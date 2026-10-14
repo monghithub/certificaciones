@@ -1,0 +1,54 @@
+{% extends "base.html" %}{% block titulo %}Pregunta {{ n }}/{{ total }}{% endblock %}
+{% block contenido %}
+<p class="suave">Pregunta {{ n }} de {{ total }} · {{ hechas }} respondidas
+  {% if restante is not none %} · Tiempo restante: <span id="cronometro" class="crono" data-segundos="{{ restante }}" data-fin="{{ base }}/tests/{{ i.id }}/resultado">—</span>{% endif %}</p>
+{% if not p %}
+  <div class="card"><p>Esta pregunta ({{ pid }}) ya no forma parte del contenido (pregunta retirada).</p>
+  {% if n < total %}<a class="btn" href="{{ base }}/tests/{{ i.id }}/p/{{ n + 1 }}">Siguiente</a>{% endif %}</div>
+{% else %}
+<div class="card">
+  <p class="suave">{{ p.id }} · Tarea {{ p.tarea }}</p>
+  <p>{{ p.enunciado }}</p>
+  {% if respondida %}
+    {% if p.tipo == 'matching' %}<p><strong>Elementos:</strong></p><ul>{% for x in p.prompts %}<li>{{ x.id }}. {{ x.texto }}</li>{% endfor %}</ul>{% endif %}
+    <ul>{% for o in p.opciones %}<li><strong>{{ o.id }})</strong> {{ o.texto }}</li>{% endfor %}</ul>
+    {% if retro %}
+      <div class="msg {{ 'ok' if retro.correcta else 'error' }}"><strong>{{ 'Correcto' if retro.correcta else 'Incorrecto' }}.</strong>
+        {% if not retro.correcta %}Solución: {{ retro.solucion }}. Tu respuesta: {{ retro.respuesta }}.{% endif %}</div>
+      <p>{{ retro.explicacion }}</p>
+      {% if retro.distractores %}<ul>{% for k, v in retro.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
+      <p class="suave">Referencia: <a href="{{ retro.referencia }}" rel="noopener noreferrer">{{ retro.referencia }}</a></p>
+    {% else %}<div class="msg">Respuesta registrada. Verás la corrección al finalizar.</div>{% endif %}
+  {% else %}
+  <form method="post" action="{{ base }}/tests/{{ i.id }}/responder">
+    <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="n" value="{{ n }}">
+    {% if p.tipo == 'multiple_choice' %}
+      {% for o in p.opciones %}<label class="opcion"><input type="radio" name="r" value="{{ o.id }}" required><span>{{ o.texto }}</span></label>{% endfor %}
+    {% elif p.tipo == 'multiple_response' %}
+      <p class="suave">Selecciona todas las respuestas correctas.</p>
+      {% for o in p.opciones %}<label class="opcion"><input type="checkbox" name="r" value="{{ o.id }}"><span>{{ o.texto }}</span></label>{% endfor %}
+    {% elif p.tipo == 'ordering' %}
+      <p class="suave">Elige qué elemento va en cada posición, de primero a último.</p>
+      {% for k in range(1, p.posiciones + 1) %}
+        <label for="o{{ k }}">Posición {{ k }}</label>
+        <select id="o{{ k }}" name="o{{ k }}" required><option value="">—</option>{% for o in p.opciones %}<option value="{{ o.id }}">{{ o.texto }}</option>{% endfor %}</select>
+      {% endfor %}
+    {% else %}
+      <p class="suave">Empareja cada elemento con una opción.</p>
+      {% for x in p.prompts %}
+        <label for="m_{{ x.id }}">{{ x.id }}. {{ x.texto }}</label>
+        <select id="m_{{ x.id }}" name="m_{{ x.id }}" required><option value="">—</option>{% for o in p.opciones %}<option value="{{ o.id }}">{{ o.texto }}</option>{% endfor %}</select>
+      {% endfor %}
+    {% endif %}
+    <p><button type="submit">Responder</button></p>
+  </form>
+  {% endif %}
+</div>
+{% endif %}
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+  {% if n > 1 %}<a class="btn sec" href="{{ base }}/tests/{{ i.id }}/p/{{ n - 1 }}">Anterior</a>{% endif %}
+  {% if n < total %}<a class="btn sec" href="{{ base }}/tests/{{ i.id }}/p/{{ n + 1 }}">{{ 'Siguiente' if respondida or simulacro else 'Saltar' }}</a>{% endif %}
+  <form method="post" action="{{ base }}/tests/{{ i.id }}/finalizar" style="margin:0"><input type="hidden" name="csrf" value="{{ csrf }}">
+    <button type="submit" class="{{ 'sec' if hechas < total }}">{{ 'Ver resultado' if hechas == total else 'Finalizar test' }}</button></form>
+</div>
+{% endblock %}

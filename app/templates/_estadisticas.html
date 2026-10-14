@@ -1,0 +1,19 @@
+{% if posicion %}<p>Última lectura: <a href="{{ base }}/modulo/{{ posicion.modulo.id }}/{{ posicion.seccion.id }}">{{ posicion.modulo.numero }} · {{ posicion.modulo.titulo }} — {{ posicion.seccion.titulo }}</a> <span class="suave">({{ posicion.fecha|fecha }} UTC)</span></p>{% else %}<p class="suave">Sin lecturas todavía.</p>{% endif %}
+<h2>Progreso por módulo</h2>
+<div class="tablawrap"><table><thead><tr><th>Módulo</th><th>Estado</th><th>Secciones</th></tr></thead><tbody>
+{% for f in progreso %}<tr><td>{{ f.modulo.numero }} · {{ f.modulo.titulo }}</td><td>{{ f.estado }}</td><td>{{ f.hechas }}/{{ f.total }}</td></tr>{% endfor %}</tbody></table></div>
+<h2>Aciertos por dominio</h2>
+{% if dominios %}<div class="tablawrap"><table><thead><tr><th>Dominio</th><th>Respuestas</th><th>Aciertos</th><th></th></tr></thead><tbody>
+{% for d in dominios %}<tr><td>Dominio {{ d.dominio }}{% if nombres and nombres.get(d.dominio) %} · {{ nombres[d.dominio].nombre }}{% endif %}</td><td>{{ d.n }}</td><td>{{ d.pct }} %</td><td><div class="barra"><span style="width: {{ d.pct }}%"></span></div></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="suave">Aún no hay respuestas.</p>{% endif %}
+<h2>Aciertos por tarea</h2>
+{% if tareas %}<div class="tablawrap"><table><thead><tr><th>Tarea</th><th>Respuestas</th><th>Aciertos</th></tr></thead><tbody>
+{% for t in tareas %}<tr><td>{{ t.tarea }}</td><td>{{ t.n }}</td><td>{{ t.pct }} %</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="suave">Aún no hay respuestas.</p>{% endif %}
+<h2>Puntos débiles</h2>
+{% if debiles %}<ul>{% for t in debiles %}<li>Tarea {{ t.tarea }}: {{ t.pct }} % ({{ t.n }} respuestas)</li>{% endfor %}</ul>
+{% else %}<p class="suave">Ninguna tarea por debajo del 70 % con al menos 3 respuestas.</p>{% endif %}
+<h2>Historial de intentos</h2>
+{% if intentos %}<div class="tablawrap"><table><thead><tr><th>Fecha (UTC)</th><th>Modo</th><th>Resultado</th><th>Estado</th></tr></thead><tbody>
+{% for r in intentos %}<tr><td>{{ r.intento.inicio|fecha }}</td><td>{{ r.intento.modo }}{% if r.intento.filtro %} · {{ r.intento.filtro }}{% endif %}</td><td>{{ r.ok }}/{{ r.total }} ({{ r.pct }} %)</td>
+<td>{% if verlinks|default(false) %}{{ 'cerrado' if r.cerrado else 'abierto' }}{% else %}{% if r.cerrado %}<a href="{{ base }}/tests/{{ r.intento.id }}/resultado">ver</a>{% else %}<a href="{{ base }}/tests/{{ r.intento.id }}">continuar</a>{% endif %}{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="suave">Sin intentos.</p>{% endif %}

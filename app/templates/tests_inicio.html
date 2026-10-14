@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block titulo %}Tests{% endblock %}
+{% block contenido %}
+<h1>Tests</h1>
+<div class="grid">
+  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="modulo">
+    <h2 style="margin-top:0">Por módulo</h2>
+    {% if modulos %}<label for="m-filtro">Módulo</label><select id="m-filtro" name="filtro">{% for m in modulos %}<option value="{{ m.id }}">{{ m.numero }} · {{ m.titulo }} ({{ m.preguntas|length }})</option>{% endfor %}</select>
+    <label for="m-n">Número de preguntas</label><input id="m-n" type="number" name="n" value="10" min="1" max="100"><p><button>Empezar</button></p>
+    {% else %}<p class="suave">Aún no hay preguntas.</p>{% endif %}</form>
+  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="dominio">
+    <h2 style="margin-top:0">Por dominio</h2>
+    {% if dominios %}<label for="d-filtro">Dominio</label><select id="d-filtro" name="filtro">{% for d in dominios %}<option value="{{ d }}">Dominio {{ d }}{% if nombres.get(d) %} · {{ nombres[d].nombre }}{% endif %}</option>{% endfor %}</select>
+    <label for="d-n">Número de preguntas</label><input id="d-n" type="number" name="n" value="10" min="1" max="100"><p><button>Empezar</button></p>
+    {% else %}<p class="suave">Aún no hay preguntas.</p>{% endif %}</form>
+  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="mixto">
+    <h2 style="margin-top:0">Mixto</h2>
+    <label for="x-n">Número de preguntas</label><input id="x-n" type="number" name="n" value="20" min="1" max="100"><p><button>Empezar</button></p></form>
+{% if hay_simulacro %}  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="simulacro">
+    <h2 style="margin-top:0">Simulacro</h2>
+    <p>{{ sim_n }} preguntas en {{ sim_min }} minutos, con el tiempo medido en el servidor. Sin explicaciones hasta terminar.</p>
+    {% if sim_ok %}<button>Empezar simulacro</button>{% else %}<p class="suave">No disponible: hay {{ n_sim }} de {{ sim_n }} preguntas.</p>{% endif %}</form>
+{% endif %}</div>
+{% endblock %}

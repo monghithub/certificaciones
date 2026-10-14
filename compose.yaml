@@ -1,0 +1,27 @@
+services:
+  consola:
+    build: .
+    image: aif-c01-consola
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PORT:-8000}:8000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Define SECRET_KEY (mínimo 32 caracteres) en .env}
+      PASSWORD_MIN_LENGTH: ${PASSWORD_MIN_LENGTH:-10}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS:-127.0.0.1}
+    volumes:
+      - datos:/data
+      - ./cursos:/cursos:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  datos:

@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block titulo %}Glosario{% endblock %}
+{% block contenido %}
+<p class="suave"><a href="/">Mis cursos</a> › <a href="{{ base }}/">{{ curso.manifiesto.titulo }}</a></p>
+<h1>Glosario</h1>
+{% if not hay_glosario %}
+  <div class="msg aviso">Este curso todavía no tiene glosario.</div>
+{% else %}
+  <p class="suave">{{ entradas|length }} conceptos. Pulsa uno para ver su definición.</p>
+  <label for="filtro-glosario" class="sr-only">Filtrar conceptos</label>
+  <input id="filtro-glosario" type="search" placeholder="Filtrar: por ejemplo, recall, Bedrock…" autocomplete="off" data-filtro-glosario>
+  <ul class="lista-glosario" id="lista-glosario">
+  {% for e in entradas %}
+    <li data-buscar="{{ (e.termino ~ ' ' ~ e.alias|join(' ') ~ ' ' ~ e.definicion)|lower }}">
+      <button type="button" class="concepto concepto-fila" data-concepto="{{ e.id }}"><span class="cat cat-{{ e.categoria }}">{{ e.categoria }}</span> {{ e.termino }}</button>
+      <span class="suave">{{ e.definicion[:120] }}{{ '…' if e.definicion|length > 120 }}</span>
+    </li>
+  {% endfor %}
+  </ul>
+  <p id="sin-resultados" class="suave" hidden>Ningún concepto coincide con el filtro.</p>
+  <script type="application/json" id="datos-glosario">{{ datos_conceptos|safe }}</script>
+{% endif %}
+{% endblock %}

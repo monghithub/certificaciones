@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block titulo %}Cursos{% endblock %}
+{% block contenido %}
+<h1>Cursos</h1>
+{% if avisos %}<div class="msg aviso"><strong>Avisos del catálogo ({{ avisos|length }}):</strong><ul>{% for a in avisos[:15] %}<li>{{ a }}</li>{% endfor %}</ul></div>{% endif %}
+<div class="tablawrap"><table><thead><tr><th>Curso</th><th>Identificador</th><th>Módulos</th><th>Preguntas</th><th>Simulacro</th><th>Matriculados</th></tr></thead><tbody>
+{% for f in filas %}{% set m = f.curso.manifiesto %}<tr>
+  <td><a href="/c/{{ m.slug }}/">{{ m.titulo }}</a></td><td><code>{{ m.slug }}</code></td><td>{{ f.modulos }}</td><td>{{ f.preguntas }}</td>
+  <td>{{ (m.examen_preguntas ~ ' preguntas · ' ~ m.examen_minutos ~ ' min') if m.tiene_simulacro else '—' }}</td><td>{{ f.matriculados }}</td></tr>
+{% else %}<tr><td colspan="6" class="suave">No hay cursos en el catálogo.</td></tr>{% endfor %}</tbody></table></div>
+<p class="suave">Los cursos se descubren en <code>cursos/&lt;curso&gt;/curso.yaml</code>. Los administradores acceden a todos sin matrícula.</p>
+<form method="post" action="/admin/recargar"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="sec">Recargar contenido</button></form>
+{% endblock %}

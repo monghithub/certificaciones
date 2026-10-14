@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block titulo %}Nuevo usuario{% endblock %}
+{% block contenido %}
+<h1>Nuevo usuario</h1>
+{% if error %}<div class="msg error" role="alert">{{ error }}</div>{% endif %}
+<form method="post" action="/admin/usuarios/nuevo" class="card" hx-boost="false"><input type="hidden" name="csrf" value="{{ csrf }}">
+  <label for="username">Usuario</label><input id="username" name="username" type="text" value="{{ datos.username or '' }}" required autocomplete="off">
+  <label for="nombre">Nombre</label><input id="nombre" name="nombre" type="text" value="{{ datos.nombre or '' }}" required>
+  <label for="rol">Rol</label><select id="rol" name="rol">{% for r in roles %}<option value="{{ r }}" {{ 'selected' if datos.rol == r }}>{{ r }}</option>{% endfor %}</select>
+  <label for="password">Contraseña temporal (mínimo {{ min_password }} caracteres)</label><input id="password" name="password" type="password" autocomplete="new-password" required>
+  <p class="suave">El usuario deberá cambiarla en su primer acceso.</p>
+  <fieldset style="border:1px solid var(--borde);border-radius:8px;margin:12px 0"><legend>Cursos en los que se matricula</legend>
+    {% for c in cursos %}<label class="opcion"><input type="checkbox" name="cursos" value="{{ c.manifiesto.slug }}" {{ 'checked' if c.manifiesto.slug in (datos.cursos or []) }}><span>{{ c.manifiesto.titulo }} <span class="suave">({{ c.manifiesto.slug }})</span></span></label>
+    {% else %}<p class="suave">No hay cursos en el catálogo.</p>{% endfor %}
+    <p class="suave">Los administradores acceden a todos los cursos sin matrícula.</p>
+  </fieldset>
+  <p><button type="submit">Crear usuario</button> <a class="btn sec" href="/admin/usuarios">Cancelar</a></p>
+</form>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block titulo %}{{ mod.titulo }} — {{ sec.titulo }}{% endblock %}
+{% block contenido %}
+<p class="suave"><a href="/">Mis cursos</a> › <a href="{{ base }}/">{{ curso.manifiesto.titulo }}</a> › {{ mod.numero }} · {{ mod.titulo }}</p>
+<div class="tabs" role="tablist">{% for s in mod.secciones %}<a href="{{ base }}/modulo/{{ mod.id }}/{{ s.id }}" class="{{ 'act' if s.id == sec.id }}">{{ s.titulo }}</a>{% endfor %}</div>
+<article class="card md">{{ html|safe }}</article>
+{% if datos_conceptos != '{"conceptos": {}, "diagramas": {}}' %}<script type="application/json" id="datos-glosario">{{ datos_conceptos|safe }}</script>{% endif %}
+<form method="post" action="{{ base }}/modulo/{{ mod.id }}/{{ sec.id }}/completar">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <button type="submit" class="{{ 'sec' if completada }}">{{ 'Marcar como no completada' if completada else 'Marcar sección como completada' }}</button>
+</form>
+{% endblock %}

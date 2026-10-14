@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block titulo %}Curso{% endblock %}
+{% block contenido %}
+<h1>{{ curso.manifiesto.titulo }}</h1>
+{% if continuar %}
+<div class="card"><strong>Continuar donde lo dejaste</strong><br>
+  <a href="{{ base }}/modulo/{{ continuar.modulo.id }}/{{ continuar.seccion.id }}">{{ continuar.modulo.numero }} · {{ continuar.modulo.titulo }} — {{ continuar.seccion.titulo }}</a>
+  <span class="suave">({{ continuar.fecha|fecha }} UTC)</span></div>
+{% endif %}
+<div class="grid">
+{% for f in progreso %}{% set m = f.modulo %}
+  <div class="card">
+    <h2 style="margin-top:0">{{ m.numero }} · {{ m.titulo }}</h2>
+    <span class="etiqueta {{ 'completado' if f.estado == 'completado' else 'en' if f.estado == 'en curso' else '' }}">{{ f.estado }}</span>
+    {% if f.total %}
+    <div class="barra" style="margin:10px 0" aria-label="Progreso"><span style="width: {{ (100 * f.hechas / f.total)|round|int }}%"></span></div>
+    <div class="suave">{{ f.hechas }} de {{ f.total }} secciones completadas</div>
+    <ul>{% for s in m.secciones %}<li><a href="{{ base }}/modulo/{{ m.id }}/{{ s.id }}">{{ s.titulo }}</a>{% if s.id in f.completadas %} <span class="ok-t">✓</span>{% endif %}</li>{% endfor %}</ul>
+    {% else %}<p class="suave">Sin contenido todavía.</p>{% endif %}
+    {% if m.preguntas %}<a class="btn sec" href="{{ base }}/tests">{{ m.preguntas|length }} preguntas</a>{% endif %}
+  </div>
+{% else %}<p>No hay módulos disponibles.</p>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block titulo %}Mis cursos{% endblock %}
+{% block contenido %}
+<h1>Mis cursos</h1>
+{% if not filas %}
+  {% if user.rol == 'admin' %}<div class="msg aviso">No hay cursos en el catálogo. Añade una carpeta <code>cursos/&lt;curso&gt;/</code> con su <code>curso.yaml</code> y pulsa «Recargar contenido» en <a href="/admin/usuarios">Usuarios</a>.</div>
+  {% else %}<div class="msg aviso">Todavía no tienes cursos asignados. Pide al administrador que te matricule.</div>{% endif %}
+{% endif %}
+<div class="grid">
+{% for f in filas %}{% set m = f.curso.manifiesto %}
+  <div class="card">
+    <h2 style="margin-top:0"><a href="/c/{{ m.slug }}/">{{ m.titulo }}</a></h2>
+    <div class="barra" style="margin:10px 0" aria-label="Progreso"><span style="width: {{ f.pct }}%"></span></div>
+    <div class="suave">{{ f.hechas }} de {{ f.total }} secciones completadas</div>
+    {% if f.posicion %}<p class="suave">Última lectura: <a href="/c/{{ m.slug }}/modulo/{{ f.posicion.modulo.id }}/{{ f.posicion.seccion.id }}">{{ f.posicion.modulo.numero }} · {{ f.posicion.seccion.titulo }}</a></p>{% endif %}
+    <a class="btn" href="/c/{{ m.slug }}/">Entrar</a> <a class="btn sec" href="/c/{{ m.slug }}/tests">Tests</a>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

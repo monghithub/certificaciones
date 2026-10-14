@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block titulo %}Resultado{% endblock %}
+{% block contenido %}
+<h1>Resultado</h1>
+<div class="card"><p style="font-size:1.4rem;margin:0"><strong>{{ ok }}/{{ total }}</strong> ({{ pct }} %)</p>
+  <p class="suave">Modo: {{ i.modo }}{% if i.filtro %} · {{ i.filtro }}{% endif %} · {{ i.inicio|fecha }} UTC</p>
+  {% if i.modo == 'simulacro' %}<div class="msg aviso">El examen real usa una puntuación escalada de 100–1.000 (aprobado con 700). Este porcentaje es solo orientativo y no equivale a esa escala.</div>{% endif %}
+  <a class="btn" href="{{ base }}/tests">Nuevo test</a> <a class="btn sec" href="{{ base }}/estadisticas">Mis estadísticas</a></div>
+{% for f in filas %}
+<div class="card">
+  {% if f.retirada %}<p><strong>{{ f.n }}. {{ f.id }}</strong> — pregunta retirada del contenido.
+    {% if f.r %}<span class="{{ 'ok-t' if f.r.correcta else 'mal-t' }}">{{ 'Acertada' if f.r.correcta else 'Fallada' }}</span>{% endif %}</p>
+  {% else %}
+  <p class="suave">{{ f.n }}. {{ f.p.id }} · Tarea {{ f.p.tarea }} ·
+    {% if not f.r %}<span class="mal-t">Sin responder</span>{% elif f.r.correcta %}<span class="ok-t">Correcta</span>{% else %}<span class="mal-t">Incorrecta</span>{% endif %}</p>
+  <p>{{ f.p.enunciado }}</p>
+  {% if f.r and not f.r.correcta %}<p>Tu respuesta: {{ f.r.respuesta }}</p>{% endif %}
+  <p><strong>Solución:</strong> {{ f.p.correctas }}</p>
+  <p>{{ f.p.explicacion }}</p>
+  {% if f.p.distractores %}<ul>{% for k, v in f.p.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
+  <p class="suave">Referencia: <a href="{{ f.p.referencia }}" rel="noopener noreferrer">{{ f.p.referencia }}</a></p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
