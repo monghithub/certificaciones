@@ -179,8 +179,9 @@
   alias: [Quick]
   categoria: servicio
   definicion: "Servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar. Se usa mediante chat en lenguaje natural y emplea agentes de IA sobre los datos y aplicaciones conectados."
-  no_usar_cuando: "Cuando se necesita un modelo propio con control sobre el entrenamiento."
-  referencia: https://docs.aws.amazon.com/quicksuite/latest/userguide/what-is.html
+  usar_cuando: "Para dar a los empleados un asistente con agentes que consulte los datos de la empresa, automatice tareas, analice datos e investigue, sin desarrollar."
+  no_usar_cuando: "Cuando se necesita un modelo propio con control sobre el entrenamiento, o una aplicación propia para clientes."
+  referencia: https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
 
 - id: kiro
   termino: Kiro
@@ -188,8 +189,9 @@
   definicion: "Plataforma de desarrollo con IA de AWS, basada en especificaciones (spec-driven development), con un IDE y una CLI en los que agentes de IA ayudan a planificar, escribir y probar código."
   usar_cuando: "Para acelerar el desarrollo de software (incluidas aplicaciones de IA) con un asistente agéntico."
   no_usar_cuando: "Cuando la pregunta trata de entrenar o desplegar un modelo de ML."
-  referencia: https://kiro.dev/
+  referencia: https://aws.amazon.com/documentation-overview/kiro/
   enlaces:
+    - {texto: "Documentación de Kiro", url: "https://kiro.dev/docs/"}
     - {texto: "Kiro en la documentación de AWS (GovCloud)", url: "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kiro.html"}
 
 # ------------------------------------------------------------------ conceptos de IA y ML
@@ -485,8 +487,10 @@
   termino: On-Demand
   alias: [bajo demanda]
   categoria: concepto
-  definicion: "Modelo de precios de pago por uso sin compromiso. En Amazon EC2 se paga por segundo por las instancias lanzadas."
+  definicion: "Modelo de precios de pago por uso sin compromiso. En Amazon EC2 se paga por segundo por las instancias lanzadas; en Amazon Bedrock, por los tokens de entrada y de salida de cada petición (nivel Standard por defecto)."
   referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+  enlaces:
+    - {texto: "Precios de Amazon Bedrock", url: "https://aws.amazon.com/bedrock/pricing/"}
 
 - id: savings-plans
   termino: Savings Plans
@@ -511,9 +515,11 @@
 
 - id: provisioned-throughput
   termino: Provisioned Throughput
-  alias: [rendimiento aprovisionado]
+  alias: [rendimiento aprovisionado, unidades de modelo, unidad de modelo]
   categoria: concepto
-  definicion: "Opción de Amazon Bedrock para reservar un mayor nivel de rendimiento de un modelo a un coste fijo, facturado por horas según el modelo y el número de unidades de modelo. Es obligatorio para usar un modelo personalizado."
+  definicion: "Opción de Amazon Bedrock para reservar un mayor nivel de rendimiento de un modelo a un coste fijo, facturado por horas según el modelo y el número de unidades de modelo (MU), sin compromiso o con compromiso de 1 o 6 meses. Se factura mientras exista, se use o no. Es una de las formas de usar un modelo personalizado; algunos modelos personalizados admiten también inferencia bajo demanda."
+  usar_cuando: "Para un rendimiento alto y constante de un modelo concreto, o para servir un modelo personalizado con capacidad dedicada."
+  no_usar_cuando: "Con tráfico bajo, variable o de prueba: bajo demanda es más barato porque solo se paga por uso."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html
 
 # ------------------------------------------------------------------ ampliación (revisión de la iteración 1)
@@ -521,7 +527,7 @@
   termino: Amazon Nova
   alias: [Nova]
   categoria: servicio
-  definicion: "Familia de modelos fundacionales de Amazon (texto, imagen, vídeo y voz) que se usan mediante API a través de Amazon Bedrock."
+  definicion: "Familia de modelos fundacionales de Amazon que se usan mediante API a través de Amazon Bedrock: Micro (solo texto), Lite, Pro y Premier, y la generación Nova 2 (Lite, Sonic y Multimodal Embeddings). Nova Canvas (imagen), Nova Reel (vídeo) y Nova Sonic v1 están retirados desde septiembre de 2026."
   usar_cuando: "Cuando se busca un modelo fundacional propio de Amazon dentro de Bedrock, por ejemplo por precio-rendimiento."
   no_usar_cuando: "Cuando basta un servicio de IA especializado o un modelo de ML tradicional para una tarea acotada."
   referencia: https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html
@@ -663,3 +669,293 @@
   categoria: concepto
   definicion: "La «receta» con la que se resuelve un tipo de problema de ML. Al aplicarlo a unos datos de entrenamiento se obtiene un modelo. La relación entre algoritmos y tipos de problema es de muchos a muchos."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+# ------------------------------------------------------------------ módulo 02: fundamentos de IA generativa
+- id: token
+  termino: token
+  alias: [tokens]
+  categoria: concepto
+  definicion: "Unidad mínima de texto (u otro dato) que procesa un modelo: una palabra, parte de una palabra o un signo. El modelo recibe tokens de entrada y genera tokens de salida uno a uno. Cada modelo tokeniza a su manera. Es la unidad de facturación y de las cuotas de los modelos fundacionales."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/count-tokens.html
+
+- id: chunking
+  termino: chunking
+  alias: [chunks, fragmentación de documentos]
+  categoria: tecnica
+  definicion: "Dividir documentos largos en fragmentos (chunks) antes de convertirlos en embeddings. Bedrock Knowledge Bases ofrece fragmentación de tamaño fijo (tokens por fragmento y solapamiento), jerárquica, semántica o sin fragmentar."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html
+
+- id: embedding
+  termino: embedding
+  alias: [embeddings, incrustaciones vectoriales]
+  categoria: concepto
+  definicion: "Representación numérica (un vector) de un objeto del mundo real, como un texto o una imagen, que captura su significado. Objetos parecidos tienen embeddings cercanos, lo que permite buscar por similitud semántica."
+  referencia: https://aws.amazon.com/what-is/embeddings-in-machine-learning/
+
+- id: vector
+  termino: vector
+  alias: [vectores]
+  categoria: concepto
+  definicion: "Lista de valores numéricos que representa información en un espacio de muchas dimensiones. Es la forma de un embedding; la distancia entre vectores mide la similitud."
+  referencia: https://aws.amazon.com/what-is/embeddings-in-machine-learning/
+
+- id: base-de-datos-vectorial
+  termino: base de datos vectorial
+  alias: [bases de datos vectoriales, vector database]
+  categoria: concepto
+  definicion: "Base de datos que almacena e indexa vectores (embeddings) para encontrar rápidamente los más parecidos a uno dado. Es la pieza de búsqueda semántica de RAG."
+  referencia: https://aws.amazon.com/what-is/vector-databases/
+
+- id: ingenieria-de-prompts
+  termino: ingeniería de prompts
+  alias: [prompt engineering]
+  categoria: tecnica
+  definicion: "Redactar y refinar el prompt (instrucciones, contexto, ejemplos y pregunta) para que el modelo dé la respuesta deseada sin modificar el modelo. Es la forma más barata de adaptar un modelo fundacional."
+  referencia: https://aws.amazon.com/what-is/prompt-engineering/
+
+- id: transformer
+  termino: transformer
+  alias: [transformers, arquitectura transformer]
+  categoria: concepto
+  definicion: "Arquitectura de red neuronal en la que se basan los LLM. Su mecanismo de autoatención (self-attention) analiza a la vez todas las partes de la secuencia y decide cuáles son más importantes, en lugar de procesarla palabra a palabra."
+  referencia: https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/
+
+- id: modelo-multimodal
+  termino: modelo multimodal
+  alias: [modelos multimodales, multimodal]
+  categoria: concepto
+  definicion: "Modelo que procesa y entiende varios tipos de entrada a la vez (texto, imágenes, vídeo, documentos, audio) en una misma petición, y puede generar uno o varios tipos de salida."
+  referencia: https://docs.aws.amazon.com/nova/latest/nova2-userguide/what-is-nova-2.html
+
+- id: modelo-de-difusion
+  termino: modelo de difusión
+  alias: [modelos de difusión, diffusion model]
+  categoria: concepto
+  definicion: "Modelo generativo de imagen (y vídeo) que aprende a eliminar ruido: al generar parte de ruido y lo va limpiando, guiado por el prompt, hasta obtener la imagen. Stable Diffusion es un ejemplo."
+  referencia: https://aws.amazon.com/what-is/stable-diffusion/
+
+- id: ventana-de-contexto
+  termino: ventana de contexto
+  alias: [context window]
+  categoria: concepto
+  definicion: "Cantidad máxima de tokens (entrada e historial) que un modelo puede tener en cuenta en una petición. Es un límite técnico y un factor de coste: más contexto implica pagar más tokens."
+  referencia: https://docs.aws.amazon.com/nova/latest/nova2-userguide/what-is-nova-2.html
+
+- id: alucinacion
+  termino: alucinación
+  alias: [alucinaciones, hallucination, hallucinations]
+  categoria: concepto
+  definicion: "Respuesta incorrecta o engañosa que genera un modelo fundacional. Causas habituales: datos de entrenamiento insuficientes o sesgados, sobreajuste y falta de contexto. Se mitiga con RAG, prompts precisos y verificación."
+  referencia: https://aws.amazon.com/what-is/ai-hallucinations/
+
+- id: parametros-de-inferencia
+  termino: parámetros de inferencia
+  alias: [inference parameters, temperatura de muestreo, top-p, Top-p, top-k, Top-k]
+  categoria: concepto
+  definicion: "Ajustes de cada petición que cambian la generación. La temperatura baja favorece los tokens más probables (respuestas más deterministas) y la alta da más variedad; top-k limita a los k candidatos más probables; top-p, a los que suman una proporción de la probabilidad acumulada; la longitud máxima limita la respuesta."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html
+
+- id: no-determinismo
+  termino: no determinismo
+  alias: [nondeterminism, no deterministas]
+  categoria: concepto
+  definicion: "Propiedad de los modelos generativos por la que la misma petición puede dar respuestas distintas, porque el siguiente token se elige muestreando una distribución de probabilidad. Una temperatura baja la reduce."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html
+
+- id: ingenieria-de-contexto
+  termino: ingeniería de contexto
+  alias: [context engineering]
+  categoria: tecnica
+  definicion: "Decidir qué información llega al modelo en cada llamada, en qué orden y con qué tamaño: instrucciones del sistema, historial y memoria, conocimiento recuperado (RAG), herramientas y ejemplos. Busca respuestas correctas sin desperdiciar tokens."
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html
+
+- id: mcp
+  termino: MCP
+  alias: [Model Context Protocol]
+  categoria: concepto
+  definicion: "Model Context Protocol: protocolo abierto que proporciona una capa de comunicación estándar para que los agentes de IA interactúen con datos, herramientas y servicios externos, y también con otros agentes."
+  usar_cuando: "Para exponer una herramienta o fuente de datos una sola vez y que la use cualquier agente compatible."
+  no_usar_cuando: "No es un modelo ni un servicio de AWS: no genera respuestas por sí mismo."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/getting-started-with-mcp.html
+
+- id: uso-de-herramientas
+  termino: uso de herramientas
+  alias: [tool use, llamadas a herramientas, function calling]
+  categoria: concepto
+  definicion: "Capacidad de un modelo para decidir qué herramienta (API, función, base de datos) llamar y con qué parámetros. La aplicación o la plataforma la ejecuta y devuelve el resultado al modelo."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html
+
+- id: memoria-del-agente
+  termino: memoria del agente
+  alias: [memoria a corto plazo, memoria a largo plazo]
+  categoria: concepto
+  definicion: "Capacidad de un agente para recordar: la memoria a corto plazo guarda los turnos de la sesión; la de largo plazo extrae y conserva entre sesiones datos clave como las preferencias del usuario. Sin memoria, cada interacción empieza de cero."
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html
+
+- id: sistema-multiagente
+  termino: sistema multiagente
+  alias: [sistemas multiagente, multi-agent]
+  categoria: concepto
+  definicion: "Varios agentes con roles o especialidades distintos que colaboran en una tarea compleja, bien con un coordinador que delega (flujo centralizado), bien como iguales que negocian y comparten información."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/multi-agent-collaboration.html
+
+- id: orquestacion-de-flujos
+  termino: orquestación de flujos
+  alias: [workflow orchestration]
+  categoria: concepto
+  definicion: "Coordinación de los pasos, herramientas y agentes de un proceso: orden, paralelismo, gestión de errores y puntos de aprobación humana."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html
+
+- id: strands-agents
+  termino: Strands Agents
+  alias: [Strands]
+  categoria: servicio
+  definicion: "SDK de código abierto publicado inicialmente por AWS para crear agentes de IA con un enfoque centrado en el modelo. Admite MCP, patrones multiagente (Swarm, Graph, Workflow) y varios proveedores de modelos, incluido Amazon Bedrock."
+  usar_cuando: "Para programar agentes en código con herramientas y MCP, sobre Bedrock u otros proveedores."
+  no_usar_cuando: "Cuando no se quiere programar: para un asistente listo para empleados, Amazon Quick."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/strands-agents.html
+
+- id: preentrenamiento
+  termino: preentrenamiento
+  alias: [pre-training, preentrenar]
+  categoria: tecnica
+  definicion: "Entrenamiento inicial de un modelo fundacional con datos masivos, de forma autosupervisada. Requiere enormes recursos y puede durar meses; lo hacen los proveedores de modelos, no las empresas que los usan."
+  referencia: https://aws.amazon.com/what-is/foundation-models/
+
+- id: fine-tuning
+  termino: fine-tuning
+  alias: [ajuste fino, supervised fine-tuning]
+  categoria: tecnica
+  definicion: "Personalización de un modelo preentrenado con datos etiquetados de una tarea o dominio, que ajusta los parámetros del modelo. En Amazon Bedrock existen también el reinforcement fine-tuning y la destilación."
+  usar_cuando: "Cuando el prompt y el contexto no consiguen la calidad, el estilo o el formato necesarios."
+  no_usar_cuando: "Cuando el problema es que faltan datos actualizados o propios: eso lo resuelve RAG."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html
+
+- id: inferencia-por-lotes-bedrock
+  termino: inferencia por lotes de Bedrock
+  alias: [batch inference]
+  categoria: concepto
+  definicion: "Modo de Amazon Bedrock que procesa de forma asíncrona muchos prompts de una vez: la entrada y la salida van a Amazon S3. En los modelos que lo admiten cuesta un 50 % menos que bajo demanda. No admite llamadas a herramientas."
+  usar_cuando: "Para grandes volúmenes que no necesitan respuesta inmediata."
+  no_usar_cuando: "En aplicaciones interactivas o conversaciones de varios turnos."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
+
+- id: niveles-de-servicio-bedrock
+  termino: niveles de servicio de Bedrock
+  alias: [service tiers, nivel Flex, nivel Priority, nivel Reserved, nivel Standard]
+  categoria: concepto
+  definicion: "Niveles de inferencia de Amazon Bedrock: Standard (por defecto), Priority (respuesta más rápida con un recargo del 75 %), Flex (un 50 % de descuento para cargas que toleran más tiempo) y Reserved (capacidad reservada de tokens por minuto durante 1 o 3 meses, con objetivo de disponibilidad del 99,5 %; el exceso pasa a Standard)."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html
+
+- id: prompt-caching
+  termino: prompt caching
+  alias: [caché de prompts]
+  categoria: tecnica
+  definicion: "Funcionalidad de Amazon Bedrock que reutiliza prefijos de prompt repetidos (por ejemplo, un documento largo) para reducir la latencia y el coste de los tokens de entrada. Disponible en modelos compatibles."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html
+
+- id: inferencia-entre-regiones
+  termino: inferencia entre Regiones
+  alias: [cross-Region inference, CRIS]
+  categoria: concepto
+  definicion: "Enrutamiento automático de las peticiones de Amazon Bedrock a otras Regiones para ganar rendimiento. La geográfica se limita a una zona (EE. UU., UE, APAC) y sirve para residencia de datos; la global usa cualquier Región comercial y ahorra aproximadamente un 10 %. Sin coste adicional de enrutamiento."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+
+- id: amazon-bedrock-guardrails
+  termino: Amazon Bedrock Guardrails
+  alias: [Bedrock Guardrails, Guardrails]
+  categoria: servicio
+  definicion: "Salvaguardas configurables para detectar y filtrar contenido no deseado y proteger información sensible en las entradas y respuestas de los modelos: filtros de contenido, temas denegados, filtros de palabras y de datos sensibles, entre otros."
+  usar_cuando: "Para aplicar políticas de uso responsable y privacidad a una aplicación de IA generativa."
+  no_usar_cuando: "Como sustituto de los permisos IAM o del cifrado de los datos."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
+
+- id: amazon-q
+  termino: Amazon Q
+  alias: [Amazon Q Business, Amazon Q Developer]
+  categoria: servicio
+  definicion: "Asistentes de IA generativa de AWS. Amazon Q Business ya no admite clientes nuevos (AWS remite a Amazon Quick) y los plugins de IDE de Amazon Q Developer dejan de tener soporte el 30 de abril de 2027 (AWS remite a Kiro)."
+  no_usar_cuando: "En proyectos nuevos: para asistentes empresariales, Amazon Quick; para desarrollo, Kiro."
+  referencia: https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/what-is.html
+  enlaces:
+    - {texto: "Amazon Q Developer (aviso de fin de soporte)", url: "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html"}
+
+- id: aws-trainium
+  termino: AWS Trainium
+  alias: [Trainium]
+  categoria: servicio
+  definicion: "Chips diseñados por AWS para entrenar y servir (inferencia) modelos de IA a escala con la mejor relación coste-rendimiento, disponibles en instancias de Amazon EC2."
+  usar_cuando: "Para entrenar modelos grandes propios (o servirlos) en EC2 optimizando el coste."
+  no_usar_cuando: "Cuando se consume un modelo por API en Bedrock: ahí no se eligen chips."
+  referencia: https://aws.amazon.com/ai/machine-learning/trainium/
+
+- id: aws-inferentia
+  termino: AWS Inferentia
+  alias: [Inferentia]
+  categoria: servicio
+  definicion: "Chips diseñados por AWS específicamente para la inferencia de aprendizaje profundo e IA generativa, con alto rendimiento al menor coste en Amazon EC2."
+  usar_cuando: "Para servir en EC2 un modelo ya entrenado al menor coste por inferencia."
+  no_usar_cuando: "Para entrenar modelos: para eso está AWS Trainium."
+  referencia: https://aws.amazon.com/ai/machine-learning/inferentia/
+
+- id: tasa-de-conversion
+  termino: tasa de conversión
+  alias: [conversion rate]
+  categoria: metrica
+  definicion: "Porcentaje de usuarios que completan la acción deseada (comprar, registrarse) respecto al total. Métrica de negocio habitual para asistentes de venta."
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+
+- id: arpu
+  termino: ARPU
+  alias: [ingreso medio por usuario, average revenue per user]
+  categoria: metrica
+  definicion: "Ingreso medio por usuario: ingresos totales divididos entre el número de usuarios en un periodo."
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+
+- id: clv
+  termino: CLV
+  alias: [valor del ciclo de vida del cliente, customer lifetime value]
+  categoria: metrica
+  definicion: "Valor del ciclo de vida del cliente: ingresos que se esperan de un cliente durante toda su relación con la empresa. Sube cuando mejora la retención."
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+
+- id: aws-transform
+  termino: AWS Transform
+  alias: [Transform]
+  categoria: servicio
+  definicion: "Servicio con IA agéntica para acelerar la transformación de infraestructura, aplicaciones y código: modernizar y migrar cargas existentes, por ejemplo mainframes o servidores VMware, a AWS."
+  usar_cuando: "Para modernizar o migrar sistemas y código heredados con ayuda de agentes."
+  no_usar_cuando: "Para desarrollar software nuevo (Kiro) o crear una aplicación de IA generativa propia (Amazon Bedrock)."
+  referencia: https://docs.aws.amazon.com/transform/latest/userguide/what-is-service.html
+
+- id: a2a
+  termino: A2A
+  alias: [Agent-to-Agent, Agent2Agent]
+  categoria: concepto
+  definicion: "Protocolo abierto para la comunicación entre agentes: cada agente publica una Agent Card con su identidad, capacidades y punto de acceso para que otros lo descubran, y se intercambian mensajes y tareas. AgentCore Runtime admite servidores A2A."
+  usar_cuando: "Para que agentes de equipos o proveedores distintos se descubran y colaboren."
+  no_usar_cuando: "Para conectar un agente con herramientas o datos: eso es MCP."
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-a2a.html
+
+- id: aws-privatelink
+  termino: AWS PrivateLink
+  alias: [PrivateLink]
+  categoria: servicio
+  definicion: "Conectividad privada entre una VPC y servicios de AWS (como Amazon Bedrock) mediante endpoints de interfaz, sin exponer el tráfico a internet."
+  usar_cuando: "Cuando el tráfico hacia el servicio no debe pasar por internet."
+  no_usar_cuando: "Como sustituto de los permisos IAM o del cifrado."
+  referencia: https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
+
+- id: api-converse
+  termino: API Converse
+  alias: [Converse API, Converse]
+  categoria: concepto
+  definicion: "API unificada de Amazon Bedrock para conversar con los modelos: abstrae sus diferencias, de modo que se puede cambiar de modelo modificando un solo parámetro."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html
+
+- id: rendimiento-entre-dominios
+  termino: rendimiento entre dominios
+  alias: [cross-domain performance]
+  categoria: metrica
+  definicion: "Capacidad de una aplicación de IA generativa de mantener la calidad en tareas o áreas distintas de aquellas para las que se probó o ajustó."
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html

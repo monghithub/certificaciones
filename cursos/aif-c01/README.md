@@ -2,7 +2,7 @@
 
 Curso en español de España para preparar el examen **AWS Certified AI Practitioner (AIF-C01)**. Está pensado para perfiles junior con conocimientos básicos de programación y poca experiencia en AWS, y lo revisa un arquitecto de software sénior.
 
-> Estado: **Iteración 1** completada y revisada (módulos 00 y 01, con 82 preguntas del Dominio 1). Los módulos 02 a 06 están pendientes. Consulta [CHANGELOG.md](../../CHANGELOG.md).
+> Estado: **Iteración 2** completada (módulos 00, 01 y 02, con 82 preguntas del Dominio 1 y 75 del Dominio 2). Los módulos 03 a 06 están pendientes. Consulta [CHANGELOG.md](../../CHANGELOG.md).
 
 Manifiesto del curso: [curso.yaml](curso.yaml).
 
