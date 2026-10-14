@@ -1,6 +1,6 @@
 ## Context
 
-El Dominio 2 tiene 3 tareas y 14 objetivos (`fuentes/dominio-2.md`, guía v1.1). La v1.1 incorpora conceptos nuevos: ingeniería de contexto (2.1.5), agentes con MCP, memoria, herramientas y orquestación (2.1.6), y servicios como Amazon Quick, Kiro, Strands Agents y Amazon Bedrock AgentCore (2.3.1). Las reglas de `AGENTS.md` («Calidad del contenido» y «Calidad del banco de preguntas») y los mínimos de `curso.yaml` (60, 15 y 3) se aplican desde la primera versión.
+El Dominio 2 tiene 3 tareas y 14 objetivos (`fuentes/dominio-2.md`, guía v1.1). La v1.1 incorpora conceptos nuevos: ingeniería de contexto (2.1.5), agentes con MCP, memoria, herramientas y orquestación (2.1.6), y servicios como Amazon Quick, Kiro, Strands Agents y Amazon Bedrock AgentCore (2.3.1). Las reglas comunes de `AGENTS.md` («Calidad del contenido» y «Calidad del banco de preguntas»), las propias de `cursos/aif-c01/AGENTS.md` y los mínimos de `curso.yaml` (60, 15 y 3) se aplican desde la primera versión.
 
 ## Goals / Non-Goals
 

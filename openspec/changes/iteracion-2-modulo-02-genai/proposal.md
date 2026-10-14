@@ -1,6 +1,6 @@
 ## Why
 
-Los módulos 00 y 01 están completos y revisados. El Dominio 2 (Fundamentos de IA generativa) pesa el 24 % del examen y es la base de los dominios 3 a 5: sin él, el estudiante no puede razonar sobre *tokens*, *embeddings*, agentes ni costes de Bedrock. Es la Iteración 2 de `promt.md`.
+Los módulos 00 y 01 están completos y revisados. El Dominio 2 (Fundamentos de IA generativa) pesa el 24 % del examen y es la base de los dominios 3 a 5: sin él, el estudiante no puede razonar sobre *tokens*, *embeddings*, agentes ni costes de Bedrock. Es la Iteración 2 de `cursos/aif-c01/promt.md`.
 
 ## What Changes
 
