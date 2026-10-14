@@ -91,6 +91,16 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Verificación:** validador, cobertura y 219 tests en verde (4 nuevos).
 - Integrado en `main` con la PR #2 (CI en verde; el primer intento falló por un error temporal de la API de GitHub) y cambio archivado como `2026-10-14-plataforma-multicertificacion`.
 
+### Iteración 2: propuesta del módulo 02 (Dominio 2)
+
+- Rama `modulo/02-fundamentos-genai`. Cambio de OpenSpec `iteracion-2-modulo-02-genai` con propuesta, diseño, tres specs (`modulo-02-fundamentos-genai`, `banco-preguntas-dominio-2`, `laboratorio-modulo-02`) y tareas. Valida en modo estricto.
+- Decisiones de diseño:
+  - Unas 70 preguntas, de 4 a 6 por objetivo.
+  - El laboratorio usa el playground de Bedrock con un modelo económico y sin recursos con coste por hora.
+  - El módulo 02 explica *qué* es cada técnica y remite al 03 para el *cómo*.
+  - Antes de redactar se verifica cada servicio reciente (Quick, Kiro, Strands Agents, AgentCore).
+- Estado: **pendiente de revisión del usuario** antes de implementar (`/opsx:apply`).
+
 ### Pendiente
 
 - Iteraciones 2 a 5: módulos 02 a 05, con al menos 60 preguntas cada uno y laboratorio obligatorio.
