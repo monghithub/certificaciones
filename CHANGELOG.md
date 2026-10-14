@@ -38,6 +38,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
   - `cursos/aif-c01/README.md`: enlaces al conjunto oficial de preguntas de práctica de AWS Skill Builder, a la página de la certificación y a la guía del examen (criterio de aceptación de `promt.md`); estado actualizado a 82 preguntas.
   - `fuentes/servicios-alcance.md`: se anota la contradicción de AWS entre la página de revisiones y la lista out of scope vigente.
 
+- **Plataforma multicertificación.** El repositorio pasa a llamarse `certificaciones` y reúne cursos de cualquier proveedor:
+  - El manifiesto admite `proveedor` y `fuentes_oficiales`, y `validar_preguntas.py` exige que la `referencia` de cada pregunta pertenezca a las fuentes oficiales de su curso. El esquema de pregunta ya no está atado a AWS.
+  - `AGENTS.md` raíz con las reglas comunes; las propias de AWS y AIF-C01 pasan a `cursos/aif-c01/AGENTS.md`, y `promt.md` a `cursos/aif-c01/promt.md`.
+  - La consola se presenta como «Certificaciones». **Cambio incompatible:** la imagen Docker pasa a llamarse `certificaciones-consola` (`docker compose up -d --build` la crea; la antigua `aif-c01-consola` puede borrarse; los datos no cambian).
+  - CI: se excluyen de lychee los enlaces locales de `docs/consola.md`.
+
 ### Revalidación de los datos de referencia (2026-10-14)
 
 Contrastados con la [guía oficial](https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html) (v1.1, 30 de abril de 2026) y la [página de la certificación](https://aws.amazon.com/certification/certified-ai-practitioner/).

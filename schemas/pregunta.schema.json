@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/aif-c01/pregunta.schema.json",
-  "title": "Pregunta del banco AIF-C01",
+  "$id": "https://example.invalid/cursos/pregunta.schema.json",
+  "title": "Pregunta del banco de un curso",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -84,7 +84,7 @@
     },
     "referencia": {
       "type": "string",
-      "pattern": "^https://docs\\.aws\\.amazon\\.com/|^https://aws\\.amazon\\.com/"
+      "pattern": "^https://[^\\s/]+(/\\S*)?$"
     },
     "objetivo": {
       "type": "string",

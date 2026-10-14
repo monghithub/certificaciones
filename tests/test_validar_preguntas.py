@@ -192,3 +192,37 @@ def test_modulo_de_simulacro_inexistente(repo):
     f.write_text(f.read_text(encoding="utf8").replace("simulacro: 06-simulacro", "simulacro: 09-nada"), encoding="utf8")
     errs, _, _ = validar(repo)
     assert any("simulacro '09-nada' no existe" in e for e in errs)
+
+
+def test_referencia_fuera_de_las_fuentes_oficiales(repo):
+    p = copy.deepcopy(BASE)
+    p[0]["referencia"] = "https://learn.microsoft.com/es-es/azure/"
+    assert any("no pertenece a las fuentes oficiales" in e for e in errores(repo, p))
+
+
+def test_referencia_en_subdominio_de_una_fuente_oficial(repo):
+    p = copy.deepcopy(BASE)
+    p[0]["referencia"] = "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+    assert errores(repo, p) == []
+
+
+def test_curso_de_otro_proveedor_con_sus_fuentes(repo):
+    c = segundo_curso(repo)
+    f = c / "curso.yaml"
+    f.write_text(f.read_text(encoding="utf8").replace(
+        "idioma: es-ES\n", "proveedor: Microsoft\nfuentes_oficiales: [learn.microsoft.com]\nidioma: es-ES\n"), encoding="utf8")
+    p = yaml.safe_load((c / "modulos" / "01-base" / "preguntas.yaml").read_text(encoding="utf8"))
+    p[0]["referencia"] = "https://learn.microsoft.com/es-es/credentials/"
+    (c / "modulos" / "01-base" / "preguntas.yaml").write_text(yaml.safe_dump(p, allow_unicode=True), encoding="utf8")
+    errs, _, _ = validar(repo, minimos=False, cursos=[c.name])
+    assert errs == [], errs
+    p[0]["referencia"] = "https://docs.aws.amazon.com/bedrock/"
+    (c / "modulos" / "01-base" / "preguntas.yaml").write_text(yaml.safe_dump(p, allow_unicode=True), encoding="utf8")
+    errs, _, _ = validar(repo, minimos=False, cursos=[c.name])
+    assert any("no pertenece a las fuentes oficiales" in e for e in errs), errs
+
+
+def test_referencia_no_https_rechazada_por_el_esquema(repo):
+    p = copy.deepcopy(BASE)
+    p[0]["referencia"] = "http://docs.aws.amazon.com/bedrock/"
+    assert any("referencia" in e for e in errores(repo, p))

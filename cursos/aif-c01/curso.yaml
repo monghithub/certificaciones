@@ -1,5 +1,7 @@
 slug: aif-c01
 titulo: AWS Certified AI Practitioner (AIF-C01)
+proveedor: AWS
+fuentes_oficiales: [docs.aws.amazon.com, aws.amazon.com]
 idioma: es-ES
 dominios:
   - {id: 1, nombre: "Fundamentos de IA y ML", peso: 20}

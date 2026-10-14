@@ -1,4 +1,4 @@
 max_retries = 3
 accept = [200, 206, 429]
 exclude = ["^https://example\\.invalid", "^file://", "^https?://(127\\.0\\.0\\.1|localhost)(:[0-9]+)?(/|$)"]
-exclude_path = ["openspec", ".claude", "promt.md"]
+exclude_path = ["openspec", ".claude", "promt.md", "cursos/aif-c01/promt.md"]

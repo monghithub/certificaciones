@@ -53,4 +53,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Construir imagen de la consola
-        run: docker build -t aif-c01-consola .
+        run: docker build -t certificaciones-consola .

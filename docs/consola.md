@@ -71,7 +71,7 @@ La web usa por defecto un tema claro de tonos suaves. El botón de la cabecera c
 
 ## Añadir un curso y matricular usuarios
 
-1. Crea `cursos/<slug>/` con su `curso.yaml` (el `slug` coincide con la carpeta; ejemplo en `cursos/aif-c01/curso.yaml` y esquema en `schemas/curso.schema.json`) y sus `modulos/`.
+1. Crea `cursos/<slug>/` con su `curso.yaml` (el `slug` coincide con la carpeta; ejemplo en `cursos/aif-c01/curso.yaml` y esquema en `schemas/curso.schema.json`) y sus `modulos/`. Los cursos pueden ser de cualquier proveedor de certificaciones.
 2. Comprueba el contenido: `python scripts/validar_preguntas.py --curso <slug>`.
 3. En la consola, en **Cursos** o **Usuarios**, pulsa «Recargar contenido». Si hay avisos (manifiesto inválido, preguntas descartadas), aparecen ahí.
 4. En la ficha de cada usuario, sección **Cursos**, matricúlalo. Retirar una matrícula no borra su historial: si lo vuelves a matricular, lo recupera.

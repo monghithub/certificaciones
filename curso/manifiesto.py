@@ -18,6 +18,8 @@ class Manifiesto:
     titulo: str
     idioma: str
     carpeta: Path
+    proveedor: str | None = None
+    fuentes_oficiales: tuple[str, ...] = ()  # hosts aceptados en `referencia` (vacío: cualquier https)
     dominios: dict[int, dict] = field(default_factory=dict)  # id -> {"nombre", "peso"}
     simulacro: str | None = None
     examen_preguntas: int | None = None
@@ -71,6 +73,7 @@ def cargar_manifiesto(carpeta: Path, esquemas: Path | None = None) -> Manifiesto
     examen = datos.get("examen") or {}
     return Manifiesto(
         slug=datos["slug"], titulo=datos["titulo"], idioma=datos["idioma"], carpeta=carpeta,
+        proveedor=datos.get("proveedor"), fuentes_oficiales=tuple(datos.get("fuentes_oficiales") or ()),
         dominios={d["id"]: {"nombre": d["nombre"], "peso": d["peso"]} for d in datos["dominios"]},
         simulacro=datos.get("simulacro"), examen_preguntas=examen.get("preguntas"), examen_minutos=examen.get("minutos"),
         minimo_por_modulo=banco.get("minimo_por_modulo"), minimo_simulacro=banco.get("minimo_simulacro"),
