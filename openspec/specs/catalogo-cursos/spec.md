@@ -15,7 +15,7 @@ Cada curso SHALL residir en `cursos/<slug>/` con un manifiesto `curso.yaml`, un 
 - **THEN** el validador informa de error y la consola omite el curso con un aviso
 
 ### Requirement: Manifiesto del curso
-El manifiesto SHALL declarar `slug`, `titulo`, `idioma` y `dominios` (cada uno con `id`, `nombre` y `peso`, sumando los pesos 100), y MAY declarar `examen` (preguntas y minutos del simulacro), `simulacro` (módulo del simulacro) y `banco` (mínimos y distribución por tipos). SHALL validarse con `schemas/curso.schema.json`.
+El manifiesto SHALL declarar `slug`, `titulo`, `idioma` y `dominios` (cada uno con `id`, `nombre` y `peso`, sumando los pesos 100), y MAY declarar `proveedor` (nombre del proveedor de la certificación), `fuentes_oficiales` (lista de hosts de su documentación oficial), `examen` (preguntas y minutos del simulacro), `simulacro` (módulo del simulacro) y `banco` (mínimos y distribución por tipos). SHALL validarse con `schemas/curso.schema.json`.
 
 #### Scenario: Pesos que no suman 100
 - **WHEN** los pesos de los dominios suman 95
@@ -24,6 +24,10 @@ El manifiesto SHALL declarar `slug`, `titulo`, `idioma` y `dominios` (cada uno c
 #### Scenario: Curso sin simulacro
 - **WHEN** el manifiesto no declara `examen` ni `simulacro`
 - **THEN** el curso es válido y no ofrece simulacro
+
+#### Scenario: Curso de otro proveedor
+- **WHEN** un curso declara `proveedor: Microsoft` y `fuentes_oficiales: [learn.microsoft.com]`
+- **THEN** el manifiesto es válido sin cambios de código
 
 ### Requirement: Esquema de pregunta independiente del curso
 `schemas/pregunta.schema.json` SHALL admitir cualquier dominio entero ≥ 1 y ids con formato `D<n>-NNN` o `S-NNN`. El validador SHALL comprobar que el `dominio` de cada pregunta exista en el manifiesto de su curso y que la `tarea` exista en `fuentes/dominio-N.md` de ese curso.
@@ -53,4 +57,15 @@ La consola SHALL descubrir los cursos en `COURSES_DIR`, cargar cada uno de forma
 #### Scenario: Un curso inválido no bloquea a los demás
 - **WHEN** un curso tiene un `curso.yaml` malformado y otro es válido
 - **THEN** la consola arranca, ofrece solo el válido y muestra el aviso al admin
+
+### Requirement: Referencias en las fuentes oficiales del curso
+El esquema de pregunta SHALL exigir que `referencia` sea una URL https, y cuando el manifiesto declare `fuentes_oficiales`, `validar_preguntas.py` SHALL fallar si el host de la referencia no es uno de esos hosts ni un subdominio suyo.
+
+#### Scenario: Referencia de otro proveedor
+- **WHEN** una pregunta de un curso con `fuentes_oficiales: [docs.aws.amazon.com, aws.amazon.com]` cita `https://learn.microsoft.com/...`
+- **THEN** el validador informa de error indicando las fuentes aceptadas
+
+#### Scenario: Curso sin fuentes declaradas
+- **WHEN** un curso no declara `fuentes_oficiales`
+- **THEN** se acepta cualquier referencia https
 

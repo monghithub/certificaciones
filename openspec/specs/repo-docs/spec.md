@@ -4,25 +4,29 @@
 TBD - created by archiving change iteracion-0-fundacion-curso. Update Purpose after archive.
 ## Requirements
 ### Requirement: Estructura del repositorio
-El repositorio SHALL contener `README.md`, `AGENTS.md`, `CHANGELOG.md`, `LICENSE`, y los directorios `fuentes/`, `modulos/00-base-aws` … `modulos/06-simulacro`, `schemas/`, `scripts/` y `.github/workflows/`, según la sección 5 de `promt.md`.
+El repositorio SHALL contener `README.md`, `AGENTS.md`, `CHANGELOG.md`, `LICENSE`, `docs/journal.md`, `schemas/`, `scripts/`, `.github/workflows/` y un directorio por curso en `cursos/<slug>/` con `curso.yaml`, `README.md`, `fuentes/` y `modulos/`, y opcionalmente `glosario.yaml`, `AGENTS.md` y `promt.md` del curso.
 
-#### Scenario: Directorios de módulo presentes
-- **WHEN** se lista `modulos/`
-- **THEN** existen exactamente los siete directorios `00-base-aws`, `01-fundamentos-ia-ml`, `02-fundamentos-genai`, `03-modelos-fundacionales`, `04-ia-responsable`, `05-seguridad-gobierno` y `06-simulacro`
+#### Scenario: Curso autocontenido
+- **WHEN** se lista `cursos/aif-c01/`
+- **THEN** contiene `curso.yaml`, `README.md`, `AGENTS.md`, `promt.md`, `glosario.yaml`, `fuentes/` y `modulos/`
 
 ### Requirement: README del curso
-`README.md` SHALL incluir presentación, índice de módulos, instrucciones de estudio, plan de 4 semanas, datos del examen revalidados y la recomendación de validar la preparación con el examen de práctica oficial de AWS Skill Builder antes de reservar el examen.
+El `README.md` de cada curso SHALL incluir presentación, índice de módulos, instrucciones de estudio, plan de estudio, datos del examen revalidados y la recomendación de validar la preparación con el material oficial de práctica del proveedor, enlazado, antes de reservar el examen.
 
 #### Scenario: Recomendación final presente
-- **WHEN** se lee `README.md`
-- **THEN** contiene la recomendación sobre el examen de práctica oficial de AWS Skill Builder
+- **WHEN** se lee `cursos/aif-c01/README.md`
+- **THEN** contiene el enlace al conjunto oficial de práctica de AWS Skill Builder
 
 ### Requirement: AGENTS.md
-`AGENTS.md` SHALL resumir las reglas de `promt.md` para colaboradores: fuente de verdad, prohibición de inventar datos y de usar "dumps", marcador `PENDIENTE DE VERIFICAR`, criterios de redacción, esquema de preguntas (incluido el formato de `ordering` y `matching`), convenciones Git y flujo por iteraciones.
+El `AGENTS.md` raíz SHALL recoger las reglas comunes a todos los cursos (fuente de verdad, prohibición de inventar datos y de usar *dumps*, marcador `PENDIENTE DE VERIFICAR`, calidad del contenido y del banco, esquema de preguntas, glosario y diagramas, cómo añadir un curso, flujo de OpenSpec, Git y journal) y su orden de prevalencia. Las reglas propias de un curso SHALL ir en `cursos/<slug>/AGENTS.md`.
 
 #### Scenario: Reglas de verificación documentadas
 - **WHEN** un agente lee `AGENTS.md`
 - **THEN** encuentra la prohibición de inventar datos y el formato del marcador `> ⚠️ PENDIENTE DE VERIFICAR:`
+
+#### Scenario: Reglas propias de AIF-C01
+- **WHEN** un agente trabaja en `cursos/aif-c01/`
+- **THEN** encuentra en `cursos/aif-c01/AGENTS.md` las fuentes oficiales de AWS, los avisos de disponibilidad de servicios y las reglas de sus laboratorios
 
 ### Requirement: Registro de cambios
 `CHANGELOG.md` SHALL registrar la Iteración 0 y toda discrepancia entre los datos de referencia de `promt.md` y la guía oficial.

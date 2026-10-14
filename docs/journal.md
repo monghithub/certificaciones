@@ -89,6 +89,7 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - Cada curso lleva su propio `AGENTS.md`, que complementa al raíz.
   - Ramas `<slug>/<etapa>` y etiquetas `<slug>-vX.Y.Z` por curso.
 - **Verificación:** validador, cobertura y 219 tests en verde (4 nuevos).
+- Integrado en `main` con la PR #2 (CI en verde; el primer intento falló por un error temporal de la API de GitHub) y cambio archivado como `2026-10-14-plataforma-multicertificacion`.
 
 ### Pendiente
 
