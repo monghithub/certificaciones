@@ -1,0 +1,26 @@
+slug: aif-c01
+titulo: AWS Certified AI Practitioner (AIF-C01)
+idioma: es-ES
+dominios:
+  - {id: 1, nombre: "Fundamentos de IA y ML", peso: 20}
+  - {id: 2, nombre: "Fundamentos de IA generativa", peso: 24}
+  - {id: 3, nombre: "Aplicaciones de modelos fundacionales", peso: 28}
+  - {id: 4, nombre: "Directrices para una IA responsable", peso: 14}
+  - {id: 5, nombre: "Seguridad, cumplimiento y gobierno de soluciones de IA", peso: 14}
+simulacro: 06-simulacro
+examen:
+  preguntas: 65
+  minutos: 90
+banco:
+  minimo_por_modulo: 60
+  minimo_simulacro: 65
+  minimo_por_tarea: 15
+  minimo_por_objetivo: 3
+  distribucion: {multiple_choice: 60, multiple_response: 20, ordering: 10, matching: 10}
+cobertura:
+  00-base-aws: conocimientos-previos.md
+  01-fundamentos-ia-ml: dominio-1.md
+  02-fundamentos-genai: dominio-2.md
+  03-modelos-fundacionales: dominio-3.md
+  04-ia-responsable: dominio-4.md
+  05-seguridad-gobierno: dominio-5.md

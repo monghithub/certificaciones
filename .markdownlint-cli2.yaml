@@ -1,0 +1,15 @@
+config:
+  MD013: false   # sin límite de longitud de línea
+  MD033: false   # HTML permitido en Markdown
+  MD024:
+    siblings_only: true
+  MD041: false
+  MD060: false   # estilo de tablas
+globs:
+  - "**/*.md"
+ignores:
+  - "openspec/**"
+  - ".claude/**"
+  - "promt.md"
+  - "node_modules/**"
+  - "**/node_modules/**"

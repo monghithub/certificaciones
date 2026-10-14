@@ -1,0 +1,11 @@
+.git
+.claude
+openspec
+tests
+venv
+.venv
+data
+.env
+**/__pycache__
+*.db*
+cursos

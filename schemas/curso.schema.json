@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/cursos/curso.schema.json",
+  "title": "Manifiesto de curso (curso.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slug",
+    "titulo",
+    "idioma",
+    "dominios"
+  ],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "titulo": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 200
+    },
+    "idioma": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+    },
+    "dominios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "nombre",
+          "peso"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "nombre": {
+            "type": "string",
+            "minLength": 1
+          },
+          "peso": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          }
+        }
+      }
+    },
+    "simulacro": {
+      "type": "string",
+      "pattern": "^[0-9]{2}-[a-z0-9-]+$"
+    },
+    "examen": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preguntas",
+        "minutos"
+      ],
+      "properties": {
+        "preguntas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minutos": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "banco": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minimo_por_modulo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minimo_simulacro": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "distribucion": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "multiple_choice": {
+              "type": "number",
+              "minimum": 0
+            },
+            "multiple_response": {
+              "type": "number",
+              "minimum": 0
+            },
+            "ordering": {
+              "type": "number",
+              "minimum": 0
+            },
+            "matching": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "minimo_por_tarea": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minimo_por_objetivo": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "cobertura": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[0-9]{2}-[a-z0-9-]+$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+\\.md$"
+      }
+    }
+  },
+  "dependentRequired": {
+    "examen": [
+      "simulacro"
+    ],
+    "simulacro": [
+      "examen"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/cursos/glosario.schema.json",
+  "title": "Glosario de curso (glosario.yaml)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "termino",
+      "categoria",
+      "definicion"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]{1,60}$"
+      },
+      "termino": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80
+      },
+      "alias": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        }
+      },
+      "categoria": {
+        "enum": [
+          "servicio",
+          "concepto",
+          "tecnica",
+          "metrica"
+        ]
+      },
+      "definicion": {
+        "type": "string",
+        "minLength": 20,
+        "maxLength": 700
+      },
+      "usar_cuando": {
+        "type": "string",
+        "minLength": 5,
+        "maxLength": 400
+      },
+      "no_usar_cuando": {
+        "type": "string",
+        "minLength": 5,
+        "maxLength": 400
+      },
+      "referencia": {
+        "type": "string",
+        "pattern": "^https://[^\\s]+$"
+      },
+      "enlaces": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "texto",
+            "url"
+          ],
+          "properties": {
+            "texto": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 120
+            },
+            "url": {
+              "type": "string",
+              "pattern": "^https://[^\\s]+$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

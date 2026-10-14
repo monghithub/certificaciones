@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  comprobaciones:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v19
+
+      - name: Comprobar enlaces
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config .lychee.toml --no-progress '**/*.md'
+          fail: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements-app.txt
+
+      - name: Tests (herramientas y consola web)
+        run: python -m pytest -q
+
+      - name: Validar preguntas
+        run: python scripts/validar_preguntas.py
+
+      - name: Comprobar cobertura de objetivos
+        run: python scripts/comprobar_cobertura.py --preguntas
+
+      - name: Aviso de marcadores PENDIENTE DE VERIFICAR
+        run: |
+          if grep -rn --include='*.md' --include='*.yaml' --exclude-dir=openspec --exclude-dir=.claude --exclude=promt.md --exclude=AGENTS.md --exclude=README.md --exclude=CHANGELOG.md 'PENDIENTE DE VERIFICAR' . > pendientes.txt; then
+            while IFS=: read -r f l _; do
+              echo "::warning file=$f,line=$l::Marcador PENDIENTE DE VERIFICAR sin resolver"
+            done < pendientes.txt
+          fi
+          exit 0
+
+  contenedor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen de la consola
+        run: docker build -t aif-c01-consola .

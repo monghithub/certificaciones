@@ -1,0 +1,76 @@
+- id: D3-001
+  dominio: 3
+  tarea: "3.1"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: >
+    Una empresa quiere que un asistente responda usando sus manuales internos,
+    actualizados semanalmente, con el menor esfuerzo operativo. ¿Qué enfoque es el más adecuado?
+  opciones:
+    - {id: a, texto: "Fine-tuning semanal de un modelo fundacional"}
+    - {id: b, texto: "Amazon Bedrock Knowledge Bases (RAG)"}
+    - {id: c, texto: "Pre-entrenamiento continuado"}
+    - {id: d, texto: "Entrenar un modelo propio en Amazon SageMaker AI"}
+  correctas: [b]
+  explicacion: RAG incorpora contenido actualizado sin reentrenar el modelo.
+  distractores:
+    a: "Reentrenar cada semana es costoso y lento."
+    c: "Exige gran volumen de datos y coste elevado."
+    d: "Máximo esfuerzo operativo, contrario al requisito."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/kb.html"
+- id: D3-002
+  dominio: 3
+  tarea: "3.2"
+  tipo: multiple_response
+  dificultad: baja
+  enunciado: >
+    ¿Qué dos técnicas de prompt engineering incluyen ejemplos en el propio prompt?
+  opciones:
+    - {id: a, texto: "Zero-shot"}
+    - {id: b, texto: "Single-shot"}
+    - {id: c, texto: "Few-shot"}
+    - {id: d, texto: "Ajuste de la temperatura"}
+    - {id: e, texto: "Negative prompts"}
+  correctas: [b, c]
+  explicacion: Single-shot y few-shot aportan uno o varios ejemplos.
+  distractores:
+    a: "No incluye ejemplos."
+    d: "Es un parámetro de inferencia, no una técnica con ejemplos."
+    e: "Indica lo que debe evitarse, no aporta ejemplos."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+- id: D3-003
+  dominio: 3
+  tarea: "3.3"
+  tipo: ordering
+  dificultad: media
+  enunciado: >
+    Ordene de menor a mayor coste y esfuerzo los enfoques para adaptar un modelo fundacional.
+  opciones:
+    - {id: a, texto: "Prompt engineering"}
+    - {id: b, texto: "RAG"}
+    - {id: c, texto: "Fine-tuning"}
+    - {id: d, texto: "Pre-entrenamiento continuado"}
+  correctas: [a, b, c, d]
+  explicacion: El coste y el esfuerzo crecen de prompt engineering a pre-entrenamiento continuado.
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+- id: D3-004
+  dominio: 3
+  tarea: "3.4"
+  tipo: matching
+  dificultad: alta
+  enunciado: >
+    Empareje cada tarea de evaluación con la métrica más adecuada.
+  prompts:
+    - {id: "1", texto: "Resumen automático de textos"}
+    - {id: "2", texto: "Traducción automática"}
+    - {id: "3", texto: "Similitud semántica de respuestas"}
+  opciones:
+    - {id: a, texto: "BLEU"}
+    - {id: b, texto: "ROUGE"}
+    - {id: c, texto: "BERTScore"}
+    - {id: d, texto: "Recall"}
+  correctas: [["1", b], ["2", a], ["3", c]]
+  explicacion: ROUGE para resumen, BLEU para traducción y BERTScore para similitud semántica.
+  distractores:
+    d: "Métrica de clasificación, no de generación de texto."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-metrics.html"
