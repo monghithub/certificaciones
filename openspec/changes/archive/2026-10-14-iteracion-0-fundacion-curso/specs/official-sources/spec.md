@@ -12,7 +12,7 @@ Antes de crear ficheros de contenido, el proceso SHALL contrastar con la guía o
 - **THEN** se adopta el valor oficial y se documenta la diferencia en `CHANGELOG.md`
 
 ### Requirement: Transcripción de tareas por dominio
-Existirán `fuentes/dominio-1.md` … `fuentes/dominio-5.md`, cada uno con la URL de origen, la fecha de consulta y la lista literal de Task Statements y sus habilidades/objetivos, con un encabezado `## Task Statement N.M` por tarea.
+Los ficheros `fuentes/dominio-1.md` … `fuentes/dominio-5.md` SHALL existir, cada uno con la URL de origen, la fecha de consulta y la lista literal de Task Statements y sus habilidades/objetivos, con un encabezado `## Task Statement N.M` por tarea.
 
 #### Scenario: Fichero de dominio completo
 - **WHEN** se abre `fuentes/dominio-3.md`

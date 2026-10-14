@@ -131,6 +131,10 @@ Objetivo y relación con tareas; requisitos (cuenta, región con Bedrock y acces
 - Una rama por módulo (`modulo/03-modelos-fundacionales`) integrada en `main` con PR.
 - `CHANGELOG.md` actualizado al completar cada módulo. Etiqueta `v1.0.0` solo con los siete módulos completos y CI en verde, sin marcadores `PENDIENTE DE VERIFICAR`.
 
+## Journal
+
+`docs/journal.md` es el diario de trabajo: al cerrar cada etapa se añade una entrada con fecha que recoja qué se hizo, qué se decidió y por qué, los cambios de OpenSpec y los commits, y lo que queda pendiente. El journal no sustituye a `CHANGELOG.md`, que solo dice qué cambia.
+
 ## Flujo por iteraciones (detenerse para revisión humana al final de cada una)
 
 - Iteración 0: cimientos.

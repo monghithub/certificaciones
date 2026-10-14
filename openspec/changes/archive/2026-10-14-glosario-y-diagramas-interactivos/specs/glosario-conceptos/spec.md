@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Glosario por curso
-Un curso MAY incluir `cursos/<curso>/glosario.yaml`, una lista de entradas con `id`, `termino`, `categoria` y `definicion` obligatorios y `alias`, `usar_cuando`, `no_usar_cuando` y `referencia` opcionales, validada con `schemas/glosario.schema.json`.
+Un curso MAY incluir `cursos/<curso>/glosario.yaml`, una lista de entradas con `id`, `termino`, `categoria` y `definicion` obligatorios y `alias`, `usar_cuando`, `no_usar_cuando` y `referencia` opcionales; cuando exista, SHALL validarse con `schemas/glosario.schema.json`.
 
 #### Scenario: Entrada válida
 - **WHEN** una entrada tiene id en minúsculas con guiones, término, categoría `servicio` y una definición
