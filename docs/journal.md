@@ -99,11 +99,26 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - El laboratorio usa el playground de Bedrock con un modelo económico y sin recursos con coste por hora.
   - El módulo 02 explica *qué* es cada técnica y remite al 03 para el *cómo*.
   - Antes de redactar se verifica cada servicio reciente (Quick, Kiro, Strands Agents, AgentCore).
-- Estado: **pendiente de revisión del usuario** antes de implementar (`/opsx:apply`).
+- Estado: el usuario la aprobó («hazlo todo») y se implementó en la misma rama.
+
+### Iteración 2: módulo 02 (Dominio 2) implementado
+
+- **Petición del usuario:** «hazlo todo», que cubría reconstruir la consola con la imagen `certificaciones-consola` (la antigua `aif-c01-consola` se borró) e implementar la iteración 2.
+- **Verificación primero:** antes de redactar se descargaron y contrastaron unas 60 páginas oficiales (Bedrock, niveles de servicio, lotes, Provisioned Throughput, inferencia entre Regiones, personalización, AgentCore, Quick, Kiro, Strands Agents, MCP, Nova, Amazon Q, Trainium e Inferentia). Hallazgos: Amazon Q Business ya no admite clientes nuevos (→ Amazon Quick), los *plugins* de IDE de Q Developer pierden soporte el 30/04/2027 (→ Kiro), los modelos personalizados pueden usarse también bajo demanda y Nova Canvas y Nova Reel están retirados.
+- **Hecho:** teoría con los 14 objetivos y 5 diagramas, `servicios.md`, `trampas.md`, laboratorio del *playground* de Bedrock con Nova Micro, 75 preguntas y 38 entradas de glosario. La prueba de navegador cubre también las cajas del módulo 02.
+- **Decisiones:**
+  - El ejemplo de coste por *tokens* usa precios reales y fechados de un modelo cuya tabla es pública (DeepSeek v3.2 en us-east-1), porque la tabla de Nova se carga con JavaScript y no se pudo verificar.
+  - El laboratorio no da el precio de Nova Micro: remite a la página de precios y acota el coste con una cota superior explícita.
+  - El glosario no usa «temperatura» como alias, porque en el módulo 01 aparece con otro sentido (la temperatura de una máquina).
+  - Las preguntas se escriben con la correcta primero y un generador fuera del repositorio reparte las letras; la fuente de verdad es `preguntas.yaml`.
+- **Revisión independiente:** encontró 3 errores críticos (cálculo de un distractor, Nova Canvas y Nova Reel retirados y Trainium también para inferencia), 11 importantes (AWS Transform y A2A ausentes, cifras de Priority y Flex, pistas en enunciados, distractores débiles, la correcta como opción más larga en el 54 % de los casos) y varios menores. Se aplicaron todos antes del cierre, salvo dos: las referencias de las métricas de negocio siguen citando la guía del examen, porque AWS no tiene páginas oficiales que las definan, y la dificultad baja queda en el 13 %.
+- **Verificación:** validador, cobertura (14/14, de 4 a 8 preguntas por objetivo), markdownlint, 10/10 diagramas, 219 tests y 36/36 comprobaciones de navegador.
+- **Queda abierto:** el marcador sobre Amazon Q en `servicios-alcance.md` y en `servicios.md`. En la consola, la solución de las preguntas de emparejamiento se muestra en formato técnico (`[['1','e'], …]`); es un defecto anterior a esta iteración.
 
 ### Pendiente
 
-- Iteraciones 2 a 5: módulos 02 a 05, con al menos 60 preguntas cada uno y laboratorio obligatorio.
+- Iteraciones 3 a 5: módulos 03 a 05, con al menos 60 preguntas cada uno y laboratorio obligatorio.
+- Consola: mostrar de forma legible la solución de las preguntas de emparejamiento y ordenación.
 - Iteración 6: simulacro de 65 preguntas inéditas, `chuleta.md`, decidir sobre `glosario.md` (hoy existe `glosario.yaml`) y revisión cruzada.
 - Marcadores `PENDIENTE DE VERIFICAR` en `fuentes/servicios-alcance.md` (Amazon Q; incoherencia de la lista out of scope de AWS).
 - Decisiones del usuario: licencia y formato de `ordering`/`matching`.

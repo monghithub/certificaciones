@@ -38,6 +38,23 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
   - `cursos/aif-c01/README.md`: enlaces al conjunto oficial de preguntas de práctica de AWS Skill Builder, a la página de la certificación y a la guía del examen (criterio de aceptación de `promt.md`); estado actualizado a 82 preguntas.
   - `fuentes/servicios-alcance.md`: se anota la contradicción de AWS entre la página de revisiones y la lista out of scope vigente.
 
+- Iteración 2: módulo 02 (Dominio 2, fundamentos de IA generativa), verificado contra la documentación oficial el 2026-10-14:
+  - **Teoría** con mapa de cobertura de los 14 objetivos y 5 diagramas: *tokens*, *chunking*, *embeddings*, vectores, *transformers*, modelos multimodales y de difusión; casos de uso; ciclo de vida del modelo fundacional con un caso de principio a fin; precios por *tokens* con ejemplo resuelto; ingeniería de contexto; IA agéntica (uso de herramientas, MCP, memoria, orquestación, patrones multiagente); ventajas, limitaciones y parámetros de inferencia; criterios para elegir un modelo; métricas de negocio con ejemplo de ROI; servicios (Bedrock, SageMaker AI, JumpStart, Quick, Kiro, Strands Agents, AgentCore), ventajas de AWS, infraestructura (privacidad de Bedrock, cumplimiento, Trainium e Inferentia) y compromisos de coste (niveles Standard, Priority, Flex y Reserved, lotes, Provisioned Throughput, modelos personalizados, *prompt caching* e inferencia entre Regiones).
+  - `servicios.md`, `trampas.md` y laboratorio del *playground* de Bedrock con Amazon Nova Micro (temperatura, top-p, longitud máxima y *tokens*), con permisos de consola y CLI, coste y limpieza.
+  - **Banco:** 75 preguntas originales (46 de opción múltiple, 15 de respuesta múltiple, 6 de ordenación y 8 de emparejamiento; 31, 20 y 24 por tarea; de 4 a 8 por objetivo; dificultad 10 baja, 46 media y 19 alta).
+  - **Glosario:** 38 entradas nuevas (124 en total), entre ellas A2A, AWS Transform, AWS PrivateLink y la API Converse.
+  - **Disponibilidad:** Amazon Q Business ya no admite clientes nuevos (AWS remite a Amazon Quick) y los *plugins* de IDE de Amazon Q Developer pierden soporte el 30 de abril de 2027 (AWS remite a Kiro). Amazon Quick sustituye a QuickSight, que sigue como Quick Sight.
+  - **Correcciones:** la entrada del glosario de *Provisioned Throughput* decía que es obligatorio para usar un modelo personalizado; ahora algunos modelos personalizados admiten también inferencia bajo demanda. La referencia de Kiro apunta a su página de documentación en AWS.
+  - `tests/e2e/consola.mjs` comprueba también las cajas de los diagramas del módulo 02.
+  - **Revisión independiente** (2026-10-14), contrastada con la documentación oficial y aplicada antes del cierre:
+    - Nova Canvas, Nova Reel y Nova Sonic v1 están retirados (fin de vida en septiembre de 2026): se retiran como distractores y se anota en el glosario.
+    - AWS Trainium sirve para entrenar **y** para inferencia; Inferentia es específico de inferencia (se reescribe D2-066).
+    - Cifras de los niveles de servicio: Priority +75 % y Flex −50 % sobre Standard (igual que lotes); Reserved desborda a Standard.
+    - Se añaden AWS Transform (servicio in scope que faltaba) y el protocolo A2A frente a MCP, y la lista de módulos de AgentCore se completa con Policy y Evaluations.
+    - Trampas nuevas para los objetivos 2.1.2, 2.2.1 y 2.3.2, y un ejemplo de negocio para 2.3.3.
+    - Banco: corregida la explicación de un distractor de cálculo (D2-017); distractores más plausibles y sin pistas en D2-003, 009, 012, 016, 022, 023, 026, 028, 033, 038, 040, 044, 046, 053, 056, 060 y 061; la respuesta correcta ya no es la opción más larga en la mayoría de las preguntas (de 25 a 13 de 46).
+    - Precisiones: ventana de contexto (incluye a menudo la salida), *chunking* por defecto de unos 300 *tokens*, `CountTokens` solo en modelos compatibles, *Provisioned Throughput* no se combina con la inferencia entre Regiones, y el plan gratuito de AWS no da acceso a todos los servicios.
+
 - **Plataforma multicertificación.** El repositorio pasa a llamarse `certificaciones` y reúne cursos de cualquier proveedor:
   - El manifiesto admite `proveedor` y `fuentes_oficiales`, y `validar_preguntas.py` exige que la `referencia` de cada pregunta pertenezca a las fuentes oficiales de su curso. El esquema de pregunta ya no está atado a AWS.
   - `AGENTS.md` raíz con las reglas comunes; las propias de AWS y AIF-C01 pasan a `cursos/aif-c01/AGENTS.md`, y `promt.md` a `cursos/aif-c01/promt.md`.
