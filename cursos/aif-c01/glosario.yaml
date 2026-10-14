@@ -1,0 +1,665 @@
+# Glosario del curso AIF-C01. Cada servicio o concepto clave que aparece en los módulos debe tener su entrada.
+# Los términos y alias se convierten en botones que abren un modal en la consola.
+
+# ------------------------------------------------------------------ servicios de AWS
+- id: amazon-ec2
+  termino: Amazon EC2
+  alias: [EC2, Amazon Elastic Compute Cloud]
+  categoria: servicio
+  definicion: "Capacidad de cómputo escalable bajo demanda en la nube de AWS: servidores virtuales llamados instancias. El cliente elige el tipo de instancia, la red y el almacenamiento, y gestiona el sistema operativo invitado."
+  usar_cuando: "Cuando se necesita control del sistema operativo, de la red y del almacenamiento (por ejemplo, para alojar un modelo propio)."
+  no_usar_cuando: "Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor."
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
+
+- id: amazon-s3
+  termino: Amazon S3
+  alias: [S3, Amazon Simple Storage Service]
+  categoria: servicio
+  definicion: "Servicio de almacenamiento de objetos con gran escalabilidad, disponibilidad, seguridad y rendimiento. Se usa, entre otros, para lagos de datos, sitios web, copias de seguridad y analítica de big data."
+  no_usar_cuando: "Como base de datos transaccional o como sistema de ficheros de baja latencia para un servidor."
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
+
+- id: aws-lambda
+  termino: AWS Lambda
+  alias: [Lambda]
+  categoria: servicio
+  definicion: "Servicio de cómputo serverless: ejecuta código sin aprovisionar ni gestionar servidores. AWS se encarga del mantenimiento, la capacidad, el escalado y los parches."
+  usar_cuando: "Para ejecutar código en respuesta a eventos o llamadas a una API sin gestionar servidores."
+  no_usar_cuando: "Cuando se necesita control sobre el servidor o el sistema operativo."
+  referencia: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+
+- id: aws-iam
+  termino: AWS Identity and Access Management (IAM)
+  alias: [IAM, AWS Identity and Access Management]
+  categoria: servicio
+  definicion: "Servicio que controla de forma segura el acceso a los recursos de AWS: quién está autenticado (ha iniciado sesión) y quién está autorizado (tiene permisos) para usar qué recursos."
+  no_usar_cuando: "No es un servicio de datos ni de cómputo: no sustituye al cifrado ni a las políticas de la propia aplicación."
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
+
+- id: amazon-bedrock
+  termino: Amazon Bedrock
+  alias: [Bedrock]
+  categoria: servicio
+  definicion: "Servicio totalmente gestionado que da acceso seguro a modelos fundacionales de alto rendimiento de las principales compañías de IA para crear y escalar aplicaciones de IA generativa."
+  usar_cuando: "Para usar modelos fundacionales de varios proveedores mediante API, sin gestionar la infraestructura."
+  no_usar_cuando: "Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
+
+- id: amazon-bedrock-agentcore
+  termino: Amazon Bedrock AgentCore
+  alias: [AgentCore]
+  categoria: servicio
+  definicion: "Plataforma agéntica para crear, desplegar y operar agentes de IA de forma segura y a escala, con cualquier framework y modelo fundacional."
+  usar_cuando: "Cuando hay un caso de uso agéntico que necesita ejecución, memoria, identidad y observabilidad gestionadas."
+  no_usar_cuando: "Cuando basta una consulta sencilla a un modelo: no hace falta un agente."
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html
+
+- id: amazon-bedrock-agents
+  termino: Amazon Bedrock Agents
+  alias: [Bedrock Agents, Amazon Bedrock Agents Classic]
+  categoria: servicio
+  definicion: "Permite crear y configurar agentes autónomos en una aplicación: orquestan las interacciones entre modelos fundacionales, fuentes de datos, aplicaciones y usuarios, y llaman a APIs para ejecutar acciones. Ahora se llama Agents Classic y ya no está abierto a clientes nuevos."
+  no_usar_cuando: "En proyectos nuevos: AWS remite a Amazon Bedrock AgentCore para capacidades similares."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html
+
+- id: amazon-bedrock-knowledge-bases
+  termino: Amazon Bedrock Knowledge Bases
+  alias: [Bedrock Knowledge Bases, Knowledge Bases]
+  categoria: servicio
+  definicion: "Permite integrar información propia en aplicaciones de IA generativa mediante RAG: busca en tus datos la información relevante para una consulta y la usa para mejorar las respuestas del modelo."
+  usar_cuando: "Cuando el modelo debe responder con información propia, específica o actualizada."
+  no_usar_cuando: "Cuando el modelo no necesita datos propios ni actualizados."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
+
+- id: amazon-sagemaker-ai
+  termino: Amazon SageMaker AI
+  alias: [SageMaker AI, SageMaker]
+  categoria: servicio
+  definicion: "Servicio totalmente gestionado de aprendizaje automático para construir, entrenar y desplegar modelos propios en un entorno de alojamiento listo para producción. Antes del 3 de diciembre de 2024 se llamaba Amazon SageMaker; desde esa fecha, «Amazon SageMaker» es el nombre de una plataforma unificada de datos, analítica e IA que incluye SageMaker AI."
+  usar_cuando: "Cuando hace falta un modelo propio y la máxima flexibilidad y control sobre el algoritmo."
+  no_usar_cuando: "Cuando un servicio de IA preentrenado resuelve el caso con menos esfuerzo."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+
+- id: amazon-sagemaker-jumpstart
+  termino: Amazon SageMaker JumpStart
+  alias: [SageMaker JumpStart, JumpStart]
+  categoria: servicio
+  definicion: "Ofrece modelos preentrenados de código abierto para muchos tipos de problemas, que se pueden entrenar de forma incremental y ajustar antes de desplegarlos, además de plantillas de solución y cuadernos de ejemplo."
+  usar_cuando: "Para partir de un modelo preentrenado y ajustarlo con datos propios sin entrenar desde cero."
+  no_usar_cuando: "Cuando se necesita un modelo totalmente a medida con un algoritmo propio, sin partir de uno preentrenado."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html
+
+- id: amazon-sagemaker-model-monitor
+  termino: SageMaker Model Monitor
+  alias: [Model Monitor, Amazon SageMaker Model Monitor]
+  categoria: servicio
+  definicion: "Calcula métricas de calidad del modelo en producción (regresión y clasificación) para detectar su deriva con el tiempo. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html
+
+- id: amazon-sagemaker-clarify
+  termino: SageMaker Clarify
+  alias: [Amazon SageMaker Clarify]
+  categoria: servicio
+  definicion: "Herramienta de SageMaker AI para detectar sesgo en los datos y en los modelos y explicar sus predicciones. Ya no está abierta a clientes nuevos; los existentes pueden seguir usándola."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html
+
+- id: amazon-transcribe
+  termino: Amazon Transcribe
+  alias: [Transcribe]
+  categoria: servicio
+  definicion: "Servicio de reconocimiento automático del habla que usa modelos de aprendizaje automático para convertir audio en texto."
+  usar_cuando: "Para transcribir audio (reuniones, llamadas) a texto."
+  no_usar_cuando: "Cuando se necesita generar voz a partir de texto (Amazon Polly) o traducir (Amazon Translate)."
+  referencia: https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html
+
+- id: amazon-translate
+  termino: Amazon Translate
+  alias: [Translate]
+  categoria: servicio
+  definicion: "Servicio de traducción de texto bajo demanda que usa aprendizaje automático. Sirve para traducir documentos de texto no estructurado y para crear aplicaciones multilingües."
+  no_usar_cuando: "Cuando hay que transcribir audio o extraer información del contenido de un documento."
+  referencia: https://docs.aws.amazon.com/translate/latest/dg/what-is.html
+
+- id: amazon-comprehend
+  termino: Amazon Comprehend
+  alias: [Comprehend]
+  categoria: servicio
+  definicion: "Usa procesamiento del lenguaje natural (NLP) para extraer información del contenido de los documentos: reconoce entidades, frases clave, idioma, opiniones y otros elementos."
+  usar_cuando: "Para analizar texto: opiniones de clientes, entidades o temas de un conjunto de documentos."
+  no_usar_cuando: "Cuando el problema no es de lenguaje natural (imágenes, datos tabulares)."
+  referencia: https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html
+
+- id: amazon-lex
+  termino: Amazon Lex
+  alias: [Lex, Amazon Lex V2]
+  categoria: servicio
+  definicion: "Servicio para crear interfaces conversacionales por voz y texto en las aplicaciones, con comprensión del lenguaje natural (NLU) y reconocimiento automático del habla (ASR)."
+  usar_cuando: "Para construir un chatbot o asistente de voz propio."
+  no_usar_cuando: "Cuando solo se quiere analizar texto existente, sin diálogo con el usuario."
+  referencia: https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html
+
+- id: amazon-polly
+  termino: Amazon Polly
+  alias: [Polly]
+  categoria: servicio
+  definicion: "Servicio en la nube que convierte texto en voz realista, con varios idiomas y voces. Solo se paga por el texto sintetizado."
+  usar_cuando: "Para dar voz a aplicaciones: lectura de artículos, asistentes, accesibilidad."
+  no_usar_cuando: "Cuando se necesita el proceso inverso, de voz a texto (Amazon Transcribe)."
+  referencia: https://docs.aws.amazon.com/polly/latest/dg/what-is.html
+
+- id: amazon-rekognition
+  termino: Amazon Rekognition
+  alias: [Rekognition]
+  categoria: servicio
+  definicion: "Servicio de análisis de imágenes y vídeo basado en aprendizaje profundo que añade capacidades de visión por computador a las aplicaciones sin necesidad de experiencia en ML."
+  usar_cuando: "Para analizar imágenes y vídeos: objetos, escenas, moderación de contenido."
+  no_usar_cuando: "Cuando hay que extraer texto estructurado de documentos (Amazon Textract)."
+  referencia: https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html
+
+- id: amazon-textract
+  termino: Amazon Textract
+  alias: [Textract]
+  categoria: servicio
+  definicion: "Detecta y analiza texto mecanografiado y manuscrito en documentos, y extrae texto, formularios y tablas de documentos con datos estructurados."
+  usar_cuando: "Para digitalizar formularios, facturas y documentos escaneados."
+  no_usar_cuando: "Cuando se trata de reconocer objetos o rostros en fotografías (Amazon Rekognition)."
+  referencia: https://docs.aws.amazon.com/textract/latest/dg/what-is.html
+
+- id: amazon-personalize
+  termino: Amazon Personalize
+  alias: [Personalize]
+  categoria: servicio
+  definicion: "Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad."
+  usar_cuando: "Para personalizar recomendaciones (por ejemplo, en una aplicación de vídeo)."
+  no_usar_cuando: "Cuando no se dispone de datos propios de usuarios y elementos con los que generar recomendaciones."
+  referencia: https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html
+
+- id: amazon-quick
+  termino: Amazon Quick
+  alias: [Quick]
+  categoria: servicio
+  definicion: "Servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar. Se usa mediante chat en lenguaje natural y emplea agentes de IA sobre los datos y aplicaciones conectados."
+  no_usar_cuando: "Cuando se necesita un modelo propio con control sobre el entrenamiento."
+  referencia: https://docs.aws.amazon.com/quicksuite/latest/userguide/what-is.html
+
+- id: kiro
+  termino: Kiro
+  categoria: servicio
+  definicion: "Plataforma de desarrollo con IA de AWS, basada en especificaciones (spec-driven development), con un IDE y una CLI en los que agentes de IA ayudan a planificar, escribir y probar código."
+  usar_cuando: "Para acelerar el desarrollo de software (incluidas aplicaciones de IA) con un asistente agéntico."
+  no_usar_cuando: "Cuando la pregunta trata de entrenar o desplegar un modelo de ML."
+  referencia: https://kiro.dev/
+  enlaces:
+    - {texto: "Kiro en la documentación de AWS (GovCloud)", url: "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kiro.html"}
+
+# ------------------------------------------------------------------ conceptos de IA y ML
+- id: inteligencia-artificial
+  termino: inteligencia artificial
+  alias: [IA, AI]
+  categoria: concepto
+  definicion: "Cualquier sistema capaz de replicar tareas que antes requerían inteligencia humana. La mayoría de los casos de uso buscan un resultado probabilístico: una predicción o decisión con un alto grado de certeza."
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+
+- id: aprendizaje-automatico
+  termino: aprendizaje automático
+  alias: [ML, machine learning]
+  categoria: concepto
+  definicion: "Subconjunto de la IA que usa grandes cantidades de datos para crear y validar una lógica de decisión, llamada modelo. Casi todos los sistemas de IA actuales se crean con ML."
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+
+- id: aprendizaje-profundo
+  termino: aprendizaje profundo
+  alias: [deep learning]
+  categoria: concepto
+  definicion: "Método de IA inspirado en el cerebro humano que procesa datos con redes neuronales de muchas capas. Reconoce patrones complejos en imágenes, texto, sonido y otros datos."
+  referencia: https://aws.amazon.com/what-is/deep-learning/
+
+- id: red-neuronal
+  termino: red neuronal
+  alias: [redes neuronales, neural network]
+  categoria: concepto
+  definicion: "Método de IA que procesa datos con nodos (neuronas artificiales) interconectados y organizados en capas, de forma inspirada en el cerebro humano. Es la base del aprendizaje profundo."
+  referencia: https://aws.amazon.com/what-is/neural-network/
+
+- id: ia-generativa
+  termino: IA generativa
+  alias: [GenAI, generative AI]
+  categoria: concepto
+  definicion: "Conjunto de sistemas y modelos de IA diseñados para generar contenido nuevo (texto, código, imágenes, música u otros datos) a partir de patrones aprendidos de datos existentes. Es un subconjunto del aprendizaje profundo."
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/generative-ai-on-aws-how-to-choose/guide.html
+
+- id: modelo-fundacional
+  termino: modelo fundacional
+  alias: [modelos fundacionales, foundation model, foundation models, FM, FMs]
+  categoria: concepto
+  definicion: "Modelo muy grande preentrenado con vastos conjuntos de datos que sirve de base de la IA generativa. Se desarrolla en los dominios 2 y 3 del examen."
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/generative-ai-on-aws-how-to-choose/guide.html
+
+- id: llm
+  termino: LLM
+  alias: [modelo de lenguaje de gran tamaño, large language model, LLMs]
+  categoria: concepto
+  definicion: "Modelo de aprendizaje profundo muy grande, preentrenado con enormes cantidades de datos y basado en la arquitectura transformer, capaz de comprender y generar lenguaje."
+  referencia: https://aws.amazon.com/what-is/large-language-model/
+
+- id: ia-agentica
+  termino: IA agéntica
+  alias: [agentic AI]
+  categoria: concepto
+  definicion: "Sistema de IA autónomo que puede actuar de forma independiente para alcanzar objetivos predefinidos, sin una supervisión humana constante. En AWS, un agente orquesta modelos, fuentes de datos y aplicaciones, y llama a APIs para ejecutar acciones."
+  referencia: https://aws.amazon.com/what-is/agentic-ai/
+
+- id: nlp
+  termino: procesamiento del lenguaje natural
+  alias: [NLP, PLN]
+  categoria: concepto
+  definicion: "Tecnología que permite a los ordenadores interpretar, manipular y comprender el lenguaje humano, en texto y en voz."
+  referencia: https://aws.amazon.com/what-is/nlp/
+
+- id: vision-por-computador
+  termino: visión por computador
+  alias: [computer vision]
+  categoria: concepto
+  definicion: "Campo de la IA que permite a los ordenadores obtener información útil de imágenes, vídeos y otras entradas visuales."
+  referencia: https://aws.amazon.com/what-is/computer-vision/
+
+- id: inferencia
+  termino: inferencia
+  alias: [inferir, inference]
+  categoria: concepto
+  definicion: "Uso de un modelo ya entrenado para obtener predicciones sobre datos nuevos. Se distingue del entrenamiento, que es el proceso de crear el modelo a partir de datos conocidos."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html
+
+- id: sobreajuste
+  termino: sobreajuste
+  alias: [overfitting]
+  categoria: concepto
+  definicion: "El modelo acierta con los datos de entrenamiento pero no con datos reales porque se ajusta demasiado a ellos y no generaliza. Es un modelo de alta varianza."
+  referencia: https://aws.amazon.com/what-is/overfitting/
+
+- id: subajuste
+  termino: subajuste
+  alias: [underfitting]
+  categoria: concepto
+  definicion: "El modelo no encuentra una relación significativa entre las entradas y las salidas y falla incluso con los datos de entrenamiento. Es un modelo de alto sesgo."
+  referencia: https://aws.amazon.com/what-is/overfitting/
+
+- id: sesgo-y-equidad
+  termino: sesgo y equidad
+  alias: [equidad, fairness]
+  categoria: concepto
+  definicion: "Un sistema se considera sesgado si discrimina a determinadas personas o grupos; los datos pueden reflejar desigualdades, por ejemplo por representación insuficiente de grupos o etiquetas sesgadas. La equidad es la ausencia de ese trato desigual. No confundir con el «sesgo» como error del modelo (bias frente a varianza)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html
+
+- id: aprendizaje-supervisado
+  termino: aprendizaje supervisado
+  alias: [supervisado, supervised learning]
+  categoria: tecnica
+  definicion: "Los datos incluyen entradas y los valores objetivo (salidas) correctos. Si el objetivo es categórico es un problema de clasificación; si es continuo, de regresión."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: aprendizaje-no-supervisado
+  termino: aprendizaje no supervisado
+  alias: [no supervisado, unsupervised learning]
+  categoria: tecnica
+  definicion: "Los datos no tienen etiquetas ni valores objetivo: el modelo descubre patrones, como agrupaciones, anomalías o una representación con menos dimensiones."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: aprendizaje-por-refuerzo
+  termino: aprendizaje por refuerzo
+  alias: [reinforcement learning]
+  categoria: tecnica
+  definicion: "Un agente aprende un comportamiento por ensayo y error interactuando con un entorno dinámico, con el objetivo de maximizar las recompensas a largo plazo."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: clasificacion
+  termino: clasificación
+  alias: [classification, clasificación binaria, clasificación multiclase]
+  categoria: tecnica
+  definicion: "Problema supervisado cuyo valor objetivo es categórico: asignar un elemento a una clase. Es binaria si hay dos clases (spam o no spam) y multiclase si hay varias (el tema de un documento)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: regresion
+  termino: regresión
+  alias: [regression]
+  categoria: tecnica
+  definicion: "Problema supervisado cuyo valor objetivo es continuo: estima una variable dependiente a partir de otras, por ejemplo el precio de una vivienda."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: agrupamiento
+  termino: agrupamiento
+  alias: [clustering, análisis de agrupamiento]
+  categoria: tecnica
+  definicion: "Técnica no supervisada que busca grupos en los datos cuyos miembros se parecen entre sí lo más posible y se diferencian de los de otros grupos."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: deteccion-de-anomalias
+  termino: detección de anomalías
+  alias: [anomaly detection]
+  categoria: tecnica
+  definicion: "Identificación de elementos o eventos poco habituales que se desvían significativamente del resto de los datos; sirve, por ejemplo, para detectar fraude bancario o errores médicos."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: datos-estructurados
+  termino: datos estructurados
+  alias: [datos no estructurados, estructurados, no estructurados]
+  categoria: concepto
+  definicion: "Los datos estructurados siguen un formato predefinido, normalmente tabular con filas y columnas. Los no estructurados (audio, vídeo, imágenes, documentos largos) no siguen reglas ni un esquema predeterminado."
+  referencia: https://aws.amazon.com/compare/the-difference-between-structured-data-and-unstructured-data/
+
+- id: series-temporales
+  termino: series temporales
+  alias: [time series, serie temporal]
+  categoria: concepto
+  definicion: "Datos ordenados en el tiempo, como las lecturas continuas de sensores de IoT o los datos financieros."
+  referencia: https://aws.amazon.com/what-is/time-series-database/
+
+- id: datos-etiquetados
+  termino: datos etiquetados
+  alias: [etiquetado de datos, datos sin etiquetar, etiquetas]
+  categoria: concepto
+  definicion: "Datos a los que se ha añadido una etiqueta informativa (por ejemplo, que una foto contiene un pájaro) para que un modelo supervisado pueda aprender de ellos."
+  referencia: https://aws.amazon.com/what-is/data-labeling/
+
+- id: rag
+  termino: RAG
+  alias: [Retrieval Augmented Generation, generación aumentada por recuperación]
+  categoria: tecnica
+  definicion: "Retrieval Augmented Generation: técnica que usa información de fuentes de datos para mejorar la relevancia y la exactitud de las respuestas generadas por un modelo fundacional."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
+
+- id: mlops
+  termino: MLOps
+  alias: [ML Operations]
+  categoria: concepto
+  definicion: "Metodología que aplica las prácticas de DevOps a las cargas de trabajo de ML: integra desarrollo de software, operaciones, ingeniería de datos y ciencia de datos para agilizar la entrega de modelos durante todo su ciclo de vida."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-why.html
+
+- id: inferencia-en-tiempo-real
+  termino: inferencia en tiempo real
+  alias: [real-time inference]
+  categoria: tecnica
+  definicion: "Opción de SageMaker AI para cargas interactivas con requisitos de baja latencia: un endpoint gestionado y permanente, con escalado automático."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints.html
+
+- id: inferencia-serverless
+  termino: inferencia serverless
+  alias: [Serverless Inference]
+  categoria: tecnica
+  definicion: "Opción de SageMaker AI que despliega y escala modelos sin gestionar la infraestructura. Es ideal para cargas con periodos de inactividad entre ráfagas de tráfico que toleran arranques en frío, y se paga por uso."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+
+- id: inferencia-asincrona
+  termino: inferencia asíncrona
+  alias: [asynchronous inference]
+  categoria: tecnica
+  definicion: "Opción de SageMaker AI que encola las solicitudes y las procesa de forma asíncrona: ideal para cargas grandes o con tiempos de procesamiento largos. Puede escalar a cero cuando no hay solicitudes."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
+
+- id: transformacion-por-lotes
+  termino: transformación por lotes
+  alias: [batch transform, inferencia por lotes]
+  categoria: tecnica
+  definicion: "Opción de SageMaker AI para obtener inferencias de conjuntos de datos grandes sin necesitar un endpoint persistente y asociando cada registro de entrada con su predicción."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html
+
+# ------------------------------------------------------------------ métricas
+- id: exactitud
+  termino: exactitud
+  alias: [accuracy]
+  categoria: metrica
+  definicion: "Proporción de elementos clasificados correctamente sobre el total de elementos clasificados. Va de 0 a 1. Engaña con clases desequilibradas: si solo el 1 % de las operaciones es fraude, un modelo que nunca detecta fraude tiene un 99 % de exactitud."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+
+- id: precision
+  termino: precisión
+  alias: [precision]
+  categoria: metrica
+  definicion: "De todo lo que el modelo predice como positivo, qué parte lo es realmente: VP / (VP + FP). Se prioriza cuando un falso positivo es costoso."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+
+- id: exhaustividad
+  termino: exhaustividad
+  alias: [recall, sensibilidad]
+  categoria: metrica
+  definicion: "De todos los positivos reales, cuántos detecta el modelo: VP / (VP + FN). Se prioriza cuando un falso negativo es costoso, por ejemplo al detectar una enfermedad."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+
+- id: f1
+  termino: puntuación F1
+  alias: [F1, F1 score]
+  categoria: metrica
+  definicion: "Media armónica de la precisión y la exhaustividad: F1 = 2 × (precisión × exhaustividad) / (precisión + exhaustividad). Va de 0 a 1."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+
+- id: auc
+  termino: AUC
+  alias: [área bajo la curva ROC]
+  categoria: metrica
+  definicion: "Área bajo la curva ROC: resume el rendimiento de un clasificador en todos los umbrales. 1 es perfecto y 0,5 equivale a adivinar al azar."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+
+- id: roi
+  termino: retorno de la inversión
+  alias: [ROI, return on investment]
+  categoria: metrica
+  definicion: "Métrica de negocio que compara el beneficio económico obtenido con lo invertido. Mide el valor que aporta una solución, no la calidad técnica del modelo."
+
+# ------------------------------------------------------------------ conceptos de AWS (módulo 00)
+- id: responsabilidad-compartida
+  termino: modelo de responsabilidad compartida
+  alias: [responsabilidad compartida, shared responsibility model]
+  categoria: concepto
+  definicion: "La seguridad y el cumplimiento son una responsabilidad compartida: AWS protege la infraestructura (seguridad de la nube) y el cliente protege sus datos, accesos y configuración (seguridad en la nube). El reparto depende del servicio usado."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/security.html
+
+- id: minimo-privilegio
+  termino: mínimo privilegio
+  alias: [least privilege]
+  categoria: concepto
+  definicion: "Práctica recomendada de IAM: conceder solo los permisos imprescindibles para cada tarea."
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+
+- id: rol-de-iam
+  termino: rol de IAM
+  alias: [roles de IAM, IAM role]
+  categoria: concepto
+  definicion: "Identidad de IAM que concede credenciales temporales. AWS recomienda que las cargas de trabajo usen roles en lugar de claves de acceso permanentes."
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+
+- id: usuario-raiz
+  termino: usuario raíz
+  alias: [root user]
+  categoria: concepto
+  definicion: "Identidad de inicio de sesión con la que empieza toda cuenta de AWS, con acceso completo a todos los servicios y recursos. AWS recomienda no usarla en las tareas diarias."
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
+
+- id: serverless
+  termino: serverless
+  alias: [sin servidores]
+  categoria: concepto
+  definicion: "Modelo en el que el cliente ejecuta su código sin aprovisionar ni gestionar servidores: AWS se encarga de la infraestructura, la capacidad, el escalado y los parches. No significa que no haya servidores."
+  referencia: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+
+- id: on-demand
+  termino: On-Demand
+  alias: [bajo demanda]
+  categoria: concepto
+  definicion: "Modelo de precios de pago por uso sin compromiso. En Amazon EC2 se paga por segundo por las instancias lanzadas."
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+
+- id: savings-plans
+  termino: Savings Plans
+  alias: [Savings Plan]
+  categoria: concepto
+  definicion: "Modelo de precios que reduce el coste de Amazon EC2 a cambio de comprometerse a un uso constante, en dólares por hora, durante 1 o 3 años."
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+
+- id: reserved-instances
+  termino: Reserved Instances
+  alias: [instancias reservadas]
+  categoria: concepto
+  definicion: "Modelo de precios que reduce el coste de Amazon EC2 a cambio de comprometerse con una configuración concreta de instancia (tipo y Región) durante 1 o 3 años."
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+
+- id: spot-instances
+  termino: Spot Instances
+  alias: [instancias Spot, Spot]
+  categoria: concepto
+  definicion: "Instancias de EC2 sin usar solicitadas a un coste significativamente menor. Son una opción rentable si la aplicación es flexible en cuándo se ejecuta y admite interrupciones."
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+
+- id: provisioned-throughput
+  termino: Provisioned Throughput
+  alias: [rendimiento aprovisionado]
+  categoria: concepto
+  definicion: "Opción de Amazon Bedrock para reservar un mayor nivel de rendimiento de un modelo a un coste fijo, facturado por horas según el modelo y el número de unidades de modelo. Es obligatorio para usar un modelo personalizado."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html
+
+# ------------------------------------------------------------------ ampliación (revisión de la iteración 1)
+- id: amazon-nova
+  termino: Amazon Nova
+  alias: [Nova]
+  categoria: servicio
+  definicion: "Familia de modelos fundacionales de Amazon (texto, imagen, vídeo y voz) que se usan mediante API a través de Amazon Bedrock."
+  usar_cuando: "Cuando se busca un modelo fundacional propio de Amazon dentro de Bedrock, por ejemplo por precio-rendimiento."
+  no_usar_cuando: "Cuando basta un servicio de IA especializado o un modelo de ML tradicional para una tarea acotada."
+  referencia: https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html
+
+- id: aws-glue
+  termino: AWS Glue
+  alias: [Glue]
+  categoria: servicio
+  definicion: "Servicio serverless de integración de datos para descubrir, preparar, mover e integrar datos de varias fuentes (ETL), con un catálogo de datos centralizado (AWS Glue Data Catalog)."
+  usar_cuando: "Para preparar y transformar datos (ETL) antes de entrenar un modelo o analizarlos."
+  no_usar_cuando: "Para entrenar o desplegar modelos: eso es SageMaker AI."
+  referencia: https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html
+
+- id: aws-glue-databrew
+  termino: AWS Glue DataBrew
+  alias: [DataBrew, Glue DataBrew]
+  categoria: servicio
+  definicion: "Herramienta visual de preparación de datos que permite limpiar y normalizar datos sin escribir código, con más de 250 transformaciones predefinidas. Es serverless."
+  usar_cuando: "Cuando analistas sin experiencia en programación deben limpiar datos para analítica o ML."
+  no_usar_cuando: "Cuando se necesita un pipeline ETL programado a medida (AWS Glue) o entrenar un modelo."
+  referencia: https://docs.aws.amazon.com/databrew/latest/dg/what-is.html
+
+- id: amazon-sagemaker-canvas
+  termino: Amazon SageMaker Canvas
+  alias: [SageMaker Canvas]
+  categoria: servicio
+  definicion: "Funcionalidad de SageMaker AI para generar predicciones con ML sin escribir código: modelos listos para usar (basados en Rekognition, Textract y Comprehend) o modelos propios de regresión, clasificación, previsión de series temporales, imagen y texto."
+  usar_cuando: "Cuando analistas de negocio sin experiencia en ML ni en programación necesitan un modelo predictivo con sus datos."
+  no_usar_cuando: "Cuando un equipo de ciencia de datos necesita control total sobre el algoritmo y el código."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html
+
+- id: amazon-sagemaker-ground-truth
+  termino: Amazon SageMaker Ground Truth
+  alias: [SageMaker Ground Truth, Ground Truth]
+  categoria: servicio
+  definicion: "Servicio para crear conjuntos de datos de entrenamiento etiquetados con trabajadores humanos (propios, de un proveedor o de Amazon Mechanical Turk) y etiquetado automático. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html
+
+- id: amazon-sagemaker-pipelines
+  termino: Amazon SageMaker Pipelines
+  alias: [SageMaker Pipelines]
+  categoria: servicio
+  definicion: "Servicio de orquestación de flujos de trabajo de SageMaker AI para automatizar el procesamiento de datos, el entrenamiento, la evaluación, el despliegue y la monitorización de modelos, con versionado y trazabilidad (lineage)."
+  usar_cuando: "Para que el entrenamiento y el despliegue sean repetibles y automatizados (MLOps)."
+  no_usar_cuando: "Para un experimento puntual que no se va a repetir."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html
+
+- id: amazon-sagemaker-model-registry
+  termino: SageMaker Model Registry
+  alias: [Model Registry, Amazon SageMaker Model Registry]
+  categoria: servicio
+  definicion: "Catálogo de modelos de SageMaker AI: gestiona versiones, metadatos (como métricas de entrenamiento), linaje, estado de aprobación y despliegue a producción."
+  usar_cuando: "Para versionar modelos, aprobarlos antes de producción y saber qué versión está desplegada."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+
+- id: sagemaker-mlflow
+  termino: MLflow en SageMaker AI
+  alias: [MLflow, SageMaker Experiments]
+  categoria: servicio
+  definicion: "MLflow totalmente gestionado en SageMaker AI para registrar, organizar y comparar experimentos y registrar los mejores modelos. Sustituye como opción recomendada a SageMaker Experiments, que ahora es Experiments Classic y solo funciona en Studio Classic."
+  usar_cuando: "Para que los experimentos de ML sean reproducibles y comparables."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow.html
+
+- id: amazon-cloudwatch
+  termino: Amazon CloudWatch
+  alias: [CloudWatch]
+  categoria: servicio
+  definicion: "Servicio de monitorización de recursos y aplicaciones de AWS: recoge métricas y registros (logs) y permite crear alarmas cuando una métrica supera un umbral."
+  usar_cuando: "Para vigilar el rendimiento y el uso de un endpoint o una aplicación y recibir alarmas."
+  no_usar_cuando: "Para auditar quién hizo qué llamada a la API (AWS CloudTrail)."
+  referencia: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html
+
+- id: aws-cloudtrail
+  termino: AWS CloudTrail
+  alias: [CloudTrail]
+  categoria: servicio
+  definicion: "Servicio que registra la actividad de la cuenta (llamadas a la API de AWS: quién, qué, cuándo y desde dónde) para auditoría, gobierno y cumplimiento."
+  usar_cuando: "Para auditar el uso de los servicios, por ejemplo quién invocó un modelo o cambió un permiso."
+  no_usar_cuando: "Para monitorizar métricas de rendimiento (Amazon CloudWatch)."
+  referencia: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html
+
+- id: amazon-vpc
+  termino: Amazon VPC
+  alias: [VPC, Amazon Virtual Private Cloud]
+  categoria: servicio
+  definicion: "Red virtual aislada lógicamente dentro de AWS en la que el cliente lanza sus recursos y controla direcciones IP, subredes, tablas de rutas y acceso."
+  usar_cuando: "Cuando los recursos (por ejemplo, un endpoint de modelo) deben quedar en una red privada controlada por el cliente."
+  referencia: https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+
+- id: aws-budgets
+  termino: AWS Budgets
+  alias: [Budgets]
+  categoria: servicio
+  definicion: "Permite definir presupuestos de coste o de uso y recibir alertas cuando el gasto real o previsto los supera."
+  usar_cuando: "Para avisar antes de que un laboratorio o un proyecto de IA supere un gasto previsto."
+  no_usar_cuando: "Para analizar en detalle el gasto histórico (AWS Cost Explorer)."
+  referencia: https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html
+
+- id: aws-cost-explorer
+  termino: AWS Cost Explorer
+  alias: [Cost Explorer]
+  categoria: servicio
+  definicion: "Herramienta para visualizar, entender y analizar los costes y el uso de AWS a lo largo del tiempo, con previsiones."
+  usar_cuando: "Para ver qué servicios generan el gasto (por ejemplo, la inferencia de un modelo) y su tendencia."
+  no_usar_cuando: "Para recibir alertas automáticas al superar un umbral (AWS Budgets)."
+  referencia: https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html
+
+- id: politica-de-iam
+  termino: política de IAM
+  alias: [políticas de IAM, IAM policy]
+  categoria: concepto
+  definicion: "Documento JSON que define permisos (qué acciones se permiten o deniegan sobre qué recursos). Las basadas en identidad se asocian a usuarios, grupos o roles; las basadas en recursos, a un recurso como un bucket de S3."
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
+
+- id: aprendizaje-autosupervisado
+  termino: aprendizaje autosupervisado
+  alias: [self-supervised learning]
+  categoria: tecnica
+  definicion: "Variante en la que las etiquetas se generan a partir de los propios datos de entrada (por ejemplo, ocultar una palabra y predecirla). Es como se preentrenan los modelos fundacionales con enormes volúmenes de datos sin etiquetar."
+  referencia: https://aws.amazon.com/what-is/foundation-models/
+
+- id: deriva
+  termino: deriva
+  alias: [deriva del modelo, deriva de datos, drift]
+  categoria: concepto
+  definicion: "Cambio con el tiempo de los datos de producción (o de la relación entre entradas y resultados) respecto a los de entrenamiento, que degrada la calidad del modelo. Se detecta monitorizando y se corrige reentrenando."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html
+
+- id: matriz-de-confusion
+  termino: matriz de confusión
+  alias: [confusion matrix, falso positivo, falsos positivos, falso negativo, falsos negativos]
+  categoria: metrica
+  definicion: "Tabla que cruza las clases reales con las predichas: verdaderos positivos (VP), falsos positivos (FP), verdaderos negativos (VN) y falsos negativos (FN). A partir de ella se calculan la exactitud, la precisión, la exhaustividad y F1."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html
+
+- id: algoritmo
+  termino: algoritmo
+  alias: [algoritmos, algorithm]
+  categoria: concepto
+  definicion: "La «receta» con la que se resuelve un tipo de problema de ML. Al aplicarlo a unos datos de entrenamiento se obtiene un modelo. La relación entre algoritmos y tipos de problema es de muchos a muchos."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html

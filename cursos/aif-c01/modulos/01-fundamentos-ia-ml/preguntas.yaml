@@ -1,0 +1,2406 @@
+- id: D1-001
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una aseguradora quiere que, cuando un cliente escriba «quiero dar de baja mi póliza», el sistema compruebe
+    la permanencia en el CRM, calcule la penalización con la API de facturación, proponga una oferta de retención
+    y, si el cliente insiste, tramite la baja, sin que un empleado intervenga en cada paso. ¿Qué tipo de solución
+    describe mejor este sistema?
+  opciones:
+  - id: a
+    texto: IA agéntica
+  - id: b
+    texto: Un modelo de IA generativa que redacta una respuesta al cliente
+  - id: c
+    texto: Un modelo de aprendizaje por refuerzo
+  - id: d
+    texto: Un modelo de clasificación que predice la probabilidad de baja
+  correctas:
+  - a
+  explicacion: 'La IA agéntica es un sistema autónomo que actúa de forma independiente para alcanzar un objetivo,
+    sin supervisión humana constante: decide los pasos, usa herramientas (CRM, API de facturación) y ejecuta acciones.
+    Suele apoyarse en un modelo fundacional, pero lo que la define es que actúa.'
+  distractores:
+    b: La IA generativa produce contenido cuando se le pide; redactar la respuesta sería solo una parte. El escenario
+      exige decidir pasos y ejecutar acciones en otros sistemas.
+    c: El aprendizaje por refuerzo es una forma de entrenar un modelo con recompensas en un entorno; no describe
+      un sistema que consulta herramientas y tramita una gestión.
+    d: Un clasificador podría estimar el riesgo de baja, pero no consulta sistemas ni ejecuta la tramitación.
+  referencia: https://aws.amazon.com/what-is/agentic-ai/
+- id: D1-002
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo entrena un modelo para detectar transacciones fraudulentas. Con los datos de entrenamiento
+    acierta el 99 % de los casos, pero con un conjunto de validación separado, que el modelo no vio durante el entrenamiento,
+    solo acierta el 63 %. Todavía no se ha desplegado. ¿Qué problema describe mejor esta situación?
+  opciones:
+  - id: a
+    texto: 'Deriva de datos: los datos de producción han cambiado respecto a los de entrenamiento'
+  - id: b
+    texto: 'Sobreajuste (overfitting): el modelo no generaliza a datos nuevos'
+  - id: c
+    texto: 'Subajuste (underfitting): el modelo es demasiado simple'
+  - id: d
+    texto: 'Sesgo de equidad: el modelo discrimina a un grupo demográfico'
+  correctas:
+  - b
+  explicacion: Un modelo sobreajustado da predicciones precisas con los datos de entrenamiento pero no con datos
+    nuevos, porque se ajusta demasiado a los datos con los que se entrenó y no generaliza (alta varianza). La diferencia
+    aparece ya en la validación, antes del despliegue.
+  distractores:
+    a: La deriva es un cambio de los datos de producción con el tiempo; aquí el modelo aún no está desplegado y
+      la caída aparece en la validación.
+    c: Un modelo subajustado falla incluso con los datos de entrenamiento; aquí el acierto en entrenamiento es muy
+      alto.
+    d: La equidad se refiere a un trato desigual entre grupos, y el enunciado no dice nada sobre grupos.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: D1-003
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.2
+  tipo: ordering
+  dificultad: baja
+  enunciado: Para una formación interna, la dirección de una empresa quiere un esquema con la relación entre conceptos
+    de IA. Ordene los siguientes conceptos de más amplio a más específico.
+  opciones:
+  - id: a
+    texto: IA generativa
+  - id: b
+    texto: Aprendizaje automático (ML)
+  - id: c
+    texto: Inteligencia artificial (IA)
+  - id: d
+    texto: Aprendizaje profundo
+  correctas:
+  - c
+  - b
+  - d
+  - a
+  explicacion: La IA es el término más amplio. El ML es un subconjunto de la IA que aprende de los datos. El aprendizaje
+    profundo (redes neuronales de muchas capas) es un subconjunto del ML. La IA generativa, que crea contenido nuevo,
+    es un subconjunto del aprendizaje profundo.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-004
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.2
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un equipo explica a la dirección la relación entre los conceptos de IA. ¿Qué DOS afirmaciones son correctas?
+  opciones:
+  - id: a
+    texto: La IA generativa es un tipo de aprendizaje no supervisado, independiente del aprendizaje profundo.
+  - id: b
+    texto: Todo sistema de IA usa redes neuronales.
+  - id: c
+    texto: La IA agéntica es el subconjunto del aprendizaje profundo que solo genera texto.
+  - id: d
+    texto: La IA generativa es un subconjunto del aprendizaje profundo capaz de crear contenido nuevo.
+  - id: e
+    texto: El aprendizaje automático es un subconjunto de la IA que usa grandes cantidades de datos para crear un
+      modelo.
+  correctas:
+  - d
+  - e
+  explicacion: El ML usa datos para crear y validar una lógica de decisión (el modelo) y es un subconjunto de la
+    IA. La IA generativa es un subconjunto del aprendizaje profundo que crea contenido como conversaciones, historias,
+    imágenes, vídeos o música.
+  distractores:
+    a: La IA generativa es un subconjunto del aprendizaje profundo y funciona con modelos fundacionales; no se define
+      por un paradigma de aprendizaje.
+    b: 'La IA es el término más amplio: muchos modelos de ML (árboles de decisión, regresión lineal) no usan redes
+      neuronales; solo el aprendizaje profundo se basa en ellas.'
+    c: La IA agéntica actúa de forma autónoma para alcanzar objetivos usando herramientas; no es un subconjunto
+      del aprendizaje profundo ni se limita a generar texto.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-005
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un portal de formación recibe peticiones a su modelo de recomendación solo en horario de clases y en
+    ráfagas; fuera de ese horario pasan horas sin tráfico. El equipo prefiere no elegir tipos de instancia ni políticas
+    de escalado, quiere pagar solo por uso y acepta una latencia algo mayor tras los periodos de inactividad. ¿Qué
+    opción de inferencia de Amazon SageMaker AI encaja mejor?
+  opciones:
+  - id: a
+    texto: Inferencia en tiempo real con instancias permanentes
+  - id: b
+    texto: Transformación por lotes (batch transform)
+  - id: c
+    texto: Inferencia serverless
+  - id: d
+    texto: Inferencia asíncrona con cola de solicitudes
+  correctas:
+  - c
+  explicacion: La inferencia serverless despliega y escala modelos sin configurar ni gestionar la infraestructura.
+    Es ideal para cargas con periodos de inactividad entre ráfagas de tráfico que toleran arranques en frío, y se
+    paga por uso.
+  distractores:
+    a: Un endpoint en tiempo real mantiene instancias que hay que dimensionar y pagar aunque no haya tráfico.
+    b: La transformación por lotes procesa un conjunto de datos completo y no atiende peticiones individuales en
+      ráfagas.
+    d: La asíncrona está pensada para solicitudes grandes o con tiempos de procesamiento largos; el escenario describe
+      peticiones interactivas normales.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+- id: D1-006
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una aseguradora usa varios modelos desplegados con Amazon SageMaker AI. ¿En qué DOS de estos casos
+    es adecuada la transformación por lotes (batch transform)?
+  opciones:
+  - id: a
+    texto: Un asistente de atención al cliente que debe responder en menos de un segundo a cada usuario.
+  - id: b
+    texto: Validar una tarjeta de crédito en el instante en que se realiza un pago online.
+  - id: c
+    texto: Calcular cada trimestre el riesgo de toda la cartera histórica de pólizas y guardar cada póliza junto
+      a su puntuación.
+  - id: d
+    texto: Puntuar cada noche millones de registros de clientes para la campaña de marketing del día siguiente,
+      sin mantener un endpoint permanente.
+  - id: e
+    texto: Analizar vídeos de peritaje de cientos de megabytes que llegan de forma irregular y cuyo resultado se
+      quiere en cuanto termine cada análisis.
+  correctas:
+  - c
+  - d
+  explicacion: La transformación por lotes se usa para obtener inferencias de conjuntos de datos grandes, sin necesitar
+    un endpoint persistente, y asocia cada registro de entrada con su inferencia.
+  distractores:
+    a: 'Requiere baja latencia interactiva: es un caso de inferencia en tiempo real.'
+    b: 'Una validación en el momento del pago exige respuesta inmediata: tiempo real.'
+    e: Cargas grandes que llegan de una en una y se procesan en cuanto se pueda encajan con la inferencia asíncrona,
+      que encola cada solicitud.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html
+- id: D1-007
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.3
+  tipo: matching
+  dificultad: alta
+  enunciado: Empareje cada situación con el tipo de inferencia más adecuado.
+  prompts:
+  - id: '1'
+    texto: Un asistente de voz que necesita respuestas interactivas de baja latencia
+  - id: '2'
+    texto: Un modelo que se usa en ráfagas, con largas pausas sin tráfico y sin querer gestionar infraestructura
+  - id: '3'
+    texto: Solicitudes con cargas grandes y tiempos de procesamiento largos que pueden encolarse
+  - id: '4'
+    texto: Puntuar un conjunto de datos completo sin mantener un endpoint permanente
+  opciones:
+  - id: a
+    texto: Inferencia en tiempo real
+  - id: b
+    texto: Inferencia serverless
+  - id: c
+    texto: Inferencia asíncrona
+  - id: d
+    texto: Transformación por lotes
+  - id: e
+    texto: Entrenamiento con algoritmos integrados
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: 'Tiempo real: cargas interactivas con baja latencia. Serverless: cargas con inactividad entre ráfagas,
+    sin gestionar infraestructura. Asíncrona: solicitudes grandes o largas que se encolan. Por lotes: un conjunto
+    de datos completo sin endpoint persistente.'
+  distractores:
+    e: El entrenamiento crea el modelo; no es un tipo de inferencia.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html
+- id: D1-008
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una fábrica registra la temperatura de una máquina cada 10 segundos para anticipar averías a partir
+    de cómo evolucionan las lecturas. ¿Qué tipo de datos es este principalmente?
+  opciones:
+  - id: a
+    texto: Imágenes
+  - id: b
+    texto: Texto no estructurado
+  - id: c
+    texto: Datos tabulares cuyo orden no importa
+  - id: d
+    texto: Series temporales
+  correctas:
+  - d
+  explicacion: Las lecturas de sensores registradas de forma continua y ordenadas en el tiempo son datos de series
+    temporales.
+  distractores:
+    a: Son valores numéricos, no imágenes.
+    b: Una temperatura medida a intervalos fijos no es texto.
+    c: 'Aunque se guarden en una tabla, lo esencial es su orden en el tiempo: la evolución de las lecturas es lo
+      que anticipa la avería.'
+  referencia: https://aws.amazon.com/what-is/time-series-database/
+- id: D1-009
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un banco quiere analizar varias fuentes de datos con ML. ¿Cuáles DOS son datos no estructurados?
+  opciones:
+  - id: a
+    texto: Grabaciones de llamadas de atención al cliente.
+  - id: b
+    texto: Contratos escaneados y correos electrónicos de texto libre.
+  - id: c
+    texto: Los registros de clientes de una base de datos relacional.
+  - id: d
+    texto: Una hoja de cálculo con los saldos mensuales de cada sucursal.
+  - id: e
+    texto: Una tabla de transacciones con columnas fijas de importe, fecha y cuenta.
+  correctas:
+  - a
+  - b
+  explicacion: 'Los datos no estructurados no siguen reglas ni un esquema predeterminado: audio, vídeo, imágenes
+    y documentos de texto extensos. Los estructurados siguen un formato predefinido, normalmente tabular con filas
+    y columnas.'
+  distractores:
+    c: 'Una base de datos relacional organiza los datos en tablas con esquema: es estructurado.'
+    d: Una hoja con filas y columnas definidas es un formato tabular y estructurado.
+    e: 'Tiene columnas fijas y un esquema definido: es estructurado.'
+  referencia: https://aws.amazon.com/compare/the-difference-between-structured-data-and-unstructured-data/
+- id: D1-010
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: 'Un equipo quiere que un sistema aprenda a fijar los pedidos de reposición de un almacén. No dispone
+    de ejemplos de la decisión correcta: el sistema prueba distintas cantidades en un simulador, obtiene una puntuación
+    según el coste del stock sobrante y de las roturas de stock, y ajusta su estrategia para maximizar esa puntuación
+    a largo plazo. ¿Qué tipo de aprendizaje es?'
+  opciones:
+  - id: a
+    texto: Aprendizaje por refuerzo
+  - id: b
+    texto: Aprendizaje supervisado (regresión sobre el histórico de pedidos)
+  - id: c
+    texto: IA agéntica
+  - id: d
+    texto: Aprendizaje no supervisado
+  correctas:
+  - a
+  explicacion: En el aprendizaje por refuerzo un agente aprende un comportamiento por ensayo y error con un entorno
+    dinámico, con el objetivo de maximizar las recompensas a largo plazo.
+  distractores:
+    b: El supervisado aprende de ejemplos con el valor objetivo correcto; el enunciado dice que no hay ejemplos
+      de la decisión correcta, solo una puntuación.
+    c: La IA agéntica describe sistemas que actúan con herramientas para cumplir un objetivo, no un paradigma de
+      aprendizaje; la pregunta es cómo aprende el sistema.
+    d: El no supervisado busca patrones en datos sin etiquetas y no usa recompensas.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-011
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una cadena de supermercados quiere ayudar a sus responsables de compras a decidir cuánto reponer en
+    cada tienda, analizando millones de ventas históricas que una persona no podría revisar a mano. Los responsables
+    mantendrán la última palabra. ¿Qué aportación del ML se aprovecha principalmente?
+  opciones:
+  - id: a
+    texto: Automatizar por completo la compra, eliminando la revisión de los responsables
+  - id: b
+    texto: Escalar el análisis y apoyar la decisión humana
+  - id: c
+    texto: Obtener cantidades exactas garantizadas, sin margen de error
+  - id: d
+    texto: Sustituir el análisis de datos por reglas de negocio fijas
+  correctas:
+  - b
+  explicacion: El ML usa grandes cantidades de datos para crear una lógica de decisión que permite predecir y apoyar
+    decisiones a una escala que una persona no alcanzaría. Los resultados son probabilísticos, no exactos.
+  distractores:
+    a: 'La automatización es otra aportación posible del ML, pero el enunciado dice que los responsables mantienen
+      la última palabra: el ML asiste la decisión.'
+    c: Los modelos dan resultados probabilísticos, con un grado de certeza; no garantizan resultados exactos.
+    d: Unas reglas fijas no aprovechan los patrones de millones de ventas; es lo contrario de usar ML.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-012
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: 'Un ayuntamiento quiere calcular automáticamente el recargo de una tasa: 5 % si la factura se paga
+    con más de 30 días de retraso y 10 % si son más de 60. Las reglas están en una ordenanza que no cambia. ¿Cuál
+    es el enfoque más adecuado?'
+  opciones:
+  - id: a
+    texto: Usar un modelo fundacional en Amazon Bedrock para calcular el recargo
+  - id: b
+    texto: Entrenar un modelo de regresión con Amazon SageMaker AI
+  - id: c
+    texto: Implementar reglas de negocio explícitas
+  - id: d
+    texto: Aplicar aprendizaje por refuerzo
+  correctas:
+  - c
+  explicacion: Hay problemas de negocio que no necesitan ML porque unas reglas de negocio sencillas lo resuelven
+    mejor. Aquí la lógica es determinista, conocida y estable, y se necesita siempre el valor exacto que fija la
+    norma.
+  distractores:
+    a: Un modelo fundacional genera respuestas probabilísticas; no es adecuado para un cálculo normativo exacto.
+    b: Un modelo de regresión aproximaría un cálculo que ya se conoce de forma exacta, añadiendo complejidad y error.
+    d: El aprendizaje por refuerzo sirve para aprender comportamientos mediante recompensas, no para aplicar una
+      fórmula conocida.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html
+- id: D1-013
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una startup quiere predecir el abandono de clientes con ML, pero solo dispone de 40 registros de clientes
+    y de ningún histórico fiable. ¿Cuál es la conclusión más razonable?
+  opciones:
+  - id: a
+    texto: Entrenar igualmente con Amazon SageMaker AI y dejar que el modelo mejore en producción
+  - id: b
+    texto: Entrenar un modelo muy complejo, como una red neuronal profunda, para compensar la falta de datos
+  - id: c
+    texto: Usar aprendizaje no supervisado, porque no necesita un histórico etiquetado de bajas
+  - id: d
+    texto: 'Valorar si ML es apropiado: sin datos suficientes quizá no lo sea'
+  correctas:
+  - d
+  explicacion: 'Al plantear el problema hay que evaluar si ML es el enfoque adecuado: para algunos problemas puede
+    no haber datos suficientes para aplicar ML como solución, y hay que definir una estrategia para obtener y anotar
+    los datos.'
+  distractores:
+    a: Un modelo entrenado con 40 registros no será fiable, y desplegarlo traslada el problema a producción.
+    b: Un modelo más complejo con muy pocos datos tiende al sobreajuste y es más difícil de interpretar y depurar.
+    c: Predecir el abandono necesita saber qué clientes se dieron de baja (un objetivo etiquetado), y el no supervisado
+      también necesita datos suficientes para encontrar patrones.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html
+- id: D1-014
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Una aseguradora revisa varias propuestas de proyecto. ¿En qué DOS NO es apropiada una solución de ML?
+  opciones:
+  - id: a
+    texto: Asignar la oficina responsable según la provincia del cliente, con una tabla de correspondencias fija.
+  - id: b
+    texto: Calcular el impuesto sobre las primas aplicando el tipo que fija la ley.
+  - id: c
+    texto: Recomendar coberturas adicionales según lo que contrataron clientes parecidos.
+  - id: d
+    texto: Detectar partes de siniestro potencialmente fraudulentos entre millones.
+  - id: e
+    texto: Clasificar fotos de siniestros por tipo de daño, con miles de fotos ya etiquetadas por peritos.
+  correctas:
+  - a
+  - b
+  explicacion: ML no es apropiado cuando se necesita un resultado determinista y exacto en lugar de una predicción,
+    ni cuando unas reglas de negocio sencillas resuelven mejor el problema. Los otros escenarios son casos clásicos
+    donde ML aporta valor.
+  distractores:
+    c: Las recomendaciones personalizadas son un caso de uso habitual de ML.
+    d: La detección de fraude a gran escala es un caso de uso habitual de ML.
+    e: Clasificar imágenes con muchos ejemplos etiquetados es un caso típico de aprendizaje supervisado.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html
+- id: D1-015
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una inmobiliaria quiere estimar el precio de venta de una vivienda a partir de su superficie, el número
+    de habitaciones y el barrio. ¿Qué técnica de ML corresponde?
+  opciones:
+  - id: a
+    texto: Regresión
+  - id: b
+    texto: Clasificación binaria
+  - id: c
+    texto: Agrupamiento (clustering)
+  - id: d
+    texto: Detección de anomalías
+  correctas:
+  - a
+  explicacion: Cuando el valor que se quiere predecir es continuo (como el precio de una casa), el problema es de
+    regresión.
+  distractores:
+    b: La clasificación binaria asigna una de dos clases; el precio no es una categoría.
+    c: El agrupamiento busca grupos sin etiquetas; aquí hay un valor objetivo.
+    d: La detección de anomalías busca elementos que se desvían de lo normal, no estima un valor.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-016
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una tienda online quiere descubrir grupos de clientes con comportamientos de compra parecidos para
+    diseñar campañas, pero no tiene etiquetas ni segmentos definidos. ¿Qué técnica es la más adecuada?
+  opciones:
+  - id: a
+    texto: Regresión lineal
+  - id: b
+    texto: Agrupamiento (clustering)
+  - id: c
+    texto: Clasificación binaria
+  - id: d
+    texto: Clasificación multiclase
+  correctas:
+  - b
+  explicacion: Sin etiquetas ni valores objetivo es un problema de aprendizaje no supervisado. El análisis de agrupamiento
+    busca grupos en los datos cuyos miembros se parecen entre sí y se diferencian de los de otros grupos.
+  distractores:
+    a: La regresión predice un valor continuo y necesita un valor objetivo.
+    c: La clasificación binaria también requiere etiquetas y solo distingue entre dos clases.
+    d: La clasificación multiclase necesita clases predefinidas con ejemplos etiquetados.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-017
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un banco revisa ideas de proyectos de ML. ¿Cuáles DOS son problemas de clasificación?
+  opciones:
+  - id: a
+    texto: Asignar cada reclamación a uno de cinco departamentos predefinidos.
+  - id: b
+    texto: Determinar si una solicitud de préstamo se aprueba o se rechaza.
+  - id: c
+    texto: Estimar el saldo medio que tendrá cada cliente el próximo mes.
+  - id: d
+    texto: Agrupar clientes con hábitos parecidos sin segmentos definidos previamente.
+  - id: e
+    texto: Predecir el importe de la próxima factura de cada tarjeta.
+  correctas:
+  - a
+  - b
+  explicacion: 'Si los valores objetivo son categóricos es clasificación: multiclase (uno de cinco departamentos)
+    o binaria (aprobar o rechazar). Predecir valores continuos es regresión y agrupar sin etiquetas es no supervisado.'
+  distractores:
+    c: 'Un saldo es un valor continuo: regresión.'
+    d: Agrupar sin etiquetas es agrupamiento (aprendizaje no supervisado), no clasificación.
+    e: 'Un importe es un valor continuo: regresión.'
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-018
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: matching
+  dificultad: media
+  enunciado: Empareje cada necesidad con el servicio gestionado de AWS que la cubre.
+  prompts:
+  - id: '1'
+    texto: Convertir en texto las grabaciones de reuniones
+  - id: '2'
+    texto: Traducir los manuales de producto a varios idiomas
+  - id: '3'
+    texto: Leer en voz alta artículos con una voz realista
+  - id: '4'
+    texto: Extraer entidades y opiniones de reseñas de clientes
+  opciones:
+  - id: a
+    texto: Amazon Polly
+  - id: b
+    texto: Amazon Transcribe
+  - id: c
+    texto: Amazon Comprehend
+  - id: d
+    texto: Amazon Translate
+  - id: e
+    texto: Amazon Rekognition
+  correctas:
+  - - '1'
+    - b
+  - - '2'
+    - d
+  - - '3'
+    - a
+  - - '4'
+    - c
+  explicacion: Transcribe convierte audio en texto; Translate traduce texto; Polly convierte texto en voz; Comprehend
+    usa NLP para extraer entidades, frases clave, idioma y opiniones de los documentos.
+  distractores:
+    e: Amazon Rekognition analiza imágenes y vídeo; ninguna de las cuatro necesidades trata de imágenes.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-019
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una gestoría recibe miles de formularios y facturas escaneados, algunos con texto manuscrito, y quiere
+    extraer su texto y sus tablas automáticamente sin entrenar un modelo. ¿Qué servicio debería usar?
+  opciones:
+  - id: a
+    texto: Amazon Rekognition
+  - id: b
+    texto: Amazon Comprehend
+  - id: c
+    texto: Amazon Textract
+  - id: d
+    texto: Amazon SageMaker AI, entrenando un modelo propio de reconocimiento de texto
+  correctas:
+  - c
+  explicacion: Amazon Textract detecta texto mecanografiado y manuscrito en documentos y extrae texto, formularios
+    y tablas de documentos con datos estructurados.
+  distractores:
+    a: Rekognition analiza imágenes y vídeos y puede detectar texto en una imagen, pero no está pensado para extraer
+      formularios y tablas de documentos.
+    b: Comprehend analiza texto que ya está digitalizado (entidades, opiniones); no extrae el texto de un documento
+      escaneado.
+    d: Entrenar un modelo propio exige datos y esfuerzo, y el enunciado pide hacerlo sin entrenar un modelo.
+  referencia: https://docs.aws.amazon.com/textract/latest/dg/what-is.html
+- id: D1-020
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El equipo de ciencia de datos de un banco necesita un modelo de riesgo de crédito con un algoritmo
+    concreto que ya ha validado, entrenado con datos de la entidad, y quiere controlar el código de entrenamiento
+    y el despliegue. ¿Qué servicio de AWS es el más adecuado?
+  opciones:
+  - id: a
+    texto: Amazon Bedrock
+  - id: b
+    texto: Amazon SageMaker Canvas
+  - id: c
+    texto: Amazon Personalize
+  - id: d
+    texto: Amazon SageMaker AI
+  correctas:
+  - d
+  explicacion: 'Los servicios de IA especializados son modelos preentrenados con capacidad limitada de personalización.
+    Amazon SageMaker AI da la mayor flexibilidad y control: permite construir modelos propios con algoritmos y frameworks
+    propios o usar modelos y algoritmos de AWS.'
+  distractores:
+    a: Bedrock da acceso a modelos fundacionales para IA generativa; no sirve para entrenar un modelo de riesgo
+      con un algoritmo propio.
+    b: Canvas permite crear modelos sin escribir código, pensado para analistas; no da control sobre el algoritmo
+      ni el código de entrenamiento.
+    c: Personalize genera recomendaciones; no es una plataforma para entrenar un modelo de riesgo con un algoritmo
+      elegido.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-021
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.6
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un banco debe justificar ante el supervisor cada decisión de concesión de crédito y explicar qué variables
+    influyeron en ella. El equipo duda entre un modelo de ML tradicional sencillo (por ejemplo, un árbol de decisión)
+    y un modelo fundacional en Amazon Bedrock al que se le pasan los datos del cliente en el prompt. ¿Qué opción
+    es la más adecuada?
+  opciones:
+  - id: a
+    texto: El modelo tradicional sencillo, porque su lógica es más fácil de interpretar y explicar al supervisor
+  - id: b
+    texto: El modelo fundacional, porque puede redactar en lenguaje natural una justificación de cada decisión
+  - id: c
+    texto: El modelo fundacional, porque al estar preentrenado no necesita evaluarse con datos de la entidad
+  - id: d
+    texto: Los dos por igual, porque la explicabilidad solo se exige cuando no hay revisión humana
+  correctas:
+  - a
+  explicacion: 'Cuando hay requisitos regulatorios o de explicabilidad, un modelo tradicional más interpretable
+    es la opción más defendible: se puede mostrar qué variables influyen en cada decisión. AWS recomienda empezar
+    por un modelo sencillo de interpretar y depurar.'
+  distractores:
+    b: Un texto generado que «suena» a justificación no garantiza que refleje cómo se tomó la decisión; los modelos
+      fundacionales son difíciles de interpretar y no deterministas.
+    c: Cualquier modelo, también uno fundacional, debe evaluarse para saber si cumple los objetivos.
+    d: El enunciado dice que hay que justificar cada decisión ante el supervisor; la explicabilidad es un requisito
+      del caso.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html
+- id: D1-022
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una empresa quiere un asistente que responda a sus empleados a partir de los manuales internos, que
+    cambian cada semana, con el menor esfuerzo y sin entrenar un modelo desde cero. ¿Qué aplicación de IA encaja
+    mejor?
+  opciones:
+  - id: a
+    texto: Hacer fine-tuning de un modelo fundacional cada vez que cambie un manual
+  - id: b
+    texto: Una base de conocimiento con RAG, por ejemplo con Amazon Bedrock Knowledge Bases
+  - id: c
+    texto: Amazon Comprehend, para extraer las entidades de los manuales
+  - id: d
+    texto: Un bot de Amazon Lex con la respuesta a cada pregunta escrita a mano
+  correctas:
+  - b
+  explicacion: 'Amazon Bedrock Knowledge Bases permite integrar información propia en aplicaciones de IA generativa
+    mediante Retrieval Augmented Generation (RAG): busca información relevante en los datos y la usa para mejorar
+    las respuestas del modelo.'
+  distractores:
+    a: Reentrenar cada semana supone mucho más coste y esfuerzo que recuperar la información actualizada en el momento
+      de responder.
+    c: Comprehend extrae entidades y opiniones, pero no responde preguntas en lenguaje natural sobre los manuales.
+    d: Escribir y mantener a mano todas las respuestas no escala con manuales que cambian cada semana.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
+- id: D1-023
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.1
+  tipo: ordering
+  dificultad: media
+  enunciado: Tras haber definido el objetivo de negocio, ordene las etapas siguientes del ciclo de vida de un proyecto
+    de ML.
+  opciones:
+  - id: a
+    texto: Desplegar el modelo
+  - id: b
+    texto: Procesar los datos
+  - id: c
+    texto: Monitorizar el modelo en producción
+  - id: d
+    texto: Plantear el problema de negocio como problema de ML
+  - id: e
+    texto: 'Desarrollar el modelo: entrenar, ajustar y evaluar'
+  correctas:
+  - d
+  - b
+  - e
+  - a
+  - c
+  explicacion: Primero se plantea el problema como problema de ML (qué se predice y con qué métrica), después se
+    procesan los datos, se desarrolla el modelo (construir, entrenar, ajustar y evaluar), se despliega y, por último,
+    se monitoriza, con posibilidad de volver a etapas anteriores.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html
+- id: D1-024
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.1
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Meses después de desplegar un modelo de previsión de demanda, la calidad de sus previsiones empeora
+    porque los hábitos de los clientes han cambiado. ¿En qué etapa del pipeline se detecta este problema y qué acción
+    corresponde?
+  opciones:
+  - id: a
+    texto: 'Desarrollo del modelo: añadir más capas al modelo y volver a desplegarlo sin revisar los datos'
+  - id: b
+    texto: 'Planteamiento del problema: cambiar la métrica de evaluación para que el resultado vuelva a ser aceptable'
+  - id: c
+    texto: 'Monitorización: detectar la deriva y reentrenar el modelo con datos actualizados'
+  - id: d
+    texto: 'Procesamiento de datos: descartar los datos recientes por atípicos'
+  correctas:
+  - c
+  explicacion: El sistema de monitorización compara los datos de producción con los de entrenamiento, define reglas
+    para detectar problemas (calidad de datos, calidad del modelo, deriva) y envía alertas; el modelo se reentrena
+    cuando se degrada.
+  distractores:
+    a: Hacer el modelo más complejo no corrige que los datos hayan cambiado; primero hay que detectar la deriva
+      y reentrenar con datos que reflejen los nuevos hábitos.
+    b: Cambiar la métrica oculta el problema en lugar de resolverlo.
+    d: Los datos recientes son precisamente los que reflejan los nuevos hábitos; descartarlos empeoraría el modelo.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html
+- id: D1-025
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: 'Una agencia de viajes quiere tener un modelo en pocos días: prefiere partir de un modelo preentrenado
+    de código abierto, ajustarlo con sus propios datos y desplegarlo en su cuenta de AWS, sin entrenar desde cero.
+    ¿Qué opción es la más adecuada?'
+  opciones:
+  - id: a
+    texto: Entrenar desde cero un modelo con un algoritmo integrado de Amazon SageMaker AI
+  - id: b
+    texto: Un clasificador personalizado de Amazon Comprehend
+  - id: c
+    texto: Entrenar un modelo desde cero en instancias de Amazon EC2 con una imagen de contenedor propia
+  - id: d
+    texto: Amazon SageMaker JumpStart
+  correctas:
+  - d
+  explicacion: Amazon SageMaker JumpStart ofrece modelos preentrenados de código abierto para muchos tipos de problemas,
+    que se pueden entrenar de forma incremental y ajustar antes de desplegarlos. Es la opción de menor esfuerzo
+    dentro de SageMaker AI.
+  distractores:
+    a: Un algoritmo integrado se entrena con los datos propios desde el principio; no parte de un modelo preentrenado
+      de código abierto.
+    b: Un clasificador personalizado de Comprehend se entrena dentro del servicio; no es un modelo de código abierto
+      que se ajuste y despliegue en la cuenta.
+    c: Entrenar desde cero con una imagen propia es la opción de mayor esfuerzo y no aprovecha un modelo preentrenado.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html
+- id: D1-026
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una empresa sanitaria ha entrenado su propio modelo con datos clínicos y necesita servirlo dentro de
+    su VPC, con control total de la configuración de red y del entorno de ejecución, asumiendo la responsabilidad
+    operativa. ¿Qué método de uso en producción encaja?
+  opciones:
+  - id: a
+    texto: Alojar su propio modelo en un endpoint propio o en instancias o contenedores dentro de su VPC
+  - id: b
+    texto: Una API de servicio gestionado, porque ofrece el máximo control sobre el modelo y su entorno
+  - id: c
+    texto: Consumir un servicio de IA especializado a través de su API gestionada, sin alojar el modelo
+  - id: d
+    texto: Publicar el modelo en Amazon S3 para que cada aplicación lo descargue y lo ejecute por su cuenta
+  correctas:
+  - a
+  explicacion: Con una API alojada por el propio cliente (self-hosted) se despliega el modelo propio en un endpoint
+    de SageMaker AI accesible solo desde la VPC, o en instancias de Amazon EC2 o contenedores dentro de la VPC,
+    con control completo de la configuración de red. A cambio, el cliente asume más responsabilidad operativa.
+  distractores:
+    b: Una API gestionada reduce el esfuerzo operativo porque AWS opera el modelo y la infraestructura; es lo contrario
+      de tener el máximo control del entorno.
+    c: Muchos servicios de IA admiten endpoints privados de VPC (AWS PrivateLink), pero sirven el modelo de AWS,
+      no el modelo propio que la empresa ha entrenado.
+    d: Repartir el modelo entre aplicaciones no ofrece un servicio controlado ni centralizado y multiplica los riesgos
+      sobre datos clínicos.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-027
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El equipo de operaciones de una cadena hotelera quiere que sus empleados, sin conocimientos técnicos,
+    pregunten en lenguaje natural por los datos de ocupación, preparen informes y automaticen tareas repetitivas
+    conectando sus aplicaciones, sin construir ni entrenar modelos. ¿Qué servicio de AWS es el más adecuado?
+  opciones:
+  - id: a
+    texto: Amazon Bedrock
+  - id: b
+    texto: Amazon Quick
+  - id: c
+    texto: Amazon SageMaker Canvas
+  - id: d
+    texto: Amazon Lex
+  correctas:
+  - b
+  explicacion: Amazon Quick es un servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web
+    e investigar, con el que se interactúa mediante chat en lenguaje natural y que usa agentes de IA sobre los datos
+    y aplicaciones conectados.
+  distractores:
+    a: Bedrock da acceso a modelos fundacionales para construir aplicaciones propias de IA generativa; habría que
+      desarrollar la solución, y el equipo no tiene perfil técnico.
+    c: Canvas sirve para crear modelos predictivos sin código; no es un servicio para consultar datos, automatizar
+      tareas y conectar aplicaciones mediante chat.
+    d: Lex sirve para construir interfaces conversacionales propias en las aplicaciones; no es un servicio para
+      analizar los datos de la organización y automatizar tareas.
+  referencia: https://docs.aws.amazon.com/quicksuite/latest/userguide/what-is.html
+- id: D1-028
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.2
+  tipo: ordering
+  dificultad: alta
+  enunciado: Ordene las opciones para obtener un modelo con Amazon SageMaker AI, de menor a mayor esfuerzo.
+  opciones:
+  - id: a
+    texto: Modelos preentrenados listos para desplegar o ajustar
+  - id: b
+    texto: Algoritmos integrados (built-in)
+  - id: c
+    texto: Código propio con un framework compatible (script mode)
+  - id: d
+    texto: Imagen de contenedor propia
+  correctas:
+  - a
+  - b
+  - c
+  - d
+  explicacion: 'SageMaker AI admite opciones que requieren un esfuerzo creciente: los modelos preentrenados requieren
+    el menor; los algoritmos integrados no requieren código pero hay que ajustar y entrenar; con script mode se
+    escribe código propio sobre un framework compatible; y la imagen de contenedor propia exige además configurar
+    el entrenamiento y el servicio del modelo.'
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-029
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_response
+  dificultad: media
+  enunciado: 'Un banco tiene un modelo de scoring en producción desde hace un año: se entrenó una vez, cada versión
+    se despliega a mano y nadie revisa su rendimiento. ¿Qué DOS prácticas de MLOps debería adoptar?'
+  opciones:
+  - id: a
+    texto: Monitorizar el modelo en producción y reentrenarlo cuando su calidad se degrada.
+  - id: b
+    texto: Seguir desplegando a mano, pero desde el portátil del científico de datos, para ganar rapidez.
+  - id: c
+    texto: Automatizar los flujos para que el entrenamiento, la evaluación y el despliegue sean repetibles.
+  - id: d
+    texto: Evaluar el modelo solo antes del primer despliegue, porque los datos de producción no cambian.
+  - id: e
+    texto: Guardar los modelos sin versión, sobrescribiendo el anterior, para simplificar.
+  correctas:
+  - a
+  - c
+  explicacion: 'MLOps aplica prácticas de DevOps a las cargas de trabajo de ML para agilizar la entrega de modelos
+    durante todo el ciclo de vida: procesos repetibles y automatizados, monitorización y reentrenamiento.'
+  distractores:
+    b: Desplegar a mano, y además desde un equipo personal, es lo contrario de un proceso repetible y controlado.
+    d: 'Los datos de producción cambian (deriva); el ciclo de vida no termina al entrenar: hay que monitorizar y
+      reentrenar.'
+    e: Sin versionado no se puede saber qué modelo está en producción ni volver atrás; MLOps gestiona la deuda técnica
+      versionando código, datos y modelos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-why.html
+- id: D1-030
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Un equipo comprueba que sus experimentos de ML no se pueden reproducir ni comparar. ¿Qué DOS capacidades
+    de SageMaker AI relacionadas con MLOps ayudan a resolverlo?
+  opciones:
+  - id: a
+    texto: Guardar los cuadernos de cada experimento en el portátil de cada científico de datos.
+  - id: b
+    texto: Registrar y versionar los modelos con trazabilidad (Model Registry y lineage).
+  - id: c
+    texto: Usar instancias de entrenamiento más grandes para que los experimentos terminen antes.
+  - id: d
+    texto: Registrar y comparar los experimentos con MLflow en SageMaker AI.
+  - id: e
+    texto: Pasar toda la inferencia a serverless.
+  correctas:
+  - b
+  - d
+  explicacion: MLflow en SageMaker AI registra, organiza y compara los experimentos (parámetros, métricas y artefactos),
+    y SageMaker Model Registry versiona los modelos con sus metadatos y su linaje. Juntos permiten reproducir y
+    comparar resultados. SageMaker Experiments es ahora Experiments Classic, y AWS recomienda MLflow.
+  distractores:
+    a: Guardar el trabajo en equipos personales dificulta aún más reproducir y compartir los experimentos.
+    c: Entrenar más rápido no hace los experimentos reproducibles ni comparables.
+    e: El tipo de inferencia no resuelve el registro ni la comparación de experimentos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow.html
+- id: D1-031
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un hospital usa un modelo para detectar una enfermedad grave. Perder un caso positivo (falso negativo)
+    es mucho más grave que hacer una prueba adicional innecesaria. ¿Qué métrica del modelo debe priorizar?
+  opciones:
+  - id: a
+    texto: Precisión (precision)
+  - id: b
+    texto: Exactitud (accuracy)
+  - id: c
+    texto: Exhaustividad (recall)
+  - id: d
+    texto: Puntuación F1
+  correctas:
+  - c
+  explicacion: La exhaustividad mide qué proporción de los positivos reales detecta el modelo (VP / (VP + FN)).
+    Es la métrica importante cuando un falso negativo es costoso, como al detectar una enfermedad.
+  distractores:
+    a: La precisión se prioriza cuando el coste de un falso positivo es alto, no el de un falso negativo.
+    b: Con una enfermedad poco frecuente, la exactitud puede ser muy alta aunque el modelo no detecte casi ningún
+      enfermo.
+    d: F1 equilibra precisión y exhaustividad; aquí los dos errores no pesan lo mismo y el falso negativo es mucho
+      más grave.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: D1-032
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: matching
+  dificultad: alta
+  enunciado: Empareje cada descripción con la métrica correspondiente.
+  prompts:
+  - id: '1'
+    texto: Media armónica de precisión y exhaustividad
+  - id: '2'
+    texto: Proporción de verdaderos positivos entre todas las predicciones positivas
+  - id: '3'
+    texto: Medida del beneficio económico obtenido frente a lo invertido
+  - id: '4'
+    texto: Área bajo la curva ROC, que resume el rendimiento de un clasificador en todos los umbrales
+  opciones:
+  - id: a
+    texto: Precisión
+  - id: b
+    texto: Puntuación F1
+  - id: c
+    texto: Retorno de la inversión (ROI), una métrica de negocio
+  - id: d
+    texto: AUC
+  - id: e
+    texto: RMSE
+  correctas:
+  - - '1'
+    - b
+  - - '2'
+    - a
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: F1 es la media armónica de precisión y exhaustividad. La precisión es la proporción de verdaderos
+    positivos entre todas las predicciones positivas. El ROI mide el retorno económico (métrica de negocio). El
+    AUC es el área bajo la curva ROC.
+  distractores:
+    e: RMSE es una métrica de error para modelos de regresión; ninguna de las cuatro descripciones se refiere a
+      ella.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: D1-033
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un equipo presenta a la dirección un modelo de detección de fraude con un 99,2 % de exactitud. En los
+    datos de prueba, el 0,8 % de las transacciones son fraudulentas y el modelo no ha detectado ninguna. ¿Qué conclusión
+    es correcta?
+  opciones:
+  - id: a
+    texto: El modelo es útil, porque su exactitud supera el 99 %
+  - id: b
+    texto: El modelo está sobreajustado y hay que reducir los datos de entrenamiento
+  - id: c
+    texto: Hay que sustituir la exactitud por el RMSE
+  - id: d
+    texto: 'La exactitud engaña con clases desequilibradas: hay que evaluar la exhaustividad y la precisión'
+  correctas:
+  - d
+  explicacion: Con un 0,8 % de fraude, un modelo que diga siempre «legítima» acierta el 99,2 % y no sirve para nada.
+    La exhaustividad (aquí, 0 %) muestra que no detecta ningún fraude; la precisión y F1 completan la evaluación.
+  distractores:
+    a: La exactitud alta se explica por el desequilibrio de clases, no por la capacidad de detectar fraude.
+    b: No hay indicios de sobreajuste (no se compara entrenamiento con datos nuevos), y reducir datos no lo corregiría.
+    c: El RMSE es una métrica de error de regresión; este es un problema de clasificación.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: D1-034
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: La dirección de una aseguradora quiere saber si el asistente de IA desplegado hace seis meses ha compensado
+    lo que costó construirlo y operarlo. ¿Qué métrica responde mejor a esa pregunta?
+  opciones:
+  - id: a
+    texto: Retorno de la inversión (ROI)
+  - id: b
+    texto: Puntuación F1 del modelo
+  - id: c
+    texto: Costes de desarrollo
+  - id: d
+    texto: Exhaustividad (recall) del modelo
+  correctas:
+  - a
+  explicacion: 'El ROI compara el beneficio obtenido con lo invertido: es la métrica de negocio que responde si
+    el proyecto ha compensado. Las métricas técnicas miden el modelo, no el valor de negocio.'
+  distractores:
+    b: F1 es una métrica técnica del modelo; no mide el beneficio económico.
+    c: 'Los costes de desarrollo son solo una parte de la ecuación: falta el beneficio obtenido.'
+    d: La exhaustividad es una métrica técnica de clasificación; no mide el valor de negocio.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/business-goal-identification.html
+- id: D1-035
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Los analistas de marketing de una cadena de gimnasios, sin experiencia en programación ni en ML, quieren
+    predecir qué socios se darán de baja a partir de una hoja de cálculo con el histórico de socios y bajas. ¿Qué
+    opción requiere menos esfuerzo?
+  opciones:
+  - id: a
+    texto: Entrenar un modelo con un algoritmo integrado de Amazon SageMaker AI escribiendo el código de entrenamiento
+  - id: b
+    texto: Amazon SageMaker Canvas
+  - id: c
+    texto: Amazon Comprehend
+  - id: d
+    texto: Amazon Personalize
+  correctas:
+  - b
+  explicacion: SageMaker Canvas permite crear modelos de ML y generar predicciones sin escribir código; admite modelos
+    de predicción categórica (clasificación) entrenados con los datos propios, como la predicción de bajas de clientes.
+  distractores:
+    a: Requiere programar y conocimientos de ML que los analistas no tienen.
+    c: Comprehend analiza texto en lenguaje natural; el histórico de socios es un conjunto de datos tabulares.
+    d: Personalize genera recomendaciones de elementos para usuarios, no predice bajas.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html
+- id: D1-036
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: matching
+  dificultad: media
+  enunciado: Una empresa organiza su ciclo de vida de ML en AWS. Empareje cada necesidad con el servicio o funcionalidad
+    que la cubre.
+  prompts:
+  - id: '1'
+    texto: Analistas que deben limpiar y normalizar datos de forma visual, sin escribir código
+  - id: '2'
+    texto: Integrar y transformar datos de varias fuentes con trabajos ETL serverless
+  - id: '3'
+    texto: Versionar los modelos y aprobarlos antes de pasarlos a producción
+  - id: '4'
+    texto: Vigilar las métricas de un endpoint y recibir una alarma si la latencia se dispara
+  opciones:
+  - id: a
+    texto: AWS Glue
+  - id: b
+    texto: SageMaker Model Registry
+  - id: c
+    texto: AWS Glue DataBrew
+  - id: d
+    texto: Amazon CloudWatch
+  - id: e
+    texto: AWS CloudTrail
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - a
+  - - '3'
+    - b
+  - - '4'
+    - d
+  explicacion: DataBrew prepara datos de forma visual sin código; Glue integra y transforma datos con ETL serverless;
+    Model Registry cataloga y versiona modelos y gestiona su aprobación; CloudWatch recoge métricas y lanza alarmas.
+  distractores:
+    e: CloudTrail registra quién hizo cada llamada a la API (auditoría); no vigila métricas de rendimiento.
+  referencia: https://docs.aws.amazon.com/databrew/latest/dg/what-is.html
+- id: D1-037
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una agencia de viajes usa un modelo fundacional que redacta, a petición, descripciones de destinos.
+    Ahora quiere que, ante la petición «organízame un viaje a Lisboa en mayo por menos de 800 €», el sistema busque
+    vuelos y hoteles en sus API, compare precios y haga la reserva. ¿Qué cambio describe mejor esta evolución?
+  opciones:
+  - id: a
+    texto: De aprendizaje supervisado a aprendizaje no supervisado
+  - id: b
+    texto: De inferencia en tiempo real a inferencia por lotes
+  - id: c
+    texto: De IA generativa a IA agéntica
+  - id: d
+    texto: De aprendizaje profundo a ML tradicional
+  correctas:
+  - c
+  explicacion: 'La IA generativa crea contenido cuando se le pide. La IA agéntica actúa de forma autónoma para alcanzar
+    un objetivo: decide los pasos, usa herramientas (las API de vuelos y hoteles) y ejecuta acciones, normalmente
+    apoyándose en un modelo fundacional.'
+  distractores:
+    a: El paradigma de aprendizaje con el que se entrenó el modelo no cambia; cambia lo que hace el sistema.
+    b: El usuario sigue esperando una respuesta interactiva; no se trata de procesar un conjunto de datos completo.
+    d: El sistema sigue usando un modelo fundacional (aprendizaje profundo); lo nuevo es que actúa sobre otros sistemas.
+  referencia: https://aws.amazon.com/what-is/agentic-ai/
+- id: D1-038
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: 'Un proveedor explica a un cliente que su modelo fundacional se preentrenó con miles de millones de
+    páginas de texto que nadie etiquetó: el modelo aprendió a predecir la siguiente palabra a partir del propio
+    texto. ¿Qué tipo de aprendizaje describe?'
+  opciones:
+  - id: a
+    texto: Aprendizaje no supervisado de agrupamiento
+  - id: b
+    texto: Aprendizaje por refuerzo
+  - id: c
+    texto: Aprendizaje supervisado con etiquetas humanas
+  - id: d
+    texto: Aprendizaje autosupervisado
+  correctas:
+  - d
+  explicacion: 'Los modelos fundacionales usan aprendizaje autosupervisado: crean las etiquetas a partir de los
+    propios datos de entrada (la siguiente palabra), sin conjuntos de datos etiquetados por personas.'
+  distractores:
+    a: El agrupamiento busca grupos de elementos parecidos; aquí el modelo aprende a predecir un valor que obtiene
+      del propio texto.
+    b: El aprendizaje por refuerzo aprende de recompensas al interactuar con un entorno; no describe el preentrenamiento
+      con texto.
+    c: El enunciado dice que nadie etiquetó las páginas.
+  referencia: https://aws.amazon.com/what-is/foundation-models/
+- id: D1-039
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora quiere analizar con su modelo de Amazon SageMaker AI vídeos de peritaje de unos 500
+    MB. Cada análisis tarda unos 20 minutos, los vídeos llegan de forma irregular, quiere el resultado de cada uno
+    en cuanto termine y no pagar instancias cuando no hay vídeos. ¿Qué opción de inferencia encaja mejor?
+  opciones:
+  - id: a
+    texto: Inferencia asíncrona
+  - id: b
+    texto: Inferencia serverless
+  - id: c
+    texto: Inferencia en tiempo real con instancias permanentes
+  - id: d
+    texto: Transformación por lotes programada cada noche
+  correctas:
+  - a
+  explicacion: La inferencia asíncrona encola las solicitudes y las procesa de forma asíncrona; es ideal para cargas
+    grandes (hasta 1 GB) y procesamientos largos (hasta una hora) con requisitos de latencia casi en tiempo real,
+    y puede escalar a cero cuando no hay solicitudes.
+  distractores:
+    b: Serverless está pensada para peticiones interactivas con tráfico intermitente, no para cargas de cientos
+      de megabytes ni procesamientos de 20 minutos.
+    c: Mantiene instancias que se pagan aunque no lleguen vídeos, y no está pensada para procesos tan largos.
+    d: Un lote nocturno retrasaría el resultado hasta el día siguiente, y el enunciado lo quiere en cuanto termine
+      cada análisis.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
+- id: D1-040
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.6
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Una empresa de logística evalúa cómo estimar el tiempo de entrega de cada pedido y duda entre un modelo
+    de ML tradicional y un modelo fundacional. ¿Qué DOS requisitos favorecen el modelo tradicional?
+  opciones:
+  - id: a
+    texto: No disponer de ningún histórico de entregas con el que entrenar.
+  - id: b
+    texto: Responder en pocos milisegundos a millones de pedidos diarios con un coste por predicción muy bajo.
+  - id: c
+    texto: Explicar a los auditores qué variables influyen en cada estimación.
+  - id: d
+    texto: Redactar un mensaje personalizado a cada cliente explicando el retraso.
+  - id: e
+    texto: Responder preguntas abiertas de los conductores sobre manuales muy variados.
+  correctas:
+  - b
+  - c
+  explicacion: Las restricciones operativas (latencia muy baja, gran volumen, coste por predicción) y los requisitos
+    de explicabilidad favorecen un modelo tradicional, más pequeño e interpretable, para una tarea acotada como
+    estimar un valor numérico.
+  distractores:
+    a: Un modelo tradicional necesita un histórico etiquetado para entrenarse; sin él no es viable, así que este
+      requisito no lo favorece.
+    d: 'Redactar texto personalizado es una tarea generativa: favorece un modelo fundacional.'
+    e: Responder preguntas abiertas sobre documentos variados encaja con un modelo fundacional (por ejemplo, con
+      RAG).
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-041
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.2
+  tipo: ordering
+  dificultad: media
+  enunciado: Una tienda online quiere clasificar las reseñas de sus clientes. Ordene estas opciones de menor a mayor
+    coste y esfuerzo.
+  opciones:
+  - id: a
+    texto: Preentrenar desde cero un modelo de lenguaje propio en instancias de Amazon EC2
+  - id: b
+    texto: Usar el análisis de opiniones preentrenado de Amazon Comprehend
+  - id: c
+    texto: Entrenar un modelo propio con un algoritmo integrado de Amazon SageMaker AI
+  - id: d
+    texto: Crear un clasificador personalizado de Amazon Comprehend con ejemplos etiquetados
+  correctas:
+  - b
+  - d
+  - c
+  - a
+  explicacion: 'Un servicio preentrenado se usa tal cual (menor esfuerzo). Un clasificador personalizado de Comprehend
+    exige etiquetar ejemplos, pero sin experiencia en ML. Un modelo propio en SageMaker AI exige preparar datos,
+    entrenar y desplegar. Preentrenar un modelo de lenguaje desde cero exige enormes volúmenes de datos y cómputo:
+    es la opción más cara.'
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-042
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un científico de datos aplica el algoritmo XGBoost a tres años de ventas históricas y obtiene un artefacto
+    que guarda en Amazon S3 para desplegarlo después en un endpoint. ¿Qué es ese artefacto?
+  opciones:
+  - id: a
+    texto: El algoritmo
+  - id: b
+    texto: El modelo
+  - id: c
+    texto: El conjunto de datos de entrenamiento
+  - id: d
+    texto: El endpoint de inferencia
+  correctas:
+  - b
+  explicacion: 'El modelo es el resultado de aplicar un algoritmo a unos datos de entrenamiento: la lógica de decisión
+    que se despliega para hacer predicciones.'
+  distractores:
+    a: El algoritmo (XGBoost) es la receta que se aplicó; el artefacto es lo que produce al entrenar.
+    c: Los datos de entrenamiento son la entrada del proceso, no su resultado.
+    d: El endpoint es el recurso que aloja el modelo para servir predicciones; se crea después.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-043
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un equipo revisa los conjuntos de datos de la empresa. ¿Qué DOS son datos etiquetados?
+  opciones:
+  - id: a
+    texto: Lecturas de sensores sin ninguna anotación
+  - id: b
+    texto: Correos marcados por los usuarios como spam o no spam
+  - id: c
+    texto: Textos de reseñas sin clasificar
+  - id: d
+    texto: Vídeos de cámaras de seguridad sin descripción
+  - id: e
+    texto: Fotos de plantas, cada una con el nombre de su especie
+  correctas:
+  - b
+  - e
+  explicacion: 'Un dato está etiquetado cuando lleva asociado el valor correcto que el modelo debe aprender: la
+    especie de la planta o la marca de spam.'
+  distractores:
+    a: Sin anotaciones, las lecturas son datos no etiquetados.
+    c: Las reseñas sin clasificar no tienen etiqueta.
+    d: Los vídeos sin descripción no tienen etiqueta.
+  referencia: https://aws.amazon.com/what-is/data-labeling/
+- id: D1-044
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una aseguradora quiere estimar automáticamente el tipo de daño de un vehículo a partir de las fotos
+    que el cliente sube con la aplicación. ¿Qué campo de la IA corresponde a esta tarea?
+  opciones:
+  - id: a
+    texto: Procesamiento del lenguaje natural
+  - id: b
+    texto: Reconocimiento del habla
+  - id: c
+    texto: Visión por computador
+  - id: d
+    texto: Sistemas de recomendación
+  correctas:
+  - c
+  explicacion: La visión por computador permite a los ordenadores obtener información útil de imágenes y vídeos.
+  distractores:
+    a: El NLP trabaja con lenguaje humano (texto o voz), no con fotos.
+    b: El reconocimiento del habla convierte voz en texto.
+    d: Los sistemas de recomendación sugieren elementos a usuarios según su comportamiento.
+  referencia: https://aws.amazon.com/what-is/computer-vision/
+- id: D1-045
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un modelo de previsión de demanda comete errores grandes tanto con los datos de entrenamiento como
+    con los de validación. El equipo usó un modelo muy simple con solo dos variables. ¿Qué problema es el más probable?
+  opciones:
+  - id: a
+    texto: Sobreajuste (overfitting)
+  - id: b
+    texto: Deriva de datos
+  - id: c
+    texto: Sesgo de equidad
+  - id: d
+    texto: Subajuste (underfitting)
+  correctas:
+  - d
+  explicacion: Un modelo subajustado no encuentra una relación significativa entre entradas y salidas y falla incluso
+    con los datos de entrenamiento (alto sesgo). Suele deberse a un modelo demasiado simple o a pocas variables
+    relevantes.
+  distractores:
+    a: El sobreajuste acierta con los datos de entrenamiento y falla con los nuevos; aquí falla con ambos.
+    b: La deriva aparece en producción con el tiempo; aquí el problema está ya en el entrenamiento.
+    c: La equidad trata del trato desigual entre grupos, y el enunciado no habla de grupos.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: D1-046
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un modelo de preselección de candidatos aprueba muchas menos solicitudes de mujeres que de hombres
+    con perfiles equivalentes. Se entrenó con diez años de contrataciones en las que la mayoría de las personas
+    contratadas eran hombres. ¿Qué describe mejor el problema?
+  opciones:
+  - id: a
+    texto: Sesgo procedente de datos de entrenamiento que reflejan desigualdades históricas
+  - id: b
+    texto: Subajuste porque el modelo es demasiado simple
+  - id: c
+    texto: Deriva de datos porque el mercado laboral ha cambiado
+  - id: d
+    texto: Un error de inferencia por usar un endpoint serverless
+  correctas:
+  - a
+  explicacion: Un sistema es sesgado si discrimina a personas o grupos. Los modelos aprenden de los datos, y unos
+    datos con representación insuficiente de un grupo o con etiquetas sesgadas reproducen esa desigualdad. Se trata
+    en detalle en el Dominio 4.
+  distractores:
+    b: El subajuste es un problema de rendimiento general, no de trato desigual entre grupos.
+    c: Nada indica un cambio en los datos de producción; el sesgo ya estaba en los datos de entrenamiento.
+    d: El tipo de despliegue no cambia lo que el modelo ha aprendido.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html
+- id: D1-047
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aplicación de banca debe puntuar el riesgo de cada transferencia en menos de 100 milisegundos,
+    con tráfico constante las 24 horas. ¿Qué opción de inferencia de Amazon SageMaker AI cumple los requisitos?
+  opciones:
+  - id: a
+    texto: Inferencia serverless
+  - id: b
+    texto: Inferencia en tiempo real
+  - id: c
+    texto: Inferencia asíncrona
+  - id: d
+    texto: Transformación por lotes
+  correctas:
+  - b
+  explicacion: La inferencia en tiempo real usa un endpoint permanente y gestionado para cargas interactivas con
+    requisitos de baja latencia. Con tráfico constante, las instancias se aprovechan todo el tiempo.
+  distractores:
+    a: Serverless puede sufrir arranques en frío y está pensada para tráfico intermitente, no constante.
+    c: La asíncrona encola las solicitudes y responde en tiempo casi real, no en milisegundos garantizados.
+    d: Por lotes procesa conjuntos de datos completos sin endpoint; no responde a cada transferencia.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints.html
+- id: D1-048
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un equipo quiere desplegar en Amazon SageMaker AI un modelo de visión que necesita GPU. El tráfico
+    es intermitente y el equipo había pensado en la inferencia serverless para no gestionar instancias. ¿Qué debería
+    hacer?
+  opciones:
+  - id: a
+    texto: Usar inferencia serverless igualmente, porque asigna GPU de forma automática
+  - id: b
+    texto: Usar transformación por lotes, porque es la única opción con GPU
+  - id: c
+    texto: Usar un endpoint en tiempo real o asíncrono con instancias de GPU, porque serverless no admite GPU
+  - id: d
+    texto: Convertir el modelo en un servicio de IA especializado
+  correctas:
+  - c
+  explicacion: La inferencia serverless no admite GPU, entre otras exclusiones. Un endpoint en tiempo real o asíncrono
+    permite elegir instancias de GPU; la asíncrona, además, puede escalar a cero cuando no hay solicitudes.
+  distractores:
+    a: La documentación de SageMaker AI excluye las GPU de la inferencia serverless.
+    b: Las GPU no son exclusivas de la transformación por lotes, y un tráfico de peticiones no encaja con un lote.
+    d: Un modelo propio no se puede convertir en un servicio de IA especializado de AWS.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+- id: D1-049
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una clínica dispone de 100 000 radiografías, de las que solo 2000 tienen asociado el diagnóstico. Quiere
+    entrenar un clasificador supervisado con todas. ¿Qué paso es necesario antes de usar las 98 000 restantes?
+  opciones:
+  - id: a
+    texto: Convertirlas en series temporales
+  - id: b
+    texto: Pasarlas por inferencia por lotes con el modelo sin entrenar
+  - id: c
+    texto: Reducir su resolución para que ocupen menos
+  - id: d
+    texto: Etiquetarlas con el diagnóstico correcto
+  correctas:
+  - d
+  explicacion: 'El aprendizaje supervisado necesita datos etiquetados: cada ejemplo debe llevar el valor correcto
+    que el modelo tiene que aprender. Las imágenes sin diagnóstico son datos no etiquetados.'
+  distractores:
+    a: Las radiografías son imágenes; convertirlas en series temporales no aporta la etiqueta que falta.
+    b: Un modelo sin entrenar no puede producir etiquetas fiables.
+    c: Reducir la resolución no añade el diagnóstico que el aprendizaje supervisado necesita.
+  referencia: https://aws.amazon.com/what-is/data-labeling/
+- id: D1-050
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un equipo evalúa la inferencia asíncrona de Amazon SageMaker AI para procesar documentos grandes. ¿Qué
+    DOS afirmaciones son correctas?
+  opciones:
+  - id: a
+    texto: Procesa un conjunto de datos completo en un trabajo sin endpoint.
+  - id: b
+    texto: No permite elegir el tipo de instancia.
+  - id: c
+    texto: Encola las solicitudes y las procesa de forma asíncrona.
+  - id: d
+    texto: Puede escalar a cero instancias cuando no hay solicitudes.
+  - id: e
+    texto: Ofrece respuestas en pocos milisegundos.
+  correctas:
+  - c
+  - d
+  explicacion: La inferencia asíncrona encola las solicitudes, admite cargas de hasta 1 GB y procesamientos de hasta
+    una hora, y puede escalar a cero para no pagar cuando no hay solicitudes.
+  distractores:
+    a: Eso describe la transformación por lotes.
+    b: Usa un endpoint con instancias que se eligen; quien no las elige es la inferencia serverless.
+    e: Está pensada para latencia casi en tiempo real y procesos largos, no para respuestas en milisegundos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
+- id: D1-051
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un operador de telecomunicaciones quiere detectar patrones de tráfico de red inusuales que podrían
+    indicar un ataque, pero no dispone de ejemplos etiquetados de ataques. ¿Qué enfoque es el más adecuado?
+  opciones:
+  - id: a
+    texto: Aprendizaje no supervisado de detección de anomalías
+  - id: b
+    texto: Aprendizaje supervisado de clasificación binaria
+  - id: c
+    texto: Aprendizaje por refuerzo
+  - id: d
+    texto: Regresión sobre el volumen de tráfico
+  correctas:
+  - a
+  explicacion: Sin etiquetas, el problema es no supervisado. La detección de anomalías identifica elementos o eventos
+    que se desvían significativamente del resto de los datos.
+  distractores:
+    b: La clasificación necesita ejemplos etiquetados de ataques, que el operador no tiene.
+    c: El aprendizaje por refuerzo aprende con recompensas en un entorno; no busca patrones raros en datos.
+    d: Estimar el volumen no identifica qué comportamientos son inusuales.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-052
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un centro de atención recibe 50 000 correos al día y quiere enviarlos automáticamente al departamento
+    adecuado, una tarea que hoy hacen cinco personas a mano. ¿Qué aportación del ML se aprovecha principalmente?
+  opciones:
+  - id: a
+    texto: Apoyar una decisión estratégica puntual de la dirección
+  - id: b
+    texto: Automatizar una tarea repetitiva de gran volumen
+  - id: c
+    texto: Obtener un resultado exacto exigido por la normativa
+  - id: d
+    texto: Reducir la cantidad de datos que hay que almacenar
+  correctas:
+  - b
+  explicacion: El ML aporta valor al automatizar tareas repetitivas y al escalar procesos que las personas no pueden
+    hacer con tanto volumen.
+  distractores:
+    a: Clasificar miles de correos al día es una tarea operativa recurrente, no una decisión estratégica.
+    c: Un modelo da resultados probabilísticos; enrutar correos no exige un resultado exacto normativo.
+    d: El ML no reduce el almacenamiento; necesita datos para aprender.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-053
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una pequeña tienda online vende 30 productos y quiere un sistema de recomendaciones con ML. El análisis
+    estima que el coste de construirlo y mantenerlo supera con creces el aumento de ventas esperado. ¿Qué es lo
+    más razonable?
+  opciones:
+  - id: a
+    texto: Entrenar un modelo propio en Amazon SageMaker AI para reducir el coste
+  - id: b
+    texto: Usar Amazon Personalize, porque al ser un servicio gestionado el retorno será positivo
+  - id: c
+    texto: 'No usar ML por ahora: el análisis coste-beneficio no lo justifica'
+  - id: d
+    texto: Usar un modelo fundacional, porque es más barato que el ML tradicional
+  correctas:
+  - c
+  explicacion: 'Determinar si ML es apropiado incluye un análisis coste-beneficio: el valor de negocio debe poder
+    medirse frente a objetivos concretos. Si el coste supera el beneficio, una solución más sencilla (por ejemplo,
+    destacar los productos más vendidos) es más adecuada.'
+  distractores:
+    a: Un modelo propio suele costar más esfuerzo que un servicio gestionado, no menos.
+    b: Un servicio gestionado reduce el esfuerzo, pero no garantiza retorno; el análisis dice que no compensa.
+    d: El coste depende del caso; un modelo fundacional no es necesariamente más barato que el ML tradicional.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/business-goal-identification.html
+- id: D1-054
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una compañía eléctrica quiere predecir la demanda de cada hora de mañana a partir del histórico horario
+    de los últimos cinco años y de la previsión meteorológica. ¿Qué técnica corresponde?
+  opciones:
+  - id: a
+    texto: Clasificación multiclase
+  - id: b
+    texto: Agrupamiento (clustering)
+  - id: c
+    texto: Aprendizaje por refuerzo
+  - id: d
+    texto: Previsión de series temporales (regresión)
+  correctas:
+  - d
+  explicacion: Predecir un valor numérico (la demanda) a partir de datos ordenados en el tiempo es un problema de
+    previsión de series temporales, un caso particular de regresión.
+  distractores:
+    a: La demanda es un valor numérico continuo, no una categoría.
+    b: El agrupamiento busca grupos sin etiquetas; aquí hay un valor histórico que predecir.
+    c: No hay un agente que aprenda con recompensas interactuando con un entorno.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-055
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una plataforma de vídeo bajo demanda quiere mostrar a cada usuario títulos según su historial de visionado
+    y el de usuarios parecidos. El equipo no tiene experiencia en ML. ¿Qué servicio cumple los requisitos con el
+    MENOR esfuerzo?
+  opciones:
+  - id: a
+    texto: Amazon Personalize
+  - id: b
+    texto: Amazon Comprehend
+  - id: c
+    texto: Amazon Rekognition
+  - id: d
+    texto: Amazon Bedrock Knowledge Bases
+  correctas:
+  - a
+  explicacion: Amazon Personalize es un servicio de ML totalmente gestionado que usa los datos de usuarios y elementos
+    para generar recomendaciones, sin necesidad de experiencia en ML.
+  distractores:
+    b: Comprehend analiza texto; no genera recomendaciones a partir del comportamiento de los usuarios.
+    c: Rekognition analiza imágenes y vídeo, pero no recomienda títulos según el historial.
+    d: Knowledge Bases recupera información de documentos para un modelo generativo (RAG); no es un recomendador.
+  referencia: https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html
+- id: D1-056
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un ayuntamiento quiere un asistente, por teléfono y por la web, con el que la ciudadanía pida cita
+    previa hablando o escribiendo en lenguaje natural. Los diálogos siguen unos pasos definidos (trámite, fecha,
+    hora). ¿Qué servicio de AWS es el más adecuado para construir la interfaz conversacional?
+  opciones:
+  - id: a
+    texto: Amazon Polly
+  - id: b
+    texto: Amazon Lex
+  - id: c
+    texto: Amazon Transcribe
+  - id: d
+    texto: Amazon Comprehend
+  correctas:
+  - b
+  explicacion: Amazon Lex sirve para crear interfaces conversacionales por voz y texto, con comprensión del lenguaje
+    natural y reconocimiento automático del habla.
+  distractores:
+    a: Polly convierte texto en voz; podría dar voz a las respuestas, pero no gestiona el diálogo.
+    c: Transcribe convierte audio en texto, pero no entiende la intención ni conduce la conversación.
+    d: Comprehend analiza texto existente; no mantiene un diálogo con el usuario.
+  referencia: https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html
+- id: D1-057
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una red social quiere detectar automáticamente imágenes inapropiadas que suben los usuarios, sin entrenar
+    modelos propios. ¿Qué servicio debería usar?
+  opciones:
+  - id: a
+    texto: Amazon Textract
+  - id: b
+    texto: Amazon Comprehend
+  - id: c
+    texto: Amazon Rekognition
+  - id: d
+    texto: Amazon SageMaker AI con un modelo de visión entrenado desde cero
+  correctas:
+  - c
+  explicacion: Amazon Rekognition añade capacidades de visión por computador a las aplicaciones sin experiencia
+    en ML, incluida la moderación de contenido en imágenes y vídeos.
+  distractores:
+    a: Textract extrae texto, formularios y tablas de documentos; no modera imágenes.
+    b: Comprehend analiza texto, no imágenes.
+    d: Entrenar un modelo propio exige datos y esfuerzo, y el enunciado pide no entrenar modelos.
+  referencia: https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html
+- id: D1-058
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora quiere detectar y ocultar datos personales (nombres, direcciones, números de cuenta)
+    en el texto de miles de reclamaciones antes de compartirlas con un proveedor. ¿Qué servicio preentrenado es
+    el más adecuado?
+  opciones:
+  - id: a
+    texto: Amazon Translate
+  - id: b
+    texto: Amazon Textract
+  - id: c
+    texto: Amazon Polly
+  - id: d
+    texto: Amazon Comprehend
+  correctas:
+  - d
+  explicacion: Amazon Comprehend usa NLP para extraer información del texto, incluida la detección de entidades
+    de datos personales (PII), que después se pueden ocultar.
+  distractores:
+    a: Translate traduce texto; no identifica datos personales.
+    b: Textract extrae el texto de documentos escaneados, pero no identifica qué partes son datos personales.
+    c: Polly convierte texto en voz.
+  referencia: https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html
+- id: D1-059
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un centro de atención quiere conocer la opinión de los clientes a partir de las grabaciones de sus
+    llamadas, sin entrenar modelos. ¿Qué DOS servicios debería combinar?
+  opciones:
+  - id: a
+    texto: Amazon Transcribe
+  - id: b
+    texto: Amazon Polly
+  - id: c
+    texto: Amazon Comprehend
+  - id: d
+    texto: Amazon Translate
+  - id: e
+    texto: Amazon Rekognition
+  correctas:
+  - a
+  - c
+  explicacion: Transcribe convierte el audio de las llamadas en texto, y Comprehend analiza ese texto para extraer
+    la opinión (sentimiento) y las entidades.
+  distractores:
+    b: 'Polly hace lo contrario: convierte texto en voz.'
+    d: Translate traduce texto; no analiza opiniones.
+    e: Rekognition analiza imágenes y vídeo, no audio.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-060
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una editorial quiere generar automáticamente resúmenes de artículos largos de temas muy variados. No
+    dispone de ejemplos de resúmenes etiquetados. ¿Qué opción es la más adecuada?
+  opciones:
+  - id: a
+    texto: Un modelo fundacional en Amazon Bedrock
+  - id: b
+    texto: Un modelo de regresión entrenado en Amazon SageMaker AI
+  - id: c
+    texto: El análisis de opiniones de Amazon Comprehend
+  - id: d
+    texto: Reglas de negocio que copien el primer párrafo de cada artículo
+  correctas:
+  - a
+  explicacion: Resumir texto libre de temas variados es una tarea generativa abierta; un modelo fundacional preentrenado
+    puede hacerlo sin datos etiquetados propios, adaptándolo con prompts.
+  distractores:
+    b: La regresión predice valores numéricos; no genera texto.
+    c: El análisis de opiniones clasifica el sentimiento del texto; no lo resume.
+    d: Copiar el primer párrafo no produce un resumen fiable de artículos largos y variados.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/generative-ai-on-aws-how-to-choose/guide.html
+- id: D1-061
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.6
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un fabricante necesita detectar defectos en piezas de una línea de producción. Cada inspección debe
+    resolverse en milisegundos, a gran volumen, y los resultados deben ser reproducibles para las auditorías de
+    calidad. Dispone de miles de imágenes etiquetadas. ¿Qué opción es la más adecuada?
+  opciones:
+  - id: a
+    texto: Un modelo fundacional multimodal que describa cada imagen en lenguaje natural
+  - id: b
+    texto: Un modelo de visión especializado, entrenado con las imágenes etiquetadas
+  - id: c
+    texto: Un agente de IA que decida en cada caso qué herramienta usar
+  - id: d
+    texto: Revisar las piezas a mano, porque el ML no es apropiado para auditorías
+  correctas:
+  - b
+  explicacion: Las restricciones operativas (latencia de milisegundos, gran volumen) y la necesidad de resultados
+    reproducibles favorecen un modelo especializado y acotado, que además puede entrenarse con los datos etiquetados
+    disponibles.
+  distractores:
+    a: Un modelo fundacional grande añade latencia y coste por petición, y sus respuestas no son deterministas.
+    c: Un agente añade pasos y latencia innecesarios para una tarea de clasificación acotada.
+    d: Con miles de ejemplos etiquetados y una tarea repetitiva de gran volumen, el ML aporta valor.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-062
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Al preparar un proyecto de ML, un equipo descubre que el 30 % de los registros tiene campos vacíos
+    y que las fechas usan formatos distintos. ¿En qué etapa del ciclo de vida se resuelve este problema?
+  opciones:
+  - id: a
+    texto: Despliegue
+  - id: b
+    texto: Monitorización
+  - id: c
+    texto: Procesamiento de datos
+  - id: d
+    texto: Identificación del objetivo de negocio
+  correctas:
+  - c
+  explicacion: En el procesamiento de datos se recogen, limpian y preparan los datos que servirán para entrenar
+    el modelo.
+  distractores:
+    a: El despliegue lleva a producción un modelo ya entrenado y evaluado.
+    b: La monitorización vigila el modelo en producción; los datos deben limpiarse antes de entrenar.
+    d: El objetivo de negocio define la meta y el valor esperado, no la calidad de los datos.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/data-processing.html
+- id: D1-063
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Antes de recopilar datos, un equipo decide que su modelo predecirá si un cliente comprará en los próximos
+    30 días y que optimizará la exhaustividad. ¿En qué etapa del ciclo de vida está?
+  opciones:
+  - id: a
+    texto: Identificación del objetivo de negocio
+  - id: b
+    texto: Desarrollo del modelo
+  - id: c
+    texto: Monitorización
+  - id: d
+    texto: Planteamiento del problema de ML
+  correctas:
+  - d
+  explicacion: 'En el planteamiento del problema de ML se traduce el problema de negocio a ML: qué se observa, qué
+    se predice (la etiqueta) y qué métrica se optimiza.'
+  distractores:
+    a: El objetivo de negocio es la meta («aumentar las ventas»); aquí ya se define la predicción y la métrica.
+    b: El desarrollo del modelo (entrenar, ajustar, evaluar) va después de preparar los datos.
+    c: La monitorización ocurre en producción.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html
+- id: D1-064
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una startup quiere añadir a su aplicación la generación de resúmenes de texto con el MENOR esfuerzo
+    operativo, sin gestionar servidores ni modelos. ¿Qué solución cumple los requisitos?
+  opciones:
+  - id: a
+    texto: Invocar un modelo fundacional a través de la API de Amazon Bedrock
+  - id: b
+    texto: Desplegar un modelo de código abierto en instancias de Amazon EC2
+  - id: c
+    texto: Desplegar un modelo de SageMaker JumpStart en un endpoint en tiempo real
+  - id: d
+    texto: Entrenar un modelo propio desde cero en Amazon SageMaker AI
+  correctas:
+  - a
+  explicacion: 'Con una API de servicio gestionado, AWS aloja y opera el modelo: el cliente solo lo invoca y paga
+    por uso. Es la opción de menor esfuerzo operativo.'
+  distractores:
+    b: Alojar el modelo en EC2 obliga a gestionar instancias, escalado y parches.
+    c: 'Un endpoint de SageMaker AI es una opción autoalojada: hay que dimensionarlo y se paga mientras está encendido.'
+    d: Entrenar desde cero es la opción de mayor coste y esfuerzo.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
+- id: D1-065
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_response
+  dificultad: baja
+  enunciado: Antes de entrenar un modelo, un equipo debe integrar datos de varias fuentes y limpiarlos. ¿Qué DOS
+    servicios de AWS están pensados para esta etapa?
+  opciones:
+  - id: a
+    texto: AWS Glue DataBrew
+  - id: b
+    texto: AWS CloudTrail
+  - id: c
+    texto: Amazon Bedrock AgentCore
+  - id: d
+    texto: AWS Glue
+  - id: e
+    texto: Amazon Polly
+  correctas:
+  - a
+  - d
+  explicacion: AWS Glue integra y transforma datos (ETL serverless) y AWS Glue DataBrew permite limpiarlos y normalizarlos
+    de forma visual, sin código.
+  distractores:
+    b: CloudTrail audita llamadas a la API.
+    c: AgentCore sirve para desplegar y operar agentes de IA.
+    e: Polly convierte texto en voz.
+  referencia: https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html
+- id: D1-066
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo de desarrollo quiere pasar de una especificación de requisitos a código y pruebas con ayuda
+    de agentes de IA, desde su entorno de desarrollo. ¿Qué herramienta de AWS encaja?
+  opciones:
+  - id: a
+    texto: Amazon Quick
+  - id: b
+    texto: Kiro
+  - id: c
+    texto: Amazon Lex
+  - id: d
+    texto: Amazon SageMaker Canvas
+  correctas:
+  - b
+  explicacion: Kiro es una plataforma de desarrollo con IA basada en especificaciones, con IDE y CLI, en la que
+    agentes de IA ayudan a planificar, escribir y probar código.
+  distractores:
+    a: 'Quick está orientado a usuarios de negocio: analizar datos, automatizar tareas e investigar mediante chat.'
+    c: Lex construye interfaces conversacionales para usuarios finales, no código.
+    d: Canvas crea modelos de ML sin código; no ayuda a desarrollar software a partir de especificaciones.
+  referencia: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kiro.html
+- id: D1-067
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una empresa tiene doce modelos en producción y nadie sabe con qué datos ni con qué versión del código
+    se entrenó cada uno, lo que frena cualquier cambio. ¿Qué concepto de MLOps aborda este problema?
+  opciones:
+  - id: a
+    texto: Reentrenar los doce modelos cada noche
+  - id: b
+    texto: Pasar los modelos a inferencia serverless
+  - id: c
+    texto: Gestionar la deuda técnica con versionado y trazabilidad de datos, código y modelos
+  - id: d
+    texto: Aumentar el tamaño de las instancias de entrenamiento
+  correctas:
+  - c
+  explicacion: Los modelos, datos y código sin versionar ni documentar generan deuda técnica que frena el desarrollo.
+    MLOps la gestiona con versionado y trazabilidad (lineage), por ejemplo con SageMaker Model Registry.
+  distractores:
+    a: Reentrenar a menudo sin registrar nada no aclara de dónde sale cada modelo y añade más versiones sin control.
+    b: El tipo de inferencia no resuelve la falta de trazabilidad.
+    d: Entrenar más rápido no documenta con qué datos ni código se entrenó cada modelo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+- id: D1-068
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un banco exige que ningún modelo llegue a producción sin superar pruebas de calidad y sin la aprobación
+    del área de riesgos. ¿Qué funcionalidad de SageMaker AI ayuda a aplicar este control?
+  opciones:
+  - id: a
+    texto: AWS CloudTrail
+  - id: b
+    texto: AWS Glue DataBrew
+  - id: c
+    texto: Amazon Comprehend
+  - id: d
+    texto: SageMaker Model Registry, con el estado de aprobación de cada versión
+  correctas:
+  - d
+  explicacion: 'Model Registry cataloga los modelos, gestiona sus versiones y su estado de aprobación, y permite
+    automatizar el despliegue solo de las versiones aprobadas: es parte de la preparación para producción.'
+  distractores:
+    a: CloudTrail audita las llamadas a la API, pero no gestiona la aprobación de modelos.
+    b: DataBrew prepara datos; no controla qué modelos pasan a producción.
+    c: Comprehend es un servicio de NLP, sin relación con la gobernanza de modelos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+- id: D1-069
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un equipo quiere saber cuándo su modelo en producción empieza a degradarse. ¿Qué DOS acciones le ayudan?
+  opciones:
+  - id: a
+    texto: Volver a entrenar con el mismo conjunto de datos original sin revisarlo.
+  - id: b
+    texto: Comparar los datos de producción con los de entrenamiento para detectar deriva.
+  - id: c
+    texto: Crear alarmas de Amazon CloudWatch sobre las métricas del endpoint y del modelo.
+  - id: d
+    texto: Desactivar los registros del endpoint para reducir costes.
+  - id: e
+    texto: Añadir más instancias al endpoint.
+  correctas:
+  - b
+  - c
+  explicacion: La monitorización captura los datos de producción, los compara con los de entrenamiento, detecta
+    problemas de calidad y deriva y envía alertas.
+  distractores:
+    a: Reentrenar con los mismos datos no corrige un cambio en los datos de producción.
+    d: Sin registros no hay datos con los que detectar la degradación.
+    e: Más instancias mejoran la capacidad, no la calidad de las predicciones.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html
+- id: D1-070
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.6
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un banco revisa propuestas de IA. ¿Qué DOS casos son más adecuados para un modelo fundacional que para
+    un modelo de ML tradicional?
+  opciones:
+  - id: a
+    texto: Un asistente que responda preguntas sobre cientos de documentos internos variados
+  - id: b
+    texto: Predecir el importe de la próxima factura de cada tarjeta
+  - id: c
+    texto: Puntuar el riesgo de fraude de cada pago en milisegundos
+  - id: d
+    texto: Decidir la concesión de préstamos con explicación de cada variable ante el supervisor
+  - id: e
+    texto: Redactar borradores de respuesta a consultas de clientes
+  correctas:
+  - a
+  - e
+  explicacion: Las tareas generativas o abiertas sobre texto libre (redactar, responder sobre documentos variados)
+    encajan con un modelo fundacional.
+  distractores:
+    b: Predecir un valor numérico es una tarea acotada de regresión.
+    c: La latencia de milisegundos y el gran volumen favorecen un modelo tradicional más pequeño.
+    d: Los requisitos regulatorios y de explicabilidad favorecen un modelo tradicional interpretable.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-071
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_response
+  dificultad: baja
+  enunciado: Una aseguradora presenta al comité de dirección los resultados de su asistente de IA. ¿Qué DOS de estas
+    métricas son métricas de negocio?
+  opciones:
+  - id: a
+    texto: AUC
+  - id: b
+    texto: Exhaustividad (recall)
+  - id: c
+    texto: Retorno de la inversión (ROI)
+  - id: d
+    texto: Puntuación F1
+  - id: e
+    texto: Coste por usuario atendido
+  correctas:
+  - c
+  - e
+  explicacion: 'Las métricas de negocio miden el valor que aporta la solución: ROI, coste por usuario, costes de
+    desarrollo u opiniones de los clientes.'
+  distractores:
+    a: AUC es una métrica técnica de clasificadores.
+    b: La exhaustividad es una métrica técnica de clasificación.
+    d: F1 es una métrica técnica del modelo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: D1-072
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una empresa compara usar un modelo mediante una API de servicio gestionado con alojarlo ella misma.
+    ¿Qué DOS son ventajas de la API de servicio gestionado?
+  opciones:
+  - id: a
+    texto: No hay que gestionar la infraestructura de inferencia
+  - id: b
+    texto: Se paga por uso, sin instancias encendidas cuando no hay peticiones
+  - id: c
+    texto: Control total sobre los pesos y el entorno de ejecución del modelo
+  - id: d
+    texto: Permite ejecutar un modelo propio con dependencias a medida
+  - id: e
+    texto: Hace que el modelo sea explicable
+  correctas:
+  - a
+  - b
+  explicacion: 'Con una API gestionada, AWS aloja y opera el modelo: el cliente no gestiona infraestructura y paga
+    por uso (peticiones, tokens o unidades).'
+  distractores:
+    c: El control total del modelo y del entorno es la ventaja de la opción autoalojada.
+    d: Ejecutar un modelo propio con dependencias a medida exige alojarlo (endpoint propio, EC2 o contenedores).
+    e: La forma de despliegue no hace explicable un modelo.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-073
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: ordering
+  dificultad: media
+  enunciado: Un modelo de previsión ya está en producción. Ordene los pasos del ciclo de monitorización y mejora.
+  opciones:
+  - id: a
+    texto: Reentrenar el modelo con datos actualizados
+  - id: b
+    texto: Capturar los datos de entrada y las predicciones en producción
+  - id: c
+    texto: Desplegar la nueva versión tras evaluarla
+  - id: d
+    texto: Comparar los datos de producción con los de entrenamiento
+  - id: e
+    texto: Generar una alerta al detectar deriva
+  correctas:
+  - b
+  - d
+  - e
+  - a
+  - c
+  explicacion: La monitorización captura datos de producción, los compara con los de entrenamiento y alerta si detecta
+    deriva; entonces se reentrena el modelo y, tras evaluarlo, se despliega la nueva versión.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html
+- id: D1-074
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: ordering
+  dificultad: alta
+  enunciado: Una empresa quiere analizar textos de sus clientes. Ordene estas opciones de MENOR a MAYOR control
+    sobre el modelo y la infraestructura.
+  opciones:
+  - id: a
+    texto: Un modelo propio en un contenedor desplegado en instancias de Amazon EC2
+  - id: b
+    texto: La API preentrenada de Amazon Comprehend
+  - id: c
+    texto: Un modelo propio entrenado con un algoritmo integrado y desplegado en un endpoint de SageMaker AI
+  - id: d
+    texto: Un modelo creado sin código con SageMaker Canvas a partir de los datos propios
+  correctas:
+  - b
+  - d
+  - c
+  - a
+  explicacion: Los servicios especializados ofrecen la personalización más limitada; Canvas entrena un modelo con
+    los datos propios pero sin control del código; SageMaker AI da mucho más control sobre el algoritmo y el despliegue;
+    la infraestructura de bajo nivel (EC2) ofrece el control máximo, a cambio de gestionarlo todo.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-075
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: ordering
+  dificultad: media
+  enunciado: Un equipo quiere evaluar un clasificador de fraude con datos que el modelo no haya visto. Ordene los
+    pasos.
+  opciones:
+  - id: a
+    texto: Calcular la precisión y la exhaustividad
+  - id: b
+    texto: Separar un conjunto de prueba que no se usará para entrenar
+  - id: c
+    texto: Construir la matriz de confusión
+  - id: d
+    texto: Entrenar el modelo con el resto de los datos
+  - id: e
+    texto: Obtener las predicciones del modelo sobre el conjunto de prueba
+  correctas:
+  - b
+  - d
+  - e
+  - c
+  - a
+  explicacion: Primero se reserva un conjunto de prueba, se entrena con el resto, se predice sobre la prueba, se
+    cruzan predicciones y valores reales en la matriz de confusión y, a partir de ella, se calculan las métricas.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: D1-076
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.2
+  tipo: ordering
+  dificultad: media
+  enunciado: Una empresa necesita un modelo fundacional para generar textos. Ordene estas fuentes de MENOR a MAYOR
+    esfuerzo.
+  opciones:
+  - id: a
+    texto: Preentrenar un modelo fundacional propio desde cero
+  - id: b
+    texto: Invocar un modelo de Amazon Bedrock tal cual, por API
+  - id: c
+    texto: Ajustar (fine-tuning) un modelo preentrenado con datos propios
+  - id: d
+    texto: Desplegar un modelo de código abierto de SageMaker JumpStart en un endpoint propio
+  correctas:
+  - b
+  - d
+  - c
+  - a
+  explicacion: Invocar un modelo gestionado no requiere infraestructura; desplegar un modelo de código abierto exige
+    alojarlo; ajustarlo exige además datos y entrenamiento; preentrenar desde cero requiere enormes volúmenes de
+    datos y cómputo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html
+- id: D1-077
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.4
+  tipo: matching
+  dificultad: baja
+  enunciado: Empareje cada aplicación con el campo de la IA que la resuelve.
+  prompts:
+  - id: '1'
+    texto: Detectar defectos en fotos de piezas
+  - id: '2'
+    texto: Subtitular automáticamente vídeos de formación
+  - id: '3'
+    texto: Clasificar correos por tema
+  - id: '4'
+    texto: Sugerir productos según el historial de compra
+  opciones:
+  - id: a
+    texto: Visión por computador
+  - id: b
+    texto: Reconocimiento del habla
+  - id: c
+    texto: Procesamiento del lenguaje natural
+  - id: d
+    texto: Sistemas de recomendación
+  - id: e
+    texto: Previsión (forecasting)
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: La visión por computador analiza imágenes; el reconocimiento del habla convierte voz en texto; el
+    NLP interpreta texto; los sistemas de recomendación sugieren elementos según el comportamiento.
+  distractores:
+    e: La previsión anticipa valores futuros a partir de datos históricos; ninguna aplicación lo pide.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-078
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: matching
+  dificultad: media
+  enunciado: Empareje cada problema de negocio con la técnica de ML adecuada.
+  prompts:
+  - id: '1'
+    texto: Estimar el precio de venta de un piso
+  - id: '2'
+    texto: Decidir si un correo es spam
+  - id: '3'
+    texto: Descubrir segmentos de clientes sin etiquetas previas
+  - id: '4'
+    texto: Un robot de almacén que aprende rutas por ensayo y error con recompensas
+  opciones:
+  - id: a
+    texto: Regresión
+  - id: b
+    texto: Clasificación
+  - id: c
+    texto: Agrupamiento (clustering)
+  - id: d
+    texto: Aprendizaje por refuerzo
+  - id: e
+    texto: Reducción de dimensiones
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Un valor continuo es regresión; una categoría, clasificación; grupos sin etiquetas, agrupamiento;
+    un agente que maximiza recompensas, aprendizaje por refuerzo.
+  distractores:
+    e: La reducción de dimensiones simplifica los datos conservando sus propiedades; no resuelve ninguno de los
+      cuatro problemas.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: D1-079
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: matching
+  dificultad: media
+  enunciado: Empareje cada necesidad con el servicio de IA de AWS que la cubre.
+  prompts:
+  - id: '1'
+    texto: Extraer importes y tablas de facturas escaneadas
+  - id: '2'
+    texto: Moderar fotos subidas por usuarios
+  - id: '3'
+    texto: Un chatbot para reservar citas
+  - id: '4'
+    texto: Recomendar artículos según el comportamiento de cada lector
+  opciones:
+  - id: a
+    texto: Amazon Textract
+  - id: b
+    texto: Amazon Rekognition
+  - id: c
+    texto: Amazon Lex
+  - id: d
+    texto: Amazon Personalize
+  - id: e
+    texto: Amazon Polly
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Textract extrae texto, formularios y tablas; Rekognition analiza imágenes; Lex crea interfaces conversacionales;
+    Personalize genera recomendaciones.
+  distractores:
+    e: Polly convierte texto en voz; ninguna necesidad lo pide.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-080
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: matching
+  dificultad: alta
+  enunciado: Empareje cada situación con la métrica que conviene priorizar.
+  prompts:
+  - id: '1'
+    texto: 'Cribado de una enfermedad grave: no se puede dejar sin detectar a ningún enfermo'
+  - id: '2'
+    texto: 'Filtro antispam corporativo: no se debe perder ningún correo legítimo de clientes'
+  - id: '3'
+    texto: 'Detección de fraude con un equipo de revisión limitado: ambos errores cuestan'
+  - id: '4'
+    texto: Comparar dos clasificadores binarios sin fijar todavía un umbral de decisión
+  opciones:
+  - id: a
+    texto: Exhaustividad (recall)
+  - id: b
+    texto: Precisión (precision)
+  - id: c
+    texto: Puntuación F1
+  - id: d
+    texto: AUC
+  - id: e
+    texto: RMSE
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: La exhaustividad minimiza los falsos negativos; la precisión, los falsos positivos; F1 equilibra
+    ambas; AUC resume el rendimiento en todos los umbrales.
+  distractores:
+    e: RMSE es una métrica de error de regresión; las cuatro situaciones son de clasificación.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: D1-081
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora quiere que sus peritos revisen primero los partes de siniestro con más probabilidad
+    de fraude. La decisión final de pagar o rechazar seguirá siendo siempre del perito. ¿Qué valor aporta principalmente
+    el ML en este caso?
+  opciones:
+  - id: a
+    texto: Automatizar la decisión final de pagar o rechazar cada parte
+  - id: b
+    texto: Eliminar el riesgo de pagar partes fraudulentos
+  - id: c
+    texto: Asistir la toma de decisiones humanas priorizando los casos de más riesgo
+  - id: d
+    texto: Eliminar la necesidad de datos históricos de fraude
+  correctas:
+  - c
+  explicacion: 'Una de las aportaciones del ML es asistir la toma de decisiones humanas: el modelo puntúa el riesgo
+    y ordena los casos, y la persona decide. Aquí la decisión final sigue siendo del perito.'
+  distractores:
+    a: 'El enunciado dice que la decisión final sigue siendo del perito: no se automatiza.'
+    b: Un modelo da resultados probabilísticos; no puede garantizar que no se cuele ningún fraude.
+    d: Para aprender a puntuar el riesgo, el modelo necesita datos históricos.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-082
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una cadena de tiendas quiere anticipar cuántas unidades de cada producto venderá el próximo trimestre
+    a partir de las ventas de los últimos tres años, para planificar las compras. ¿Qué tipo de aplicación de IA
+    es?
+  opciones:
+  - id: a
+    texto: Un sistema de recomendación
+  - id: b
+    texto: Detección de fraude
+  - id: c
+    texto: Una base de conocimiento con RAG
+  - id: d
+    texto: Previsión (forecasting)
+  correctas:
+  - d
+  explicacion: La previsión anticipa valores futuros (aquí, las ventas) a partir de datos históricos ordenados en
+    el tiempo.
+  distractores:
+    a: Un recomendador sugiere elementos a cada usuario; no estima ventas futuras.
+    b: La detección de fraude busca operaciones anómalas o fraudulentas.
+    c: Una base de conocimiento responde preguntas con información de documentos; no proyecta ventas.
+  referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
