@@ -56,7 +56,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     motor = crear_motor(settings.database_url)
     if settings.ejecutar_migraciones:
         migrar(motor)
-    app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, title="Consola AIF-C01")
+    app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, title="Consola de certificaciones")
     app.state.settings = settings
     app.state.motor = motor
     app.state.sesiones = crear_sesionmaker(motor)

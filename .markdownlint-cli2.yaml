@@ -10,6 +10,6 @@ globs:
 ignores:
   - "openspec/**"
   - ".claude/**"
-  - "promt.md"
+  - "**/promt.md"
   - "node_modules/**"
   - "**/node_modules/**"

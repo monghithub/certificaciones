@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="htmx-config" content='{"allowEval": false, "includeIndicatorStyles": false}'>
-<title>{% block titulo %}Consola{% endblock %} · Consola de cursos</title>
+<title>{% block titulo %}Consola{% endblock %} · Certificaciones</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230b5cad%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2717%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27sans-serif%27 font-weight=%27700%27%3EAI%3C/text%3E%3C/svg%3E">
 <script src="{{ static('tema.js') }}"></script>
 <link rel="stylesheet" href="{{ static('app.css') }}">
@@ -14,7 +14,7 @@
 </head>
 <body hx-boost="true" hx-headers='{"X-CSRF-Token": "{{ csrf }}"}'>
 <header class="top"><div class="in">
-  <a class="marca" href="/">Consola de cursos</a>
+  <a class="marca" href="/">Certificaciones</a>
   {% if user %}
   <nav aria-label="Principal">
     <a href="/">Mis cursos</a>

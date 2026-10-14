@@ -70,6 +70,25 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - Primeros commits del repositorio, agrupados por bloque: fundación y herramientas, consola, módulos 00 y 01, y OpenSpec. Identidad de git local del repositorio: `monghithub <monghit@gmail.com>`.
 - Archivados los 7 cambios completados de OpenSpec. Para poder archivarlos se corrigieron dos requisitos antiguos que no usaban la palabra normativa SHALL (`official-sources`, `glosario-conceptos`). Los 26 specs consolidados en `openspec/specs/` validan en modo estricto.
 - Push inicial de `main` a `origin` (`github.com/monghithub/aw-saif-c01`). A partir de aquí, cada etapa en su rama y con PR.
+- La primera CI en GitHub falló solo por la comprobación de enlaces: `docs/consola.md` cita `http://127.0.0.1:8000/`. Se excluyen los enlaces locales en `.lychee.toml` y la CI pasa a verde en `main`.
+
+### Renombrado del repositorio
+
+- A petición del usuario, el repositorio de GitHub pasa de `aw-saif-c01` a **`certificaciones`** (`github.com/monghithub/certificaciones`). GitHub redirige el nombre antiguo, y el remoto `origin` local ya apunta al nuevo. La carpeta local del clon conserva su nombre.
+
+### Plataforma multicertificación
+
+- **Visión del usuario:** el repositorio reunirá en la consola todos los cursos de certificación que vaya estudiando, de cualquier proveedor, no solo de AWS.
+- **Hecho** (rama `feat/plataforma-multicertificacion`, cambio de OpenSpec `plataforma-multicertificacion`):
+  - Campos `proveedor` y `fuentes_oficiales` en el manifiesto; las referencias de las preguntas se validan contra las fuentes oficiales de su curso.
+  - `AGENTS.md` raíz genérico, con el procedimiento para añadir un curso, y reglas propias de AWS y AIF-C01 en `cursos/aif-c01/AGENTS.md`.
+  - `promt.md` movido a `cursos/aif-c01/`.
+  - Consola «Certificaciones», imagen `certificaciones-consola` y README raíz con tabla de cursos por proveedor.
+- **Decisiones:**
+  - Las fuentes oficiales se declaran como hosts (se aceptan los subdominios) y son opcionales, para no romper los cursos existentes.
+  - Cada curso lleva su propio `AGENTS.md`, que complementa al raíz.
+  - Ramas `<slug>/<etapa>` y etiquetas `<slug>-vX.Y.Z` por curso.
+- **Verificación:** validador, cobertura y 219 tests en verde (4 nuevos).
 
 ### Pendiente
 

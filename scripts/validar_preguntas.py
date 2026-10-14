@@ -6,6 +6,7 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
+from urllib.parse import urlparse
 
 import yaml
 from jsonschema import Draft202012Validator
@@ -104,6 +105,9 @@ def comprobar_pregunta(p: dict, curso: Manifiesto, tareas: dict[int, set[str]], 
             errs.append(f"objetivo '{obj}' no pertenece a la tarea {t}")
         elif d in objetivos and obj not in objetivos[d]:
             errs.append(f"objetivo '{obj}' no existe en fuentes/dominio-{d}.md")
+    ref = p.get("referencia")
+    if isinstance(ref, str) and curso.fuentes_oficiales and not referencia_oficial(ref, curso.fuentes_oficiales):
+        errs.append(f"la referencia {ref} no pertenece a las fuentes oficiales del curso ({', '.join(curso.fuentes_oficiales)})")
     textos = [p.get("enunciado", "")] + [o.get("texto", "") for o in p.get("opciones") or []]
     if any(PROHIBIDAS.search(x) for x in textos):
         errs.append("contiene 'todas/ninguna de las anteriores'")
@@ -111,6 +115,12 @@ def comprobar_pregunta(p: dict, curso: Manifiesto, tareas: dict[int, set[str]], 
     if len(set(opciones_txt)) != len(opciones_txt):
         errs.append("hay opciones con el mismo texto")
     return errs
+
+
+def referencia_oficial(url: str, hosts: tuple[str, ...]) -> bool:
+    """True si el host de `url` es uno de `hosts` o un subdominio suyo."""
+    host = (urlparse(url).hostname or "").lower()
+    return any(host == h or host.endswith("." + h) for h in hosts)
 
 
 def avisos_calidad(p: dict) -> list[str]:
