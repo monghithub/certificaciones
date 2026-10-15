@@ -195,3 +195,5 @@ figure.diagrama.visible :is(.edgePaths, .edgeLabels) { animation: aparece-suave 
   .mermaid .node, button.concepto { transition: none; }
   dialog.modal-concepto[open] { animation: none; }
 }
+.solucion{margin:.3rem 0 .6rem;padding-left:1.2rem}
+.solucion li{margin:.15rem 0}

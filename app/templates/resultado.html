@@ -13,8 +13,8 @@
   <p class="suave">{{ f.n }}. {{ f.p.id }} · Tarea {{ f.p.tarea }} ·
     {% if not f.r %}<span class="mal-t">Sin responder</span>{% elif f.r.correcta %}<span class="ok-t">Correcta</span>{% else %}<span class="mal-t">Incorrecta</span>{% endif %}</p>
   <p>{{ f.p.enunciado }}</p>
-  {% if f.r and not f.r.correcta %}<p>Tu respuesta: {{ f.r.respuesta }}</p>{% endif %}
-  <p><strong>Solución:</strong> {{ f.p.correctas }}</p>
+  {% if f.r and not f.r.correcta %}<p>Tu respuesta:</p><ul class="solucion">{% for l in legible(f.p, f.r.respuesta) %}<li>{{ l }}</li>{% endfor %}</ul>{% endif %}
+  <p><strong>Solución:</strong></p><ul class="solucion">{% for l in legible(f.p, f.p.correctas) %}<li>{{ l }}</li>{% endfor %}</ul>
   <p>{{ f.p.explicacion }}</p>
   {% if f.p.distractores %}<ul>{% for k, v in f.p.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
   <p class="suave">Referencia: <a href="{{ f.p.referencia }}" rel="noopener noreferrer">{{ f.p.referencia }}</a></p>
