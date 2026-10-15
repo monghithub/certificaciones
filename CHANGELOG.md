@@ -61,6 +61,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
   - La consola se presenta como «Certificaciones». **Cambio incompatible:** la imagen Docker pasa a llamarse `certificaciones-consola` (`docker compose up -d --build` la crea; la antigua `aif-c01-consola` puede borrarse; los datos no cambian).
   - CI: se excluyen de lychee los enlaces locales de `docs/consola.md`.
 
+### Corregido
+
+- Consola: la solución y la respuesta del estudiante de las preguntas de ordenación y emparejamiento se mostraban en formato técnico (`[['1', 'e'], …]`). Ahora se muestran como lista con el texto de cada opción (posición, o elemento → opción), también en opción y respuesta múltiple y en la página de resultados (2026-10-15).
+
 ### Revalidación de los datos de referencia (2026-10-14)
 
 Contrastados con la [guía oficial](https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html) (v1.1, 30 de abril de 2026) y la [página de la certificación](https://aws.amazon.com/certification/certified-ai-practitioner/).

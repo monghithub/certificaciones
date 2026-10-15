@@ -14,7 +14,9 @@
     <ul>{% for o in p.opciones %}<li><strong>{{ o.id }})</strong> {{ o.texto }}</li>{% endfor %}</ul>
     {% if retro %}
       <div class="msg {{ 'ok' if retro.correcta else 'error' }}"><strong>{{ 'Correcto' if retro.correcta else 'Incorrecto' }}.</strong>
-        {% if not retro.correcta %}Solución: {{ retro.solucion }}. Tu respuesta: {{ retro.respuesta }}.{% endif %}</div>
+        {% if not retro.correcta %}
+        <p>Solución:</p><ul class="solucion">{% for l in legible(p, retro.solucion) %}<li>{{ l }}</li>{% endfor %}</ul>
+        <p>Tu respuesta:</p><ul class="solucion">{% for l in legible(p, retro.respuesta) %}<li>{{ l }}</li>{% endfor %}</ul>{% endif %}</div>
       <p>{{ retro.explicacion }}</p>
       {% if retro.distractores %}<ul>{% for k, v in retro.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
       <p class="suave">Referencia: <a href="{{ retro.referencia }}" rel="noopener noreferrer">{{ retro.referencia }}</a></p>

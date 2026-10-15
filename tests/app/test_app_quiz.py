@@ -200,3 +200,23 @@ def test_curso_sin_simulacro_no_lo_ofrece(app, curso):
     c = entrar(app)
     assert "Empezar simulacro" not in c.get("/c/aif-c01/tests").text
     assert post(c, "/c/aif-c01/tests/iniciar", "/c/aif-c01/tests", modo="simulacro").status_code == 400
+
+
+def test_la_solucion_se_muestra_con_el_texto_de_las_opciones(app):
+    crear_usuario(app)
+    c = entrar(app)
+    iid = iniciar(c, modo="mixto", n="4")
+    ids = preguntas(app, iid)
+    malas = {"D3-001": {"r": "a"}, "D3-002": {"r": ["a", "b"]}, "D3-003": {"o1": "d", "o2": "c", "o3": "b", "o4": "a"},
+             "D3-004": {"m_1": "a", "m_2": "b", "m_3": "c"}}
+    for n, pid in enumerate(ids, 1):
+        responder(c, iid, n, malas[pid])
+        html = c.get(f"/c/aif-c01/tests/{iid}/p/{n}").text
+        assert "Incorrecto" in html and "[[" not in html and "['" not in html and 'class="solucion"' in html
+        if pid == "D3-003":
+            assert "1.º" in html
+        if pid == "D3-004":
+            assert "→" in html
+    post(c, f"/c/aif-c01/tests/{iid}/finalizar")
+    final = c.get(f"/c/aif-c01/tests/{iid}/resultado").text
+    assert "[[" not in final and "['" not in final and final.count('class="solucion"') == 8

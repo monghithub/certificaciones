@@ -18,7 +18,22 @@ def static(nombre: str) -> str:
     return f"/static/{nombre}?v={v}"
 
 
+def legible(p: dict, valor) -> list[str]:
+    """Convierte una respuesta o una solución (ids) en líneas legibles con el texto de cada opción."""
+    if not p or not valor:
+        return []
+    texto = {o["id"]: o["texto"] for o in p.get("opciones") or []}
+    opcion = lambda i: f"{i}) {texto[i]}" if i in texto else str(i)  # noqa: E731
+    if p.get("tipo") == "ordering":
+        return [f"{k}.º {opcion(i)}" for k, i in enumerate(valor, 1)]
+    if p.get("tipo") == "matching":
+        izq = {x["id"]: x["texto"] for x in p.get("prompts") or []}
+        return [f"{pid}. {izq.get(pid, '')} → {opcion(o)}" for pid, o in valor]
+    return [opcion(i) for i in valor]
+
+
 plantillas.env.globals["static"] = static
+plantillas.env.globals["legible"] = legible
 plantillas.env.filters["fecha"] = lambda d: d.strftime("%d/%m/%Y %H:%M") if d else "—"
 
 
