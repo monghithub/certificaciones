@@ -2209,3 +2209,163 @@
   explicacion: La inferencia por lotes cuesta un 50 % menos que bajo demanda en los modelos que la admiten; Standard
     es el precio de referencia; Priority lleva un recargo a cambio de respuestas más rápidas.
   referencia: https://aws.amazon.com/bedrock/pricing/
+- id: D2-076
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Un equipo calcula el coste mensual de un asistente en Amazon Bedrock con un modelo que se paga bajo
+    demanda por tokens. ¿Qué tokens debe incluir en la estimación?
+  opciones:
+  - id: a
+    texto: Solo los tokens de entrada que envía la aplicación
+  - id: b
+    texto: Solo los tokens de salida que genera el modelo
+  - id: c
+    texto: Los tokens de entrada y los de salida, cada uno con su precio
+  - id: d
+    texto: 'Ninguno: bajo demanda se paga una cuota mensual fija'
+  correctas:
+  - c
+  explicacion: Bajo demanda se paga por los tokens de entrada y por los de salida, con precios distintos por modelo
+    y Región; los de salida suelen costar varias veces más.
+  distractores:
+    a: También se pagan los de salida, que suelen ser más caros.
+    b: 'También se pagan los de entrada: instrucciones, historial y documentos enviados.'
+    d: Bajo demanda se paga por uso, sin cuota fija.
+  referencia: https://aws.amazon.com/bedrock/pricing/
+- id: D2-077
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Los clientes de una tienda se quejan de que el asistente les pide de nuevo el número de pedido que
+    ya dieron dos mensajes antes. ¿Qué pieza del contexto falta en cada llamada al modelo?
+  opciones:
+  - id: a
+    texto: Una temperatura más alta
+  - id: b
+    texto: Más ejemplos few-shot de otras conversaciones
+  - id: c
+    texto: Un modelo con más parámetros
+  - id: d
+    texto: El historial de la conversación o la memoria de corto plazo
+  correctas:
+  - d
+  explicacion: 'Un modelo no recuerda nada entre peticiones: la aplicación debe enviar el historial o una memoria
+    de la sesión. Decidir qué información llega en cada llamada es ingeniería de contexto.'
+  distractores:
+    a: Cambia la variabilidad de la respuesta, no lo que el modelo sabe de la conversación.
+    b: Muestran un formato, pero no aportan lo que dijo este cliente.
+    c: El modelo no guarda estado entre llamadas, sea del tamaño que sea; hay que enviarle el historial.
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html
+- id: D2-078
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Un asistente afirma con total seguridad que la empresa tiene una oficina en Lisboa, aunque no existe.
+    ¿Cómo se llama esta limitación de la IA generativa?
+  opciones:
+  - id: a
+    texto: Deriva del modelo
+  - id: b
+    texto: Sobreajuste
+  - id: c
+    texto: Alucinación
+  - id: d
+    texto: Latencia
+  correctas:
+  - c
+  explicacion: Una alucinación es una respuesta que parece plausible y segura pero es falsa o no está respaldada
+    por los datos. Se reduce con RAG, prompts precisos y verificación.
+  distractores:
+    a: Es la pérdida de calidad de un modelo con el tiempo porque cambian los datos reales.
+    b: Es memorizar los datos de entrenamiento y generalizar mal; no describe inventar un dato con seguridad.
+    d: Es el tiempo de respuesta, no la exactitud del contenido.
+  referencia: https://aws.amazon.com/what-is/ai-hallucinations/
+- id: D2-079
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una tienda online implanta un asistente de compra y quiere saber si ayuda a vender más. ¿Qué métrica
+    debe comparar entre los visitantes que lo usan y los que no?
+  opciones:
+  - id: a
+    texto: La ventana de contexto del modelo
+  - id: b
+    texto: La temperatura del modelo
+  - id: c
+    texto: El número de tokens procesados
+  - id: d
+    texto: La tasa de conversión
+  correctas:
+  - d
+  explicacion: La tasa de conversión (visitas que terminan en compra) mide directamente el efecto del asistente
+    en las ventas.
+  distractores:
+    a: Es una característica técnica del modelo, no un resultado de negocio.
+    b: Es un parámetro de inferencia, no una métrica de negocio.
+    c: Mide el uso y el coste del modelo, no si se vende más.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+- id: D2-080
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.3
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: El responsable de seguridad de un banco pregunta si los datos que su aplicación envía a Amazon Bedrock
+    se usan para entrenar los modelos base de los proveedores. ¿Qué respuesta es correcta?
+  opciones:
+  - id: a
+    texto: 'No: el contenido del cliente no se usa para mejorar los modelos base ni se comparte con los proveedores
+      de modelos'
+  - id: b
+    texto: Depende de la temperatura configurada
+  - id: c
+    texto: Sí, salvo que se contrate Provisioned Throughput
+  - id: d
+    texto: Sí, pero de forma anónima
+  correctas:
+  - a
+  explicacion: Según la documentación de Bedrock, el contenido del cliente no se usa para mejorar los modelos base
+    ni se comparte con los proveedores de modelos.
+  distractores:
+    b: La temperatura no tiene relación con el uso de los datos.
+    c: Provisioned Throughput es una opción de capacidad, no de privacidad.
+    d: Bedrock no usa el contenido del cliente para mejorar los modelos base, ni anonimizado.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html
+- id: D2-081
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.4
+  tipo: multiple_response
+  dificultad: baja
+  enunciado: 'Una empresa usa Amazon Bedrock bajo demanda para dos cargas: un chat web con tráfico irregular y un
+    informe que resume cada noche 200 000 reseñas y se lee por la mañana. ¿Qué DOS decisiones de coste son correctas?'
+  opciones:
+  - id: a
+    texto: Usar el nivel Priority para el informe nocturno
+  - id: b
+    texto: Procesar el chat web con inferencia por lotes
+  - id: c
+    texto: Procesar el informe nocturno con inferencia por lotes
+  - id: d
+    texto: Mantener el chat web bajo demanda
+  - id: e
+    texto: Comprar Provisioned Throughput para el chat web
+  correctas:
+  - c
+  - d
+  explicacion: Para tráfico irregular, bajo demanda; para volúmenes que pueden esperar, la inferencia por lotes
+    cuesta un 50 % menos en los modelos que la admiten.
+  distractores:
+    a: Paga un recargo por rapidez en una carga que puede esperar.
+    b: 'Es asíncrona: un chat necesita respuesta inmediata.'
+    e: Se paga por horas aunque no se use; no compensa con tráfico irregular.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
