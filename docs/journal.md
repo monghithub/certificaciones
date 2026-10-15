@@ -115,12 +115,33 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Verificación:** validador, cobertura (14/14, de 4 a 8 preguntas por objetivo), markdownlint, 10/10 diagramas, 219 tests y 36/36 comprobaciones de navegador.
 - **Queda abierto:** el marcador sobre Amazon Q en `servicios-alcance.md` y en `servicios.md`. En la consola, la solución de las preguntas de emparejamiento se muestra en formato técnico (`[['1','e'], …]`); es un defecto anterior a esta iteración.
 
+## 2026-10-15
+
+### Integración de la iteración 2 y arreglo de la consola
+
+- **Petición del usuario:** «¿Puedes continuar con todo?», tras la lista de lo que faltaba.
+- PR #1 (módulo 02) integrada en `main`.
+- PR #3 (`fix/consola-solucion-legible`) integrada: la solución y la respuesta de las preguntas de ordenación y emparejamiento se muestran como lista con el texto de cada opción en lugar de `[['1', 'e'], …]`. Una prueba nueva (220 en total).
+
+### Iteración 3: módulo 03 (Dominio 3)
+
+- Rama `aif-c01/modulo-03`, cambio de OpenSpec `iteracion-3-modulo-03-fm` (propuesta, diseño, tres specs y tareas). La petición «continuar con todo» se tomó como aprobación de la propuesta.
+- **Verificación primero:** unas 50 páginas oficiales (Knowledge Bases, almacenes vectoriales, personalización, destilación, *reinforcement fine-tuning*, evaluaciones, Prompt Management, ataques de *prompt*, AgentCore Evaluations, Flows, guías prescriptivas de bases vectoriales y de evaluación). Hallazgos: Bedrock solo enumera hoy tres métodos de personalización y la página de modelos con preentrenamiento continuado ya no existe; la fuga de *prompt* de Guardrails solo está en su modalidad Standard; Bedrock mide la exactitud de los resúmenes con BERTScore; DynamoDB y ElastiCache tienen búsqueda vectorial, pero Knowledge Bases no los admite.
+- **Hecho:** teoría con 19/19 objetivos y 6 diagramas, `servicios.md`, `trampas.md`, laboratorio de técnicas de *prompt* y Prompt Management, 94 preguntas y 41 entradas de glosario.
+- **Decisiones:**
+  - La destilación se presenta aparte de la escalera de coste, porque incluye un *fine-tuning*.
+  - Los ejemplos de coste de la personalización usan cifras supuestas y lo dicen; el coste de RAG reutiliza el precio real y fechado del módulo 02.
+  - «using multiple comments» y «task engineering» se interpretan y se marcan como pendientes, sin preguntas que dependan de ellos.
+  - El generador de D3 vive fuera del repositorio, como el de D2; la fuente de verdad es `preguntas.yaml`.
+- **Banco D2:** 6 preguntas fáciles añadidas al final sin regenerar el banco, para no cambiar las opciones de preguntas ya respondidas por estudiantes.
+- **Revisión independiente:** 2 hallazgos críticos (DynamoDB y ElastiCache; la destilación como peldaño más barato), 8 importantes (paso de Save as draft, la correcta como opción más larga en 27 preguntas, D3-057, «nivel Standard» ambiguo, RDS y Knowledge Bases, BERTScore en Bedrock, objetivos 3.2.3 y 3.4.3, dificultades) y varios menores. Se aplicaron todos.
+- **Verificación:** validador sin avisos, cobertura 19/19 (de 4 a 7 preguntas por objetivo), markdownlint, 16/16 diagramas, 220 tests y 37/37 comprobaciones de navegador.
+
 ### Pendiente
 
-- Iteraciones 3 a 5: módulos 03 a 05, con al menos 60 preguntas cada uno y laboratorio obligatorio.
-- Consola: mostrar de forma legible la solución de las preguntas de emparejamiento y ordenación.
+- Iteraciones 4 y 5: módulos 04 (IA responsable) y 05 (seguridad, cumplimiento y gobierno), con al menos 60 preguntas cada uno y laboratorio.
 - Iteración 6: simulacro de 65 preguntas inéditas, `chuleta.md`, decidir sobre `glosario.md` (hoy existe `glosario.yaml`) y revisión cruzada.
-- Marcadores `PENDIENTE DE VERIFICAR` en `fuentes/servicios-alcance.md` (Amazon Q; incoherencia de la lista out of scope de AWS).
+- Marcadores `PENDIENTE DE VERIFICAR`: Amazon Q (`fuentes/servicios-alcance.md`, módulo 02), preentrenamiento continuado en Bedrock y «using multiple comments» / «task engineering» (módulo 03).
 - Decisiones del usuario: licencia y formato de `ordering`/`matching`.
 - Borrar los usuarios de prueba `test` y `admintest` de la consola local al terminar los desarrollos.
-- Etiqueta `v1.0.0` con todo completo, la CI en verde y sin pendientes.
+- Etiqueta `aif-c01-v1.0.0` con todo completo, la CI en verde y sin pendientes.
