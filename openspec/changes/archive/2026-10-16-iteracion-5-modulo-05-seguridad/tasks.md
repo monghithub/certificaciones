@@ -24,6 +24,6 @@
 ## 5. Verificación y cierre
 
 - [x] 5.1 Validador, cobertura con preguntas, markdownlint, Mermaid, pytest y e2e en verde
-- [ ] 5.2 Revisión independiente del módulo y corrección de lo que encuentre
-- [ ] 5.3 `CHANGELOG.md`, `docs/journal.md` y estado del README del curso
-- [ ] 5.4 Commit, push, PR a `main` y archivo del cambio de OpenSpec
+- [x] 5.2 Revisión independiente del módulo y corrección de lo que encuentre
+- [x] 5.3 `CHANGELOG.md`, `docs/journal.md` y estado del README del curso
+- [x] 5.4 Commit, push, PR a `main` y archivo del cambio de OpenSpec
