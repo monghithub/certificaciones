@@ -401,8 +401,9 @@ En los dos casos el acceso puede quedar dentro de la red privada: la mayoría de
 
 | Etapa | Servicios y funcionalidades (ejemplos) |
 |---|---|
-| Almacenamiento de datos | Amazon S3 (lagos de datos, datos de entrenamiento y artefactos de modelos) |
-| Preparación de datos | AWS Glue (integración y ETL *serverless*), AWS Glue DataBrew (limpieza visual sin código) |
+| Obtención de datos de terceros | AWS Data Exchange (compartir y gestionar datos de otras organizaciones, incluidas las suscripciones de AWS Marketplace) |
+| Almacenamiento y análisis de datos | Amazon S3 (lagos de datos, datos de entrenamiento y artefactos de modelos); Amazon Redshift (almacén de datos gestionado a escala de petabytes) |
+| Preparación de datos | AWS Glue (integración y ETL *serverless*), AWS Glue DataBrew (limpieza visual sin código), Amazon EMR (Apache Spark y Hadoop gestionados para procesar grandes volúmenes) |
 | Etiquetado de datos | Amazon SageMaker Ground Truth (cerrado a clientes nuevos) |
 | ML sin código | Amazon SageMaker Canvas |
 | Desarrollo de modelos propios | Amazon SageMaker AI (algoritmos integrados, *frameworks*, entrenamiento), SageMaker JumpStart |
@@ -410,7 +411,7 @@ En los dos casos el acceso puede quedar dentro de la red privada: la mayoría de
 | Agentes | Amazon Bedrock AgentCore: plataforma agéntica para crear, desplegar y operar agentes de forma segura a escala |
 | Productividad e IA aplicada | Amazon Quick: servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar mediante chat |
 | Desarrollo asistido | Kiro (entorno de desarrollo con IA basado en especificaciones) |
-| Despliegue e inferencia | Endpoints de SageMaker AI (tiempo real, *serverless*, asíncrono) y transformación por lotes |
+| Despliegue e inferencia | Endpoints de SageMaker AI (tiempo real, *serverless*, asíncrono) y transformación por lotes; modelos en contenedores con Amazon ECS o Amazon EKS (Kubernetes gestionado); Amazon CloudFront para distribuir con baja latencia el contenido de la aplicación que usa el modelo |
 | Registro y automatización | SageMaker Pipelines, SageMaker Model Registry, MLflow en SageMaker AI |
 | Monitorización | SageMaker Model Monitor (cerrado a clientes nuevos) y Amazon CloudWatch |
 

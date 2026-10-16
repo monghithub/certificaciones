@@ -26,6 +26,11 @@ MAX_POSICION = 40           # % máximo de respuestas de opción múltiple en un
 MIN_MC_POSICION = 12        # nº de preguntas de opción múltiple a partir del cual se comprueba el reparto
 
 
+def normalizar(texto: str) -> str:
+    """Enunciado en minúsculas, sin signos de puntuación ni espacios repetidos (para detectar copias)."""
+    return " ".join(re.sub(r"[^\w\s]", " ", str(texto).lower()).split())
+
+
 def tareas_oficiales(curso: Manifiesto) -> dict[int, set[str]]:
     resultado = {}
     for n in curso.dominios:
@@ -142,6 +147,8 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
     tareas = tareas_oficiales(curso)
     objetivos = objetivos_oficiales(curso)
     ids_vistos: dict[str, str] = {}
+    enunciados_modulos: dict[str, str] = {}   # enunciado normalizado -> id (bancos de los módulos)
+    enunciados_simulacro: list[tuple[str, str, str]] = []  # (fichero, id, enunciado normalizado)
     if curso.simulacro and not (curso.carpeta / "modulos" / curso.simulacro).is_dir():
         errores.append(f"{curso.slug}: el módulo de simulacro '{curso.simulacro}' no existe")
     for f in sorted((curso.carpeta / "modulos").glob("*/preguntas.yaml")):
@@ -166,6 +173,11 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
             if pid in ids_vistos:
                 errores.append(f"{rel}:{pid}: id duplicado (también en {ids_vistos[pid]})")
             ids_vistos[pid] = str(rel)
+            if p.get("enunciado"):
+                if f.parent.name == curso.simulacro:
+                    enunciados_simulacro.append((str(rel), pid, normalizar(p["enunciado"])))
+                else:
+                    enunciados_modulos.setdefault(normalizar(p["enunciado"]), pid)
         tipos = Counter(p.get("tipo") for p in datos if isinstance(p, dict))
         posiciones = Counter((p.get("correctas") or [None])[0] for p in datos
                              if isinstance(p, dict) and p.get("tipo") == "multiple_choice")
@@ -186,6 +198,9 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
                 real = 100 * tipos.get(t, 0) / n
                 if abs(real - obj) > TOLERANCIA:
                     avisos.append(f"{rel}: {t} es el {real:.0f} % (objetivo ~{obj:g} %)")
+    for rel, pid, texto in enunciados_simulacro:
+        if texto in enunciados_modulos:
+            errores.append(f"{rel}:{pid}: el simulacro debe ser inédito y repite el enunciado de {enunciados_modulos[texto]}")
     return errores, avisos, resumen
 
 

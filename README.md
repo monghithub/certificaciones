@@ -8,7 +8,7 @@ Cada curso es autocontenido en `cursos/<curso>/`, con su manifiesto, sus fuentes
 
 | Proveedor | Curso | Estado | Contenido |
 |---|---|---|---|
-| AWS | [AWS Certified AI Practitioner (AIF-C01)](cursos/aif-c01/README.md) | En construcción: módulos 00 a 05 completados (dominios 1 a 5, 401 preguntas) | [cursos/aif-c01/](cursos/aif-c01/) |
+| AWS | [AWS Certified AI Practitioner (AIF-C01)](cursos/aif-c01/README.md) | Contenido completo: módulos 00 a 05 (401 preguntas), simulacro de 65, chuleta y glosario; pendiente la versión 1.0.0 | [cursos/aif-c01/](cursos/aif-c01/) |
 
 ## Estructura
 
