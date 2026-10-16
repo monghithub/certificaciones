@@ -274,7 +274,7 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 - **Añadidos a in scope:** Amazon Aurora, Amazon Bedrock AgentCore, Kiro, Strands Agents, Amazon Q, Amazon SageMaker JumpStart, AWS Transform.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de revisiones indica que Amazon Q se añadió a la lista in scope, pero la lista actual de servicios no lo incluye (sí incluye Amazon Quick). No tratar Amazon Q como servicio evaluable hasta aclararlo. Seguimiento: [issue #8](https://github.com/monghithub/certificaciones/issues/8).
+> **Amazon Q (resuelto el 2026-10-16, [issue #8](https://github.com/monghithub/certificaciones/issues/8)).** Solo la página de revisiones lo da como añadido. Las partes normativas de la guía v1.1 no lo incluyen, ni en HTML ni en PDF: la lista de servicios *in scope* (incluye Amazon Quick) y los objetivos 1.3.4 y 2.3.1. Además, la misma página de revisiones transcribe el objetivo 1.3.4 nuevo como «Amazon Bedrock, Amazon Q, Amazon Quick, Kiro, SageMaker AI», pero el objetivo vigente dice «Amazon Bedrock, Amazon Quick, Kiro, SageMaker AI». El curso sigue la lista y los objetivos: **Amazon Q no es servicio evaluable**. Como la lista es no exhaustiva y Amazon Q tampoco está en la lista *out of scope*, el módulo 02 explica su situación (Q Business cerrado a clientes nuevos; *plugins* de IDE de Q Developer sin soporte desde el 30 de abril de 2027).
 
 - **Eliminado de in scope:** Amazon MemoryDB.
 - **Eliminados de out of scope:** AWS DeepComposer, Amazon FinSpace, Amazon Honeycode, AWS IAM Identity Center, AWS Marketplace, AWS Organizations, Amazon WorkDocs.

@@ -32,7 +32,7 @@ Servicios dentro de alcance relevantes para el Dominio 2. La columna final recog
 | Amazon Bedrock Agents | Agentes en Bedrock; ahora *Agents Classic* | En proyectos nuevos: ya no admite clientes nuevos; AWS remite a Amazon Bedrock AgentCore |
 | Amazon Q | Amazon Q Business (asistente empresarial) y Amazon Q Developer (asistente de desarrollo) | En proyectos nuevos: Q Business ya no admite clientes nuevos (AWS remite a Amazon Quick) y los *plugins* de IDE de Q Developer dejan de tener soporte el 30 de abril de 2027 (AWS remite a Kiro) |
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de revisiones de la guía v1.1 dice que Amazon Q se añadió a la lista de servicios evaluables, pero la lista actual no lo incluye (ver [fuentes/servicios-alcance.md](../../fuentes/servicios-alcance.md)). Ninguna pregunta del banco depende de ello. Seguimiento: [issue #8](https://github.com/monghithub/certificaciones/issues/8).
+> **Amazon Q no es servicio evaluable.** La lista vigente de servicios *in scope* y los objetivos 1.3.4 y 2.3.1 de la guía v1.1 no lo incluyen; solo la página de revisiones lo da como añadido, y esa misma página no coincide con el texto vigente del objetivo 1.3.4 (detalle en [fuentes/servicios-alcance.md](../../fuentes/servicios-alcance.md)). Se incluye aquí para que sepas qué hacer si aparece en un caso real: en proyectos nuevos, Amazon Quick o Kiro.
 
 ## Opciones de inferencia y coste de Amazon Bedrock
 

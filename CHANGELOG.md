@@ -105,6 +105,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
 ### Corregido
 
+- Amazon Q (2026-10-16, [issue #8](https://github.com/monghithub/certificaciones/issues/8)): resuelto el marcador pendiente. La lista de servicios *in scope* y los objetivos 1.3.4 y 2.3.1 de la guía v1.1 (HTML y PDF) no lo incluyen; solo lo cita la página de revisiones, que tampoco coincide con el texto vigente del objetivo 1.3.4. El curso lo trata como no evaluable y lo explica en `fuentes/servicios-alcance.md`, en `02/servicios.md` y en el módulo 01.
 - Consola: la solución y la respuesta del estudiante de las preguntas de ordenación y emparejamiento se mostraban en formato técnico (`[['1', 'e'], …]`). Ahora se muestran como lista con el texto de cada opción (posición, o elemento → opción), también en opción y respuesta múltiple y en la página de resultados (2026-10-15).
 
 ### Revalidación de los datos de referencia (2026-10-14)
