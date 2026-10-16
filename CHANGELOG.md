@@ -120,5 +120,6 @@ Matices y diferencias:
 
 ### Decisiones pendientes de revisión
 
-- Licencia propuesta: MIT (código) y CC BY 4.0 (contenido); titular provisional "Contribuidores del curso AIF-C01".
-- Formato de `ordering` y `matching` en el banco de preguntas (ver `AGENTS.md`).
+- Licencia propuesta: MIT (código) y CC BY 4.0 (contenido); titular provisional "Contribuidores del curso AIF-C01" ([issue #13](https://github.com/monghithub/certificaciones/issues/13)).
+- Formato de `ordering` y `matching` en el banco de preguntas (ver `AGENTS.md`; [issue #14](https://github.com/monghithub/certificaciones/issues/14)).
+- Seguimiento en issues (2026-10-16): los cinco marcadores `PENDIENTE DE VERIFICAR` ([#8](https://github.com/monghithub/certificaciones/issues/8) a [#12](https://github.com/monghithub/certificaciones/issues/12), etiqueta `verificar`), la retirada de los usuarios de prueba de la consola ([#15](https://github.com/monghithub/certificaciones/issues/15)) y la publicación de `aif-c01-v1.0.0` ([#16](https://github.com/monghithub/certificaciones/issues/16)), que depende de las anteriores. Cada marcador enlaza su issue.

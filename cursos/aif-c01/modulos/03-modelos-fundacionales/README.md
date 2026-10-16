@@ -406,7 +406,7 @@ Buenas prácticas que cita la guía:
 - ***Guardrails*.** Combinar el *prompt* con controles externos (Amazon Bedrock Guardrails filtra contenido, temas denegados, datos sensibles y ataques de *prompt*). Una instrucción del tipo «no hables de política» no basta como control de seguridad.
 - **Varias indicaciones separadas** (*using multiple comments*). Interpretamos este punto de la guía como dividir una petición compleja en instrucciones o mensajes separados y claros, en lugar de un único bloque con todo mezclado.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la guía del examen cita «using multiple comments» sin definirlo, y la documentación de AWS consultada no usa esa expresión. La interpretación anterior es nuestra. Ninguna pregunta del banco depende de ella.
+> ⚠️ PENDIENTE DE VERIFICAR: la guía del examen cita «using multiple comments» sin definirlo, y la documentación de AWS consultada no usa esa expresión. La interpretación anterior es nuestra. Ninguna pregunta del banco depende de ella. Seguimiento: [issue #10](https://github.com/monghithub/certificaciones/issues/10).
 
 Otras prácticas de la guía de Bedrock: separar instrucciones y datos con **delimitadores** (por ejemplo, etiquetas XML), poner la pregunta al final de un contexto largo, dar un **papel** al modelo y descomponer tareas complejas en varios pasos (*prompt chaining*). Bedrock también ofrece un **optimizador de *prompts*** que reescribe un *prompt* para un modelo concreto (en la página de precios, el optimizador simple cuesta 0,03 USD por cada 1000 *tokens*; consultado el 15 de octubre de 2026).
 
@@ -489,7 +489,7 @@ No todas las etapas se dan siempre, ni en ese orden estricto: el diagrama muestr
 
 Métodos de personalización que ofrece hoy Amazon Bedrock según su guía: ***supervised fine-tuning*** (datos etiquetados), ***reinforcement fine-tuning*** (funciones de recompensa en lugar de pares etiquetados) y **destilación**. Para un control total del entrenamiento (cualquier modelo abierto, cualquier técnica), **Amazon SageMaker AI** y SageMaker JumpStart.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de preguntas frecuentes de Bedrock describe el preentrenamiento continuado para modelos Amazon Titan, pero la página vigente de métodos de personalización solo enumera *supervised fine-tuning*, *reinforcement fine-tuning* y destilación, y la página de modelos admitidos para preentrenamiento continuado ya no está disponible (consulta del 15 de octubre de 2026). El concepto sí es materia de examen; ninguna pregunta depende de su disponibilidad en Bedrock.
+> ⚠️ PENDIENTE DE VERIFICAR: la página de preguntas frecuentes de Bedrock describe el preentrenamiento continuado para modelos Amazon Titan, pero la página vigente de métodos de personalización solo enumera *supervised fine-tuning*, *reinforcement fine-tuning* y destilación, y la página de modelos admitidos para preentrenamiento continuado ya no está disponible (consulta del 15 de octubre de 2026). El concepto sí es materia de examen; ninguna pregunta depende de su disponibilidad en Bedrock. Seguimiento: [issue #11](https://github.com/monghithub/certificaciones/issues/11).
 
 #### Métodos de ajuste fino
 
@@ -618,7 +618,7 @@ Una métrica técnica alta no garantiza que el modelo aporte valor. Antes de eva
 - **Implicación de los usuarios** (*user engagement*): uso activo, sesiones, conversaciones que continúan, adopción por los empleados.
 - **Diseño de la tarea** (*task engineering*): interpretamos este punto de la guía como definir bien la tarea que hace el modelo, sus límites y su criterio de éxito, para poder medir si la cumple.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la guía cita «task engineering» como ejemplo sin definirlo, y la documentación de AWS consultada no usa ese término. La interpretación anterior es nuestra. Ninguna pregunta del banco depende de ella.
+> ⚠️ PENDIENTE DE VERIFICAR: la guía cita «task engineering» como ejemplo sin definirlo, y la documentación de AWS consultada no usa ese término. La interpretación anterior es nuestra. Ninguna pregunta del banco depende de ella. Seguimiento: [issue #12](https://github.com/monghithub/certificaciones/issues/12).
 
 | Objetivo de negocio | Métrica que lo demuestra |
 |---|---|

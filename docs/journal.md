@@ -202,8 +202,21 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Segunda verificación del simulacro reescrito:** un distractor defendible (los modelos personalizados de Bedrock sí pagan un almacenamiento mensual), seis preguntas que aún repetían la decisión de un banco (sustituidas), una referencia que no respaldaba la respuesta (SHAP), dos ordenaciones ambiguas y varios distractores absolutos. Se aplicó todo; los datos verificados (F1 en Bedrock, 0,21 USD por tarea humana, lotes −50 %, Priority +75 %, eventos de datos de CloudTrail, componentes de AgentCore, A2A, Transform) eran correctos.
 - **Verificación:** validador sin avisos, cobertura 69/69, markdownlint, 25/25 diagramas, 228 tests y 39/39 comprobaciones de navegador; simulacro probado en la consola local.
 
+### Seguimiento en issues
+
+- Petición: «corrige todo lo que puedas, y deja issues por las cosas que hay que verificar para hacer el estudio por separado».
+- Comprobado antes de abrir las issues: validador sin avisos, cobertura 69/69 y glosario sincronizado; no había nada más que corregir en el contenido.
+- **Issues de verificación** (etiquetas `verificar` y `aif-c01`), una por tema, con qué verificar, qué dice cada fuente, dónde está el marcador, impacto y criterio de cierre (incluido cerrar como «no verificable» si AWS no lo aclara):
+  - [#8](https://github.com/monghithub/certificaciones/issues/8) Amazon Q en la lista de servicios evaluables.
+  - [#9](https://github.com/monghithub/certificaciones/issues/9) Lista *out of scope* (DeepComposer, IAM Identity Center, Marketplace, Organizations).
+  - [#10](https://github.com/monghithub/certificaciones/issues/10) «using multiple comments».
+  - [#11](https://github.com/monghithub/certificaciones/issues/11) Preentrenamiento continuado en Bedrock.
+  - [#12](https://github.com/monghithub/certificaciones/issues/12) «task engineering».
+- **Issues de decisión** (etiqueta `decision`): [#13](https://github.com/monghithub/certificaciones/issues/13) licencia, [#14](https://github.com/monghithub/certificaciones/issues/14) formato de `ordering`/`matching`, [#15](https://github.com/monghithub/certificaciones/issues/15) retirar los usuarios de prueba.
+- [#16](https://github.com/monghithub/certificaciones/issues/16) publicar `aif-c01-v1.0.0`, con la lista de issues que la bloquean.
+- Cada marcador enlaza su issue; `AGENTS.md` lo exige para los marcadores que no se resuelvan en la iteración.
+- **Decisiones:** no se resuelven los marcadores por cuenta propia ni se cambia `LICENSE` (son decisiones del usuario); los usuarios de prueba no se borran sin su confirmación y las pruebas de navegador los usan.
+
 ### Pendiente
 
-- Decisiones del usuario: licencia (propuesta: MIT y CC BY 4.0) y formato de `ordering`/`matching`.
-- Cinco marcadores `PENDIENTE DE VERIFICAR` por contradicciones en las fuentes de AWS (Amazon Q y revisiones de la lista de servicios; preentrenamiento continuado en Bedrock; «using multiple comments» y «task engineering»). Sin ellos resueltos no se crea la etiqueta `aif-c01-v1.0.0`.
-- Borrar los usuarios de prueba `test` y `admintest` de la consola local, solo con la confirmación del usuario.
+- Lo que siguen las issues #8 a #16.

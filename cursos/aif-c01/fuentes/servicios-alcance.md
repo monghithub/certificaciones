@@ -274,11 +274,11 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 - **Añadidos a in scope:** Amazon Aurora, Amazon Bedrock AgentCore, Kiro, Strands Agents, Amazon Q, Amazon SageMaker JumpStart, AWS Transform.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de revisiones indica que Amazon Q se añadió a la lista in scope, pero la lista actual de servicios no lo incluye (sí incluye Amazon Quick). No tratar Amazon Q como servicio evaluable hasta aclararlo.
+> ⚠️ PENDIENTE DE VERIFICAR: la página de revisiones indica que Amazon Q se añadió a la lista in scope, pero la lista actual de servicios no lo incluye (sí incluye Amazon Quick). No tratar Amazon Q como servicio evaluable hasta aclararlo. Seguimiento: [issue #8](https://github.com/monghithub/certificaciones/issues/8).
 
 - **Eliminado de in scope:** Amazon MemoryDB.
 - **Eliminados de out of scope:** AWS DeepComposer, Amazon FinSpace, Amazon Honeycode, AWS IAM Identity Center, AWS Marketplace, AWS Organizations, Amazon WorkDocs.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de revisiones dice que AWS DeepComposer, AWS IAM Identity Center, AWS Marketplace y AWS Organizations se eliminaron de la lista out of scope, pero la lista vigente los sigue incluyendo (comprobado el 2026-10-14). La lista de esta página se transcribe tal cual; en el curso se tratan como fuera de alcance.
+> ⚠️ PENDIENTE DE VERIFICAR: la página de revisiones dice que AWS DeepComposer, AWS IAM Identity Center, AWS Marketplace y AWS Organizations se eliminaron de la lista out of scope, pero la lista vigente los sigue incluyendo (comprobado el 2026-10-14). La lista de esta página se transcribe tal cual; en el curso se tratan como fuera de alcance. Seguimiento: [issue #9](https://github.com/monghithub/certificaciones/issues/9).
 
 Fuente: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-revisions.html>
