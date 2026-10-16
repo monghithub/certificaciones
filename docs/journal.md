@@ -217,6 +217,11 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - Cada marcador enlaza su issue; `AGENTS.md` lo exige para los marcadores que no se resuelvan en la iteración.
 - **Decisiones:** no se resuelven los marcadores por cuenta propia ni se cambia `LICENSE` (son decisiones del usuario); los usuarios de prueba no se borran sin su confirmación y las pruebas de navegador los usan.
 
+### Licencia confirmada
+
+- El usuario confirma MIT para el código y CC BY 4.0 para el contenido. `LICENSE` deja de estar pendiente de confirmación y su lista de directorios incluye ahora la consola (`app/`, `curso/`, `migrations/`, `Dockerfile`) y `docs/`. Se cierra la [issue #13](https://github.com/monghithub/certificaciones/issues/13).
+- El titular sigue siendo «Contribuidores del curso AIF-C01», que se fijó como provisional en la iteración 0.
+
 ### Pendiente
 
-- Lo que siguen las issues #8 a #16.
+- Lo que siguen las issues #8 a #12 y #14 a #16.
