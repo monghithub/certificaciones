@@ -145,3 +145,12 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - Decisiones del usuario: licencia y formato de `ordering`/`matching`.
 - Borrar los usuarios de prueba `test` y `admintest` de la consola local al terminar los desarrollos.
 - Etiqueta `aif-c01-v1.0.0` con todo completo, la CI en verde y sin pendientes.
+
+## 2026-10-16
+
+### Cierre de la sesión
+
+- **Petición del usuario:** «guarda el journal y haz push».
+- PR #4 (iteración 3, módulo 03) abierta con la CI en verde y pendiente de la revisión del usuario antes de integrarla en `main`.
+- No se ha abierto ningún túnel público hacia la consola: queda a la espera de confirmación y, antes, de desactivar los usuarios de prueba `test` y `admintest`.
+- Sigue vigente la lista de pendientes del 2026-10-15.
