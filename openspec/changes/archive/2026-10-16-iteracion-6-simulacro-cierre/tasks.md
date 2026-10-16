@@ -19,6 +19,6 @@
 ## 4. Verificación y cierre
 
 - [x] 4.1 Validador, cobertura, markdownlint, Mermaid, pytest y e2e en verde
-- [ ] 4.2 Revisión independiente del simulacro y de la chuleta
-- [ ] 4.3 `CHANGELOG.md`, `docs/journal.md` y README
-- [ ] 4.4 Commit, push, PR a `main` y archivo del cambio de OpenSpec
+- [x] 4.2 Revisión independiente del simulacro y de la chuleta
+- [x] 4.3 `CHANGELOG.md`, `docs/journal.md` y README
+- [x] 4.4 Commit, push, PR a `main` y archivo del cambio de OpenSpec

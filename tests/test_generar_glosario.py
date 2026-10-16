@@ -27,7 +27,7 @@ def preparar(tmp_path):
 def test_orden_alfabetico_sin_tildes_y_campos(tmp_path):
     texto = generar(preparar(tmp_path))
     assert texto.startswith("# Glosario: Curso de prueba")
-    assert texto.index("**Amazon S3**") < texto.index("**ética**") < texto.index("**Zeta**")
+    assert texto.index("**ética**") < texto.index("**Amazon S3**") < texto.index("**Zeta**")  # Amazon S3 va con la S
     assert "## E" in texto and "(ethics)" in texto
     assert "  - Usar cuando: Para guardar ficheros." in texto
     assert "  - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html>" in texto
@@ -47,3 +47,8 @@ def test_comprobar_detecta_glosario_desactualizado(tmp_path):
 def test_glosario_del_repositorio_esta_al_dia():
     raiz = Path(__file__).resolve().parent.parent
     assert main(["--raiz", str(raiz), "--comprobar"]) == 0
+
+
+def test_curso_inexistente_falla(tmp_path):
+    preparar(tmp_path)
+    assert main(["--raiz", str(tmp_path), "--curso", "no-existe"]) == 1

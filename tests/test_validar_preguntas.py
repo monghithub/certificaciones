@@ -241,3 +241,19 @@ def test_simulacro_con_enunciado_nuevo(repo):
     p.update(id="S-001", enunciado="Una empresa de logística quiere un escenario distinto de los del banco del módulo para el simulacro.")
     escribir(repo, [p], "06-simulacro")
     assert not any("inédito" in e for e in validar(repo, minimos=False)[0])
+
+
+def test_simulacro_muy_parecido_genera_aviso(repo):
+    p = copy.deepcopy(BASE[0])
+    p.update(id="S-001", enunciado=p["enunciado"].replace("semanalmente", "cada semana"))
+    escribir(repo, [p], "06-simulacro")
+    errs, avisos, _ = validar(repo, minimos=False)
+    assert not any("inédito" in e for e in errs)
+    assert any("se parece mucho a D3-001" in a for a in avisos)
+
+
+def test_simulacro_con_enunciado_repetido_dentro_del_simulacro(repo):
+    a = copy.deepcopy(BASE[0]); a.update(id="S-001", enunciado="Un escenario nuevo y distinto de los módulos para el simulacro del curso.")
+    b = copy.deepcopy(a); b["id"] = "S-002"
+    escribir(repo, [a, b], "06-simulacro")
+    assert any("del propio simulacro" in e for e in validar(repo, minimos=False)[0])

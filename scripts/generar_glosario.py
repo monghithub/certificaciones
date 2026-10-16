@@ -17,10 +17,16 @@ RAIZ = Path(__file__).resolve().parent.parent
 CATEGORIAS = {"servicio": "Servicio", "concepto": "Concepto", "tecnica": "Técnica", "metrica": "Métrica"}
 
 
+PREFIJOS = ("amazon ", "aws ")  # se ignoran al ordenar: «Amazon S3» va con la S
+
+
 def _clave(texto: str) -> str:
-    """Clave de orden: sin tildes, en minúsculas."""
-    sin_tildes = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
-    return sin_tildes.lower()
+    """Clave de orden: sin tildes, en minúsculas y sin los prefijos de marca de PREFIJOS."""
+    clave = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode().lower()
+    for prefijo in PREFIJOS:
+        if clave.startswith(prefijo):
+            return clave[len(prefijo):]
+    return clave
 
 
 def generar(curso: Path) -> str:
@@ -34,7 +40,8 @@ def generar(curso: Path) -> str:
         "",
         "Términos del curso en orden alfabético, con sus variantes en inglés y en español. "
         "**Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: "
-        "no lo edites a mano; edita el YAML y vuelve a generarlo.",
+        "no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» "
+        "y «AWS» (Amazon S3 aparece en la S).",
         "",
         f"Total: {len(entradas)} términos.",
     ]
@@ -71,7 +78,12 @@ def main(argv=None):
     ap.add_argument("--comprobar", action="store_true", help="no escribir; fallar si glosario.md está desactualizado")
     a = ap.parse_args(argv)
     desactualizados = []
-    for curso in cursos_con_glosario(a.raiz, a.curso):
+    cursos = cursos_con_glosario(a.raiz, a.curso)
+    faltan = sorted(set(a.curso or []) - {c.name for c in cursos})
+    if faltan:
+        print(f"ERROR curso no encontrado o sin glosario.yaml: {', '.join(faltan)}", file=sys.stderr)
+        return 1
+    for curso in cursos:
         destino = curso / "glosario.md"
         texto = generar(curso)
         actual = destino.read_text(encoding="utf8") if destino.is_file() else None

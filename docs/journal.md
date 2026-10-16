@@ -180,3 +180,30 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - Los enunciados con la comprobación de *grounding* hablan de servicios de preguntas y respuestas o de resumen, no de chatbots, también en el módulo 04 (sin cambiar opciones ni ids).
 - **Revisión independiente:** 1 hallazgo crítico (Role Manager cerrado a clientes nuevos, que era la respuesta correcta de una pregunta), 7 importantes (GuardDuty fuera de alcance, límites del *grounding*, eventos de datos de CloudTrail, una pregunta de respuesta múltiple con correcta débil, una ordenación ambigua, preguntas de definición con distractores débiles, retención de datos) y varios menores. Se aplicaron todos.
 - **Verificación:** validador sin avisos, cobertura 8/8 (de 7 a 10 preguntas por objetivo), markdownlint, 25/25 diagramas, 220 tests y 39/39 comprobaciones de navegador.
+
+### Iteración 6: simulacro, chuleta, glosario y revisión cruzada
+
+- Rama `aif-c01/simulacro`, cambio de OpenSpec `iteracion-6-simulacro-cierre` (propuesta, diseño, specs `simulacro-aif-c01`, `chuleta-y-glosario` y delta de `question-validation`), integrada la PR #6 de la iteración 5.
+- **Hecho:**
+  - Simulacro de 65 preguntas inéditas (13/16/18/9/9 por dominio, las 14 tareas, 44 de opción múltiple, 10 de respuesta múltiple, 5 de ordenación y 6 de emparejamiento; 13 baja, 39 media y 13 alta), con los dominios intercalados, e instrucciones en `06-simulacro/README.md`. Probado en la consola local: el botón aparece, arranca con 1/65 y cronómetro de 90 minutos.
+  - `validar_preguntas.py` falla si un enunciado del simulacro repite, normalizado, uno de los bancos o del propio simulacro, y avisa de las preguntas muy parecidas (Jaccard ≥ 0,5).
+  - `glosario.md` generado desde `glosario.yaml` con `scripts/generar_glosario.py`; la CI comprueba que está al día.
+  - `chuleta.md` por dominio.
+- **Revisión cruzada:**
+  - Cobertura: 69/69 objetivos con mapa y preguntas (más el módulo 00 de conocimientos previos).
+  - Servicios dentro de alcance: los 51 de la lista oficial aparecen en algún módulo; se añadieron al módulo 01 y al glosario AWS Data Exchange, Amazon EMR, Amazon Redshift, Amazon ECS, Amazon EKS y Amazon CloudFront, que faltaban.
+  - Servicios fuera de alcance: ninguno de los 117 es respuesta correcta en los 466 enunciados.
+  - Marcadores `PENDIENTE DE VERIFICAR`: se revalidaron el 2026-10-16 las páginas oficiales (servicios dentro de alcance, revisiones, Dominio 3, personalización de Bedrock) y siguen las mismas contradicciones; los cinco marcadores se mantienen y ninguna pregunta depende de ellos.
+- **Decisiones:**
+  - `glosario.yaml` sigue siendo la fuente de verdad (lo usa la consola); `glosario.md` es un derivado para leer en GitHub.
+  - La comprobación de servicios dentro de alcance se hizo de forma puntual y queda documentada aquí; no se añade como control permanente.
+  - No se crea la etiqueta `aif-c01-v1.0.0`: `promt.md` y `AGENTS.md` la condicionan a no tener marcadores pendientes.
+- **Revisión independiente:** la primera versión del simulacro reformulaba con otras palabras el escenario de unas 35 preguntas de los bancos (por ejemplo, el mismo cálculo de 180 USD por tokens). Se reescribió entero eligiendo decisiones que los bancos no evalúan y los objetivos que no tenían pregunta en el simulacro (1.1.1, 1.1.4, 1.2.1, 1.2.4, 1.3.3, 3.2.1, 3.2.3, 3.4.3, 4.1.1, 4.2.3). La similitud máxima con los bancos bajó de 0,85 a 0,37. Lección: la comparación literal de enunciados no basta para garantizar preguntas inéditas; hay que comparar la decisión que se evalúa.
+- **Segunda verificación del simulacro reescrito:** un distractor defendible (los modelos personalizados de Bedrock sí pagan un almacenamiento mensual), seis preguntas que aún repetían la decisión de un banco (sustituidas), una referencia que no respaldaba la respuesta (SHAP), dos ordenaciones ambiguas y varios distractores absolutos. Se aplicó todo; los datos verificados (F1 en Bedrock, 0,21 USD por tarea humana, lotes −50 %, Priority +75 %, eventos de datos de CloudTrail, componentes de AgentCore, A2A, Transform) eran correctos.
+- **Verificación:** validador sin avisos, cobertura 69/69, markdownlint, 25/25 diagramas, 228 tests y 39/39 comprobaciones de navegador; simulacro probado en la consola local.
+
+### Pendiente
+
+- Decisiones del usuario: licencia (propuesta: MIT y CC BY 4.0) y formato de `ordering`/`matching`.
+- Cinco marcadores `PENDIENTE DE VERIFICAR` por contradicciones en las fuentes de AWS (Amazon Q y revisiones de la lista de servicios; preentrenamiento continuado en Bedrock; «using multiple comments» y «task engineering»). Sin ellos resueltos no se crea la etiqueta `aif-c01-v1.0.0`.
+- Borrar los usuarios de prueba `test` y `admintest` de la consola local, solo con la confirmación del usuario.

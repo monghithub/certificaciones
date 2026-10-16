@@ -1,6 +1,6 @@
 # Simulacro del examen
 
-Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 preguntas para hacer en 90 minutos, repartidas según los pesos oficiales de los cinco dominios. Todas las preguntas son de elaboración propia e **inéditas**: no repiten ninguna de los bancos de los módulos (el validador del repositorio lo comprueba). Hazlo cuando hayas terminado los módulos 00 a 05.
+Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 preguntas para hacer en 90 minutos, repartidas según los pesos oficiales de los cinco dominios. Todas las preguntas son de elaboración propia e **inéditas**: se redactaron con escenarios y decisiones distintos de los de los bancos de los módulos. El validador del repositorio comprueba que no se repite ningún enunciado y avisa de las preguntas muy parecidas a las de los bancos. Hazlo cuando hayas terminado los módulos 00 a 05.
 
 ## Cómo hacerlo
 
@@ -10,7 +10,7 @@ Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 
 4. En las preguntas de respuesta múltiple hay que acertar **todas** las correctas; en las de ordenación, el orden completo; en las de emparejamiento, todos los pares.
 5. Al terminar, revisa la explicación de cada pregunta, también de las que aciertes.
 
-Sin la consola, puedes hacerlo en la terminal: `python scripts/quiz.py --curso aif-c01 --modulo 06 --n 65` (sin cronómetro).
+Sin la consola, puedes hacerlo en la terminal: `python scripts/quiz.py --curso aif-c01 --modulo 06 --n 65`. No reproduce las condiciones del examen: no tiene cronómetro, el orden es aleatorio y corrige cada pregunta al responderla.
 
 ## Qué contiene
 
@@ -23,7 +23,7 @@ Sin la consola, puedes hacerlo en la terminal: `python scripts/quiz.py --curso a
 | D5. Seguridad, cumplimiento y gobierno | 14 % | 9 | [05](../05-seguridad-gobierno/README.md) |
 | **Total** | 100 % | **65** | |
 
-Tipos de pregunta: 41 de opción múltiple, 12 de respuesta múltiple, 5 de ordenación y 7 de emparejamiento. Dificultad: 13 baja, 39 media y 13 alta. Los dominios aparecen intercalados, como en el examen.
+Tipos de pregunta: 44 de opción múltiple, 10 de respuesta múltiple, 5 de ordenación y 6 de emparejamiento. Dificultad: 13 baja, 39 media y 13 alta. Cubren las 14 tareas del examen. Los dominios aparecen intercalados, como en el examen.
 
 ## Cómo interpretar el resultado
 

@@ -9,7 +9,7 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 ## D1. Fundamentos de IA y ML ([módulo 01](modulos/01-fundamentos-ia-ml/README.md))
 
 - **IA ⊃ ML ⊃ aprendizaje profundo ⊃ IA generativa**; la IA agéntica actúa con herramientas para cumplir objetivos.
-- **Aprendizaje:** supervisado (datos etiquetados: clasificación, regresión), no supervisado (agrupamiento, anomalías), por refuerzo (recompensas).
+- **Aprendizaje:** supervisado (datos etiquetados: clasificación, regresión), no supervisado (agrupamiento, anomalías), por refuerzo (recompensas), autosupervisado (genera sus propias etiquetas; así se preentrenan los modelos fundacionales).
 - **Inferencia en SageMaker AI:** tiempo real (baja latencia, endpoint siempre encendido), *serverless* (tráfico intermitente, sin GPU), asíncrona (cargas de hasta 1 GB y hasta 1 hora), transformación por lotes (conjuntos completos, sin endpoint).
 - **No uses ML** si una regla exacta y auditable lo resuelve o si no hay datos. **ML clásico** para datos tabulares etiquetados; **modelo fundacional** para lenguaje, imagen y tareas abiertas.
 - **Servicios de IA:** Textract (documentos), Comprehend (texto: sentimiento, entidades), Transcribe (voz→texto), Polly (texto→voz), Translate, Rekognition (imagen y vídeo), Lex (bots), Personalize (recomendaciones).
@@ -23,17 +23,19 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 - **Coste por tokens:** entrada + salida (la salida suele costar más). Ejemplo: 100 000 peticiones × (1 000 entrada + 500 salida) a 0,60/2,40 USD por millón = 60 + 120 = 180 USD.
 - **Ingeniería de contexto:** decidir qué llega al modelo en cada petición (resumir historial, recuperar solo lo relevante, memoria).
 - **Agentes:** razonan, planifican y usan herramientas; **MCP** conecta agentes con herramientas y datos; **A2A** conecta agentes entre sí.
-- **Desventajas:** alucinaciones, no determinismo, interpretabilidad, inexactitud. **Ventajas:** adaptabilidad, rapidez, simplicidad.
+- **Ciclo de vida del modelo fundacional:** selección de datos y de modelo → preentrenamiento → ajuste fino → evaluación → despliegue → retroalimentación.
+- **Desventajas:** alucinaciones, no determinismo, interpretabilidad, inexactitud. **Ventajas:** adaptabilidad, capacidad de respuesta, capacidades conversacionales, generación de contenido.
+- **Métricas de negocio:** conversión, ingreso medio por usuario (ARPU), valor del ciclo de vida del cliente (CLV), ROI, eficiencia, rendimiento entre dominios.
 - **Servicios:** Bedrock (modelos por API), JumpStart (modelos para desplegar en SageMaker AI), AgentCore (operar agentes: Runtime, Memory, Identity, Gateway, Policy, Observability), Strands Agents (SDK), Quick (asistente para empleados), Kiro (desarrollo agéntico), Transform (modernización).
 - **Infraestructura:** Trainium (entrenar), Inferentia (inferencia, mejor rendimiento por vatio).
-- **Coste de Bedrock:** bajo demanda (tráfico variable); **lotes** y **Flex** (−50 %) si se puede esperar; **Priority** (+75 %) para la respuesta más rápida; **Provisioned Throughput** (capacidad garantizada, se paga aunque no se use); *prompt caching* para contextos repetidos.
+- **Coste de Bedrock:** bajo demanda (tráfico variable); **lotes** y **Flex** (−50 %) si se puede esperar; **Priority** (+75 %) para la respuesta más rápida; **Provisioned Throughput** (capacidad garantizada, se paga por hora aunque no se use); *prompt caching* para contextos repetidos; **inferencia entre Regiones** para absorber picos (perfil geográfico si hay residencia). Los **modelos personalizados** pagan entrenamiento, almacenamiento mensual e inferencia (bajo demanda si el modelo lo admite o con Provisioned Throughput).
 
 ## D3. Aplicaciones de modelos fundacionales ([módulo 03](modulos/03-modelos-fundacionales/README.md))
 
 - **Elegir modelo:** el **más pequeño y barato que cumple** (coste, modalidad, latencia, idiomas, ventana de contexto, personalización, *prompt caching*, Región).
 - **Parámetros:** temperatura (↑ variedad), top-p (proporción de probabilidad), top-k (número de candidatos), longitud máxima (corta), secuencias de parada.
-- **Personalización, de menos a más coste:** *prompt* (aprendizaje en contexto) → **RAG** → *fine-tuning* → preentrenamiento. Destilación: modelo pequeño que imita a uno grande (abarata la inferencia).
-- **RAG = datos propios y cambiantes con citas** (Knowledge Bases); *fine-tuning* = tono, formato o tarea fija. Almacenes de Knowledge Bases: OpenSearch Serverless, **Aurora** PostgreSQL, Neptune Analytics, S3 Vectors… (DynamoDB, ElastiCache y RDS for PostgreSQL tienen búsqueda vectorial pero **no** son almacén de Knowledge Bases).
+- **Personalización, de menos a más coste:** *prompt* (aprendizaje en contexto) → **RAG** → *fine-tuning* (pares etiquetados) → preentrenamiento continuado (mucho texto del dominio sin etiquetar) → preentrenamiento desde cero. Destilación: modelo pequeño que imita a uno grande (abarata la inferencia).
+- **RAG = datos propios y cambiantes con citas** (Knowledge Bases); *fine-tuning* = tono, formato o tarea fija. Almacenes de Knowledge Bases: OpenSearch (Serverless y gestionado), **Aurora** PostgreSQL, Neptune Analytics, S3 Vectors, Pinecone, MongoDB Atlas y Redis Enterprise Cloud (DynamoDB, ElastiCache y RDS for PostgreSQL tienen búsqueda vectorial pero **no** son almacén de Knowledge Bases).
 - **Prompts:** zero-shot, few-shot (ejemplos del formato), chain-of-thought (pasos), plantillas, *prompt* negativo. Riesgos: inyección, *jailbreak*, fuga de *prompt*, envenenamiento. **Prompt Management:** plantillas con variables y versiones.
 - **Evaluación:** humana (subjetivo), *benchmarks*, métricas automáticas (**ROUGE** resúmenes, **BLEU** traducción, **BERTScore** semántica), *LLM-as-a-judge*. **Bedrock Evaluations:** programática, humana, juez y RAG. Negocio: coste por interacción, tareas completadas, satisfacción.
 
@@ -43,6 +45,7 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 - **Guardrails:** filtros de contenido (incluye ataques de *prompt*), **temas denegados** (un tema), **filtros de palabras** (términos exactos), **información sensible** (bloquear o enmascarar PII), ***grounding* contextual** (alucinaciones frente a la fuente; no chat), **Automated Reasoning** (reglas lógicas; solo detecta). `ApplyGuardrail` = sin invocar modelo.
 - **Sesgo alto** = subajuste (falla en todo); **varianza alta** = sobreajuste (bien en entrenamiento, mal en prueba). Grupos con pocos datos se aprenden peor.
 - **Detectar sesgo:** calidad de etiquetas, auditorías humanas independientes, análisis por subgrupos. CI = (na−nd)/(na+nd); DI = q'd/q'a (1 = paridad).
+- **Herramientas:** **Clarify** (sesgo y explicaciones SHAP de ML clásico), **Model Monitor** (deriva, también de sesgo), **A2I** (revisión humana de predicciones con poca confianza), **Bedrock Evaluations** (toxicidad, robustez, estereotipos de modelos fundacionales). Las tres primeras ya no admiten clientes nuevos, pero siguen siendo la respuesta esperada si el enunciado no lo menciona.
 - **Riesgos legales:** propiedad intelectual (AWS indemniza por derechos de autor en sus modelos y servicios cubiertos), sesgo, pérdida de confianza, riesgo para el usuario, alucinaciones. **Decisiones con consecuencias → supervisión humana.**
 - **Transparencia:** **Model Cards** (tu modelo: uso previsto, riesgo, evaluación) frente a **AI Service Cards** (servicios de AWS). Interpretable (árbol, regresión) frente a opaco con SHAP. Sostenible: modelo del tamaño justo.
 

@@ -24,11 +24,24 @@ ABSOLUTOS = re.compile(r"\b(siempre|nunca|cualquier[a]?|garantiza[r]?|todos los|
 MIN_ENUNCIADO = 80          # caracteres: por debajo suele ser una pregunta de definición, no un escenario
 MAX_POSICION = 40           # % máximo de respuestas de opción múltiple en una misma letra
 MIN_MC_POSICION = 12        # nº de preguntas de opción múltiple a partir del cual se comprueba el reparto
+SIMILITUD_SIMULACRO = 0.5   # Jaccard (enunciado + correctas) a partir del cual una pregunta del simulacro se parece demasiado
 
 
 def normalizar(texto: str) -> str:
     """Enunciado en minúsculas, sin signos de puntuación ni espacios repetidos (para detectar copias)."""
     return " ".join(re.sub(r"[^\w\s]", " ", str(texto).lower()).split())
+
+
+def palabras(texto: str) -> set[str]:
+    """Palabras significativas (más de 3 letras) de un texto normalizado."""
+    return {w for w in normalizar(texto).split() if len(w) > 3}
+
+
+def texto_correctas(p: dict) -> str:
+    """Texto de las opciones correctas (en emparejamiento, las opciones emparejadas)."""
+    cor = p.get("correctas") or []
+    ids = {c[1] for c in cor if isinstance(c, list) and len(c) == 2} if p.get("tipo") == "matching" else set(map(str, cor))
+    return " ".join(str(o.get("texto", "")) for o in p.get("opciones") or [] if o.get("id") in ids)
 
 
 def tareas_oficiales(curso: Manifiesto) -> dict[int, set[str]]:
@@ -148,7 +161,8 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
     objetivos = objetivos_oficiales(curso)
     ids_vistos: dict[str, str] = {}
     enunciados_modulos: dict[str, str] = {}   # enunciado normalizado -> id (bancos de los módulos)
-    enunciados_simulacro: list[tuple[str, str, str]] = []  # (fichero, id, enunciado normalizado)
+    palabras_modulos: list[tuple[str, int, set[str]]] = []  # (id, dominio, palabras de enunciado + correctas)
+    simulacro: list[tuple[str, str, str, int, set[str]]] = []  # (fichero, id, enunciado normalizado, dominio, palabras)
     if curso.simulacro and not (curso.carpeta / "modulos" / curso.simulacro).is_dir():
         errores.append(f"{curso.slug}: el módulo de simulacro '{curso.simulacro}' no existe")
     for f in sorted((curso.carpeta / "modulos").glob("*/preguntas.yaml")):
@@ -174,10 +188,12 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
                 errores.append(f"{rel}:{pid}: id duplicado (también en {ids_vistos[pid]})")
             ids_vistos[pid] = str(rel)
             if p.get("enunciado"):
+                clave = palabras(f"{p['enunciado']} {texto_correctas(p)}")
                 if f.parent.name == curso.simulacro:
-                    enunciados_simulacro.append((str(rel), pid, normalizar(p["enunciado"])))
+                    simulacro.append((str(rel), pid, normalizar(p["enunciado"]), p.get("dominio"), clave))
                 else:
                     enunciados_modulos.setdefault(normalizar(p["enunciado"]), pid)
+                    palabras_modulos.append((pid, p.get("dominio"), clave))
         tipos = Counter(p.get("tipo") for p in datos if isinstance(p, dict))
         posiciones = Counter((p.get("correctas") or [None])[0] for p in datos
                              if isinstance(p, dict) and p.get("tipo") == "multiple_choice")
@@ -198,9 +214,19 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
                 real = 100 * tipos.get(t, 0) / n
                 if abs(real - obj) > TOLERANCIA:
                     avisos.append(f"{rel}: {t} es el {real:.0f} % (objetivo ~{obj:g} %)")
-    for rel, pid, texto in enunciados_simulacro:
+    vistos_simulacro: dict[str, str] = {}
+    for rel, pid, texto, dominio, clave in simulacro:
         if texto in enunciados_modulos:
             errores.append(f"{rel}:{pid}: el simulacro debe ser inédito y repite el enunciado de {enunciados_modulos[texto]}")
+        if texto in vistos_simulacro:
+            errores.append(f"{rel}:{pid}: repite el enunciado de {vistos_simulacro[texto]} del propio simulacro")
+        vistos_simulacro.setdefault(texto, pid)
+        parecidas = [(len(clave & otra) / len(clave | otra), mid) for mid, dom, otra in palabras_modulos
+                     if dom == dominio and clave and otra]
+        if parecidas:
+            sim, mid = max(parecidas)
+            if sim >= SIMILITUD_SIMULACRO:
+                avisos.append(f"{rel}:{pid}: se parece mucho a {mid} (similitud {sim:.2f}): usa un escenario y una decisión nuevos")
     return errores, avisos, resumen
 
 
