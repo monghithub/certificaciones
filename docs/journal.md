@@ -222,6 +222,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - El usuario confirma MIT para el código y CC BY 4.0 para el contenido. `LICENSE` deja de estar pendiente de confirmación y su lista de directorios incluye ahora la consola (`app/`, `curso/`, `migrations/`, `Dockerfile`) y `docs/`. Se cierra la [issue #13](https://github.com/monghithub/certificaciones/issues/13).
 - El titular sigue siendo «Contribuidores del curso AIF-C01», que se fijó como provisional en la iteración 0.
 
+### Issue #8: Amazon Q
+
+- Petición: «empezamos por la 8».
+- Fuentes consultadas el 2026-10-16: lista de servicios *in scope* y *out of scope*, páginas de los dominios 1 y 2, página de revisiones y PDF completo de la guía v1.1 (publicada el 30 de abril de 2026).
+- **Hallazgo nuevo:** la página de revisiones transcribe el objetivo 1.3.4 nuevo como «Amazon Bedrock, Amazon Q, Amazon Quick, Kiro, SageMaker AI», pero el objetivo vigente (HTML y PDF) dice «Amazon Bedrock, Amazon Quick, Kiro, SageMaker AI». La página de revisiones no coincide con la guía en ningún punto donde cita Amazon Q.
+- **Decisión:** se sigue la parte normativa de la guía: Amazon Q no es evaluable. Se quita el marcador en `fuentes/servicios-alcance.md` y en `02/servicios.md` (queda una nota con la explicación) y se ajusta la nota del módulo 01. No cambia ninguna pregunta.
+
 ### Pendiente
 
-- Lo que siguen las issues #8 a #12 y #14 a #16.
+- Lo que siguen las issues #9 a #12 y #14 a #16.

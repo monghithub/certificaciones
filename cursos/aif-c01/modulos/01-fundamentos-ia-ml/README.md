@@ -418,7 +418,7 @@ En los dos casos el acceso puede quedar dentro de la red privada: la mayoría de
 
 Kiro se documenta en <https://kiro.dev/> y en la documentación de AWS (por ejemplo, en la [guía de AWS GovCloud](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kiro.html)): es una plataforma de desarrollo basada en especificaciones, con IDE y CLI.
 
-**Amazon Q.** Aparece como «añadido» en la página de revisiones de la guía pero no figura en la lista vigente de servicios dentro de alcance (ver [servicios-alcance](../../fuentes/servicios-alcance.md)); no se trata como materia evaluable hasta aclararlo.
+**Amazon Q.** Aparece como «añadido» en la página de revisiones de la guía, pero no figura en la lista vigente de servicios dentro de alcance ni en el texto vigente del objetivo 1.3.4, que cita Amazon Quick y Kiro (ver [servicios-alcance](../../fuentes/servicios-alcance.md)). No es materia evaluable.
 
 > **Avisos de disponibilidad.** Amazon SageMaker Model Monitor, Amazon SageMaker Clarify y Amazon SageMaker Ground Truth ya no están abiertos a nuevos clientes, y Amazon Bedrock Agents (ahora *Classic*) tampoco, con Amazon Bedrock AgentCore como alternativa. Los clientes existentes pueden seguir usándolos. SageMaker Experiments es ahora *Experiments Classic* y AWS recomienda MLflow en SageMaker AI. Para el examen basta con saber **para qué sirve** cada capacidad.
 
