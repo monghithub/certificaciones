@@ -66,7 +66,7 @@
   termino: Amazon Bedrock Knowledge Bases
   alias: [Bedrock Knowledge Bases, Knowledge Bases]
   categoria: servicio
-  definicion: "Permite integrar información propia en aplicaciones de IA generativa mediante RAG: busca en tus datos la información relevante para una consulta y la usa para mejorar las respuestas del modelo."
+  definicion: "Permite integrar información propia en aplicaciones de IA generativa mediante RAG: busca en tus datos la información relevante para una consulta y la usa para mejorar las respuestas del modelo. Hay dos tipos: Managed Knowledge Base (Bedrock gestiona ingesta, índice y almacén, con conectores y permisos por documento) y customer-managed (el cliente elige y gestiona el almacén vectorial)."
   usar_cuando: "Cuando el modelo debe responder con información propia, específica o actualizada."
   no_usar_cuando: "Cuando el modelo no necesita datos propios ni actualizados."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
@@ -959,3 +959,318 @@
   categoria: metrica
   definicion: "Capacidad de una aplicación de IA generativa de mantener la calidad en tareas o áreas distintas de aquellas para las que se probó o ajustó."
   referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+
+# ------------------------------------------------------------------ módulo 03: aplicaciones de modelos fundacionales
+- id: amazon-opensearch-service
+  termino: Amazon OpenSearch Service
+  alias: [OpenSearch Service, OpenSearch Serverless, Amazon OpenSearch Serverless]
+  categoria: servicio
+  definicion: "Servicio gestionado de búsqueda y análisis con búsqueda vectorial (k-NN). Combina búsqueda de texto completo y vectorial con latencias muy bajas; OpenSearch Serverless es la opción de creación rápida más habitual para Bedrock Knowledge Bases y, junto con los clústeres gestionados, la única que admite vectores binarios."
+  usar_cuando: "Búsqueda híbrida (texto completo + vectores), muchas consultas con baja latencia o el almacén vectorial de una Knowledge Base."
+  no_usar_cuando: "Cuando la aplicación ya usa PostgreSQL y basta añadir pgvector, o cuando hay que guardar miles de millones de vectores al menor coste con consultas poco frecuentes (S3 Vectors)."
+  referencia: https://docs.aws.amazon.com/opensearch-service/latest/developerguide/knn.html
+
+- id: amazon-aurora
+  termino: Amazon Aurora
+  alias: [Aurora, Aurora PostgreSQL]
+  categoria: servicio
+  definicion: "Base de datos relacional gestionada compatible con MySQL y PostgreSQL. Con la extensión pgvector de PostgreSQL almacena embeddings y combina consultas SQL con búsqueda por similitud; Bedrock Knowledge Bases la admite como almacén vectorial."
+  usar_cuando: "Cuando la aplicación ya usa SQL relacional y quiere combinar filtros relacionales y búsqueda vectorial en la misma base de datos."
+  no_usar_cuando: "Cuando el caso pide relaciones de grafo (Neptune) o búsqueda de texto completo a gran escala (OpenSearch)."
+  referencia: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html
+
+- id: amazon-rds
+  termino: Amazon RDS
+  alias: [RDS for PostgreSQL, Amazon RDS for PostgreSQL, Amazon Relational Database Service]
+  categoria: servicio
+  definicion: "Servicio de bases de datos relacionales gestionadas. Amazon RDS for PostgreSQL con la extensión pgvector puede almacenar y consultar embeddings sin otra base de datos."
+  usar_cuando: "Aplicaciones RAG propias de equipos que ya gestionan PostgreSQL en RDS."
+  no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido (Aurora PostgreSQL sí)."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
+
+- id: amazon-neptune
+  termino: Amazon Neptune
+  alias: [Neptune, Neptune Analytics, Amazon Neptune Analytics]
+  categoria: servicio
+  definicion: "Base de datos de grafos gestionada. Neptune Analytics añade búsqueda vectorial combinada con recorridos y algoritmos de grafos, la base de GraphRAG; Bedrock Knowledge Bases la admite."
+  usar_cuando: "Cuando importan las relaciones entre entidades: GraphRAG, redes de fraude, vista 360 del cliente, respuestas explicables por relaciones."
+  no_usar_cuando: "Para una búsqueda semántica sencilla sobre documentos sin relaciones relevantes."
+  referencia: https://docs.aws.amazon.com/neptune-analytics/latest/userguide/vector-similarity.html
+
+- id: amazon-documentdb
+  termino: Amazon DocumentDB
+  alias: [DocumentDB]
+  categoria: servicio
+  definicion: "Base de datos de documentos compatible con MongoDB, con búsqueda vectorial nativa desde la versión 5.0."
+  usar_cuando: "Aplicaciones que ya usan la API de MongoDB y quieren añadir búsqueda semántica."
+  no_usar_cuando: "Cuando el caso no usa documentos JSON ni la API de MongoDB."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
+
+- id: amazon-s3-vectors
+  termino: Amazon S3 Vectors
+  alias: [S3 Vectors]
+  categoria: servicio
+  definicion: "Almacenamiento vectorial de Amazon S3 (buckets e índices vectoriales) optimizado en coste para volúmenes enormes, con latencias por debajo del segundo en consultas poco frecuentes y de unos 100 ms en las frecuentes. Se integra con Bedrock Knowledge Bases."
+  usar_cuando: "Miles de millones de vectores al menor coste, con consultas poco frecuentes."
+  no_usar_cuando: "Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo."
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html
+
+- id: graphrag
+  termino: GraphRAG
+  categoria: tecnica
+  definicion: "Variante de RAG que combina la búsqueda vectorial con un grafo de conocimiento, para recuperar también las relaciones entre entidades. En AWS, con Amazon Neptune Analytics y Bedrock Knowledge Bases."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
+
+- id: amazon-bedrock-prompt-management
+  termino: Amazon Bedrock Prompt Management
+  alias: [Prompt Management, Bedrock Prompt Management]
+  categoria: servicio
+  definicion: "Funcionalidad de Amazon Bedrock para crear, guardar, probar y versionar prompts reutilizables: variables, variantes comparables, borrador y versiones inmutables que la aplicación invoca por su ARN o desde Bedrock Flows."
+  usar_cuando: "Para reutilizar prompts probados, compararlos y desplegarlos o revertirlos por versiones sin tocar el código."
+  no_usar_cuando: "Como control de seguridad: los ataques de prompt se filtran con Guardrails."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html
+
+- id: amazon-bedrock-flows
+  termino: Amazon Bedrock Flows
+  alias: [Bedrock Flows]
+  categoria: servicio
+  definicion: "Constructor visual de flujos de trabajo de IA generativa que enlaza prompts, modelos fundacionales, Knowledge Bases y otros servicios como AWS Lambda, y despliega flujos inmutables. Se paga por los recursos que usa."
+  usar_cuando: "Procesos con pasos fijos y predecibles."
+  no_usar_cuando: "Cuando los pasos dependen de lo que vaya pasando y el sistema debe decidir por sí mismo: eso es un agente (AgentCore)."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html
+
+- id: amazon-bedrock-model-evaluation
+  termino: Amazon Bedrock Model Evaluation
+  alias: [Bedrock Model Evaluation, Amazon Bedrock Evaluations, Bedrock Evaluations]
+  categoria: servicio
+  definicion: "Evaluaciones de Amazon Bedrock: programáticas (conjuntos integrados o propios con métricas de exactitud, robustez y toxicidad), con trabajadores humanos, con un modelo juez (LLM-as-a-judge) y de fuentes RAG o Knowledge Bases."
+  usar_cuando: "Para comparar modelos, prompts o Knowledge Bases con datos del caso antes de elegir o de pasar a producción."
+  no_usar_cuando: "Para evaluar agentes a partir de sus trazas: AgentCore Evaluations."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html
+
+- id: intelligent-prompt-routing
+  termino: Intelligent Prompt Routing
+  alias: [enrutamiento inteligente de prompts]
+  categoria: tecnica
+  definicion: "Funcionalidad de Amazon Bedrock que envía cada petición, dentro de una familia de modelos, al que predice que dará la mejor calidad al menor coste: las preguntas sencillas a un modelo pequeño y las complejas a uno más capaz."
+  referencia: https://aws.amazon.com/bedrock/pricing/
+
+- id: aprendizaje-en-contexto
+  termino: in-context learning
+  alias: [aprendizaje en contexto]
+  categoria: tecnica
+  definicion: "Capacidad del modelo de adaptarse a una tarea a partir de las instrucciones y los ejemplos que recibe en el prompt, sin cambiar sus parámetros. Es la forma más barata de personalización."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html
+
+- id: zero-shot
+  termino: zero-shot
+  alias: [zero-shot prompting]
+  categoria: tecnica
+  definicion: "Técnica de prompt que pide la tarea sin incluir ejemplos. Sirve para tareas que el modelo ya hace bien."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html
+
+- id: few-shot
+  termino: few-shot
+  alias: [few-shot prompting, one-shot, single-shot]
+  categoria: tecnica
+  definicion: "Técnica de prompt que incluye ejemplos de entrada y salida: uno (one-shot o single-shot) o varios (few-shot). Enseña un formato o una clasificación propia sin entrenar, a cambio de más tokens de entrada."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html
+
+- id: chain-of-thought
+  termino: chain-of-thought
+  alias: [cadena de pensamiento]
+  categoria: tecnica
+  definicion: "Técnica de prompt que pide al modelo razonar paso a paso antes de dar la respuesta. Mejora los problemas de varios pasos (cálculos, lógica) a cambio de más tokens de salida y latencia."
+  referencia: https://aws.amazon.com/what-is/prompt-engineering/
+
+- id: plantilla-de-prompt
+  termino: plantilla de prompt
+  alias: [prompt template, prompt templates, plantillas de prompt]
+  categoria: tecnica
+  definicion: "Prompt fijo con variables que se rellenan en cada petición. Permite reutilizar un prompt probado de forma coherente; en AWS se gestiona con Amazon Bedrock Prompt Management."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html
+
+- id: prompt-negativo
+  termino: prompt negativo
+  alias: [negative prompt, negative prompts]
+  categoria: concepto
+  definicion: "Indicación de lo que no debe aparecer en la respuesta. En modelos de imagen suele ser un campo aparte (sin texto, sin personas); en texto se expresa como restricción."
+  referencia: https://docs.aws.amazon.com/nova/latest/userguide/prompting-image-negative.html
+
+- id: prompt-injection
+  termino: prompt injection
+  alias: [inyección de prompts, hijacking, secuestro de objetivo]
+  categoria: concepto
+  definicion: "Ataque con instrucciones (del usuario o escondidas en un documento o web que lee el modelo) que intentan ignorar y sustituir las del desarrollador para cambiar el objetivo del modelo. Prevenirlo en la aplicación es responsabilidad del cliente; Guardrails ayuda a detectarlo."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html
+
+- id: jailbreak
+  termino: jailbreaking
+  alias: [jailbreak, jailbreaks]
+  categoria: concepto
+  definicion: "Ataque con prompts diseñados para saltarse las protecciones de seguridad y moderación del propio modelo y obtener contenido dañino (por ejemplo, prompts tipo DAN o juegos de rol). Guardrails incluye un filtro de jailbreaks."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html
+
+- id: fuga-de-prompt
+  termino: fuga de prompt
+  alias: [prompt leakage]
+  categoria: concepto
+  definicion: "Riesgo de exposición: el usuario consigue que el modelo revele las instrucciones del sistema, la configuración o el historial de la conversación. Guardrails lo detecta en su modalidad Standard (no en la Classic)."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html
+
+- id: envenenamiento-de-datos
+  termino: envenenamiento de datos
+  alias: [poisoning, data poisoning]
+  categoria: concepto
+  definicion: "Introducción intencionada de datos maliciosos o sesgados en los datos de entrenamiento, de ajuste fino o en las fuentes de RAG para alterar el comportamiento del modelo. Se mitiga con curación, gobierno y control de acceso a los datos."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/common-attacks.html
+
+- id: preentrenamiento-continuado
+  termino: preentrenamiento continuado
+  alias: [continued pre-training, continued pretraining]
+  categoria: tecnica
+  definicion: "Seguir preentrenando un modelo existente con grandes volúmenes de texto sin etiquetar de un dominio (médico, legal, financiero) para que aprenda su vocabulario, conservando la mayor parte de sus capacidades generales."
+  usar_cuando: "Cuando el modelo no conoce la jerga de un dominio y hay mucho texto propio sin etiquetar."
+  no_usar_cuando: "Cuando el problema es la información actualizada (RAG) o una tarea concreta con ejemplos etiquetados (fine-tuning)."
+  referencia: https://aws.amazon.com/bedrock/faqs/
+
+- id: destilacion
+  termino: destilación
+  alias: [model distillation, distillation, Amazon Bedrock Model Distillation]
+  categoria: tecnica
+  definicion: "Transferir el conocimiento de un modelo grande (maestro) a uno más pequeño, rápido y barato (alumno) para un caso de uso. Bedrock genera respuestas del maestro con los prompts del cliente (o las toma de los registros de invocación) y ajusta al alumno."
+  usar_cuando: "Cuando se quiere una calidad cercana a la del modelo grande con la latencia y el precio de uno pequeño."
+  no_usar_cuando: "Cuando el problema es que faltan datos propios o actualizados: RAG."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html
+
+- id: reinforcement-fine-tuning
+  termino: reinforcement fine-tuning
+  alias: [ajuste fino por refuerzo]
+  categoria: tecnica
+  definicion: "Método de personalización de Amazon Bedrock en el que el modelo genera respuestas, una función de recompensa (código en Lambda o un modelo juez) las puntúa y el modelo aprende a maximizar la recompensa, sin pares etiquetados."
+  usar_cuando: "Cuando el éxito se puede medir (código que pasa pruebas, respuestas verificables) pero es caro conseguir ejemplos etiquetados."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/reinforcement-fine-tuning.html
+
+- id: instruction-tuning
+  termino: instruction tuning
+  alias: [ajuste por instrucciones]
+  categoria: tecnica
+  definicion: "Ajuste fino con pares instrucción → respuesta para que el modelo siga mejor las instrucciones de un tipo de tarea."
+  referencia: https://aws.amazon.com/what-is/foundation-models/
+
+- id: transfer-learning
+  termino: transfer learning
+  alias: [aprendizaje por transferencia]
+  categoria: tecnica
+  definicion: "Reutilizar lo que un modelo aprendió en una tarea general para otra concreta, con pocos datos o entrenando solo una parte. Es la idea en la que se basa el ajuste fino de los modelos fundacionales."
+  referencia: https://aws.amazon.com/what-is/transfer-learning/
+
+- id: rlhf
+  termino: RLHF
+  alias: [Reinforcement Learning from Human Feedback, aprendizaje por refuerzo con retroalimentación humana]
+  categoria: tecnica
+  definicion: "Técnica en la que personas comparan o puntúan respuestas del modelo; con esas preferencias se entrena un modelo de recompensa y se ajusta el modelo para producir las respuestas que prefieren las personas (más útiles, seguras o alineadas)."
+  referencia: https://aws.amazon.com/what-is/reinforcement-learning-from-human-feedback/
+
+- id: curacion-de-datos
+  termino: curación de datos
+  alias: [data curation]
+  categoria: concepto
+  definicion: "Seleccionar, limpiar, deduplicar y revisar los datos antes de entrenar o ajustar un modelo: quitar errores, contenido tóxico y datos personales innecesarios."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html
+
+- id: benchmark
+  termino: benchmark
+  alias: [benchmarks, benchmark datasets, conjunto de referencia]
+  categoria: concepto
+  definicion: "Conjunto de datos de referencia con preguntas y respuestas conocidas para medir y comparar modelos de forma repetible. Bedrock incluye conjuntos integrados (TREX, BOLD, RealToxicityPrompts, Gigaword, BoolQ…) y admite conjuntos propios."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-tasks.html
+
+- id: evaluacion-humana
+  termino: evaluación humana
+  alias: [human-in-the-loop, human evaluation]
+  categoria: tecnica
+  definicion: "Evaluación en la que personas (empleados o expertos) puntúan o comparan respuestas del modelo. Capta criterios subjetivos y es la referencia final, pero es lenta y cara."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-human.html
+
+- id: llm-as-a-judge
+  termino: LLM-as-a-judge
+  alias: [modelo juez, LLM como juez]
+  categoria: tecnica
+  definicion: "Evaluación en la que un segundo modelo puntúa las respuestas de otro con una rúbrica (corrección, fidelidad, relevancia, tono…) y explica la nota. Escala bien, pero el juez debe validarse con personas y conviene que sea de otra familia de modelos."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html
+
+- id: rouge
+  termino: ROUGE
+  alias: [Recall-Oriented Understudy for Gisting Evaluation, ROUGE-N, ROUGE-L]
+  categoria: metrica
+  definicion: "Métrica que mide el solapamiento de n-gramas entre la respuesta y un texto de referencia, orientada a la exhaustividad (cuánto de la referencia aparece en la respuesta). Típica de resúmenes."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-quality.html
+
+- id: bleu
+  termino: BLEU
+  alias: [Bilingual Evaluation Understudy]
+  categoria: metrica
+  definicion: "Métrica que mide el solapamiento de n-gramas orientada a la precisión (cuánto de la respuesta aparece en la referencia) y penaliza respuestas demasiado cortas. Típica de traducción automática."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-quality.html
+
+- id: bertscore
+  termino: BERTScore
+  categoria: metrica
+  definicion: "Métrica que compara los embeddings de la respuesta y de la referencia para medir su similitud semántica: reconoce paráfrasis que ROUGE y BLEU penalizan. Bedrock la usa en las tareas de resumen."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-tasks.html
+
+- id: tasa-de-tareas-completadas
+  termino: tasa de tareas completadas
+  alias: [task completion rate]
+  categoria: metrica
+  definicion: "Proporción de solicitudes que una aplicación de IA resuelve sin intervención humana. Por ejemplo, 42 000 de 60 000 consultas = 70 %."
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+
+- id: coste-por-interaccion
+  termino: coste por interacción
+  alias: [cost per interaction]
+  categoria: metrica
+  definicion: "Coste total de una aplicación de IA (inferencia, almacenamiento, otros servicios) dividido entre el número de interacciones en un periodo."
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+
+- id: satisfaccion-del-usuario
+  termino: satisfacción del usuario
+  alias: [user satisfaction, CSAT]
+  categoria: metrica
+  definicion: "Valoración de los usuarios de una aplicación de IA: encuestas (CSAT), votos positivos o negativos y quejas."
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+
+- id: amazon-dynamodb
+  termino: Amazon DynamoDB
+  alias: [DynamoDB]
+  categoria: servicio
+  definicion: "Base de datos NoSQL sin servidor y totalmente gestionada. Tiene índices vectoriales nativos que se consultan con la API SearchVectors para buscar por similitud junto a los datos operativos, sin otra base de datos ni réplicas."
+  usar_cuando: "RAG o memoria de agentes cuando los datos operativos ya están en DynamoDB."
+  no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido."
+  referencia: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/VectorSearch.html
+
+- id: amazon-elasticache
+  termino: Amazon ElastiCache
+  alias: [ElastiCache, ElastiCache para Valkey]
+  categoria: servicio
+  definicion: "Caché y almacén de datos en memoria totalmente gestionado (Valkey, Redis OSS, Memcached). Desde Valkey 8.2 ofrece búsqueda vectorial en memoria con latencias mínimas."
+  usar_cuando: "Búsqueda semántica en tiempo real, caché semántica o memoria de agentes con latencias mínimas."
+  no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido."
+  referencia: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/vector-search-overview.html
+
+- id: instrucciones-del-sistema
+  termino: instrucciones del sistema
+  alias: [system prompt, prompt del sistema]
+  categoria: concepto
+  definicion: "Parte fija del prompt que define el papel, las reglas, el tono y el formato de todas las respuestas de una aplicación, separada del mensaje que escribe el usuario."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/design-a-prompt.html
+
+- id: agentcore-evaluations
+  termino: AgentCore Evaluations
+  alias: [Amazon Bedrock AgentCore Evaluations]
+  categoria: servicio
+  definicion: "Servicio de Amazon Bedrock AgentCore que evalúa agentes y herramientas a partir de sus trazas (por ejemplo, de Strands o LangGraph) con evaluadores integrados o propios basados en LLM-as-a-judge, antes y después del despliegue."
+  usar_cuando: "Para medir de forma continua la calidad de un agente: utilidad, elección de herramientas, cumplimiento de la tarea."
+  no_usar_cuando: "Para comparar modelos en tareas estándar: Amazon Bedrock Model Evaluation."
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations.html
