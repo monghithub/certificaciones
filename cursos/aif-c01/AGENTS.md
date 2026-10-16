@@ -18,7 +18,8 @@ Gestionado frente a medida; prompt engineering → RAG → *fine-tuning* → pre
 
 ## Disponibilidad y nombres de servicios de AWS (a 2026-10-14)
 
-- Cerrados a clientes nuevos: SageMaker Model Monitor, SageMaker Clarify, SageMaker Ground Truth y Amazon Bedrock Agents (ahora *Classic*; AWS remite a Amazon Bedrock AgentCore).
+- Cerrados a clientes nuevos (a 2026-10-16): SageMaker Model Monitor, SageMaker Clarify, SageMaker Ground Truth, Amazon Augmented AI (A2I), SageMaker Role Manager, AWS Audit Manager y Amazon Bedrock Agents (ahora *Classic*; AWS remite a Amazon Bedrock AgentCore). Si el examen pregunta por ellos sin decir que el cliente sea nuevo, siguen siendo la respuesta esperada.
+- Fuera de alcance aunque aparezcan en la documentación de seguridad: Amazon GuardDuty, IAM Identity Center, AWS Security Hub, AWS WAF, Amazon Cognito (ver `fuentes/servicios-alcance.md`); solo se mencionan para reconocerlos.
 - SageMaker Experiments es ahora *Experiments Classic*; AWS recomienda MLflow en SageMaker AI.
 - Desde el 3 de diciembre de 2024, el servicio de ML se llama Amazon SageMaker AI y «Amazon SageMaker» designa una plataforma unificada que lo incluye.
 - Las guías de decisión de AWS indican su *Last updated*; la guía de ML de mayo de 2024 está desactualizada en, por ejemplo, el soporte de *endpoints* de VPC (consulta la lista de AWS PrivateLink).
