@@ -154,3 +154,17 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - PR #4 (iteración 3, módulo 03) abierta con la CI en verde y pendiente de la revisión del usuario antes de integrarla en `main`.
 - No se ha abierto ningún túnel público hacia la consola: queda a la espera de confirmación y, antes, de desactivar los usuarios de prueba `test` y `admintest`.
 - Sigue vigente la lista de pendientes del 2026-10-15.
+
+### Iteración 4: módulo 04 (Dominio 4)
+
+- **Petición del usuario:** «continua con todo hasta el final y haz push». Se integró la PR #4 (iteración 3) y se encadenan las iteraciones 4, 5 y 6, cada una con su PR. La petición se toma como aprobación de las propuestas y de la integración de cada PR con la CI en verde.
+- Rama `aif-c01/modulo-04`, cambio de OpenSpec `iteracion-4-modulo-04-rai` (propuesta, diseño, tres specs y tareas).
+- **Verificación primero:** unas 60 páginas oficiales (IA responsable y política de AWS, AI Service Cards, Responsible AI Lens y Generative AI Lens, todas las salvaguardas de Guardrails con sus niveles, idiomas, permisos y precios, Bedrock Evaluations, Clarify y sus métricas, Model Monitor, A2I, Ground Truth, Model Cards, FAQ de Bedrock, guía prescriptiva de interpretabilidad, sobreajuste, Inferentia). Hallazgos: A2I también está cerrado a clientes nuevos; AWS publica cómo sustituir Clarify (bibliotecas abiertas, SHAP y Bedrock Evaluations) y Model Monitor (soluciones abiertas de monitorización); la *Responsible AI Lens* (noviembre de 2025) enumera diez dimensiones frente a las ocho de la página de AWS; Automated Reasoning checks solo detecta.
+- **Hecho:** teoría con 11/11 objetivos y 5 diagramas, `servicios.md`, `trampas.md`, laboratorio de Guardrails, 75 preguntas y 34 entradas de glosario.
+- **Decisiones:**
+  - Los servicios cerrados a clientes nuevos se explican porque el examen los nombra, con una regla de lectura: si la pregunta no dice que el cliente sea nuevo, siguen siendo la respuesta esperada; si es un cliente nuevo o un modelo fundacional, Bedrock Evaluations y Guardrails.
+  - Las cifras de marketing (por ejemplo, el porcentaje de contenido dañino que bloquea Guardrails) no se usan; la de rendimiento por vatio de Inferentia2 se cita con su fuente.
+  - El banco reparte la longitud de las opciones: la correcta es la más larga en 15 de 52 preguntas de opción múltiple.
+  - El generador del banco pasa a ser genérico (`genbanco.py`, fuera del repositorio); la fuente de verdad sigue siendo `preguntas.yaml`.
+- **Revisión independiente:** sin errores críticos; 9 hallazgos importantes (Automated Reasoning solo detecta, lectura de Clarify/A2I en el examen, fechas no verificadas en dos preguntas, alertas de deriva, pasos del laboratorio, distractores de otra categoría, fmeval y gobierno de ML, dos dificultades) y varios menores. Se aplicaron todos; se añadieron tres preguntas con Clarify o A2I como respuesta correcta.
+- **Verificación:** validador sin avisos, cobertura 11/11 (de 6 a 9 preguntas por objetivo), markdownlint, 21/21 diagramas, 220 tests y 38/38 comprobaciones de navegador.
