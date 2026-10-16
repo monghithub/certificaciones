@@ -17,7 +17,7 @@ Cursos en **español de España**, registro formal y técnico, pensados para un 
 - **Primaria:** la guía oficial del examen y sus subpáginas, transcritas literalmente en `cursos/<curso>/fuentes/` con URL y fecha de consulta.
 - **Secundarias:** la documentación oficial del proveedor y su plataforma oficial de formación. Las aceptadas para cada curso se declaran en `fuentes_oficiales` de `curso.yaml`, y el validador exige que la `referencia` de cada pregunta pertenezca a ellas.
 - Antes de redactar un módulo, relee `cursos/<curso>/fuentes/dominio-N.md` y redáctalo contra esa lista. Si la guía cambia, actualiza `fuentes/`, anota la diferencia en `CHANGELOG.md` y revisa los módulos y preguntas afectados.
-- **Prohibido inventar** cuotas, precios, nombres de funcionalidades, regiones o fechas. Si no puedes verificar un dato, escribe `> ⚠️ PENDIENTE DE VERIFICAR:` seguido de la duda y continúa.
+- **Prohibido inventar** cuotas, precios, nombres de funcionalidades, regiones o fechas. Si no puedes verificar un dato, escribe `> ⚠️ PENDIENTE DE VERIFICAR:` seguido de la duda y continúa. Si el marcador no se resuelve en la iteración, abre una issue con la etiqueta `verificar` (qué hay que verificar, qué dicen las fuentes, dónde está el marcador, impacto y criterio de cierre) y enlázala al final del marcador con «Seguimiento: issue #N».
 - **Prohibido** usar o reproducir preguntas reales del examen (*dumps*) o material de terceros protegido.
 - Lo que la guía declara fuera de alcance solo se menciona al nivel necesario para reconocerlo.
 
@@ -88,7 +88,7 @@ Reglas surgidas de la revisión técnica de la iteración 1 de AIF-C01. Se aplic
 | `ordering` | ≥ nº de elementos | 3–5 ids **en orden**; sin `distractores` |
 | `matching` | columna derecha; `prompts` en columna izquierda (3–7) | 3–7 pares `[prompt_id, opcion_id]`; `distractores` para las opciones sin par |
 
-Los ids de `prompts` son números (`"1"`, `"2"`…, entre comillas en YAML) y los de `opciones` letras (`a`–`j`). Las opciones incorrectas de `multiple_*` y las no usadas en `matching` deben tener su explicación en `distractores`. El formato concreto de `matching` y `ordering` es una decisión de diseño de este repositorio.
+Los ids de `prompts` son números (`"1"`, `"2"`…, entre comillas en YAML) y los de `opciones` letras (`a`–`j`). Las opciones incorrectas de `multiple_*` y las no usadas en `matching` deben tener su explicación en `distractores`. El formato concreto de `matching` y `ordering` es una decisión de diseño de este repositorio, pendiente de confirmar ([issue #14](https://github.com/monghithub/certificaciones/issues/14)).
 
 ### Calidad del banco de preguntas
 
