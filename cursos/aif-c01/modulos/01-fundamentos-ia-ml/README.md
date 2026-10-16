@@ -401,16 +401,18 @@ En los dos casos el acceso puede quedar dentro de la red privada: la mayoría de
 
 | Etapa | Servicios y funcionalidades (ejemplos) |
 |---|---|
-| Almacenamiento de datos | Amazon S3 (lagos de datos, datos de entrenamiento y artefactos de modelos) |
-| Preparación de datos | AWS Glue (integración y ETL *serverless*), AWS Glue DataBrew (limpieza visual sin código) |
+| Obtención de datos de terceros | AWS Data Exchange (compartir y gestionar datos de otras organizaciones, incluidas las suscripciones de AWS Marketplace) |
+| Almacenamiento y análisis de datos | Amazon S3 (lagos de datos, datos de entrenamiento y artefactos de modelos); Amazon Redshift (almacén de datos gestionado a escala de petabytes); AWS Lake Formation (permisos detallados sobre el lago de datos); Amazon OpenSearch Service (búsqueda de texto y vectorial, por ejemplo para RAG) |
+| Preparación de datos | AWS Glue (integración y ETL *serverless*), AWS Glue DataBrew (limpieza visual sin código), Amazon EMR (Apache Spark y Hadoop gestionados para procesar grandes volúmenes) |
 | Etiquetado de datos | Amazon SageMaker Ground Truth (cerrado a clientes nuevos) |
 | ML sin código | Amazon SageMaker Canvas |
 | Desarrollo de modelos propios | Amazon SageMaker AI (algoritmos integrados, *frameworks*, entrenamiento), SageMaker JumpStart |
 | Modelos fundacionales y aplicaciones de IA generativa | Amazon Bedrock |
-| Agentes | Amazon Bedrock AgentCore: plataforma agéntica para crear, desplegar y operar agentes de forma segura a escala |
+| Agentes | Amazon Bedrock AgentCore: plataforma agéntica para crear, desplegar y operar agentes de forma segura a escala; Strands Agents (SDK de código abierto para programar agentes) |
 | Productividad e IA aplicada | Amazon Quick: servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar mediante chat |
-| Desarrollo asistido | Kiro (entorno de desarrollo con IA basado en especificaciones) |
-| Despliegue e inferencia | Endpoints de SageMaker AI (tiempo real, *serverless*, asíncrono) y transformación por lotes |
+| Desarrollo asistido | Kiro (entorno de desarrollo con IA basado en especificaciones); AWS Transform (migración y modernización de aplicaciones con agentes) |
+| Despliegue e inferencia | Endpoints de SageMaker AI (tiempo real, *serverless*, asíncrono) y transformación por lotes; modelos autoalojados en Amazon EC2 o en contenedores con Amazon ECS o Amazon EKS (Kubernetes gestionado); AWS Lambda para la lógica *serverless* que llama al modelo |
+| Entrega de la aplicación | Amazon CloudFront (distribuye con baja latencia el contenido de la aplicación que usa el modelo) |
 | Registro y automatización | SageMaker Pipelines, SageMaker Model Registry, MLflow en SageMaker AI |
 | Monitorización | SageMaker Model Monitor (cerrado a clientes nuevos) y Amazon CloudWatch |
 

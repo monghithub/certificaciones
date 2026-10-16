@@ -2,7 +2,7 @@
 
 Curso en español de España para preparar el examen **AWS Certified AI Practitioner (AIF-C01)**. Está pensado para perfiles junior con conocimientos básicos de programación y poca experiencia en AWS, y lo revisa un arquitecto de software sénior.
 
-> Estado: **Iteración 5** completada (módulos 00 a 05, con 82 preguntas del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5). El simulacro (módulo 06) está pendiente. Consulta [CHANGELOG.md](../../CHANGELOG.md).
+> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)). Quedan cinco marcadores `PENDIENTE DE VERIFICAR` por contradicciones en las propias fuentes de AWS; ninguna pregunta depende de ellos. Consulta [CHANGELOG.md](../../CHANGELOG.md).
 
 Manifiesto del curso: [curso.yaml](curso.yaml).
 
@@ -42,7 +42,10 @@ Servicios dentro y fuera de alcance: [fuentes/servicios-alcance.md](fuentes/serv
 | [05 Seguridad y gobierno](modulos/05-seguridad-gobierno/) | Seguridad, cumplimiento y gobierno | D5 |
 | [06 Simulacro](modulos/06-simulacro/) | 65 preguntas según los pesos oficiales | Todos |
 
-Cada módulo contiene `README.md` (teoría), `servicios.md`, `trampas.md`, `preguntas.yaml` y, si aplica, `laboratorio.md`.
+Cada módulo contiene `README.md` (teoría), `servicios.md`, `trampas.md`, `preguntas.yaml` y, si aplica, `laboratorio.md`. Además:
+
+- [chuleta.md](chuleta.md): resumen de 2–3 páginas para la víspera del examen.
+- [glosario.md](glosario.md): todos los términos del curso en orden alfabético, en inglés y en español (se genera desde `glosario.yaml`, que usa la consola).
 
 ## Cómo estudiar
 

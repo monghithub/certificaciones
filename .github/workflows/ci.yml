@@ -39,6 +39,9 @@ jobs:
       - name: Comprobar cobertura de objetivos
         run: python scripts/comprobar_cobertura.py --preguntas
 
+      - name: Glosario en Markdown al día
+        run: python scripts/generar_glosario.py --comprobar
+
       - name: Aviso de marcadores PENDIENTE DE VERIFICAR
         run: |
           if grep -rn --include='*.md' --include='*.yaml' --exclude-dir=openspec --exclude-dir=.claude --exclude=promt.md --exclude=AGENTS.md --exclude=README.md --exclude=CHANGELOG.md 'PENDIENTE DE VERIFICAR' . > pendientes.txt; then

@@ -1774,3 +1774,59 @@
   categoria: concepto
   definicion: "Riesgo de que un agente de IA tenga más permisos o capacidad de acción de la necesaria, lo que multiplica el daño de un error o de una inyección de prompts. Se limita con mínimo privilegio, Policy in AgentCore y aprobación humana."
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/security.html
+
+# ------------------------------------------------------------------ revisión cruzada: servicios dentro de alcance
+- id: aws-data-exchange
+  termino: AWS Data Exchange
+  alias: [Data Exchange]
+  categoria: servicio
+  definicion: "Servicio para compartir y gestionar a escala datos de otras organizaciones (concesiones de datos y suscripciones de AWS Marketplace) y usarlos con servicios de analítica y ML."
+  usar_cuando: "Para obtener conjuntos de datos de terceros con los que entrenar o enriquecer un modelo."
+  no_usar_cuando: "Para preparar o transformar los datos (AWS Glue, Amazon EMR)."
+  referencia: https://docs.aws.amazon.com/data-exchange/latest/userguide/what-is.html
+
+- id: amazon-emr
+  termino: Amazon EMR
+  alias: [EMR, Amazon Elastic MapReduce]
+  categoria: servicio
+  definicion: "Plataforma gestionada de clústeres para ejecutar marcos de big data como Apache Hadoop y Apache Spark y procesar y analizar grandes volúmenes de datos."
+  usar_cuando: "Para preparar con Spark o Hadoop volúmenes de datos muy grandes antes de entrenar un modelo."
+  no_usar_cuando: "Para una preparación visual y sin código (AWS Glue DataBrew)."
+  referencia: https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html
+
+- id: amazon-redshift
+  termino: Amazon Redshift
+  alias: [Redshift]
+  categoria: servicio
+  definicion: "Almacén de datos (data warehouse) totalmente gestionado a escala de petabytes; con Redshift Serverless se analizan datos sin configurar un almacén aprovisionado."
+  usar_cuando: "Para analizar con SQL grandes volúmenes de datos estructurados que alimentan modelos o informes."
+  no_usar_cuando: "Para guardar objetos y ficheros de entrenamiento sin estructura (Amazon S3)."
+  referencia: https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html
+
+- id: amazon-ecs
+  termino: Amazon ECS
+  alias: [ECS, Amazon Elastic Container Service]
+  categoria: servicio
+  definicion: "Servicio totalmente gestionado de orquestación de contenedores para desplegar, gestionar y escalar aplicaciones en contenedores, integrado con Amazon ECR."
+  usar_cuando: "Para desplegar en contenedores una aplicación o un modelo propio sin gestionar Kubernetes."
+  no_usar_cuando: "Cuando la organización ya estandariza en Kubernetes (Amazon EKS) o basta un endpoint gestionado de SageMaker AI."
+  referencia: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
+
+- id: amazon-eks
+  termino: Amazon EKS
+  alias: [EKS, Amazon Elastic Kubernetes Service]
+  categoria: servicio
+  definicion: "Servicio gestionado de Kubernetes que elimina la complejidad de operar clústeres de Kubernetes para desplegar aplicaciones en contenedores."
+  usar_cuando: "Para desplegar modelos o aplicaciones en Kubernetes cuando la organización ya usa ese estándar."
+  no_usar_cuando: "Cuando basta un servicio de contenedores más sencillo (Amazon ECS) o un endpoint gestionado de SageMaker AI."
+  referencia: https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html
+
+- id: amazon-cloudfront
+  termino: Amazon CloudFront
+  alias: [CloudFront]
+  categoria: servicio
+  definicion: "Red de distribución de contenido que acelera la entrega de contenido web estático y dinámico a los usuarios desde ubicaciones de borde de todo el mundo."
+  usar_cuando: "Para servir con baja latencia la interfaz web de una aplicación que usa IA."
+  no_usar_cuando: "Para invocar o alojar el modelo (Bedrock, SageMaker AI)."
+  referencia: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html
+
