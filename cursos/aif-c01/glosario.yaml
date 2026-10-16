@@ -93,7 +93,7 @@
   termino: SageMaker Model Monitor
   alias: [Model Monitor, Amazon SageMaker Model Monitor]
   categoria: servicio
-  definicion: "Calcula métricas de calidad del modelo en producción (regresión y clasificación) para detectar su deriva con el tiempo. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
+  definicion: "Vigila modelos de SageMaker AI en producción: deriva de la calidad de los datos y del modelo, deriva del sesgo y de la atribución de características, con alertas. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo. AWS indica como sustituto sus soluciones abiertas de monitorización con CloudWatch."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html
 
 - id: amazon-sagemaker-clarify
@@ -895,7 +895,7 @@
   termino: AWS Inferentia
   alias: [Inferentia]
   categoria: servicio
-  definicion: "Chips diseñados por AWS específicamente para la inferencia de aprendizaje profundo e IA generativa, con alto rendimiento al menor coste en Amazon EC2."
+  definicion: "Chips diseñados por AWS específicamente para la inferencia de aprendizaje profundo e IA generativa, con alto rendimiento al menor coste en Amazon EC2. AWS indica que las instancias Inf2 ofrecen hasta un 50 % más de rendimiento por vatio que instancias EC2 comparables, lo que ayuda a los objetivos de sostenibilidad."
   usar_cuando: "Para servir en EC2 un modelo ya entrenado al menor coste por inferencia."
   no_usar_cuando: "Para entrenar modelos: para eso está AWS Trainium."
   referencia: https://aws.amazon.com/ai/machine-learning/inferentia/
@@ -1450,7 +1450,7 @@
   termino: filtros de palabras
   alias: [word filters]
   categoria: tecnica
-  definicion: "Salvaguarda de Bedrock Guardrails que bloquea palabras o frases exactas (sin distinguir mayúsculas): una lista predefinida de blasfemias o términos propios, como nombres de la competencia. No tiene coste."
+  definicion: "Salvaguarda de Bedrock Guardrails que bloquea palabras o frases exactas de hasta tres palabras, sin distinguir mayúsculas y por palabra completa: una lista predefinida de blasfemias o términos propios, como nombres de la competencia. No tiene coste."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-word-filters.html
 
 - id: filtros-de-informacion-sensible
@@ -1480,7 +1480,7 @@
   termino: Automated Reasoning checks
   alias: [comprobaciones de razonamiento automatizado]
   categoria: tecnica
-  definicion: "Salvaguarda de Bedrock Guardrails que valida con lógica formal si una respuesta es coherente con una política de reglas definida por el cliente, explica por qué y señala supuestos no declarados. Solo inglés (EE. UU.), sin streaming y sin protección frente a la inyección de prompts."
+  definicion: "Salvaguarda de Bedrock Guardrails que valida con lógica formal si una respuesta es coherente con una política de reglas definida por el cliente, explica por qué y señala supuestos no declarados. Solo detecta (no bloquea): devuelve hallazgos y la aplicación decide. Solo inglés (EE. UU.), sin streaming y sin protección frente a la inyección de prompts."
   usar_cuando: "Sectores regulados o reglas complejas (elegibilidad, prestaciones, normativa interna) donde hay que demostrar que la respuesta cumple las reglas."
   no_usar_cuando: "Para detectar contenido dañino, temas fuera de alcance o ataques de prompt: filtros de contenido y temas denegados."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html
@@ -1525,3 +1525,12 @@
   categoria: concepto
   definicion: "Reducir el impacto ambiental de una carga de IA: comprobar si la IA generativa hace falta, elegir el modelo del tamaño justo, personalizar de forma eficiente y usar recursos que se ajustan a la demanda (serverless, autoescalado, chips eficientes)."
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html
+
+- id: fmeval
+  termino: fmeval
+  alias: [FMEval]
+  categoria: servicio
+  definicion: "Biblioteca de código abierto de AWS para evaluar modelos de lenguaje (exactitud, robustez, toxicidad y otras dimensiones), la que usa la evaluación de modelos fundacionales de SageMaker Clarify. Para proyectos nuevos, AWS indica Amazon Bedrock Evaluations como vía gestionada."
+  usar_cuando: "Para evaluar con control total, en código, modelos de lenguaje alojados dentro o fuera de AWS."
+  no_usar_cuando: "Cuando basta una evaluación gestionada de modelos de Bedrock (Bedrock Evaluations)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-foundation-model-evaluate.html

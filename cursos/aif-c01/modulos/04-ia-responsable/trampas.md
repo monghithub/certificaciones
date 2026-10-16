@@ -11,7 +11,8 @@
 - **Grounding para un chatbot conversacional.** La comprobación de *grounding* está pensada para resúmenes, paráfrasis y preguntas y respuestas sobre una fuente; el chat conversacional no está admitido.
 - **Guardrails solo funciona con modelos de Bedrock.** La API `ApplyGuardrail` evalúa texto sin invocar un modelo, así que las mismas políticas se aplican a modelos externos o propios.
 - **Guardrails sustituye a IAM o al cifrado.** Filtra contenido; no controla quién accede a qué ni protege los datos almacenados (módulo 05).
-- **Clarify o Model Monitor como respuesta para un proyecto nuevo.** Ya no admiten clientes nuevos (tampoco A2I ni Ground Truth). Si el enunciado habla de evaluar o proteger un **modelo fundacional**, piensa en Bedrock Evaluations y Guardrails.
+- **Descartar Clarify, Model Monitor, A2I o Ground Truth por sistema.** Ya no admiten clientes nuevos, pero la guía del examen los mantiene en alcance. Si la pregunta pide detectar sesgo o explicar predicciones de un modelo de ML clásico, vigilar su deriva o añadir revisión humana, y no dice que el cliente sea nuevo, siguen siendo la respuesta esperada. Si el enunciado deja claro que es un cliente nuevo, o habla de evaluar o proteger un **modelo fundacional**, piensa en Bedrock Evaluations y Guardrails.
+- **Automated Reasoning checks bloquea respuestas.** Solo detecta: devuelve hallazgos y explicaciones, y la aplicación decide si entrega, reescribe o pide aclaraciones.
 
 ## Modelos, datos y riesgos
 

@@ -63,9 +63,9 @@ Caso del laboratorio: un banco ficticio, «Banco Ejemplo», quiere un asistente 
 ## Parte 1: crear el guardrail con filtros de contenido
 
 1. Abre la consola de Amazon Bedrock en `us-east-1` y elige **Guardrails** en el panel de navegación. Pulsa **Create guardrail**.
-2. **Detalles:** nombre `lab-banco-ejemplo`, una descripción y el mensaje para las peticiones bloqueadas, por ejemplo: «Lo siento, no puedo ayudarte con eso. Para otras consultas, contacta con tu gestor.». Marca la casilla para usar el mismo mensaje en las respuestas bloqueadas.
-3. **Nivel de salvaguarda:** si la consola te deja elegir, usa **Classic** (admite español y no necesita inferencia entre Regiones). Si prefieres **Standard**, tendrás que activar la inferencia entre Regiones del *guardrail*.
-4. **Filtros de contenido:** activa los filtros para las preguntas y las respuestas con intensidad **High** en odio, insultos, sexual, violencia y conducta indebida, y activa el filtro de **ataques de *prompt*** con intensidad **High**.
+2. **Detalles:** nombre `lab-banco-ejemplo`, una descripción y el mensaje para las peticiones bloqueadas, por ejemplo: «Lo siento, no puedo ayudarte con eso. Para otras consultas, contacta con tu gestor.». Marca la casilla para usar el mismo mensaje en las respuestas bloqueadas. Deja desactivada la inferencia entre Regiones (*Cross-Region inference*).
+3. **Filtros de contenido:** en esta página se elige el **nivel** del filtro (*Content filters tier*). Usa **Classic**: admite español y no necesita inferencia entre Regiones. (Si eligieras **Standard**, tendrías que volver a los detalles, activar *Cross-Region inference* y elegir un perfil de *guardrail*.)
+4. Activa los filtros para las preguntas y las respuestas con intensidad **High** en odio, insultos, sexual, violencia y conducta indebida, y activa el filtro de **ataques de *prompt*** con intensidad **High**.
 5. Pasa los pasos de temas, palabras e información sensible sin configurar nada por ahora y crea el *guardrail*. Se crea un **borrador de trabajo** (*working draft*).
 
 Prueba en la ventana de prueba de la derecha: elige el modelo con **Select model** (Nova Micro) y **Apply**, escribe cada *prompt* y pulsa **Run**. Con **View trace** verás qué política intervino.
@@ -80,7 +80,7 @@ Prueba en la ventana de prueba de la derecha: elige el modelo con **Select model
 
 ## Parte 2: tema denegado y filtro de palabras
 
-1. Edita el *guardrail* y ve a **denied topics** (temas denegados). Añade un tema:
+1. Edita el *guardrail* y ve a **denied topics** (temas denegados). Mantén el nivel **Classic** (*Denied topics tier*): la definición admite hasta 200 caracteres (1 000 en Standard). Añade un tema:
    - **Nombre:** `asesoramiento-de-inversion`.
    - **Definición** (concreta y en positivo, como recomienda la guía; sin instrucciones ni negaciones): «Recomendaciones sobre en qué productos financieros, acciones, fondos o criptomonedas invertir, o cuándo comprar o vender para obtener rentabilidad.»
    - **Frases de ejemplo** (hasta cinco): «¿En qué acciones me recomiendas invertir?», «¿Compro bitcoin ahora?», «¿Qué fondo me dará más rentabilidad este año?».
@@ -95,7 +95,7 @@ Prueba en la ventana de prueba de la derecha: elige el modelo con **Select model
 
 ## Parte 3: información sensible
 
-1. Edita el *guardrail* y ve a **sensitive information filters**. Añade los tipos de PII `EMAIL` y `PHONE` con la acción **Mask** (enmascarar) en las respuestas, y `CREDIT_DEBIT_CARD_NUMBER` con la acción **Block** (bloquear).
+1. Edita el *guardrail* y ve a **sensitive information filters**. Añade los tipos de PII `EMAIL` y `PHONE` con la acción **Mask** (enmascarar) en las respuestas (*Output*), y `CREDIT_DEBIT_CARD_NUMBER` con la acción **Block** (bloquear) en las preguntas (*Input*) y en las respuestas (*Output*).
 2. Guarda y prueba:
 
 | *Prompt* de prueba | Resultado esperado |
@@ -112,6 +112,8 @@ La comprobación de *grounding* necesita una fuente de referencia, una pregunta 
 1. Edita el *guardrail* y activa **contextual grounding check** con un umbral de *grounding* de **0,7** y un umbral de relevancia de **0,7**. Guarda.
 2. Cuando estés satisfecho con el borrador, pulsa **Create version**. La versión 1 es una foto inmutable de la configuración: una aplicación en producción usaría esa versión, y los cambios posteriores del borrador no le afectarían hasta publicar otra.
 3. Anota el **ID del *guardrail*** (aparece en la página de detalle) para la parte 5.
+
+> Con la comprobación de *grounding* activada, las pruebas en la ventana de la consola (que no aporta fuente de referencia) pueden dar resultados inesperados. Si quieres repetir las partes 1 a 3 después, desactívala en el borrador.
 
 ## Parte 5: equivalente con la AWS CLI (opcional)
 

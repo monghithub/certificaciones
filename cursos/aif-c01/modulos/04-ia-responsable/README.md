@@ -46,6 +46,8 @@ AWS define la **IA responsable** (*responsible AI*) como la disciplina de diseñ
 | **Gobierno** (*governance*) | Incorporar buenas prácticas en toda la cadena de suministro de la IA, de proveedores a implantadores | Nadie revisa qué modelo se usa ni con qué datos se ajustó |
 | **Transparencia** (*transparency*) | Permitir que las personas decidan con información sobre su relación con un sistema de IA | El cliente no sabe que habla con una IA ni qué limitaciones tiene |
 
+El *Responsible AI Lens* de AWS separa algunas de estas dimensiones y enumera diez (privacidad y seguridad por un lado; veracidad y robustez por otro). Son las mismas ideas: conviene reconocer las dos formas.
+
 La guía del examen añade términos que conviene situar en esa tabla:
 
 - **Sesgo** (*bias*) en el sentido ético: el sistema discrimina a personas o grupos. Es lo contrario de la equidad. No hay que confundirlo con el sesgo como error del modelo (ver [Efectos del sesgo y la varianza](#efectos-del-sesgo-y-la-varianza)).
@@ -139,7 +141,7 @@ GO:
 | **Filtros de palabras** (*word filters*) | Bloquean palabras o frases exactas: blasfemias (lista predefinida) o términos propios | Bloquear los nombres de la competencia |
 | **Filtros de información sensible** (*sensitive information filters*) | Detectan datos personales (PII) y patrones propios (expresiones regulares) y **bloquean** el mensaje o **enmascaran** el dato | Un resumen de llamadas que sustituye el número de teléfono del cliente por una etiqueta |
 | **Comprobación de *grounding* contextual** (*contextual grounding checks*) | Detectan alucinaciones: respuestas **no basadas** en la fuente de referencia o **irrelevantes** para la pregunta, con umbrales configurables | Un RAG que bloquea respuestas que añaden datos que no están en los documentos recuperados |
-| ***Automated Reasoning checks*** | Validan la respuesta con **lógica formal** contra reglas que el cliente define, explican por qué es correcta o no y señalan supuestos no declarados | Un asistente de RR. HH. cuyas respuestas sobre permisos se comprueban contra la normativa interna |
+| ***Automated Reasoning checks*** | Validan la respuesta con **lógica formal** contra reglas que el cliente define, explican por qué es correcta o no y señalan supuestos no declarados. **Solo detectan:** devuelven hallazgos y explicaciones, y la aplicación decide si entrega, reescribe o pide aclaraciones | Un asistente de RR. HH. cuyas respuestas sobre permisos se comprueban contra la normativa interna |
 
 Cómo funciona un *guardrail* en una llamada al modelo:
 
@@ -178,7 +180,7 @@ FM:
   seccion: 02-fundamentos-genai/teoria#conceptos-fundamentales
 CS:
   titulo: "Evaluación de la respuesta"
-  texto: "La respuesta del modelo se evalúa con las mismas políticas. Las comprobaciones de grounding y Automated Reasoning actúan sobre la respuesta."
+  texto: "La respuesta del modelo se evalúa con las mismas políticas. La comprobación de grounding actúa sobre la respuesta; Automated Reasoning checks también, pero solo detecta: devuelve hallazgos y la aplicación decide qué hacer."
   seccion: 04-ia-responsable/teoria#herramientas-para-aplicar-la-ia-responsable
 BL2:
   titulo: "Bloqueo o enmascarado"
@@ -193,11 +195,11 @@ OK:
 Matices que separan opciones parecidas en el examen (fuente: guía de usuario de Bedrock):
 
 - **Dos formas de usarlo:** al invocar un modelo de Bedrock, indicando el identificador y la versión del *guardrail*, o con la API **`ApplyGuardrail`**, que evalúa un texto **sin invocar un modelo**. Con `ApplyGuardrail` se aplican las mismas políticas a modelos alojados fuera de Bedrock. Funciona también con Amazon Bedrock Knowledge Bases y con los agentes de Bedrock.
-- **Lo que no cubre:** los modelos de *embeddings*, de reordenación y de generación de imágenes no admiten *guardrails*; los filtros de contenido no evalúan los resultados de las herramientas en el uso de herramientas. Automated Reasoning checks solo admite inglés (EE. UU.), no admite *streaming* y no protege contra la inyección de *prompts* (para eso, los filtros de contenido).
-- **La comprobación de *grounding*** está pensada para resúmenes, paráfrasis y preguntas y respuestas sobre una fuente; los casos de chat conversacional no están admitidos. Necesita tres piezas: la fuente, la pregunta y la respuesta. Los umbrales van de 0 a 0,99: con 0,7, se bloquea toda respuesta con puntuación de *grounding* o de relevancia inferior a 0,7.
+- **Lo que no cubre:** los modelos de *embeddings*, de reordenación y de generación de imágenes no admiten *guardrails*; los filtros de contenido no evalúan los resultados de las herramientas en el uso de herramientas. Automated Reasoning checks funciona solo en modo de detección (no bloquea), solo admite inglés (EE. UU.), no admite *streaming* y no protege contra la inyección de *prompts* (para eso, los filtros de contenido).
+- **La comprobación de *grounding*** está pensada para resúmenes, paráfrasis y preguntas y respuestas sobre una fuente; los casos de chat conversacional no están admitidos. Necesita tres piezas: la fuente, la pregunta y la respuesta. Los umbrales van de 0 a 0,99: con 0,7, se bloquea toda respuesta con puntuación de *grounding* o de relevancia inferior a 0,7. Admite hasta 100 000 caracteres de fuente, 1 000 de pregunta y 5 000 de respuesta.
 - **Niveles** (*safeguard tiers*) para los filtros de contenido, los ataques de *prompt* y los temas denegados: el nivel **Classic** admite inglés, francés y español; el **Standard** es más robusto, admite muchos más idiomas, protege también el contenido dentro de código y detecta la fuga de *prompt*, y requiere la inferencia entre Regiones.
 - **Versiones:** se trabaja sobre un borrador (*working draft*), se prueba en la ventana de prueba de la consola y se publica una **versión** inmutable para producción.
-- **Precio** (página de precios de Bedrock, consultada el 15 de octubre de 2026): se paga por **unidad de texto** (hasta 1 000 caracteres) y por salvaguarda usada; por ejemplo, 0,15 USD por cada 1 000 unidades en filtros de contenido y temas denegados, 0,10 USD en información sensible y en *grounding*; los filtros de palabras y las expresiones regulares no tienen coste.
+- **Precio** (página de precios de Bedrock, consultada el 15 de octubre de 2026): se paga por **unidad de texto** (hasta 1 000 caracteres) y por salvaguarda usada; por ejemplo, 0,15 USD por cada 1 000 unidades en filtros de contenido y temas denegados, 0,10 USD en información sensible y en *grounding*, y 0,17 USD por política en Automated Reasoning checks; los filtros de imágenes se cobran por imagen (0,00075 USD); los filtros de palabras y las expresiones regulares no tienen coste.
 
 *Ejemplo resuelto de coste:* un asistente recibe 50 000 preguntas al mes. Cada pregunta tiene unos 400 caracteres (1 unidad de texto) y cada respuesta unos 2 300 (3 unidades): 4 unidades por interacción, 200 000 al mes. Con filtros de contenido (0,15 USD) e información sensible (0,10 USD): 200 × (0,15 + 0,10) = **50 USD al mes**. Si además se añadieran temas denegados, serían 200 × 0,40 = 80 USD.
 
@@ -207,10 +209,14 @@ Otras herramientas de AWS para la IA responsable, que también aparecen en la gu
 |---|---|---|
 | **Amazon Bedrock Evaluations** | Comparar modelos y aplicaciones con métricas de **robustez** y **toxicidad** (evaluación programática) y de **nocividad**, **estereotipos** y **rechazo** (evaluación con un modelo juez), además de evaluación humana | Disponible; es la vía gestionada para modelos fundacionales |
 | **Amazon SageMaker Clarify** | Detectar sesgo en los datos y en las predicciones de modelos de ML clásico y explicarlas con SHAP | **Cerrado a clientes nuevos**. AWS indica como sustituto calcular las mismas métricas con bibliotecas abiertas y SHAP dentro de sus soluciones de referencia, y Bedrock Evaluations para modelos fundacionales |
+| **fmeval** | Biblioteca de código abierto para evaluar modelos de lenguaje (la que usa la evaluación de modelos fundacionales de Clarify) | De código abierto; para proyectos nuevos en AWS, la vía gestionada es Bedrock Evaluations |
 | **Amazon SageMaker Model Monitor** | Detectar deriva de calidad, de sesgo y de atribución de características en producción | **Cerrado a clientes nuevos**. Sustituto: soluciones abiertas de monitorización publicadas por AWS, con Amazon CloudWatch y paneles de Amazon QuickSight |
 | **Amazon Augmented AI (A2I)** | Revisión humana de predicciones con baja confianza | **Cerrado a clientes nuevos** |
 | **Amazon SageMaker Ground Truth** | Etiquetado y *feedback* humano | **Cerrado a clientes nuevos** |
 | **Amazon SageMaker Model Cards** | Documentar el uso previsto, el riesgo y la evaluación de un modelo | Disponible (ver [Herramientas de transparencia y explicabilidad](#herramientas-de-transparencia-y-explicabilidad)) |
+| **Gobierno de ML de SageMaker AI** | Role Manager (permisos de mínimo privilegio por perfil), Model Cards y Model Dashboard (visión centralizada de los modelos) | Disponible; se amplía en el módulo 05 |
+
+**Cómo leer las preguntas con estas herramientas.** La guía del examen (versión 1.1) mantiene SageMaker AI dentro de alcance, y Clarify, Model Monitor, A2I y Ground Truth son las respuestas clásicas para detectar sesgo en datos o modelos de ML clásico, explicar sus predicciones, vigilar su deriva o añadir revisión humana. Si la pregunta pide eso y **no** dice que el cliente sea nuevo en el servicio, siguen siendo la respuesta esperada. Si el enunciado deja claro que es un cliente nuevo o que se trata de un **modelo fundacional**, piensa en Bedrock Evaluations y Guardrails.
 
 | Escenario | Herramienta |
 |---|---|
@@ -262,6 +268,8 @@ Un modelo aprende lo que hay en sus datos. Las características que la guía pid
 - **Diversidad** (*diversity*): variedad de situaciones, estilos, idiomas, acentos, condiciones de captura (luz, ruido) y casos límite.
 - **Fuentes curadas** (*curated data sources*): datos de origen conocido, revisados, con licencia y sin contenido inadecuado.
 - **Conjuntos equilibrados** (*balanced datasets*): cada grupo y cada clase tienen suficientes ejemplos para aprender y para medir.
+
+**De dónde viene el sesgo de los datos** (documentación de Clarify y *Responsible AI Lens*): **representación insuficiente** de algunos grupos (lo que se suele llamar sesgo de muestreo, *sampling bias*), **etiquetas sesgadas**, **variables que actúan como sustituto** (*proxy*) de un atributo demográfico (por ejemplo, el código postal) y datos que **reflejan desigualdades existentes**. El modelo aprende esos sesgos y puede reproducirlos o agravarlos.
 
 Las buenas prácticas del *Responsible AI Lens* de AWS añaden: comprobar que el conjunto es **representativo** del uso real (si se evalúa con datos que no se parecen al uso real, el sistema parece mejor o peor de lo que es); cubrir los huecos recogiendo más datos o con **muestreo estratificado** (se divide la población en subgrupos y se toma una muestra de cada uno); preferir etiquetas demográficas **declaradas por las personas** a las inferidas; y documentar cada conjunto en una **ficha de datos** (*datasheet*) con su uso previsto, su origen, su forma de recogida y sus sesgos conocidos.
 

@@ -39,20 +39,20 @@
     ningún prospecto ni en la documentación de la empresa. ¿Qué dimensión de la IA responsable se ve comprometida?
   opciones:
   - id: a
-    texto: Veracidad
-  - id: b
     texto: Transparencia
-  - id: c
+  - id: b
     texto: Equidad
+  - id: c
+    texto: Veracidad
   - id: d
     texto: Gobierno
   correctas:
-  - a
+  - c
   explicacion: La veracidad es conseguir salidas factualmente correctas. Inventar una dosis es una alucinación,
     el principal enemigo de la veracidad en la IA generativa.
   distractores:
-    b: Se refiere a informar sobre el uso de IA y sus limitaciones. Informar no corrige que el sistema invente datos.
-    c: Se refiere al trato a los distintos grupos de personas. El problema descrito afecta a la exactitud de los
+    a: Se refiere a informar sobre el uso de IA y sus limitaciones. Informar no corrige que el sistema invente datos.
+    b: Se refiere al trato a los distintos grupos de personas. El problema descrito afecta a la exactitud de los
       datos, no a un grupo concreto.
     d: Se refiere a incorporar buenas prácticas en la cadena de suministro de la IA. Puede ayudar a prevenir el
       problema, pero la dimensión directamente afectada es la exactitud de las salidas.
@@ -71,19 +71,19 @@
   - id: a
     texto: 'Transparencia: que se publique la exactitud media del servicio'
   - id: b
-    texto: 'Inclusividad: representar en los datos a los grupos que lo usarán'
-  - id: c
     texto: 'Controlabilidad: que se pueda detener el servicio cuando falle'
+  - id: c
+    texto: 'Inclusividad: representar en los datos a los grupos que lo usarán'
   - id: d
     texto: 'Robustez: que el modelo resista entradas maliciosas diseñadas para engañarlo'
   correctas:
-  - b
+  - c
   explicacion: La inclusividad consiste en que el sistema funcione bien para todos los grupos que lo van a usar.
     Empieza por datos que representen a personas mayores y acentos poco frecuentes, y por medir la calidad para
     cada grupo.
   distractores:
     a: La exactitud media ocultaría precisamente el problema de los grupos minoritarios.
-    c: Detener el servicio no lo hace útil para esos pacientes; hay que representarlos en los datos y medir su calidad.
+    b: Detener el servicio no lo hace útil para esos pacientes; hay que representarlos en los datos y medir su calidad.
     d: 'La robustez también cubre variaciones de la entrada, pero el escenario no habla de ataques: el problema
       es que unos grupos concretos de pacientes no están representados.'
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html
@@ -173,24 +173,24 @@
     tipo de uso?
   opciones:
   - id: a
+    texto: Desactivar los filtros del modelo para que no interfieran en la puntuación
+  - id: b
+    texto: Obtener de AWS una aprobación previa y por escrito del caso de uso antes de desplegarlo en producción
+  - id: c
+    texto: Usar exclusivamente modelos de Amazon cubiertos por la indemnización de propiedad intelectual
+  - id: d
     texto: Evaluar los riesgos del caso de uso e implantar supervisión humana, pruebas y salvaguardas adecuadas
       al riesgo
-  - id: b
-    texto: Desactivar los filtros del modelo para que no interfieran en la puntuación
-  - id: c
-    texto: Obtener de AWS una aprobación previa y por escrito del caso de uso antes de desplegarlo en producción
-  - id: d
-    texto: Usar exclusivamente modelos de Amazon cubiertos por la indemnización de propiedad intelectual
   correctas:
-  - a
+  - d
   explicacion: Las decisiones de contratación son decisiones con consecuencias. La política de IA responsable de
     AWS exige en ellas evaluar los riesgos e implantar supervisión humana, pruebas y salvaguardas específicas del
     caso de uso.
   distractores:
-    b: 'Es contrario a la política: desactivar salvaguardas aumenta el riesgo y además anula condiciones como las
+    a: 'Es contrario a la política: desactivar salvaguardas aumenta el riesgo y además anula condiciones como las
       de la indemnización.'
-    c: La política pide facilitar información sobre el uso previsto si AWS la solicita, no una aprobación previa.
-    d: La indemnización trata reclamaciones de derechos de autor; no responde al riesgo de decidir sobre el empleo
+    b: La política pide facilitar información sobre el uso previsto si AWS la solicita, no una aprobación previa.
+    c: La indemnización trata reclamaciones de derechos de autor; no responde al riesgo de decidir sobre el empleo
       de las personas.
   referencia: https://aws.amazon.com/ai/responsible-ai/policy/
 - id: D4-007
@@ -206,19 +206,19 @@
   - id: a
     texto: Un filtro de palabras de Guardrails con los nombres de fondos, acciones y criptomonedas más habituales
   - id: b
-    texto: Los filtros de contenido de Guardrails en intensidad alta
-  - id: c
     texto: Un tema denegado de Amazon Bedrock Guardrails que describa el asesoramiento de inversión
+  - id: c
+    texto: Los filtros de contenido de Guardrails en intensidad alta
   - id: d
     texto: La comprobación de grounding contextual de Guardrails
   correctas:
-  - c
+  - b
   explicacion: Los temas denegados bloquean temas que el cliente describe en lenguaje natural, en las preguntas
     y en las respuestas, aunque cambie la redacción. Es el ejemplo que da la propia documentación de Guardrails
     para un banco.
   distractores:
     a: Bloquea palabras o frases exactas; no detecta peticiones de consejo formuladas con otras palabras.
-    b: Detectan categorías predefinidas (odio, insultos, sexual, violencia, conducta indebida, ataques de prompt);
+    c: Detectan categorías predefinidas (odio, insultos, sexual, violencia, conducta indebida, ataques de prompt);
       el asesoramiento de inversión no es una de ellas.
     d: Detecta respuestas no basadas en una fuente o irrelevantes; no bloquea un tema de conversación.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-denied-topics.html
@@ -233,21 +233,21 @@
     de Amazon Bedrock Guardrails es la adecuada?
   opciones:
   - id: a
-    texto: Un tema denegado llamado «datos de contacto»
-  - id: b
-    texto: Un filtro de información sensible con la acción de bloquear para esos tipos de PII
-  - id: c
     texto: Un filtro de información sensible con la acción de enmascarar para esos tipos de PII
+  - id: b
+    texto: Un tema denegado llamado «datos de contacto»
+  - id: c
+    texto: Un filtro de información sensible con la acción de bloquear para esos tipos de PII
   - id: d
     texto: Un filtro de palabras con la lista de teléfonos y correos de los clientes
   correctas:
-  - c
+  - a
   explicacion: 'El filtro de información sensible detecta PII como teléfonos o correos y puede enmascararla: la
     respuesta llega con el dato sustituido por una etiqueta. Es el caso de uso de resumen de llamadas que describe
     la documentación.'
   distractores:
-    a: Bloquearía la respuesta completa cuando aparezca el tema, en lugar de quitar solo el dato.
-    b: 'Bloquear sustituye toda la respuesta por el mensaje de bloqueo: el supervisor se quedaría sin el resumen.'
+    b: Bloquearía la respuesta completa cuando aparezca el tema, en lugar de quitar solo el dato.
+    c: 'Bloquear sustituye toda la respuesta por el mensaje de bloqueo: el supervisor se quedaría sin el resumen.'
     d: Es inviable mantener esa lista y además expondría los datos; el filtro de información sensible los detecta
       por tipo.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
@@ -266,11 +266,11 @@
   - id: b
     texto: Automated Reasoning checks de Amazon Bedrock Guardrails
   - id: c
-    texto: El filtro de ataques de prompt de Amazon Bedrock Guardrails
-  - id: d
     texto: La comprobación de grounding contextual (contextual grounding check) de Guardrails
+  - id: d
+    texto: El filtro de ataques de prompt de Amazon Bedrock Guardrails
   correctas:
-  - d
+  - c
   explicacion: La comprobación de grounding contextual puntúa si la respuesta se basa en la fuente de referencia
     y si es relevante para la pregunta, y bloquea las que quedan por debajo del umbral. Es la salvaguarda para alucinaciones
     en RAG.
@@ -278,7 +278,7 @@
     a: Habría que adivinar de antemano qué inventará el modelo; no detecta información no basada en la fuente.
     b: Valida respuestas contra reglas lógicas definidas en una política, no contra los fragmentos recuperados en
       cada pregunta.
-    c: Detecta intentos de manipular el modelo con instrucciones; no comprueba si la respuesta se basa en la fuente.
+    d: Detecta intentos de manipular el modelo con instrucciones; no comprueba si la respuesta se basa en la fuente.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html
 - id: D4-010
   dominio: 4
@@ -294,20 +294,21 @@
   - id: a
     texto: Los filtros de contenido en intensidad alta
   - id: b
-    texto: Un tema denegado sobre prestaciones sanitarias
-  - id: c
-    texto: La comprobación de grounding contextual con un umbral alto sobre el reglamento de prestaciones
-  - id: d
     texto: Automated Reasoning checks con una política que recoja las normas de elegibilidad
+  - id: c
+    texto: Un tema denegado sobre prestaciones sanitarias
+  - id: d
+    texto: La comprobación de grounding contextual con un umbral alto sobre el reglamento de prestaciones
   correctas:
-  - d
-  explicacion: Automated Reasoning checks valida la respuesta con lógica formal contra una política de reglas, explica
-    por qué es correcta o no y señala supuestos no declarados. Está pensado para sectores regulados y reglas complejas;
-    admite inglés (EE. UU.).
+  - b
+  explicacion: 'Automated Reasoning checks valida la respuesta con lógica formal contra una política de reglas,
+    explica por qué es correcta o no y señala supuestos no declarados. Está pensado para sectores regulados y reglas
+    complejas; admite inglés (EE. UU.) y solo detecta: devuelve hallazgos y la aplicación decide si entrega o corrige
+    la respuesta.'
   distractores:
     a: Detectan contenido dañino, no si una respuesta respeta las reglas de elegibilidad.
-    b: Bloquearía las preguntas sobre prestaciones, que son precisamente el servicio que hay que dar.
-    c: Comprueba que la respuesta se basa en un texto de referencia, pero no demuestra con lógica formal que cumple
+    c: Bloquearía las preguntas sobre prestaciones, que son precisamente el servicio que hay que dar.
+    d: Comprueba que la respuesta se basa en un texto de referencia, pero no demuestra con lógica formal que cumple
       un conjunto de reglas combinadas.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html
 - id: D4-011
@@ -321,20 +322,20 @@
     migrarlo. ¿Qué solución lo permite?
   opciones:
   - id: a
+    texto: Llamar a la API ApplyGuardrail con el guardrail corporativo antes y después de invocar el modelo de EC2
+  - id: b
     texto: Asociar el guardrail a una Knowledge Base y enrutar las consultas del modelo de EC2 a través de esa Knowledge
       Base
-  - id: b
-    texto: Llamar a la API ApplyGuardrail con el guardrail corporativo antes y después de invocar el modelo de EC2
   - id: c
     texto: Configurar SageMaker Clarify para que filtre las respuestas del modelo
   - id: d
     texto: 'Ninguna: los guardrails solo actúan cuando se invoca un modelo de Amazon Bedrock'
   correctas:
-  - b
+  - a
   explicacion: La API ApplyGuardrail evalúa un contenido con las políticas de un guardrail sin invocar ningún modelo.
     Así se aplican las mismas salvaguardas a modelos alojados fuera de Bedrock.
   distractores:
-    a: Una Knowledge Base no sirve para enrutar peticiones a un modelo de EC2; además complica la arquitectura sin
+    b: Una Knowledge Base no sirve para enrutar peticiones a un modelo de EC2; además complica la arquitectura sin
       necesidad.
     c: Clarify mide sesgo y explica predicciones, no filtra contenido en tiempo real, y ya no admite clientes nuevos.
     d: 'Es falso: ApplyGuardrail evalúa texto sin invocar un modelo, precisamente para modelos externos o propios.'
@@ -411,17 +412,17 @@
   - id: b
     texto: Amazon SageMaker Clarify
   - id: c
-    texto: Amazon Bedrock Evaluations
-  - id: d
     texto: Amazon SageMaker Model Monitor
+  - id: d
+    texto: Amazon Bedrock Evaluations
   correctas:
-  - c
+  - d
   explicacion: Bedrock Evaluations permite evaluar modelos con un modelo juez y métricas integradas como estereotipos,
     nocividad y rechazo, con conjuntos de prompts propios. Es la vía gestionada que AWS indica para modelos fundacionales.
   distractores:
     a: Filtra contenido en tiempo de ejecución; no compara modelos candidatos con métricas.
     b: Ya no admite clientes nuevos; AWS indica Bedrock Evaluations para evaluar modelos fundacionales.
-    d: Monitoriza modelos de SageMaker AI en producción y ya no admite clientes nuevos; no compara modelos fundacionales.
+    c: Monitoriza modelos de SageMaker AI en producción y ya no admite clientes nuevos; no compara modelos fundacionales.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-metrics.html
 - id: D4-015
   dominio: 4
@@ -435,19 +436,19 @@
   - id: a
     texto: Solo la inferencia del modelo, porque Guardrails no tiene precio propio
   - id: b
-    texto: La evaluación del guardrail, pero no la inferencia del modelo, que no llega a invocarse
-  - id: c
     texto: Nada, porque las peticiones bloqueadas no tienen coste
+  - id: c
+    texto: La evaluación del guardrail, pero no la inferencia del modelo, que no llega a invocarse
   - id: d
     texto: La evaluación del guardrail y también la inferencia completa del modelo, aunque no se devuelva su respuesta
   correctas:
-  - b
+  - c
   explicacion: Según la documentación, si un guardrail bloquea la entrada se cobra su evaluación y no hay cargos
     de inferencia del modelo. Si bloquea la respuesta, se cobran la evaluación de la entrada y de la respuesta y
     la inferencia del modelo.
   distractores:
     a: Guardrails se cobra por unidad de texto y por salvaguarda configurada.
-    c: La evaluación del guardrail se cobra aunque bloquee la entrada.
+    b: La evaluación del guardrail se cobra aunque bloquee la entrada.
     d: Si el guardrail bloquea la entrada, el modelo no se invoca y no hay inferencia que pagar.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html
 - id: D4-016
@@ -490,19 +491,19 @@
   - id: a
     texto: Elegir el modelo generativo con la ventana de contexto más grande disponible
   - id: b
-    texto: 'Comprobar si hace falta IA generativa: un buscador basta'
-  - id: c
     texto: Ajustar el modelo con el texto de las políticas de la empresa
+  - id: c
+    texto: Comprobar si hace falta IA generativa
   - id: d
     texto: Contratar Provisioned Throughput para reservar la capacidad
   correctas:
-  - b
+  - c
   explicacion: 'El primer principio de sostenibilidad del Generative AI Lens es identificar si la IA generativa
     es la solución adecuada: si un buscador obtiene el mismo resultado, consume muchos menos recursos que un modelo
     generativo.'
   distractores:
     a: Agrava el consumo sin necesidad; el caso es una búsqueda por palabras clave.
-    c: Es costoso y no resuelve mejor una búsqueda por palabras clave.
+    b: Es costoso y no resuelve mejor una búsqueda por palabras clave.
     d: Reserva capacidad que puede quedar ociosa; además, la primera pregunta es si hace falta un modelo generativo.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html
 - id: D4-018
@@ -548,21 +549,21 @@
   - id: a
     texto: En los registros de AWS CloudTrail
   - id: b
-    texto: En Amazon SageMaker Model Cards
-  - id: c
-    texto: En los resultados de Amazon Bedrock Evaluations
-  - id: d
     texto: En las AWS AI Service Cards
+  - id: c
+    texto: En Amazon SageMaker Model Cards
+  - id: d
+    texto: En los resultados de Amazon Bedrock Evaluations
   correctas:
-  - d
+  - b
   explicacion: 'Las AI Service Cards son el recurso de transparencia de AWS: reúnen en un sitio los casos de uso
     previstos, las limitaciones, las decisiones de diseño responsable y las buenas prácticas de sus servicios y
     modelos, como Amazon Nova.'
   distractores:
     a: Registran llamadas a las API de la cuenta; no describen usos previstos ni limitaciones de un modelo.
-    b: Sirven para que el cliente documente sus propios modelos, no recogen la información que publica AWS sobre
+    c: Sirven para que el cliente documente sus propios modelos, no recogen la información que publica AWS sobre
       los suyos.
-    c: Miden el comportamiento con los datos del cliente; no son la documentación del proveedor sobre el uso previsto.
+    d: Miden el comportamiento con los datos del cliente; no son la documentación del proveedor sobre el uso previsto.
   referencia: https://aws.amazon.com/ai/responsible-ai/resources/
 - id: D4-020
   dominio: 4
@@ -578,7 +579,7 @@
   - id: b
     texto: Instancias de cómputo general con CPU, sin aceleradores
   - id: c
-    texto: Instancias Inf2 con chips AWS Inferentia2, diseñados para inferencia
+    texto: Instancias Inf2 con AWS Inferentia2
   - id: d
     texto: Réplicas encendidas de forma permanente en varias Regiones
   correctas:
@@ -634,7 +635,7 @@
     responsables.
   distractores:
     d: La popularidad no informa sobre licencia, residencia, consumo ni comportamiento responsable.
-  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html
+  referencia: https://aws.amazon.com/ai/responsible-ai/
 - id: D4-022
   dominio: 4
   tarea: '4.1'
@@ -645,21 +646,23 @@
     reclamaciones por derechos de autor. ¿Qué medida reduce MÁS ese riesgo?
   opciones:
   - id: a
-    texto: Subir la temperatura para que las imágenes sean más originales
+    texto: Activar un filtro de palabras con los títulos de obras protegidas
   - id: b
-    texto: Publicar sin revisión, porque el contenido generado por IA no tiene autor reconocido
-  - id: c
     texto: Un servicio con indemnización de AWS, filtros activos y revisión previa
+  - id: c
+    texto: Usar el modelo de un proveedor externo en Bedrock, que también cubre la indemnización de AWS
   - id: d
     texto: Incluir en el prompt obras protegidas como referencia de estilo
   correctas:
-  - c
+  - b
   explicacion: AWS ofrece indemnización sin límite por reclamaciones de derechos de autor sobre la salida de sus
     modelos y servicios cubiertos, siempre que se usen de forma responsable (sin introducir material infractor ni
     desactivar filtros). La revisión humana añade otra barrera.
   distractores:
-    a: La temperatura cambia la variabilidad de la salida; no reduce el riesgo legal ni ofrece protección.
-    b: El contenido generado puede parecerse a obras protegidas; publicar sin revisión aumenta el riesgo.
+    a: Un filtro de palabras bloquea términos exactos en el texto; no impide que una imagen o un texto generados
+      se parezcan a una obra protegida.
+    c: La indemnización cubre los modelos de Amazon y los servicios enumerados en las condiciones de servicio; no
+      hay que dar por hecho que cubre los modelos de otros proveedores.
     d: 'Aumenta el riesgo: introducir material que infringe derechos va contra el uso responsable que exige la indemnización.'
   referencia: https://aws.amazon.com/bedrock/faqs/
 - id: D4-023
@@ -672,20 +675,20 @@
     AWS ofrece para sus servicios de IA generativa. ¿Qué respuesta es la correcta?
   opciones:
   - id: a
-    texto: Reclamaciones de terceros por derechos de autor sobre la salida, con uso responsable
-  - id: b
     texto: Las reclamaciones por daños causados por respuestas inexactas del modelo
+  - id: b
+    texto: Reclamaciones de terceros por derechos de autor sobre la salida, con uso responsable
   - id: c
     texto: La salida de los modelos de proveedores externos, sin condiciones de uso
   - id: d
     texto: Las sanciones que imponga una autoridad por incumplir el Reglamento de IA de la Unión Europea
   correctas:
-  - a
+  - b
   explicacion: Según las preguntas frecuentes de Bedrock, la indemnización es sin límite frente a reclamaciones
     de terceros por derechos de autor sobre la salida de los modelos de Amazon y de los servicios enumerados en
     la sección 50.10 de las Service Terms, con uso responsable.
   distractores:
-    b: La indemnización trata reclamaciones por derechos de autor sobre la salida, no daños por inexactitudes.
+    a: La indemnización trata reclamaciones por derechos de autor sobre la salida, no daños por inexactitudes.
     c: Cubre los modelos de Amazon y los servicios enumerados en las condiciones, y exige un uso responsable.
     d: La política de AWS deja al cliente la responsabilidad de cumplir las leyes aplicables, incluidas las de IA.
   referencia: https://aws.amazon.com/bedrock/faqs/
@@ -707,7 +710,7 @@
   - id: d
     texto: Pérdida de confianza de los clientes
   - id: e
-    texto: Incumplimiento de la residencia de los datos de los candidatos
+    texto: Incumplimiento de la residencia de los datos de los clientes
   correctas:
   - a
   - d
@@ -730,20 +733,20 @@
     usuario final?
   opciones:
   - id: a
-    texto: Cambiar a un modelo más grande y reciente, que suele equivocarse menos en temas médicos
-  - id: b
-    texto: Activar prompt caching para responder más rápido y barato
-  - id: c
     texto: Un tema denegado sobre dosificación, avisos claros y derivar a un profesional
+  - id: b
+    texto: Cambiar a un modelo más grande y reciente, que suele equivocarse menos en temas médicos
+  - id: c
+    texto: Activar prompt caching para responder más rápido y barato
   - id: d
     texto: Poner la temperatura a 0 para que la respuesta no varíe entre llamadas
   correctas:
-  - c
+  - a
   explicacion: El riesgo para el usuario final se reduce limitando lo que el sistema puede hacer en temas con consecuencias
     graves, informando con claridad y derivando a una persona cualificada.
   distractores:
-    a: Reduce errores, pero el asistente seguiría dando consejos de dosificación, que es el riesgo.
-    b: Mejora coste y latencia; no reduce el riesgo para el usuario.
+    b: Reduce errores, pero el asistente seguiría dando consejos de dosificación, que es el riesgo.
+    c: Mejora coste y latencia; no reduce el riesgo para el usuario.
     d: Una respuesta estable puede ser igualmente incorrecta; no evita el consejo médico.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-denied-topics.html
 - id: D4-026
@@ -772,7 +775,7 @@
   - id: d
     texto: RAG con citas y comprobación de grounding contextual
   - id: e
-    texto: Contratar Provisioned Throughput
+    texto: Publicar la ficha de uso previsto del modelo
   correctas:
   - - '1'
     - c
@@ -786,8 +789,8 @@
     medición por grupos y supervisión humana para el sesgo; fuentes y grounding para las alucinaciones; filtros
     de contenido para las salidas ofensivas.'
   distractores:
-    e: Garantiza capacidad de inferencia; no mitiga ningún riesgo legal.
-  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
+    e: Es una medida de transparencia útil, pero no es la mitigación más directa de ninguno de los cuatro riesgos.
+  referencia: https://aws.amazon.com/ai/responsible-ai/
 - id: D4-027
   dominio: 4
   tarea: '4.1'
@@ -800,19 +803,19 @@
   - id: a
     texto: Infracción de propiedad intelectual
   - id: b
-    texto: Alucinación del modelo
-  - id: c
-    texto: Incumplimiento de la residencia de los datos de los candidatos
-  - id: d
     texto: Resultados sesgados que pueden suponer discriminación
+  - id: c
+    texto: Alucinación del modelo
+  - id: d
+    texto: Incumplimiento de la residencia de los datos de los candidatos
   correctas:
-  - d
+  - b
   explicacion: Puntuar peor a un grupo con el mismo perfil es un resultado sesgado; en selección de personal puede
     constituir discriminación, uno de los riesgos legales que cita la guía.
   distractores:
     a: No hay obras protegidas implicadas en el cribado.
-    b: 'El modelo no inventa datos: puntúa de forma desigual a un grupo.'
-    c: El problema no es dónde se procesan los datos, sino el trato desigual.
+    c: 'El modelo no inventa datos: puntúa de forma desigual a un grupo.'
+    d: El problema no es dónde se procesan los datos, sino el trato desigual.
   referencia: https://aws.amazon.com/ai/responsible-ai/policy/
 - id: D4-028
   dominio: 4
@@ -829,17 +832,17 @@
   - id: b
     texto: Entrenar durante más épocas con el mismo conjunto de datos para afinar el modelo
   - id: c
-    texto: Añadir datos representativos de los grupos poco representados
-  - id: d
     texto: Usar un modelo más grande con los mismos datos
+  - id: d
+    texto: Añadir datos representativos de los grupos poco representados
   correctas:
-  - c
+  - d
   explicacion: 'El problema es de inclusividad y diversidad de los datos: un grupo con pocos ejemplos se aprende
     peor. Hay que completar el conjunto con datos representativos y comprobar la calidad para cada grupo.'
   distractores:
     a: Aumentaría el desequilibrio en lugar de reducirlo.
     b: El modelo seguiría aprendiendo casi solo del grupo mayoritario.
-    d: Un modelo mayor no compensa la falta de ejemplos de un grupo.
+    c: Un modelo mayor no compensa la falta de ejemplos de un grupo.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html
 - id: D4-029
   dominio: 4
@@ -882,17 +885,17 @@
   - id: b
     texto: Que esté etiquetado por el propio modelo para ahorrar coste
   - id: c
-    texto: Que se entrene durante más épocas para filtrar el ruido
-  - id: d
     texto: Que proceda de fuentes curadas, de origen conocido y revisado
+  - id: d
+    texto: Que se entrene durante más épocas para filtrar el ruido
   correctas:
-  - d
+  - c
   explicacion: 'Los datos de ajuste deben venir de fuentes curadas: de origen conocido, revisados, con derechos
     de uso y sin contenido inadecuado. Lo contrario introduce toxicidad, sesgos y riesgos legales.'
   distractores:
     a: El tamaño no compensa un origen desconocido y contenido tóxico; más datos de mala calidad empeoran el modelo.
     b: Etiquetar con el modelo no resuelve el origen ni la toxicidad de los datos.
-    c: Más épocas con datos tóxicos aumentan el riesgo de que el modelo los reproduzca.
+    d: Más épocas con datos tóxicos aumentan el riesgo de que el modelo los reproduzca.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp05.html
 - id: D4-031
   dominio: 4
@@ -937,17 +940,17 @@
   - id: b
     texto: Etiquetas que estiman los anotadores según la apariencia
   - id: c
-    texto: Etiquetas declaradas por las propias personas
-  - id: d
     texto: Etiquetas que infiere un modelo de visión a partir de fotos
+  - id: d
+    texto: Etiquetas declaradas por las propias personas
   correctas:
-  - c
+  - d
   explicacion: El Responsible AI Lens recomienda considerar etiquetas demográficas declaradas por las personas (encuestas
     o información aportada por el usuario) en lugar de predicciones algorítmicas o humanas.
   distractores:
     a: Sin etiquetas no se puede medir la representación ni la equidad por grupo.
     b: Las estimaciones humanas también introducen errores y sesgos de los anotadores.
-    d: Una inferencia algorítmica puede equivocarse y trasladar sus propios sesgos a la evaluación.
+    c: Una inferencia algorítmica puede equivocarse y trasladar sus propios sesgos a la evaluación.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html
 - id: D4-033
   dominio: 4
@@ -960,19 +963,19 @@
     cuando cambie. ¿Qué artefacto describe esta práctica?
   opciones:
   - id: a
-    texto: Una ficha de datos (datasheet) por conjunto
-  - id: b
     texto: Un registro de AWS CloudTrail
+  - id: b
+    texto: Una ficha de datos (datasheet) por conjunto
   - id: c
     texto: Una SageMaker Model Card por cada conjunto de datos
   - id: d
     texto: Una AWS AI Service Card
   correctas:
-  - a
+  - b
   explicacion: 'El Responsible AI Lens recomienda documentar cada conjunto de datos con una ficha (datasheet): usos
     previstos e inapropiados, fuentes, recogida, etiquetado, distribución y sesgos conocidos, como documento vivo.'
   distractores:
-    b: Registra llamadas a las API; no describe el contenido ni el origen de un conjunto de datos.
+    a: Registra llamadas a las API; no describe el contenido ni el origen de un conjunto de datos.
     c: Las Model Cards documentan modelos (uso previsto, riesgo, evaluación); la práctica descrita documenta cada
       conjunto de datos.
     d: Las publica AWS sobre sus servicios y modelos; no documentan los datos del cliente.
@@ -1040,21 +1043,21 @@
     60 % con los de prueba, muy por debajo de lo que necesita el negocio. ¿Qué acción es la más adecuada?
   opciones:
   - id: a
-    texto: Detener antes el entrenamiento para evitar memorizar
-  - id: b
-    texto: Aumentar la regularización para simplificar el modelo y evitar que memorice
-  - id: c
-    texto: Reducir el número de características de entrada
-  - id: d
     texto: Usar un modelo más capaz o entrenarlo durante más tiempo
+  - id: b
+    texto: Detener antes el entrenamiento para evitar memorizar
+  - id: c
+    texto: Aumentar la regularización para simplificar el modelo y evitar que memorice
+  - id: d
+    texto: Reducir el número de características de entrada
   correctas:
-  - d
+  - a
   explicacion: 'Fallar por igual en entrenamiento y en prueba es subajuste (alto sesgo): el modelo es demasiado
     simple o se entrenó poco. Se corrige con más capacidad, mejores características o más tiempo de entrenamiento.'
   distractores:
-    a: Es un remedio contra el sobreajuste; aquí el problema es el contrario.
-    b: Simplificaría aún más un modelo que ya no capta la relación entre los datos.
-    c: Quitaría información a un modelo que ya es demasiado simple.
+    b: Es un remedio contra el sobreajuste; aquí el problema es el contrario.
+    c: Simplificaría aún más un modelo que ya no capta la relación entre los datos.
+    d: Quitaría información a un modelo que ya es demasiado simple.
   referencia: https://aws.amazon.com/what-is/overfitting/
 - id: D4-037
   dominio: 4
@@ -1069,20 +1072,20 @@
   - id: a
     texto: Los datos de producción han derivado con el tiempo respecto a los de entrenamiento
   - id: b
-    texto: La temperatura del modelo es demasiado alta
-  - id: c
-    texto: El modelo tiene alto sesgo con carácter general
-  - id: d
     texto: El grupo tenía pocos ejemplos y el modelo se ajustó peor a él
+  - id: c
+    texto: La temperatura del modelo es demasiado alta
+  - id: d
+    texto: El modelo tiene alto sesgo con carácter general
   correctas:
-  - d
+  - b
   explicacion: 'Un grupo con pocos ejemplos se aprende peor: el modelo se ajusta al grupo mayoritario y comete más
     errores (o se sobreajusta) con el minoritario. Es uno de los efectos del sesgo y la varianza sobre los grupos
     demográficos.'
   distractores:
     a: No se describe un cambio temporal, sino un grupo con poca representación desde el entrenamiento.
-    b: La temperatura es un parámetro de los modelos generativos; no explica más errores en un grupo concreto.
-    c: Con alto sesgo generalizado la exactitud global no sería del 93 %; el problema se concentra en un grupo.
+    c: La temperatura es un parámetro de los modelos generativos; no explica más errores en un grupo concreto.
+    d: Con alto sesgo generalizado la exactitud global no sería del 93 %; el problema se concentra en un grupo.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html
 - id: D4-038
   dominio: 4
@@ -1187,19 +1190,19 @@
     ¿Cuál es el impacto dispar (DI) según la fórmula que publica AWS, q'd / q'a?
   opciones:
   - id: a
-    texto: 1,43
-  - id: b
     texto: 0,7
+  - id: b
+    texto: 1,43
   - id: c
     texto: 0,18
   - id: d
     texto: 0,42
   correctas:
-  - b
+  - a
   explicacion: DI = q'd / q'a = 0,42 / 0,60 = 0,7. Un valor de 1 indica paridad; por debajo de 1, el grupo d recibe
     proporcionalmente menos resultados positivos.
   distractores:
-    a: Es el cociente invertido (0,60 / 0,42); DI pone el grupo desfavorecido en el numerador.
+    b: Es el cociente invertido (0,60 / 0,42); DI pone el grupo desfavorecido en el numerador.
     c: Es la diferencia (0,60 − 0,42), que corresponde a otra métrica (DPPL), no al cociente.
     d: Es solo la tasa de aprobación del grupo d, sin compararla con la del grupo a.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-di.html
@@ -1215,19 +1218,19 @@
   - id: a
     texto: Revisar con un modelo juez una muestra aleatoria de las decisiones del último mes
   - id: b
-    texto: Crear una SageMaker Model Card del modelo
-  - id: c
-    texto: Subir el objetivo de exactitud global al 97 %
-  - id: d
     texto: Calcular las métricas por subgrupo de edad y compararlas con un umbral aceptable pactado
+  - id: c
+    texto: Crear una SageMaker Model Card del modelo
+  - id: d
+    texto: Subir el objetivo de exactitud global al 97 %
   correctas:
-  - d
+  - b
   explicacion: El análisis por subgrupos calcula las mismas métricas para cada grupo y las compara con un umbral.
     Revela el sesgo que una exactitud media alta oculta.
   distractores:
     a: Una muestra aleatoria apenas incluirá al grupo afectado y no mide por grupos.
-    b: Documenta el modelo, pero no mide si se equivoca más con un grupo.
-    c: La media puede seguir ocultando un grupo con mucho más error.
+    c: Documenta el modelo, pero no mide si se equivoca más con un grupo.
+    d: La media puede seguir ocultando un grupo con mucho más error.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html
 - id: D4-043
   dominio: 4
@@ -1242,19 +1245,19 @@
   - id: a
     texto: Quitar las instrucciones de etiquetado para no condicionar al equipo
   - id: b
-    texto: Medir el acuerdo entre anotadores e incluir ejemplos de control con respuesta conocida de antemano
-  - id: c
     texto: Entrenar durante más épocas para que el modelo compense el ruido
-  - id: d
+  - id: c
     texto: Duplicar el tamaño del conjunto con más reseñas etiquetadas por el mismo equipo externo
+  - id: d
+    texto: Medir el acuerdo entre anotadores e incluir ejemplos de control con respuesta conocida de antemano
   correctas:
-  - b
+  - d
   explicacion: El Responsible AI Lens recomienda formar a los anotadores, medir su acuerdo, usar ejemplos con respuesta
     conocida para detectar a quien no sigue las instrucciones y vigilar sus sesgos.
   distractores:
     a: Sin instrucciones las etiquetas serán todavía menos consistentes.
-    c: Un modelo entrenado con etiquetas inconsistentes aprende esa inconsistencia.
-    d: Más datos con el mismo problema no lo corrigen; lo amplifican.
+    b: Un modelo entrenado con etiquetas inconsistentes aprende esa inconsistencia.
+    c: Más datos con el mismo problema no lo corrigen; lo amplifican.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp03.html
 - id: D4-044
   dominio: 4
@@ -1268,19 +1271,19 @@
   - id: a
     texto: Sustituir la revisión por un modelo juez con la rúbrica del equipo
   - id: b
-    texto: Una auditoría humana por un equipo independiente que construya su propio conjunto de evaluación del sistema
-  - id: c
     texto: Basarse en las métricas de sesgo que publica el proveedor del modelo
+  - id: c
+    texto: Una auditoría humana por un equipo independiente que construya su propio conjunto de evaluación del sistema
   - id: d
     texto: Que el equipo de desarrollo repita sus propias pruebas con otra semilla aleatoria y más iteraciones
   correctas:
-  - b
+  - c
   explicacion: El Responsible AI Lens recomienda corroborar de forma independiente las evaluaciones críticas o subjetivas,
     idealmente con evaluadores sin interés en el proyecto que construyan sus propios conjuntos de datos.
   distractores:
     a: Un juez LLM puede tener sus propios sesgos y la rúbrica sigue siendo la del equipo; en evaluaciones críticas
       se corrobora con personas independientes.
-    c: No se refieren a los datos ni al caso de uso concretos del sistema.
+    b: No se refieren a los datos ni al caso de uso concretos del sistema.
     d: Sigue siendo el mismo equipo con los mismos datos y los mismos puntos ciegos.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raier01-bp02.html
 - id: D4-045
@@ -1319,7 +1322,7 @@
   objetivo: 4.1.7
   tipo: multiple_choice
   dificultad: alta
-  enunciado: Una empresa que empezó a usar SageMaker AI en 2026 quiere vigilar cada semana si su modelo de préstamos
+  enunciado: Una empresa que nunca ha usado SageMaker Model Monitor quiere vigilar cada semana si su modelo de préstamos
     empieza a tratar de forma distinta a algún grupo de clientes y recibir una alarma si ocurre. ¿Qué enfoque sigue
     las indicaciones vigentes de AWS?
   opciones:
@@ -1330,12 +1333,12 @@
   - id: c
     texto: Medir el sesgo una única vez antes del despliegue
   - id: d
-    texto: Métricas por grupo con las soluciones abiertas de AWS y alarmas de CloudWatch
+    texto: Métricas por grupo con las soluciones abiertas de AWS y alertas por umbral
   correctas:
   - d
   explicacion: El sesgo puede aparecer tras el despliegue si cambian los datos reales. Para clientes nuevos, AWS
-    indica sustituir Model Monitor por sus soluciones abiertas de monitorización con CloudWatch, que calculan métricas
-    por segmento y alertan al superar un umbral.
+    indica sustituir Model Monitor por sus soluciones abiertas de monitorización, que calculan métricas por segmento
+    y avisan (por ejemplo, con Amazon SNS) al superar un umbral.
   distractores:
     a: Guardrails filtra contenido de modelos generativos; no mide el sesgo de un modelo de préstamos.
     b: Model Monitor ya no admite clientes nuevos; AWS remite a sus soluciones abiertas de monitorización con CloudWatch.
@@ -1370,6 +1373,34 @@
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html
 - id: D4-048
   dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora que trabaja desde hace años con SageMaker AI y sus herramientas de sesgo quiere medir,
+    antes de entrenar, si su conjunto de pólizas está desequilibrado entre grupos de edad y, después, si las predicciones
+    del modelo tratan de forma distinta a esos grupos. ¿Qué herramienta cubre las dos fases?
+  opciones:
+  - id: a
+    texto: Amazon SageMaker Model Cards con la calificación de riesgo
+  - id: b
+    texto: Amazon Bedrock Evaluations con la métrica de estereotipos
+  - id: c
+    texto: Amazon Bedrock Guardrails con un tema denegado sobre la edad
+  - id: d
+    texto: Amazon SageMaker Clarify
+  correctas:
+  - d
+  explicacion: Clarify calcula métricas de sesgo previas al entrenamiento (por ejemplo, CI o DPL) y posteriores
+    (por ejemplo, DI). La aseguradora es cliente desde hace años, así que el cierre a clientes nuevos no le afecta.
+  distractores:
+    a: Documenta el modelo y su riesgo, pero no calcula métricas de sesgo.
+    b: Evalúa modelos fundacionales; AWS aclara que no sustituye la detección de sesgo de modelos predictivos clásicos.
+    c: Filtra contenido de modelos generativos en tiempo de ejecución; no mide el sesgo de un conjunto de datos
+      ni de un modelo predictivo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-configure-processing-jobs.html
+- id: D4-049
+  dominio: 4
   tarea: '4.2'
   objetivo: 4.2.1
   tipo: multiple_choice
@@ -1379,50 +1410,50 @@
     tipo de modelo encaja mejor?
   opciones:
   - id: a
-    texto: Un modelo fundacional al que se le pide que justifique cada decisión
+    texto: Una red neuronal profunda con muchas capas
   - id: b
     texto: Un árbol de decisión pequeño o una regresión logística
   - id: c
-    texto: Un conjunto de muchos modelos profundos combinados
+    texto: Un modelo fundacional al que se le pide que justifique cada decisión
   - id: d
-    texto: Una red neuronal profunda con muchas capas
+    texto: Un conjunto de muchos modelos profundos combinados
   correctas:
   - b
   explicacion: 'Los modelos simples, como una regresión o un árbol de decisión, son interpretables: sus coeficientes
     o sus ramas muestran cómo decide. Si cumplen el rendimiento, son la opción natural cuando hay que justificar
     cada decisión.'
   distractores:
-    a: La justificación que genera no es la lógica interna del modelo y puede no reflejarla.
-    c: Es aún más difícil de interpretar que un único modelo profundo.
-    d: Su lógica interna no se puede seguir directamente; necesitaría explicaciones a posteriori.
+    a: Su lógica interna no se puede seguir directamente; necesitaría explicaciones a posteriori.
+    c: La justificación que genera no es la lógica interna del modelo y puede no reflejarla.
+    d: Es aún más difícil de interpretar que un único modelo profundo.
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/overview.html
-- id: D4-049
+- id: D4-050
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.1
   tipo: multiple_choice
-  dificultad: alta
+  dificultad: media
   enunciado: Un cliente pregunta a su banco por qué se rechazó su solicitud de préstamo, y el banco le muestra los
     tres factores que más pesaron en esa decisión. ¿Qué propiedad del sistema está aplicando?
   opciones:
   - id: a
-    texto: Explicabilidad, con una explicación local de esa predicción
-  - id: b
-    texto: Transparencia, porque informa de que el sistema usa IA
-  - id: c
-    texto: Interpretabilidad global, porque muestra cómo funciona el modelo entero
-  - id: d
     texto: Veracidad, porque la decisión es correcta
+  - id: b
+    texto: Interpretabilidad global, porque muestra cómo funciona el modelo entero
+  - id: c
+    texto: Transparencia, porque informa de que el sistema usa IA
+  - id: d
+    texto: Explicabilidad, con una explicación local de esa predicción
   correctas:
-  - a
+  - d
   explicacion: La explicabilidad permite entender por qué el sistema dio una salida concreta. Mostrar los factores
     que pesaron en una predicción individual es una explicación local.
   distractores:
-    b: La transparencia informa sobre el sistema en general; aquí se explica una decisión concreta.
-    c: Una explicación global describe qué variables pesan en el modelo en general, no en la solicitud de este cliente.
-    d: La veracidad trata de que las salidas sean correctas, no de explicar por qué se produjeron.
+    a: La veracidad trata de que las salidas sean correctas, no de explicar por qué se produjeron.
+    b: Una explicación global describe qué variables pesan en el modelo en general, no en la solicitud de este cliente.
+    c: La transparencia informa sobre el sistema en general; aquí se explica una decisión concreta.
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/overview.html
-- id: D4-050
+- id: D4-051
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.1
@@ -1432,23 +1463,23 @@
     predicciones de su modelo de siniestralidad, no en un caso concreto. ¿Qué necesita?
   opciones:
   - id: a
-    texto: Una comprobación de grounding contextual
-  - id: b
-    texto: La matriz de confusión del modelo con los datos de prueba
-  - id: c
-    texto: Una explicación local de una predicción elegida al azar
-  - id: d
     texto: Una explicación global de la importancia de cada variable del modelo
+  - id: b
+    texto: Una comprobación de grounding contextual
+  - id: c
+    texto: La matriz de confusión del modelo con los datos de prueba
+  - id: d
+    texto: Una explicación local de una predicción elegida al azar
   correctas:
-  - d
+  - a
   explicacion: Las importancias de las variables pueden ser globales (válidas para el modelo en todas las entradas)
     o locales (para una predicción). El comité pide la visión global.
   distractores:
-    a: Es una salvaguarda de IA generativa para respuestas basadas en una fuente; no explica un modelo predictivo.
-    b: Mide aciertos y errores, pero no qué variables influyen en las predicciones.
-    c: Explica un caso, no el comportamiento general del modelo.
+    b: Es una salvaguarda de IA generativa para respuestas basadas en una fuente; no explica un modelo predictivo.
+    c: Mide aciertos y errores, pero no qué variables influyen en las predicciones.
+    d: Explica un caso, no el comportamiento general del modelo.
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/overview.html
-- id: D4-051
+- id: D4-052
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.1
@@ -1458,27 +1489,27 @@
     DOS afirmaciones describen al modelo opaco? (Elige DOS.)
   opciones:
   - id: a
-    texto: Sus coeficientes muestran cuánto pesa cada variable
+    texto: 'Su lógica interna no se ve: solo se observan sus entradas y salidas'
   - id: b
-    texto: Es más difícil justificar sus decisiones ante auditores y reguladores
-  - id: c
     texto: No se puede desplegar en AWS sin un permiso especial
+  - id: c
+    texto: Sus coeficientes muestran cuánto pesa cada variable
   - id: d
     texto: Rinde peor que el interpretable en problemas complejos
   - id: e
-    texto: 'Su lógica interna no se ve: solo se observan sus entradas y salidas'
+    texto: Es más difícil justificar sus decisiones ante auditores y reguladores
   correctas:
-  - b
+  - a
   - e
   explicacion: Un modelo opaco no deja ver cómo decide, lo que complica justificarlo y depurarlo; suele compensarlo
     con más rendimiento en problemas complejos, y se acompaña de explicaciones a posteriori.
   distractores:
-    a: Eso describe un modelo interpretable, como una regresión lineal.
-    c: La opacidad no impide desplegarlo; es una cuestión de explicabilidad, no de permisos.
+    b: La opacidad no impide desplegarlo; es una cuestión de explicabilidad, no de permisos.
+    c: Eso describe un modelo interpretable, como una regresión lineal.
     d: 'Suele ser al revés: los modelos complejos tienden a rendir más en problemas complejos, a cambio de ser menos
       interpretables.'
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/overview.html
-- id: D4-052
+- id: D4-053
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.1
@@ -1494,26 +1525,26 @@
     texto: Leer los coeficientes de una regresión para entender cómo decide el modelo
   opciones:
   - id: a
-    texto: Explicabilidad
-  - id: b
-    texto: Veracidad
-  - id: c
-    texto: Transparencia
-  - id: d
     texto: Interpretabilidad
+  - id: b
+    texto: Explicabilidad
+  - id: c
+    texto: Veracidad
+  - id: d
+    texto: Transparencia
   correctas:
   - - '1'
-    - c
-  - - '2'
-    - a
-  - - '3'
     - d
+  - - '2'
+    - b
+  - - '3'
+    - a
   explicacion: 'Transparencia: información sobre el sistema para decidir. Explicabilidad: entender por qué salió
     una decisión concreta. Interpretabilidad: entender el funcionamiento interno del modelo sin herramientas.'
   distractores:
-    b: Trata de que las salidas sean correctas; ninguna de las prácticas comprueba la exactitud de una respuesta.
+    c: Trata de que las salidas sean correctas; ninguna de las prácticas comprueba la exactitud de una respuesta.
   referencia: https://aws.amazon.com/ai/responsible-ai/
-- id: D4-053
+- id: D4-054
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.1
@@ -1524,25 +1555,25 @@
     el más adecuado?
   opciones:
   - id: a
-    texto: Las trazas del agente con sus pasos, herramientas consultadas y razonamiento
-  - id: b
     texto: Valores SHAP calculados sobre los embeddings de la conversación
+  - id: b
+    texto: Una SageMaker Model Card del modelo fundacional
   - id: c
     texto: Subir la temperatura para que el agente detalle más sus respuestas
   - id: d
-    texto: Una SageMaker Model Card del modelo fundacional
+    texto: Las trazas del agente con sus pasos, herramientas consultadas y razonamiento
   correctas:
-  - a
+  - d
   explicacion: En IA generativa y agentes, la explicabilidad se apoya en las trazas (los pasos orquestados, las
     herramientas usadas), el razonamiento paso a paso y las citas. AWS cita las trazas de los agentes de Bedrock
     y AgentCore como ejemplo.
   distractores:
-    b: SHAP explica la contribución de las variables en modelos predictivos; no reconstruye los pasos y herramientas
+    a: SHAP explica la contribución de las variables en modelos predictivos; no reconstruye los pasos y herramientas
       de un agente.
+    b: Documenta el modelo, pero no explica cómo se resolvió una incidencia concreta.
     c: Aumenta la variabilidad, no la explicabilidad de las decisiones.
-    d: Documenta el modelo, pero no explica cómo se resolvió una incidencia concreta.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp07.html
-- id: D4-054
+- id: D4-055
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.2
@@ -1555,22 +1586,22 @@
   - id: a
     texto: AWS CloudTrail
   - id: b
-    texto: Amazon SageMaker Model Cards
-  - id: c
     texto: Amazon Bedrock Guardrails con temas denegados
-  - id: d
+  - id: c
     texto: AWS AI Service Cards
+  - id: d
+    texto: Amazon SageMaker Model Cards
   correctas:
-  - b
+  - d
   explicacion: SageMaker Model Cards documenta en un único sitio el uso previsto y no previsto, la calificación
     de riesgo (desconocido, bajo, medio o alto), el entrenamiento, las métricas y la evaluación de un modelo, para
     gobierno y auditoría.
   distractores:
     a: Registra las llamadas a las API; no documenta el uso previsto ni la evaluación de un modelo.
-    c: Filtra contenido en tiempo de ejecución; no documenta modelos.
-    d: Las publica AWS sobre sus propios servicios y modelos; no documentan los modelos del cliente.
+    b: Filtra contenido en tiempo de ejecución; no documenta modelos.
+    c: Las publica AWS sobre sus propios servicios y modelos; no documentan los modelos del cliente.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
-- id: D4-055
+- id: D4-056
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.2
@@ -1596,7 +1627,7 @@
     c: El cifrado no forma parte de Model Cards ni da un historial de cambios.
     d: La ficha registra un estado de aprobación, pero no bloquea por sí misma el despliegue.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
-- id: D4-056
+- id: D4-057
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.2
@@ -1608,7 +1639,7 @@
   - id: a
     texto: Un modelo de código abierto desplegado desde Amazon SageMaker JumpStart
   - id: b
-    texto: Activar prompt caching en el modelo elegido
+    texto: Un modelo propietario evaluado con Amazon Bedrock Evaluations
   - id: c
     texto: Un modelo propietario consumido por API en Amazon Bedrock, sin acceso a sus pesos
   - id: d
@@ -1618,11 +1649,11 @@
   explicacion: Los modelos de código abierto exponen sus pesos y su arquitectura, lo que permite inspeccionarlos,
     auditarlos y desplegarlos con control propio, por ejemplo desde SageMaker JumpStart.
   distractores:
-    b: Abarata contextos repetidos; no aporta transparencia sobre el modelo.
+    b: Las evaluaciones miden su comportamiento, pero no dan acceso a los pesos ni a la arquitectura.
     c: No permite inspeccionar los pesos ni la arquitectura.
     d: Informa del uso previsto y las limitaciones, pero no da acceso a los pesos.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html
-- id: D4-057
+- id: D4-058
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.2
@@ -1633,26 +1664,28 @@
     DOS.)
   opciones:
   - id: a
-    texto: Los hallazgos de Amazon Inspector
+    texto: Los registros de AWS CloudTrail
   - id: b
     texto: Las AWS AI Service Cards de los modelos de Amazon
   - id: c
     texto: La ficha y la licencia que publica el proveedor de cada modelo
   - id: d
-    texto: Las recomendaciones de AWS Trusted Advisor
+    texto: Los resultados de Amazon Bedrock Evaluations
   - id: e
-    texto: Las métricas de Amazon CloudWatch de la cuenta
+    texto: Las SageMaker Model Cards de la propia empresa
   correctas:
   - b
   - c
   explicacion: Las AI Service Cards documentan el uso previsto y las limitaciones de los modelos y servicios de
     AWS; para modelos de otros proveedores, sus fichas y licencias cumplen ese papel de transparencia.
   distractores:
-    a: Detectan vulnerabilidades de software; no describen el uso previsto de un modelo.
-    d: Revisan buenas prácticas de la cuenta (coste, seguridad, límites), no las limitaciones de un modelo.
-    e: Miden el funcionamiento de los recursos desplegados, no el uso previsto de un modelo.
+    a: Registran llamadas a las API de la cuenta; no informan del uso previsto de un modelo.
+    d: Miden el comportamiento con los datos de la empresa, pero no describen el uso previsto ni las condiciones
+      de uso que fija el proveedor.
+    e: Documentan los modelos propios de la empresa; todavía no existen para los candidatos de terceros que se están
+      evaluando.
   referencia: https://aws.amazon.com/ai/responsible-ai/resources/
-- id: D4-058
+- id: D4-059
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.2
@@ -1678,35 +1711,35 @@
     c: Indica el nivel de riesgo del caso de uso; no dice qué permite la licencia.
     d: Miden el comportamiento del modelo, no sus condiciones legales de uso.
   referencia: https://aws.amazon.com/ai/responsible-ai/
-- id: D4-059
+- id: D4-060
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.2
   tipo: multiple_choice
   dificultad: alta
-  enunciado: Una empresa que empieza en 2026 con SageMaker AI necesita explicaciones SHAP de las predicciones de
+  enunciado: Una empresa que nunca ha usado SageMaker Clarify necesita explicaciones SHAP de las predicciones de
     un modelo tabular de riesgo de impago. ¿Qué opción sigue las indicaciones vigentes de AWS?
   opciones:
   - id: a
-    texto: Documentar el modelo con SageMaker Model Cards
-  - id: b
-    texto: Crear trabajos de explicabilidad con Amazon SageMaker Clarify
-  - id: c
-    texto: Usar Amazon Bedrock Evaluations para explicar cada predicción
-  - id: d
     texto: Usar directamente la biblioteca de código abierto SHAP
+  - id: b
+    texto: Documentar el modelo con SageMaker Model Cards
+  - id: c
+    texto: Crear trabajos de explicabilidad con Amazon SageMaker Clarify
+  - id: d
+    texto: Usar Amazon Bedrock Evaluations para explicar cada predicción
   correctas:
-  - d
+  - a
   explicacion: Tras el cierre de Clarify a clientes nuevos, AWS indica calcular la atribución de características
     con la biblioteca SHAP (el mismo motor que usa Clarify) dentro de sus soluciones de referencia y flujos de SageMaker
     AI.
   distractores:
-    a: Documenta el modelo, pero no calcula explicaciones de cada predicción.
-    b: Clarify ya no admite clientes nuevos; AWS indica usar SHAP directamente, el mismo motor que usa Clarify.
-    c: Bedrock Evaluations es para modelos fundacionales; AWS aclara que no sustituye la explicabilidad de modelos
+    b: Documenta el modelo, pero no calcula explicaciones de cada predicción.
+    c: Clarify ya no admite clientes nuevos; AWS indica usar SHAP directamente, el mismo motor que usa Clarify.
+    d: Bedrock Evaluations es para modelos fundacionales; AWS aclara que no sustituye la explicabilidad de modelos
       predictivos.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
-- id: D4-060
+- id: D4-061
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.2
@@ -1728,7 +1761,7 @@
   - id: b
     texto: Amazon SageMaker Model Cards
   - id: c
-    texto: AWS Trusted Advisor
+    texto: Amazon Bedrock Guardrails
   - id: d
     texto: Amazon Bedrock Evaluations
   - id: e
@@ -1745,10 +1778,9 @@
   explicacion: Model Cards documenta modelos propios; AI Service Cards, los servicios de AWS; Bedrock Evaluations
     mide el comportamiento de los candidatos; un modelo de código abierto permite inspeccionar sus pesos.
   distractores:
-    c: Revisa buenas prácticas de la cuenta (coste, seguridad, límites de servicio); no aporta transparencia sobre
-      modelos.
+    c: Filtra contenido en tiempo de ejecución; no documenta ni permite inspeccionar un modelo.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
-- id: D4-061
+- id: D4-062
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.3
@@ -1763,11 +1795,11 @@
   - id: b
     texto: La red profunda, porque tiene la mayor exactitud
   - id: c
-    texto: El árbol de decisión, porque cumple el mínimo y se explica por sí mismo
-  - id: d
     texto: La red profunda sin explicaciones, porque el regulador solo revisa una muestra
+  - id: d
+    texto: El árbol de decisión, porque cumple el mínimo y se explica por sí mismo
   correctas:
-  - c
+  - d
   explicacion: La interpretabilidad y el rendimiento se miden en el caso concreto y se fijan mínimos. Si el modelo
     interpretable cumple el mínimo de rendimiento, se prefiere en decisiones reguladas porque su explicación sale
     del propio modelo.
@@ -1775,9 +1807,9 @@
     a: 'Retrasa el proyecto sin necesidad: el árbol ya cumple los requisitos.'
     b: Maximizar la exactitud no es el criterio si un modelo interpretable ya cumple el mínimo pactado y el requisito
       de explicación.
-    d: Incumple el requisito de explicar cada rechazo.
+    c: Incumple el requisito de explicar cada rechazo.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp07.html
-- id: D4-062
+- id: D4-063
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.3
@@ -1787,24 +1819,24 @@
     y las reglas exactas de sus guardrails. ¿Qué riesgo plantea y qué alternativa es mejor?
   opciones:
   - id: a
-    texto: Facilita saltarse las salvaguardas; conviene publicar el uso previsto y los límites
-  - id: b
     texto: 'Ninguno: cuanta más información se publique, más seguro es el sistema'
-  - id: c
+  - id: b
     texto: Aumenta el coste de inferencia; es mejor cifrar las instrucciones del sistema
+  - id: c
+    texto: Facilita saltarse las salvaguardas; conviene publicar el uso previsto y los límites
   - id: d
     texto: Reduce la exactitud del modelo; es mejor no informar de que se usa IA
   correctas:
-  - a
+  - c
   explicacion: 'Transparencia y seguridad pueden chocar: revelar las reglas de los filtros o las instrucciones del
     sistema facilita saltárselos o extraer información. Se publica lo que los usuarios necesitan para decidir, sin
     los detalles que facilitan un ataque.'
   distractores:
-    b: Más información sobre las defensas facilita diseñar ataques para eludirlas.
-    c: Publicar no cambia el coste de inferencia, y cifrar no responde a la necesidad de transparencia.
+    a: Más información sobre las defensas facilita diseñar ataques para eludirlas.
+    b: Publicar no cambia el coste de inferencia, y cifrar no responde a la necesidad de transparencia.
     d: Publicar no afecta a la exactitud, y ocultar que se usa IA va contra la transparencia.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp01-bp02.html
-- id: D4-063
+- id: D4-064
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.3
@@ -1818,19 +1850,19 @@
   - id: b
     texto: Cambiar a un modelo más grande y con más capacidad
   - id: c
-    texto: Desactivar el guardrail para no perder clientes
-  - id: d
     texto: Ajustar la intensidad de los filtros y probar con casos reales
+  - id: d
+    texto: Desactivar el guardrail para no perder clientes
   correctas:
-  - d
+  - c
   explicacion: Un filtro más estricto bloquea más contenido dañino pero también más contenido legítimo (falsos positivos).
     Es un compromiso entre seguridad y utilidad que se ajusta con la intensidad de los filtros y pruebas reales.
   distractores:
     a: La temperatura afecta a la generación del modelo, no a la evaluación del guardrail.
     b: Los bloqueos los produce el guardrail, no el modelo.
-    c: Eliminaría la protección frente al contenido dañino.
+    d: Eliminaría la protección frente al contenido dañino.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-content-filters.html
-- id: D4-064
+- id: D4-065
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.3
@@ -1844,7 +1876,7 @@
   - id: b
     texto: Medir la interpretabilidad y el rendimiento de los modelos candidatos en el caso concreto
   - id: c
-    texto: Elegir el modelo más transparente sin medir su rendimiento
+    texto: Maximizar la privacidad aunque la exactitud caiga por debajo del mínimo
   - id: d
     texto: Fijar un mínimo aceptable para cada criterio en lugar de maximizar uno a costa de los demás
   - id: e
@@ -1857,10 +1889,10 @@
     concreto.
   distractores:
     a: Puede vulnerar la privacidad de las personas representadas en los datos.
-    c: Ignora el rendimiento; hay que comprobar que se cumple el mínimo.
+    c: Optimiza un criterio a costa de otro; la guía pide cumplir el mínimo de cada criterio, no sacrificar uno.
     e: Optimiza un criterio a costa de los demás, justo lo que la guía desaconseja.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp01-bp02.html
-- id: D4-065
+- id: D4-066
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.3
@@ -1871,23 +1903,23 @@
     adecuada?
   opciones:
   - id: a
-    texto: Renunciar a explicar las decisiones para recuperar exactitud
-  - id: b
-    texto: Cambiar a un modelo opaco más grande sin evaluarlo
-  - id: c
     texto: Mantener la protección de la privacidad, porque se cumple el mínimo pactado
+  - id: b
+    texto: Renunciar a explicar las decisiones para recuperar exactitud
+  - id: c
+    texto: Cambiar a un modelo opaco más grande sin evaluarlo
   - id: d
     texto: Volver a incluir los datos personales para recuperar el 91 %
   correctas:
-  - c
+  - a
   explicacion: 'Las protecciones de privacidad pueden reducir la exactitud. Con mínimos pactados para cada criterio,
     la decisión es sencilla: si se cumplen, se mantiene la protección.'
   distractores:
-    a: 'Cambia un criterio por otro sin necesidad: el modelo ya cumple.'
-    b: Añade coste y pierde explicabilidad sin comprobar que mejore nada.
+    b: 'Cambia un criterio por otro sin necesidad: el modelo ya cumple.'
+    c: Añade coste y pierde explicabilidad sin comprobar que mejore nada.
     d: Sacrifica la privacidad para superar un mínimo que ya se cumple.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp01-bp02.html
-- id: D4-066
+- id: D4-067
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.3
@@ -1912,7 +1944,7 @@
   explicacion: Primero se fijan los requisitos; se prueba el modelo interpretable; solo si no llega se pasa al complejo
     con explicaciones a posteriori, y estas se validan con expertos porque pueden engañar.
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/overview.html
-- id: D4-067
+- id: D4-068
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.4
@@ -1922,23 +1954,23 @@
     o inadecuada, y que esos avisos sirvan para mejorarlo. ¿Qué principio de diseño aplica?
   opciones:
   - id: a
-    texto: Un mecanismo de feedback con revisiones periódicas
-  - id: b
     texto: Aumentar el número máximo de tokens de salida
-  - id: c
+  - id: b
     texto: Desactivar los registros de conversación para proteger la privacidad
-  - id: d
+  - id: c
     texto: Crear una SageMaker Model Card del modelo
+  - id: d
+    texto: Un mecanismo de feedback con revisiones periódicas
   correctas:
-  - a
+  - d
   explicacion: Los mecanismos de feedback de los usuarios son un principio del diseño centrado en las personas.
     El Responsible AI Lens recomienda convertir ese feedback en mejoras con ciclos de revisión periódicos.
   distractores:
-    b: Cambia la longitud de las respuestas; no recoge la opinión de los usuarios.
-    c: Sin información sobre los fallos no hay forma de mejorar el sistema.
-    d: Documenta el modelo, pero no recoge feedback de los usuarios.
+    a: Cambia la longitud de las respuestas; no recoge la opinión de los usuarios.
+    b: Sin información sobre los fallos no hay forma de mejorar el sistema.
+    c: Documenta el modelo, pero no recoge feedback de los usuarios.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon02-bp01.html
-- id: D4-068
+- id: D4-069
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.4
@@ -1948,23 +1980,23 @@
     con confianza baja tienen consecuencias graves para el cliente. ¿Qué diseño es el más adecuado?
   opciones:
   - id: a
-    texto: Revisión humana de esos casos, con los factores y la confianza a la vista
-  - id: b
     texto: Ocultar la confianza al tramitador para no condicionarlo
-  - id: c
+  - id: b
     texto: Revisar a mano un 1 % de siniestros elegidos al azar
+  - id: c
+    texto: Revisión humana de esos casos, con los factores y la confianza a la vista
   - id: d
     texto: Automatizar la tramitación de los siniestros para reducir costes y tiempos de espera
   correctas:
-  - a
+  - c
   explicacion: 'El diseño centrado en las personas pone la supervisión humana donde los errores tienen consecuencias
     graves y da al revisor la información que necesita: explicación, factores y confianza.'
   distractores:
-    b: El revisor necesita la explicación y la confianza para decidir con información.
-    c: Una muestra aleatoria no garantiza revisar los casos graves, que son los que importan.
+    a: El revisor necesita la explicación y la confianza para decidir con información.
+    b: Una muestra aleatoria no garantiza revisar los casos graves, que son los que importan.
     d: Deja sin supervisión las decisiones con consecuencias graves.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raiuc04-bp02.html
-- id: D4-069
+- id: D4-070
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.4
@@ -1976,21 +2008,21 @@
   - id: a
     texto: Solo el resultado, para no confundir al cliente
   - id: b
-    texto: Que interviene una IA, los factores principales y cómo pedir una revisión humana
-  - id: c
     texto: Las instrucciones del sistema que usa el asistente para decidir cada caso
-  - id: d
+  - id: c
     texto: Los pesos completos del modelo y su arquitectura
+  - id: d
+    texto: Que interviene una IA, los factores principales y cómo pedir una revisión humana
   correctas:
-  - b
+  - d
   explicacion: La transparencia de las decisiones consiste en avisar de que interviene una IA, explicar de forma
     comprensible los factores de la decisión y dar al usuario la posibilidad de cuestionarla o escalarla a una persona.
   distractores:
     a: Sin explicación ni opción de revisión, el cliente no puede entender ni cuestionar la decisión.
-    c: No explican la decisión y facilitan intentos de manipular el sistema.
-    d: No ayudan al cliente a entender su caso y pueden exponer información sensible.
+    b: No explican la decisión y facilitan intentos de manipular el sistema.
+    c: No ayudan al cliente a entender su caso y pueden exponer información sensible.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp04.html
-- id: D4-070
+- id: D4-071
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.4
@@ -2017,9 +2049,9 @@
   distractores:
     a: Elimina la supervisión humana en decisiones con consecuencias sobre la salud.
     b: Contradice la adaptación de las explicaciones a la experiencia del usuario.
-    e: Un nivel técnico único no sirve a pacientes ni a enfermeras; hay que adaptar la explicación.
+    e: Los valores SHAP en bruto no son comprensibles para pacientes ni para la mayoría del personal sanitario.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp04.html
-- id: D4-071
+- id: D4-072
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.4
@@ -2040,7 +2072,7 @@
   - id: a
     texto: Supervisión humana en decisiones con consecuencias
   - id: b
-    texto: Prompt caching
+    texto: Registro de invocaciones del modelo
   - id: c
     texto: Explicaciones adaptadas a cada usuario
   - id: d
@@ -2059,9 +2091,10 @@
   explicacion: 'Cada práctica corresponde a un principio: recoger y usar el feedback, explicar las decisiones, supervisar
     donde hay consecuencias y adaptar la explicación al usuario.'
   distractores:
-    b: Es una técnica de coste y latencia; no es un principio de diseño centrado en las personas.
+    b: Es un mecanismo de auditoría; ayuda a investigar, pero por sí solo no es un principio de diseño centrado
+      en las personas.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp04.html
-- id: D4-072
+- id: D4-073
   dominio: 4
   tarea: '4.2'
   objetivo: 4.2.4
@@ -2088,3 +2121,59 @@
   explicacion: 'El Responsible AI Lens describe un circuito: recoger el feedback, analizarlo en revisiones periódicas,
     convertirlo en mejoras (guardrails, prompts, datos) y validar que las mejoras no introducen problemas nuevos.'
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon02-bp01.html
+- id: D4-074
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.2
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un banco que usa desde hace años las herramientas de explicabilidad de SageMaker AI tiene un modelo
+    de crédito en un endpoint de SageMaker AI. Necesita que cada respuesta del endpoint incluya qué variables pesaron
+    más en esa decisión, para mostrárselas al gestor en el momento. ¿Qué solución encaja mejor?
+  opciones:
+  - id: a
+    texto: La explicabilidad en línea de SageMaker Clarify, con atribuciones SHAP en cada predicción
+  - id: b
+    texto: Amazon Bedrock Evaluations con un modelo juez sobre las decisiones
+  - id: c
+    texto: Una SageMaker Model Card actualizada después de cada decisión
+  - id: d
+    texto: La comprobación de grounding contextual de Amazon Bedrock Guardrails
+  correctas:
+  - a
+  explicacion: Clarify ofrece explicaciones locales con SHAP también en tiempo real desde un endpoint de SageMaker
+    AI (explicabilidad en línea). El banco ya usa estas herramientas desde hace años, así que el cierre a clientes
+    nuevos no le afecta.
+  distractores:
+    b: Evalúa modelos fundacionales por lotes; no da atribuciones por variable de un modelo de crédito en cada petición.
+    c: La ficha documenta el modelo en general; no explica cada predicción en tiempo real.
+    d: Comprueba si una respuesta generativa se basa en una fuente; no explica predicciones de un modelo tabular.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html
+- id: D4-075
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una entidad financiera, cliente desde hace años de la revisión humana gestionada de AWS, extrae con
+    Amazon Textract los datos de solicitudes de hipoteca escaneadas. Quiere que una persona revise solo los campos
+    que Textract extrae con baja confianza. ¿Qué solución es la adecuada?
+  opciones:
+  - id: a
+    texto: Un trabajo de etiquetado de Amazon SageMaker Ground Truth
+  - id: b
+    texto: Un flujo de revisión humana de Amazon A2I activado por un umbral de confianza
+  - id: c
+    texto: La comprobación de grounding contextual de Amazon Bedrock Guardrails
+  - id: d
+    texto: Amazon SageMaker Model Monitor sobre el endpoint de Textract
+  correctas:
+  - b
+  explicacion: Amazon A2I añade revisión humana a las predicciones con baja confianza, con integración para Textract.
+    Pone la supervisión humana donde el sistema está menos seguro, un principio del diseño centrado en las personas.
+    La entidad es cliente desde hace años, así que el cierre a clientes nuevos no le afecta.
+  distractores:
+    a: Sirve para etiquetar datos de entrenamiento, no para revisar en producción las predicciones de baja confianza.
+    c: Es para respuestas de modelos generativos frente a una fuente; no revisa extracciones de Textract.
+    d: Model Monitor vigila modelos alojados en SageMaker AI; no envía casos concretos a revisión humana.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
