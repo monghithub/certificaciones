@@ -100,8 +100,10 @@
   termino: SageMaker Clarify
   alias: [Amazon SageMaker Clarify]
   categoria: servicio
-  definicion: "Herramienta de SageMaker AI para detectar sesgo en los datos y en los modelos y explicar sus predicciones. Ya no está abierta a clientes nuevos; los existentes pueden seguir usándola."
-  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html
+  definicion: "Herramienta de SageMaker AI para detectar sesgo en los datos (por ejemplo, CI y DPL) y en las predicciones (por ejemplo, DI) y explicarlas con SHAP. Ya no está abierta a clientes nuevos; los existentes pueden seguir usándola. AWS indica como sustituto calcular las mismas métricas con bibliotecas abiertas y SHAP, y Amazon Bedrock Evaluations para modelos fundacionales."
+  usar_cuando: "Clientes actuales que necesitan métricas de sesgo y explicaciones de modelos de ML clásico."
+  no_usar_cuando: "Como opción para un proyecto nuevo, o para evaluar modelos fundacionales: Amazon Bedrock Evaluations."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
 
 - id: amazon-transcribe
   termino: Amazon Transcribe
@@ -865,7 +867,7 @@
   termino: Amazon Bedrock Guardrails
   alias: [Bedrock Guardrails, Guardrails]
   categoria: servicio
-  definicion: "Salvaguardas configurables para detectar y filtrar contenido no deseado y proteger información sensible en las entradas y respuestas de los modelos: filtros de contenido, temas denegados, filtros de palabras y de datos sensibles, entre otros."
+  definicion: "Salvaguardas configurables para detectar y filtrar contenido no deseado y proteger información sensible en las entradas y respuestas de los modelos: filtros de contenido, temas denegados, filtros de palabras, filtros de información sensible, comprobación de grounding contextual y Automated Reasoning checks. Se aplica al invocar un modelo de Bedrock o con la API ApplyGuardrail, sin invocar un modelo."
   usar_cuando: "Para aplicar políticas de uso responsable y privacidad a una aplicación de IA generativa."
   no_usar_cuando: "Como sustituto de los permisos IAM o del cifrado de los datos."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
@@ -1274,3 +1276,252 @@
   usar_cuando: "Para medir de forma continua la calidad de un agente: utilidad, elección de herramientas, cumplimiento de la tarea."
   no_usar_cuando: "Para comparar modelos en tareas estándar: Amazon Bedrock Model Evaluation."
   referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations.html
+
+# ------------------------------------------------------------------ módulo 04: IA responsable
+- id: ia-responsable
+  termino: IA responsable
+  alias: [responsible AI]
+  categoria: concepto
+  definicion: "Disciplina de diseñar, desarrollar y usar la IA con el objetivo de maximizar los beneficios y minimizar los riesgos. AWS la concreta en dimensiones: equidad, explicabilidad, privacidad y seguridad, seguridad frente a daños, controlabilidad, veracidad y robustez, gobierno y transparencia."
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+
+- id: explicabilidad
+  termino: explicabilidad
+  alias: [explainability]
+  categoria: concepto
+  definicion: "Dimensión de la IA responsable: entender y evaluar por qué el sistema da una salida concreta, aunque el modelo sea complejo. Se apoya en explicaciones locales y globales (por ejemplo, SHAP), citas de fuentes o trazas de agentes."
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+
+- id: transparencia
+  termino: transparencia
+  alias: [transparency]
+  categoria: concepto
+  definicion: "Dimensión de la IA responsable: permitir que las personas decidan con información sobre su relación con un sistema de IA (que se usa IA, uso previsto, limitaciones, datos). Se documenta con Model Cards, AI Service Cards o fichas de datos."
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+
+- id: interpretabilidad
+  termino: interpretabilidad
+  alias: [interpretability]
+  categoria: concepto
+  definicion: "Grado en que se entiende cómo funciona un modelo por dentro sin herramientas adicionales. Los modelos simples (regresión lineal, árbol de decisión) son más interpretables; los complejos suelen rendir más pero necesitan explicaciones a posteriori."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/overview.html
+
+- id: veracidad
+  termino: veracidad
+  alias: [veracity, veracidad y robustez]
+  categoria: concepto
+  definicion: "Dimensión de la IA responsable: que las salidas sean factualmente correctas, también ante entradas inesperadas o maliciosas (robustez). En IA generativa se protege con RAG y citas, comprobaciones de grounding y Automated Reasoning checks."
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+
+- id: robustez
+  termino: robustez
+  alias: [robustness]
+  categoria: concepto
+  definicion: "Capacidad de un sistema de IA de dar salidas correctas ante entradas esperadas e inesperadas: erratas, sinónimos, otro idioma o ataques. Bedrock Evaluations la mide perturbando ligeramente los prompts y comparando las respuestas."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-report-programmatic.html
+
+- id: controlabilidad
+  termino: controlabilidad
+  alias: [controllability]
+  categoria: concepto
+  definicion: "Dimensión de la IA responsable: disponer de mecanismos para supervisar y dirigir el comportamiento del sistema, por ejemplo supervisión humana, límites de actuación de un agente o la posibilidad de corregir o detener una acción."
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+
+- id: inclusividad
+  termino: inclusividad
+  alias: [inclusivity, inclusión]
+  categoria: concepto
+  definicion: "Que el sistema funcione bien para todos los grupos que lo van a usar, incluidos los minoritarios y las personas con necesidades de accesibilidad. Empieza por conjuntos de datos que los representen."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html
+
+- id: conjunto-equilibrado
+  termino: conjunto de datos equilibrado
+  alias: [balanced dataset, datos equilibrados]
+  categoria: concepto
+  definicion: "Conjunto en el que cada grupo y cada clase tienen suficientes ejemplos para aprender y medir. Los huecos se cubren recogiendo más datos o con muestreo estratificado."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html
+
+- id: ficha-de-datos
+  termino: ficha de datos
+  alias: [datasheet, datasheets]
+  categoria: concepto
+  definicion: "Documento vivo que describe un conjunto de datos: uso previsto y no previsto, fuentes, forma de recogida, etiquetado, distribución y sesgos o limitaciones conocidos."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp04-bp05.html
+
+- id: desequilibrio-de-clases
+  termino: desequilibrio de clases
+  alias: [class imbalance]
+  categoria: metrica
+  definicion: "Métrica de sesgo previa al entrenamiento: CI = (na − nd) / (na + nd), con na y nd el número de miembros de cada grupo. Va de −1 a 1; cerca de 0 indica grupos equilibrados."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html
+
+- id: diferencia-en-proporciones-de-etiquetas
+  termino: diferencia en las proporciones de etiquetas
+  alias: [difference in proportions of labels, DPL]
+  categoria: metrica
+  definicion: "Métrica de sesgo previa al entrenamiento: DPL = qa − qd, la diferencia entre la proporción de resultados positivos observados en un grupo y en otro. Un modelo entrenado con un DPL alto tiende a reproducirlo."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-true-label-imbalance.html
+
+- id: impacto-dispar
+  termino: impacto dispar
+  alias: [disparate impact]
+  categoria: metrica
+  definicion: "Métrica de sesgo posterior al entrenamiento: DI = q'd / q'a, la proporción de predicciones positivas del grupo desfavorecido entre la del favorecido. 1 indica paridad; por debajo de 1, el grupo d recibe menos resultados positivos."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-di.html
+
+- id: analisis-por-subgrupos
+  termino: análisis por subgrupos
+  alias: [subgroup analysis]
+  categoria: tecnica
+  definicion: "Calcular las mismas métricas (exactitud, precisión, recall, tasa de aprobación) para cada grupo de personas, incluidos los interseccionales, y compararlas con un umbral aceptable para detectar sesgo que la media oculta."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html
+
+- id: auditoria-humana
+  termino: auditoría humana
+  alias: [human audit, auditorías humanas]
+  categoria: tecnica
+  definicion: "Revisión por personas, idealmente independientes del equipo y con sus propios datos de evaluación, de los aspectos críticos o subjetivos de un sistema de IA (seguridad, sesgo, experiencia de usuario) antes de lanzarlo y de forma periódica."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raier01-bp02.html
+
+- id: calidad-de-etiquetas
+  termino: calidad de las etiquetas
+  alias: [label quality]
+  categoria: tecnica
+  definicion: "Control de las etiquetas de un conjunto de datos: formación de los anotadores, acuerdo entre anotadores, ejemplos con respuesta conocida, búsqueda de sesgos de los anotadores y contraste de las etiquetas sintéticas con el juicio humano."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp03.html
+
+- id: shap
+  termino: SHAP
+  alias: [SHapley Additive exPlanations, valores de Shapley]
+  categoria: tecnica
+  definicion: "Método de explicación a posteriori, independiente del modelo, basado en los valores de Shapley de la teoría de juegos cooperativos: asigna a cada variable su contribución a una predicción concreta (explicación local) o al modelo en general (global)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html
+
+- id: supervision-humana
+  termino: supervisión humana
+  alias: [human oversight]
+  categoria: tecnica
+  definicion: "Revisión o decisión de una persona en los puntos donde un error tiene consecuencias graves o donde su experiencia aporta más. La política de IA responsable de AWS la exige en las decisiones con consecuencias para las personas."
+  referencia: https://aws.amazon.com/ai/responsible-ai/policy/
+
+- id: mecanismo-de-feedback
+  termino: mecanismo de feedback
+  alias: [user-feedback mechanism, feedback de los usuarios]
+  categoria: tecnica
+  definicion: "Forma de que los usuarios valoren o notifiquen respuestas incorrectas o inadecuadas, unida a un circuito de revisión periódica que convierte ese feedback en mejoras del sistema (guardrails, prompts, datos)."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon02-bp01.html
+
+- id: diseno-centrado-en-las-personas
+  termino: diseño centrado en las personas
+  alias: [human-centered design]
+  categoria: concepto
+  definicion: "Diseñar el sistema de IA a partir de quién lo usa y qué necesita entender: transparencia de las decisiones, explicaciones adaptadas, supervisión humana donde hay consecuencias, feedback de los usuarios y accesibilidad."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp04.html
+
+- id: decisiones-con-consecuencias
+  termino: decisiones con consecuencias
+  alias: [consequential decisions]
+  categoria: concepto
+  definicion: "Decisiones que afectan a derechos, salud o seguridad de las personas (diagnóstico médico, crédito, empleo, vivienda, prestaciones, asesoramiento legal o financiero). Según la política de AWS, exigen evaluar riesgos e implantar supervisión humana y pruebas."
+  referencia: https://aws.amazon.com/ai/responsible-ai/policy/
+
+- id: indemnizacion-de-propiedad-intelectual
+  termino: indemnización de propiedad intelectual
+  alias: [IP indemnity]
+  categoria: concepto
+  definicion: "AWS ofrece una indemnización sin límite frente a reclamaciones de terceros por derechos de autor sobre la salida de los modelos de Amazon y de otros servicios de IA generativa enumerados en sus condiciones de servicio, siempre que el cliente use el servicio de forma responsable."
+  referencia: https://aws.amazon.com/bedrock/faqs/
+
+- id: filtros-de-contenido
+  termino: filtros de contenido
+  alias: [content filters, filtro de contenido]
+  categoria: tecnica
+  definicion: "Salvaguarda de Bedrock Guardrails que detecta contenido dañino en texto o imágenes por categorías (odio, insultos, sexual, violencia, conducta indebida y ataque de prompt), con una intensidad configurable para cada una."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-content-filters.html
+
+- id: temas-denegados
+  termino: temas denegados
+  alias: [denied topics]
+  categoria: tecnica
+  definicion: "Salvaguarda de Bedrock Guardrails que bloquea los temas que el cliente define en lenguaje natural como no deseados para su aplicación, en las preguntas y en las respuestas."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-denied-topics.html
+
+- id: filtros-de-palabras
+  termino: filtros de palabras
+  alias: [word filters]
+  categoria: tecnica
+  definicion: "Salvaguarda de Bedrock Guardrails que bloquea palabras o frases exactas (sin distinguir mayúsculas): una lista predefinida de blasfemias o términos propios, como nombres de la competencia. No tiene coste."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-word-filters.html
+
+- id: filtros-de-informacion-sensible
+  termino: filtros de información sensible
+  alias: [sensitive information filters]
+  categoria: tecnica
+  definicion: "Salvaguarda de Bedrock Guardrails que detecta datos personales (PII) y patrones propios con expresiones regulares en las entradas y respuestas, y bloquea el mensaje o enmascara el dato."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
+
+- id: pii
+  termino: PII
+  alias: [datos personales, personally identifiable information]
+  categoria: concepto
+  definicion: "Información de identificación personal: datos que identifican a una persona, como nombre, dirección, correo, teléfono, número de documento o de tarjeta."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
+
+- id: contextual-grounding-check
+  termino: contextual grounding check
+  alias: [comprobación de grounding contextual, contextual grounding checks]
+  categoria: tecnica
+  definicion: "Salvaguarda de Bedrock Guardrails que detecta alucinaciones: puntúa si la respuesta se basa en la fuente de referencia (grounding) y si responde a la pregunta (relevancia), y bloquea las que quedan por debajo del umbral (0 a 0,99). Para resúmenes, paráfrasis y preguntas y respuestas; no para chat conversacional."
+  usar_cuando: "En RAG o resúmenes, para bloquear respuestas que añaden datos que no están en la fuente."
+  no_usar_cuando: "Para comprobar respuestas contra reglas lógicas de negocio: Automated Reasoning checks."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html
+
+- id: automated-reasoning-checks
+  termino: Automated Reasoning checks
+  alias: [comprobaciones de razonamiento automatizado]
+  categoria: tecnica
+  definicion: "Salvaguarda de Bedrock Guardrails que valida con lógica formal si una respuesta es coherente con una política de reglas definida por el cliente, explica por qué y señala supuestos no declarados. Solo inglés (EE. UU.), sin streaming y sin protección frente a la inyección de prompts."
+  usar_cuando: "Sectores regulados o reglas complejas (elegibilidad, prestaciones, normativa interna) donde hay que demostrar que la respuesta cumple las reglas."
+  no_usar_cuando: "Para detectar contenido dañino, temas fuera de alcance o ataques de prompt: filtros de contenido y temas denegados."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html
+
+- id: amazon-sagemaker-model-cards
+  termino: Amazon SageMaker Model Cards
+  alias: [SageMaker Model Cards, Model Cards, model card]
+  categoria: servicio
+  definicion: "Documentación de un modelo de ML en un único sitio: uso previsto y no previsto, calificación de riesgo (desconocido, bajo, medio, alto), detalles de entrenamiento, métricas y resultados de evaluación. Cada cambio crea una versión inmutable; se exporta a PDF y se integra con el Model Registry."
+  usar_cuando: "Para gobierno y auditoría: comunicar a riesgos, cumplimiento o reguladores para qué sirve un modelo y cómo se evaluó."
+  no_usar_cuando: "Para detectar sesgo o explicar predicciones: documenta, no mide."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
+
+- id: aws-ai-service-cards
+  termino: AWS AI Service Cards
+  alias: [AI Service Cards, AI Service Card]
+  categoria: servicio
+  definicion: "Fichas que publica AWS sobre sus servicios y modelos de IA (por ejemplo, Amazon Nova o Bedrock Guardrails) con los casos de uso previstos, las limitaciones, las decisiones de diseño responsable y las buenas prácticas de rendimiento."
+  usar_cuando: "Para conocer el uso previsto y las limitaciones de un servicio o modelo de AWS antes de adoptarlo."
+  no_usar_cuando: "Para documentar un modelo propio: SageMaker Model Cards."
+  referencia: https://aws.amazon.com/ai/responsible-ai/resources/
+
+- id: amazon-augmented-ai
+  termino: Amazon Augmented AI
+  alias: [Amazon A2I, A2I]
+  categoria: servicio
+  definicion: "Servicio para añadir revisión humana a predicciones de ML con baja confianza o a muestras aleatorias (Textract, Rekognition, modelos propios). Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
+  usar_cuando: "Clientes actuales que necesitan revisión humana de predicciones de baja confianza."
+  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
+
+- id: responsible-ai-lens
+  termino: Responsible AI Lens
+  alias: [AWS Well-Architected Responsible AI Lens]
+  categoria: concepto
+  definicion: "Guía del AWS Well-Architected Framework (noviembre de 2025) con buenas prácticas para diseñar, desarrollar y operar de forma responsable sistemas de IA para casos de uso concretos, organizada en ocho áreas del ciclo de vida."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+
+- id: sostenibilidad-de-la-ia
+  termino: sostenibilidad de la IA
+  alias: [sostenibilidad]
+  categoria: concepto
+  definicion: "Reducir el impacto ambiental de una carga de IA: comprobar si la IA generativa hace falta, elegir el modelo del tamaño justo, personalizar de forma eficiente y usar recursos que se ajustan a la demanda (serverless, autoescalado, chips eficientes)."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html
