@@ -99,6 +99,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
   - La consola se presenta como «Certificaciones». **Cambio incompatible:** la imagen Docker pasa a llamarse `certificaciones-consola` (`docker compose up -d --build` la crea; la antigua `aif-c01-consola` puede borrarse; los datos no cambian).
   - CI: se excluyen de lychee los enlaces locales de `docs/consola.md`.
 
+### Cambiado
+
+- Licencia confirmada por el responsable (2026-10-16): MIT para el código y CC BY 4.0 para el contenido. `LICENSE` deja de estar pendiente de confirmación y enumera también `app/`, `curso/`, `migrations/` y `Dockerfile` como código, y `docs/` como contenido ([issue #13](https://github.com/monghithub/certificaciones/issues/13)).
+
 ### Corregido
 
 - Consola: la solución y la respuesta del estudiante de las preguntas de ordenación y emparejamiento se mostraban en formato técnico (`[['1', 'e'], …]`). Ahora se muestran como lista con el texto de cada opción (posición, o elemento → opción), también en opción y respuesta múltiple y en la página de resultados (2026-10-15).
@@ -120,6 +124,5 @@ Matices y diferencias:
 
 ### Decisiones pendientes de revisión
 
-- Licencia propuesta: MIT (código) y CC BY 4.0 (contenido); titular provisional "Contribuidores del curso AIF-C01" ([issue #13](https://github.com/monghithub/certificaciones/issues/13)).
 - Formato de `ordering` y `matching` en el banco de preguntas (ver `AGENTS.md`; [issue #14](https://github.com/monghithub/certificaciones/issues/14)).
 - Seguimiento en issues (2026-10-16): los cinco marcadores `PENDIENTE DE VERIFICAR` ([#8](https://github.com/monghithub/certificaciones/issues/8) a [#12](https://github.com/monghithub/certificaciones/issues/12), etiqueta `verificar`), la retirada de los usuarios de prueba de la consola ([#15](https://github.com/monghithub/certificaciones/issues/15)) y la publicación de `aif-c01-v1.0.0` ([#16](https://github.com/monghithub/certificaciones/issues/16)), que depende de las anteriores. Cada marcador enlaza su issue.

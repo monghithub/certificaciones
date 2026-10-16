@@ -1,8 +1,9 @@
-Licencia del repositorio (pendiente de confirmación por el revisor)
+Licencia del repositorio
 
 Copyright (c) 2026 Contribuidores del curso AIF-C01
 
-1. Código (directorios scripts/, tests/, .github/ y ficheros de configuración):
+1. Código (directorios app/, curso/, migrations/, scripts/, tests/, .github/,
+   Dockerfile y ficheros de configuración):
    licencia MIT.
 
    Se concede permiso, libre de cargos, a cualquier persona que obtenga una copia
@@ -24,7 +25,8 @@ Copyright (c) 2026 Contribuidores del curso AIF-C01
    MODO, DERIVADA DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTRO TIPO
    DE ACCIONES EN EL SOFTWARE.
 
-2. Contenido del curso (módulos, glosario, chuleta, README):
+2. Contenido de los cursos (módulos, glosario, chuleta, README) y documentación
+   (docs/):
    Creative Commons Atribución 4.0 Internacional (CC BY 4.0),
    https://creativecommons.org/licenses/by/4.0/
 
