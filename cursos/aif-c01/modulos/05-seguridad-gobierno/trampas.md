@@ -17,6 +17,7 @@
 - **Glue Data Catalog frente a Lake Formation.** El catálogo **describe** los datos (ubicación, esquema); Lake Formation **controla quién accede** a ellos con detalle.
 - **Borrar un dato del modelo es fácil.** Si un dato personal se usó para ajustar el modelo, la forma eficaz de quitarlo es reentrenar sin él. Mejor no meter PII en el entrenamiento y aportarla en la inferencia con RAG.
 - **Temperatura 0 elimina las alucinaciones.** Hace la respuesta menos variable, no más veraz. Contra las alucinaciones: RAG con citas, *grounding check*, Automated Reasoning, validación y confianza.
+- ***Grounding* check para un chatbot.** La comprobación de *grounding* contextual admite resúmenes, paráfrasis y preguntas y respuestas sobre una fuente; el chat conversacional no está admitido.
 - ***Grounding* alto basta.** La comprobación de Guardrails mide **dos** cosas: si la respuesta se basa en la fuente (*grounding*) y si responde a la pregunta (relevancia). Puede fallar por cualquiera de las dos.
 
 ## Gobierno y cumplimiento
@@ -24,6 +25,7 @@
 - **Si Guardrails enmascara la PII, los registros quedan limpios.** El enmascarado solo afecta a la entrada del modelo y a su respuesta; el registro de invocaciones guarda la petición original. Hay que proteger los registros (protección de datos de CloudWatch Logs, permisos, retención).
 - **Config frente a CloudTrail.** Config: **cómo está configurado** un recurso y cómo cambió. CloudTrail: **quién hizo** una llamada a la API y cuándo.
 - **CloudTrail guarda los *prompts*.** CloudTrail registra la llamada a `InvokeModel`, no su contenido. El texto de las peticiones y respuestas se guarda con el **registro de invocaciones de Bedrock**, desactivado por defecto.
+- **Todo lo que hace Bedrock aparece en el historial de CloudTrail.** `InvokeModel` y `Converse` sí (eventos de administración); las consultas a Knowledge Bases, agentes y flujos y `ApplyGuardrail` son eventos de datos y necesitan un *trail* configurado.
 - **Artifact certifica mi aplicación.** Artifact ofrece los informes de cumplimiento **de AWS**; el cumplimiento de la aplicación del cliente es responsabilidad del cliente.
 - **Inspector frente a Trusted Advisor.** Inspector **escanea vulnerabilidades** de *software*; Trusted Advisor da **recomendaciones** de buenas prácticas (coste, seguridad, límites).
 - **Audit Manager para un proyecto nuevo.** Ya no admite clientes nuevos.

@@ -257,9 +257,9 @@
   objetivo: 4.1.2
   tipo: multiple_choice
   dificultad: media
-  enunciado: Una aseguradora tiene un asistente RAG con Amazon Bedrock Knowledge Bases. En las pruebas, algunas
-    respuestas añaden coberturas que no aparecen en los fragmentos recuperados. Quieren bloquear esas respuestas
-    antes de que lleguen al cliente. ¿Qué salvaguarda deben configurar?
+  enunciado: Una aseguradora tiene un servicio de preguntas y respuestas sobre sus pólizas con Amazon Bedrock Knowledge
+    Bases. En las pruebas, algunas respuestas añaden coberturas que no aparecen en los fragmentos recuperados. Quieren
+    bloquear esas respuestas antes de que lleguen al cliente. ¿Qué salvaguarda deben configurar?
   opciones:
   - id: a
     texto: Un filtro de palabras con los nombres de las coberturas inexistentes
@@ -1292,8 +1292,9 @@
   objetivo: 4.1.7
   tipo: multiple_response
   dificultad: media
-  enunciado: Una empresa tiene un asistente RAG en Amazon Bedrock y quiere detectar respuestas que no se basan en
-    sus documentos, tanto antes del lanzamiento como en producción. ¿Qué DOS herramientas le ayudan? (Elige DOS.)
+  enunciado: Una empresa tiene un servicio RAG de preguntas y respuestas en Amazon Bedrock y quiere detectar respuestas
+    que no se basan en sus documentos, tanto antes del lanzamiento como en producción. ¿Qué DOS herramientas le
+    ayudan? (Elige DOS.)
   opciones:
   - id: a
     texto: Una evaluación de RAG en Bedrock Evaluations (fidelidad)

@@ -1585,7 +1585,7 @@
   termino: registro de invocaciones de modelos
   alias: [model invocation logging, registro de invocaciones]
   categoria: tecnica
-  definicion: "Funcionalidad de Amazon Bedrock que guarda la petición, la respuesta y los metadatos de cada invocación (Converse, InvokeModel y sus variantes) en CloudWatch Logs o en S3 de la misma cuenta y Región. Está desactivada por defecto y los registros se conservan hasta que se borra la configuración."
+  definicion: "Funcionalidad de Amazon Bedrock que guarda la petición, la respuesta y los metadatos de cada invocación (Converse, InvokeModel y sus variantes) en CloudWatch Logs o en S3 de la misma cuenta y Región. Está desactivada por defecto; cuánto se conservan los registros lo decide la retención del destino. El enmascarado de PII de Guardrails no se aplica a estos registros."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
 
 - id: aws-lake-formation
@@ -1672,7 +1672,7 @@
   termino: Amazon S3 Glacier
   alias: [S3 Glacier]
   categoria: servicio
-  definicion: "Clases de almacenamiento de Amazon S3 de bajo coste para archivar datos que se consultan poco y deben conservarse mucho tiempo."
+  definicion: "Clases de almacenamiento de archivo de Amazon S3, de bajo coste, para datos que se consultan poco y deben conservarse mucho tiempo. (El servicio original de bóvedas, Amazon Glacier, es distinto.)"
   usar_cuando: "Para conservar años datos de entrenamiento o registros que exige la normativa."
   no_usar_cuando: "Para datos que se consultan a menudo o con baja latencia."
   referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
@@ -1688,7 +1688,7 @@
   termino: Amazon GuardDuty
   alias: [GuardDuty]
   categoria: servicio
-  definicion: "Servicio de detección de amenazas que analiza de forma continua registros y datos de la cuenta con inteligencia de amenazas y ML para encontrar actividad sospechosa, como credenciales comprometidas o exfiltración de datos."
+  definicion: "Servicio de detección de amenazas que analiza de forma continua registros y datos de la cuenta con inteligencia de amenazas y ML para encontrar actividad sospechosa, como credenciales comprometidas o exfiltración de datos. Está fuera del alcance del examen AIF-C01: basta reconocerlo."
   referencia: https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html
 
 - id: citacion-de-fuentes

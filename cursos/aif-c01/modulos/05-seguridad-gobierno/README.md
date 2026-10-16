@@ -43,7 +43,7 @@ Cuanto más gestionado es el servicio, menos tareas de seguridad recaen en el cl
 **Privacidad de los datos en Amazon Bedrock** (preguntas frecuentes y guía de usuario):
 
 - Las entradas y salidas **no se comparten con los proveedores de modelos**, y ni AWS ni los proveedores las usan para **entrenar** modelos. Los modelos se despliegan en cuentas de Bedrock a las que los proveedores no tienen acceso.
-- Para la detección de abusos, algunos modelos concretos retienen el tráfico hasta 30 días (lo detalla la página de detección de abusos), y el cliente controla la **retención de datos** por Región, incluido un modo de retención cero (*zero data retention*).
+- Para la detección de abusos, algunos modelos concretos retienen el tráfico hasta 30 días (lo detalla la página de detección de abusos); para el resto no cambia nada. Además, el cliente puede fijar por Región, mediante la API, un modo de **retención cero** (*zero data retention*): con él, Bedrock rechaza los modelos que exigen retener datos.
 
 Servicios y funcionalidades que cita la guía:
 
@@ -52,7 +52,7 @@ Servicios y funcionalidades que cita la guía:
 | **IAM: roles, políticas y permisos** | Quién puede invocar qué modelo, crear qué *Knowledge Base* o borrar qué *guardrail*. Bedrock usa **roles de servicio** para acceder a datos en nombre del cliente (por ejemplo, una Knowledge Base lee S3). Principio de **mínimo privilegio** |
 | **Cifrado** | En tránsito con TLS (Bedrock exige TLS 1.2 y recomienda 1.3). En reposo con **AWS KMS** y claves del cliente para modelos personalizados, trabajos de ajuste, agentes, ingesta de Knowledge Bases y evaluaciones |
 | **Amazon Macie** | Descubre datos sensibles (PII, credenciales) en los *buckets* de S3 con ML y patrones, y avisa de *buckets* expuestos. Útil antes de usar un *bucket* para ajustar un modelo o como fuente de una Knowledge Base |
-| **AWS PrivateLink** | *Endpoints* de interfaz de VPC para llegar a Bedrock (`bedrock`, `bedrock-runtime`, `bedrock-agent`, `bedrock-agent-runtime`) **sin pasar por Internet**, sin pasarela de Internet ni NAT, con políticas de *endpoint* para limitar el acceso |
+| **AWS PrivateLink** | *Endpoints* de interfaz de VPC para llegar a Bedrock (`bedrock`, `bedrock-runtime`, `bedrock-mantle`, `bedrock-agent`, `bedrock-agent-runtime`) **sin pasar por Internet**, sin pasarela de Internet ni NAT, con políticas de *endpoint* para limitar el acceso |
 | **Modelo de responsabilidad compartida** | Delimita qué protege AWS y qué protege el cliente |
 | **Amazon Bedrock AgentCore Identity** | Gestión de identidades y credenciales **para agentes**: los agentes y sus herramientas acceden a recursos de AWS y de terceros **en nombre de los usuarios**, con autenticación, autorización y trazas de auditoría |
 | **Policy in AgentCore** | Políticas **deterministas** (en lenguaje Cedar o redactadas en lenguaje natural) que se evalúan en el AgentCore Gateway **antes** de permitir que un agente use una herramienta: qué puede hacer cada agente y con qué límites |
@@ -181,7 +181,7 @@ Las buenas prácticas que cita la guía:
 | **Control de acceso a los datos** | Cada persona o sistema accede solo a los datos que necesita | **IAM**, políticas de *bucket* de S3 y **Lake Formation** (permisos por columna, fila y celda) |
 | **Integridad de los datos** | Los datos no se alteran sin control: versiones, registros y protección frente al **envenenamiento** | Versionado de S3, CloudTrail, permisos de escritura mínimos |
 
-*Ejemplo resuelto de minimización y seudonimización* (adaptado del *Responsible AI Lens*): el registro «Juan Pérez, diabético, calle Mayor 12» se transforma en «Paciente_2384, afección_tipo_2, zona_14». Mantiene el valor analítico (tipo de afección, zona) y deja de identificar a la persona.
+*Ejemplo resuelto de minimización y seudonimización* (adaptado del *Responsible AI Lens*): el registro «Juan Pérez, diabético, calle Mayor 12» se transforma en «Paciente_2384, afección_tipo_2, zona_14». Mantiene el valor analítico (tipo de afección, zona) y reduce mucho la posibilidad de identificar a la persona. Ojo: según el RGPD, los datos seudonimizados siguen siendo datos personales; solo los anonimizados de forma irreversible dejan de serlo.
 
 Una idea que conviene llevar al examen: **es más seguro no meter datos personales en el modelo** que intentar sacarlos después. La guía de AWS sobre la *AI Security Scoping Matrix* recuerda que la única forma totalmente eficaz de eliminar un dato de un modelo es quitarlo del conjunto de entrenamiento y entrenar una versión nueva; por eso recomienda añadir los datos personales o cambiantes **en la inferencia** (RAG o agentes con permisos) en lugar de ajustarlos dentro del modelo.
 
@@ -192,7 +192,7 @@ La guía enumera las consideraciones que hay que reconocer. Las de la columna iz
 | Consideración | Qué se protege | Medidas típicas en AWS |
 |---|---|---|
 | Seguridad de las aplicaciones | La aplicación que llama al modelo | Autenticación de usuarios, validación de entradas, mínimo privilegio |
-| Detección de amenazas | Actividad sospechosa en la cuenta | Amazon GuardDuty (credenciales comprometidas, comportamiento anómalo) |
+| Detección de amenazas | Actividad sospechosa en la cuenta | Servicios de detección de amenazas como Amazon GuardDuty (fuera del alcance del examen: basta reconocerlo) |
 | Gestión de vulnerabilidades | *Software* con fallos conocidos | **Amazon Inspector** (EC2, imágenes de contenedores, Lambda) |
 | Protección de la infraestructura | Red y recursos | VPC, grupos de seguridad, **PrivateLink** |
 | **Inyección de *prompts*** (IA) | Que el usuario o un documento cambien las instrucciones del modelo | Filtro de ataques de *prompt* de Guardrails, separar instrucciones y datos, mínimo privilegio para los agentes |
@@ -204,7 +204,7 @@ La guía enumera las consideraciones que hay que reconocer. Las de la columna iz
 
 Matices que separan opciones parecidas:
 
-- **CloudTrail frente al registro de invocaciones.** CloudTrail registra **quién llamó a qué API y cuándo** (Bedrock registra `InvokeModel` y `Converse` como eventos de administración). El **registro de invocaciones de modelos** de Bedrock guarda **el contenido**: la petición, la respuesta y sus metadatos, en CloudWatch Logs o S3. Está **desactivado por defecto**.
+- **CloudTrail frente al registro de invocaciones.** CloudTrail registra **quién llamó a qué API y cuándo**. Bedrock registra `InvokeModel` y `Converse` como eventos de administración, que aparecen en el historial de eventos sin configurar nada; en cambio, las consultas a Knowledge Bases (`Retrieve`, `RetrieveAndGenerate`), a agentes (`InvokeAgent`), a flujos (`InvokeFlow`) y `ApplyGuardrail` son **eventos de datos**: solo se registran con un *trail* configurado con selectores avanzados, y tienen coste. El **registro de invocaciones de modelos** de Bedrock guarda **el contenido**: la petición, la respuesta y sus metadatos, en CloudWatch Logs o S3. Está **desactivado por defecto**.
 - **Los modelos fundacionales no tienen control de acceso a los datos que contienen o reciben.** La *AI Security Scoping Matrix* lo subraya: el control de acceso se aplica **antes** de añadir datos al contexto de la petición, en la capa de aplicación (por ejemplo, filtrando por permisos en el RAG).
 - **Tipos de inyección de *prompts*** que describe la guía prescriptiva de AWS: cambio de personaje, extracción de la plantilla del *prompt*, ignorar la plantilla, alternar idiomas o caracteres de escape, extraer el historial de la conversación o aumentar la plantilla con instrucciones nuevas.
 - **El enmascarado de PII de Guardrails no llega a los registros.** Solo se aplica a lo que entra al modelo y a lo que devuelve. El campo de entrada del registro de invocaciones en CloudWatch Logs guarda la petición original, y la traza de Guardrails devuelve el valor detectado. Para proteger los registros se usa la protección de datos de CloudWatch Logs y se limita el acceso a ellos.
@@ -215,6 +215,7 @@ Matices que separan opciones parecidas:
 Una **alucinación** es una respuesta plausible pero falsa o no respaldada. Las técnicas que cita la guía:
 
 - ***Grounding* con RAG:** el modelo responde a partir de documentos recuperados, con **citas**, en lugar de su memoria.
+- **Comprobación de *grounding* contextual** de Guardrails: está pensada para resúmenes, paráfrasis y preguntas y respuestas sobre una fuente (no para chat conversacional) y necesita tres piezas: la fuente, la pregunta y la respuesta.
 - **Validación de la salida:** comprobar la respuesta antes de usarla: contra la fuente (*contextual grounding check*), contra reglas lógicas (**Automated Reasoning checks**), contra un formato o esquema esperado, o con revisión humana.
 - **Puntuación de confianza** (*confidence scoring*): asignar a cada respuesta una puntuación y actuar según un umbral (entregar, avisar, derivar a una persona o no responder). La comprobación de *grounding* de Guardrails da puntuaciones de *grounding* y de relevancia; muchos servicios de IA de AWS (Textract, Comprehend, Rekognition) devuelven una confianza con cada predicción.
 
@@ -276,12 +277,12 @@ NOK:
 | **AWS Config** | Inventario de la configuración de los recursos, su historial y su evaluación con **reglas** (y paquetes de conformidad) | Comprobar que los *buckets* con datos de entrenamiento están cifrados y no son públicos, y ver cuándo cambió una configuración |
 | **Amazon Inspector** | **Gestión de vulnerabilidades**: escanea de forma continua EC2, imágenes de contenedores en ECR y funciones Lambda | Detectar una biblioteca vulnerable en el contenedor de inferencia |
 | **AWS Artifact** | Descarga bajo demanda de **informes de cumplimiento de AWS** (SOC, ISO, PCI) y gestión de acuerdos | Entregar al auditor el informe SOC de la infraestructura de AWS |
-| **AWS CloudTrail** | Registro de **la actividad de la API**: quién hizo qué, cuándo y desde dónde. El historial de eventos guarda 90 días de eventos de administración | Saber quién borró un *guardrail* o quién invocó un modelo |
+| **AWS CloudTrail** | Registro de **la actividad de la API**: quién hizo qué, cuándo y desde dónde. El historial de eventos guarda 90 días de eventos de administración; los eventos de datos y la conservación más larga requieren un *trail* | Saber quién borró un *guardrail* o quién invocó un modelo |
 | **AWS Trusted Advisor** | **Recomendaciones** para ahorrar costes, mejorar el rendimiento y la disponibilidad y cerrar brechas de seguridad. El plan de soporte Basic incluye los límites de servicio y algunas comprobaciones de seguridad y tolerancia a fallos | Avisar de un *bucket* con permisos abiertos o de una cuota a punto de agotarse |
 | **Amazon CloudWatch** | Métricas, registros y alarmas | Alarma si sube la tasa de errores o de bloqueos de un *guardrail* |
 | **AWS Well-Architected Tool** | Revisar una carga de trabajo frente a las buenas prácticas y a las lentes del catálogo oficial de AWS | Revisar un asistente de IA generativa con la lente correspondiente |
 | **AWS Audit Manager** | Recopila evidencias para auditorías con marcos predefinidos | **Ya no admite clientes nuevos**; no es la respuesta para un proyecto nuevo |
-| **Gobierno de ML en SageMaker AI** | Role Manager (permisos de mínimo privilegio por perfil), Model Cards y Model Dashboard | Dar a los científicos de datos solo los permisos que necesitan |
+| **Gobierno de ML en SageMaker AI** | Model Cards y Model Dashboard (visión centralizada de los modelos; sus métricas de monitorización dependen de Model Monitor). Role Manager **ya no admite clientes nuevos**: AWS remite a roles y políticas de IAM, IAM Identity Center e infraestructura como código | Documentar y localizar los modelos de la cuenta |
 
 ```mermaid
 flowchart LR
@@ -329,7 +330,7 @@ TA:
 
 | Estrategia | Qué decide | Ejemplo en AWS |
 |---|---|---|
-| **Ciclo de vida** (*data lifecycle*) | Qué pasa con los datos desde que se crean hasta que se borran | **S3 Lifecycle**: mover a una clase más barata (por ejemplo, S3 Glacier) y borrar al vencer el plazo |
+| **Ciclo de vida** (*data lifecycle*) | Qué pasa con los datos desde que se crean hasta que se borran | **S3 Lifecycle**: mover a una clase más barata (por ejemplo, las clases de archivo S3 Glacier) y borrar al vencer el plazo |
 | **Registro** (*logging*) | Qué se registra de cada acceso y cada interacción | CloudTrail, registro de invocaciones de Bedrock |
 | **Residencia** (*residency*) | En qué Región o geografía se almacenan y procesan los datos | Elegir la Región; con inferencia entre Regiones, los perfiles **geográficos** mantienen el procesamiento dentro de una geografía (EE. UU., UE…), mientras que el **global** puede usar cualquier Región comercial admitida |
 | **Monitorización** (*monitoring*) | Qué métricas se vigilan y con qué alarmas | CloudWatch |
@@ -342,7 +343,7 @@ Otras ideas que el examen puede plantear:
 
 - **Derecho de supresión** (RGPD): si los datos de una persona se usaron para ajustar un modelo, borrarlos puede obligar a reentrenar. Es otro motivo para usar RAG con datos personales en lugar de ajustar.
 - **Clasificación del modelo:** la *AI Security Scoping Matrix* recomienda clasificar un modelo ajustado con el **nivel de sensibilidad más alto** de los datos usados para entrenarlo y limitar quién puede invocarlo.
-- **El registro de invocaciones de Bedrock** guarda los registros hasta que se borra la configuración: hay que fijar la retención en el destino (CloudWatch Logs o S3).
+- **El registro de invocaciones de Bedrock** envía registros mientras exista su configuración; cuánto se conservan lo decide la retención del destino (CloudWatch Logs, indefinida por defecto, o S3 Lifecycle).
 
 #### Procesos de gobierno
 

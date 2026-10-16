@@ -214,7 +214,7 @@ Otras herramientas de AWS para la IA responsable, que también aparecen en la gu
 | **Amazon Augmented AI (A2I)** | Revisión humana de predicciones con baja confianza | **Cerrado a clientes nuevos** |
 | **Amazon SageMaker Ground Truth** | Etiquetado y *feedback* humano | **Cerrado a clientes nuevos** |
 | **Amazon SageMaker Model Cards** | Documentar el uso previsto, el riesgo y la evaluación de un modelo | Disponible (ver [Herramientas de transparencia y explicabilidad](#herramientas-de-transparencia-y-explicabilidad)) |
-| **Gobierno de ML de SageMaker AI** | Role Manager (permisos de mínimo privilegio por perfil), Model Cards y Model Dashboard (visión centralizada de los modelos) | Disponible; se amplía en el módulo 05 |
+| **Gobierno de ML de SageMaker AI** | Model Cards y Model Dashboard (visión centralizada de los modelos); Role Manager (permisos por perfil) | Model Cards y Model Dashboard, disponibles; Role Manager **cerrado a clientes nuevos** (AWS remite a roles de IAM e IAM Identity Center). Se amplía en el módulo 05 |
 
 **Cómo leer las preguntas con estas herramientas.** La guía del examen (versión 1.1) mantiene SageMaker AI dentro de alcance, y Clarify, Model Monitor, A2I y Ground Truth son las respuestas clásicas para detectar sesgo en datos o modelos de ML clásico, explicar sus predicciones, vigilar su deriva o añadir revisión humana. Si la pregunta pide eso y **no** dice que el cliente sea nuevo en el servicio, siguen siendo la respuesta esperada. Si el enunciado deja claro que es un cliente nuevo o que se trata de un **modelo fundacional**, piensa en Bedrock Evaluations y Guardrails.
 

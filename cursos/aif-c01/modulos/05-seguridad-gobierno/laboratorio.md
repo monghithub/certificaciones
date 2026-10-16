@@ -89,7 +89,7 @@ La primera llamada devuelve una respuesta. La segunda termina con un error **Acc
 2. En la consola de **Amazon Bedrock** (`us-east-1`) → **Settings** → **Model invocation logging**, activa el registro:
    - Modalidades: solo **Text**.
    - Destino: **CloudWatch Logs only**, con el grupo `lab-bedrock-invocaciones`.
-   - Rol: deja que la consola cree un rol de servicio nuevo, si lo ofrece, o crea uno con la relación de confianza y la política que indica la guía de registro de invocaciones (permiso `logs:CreateLogStream` y `logs:PutLogEvents` sobre ese grupo, y confianza en `bedrock.amazonaws.com`). Anota su nombre para la limpieza.
+   - Rol: deja que la consola cree un rol de servicio nuevo, si lo ofrece, o crea uno con la relación de confianza y la política que indica la guía de registro de invocaciones: confianza en `bedrock.amazonaws.com` y permisos `logs:CreateLogStream` y `logs:PutLogEvents` limitados al flujo `aws/bedrock/modelinvocations` de ese grupo. Anota su nombre para la limpieza.
 3. Guarda la configuración.
 
 ## Parte 4: auditar la actividad
@@ -99,7 +99,7 @@ La primera llamada devuelve una respuesta. La segunda termina con un error **Acc
    - la **identidad** que hizo la petición (`identity.arn`, con el usuario `lab-auditoria`);
    - el **modelo**, la **entrada** (tu *prompt*, con el teléfono tal cual) y la **salida**;
    - los *tokens* de entrada y de salida.
-3. En la consola de **CloudTrail** → **Event history**, filtra por **Event name** = `Converse` (o por **User name** = `lab-auditoria`). Verás quién llamó, cuándo, desde qué IP y a qué modelo, pero **no** el texto del *prompt*. Bedrock registra `InvokeModel` y `Converse` como eventos de administración, por eso aparecen en el historial sin configurar nada. La llamada denegada de la parte 2 también aparece, con su código de error.
+3. En la consola de **CloudTrail** → **Event history** (los eventos pueden tardar unos minutos en aparecer), filtra por **Event name** = `Converse` (o por **User name** = `lab-auditoria`). Verás quién llamó, cuándo, desde qué IP y a qué modelo, pero **no** el texto del *prompt*. Bedrock registra `InvokeModel` y `Converse` como eventos de administración, por eso aparecen en el historial sin configurar nada. La llamada denegada de la parte 2 también aparece, con su código de error.
 
 | Pregunta de auditoría | Dónde se responde |
 |---|---|

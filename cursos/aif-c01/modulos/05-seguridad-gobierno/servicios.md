@@ -23,7 +23,7 @@ Servicios dentro de alcance relevantes para el Dominio 5. La columna final recog
 | AWS Glue | Catálogo central de metadatos (Data Catalog) y calidad de datos (Glue Data Quality) | Para controlar permisos por columna o fila (Lake Formation) |
 | AWS Glue DataBrew | Perfilar y limpiar datos de forma visual, sin código | Para catalogar los conjuntos de datos de la organización (Glue Data Catalog) |
 | AWS Lake Formation | Permisos detallados (columna, fila, celda) sobre el lago de datos | Para descubrir PII en S3 (Macie) |
-| Amazon SageMaker AI | Linaje de ML (ML Lineage Tracking, MLflow), Model Cards y Role Manager | Cuando el modelo se consume por API en Bedrock y no se entrena |
+| Amazon SageMaker AI | Linaje de ML (ML Lineage Tracking, MLflow), Model Cards y Model Dashboard. Role Manager ya no admite clientes nuevos | Cuando el modelo se consume por API en Bedrock y no se entrena |
 
 ## Gobierno y cumplimiento
 
@@ -37,4 +37,4 @@ Servicios dentro de alcance relevantes para el Dominio 5. La columna final recog
 | Amazon CloudWatch | Métricas, registros (destino del registro de invocaciones) y alarmas; retención por grupo de registros | Para registrar cambios de configuración (Config) |
 | AWS Well-Architected Tool | Revisar una carga de trabajo frente a las buenas prácticas y las lentes de AWS | Para escanear vulnerabilidades o recopilar evidencias automáticamente |
 | Amazon S3 | Datos de entrenamiento y registros; S3 Lifecycle para transición y expiración | Para consultas de configuración o auditoría de API |
-| Amazon S3 Glacier | Archivo de bajo coste de datos y registros que hay que conservar años | Datos que se consultan a menudo |
+| Amazon S3 Glacier | Clases de almacenamiento de archivo de S3, de bajo coste, para datos y registros que hay que conservar años | Datos que se consultan a menudo |
