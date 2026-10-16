@@ -93,7 +93,7 @@ const RUTA = U + "/c/aif-c01/modulo/01-fundamentos-ia-ml/teoria";
   await page.screenshot({ path: `${SH}/pagina-claro.png` });
 
   // todas las cajas de todos los diagramas de los módulos: abren el modal con título y enlaces
-  for (const modulo of ["00-base-aws", "01-fundamentos-ia-ml", "02-fundamentos-genai", "03-modelos-fundacionales", "04-ia-responsable"]) {
+  for (const modulo of ["00-base-aws", "01-fundamentos-ia-ml", "02-fundamentos-genai", "03-modelos-fundacionales", "04-ia-responsable", "05-seguridad-gobierno"]) {
     await page.goto(`${U}/c/aif-c01/modulo/${modulo}/teoria`);
     await page.waitForSelector("figure.diagrama svg", { timeout: 20000 });
     await page.waitForTimeout(1200);

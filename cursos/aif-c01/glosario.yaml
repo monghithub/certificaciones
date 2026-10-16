@@ -30,7 +30,7 @@
 
 - id: aws-iam
   termino: AWS Identity and Access Management (IAM)
-  alias: [IAM, AWS Identity and Access Management]
+  alias: [IAM, AWS IAM, AWS Identity and Access Management]
   categoria: servicio
   definicion: "Servicio que controla de forma segura el acceso a los recursos de AWS: quién está autenticado (ha iniciado sesión) y quién está autorizado (tiene permisos) para usar qué recursos."
   no_usar_cuando: "No es un servicio de datos ni de cómputo: no sustituye al cifrado ni a las políticas de la propia aplicación."
@@ -1534,3 +1534,243 @@
   usar_cuando: "Para evaluar con control total, en código, modelos de lenguaje alojados dentro o fuera de AWS."
   no_usar_cuando: "Cuando basta una evaluación gestionada de modelos de Bedrock (Bedrock Evaluations)."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-foundation-model-evaluate.html
+
+# ------------------------------------------------------------------ módulo 05: seguridad, cumplimiento y gobierno
+- id: aws-kms
+  termino: AWS KMS
+  alias: [AWS Key Management Service, KMS]
+  categoria: servicio
+  definicion: "Servicio gestionado para crear y controlar las claves de cifrado y firma. Las claves se protegen en módulos de seguridad de hardware y no salen del servicio sin cifrar. En Bedrock cifra con claves del cliente modelos personalizados, agentes, ingesta de Knowledge Bases y evaluaciones."
+  usar_cuando: "Para cifrar en reposo datos y modelos con claves que controla la empresa y auditar su uso."
+  no_usar_cuando: "Para guardar contraseñas o claves de API de terceros (Secrets Manager)."
+  referencia: https://docs.aws.amazon.com/kms/latest/developerguide/overview.html
+
+- id: amazon-macie
+  termino: Amazon Macie
+  alias: [Macie]
+  categoria: servicio
+  definicion: "Servicio de seguridad de datos que descubre datos sensibles en Amazon S3 con aprendizaje automático y coincidencia de patrones, mantiene un inventario de los buckets y avisa de riesgos, como un bucket que pasa a ser público."
+  usar_cuando: "Antes de usar un bucket para ajustar un modelo o como fuente de una Knowledge Base, para saber si contiene datos personales."
+  no_usar_cuando: "Para filtrar datos personales en tiempo real en las respuestas de un modelo (Bedrock Guardrails)."
+  referencia: https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
+
+- id: aws-secrets-manager
+  termino: AWS Secrets Manager
+  alias: [Secrets Manager]
+  categoria: servicio
+  definicion: "Servicio para guardar, recuperar y rotar credenciales de bases de datos, claves de API, tokens OAuth y otros secretos, para no escribirlos en el código de las aplicaciones."
+  usar_cuando: "Para las claves de API y credenciales que usan las herramientas de un agente o una aplicación de IA."
+  no_usar_cuando: "Para claves de cifrado (KMS) o credenciales de AWS (IAM)."
+  referencia: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
+
+- id: agentcore-identity
+  termino: AgentCore Identity
+  alias: [Amazon Bedrock AgentCore Identity]
+  categoria: servicio
+  definicion: "Servicio de Amazon Bedrock AgentCore de identidad y gestión de credenciales para agentes: autentica y autoriza a los agentes y sus herramientas para acceder a recursos de AWS y de terceros en nombre de los usuarios, con trazas de auditoría."
+  usar_cuando: "Cuando un agente debe acceder a servicios externos o de AWS con la identidad y los permisos del usuario."
+  no_usar_cuando: "Para limitar qué acciones puede hacer el agente con cada herramienta (Policy in AgentCore)."
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html
+
+- id: policy-in-agentcore
+  termino: Policy in AgentCore
+  alias: [Policy in Amazon Bedrock AgentCore]
+  categoria: servicio
+  definicion: "Políticas deterministas, en lenguaje Cedar o redactadas en lenguaje natural, que un motor de políticas evalúa en el AgentCore Gateway antes de permitir cada llamada de un agente a una herramienta: qué puede hacer y con qué límites."
+  usar_cuando: "Para impedir que un agente actúe fuera de su autoridad, por ejemplo aprobar importes por encima de un límite."
+  no_usar_cuando: "Para filtrar contenido dañino en los prompts (Guardrails) o gestionar las credenciales del agente (AgentCore Identity)."
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html
+
+- id: registro-de-invocaciones
+  termino: registro de invocaciones de modelos
+  alias: [model invocation logging, registro de invocaciones]
+  categoria: tecnica
+  definicion: "Funcionalidad de Amazon Bedrock que guarda la petición, la respuesta y los metadatos de cada invocación (Converse, InvokeModel y sus variantes) en CloudWatch Logs o en S3 de la misma cuenta y Región. Está desactivada por defecto y los registros se conservan hasta que se borra la configuración."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
+
+- id: aws-lake-formation
+  termino: AWS Lake Formation
+  alias: [Lake Formation]
+  categoria: servicio
+  definicion: "Servicio para gobernar, proteger y compartir los datos de un lago de datos con permisos detallados por columna, fila y celda sobre los datos de S3 y sus metadatos del AWS Glue Data Catalog."
+  usar_cuando: "Para que cada equipo o modelo acceda solo a las columnas o filas que necesita."
+  no_usar_cuando: "Para descubrir datos personales en S3 (Macie) o catalogar los conjuntos de datos (Glue Data Catalog)."
+  referencia: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
+
+- id: aws-glue-data-catalog
+  termino: AWS Glue Data Catalog
+  alias: [Glue Data Catalog, Data Catalog]
+  categoria: servicio
+  definicion: "Repositorio central de metadatos de los conjuntos de datos de la organización: ubicación, esquema y métricas. Se rellena con rastreadores (crawlers) o a mano y lo usan Athena, Lake Formation o EMR."
+  usar_cuando: "Para saber qué conjuntos de datos existen, dónde están y con qué esquema."
+  no_usar_cuando: "Para controlar permisos detallados sobre esos datos (Lake Formation)."
+  referencia: https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html
+
+- id: aws-glue-data-quality
+  termino: AWS Glue Data Quality
+  alias: [Glue Data Quality]
+  categoria: servicio
+  definicion: "Funcionalidad serverless de AWS Glue para medir y vigilar la calidad de los datos con reglas (recomendadas o propias), una puntuación de calidad y detección de anomalías con ML."
+  usar_cuando: "Para comprobar la calidad de los datos antes de entrenar o ajustar un modelo."
+  no_usar_cuando: "Para descubrir datos personales (Macie)."
+  referencia: https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html
+
+- id: aws-config
+  termino: AWS Config
+  alias: [Config]
+  categoria: servicio
+  definicion: "Servicio que registra la configuración de los recursos de AWS, cómo se relacionan y cómo ha cambiado con el tiempo, y la evalúa con reglas y paquetes de conformidad."
+  usar_cuando: "Para comprobar que los recursos de un sistema de IA cumplen reglas (cifrado, acceso público) y ver su historial de configuración."
+  no_usar_cuando: "Para saber quién hizo una llamada a la API (CloudTrail)."
+  referencia: https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html
+
+- id: amazon-inspector
+  termino: Amazon Inspector
+  alias: [Inspector]
+  categoria: servicio
+  definicion: "Servicio de gestión de vulnerabilidades que descubre y escanea de forma continua instancias EC2, imágenes de contenedores en ECR y funciones Lambda en busca de vulnerabilidades de software y exposición de red no deseada."
+  usar_cuando: "Para detectar bibliotecas vulnerables en el software que sirve o rodea a un modelo."
+  no_usar_cuando: "Para obtener informes de cumplimiento de AWS (Artifact) o recomendaciones generales (Trusted Advisor)."
+  referencia: https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html
+
+- id: aws-artifact
+  termino: AWS Artifact
+  alias: [Artifact]
+  categoria: servicio
+  definicion: "Portal de descarga bajo demanda de los informes de seguridad y cumplimiento de AWS (por ejemplo, SOC, ISO o PCI) y de gestión de los acuerdos con AWS."
+  usar_cuando: "Para entregar a un auditor la evidencia de cumplimiento de la infraestructura de AWS."
+  no_usar_cuando: "Para demostrar la configuración o el cumplimiento de los recursos del propio cliente (Config)."
+  referencia: https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html
+
+- id: aws-trusted-advisor
+  termino: AWS Trusted Advisor
+  alias: [Trusted Advisor]
+  categoria: servicio
+  definicion: "Servicio que inspecciona el entorno de AWS y recomienda mejoras para ahorrar costes, mejorar la disponibilidad y el rendimiento y cerrar brechas de seguridad. Con el plan Basic se accede a los límites de servicio y a algunas comprobaciones de seguridad y tolerancia a fallos."
+  usar_cuando: "Para revisar buenas prácticas de la cuenta (permisos abiertos, cuotas, costes)."
+  no_usar_cuando: "Para escanear vulnerabilidades de software (Inspector)."
+  referencia: https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
+
+- id: aws-well-architected-tool
+  termino: AWS Well-Architected Tool
+  alias: [Well-Architected Tool, AWS WA Tool]
+  categoria: servicio
+  definicion: "Herramienta para revisar una carga de trabajo frente a las buenas prácticas del AWS Well-Architected Framework y a lentes adicionales del catálogo oficial o propias, con un plan de mejora."
+  usar_cuando: "Para revisar de forma estructurada la arquitectura de un sistema de IA."
+  no_usar_cuando: "Para escanear vulnerabilidades o recopilar evidencias de auditoría automáticamente."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html
+
+- id: aws-audit-manager
+  termino: AWS Audit Manager
+  alias: [Audit Manager]
+  categoria: servicio
+  definicion: "Servicio que recopila automáticamente evidencias para auditorías con marcos predefinidos o propios. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
+  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos."
+  referencia: https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html
+
+- id: amazon-s3-glacier
+  termino: Amazon S3 Glacier
+  alias: [S3 Glacier]
+  categoria: servicio
+  definicion: "Clases de almacenamiento de Amazon S3 de bajo coste para archivar datos que se consultan poco y deben conservarse mucho tiempo."
+  usar_cuando: "Para conservar años datos de entrenamiento o registros que exige la normativa."
+  no_usar_cuando: "Para datos que se consultan a menudo o con baja latencia."
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
+
+- id: s3-lifecycle
+  termino: S3 Lifecycle
+  alias: [ciclo de vida de S3]
+  categoria: tecnica
+  definicion: "Reglas de Amazon S3 que mueven automáticamente los objetos a clases de almacenamiento más baratas (transición) o los borran al cumplirse un plazo (expiración)."
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
+
+- id: amazon-guardduty
+  termino: Amazon GuardDuty
+  alias: [GuardDuty]
+  categoria: servicio
+  definicion: "Servicio de detección de amenazas que analiza de forma continua registros y datos de la cuenta con inteligencia de amenazas y ML para encontrar actividad sospechosa, como credenciales comprometidas o exfiltración de datos."
+  referencia: https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html
+
+- id: citacion-de-fuentes
+  termino: citación de fuentes
+  alias: [source citation]
+  categoria: tecnica
+  definicion: "Indicar de qué documentos sale cada respuesta. Amazon Bedrock Knowledge Bases devuelve citas con los fragmentos y documentos de origen, lo que permite comprobar la respuesta."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve-generate.html
+
+- id: linaje-de-datos
+  termino: linaje de datos
+  alias: [data lineage, linaje]
+  categoria: concepto
+  definicion: "Recorrido de los datos y artefactos desde su origen hasta el modelo desplegado (conjunto de datos, versión, trabajo de entrenamiento, endpoint). SageMaker ML Lineage Tracking lo registra para reproducir el flujo y auditarlo."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html
+
+- id: catalogo-de-datos
+  termino: catalogación de datos
+  alias: [data cataloging, catálogo de datos]
+  categoria: concepto
+  definicion: "Inventario de los conjuntos de datos con su ubicación, esquema y metadatos para que se puedan encontrar y gobernar. En AWS, el AWS Glue Data Catalog."
+  referencia: https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html
+
+- id: tecnologias-de-mejora-de-la-privacidad
+  termino: tecnologías de mejora de la privacidad
+  alias: [privacy-enhancing technologies, PET]
+  categoria: tecnica
+  definicion: "Técnicas para usar datos protegiendo a las personas: minimización, anonimización, seudonimización o tokenización, enmascarado, privacidad diferencial y datos sintéticos."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp02.html
+
+- id: integridad-de-los-datos
+  termino: integridad de los datos
+  alias: [data integrity]
+  categoria: concepto
+  definicion: "Garantía de que los datos no se alteran sin control: versiones, registros de cambios y permisos de escritura mínimos, también como defensa frente al envenenamiento de los datos de entrenamiento."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp04-bp03.html
+
+- id: residencia-de-datos
+  termino: residencia de datos
+  alias: [data residency]
+  categoria: concepto
+  definicion: "Requisito de que los datos se almacenen y procesen en una Región o geografía concreta. En Bedrock se respeta eligiendo la Región y, con inferencia entre Regiones, un perfil geográfico en lugar del global."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+
+- id: retencion-de-datos
+  termino: retención de datos
+  alias: [data retention]
+  categoria: concepto
+  definicion: "Cuánto tiempo se conservan los datos y los registros antes de borrarlos. En AWS se fija con la retención de los grupos de CloudWatch Logs (indefinida por defecto), la expiración de S3 Lifecycle y los modos de retención de datos de Bedrock."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html
+
+- id: ciclo-de-vida-de-los-datos
+  termino: ciclo de vida de los datos
+  alias: [data lifecycle]
+  categoria: concepto
+  definicion: "Qué ocurre con los datos desde que se crean hasta que se borran: almacenamiento, uso, archivo y eliminación según políticas. En S3 se automatiza con S3 Lifecycle."
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
+
+- id: ai-security-scoping-matrix
+  termino: Generative AI Security Scoping Matrix
+  alias: [AI Security Scoping Matrix, Security Scoping Matrix]
+  categoria: concepto
+  definicion: "Marco de AWS que clasifica los casos de IA generativa en cinco ámbitos según cuánto controla la organización el modelo y sus datos (aplicación de consumo, aplicación empresarial, modelo preentrenado, modelo ajustado, modelo propio) y los cruza con cinco disciplinas: gobierno y cumplimiento, legal y privacidad, gestión de riesgos, controles y resiliencia."
+  referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
+
+- id: puntuacion-de-confianza
+  termino: puntuación de confianza
+  alias: [confidence scoring, confidence score]
+  categoria: tecnica
+  definicion: "Valor que indica cuánto se puede fiar de una salida. Se usa con un umbral para entregar, avisar, derivar a una persona o no responder. Guardrails da puntuaciones de grounding y relevancia; servicios como Textract o Comprehend devuelven una confianza por predicción."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html
+
+- id: validacion-de-la-salida
+  termino: validación de la salida
+  alias: [output validation]
+  categoria: tecnica
+  definicion: "Comprobar la respuesta de un modelo antes de usarla: contra la fuente (grounding), contra reglas lógicas (Automated Reasoning), contra un formato o esquema esperado, o con revisión humana."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/security.html
+
+- id: exceso-de-autonomia
+  termino: exceso de autonomía
+  alias: [excessive agency]
+  categoria: concepto
+  definicion: "Riesgo de que un agente de IA tenga más permisos o capacidad de acción de la necesaria, lo que multiplica el daño de un error o de una inyección de prompts. Se limita con mínimo privilegio, Policy in AgentCore y aprobación humana."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/security.html
