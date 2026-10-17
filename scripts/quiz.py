@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cuestionario interactivo en terminal a partir de cursos/<curso>/modulos/*/preguntas.yaml."""
+"""Cuestionario interactivo en terminal a partir de cursos/<curso>/modulos/*/preguntas.yaml (o de repaso.yaml con --repaso)."""
 import argparse
 import random
 import sys
@@ -14,9 +14,9 @@ from curso.correccion import corregir  # noqa: E402
 from curso.manifiesto import descubrir  # noqa: E402
 
 
-def cargar(raiz: Path, curso: str, modulo=None, dominio=None, tipo=None) -> list[dict]:
+def cargar(raiz: Path, curso: str, modulo=None, dominio=None, tipo=None, repaso=False) -> list[dict]:
     preguntas = []
-    for f in sorted((raiz / "cursos" / curso / "modulos").glob("*/preguntas.yaml")):
+    for f in sorted((raiz / "cursos" / curso / "modulos").glob("*/repaso.yaml" if repaso else "*/preguntas.yaml")):
         if modulo and not f.parent.name.startswith(modulo):
             continue
         preguntas += yaml.safe_load(f.read_text(encoding="utf8")) or []
@@ -72,6 +72,7 @@ def main(argv=None, entrada=input):
     ap.add_argument("--modulo", help="prefijo del módulo, p. ej. 03")
     ap.add_argument("--dominio", type=int)
     ap.add_argument("--tipo", choices=["multiple_choice", "multiple_response", "ordering", "matching"])
+    ap.add_argument("--repaso", action="store_true", help="preguntas de repaso de conocimientos en lugar de las de examen")
     ap.add_argument("--n", type=int, default=10)
     ap.add_argument("--semilla", type=int)
     a = ap.parse_args(argv)
@@ -85,7 +86,7 @@ def main(argv=None, entrada=input):
     elif curso not in cursos:
         print(f"Curso '{curso}' no encontrado. Disponibles: " + (", ".join(cursos) or "ninguno"), file=sys.stderr)
         return 2
-    pool = cargar(a.raiz, curso, a.modulo, a.dominio, a.tipo)
+    pool = cargar(a.raiz, curso, a.modulo, a.dominio, a.tipo, a.repaso)
     if not pool:
         print("No hay preguntas que cumplan el filtro.", file=sys.stderr)
         return 1

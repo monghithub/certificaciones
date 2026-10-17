@@ -16,7 +16,8 @@
     <div class="suave">{{ f.hechas }} de {{ f.total }} secciones completadas</div>
     <ul>{% for s in m.secciones %}<li><a href="{{ base }}/modulo/{{ m.id }}/{{ s.id }}">{{ s.titulo }}</a>{% if s.id in f.completadas %} <span class="ok-t">✓</span>{% endif %}</li>{% endfor %}</ul>
     {% else %}<p class="suave">Sin contenido todavía.</p>{% endif %}
-    {% if m.preguntas %}<a class="btn sec" href="{{ base }}/tests">{{ m.preguntas|length }} preguntas</a>{% endif %}
+    {% if m.repaso %}<a class="btn sec" href="{{ base }}/tests">{{ m.repaso|length }} de repaso</a>{% endif %}
+    {% if m.preguntas %}<a class="btn sec" href="{{ base }}/tests">{{ m.preguntas|length }} de examen</a>{% endif %}
   </div>
 {% else %}<p>No hay módulos disponibles.</p>{% endfor %}
 </div>

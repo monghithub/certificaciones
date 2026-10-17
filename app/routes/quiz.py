@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from curso.correccion import corregir
 
+from .. import stats
 from ..content import Contenido
 from ..deps import get_db, requiere_curso, requiere_usuario, verificar_csrf
 from ..models import Intento, IntentoRespuesta, Usuario, ahora
@@ -39,19 +40,22 @@ def _segundos_restantes(i: Intento) -> int | None:
 
 
 @router.get("")
-def inicio(request: Request, c: Contenido = Depends(requiere_curso), usuario: Usuario = Depends(requiere_usuario)):
+def inicio(request: Request, c: Contenido = Depends(requiere_curso), usuario: Usuario = Depends(requiere_usuario),
+           db: Session = Depends(get_db)):
     m = c.manifiesto
     modulos = [x for x in c.modulos.values() if x.preguntas and not x.es_simulacro]
+    repaso = [x for x in c.modulos.values() if x.repaso]
     banco_sim = c.modulos.get(m.simulacro) if m.tiene_simulacro else None
     n_sim = len(banco_sim.preguntas) if banco_sim else 0
     dominios = sorted({c.preguntas[p]["dominio"] for x in modulos for p in x.preguntas})
-    return render(request, "tests_inicio.html", modulos=modulos, dominios=dominios, n_sim=n_sim, nombres=m.dominios,
+    return render(request, "tests_inicio.html", modulos=modulos, repaso=repaso, n_repaso=sum(len(x.repaso) for x in repaso),
+                  n_falladas=len(stats.falladas(db, usuario.id, c)), dominios=dominios, n_sim=n_sim, nombres=m.dominios,
                   hay_simulacro=m.tiene_simulacro, sim_ok=m.tiene_simulacro and n_sim >= m.examen_preguntas,
                   sim_n=m.examen_preguntas, sim_min=m.examen_minutos)
 
 
 @router.post("/iniciar")
-def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: int = Form(10),
+def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: int = Form(10), estudio: str = Form(""),
             c: Contenido = Depends(requiere_curso), usuario: Usuario = Depends(requiere_usuario),
             db: Session = Depends(get_db)):
     m = c.manifiesto
@@ -66,10 +70,17 @@ def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: 
         if len(ids) < m.examen_preguntas:
             flash(request, f"El simulacro necesita {m.examen_preguntas} preguntas y hay {len(ids)}.", "error")
             return RedirectResponse(f"{base}/tests", 303)
-        ids, limite, filtro = ids[: m.examen_preguntas], m.examen_minutos * 60, ""
+        # Modo estudio: corrección y explicación tras cada respuesta; se guarda en `filtro` (no hay otro filtro en el simulacro).
+        ids, limite, filtro = ids[: m.examen_preguntas], m.examen_minutos * 60, "estudio" if estudio else ""
     else:
         fuente = [p for x in c.modulos.values() if not x.es_simulacro for p in x.preguntas]
-        if modo == "modulo":
+        if modo == "repaso":
+            if filtro and (filtro not in c.modulos or not c.modulos[filtro].repaso):
+                raise HTTPException(400, "Módulo no válido")
+            fuente = c.modulos[filtro].repaso if filtro else [p for x in c.modulos.values() for p in x.repaso]
+        elif modo == "falladas":
+            fuente, filtro = stats.falladas(db, usuario.id, c), ""
+        elif modo == "modulo":
             if filtro not in c.modulos or c.modulos[filtro].es_simulacro:
                 raise HTTPException(400, "Módulo no válido")
             fuente = c.modulos[filtro].preguntas
@@ -102,11 +113,16 @@ def continuar(iid: int, request: Request, c: Contenido = Depends(requiere_curso)
     return RedirectResponse(f"/c/{c.manifiesto.slug}/tests/{iid}/p/{pendiente}", 303)
 
 
+def _sin_correccion(i: Intento) -> bool:
+    """El simulacro no corrige hasta el final, salvo en modo estudio."""
+    return i.modo == "simulacro" and i.filtro != "estudio"
+
+
 def _vista_pregunta(c, pid: str):
     p = c.preguntas.get(pid)
     if not p:
         return None
-    vista = {k: p.get(k) for k in ("id", "tipo", "enunciado", "opciones", "prompts", "tarea", "dominio")}
+    vista = {k: p.get(k) for k in ("id", "tipo", "enunciado", "opciones", "prompts", "tarea", "dominio", "banco")}
     vista["posiciones"] = len(p["correctas"]) if p["tipo"] == "ordering" else 0  # solo el nº de huecos, no la solución
     return vista
 
@@ -122,11 +138,12 @@ def ver(iid: int, n: int, request: Request, c: Contenido = Depends(requiere_curs
     pid = i.preguntas[n - 1]
     p = c.preguntas.get(pid)
     resp = next((r for r in i.respuestas if r.pregunta_id == pid), None)
-    simulacro = i.modo == "simulacro"
+    simulacro = _sin_correccion(i)
     retro = None
     if resp and not simulacro and p:
         retro = {"correcta": resp.correcta, "solucion": p["correctas"], "explicacion": p["explicacion"],
-                 "distractores": p.get("distractores") or {}, "referencia": p["referencia"], "respuesta": resp.respuesta}
+                 "distractores": p.get("distractores") or {}, "referencia": p["referencia"], "respuesta": resp.respuesta,
+                 "teoria": c.url_teoria(p.get("objetivo"))}
     return render(request, "pregunta.html", i=i, n=n, total=len(i.preguntas), p=_vista_pregunta(c, pid), pid=pid,
                   respondida=resp is not None, retro=retro, simulacro=simulacro,
                   restante=_segundos_restantes(i), hechas=len(i.respuestas))
@@ -182,7 +199,7 @@ async def responder(iid: int, request: Request, n: int = Form(...), c: Contenido
     db.add(IntentoRespuesta(intento_id=i.id, pregunta_id=pid, dominio=p["dominio"], tarea=p["tarea"], tipo=p["tipo"],
                             respuesta=r, correcta=corregir(p, r)))
     db.commit()
-    if i.modo == "simulacro":
+    if _sin_correccion(i):
         siguiente = next((k for k, q in enumerate(i.preguntas, 1) if k > n and q not in {x.pregunta_id for x in i.respuestas} | {pid}), None)
         return RedirectResponse(f"/c/{c.manifiesto.slug}/tests/{iid}/p/{siguiente}" if siguiente else f"/c/{c.manifiesto.slug}/tests/{iid}/p/{n}", 303)
     return RedirectResponse(f"/c/{c.manifiesto.slug}/tests/{iid}/p/{n}", 303)
@@ -207,7 +224,8 @@ def resultado(iid: int, request: Request, c: Contenido = Depends(requiere_curso)
     filas = []
     for k, pid in enumerate(i.preguntas, 1):
         p, r = c.preguntas.get(pid), por_pregunta.get(pid)
-        filas.append({"n": k, "id": pid, "p": p, "r": r, "retirada": p is None})
+        filas.append({"n": k, "id": pid, "p": p, "r": r, "retirada": p is None, "teoria": c.url_teoria(p.get("objetivo")) if p else None})
     ok = sum(1 for r in i.respuestas if r.correcta)
     total = len(i.preguntas)
-    return render(request, "resultado.html", i=i, filas=filas, ok=ok, total=total, pct=round(100 * ok / total) if total else 0)
+    return render(request, "resultado.html", i=i, filas=filas, ok=ok, total=total, pct=round(100 * ok / total) if total else 0,
+                  n_falladas=len(stats.falladas(db, usuario.id, c)))

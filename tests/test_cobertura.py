@@ -8,7 +8,7 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 from comprobar_cobertura import ancla, anclas_de, comprobar, main  # noqa: E402
-from conftest import FIX, escribir  # noqa: E402
+from conftest import FIX, con_repaso, escribir, pregunta_repaso  # noqa: E402
 
 MOD = "03-modelos-fundacionales"
 
@@ -157,3 +157,18 @@ def test_fuente_de_conocimientos_previos_del_curso_real():
     real = Path(__file__).resolve().parent.parent / "cursos" / "aif-c01" / "fuentes"
     assert objetivos_de(real / "conocimientos-previos.md") == ["CP.1", "CP.2", "CP.3", "CP.4"]
     assert len(objetivos_de(real / "dominio-1.md")) == 17
+
+
+def test_cobertura_del_repaso(repo):
+    readme(repo)
+    preguntas(repo, {"3.1": 18, "3.2": 18, "3.3": 18, "3.4": 18})
+    con_repaso(repo, minimo_por_objetivo=1)
+    errs, _ = comprobar(repo, modulo="03", con_preguntas=True)
+    assert any("falta el banco de repaso" in e for e in errs)
+    objetivos = ids_dominio3(repo)
+    banco = [pregunta_repaso(f"R3-{k:03d}", tarea=o.rsplit(".", 1)[0], objetivo=o, enunciado=f"Pregunta de repaso {k}")
+             for k, o in enumerate(objetivos[1:], 1)]  # sin el primer objetivo
+    escribir(repo, banco, MOD, fichero="repaso.yaml")
+    errs, resumen = comprobar(repo, modulo="03", con_preguntas=True)
+    assert errs == [f"aif-c01/{MOD}: repaso: el objetivo {objetivos[0]} tiene 0 preguntas, mínimo 1"], errs
+    assert any(r.endswith("de repaso") for r in resumen)

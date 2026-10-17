@@ -3,6 +3,7 @@
 <h1>Resultado</h1>
 <div class="card"><p style="font-size:1.4rem;margin:0"><strong>{{ ok }}/{{ total }}</strong> ({{ pct }} %)</p>
   <p class="suave">Modo: {{ i.modo }}{% if i.filtro %} · {{ i.filtro }}{% endif %} · {{ i.inicio|fecha }} UTC</p>
+  {% if n_falladas %}<p>Te quedan {{ n_falladas }} preguntas falladas por repasar: puedes repetirlas desde <a href="{{ base }}/tests">Tests</a>, en «Repetir falladas».</p>{% endif %}
   {% if i.modo == 'simulacro' %}<div class="msg aviso">El examen real usa una puntuación escalada de 100–1.000 (aprobado con 700). Este porcentaje es solo orientativo y no equivale a esa escala.</div>{% endif %}
   <a class="btn" href="{{ base }}/tests">Nuevo test</a> <a class="btn sec" href="{{ base }}/estadisticas">Mis estadísticas</a></div>
 {% for f in filas %}
@@ -17,6 +18,7 @@
   <p><strong>Solución:</strong></p><ul class="solucion">{% for l in legible(f.p, f.p.correctas) %}<li>{{ l }}</li>{% endfor %}</ul>
   <p>{{ f.p.explicacion }}</p>
   {% if f.p.distractores %}<ul>{% for k, v in f.p.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
+  {% if f.teoria %}<p><a class="btn sec" href="{{ f.teoria }}">Repasar en la teoría</a></p>{% endif %}
   <p class="suave">Referencia: <a href="{{ f.p.referencia }}" rel="noopener noreferrer">{{ f.p.referencia }}</a></p>
   {% endif %}
 </div>

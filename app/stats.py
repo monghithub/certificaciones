@@ -57,6 +57,16 @@ def aciertos_por(db: Session, uid: int, curso: str) -> tuple[list[dict], list[di
     return sorted(dominios.values(), key=lambda x: x["dominio"]), sorted(tareas, key=lambda x: x["tarea"])
 
 
+def falladas(db: Session, uid: int, contenido: Contenido) -> list[str]:
+    """Preguntas (de repaso y de examen, no del simulacro) cuya última respuesta del usuario fue incorrecta."""
+    q = (select(IntentoRespuesta.pregunta_id, IntentoRespuesta.correcta).join(Intento)
+         .where(Intento.usuario_id == uid, Intento.curso == contenido.manifiesto.slug).order_by(IntentoRespuesta.id))
+    ultima = dict(db.execute(q).all())
+    simulacro = contenido.manifiesto.simulacro
+    return sorted(pid for pid, ok in ultima.items()
+                  if not ok and pid in contenido.preguntas and contenido.preguntas[pid]["modulo"] != simulacro)
+
+
 def puntos_debiles(tareas: list[dict]) -> list[dict]:
     debiles = [t for t in tareas if t["n"] >= MIN_RESPUESTAS_DEBIL and t["pct"] < UMBRAL_DEBIL]
     return sorted(debiles, key=lambda t: t["pct"])[:5]

@@ -89,3 +89,11 @@ def test_quiz_de_un_curso_no_mezcla_otro(repo, capsys):
     finally:
         quiz.mostrar = mostrar
     assert code == 0 and actual == ["D2-001"]
+
+
+def test_cargar_repaso(repo):
+    from conftest import escribir, pregunta_repaso
+
+    escribir(repo, [pregunta_repaso()], fichero="repaso.yaml")
+    assert [p["id"] for p in cargar(repo, "aif-c01", repaso=True)] == ["R3-001"]
+    assert all(not p["id"].startswith("R") for p in cargar(repo, "aif-c01"))

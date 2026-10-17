@@ -19,6 +19,10 @@ banco:
   minimo_por_tarea: 15
   minimo_por_objetivo: 3
   distribucion: {multiple_choice: 60, multiple_response: 20, ordering: 10, matching: 10}
+repaso:
+  minimo_por_modulo: 20
+  minimo_por_objetivo: 2
+  previos: conocimientos-previos.md
 cobertura:
   00-base-aws: conocimientos-previos.md
   01-fundamentos-ia-ml: dominio-1.md

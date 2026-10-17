@@ -6,7 +6,7 @@ import pytest
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from conftest import FIX, escribir, segundo_curso  # noqa: E402
+from conftest import FIX, con_repaso, escribir, pregunta_repaso, segundo_curso  # noqa: E402
 from validar_preguntas import main, validar  # noqa: E402
 
 BASE = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))
@@ -257,3 +257,52 @@ def test_simulacro_con_enunciado_repetido_dentro_del_simulacro(repo):
     b = copy.deepcopy(a); b["id"] = "S-002"
     escribir(repo, [a, b], "06-simulacro")
     assert any("del propio simulacro" in e for e in validar(repo, minimos=False)[0])
+
+
+# ------------------------------------------------------------- bancos de repaso
+def repaso(repo, preguntas, modulo="03-modelos-fundacionales"):
+    escribir(repo, preguntas, modulo, fichero="repaso.yaml")
+
+
+def test_repaso_valido_con_conocimientos_previos(repo):
+    con_repaso(repo)
+    repaso(repo, [pregunta_repaso()])
+    repaso(repo, [pregunta_repaso("R0-001", dominio=0, tarea="CP", objetivo="CP.2", enunciado="¿Quién cifra tus datos?")], "00-base-aws")
+    errs, avisos, resumen = validar(repo, minimos=False)
+    assert errs == [], errs
+    assert not any("repaso.yaml" in a and "enunciado muy corto" in a for a in avisos)  # el repaso admite preguntas directas
+    assert any(r.endswith("00-base-aws/repaso.yaml") for r in resumen)
+
+
+def test_dominio_0_solo_en_repaso_con_previos(repo):
+    p = mutar(0, dominio=0, tarea="CP", objetivo="CP.1")
+    assert any("dominio 0" in e for e in errores(repo, p))  # banco de examen
+    repaso(repo, [pregunta_repaso("R0-001", dominio=0, tarea="CP", objetivo="CP.1")], "00-base-aws")
+    assert any("dominio 0" in e for e in validar(repo, minimos=False)[0])  # curso sin `repaso.previos`
+
+
+def test_repaso_con_objetivo_previo_inexistente_o_tarea_cp_fuera_del_dominio_0(repo):
+    con_repaso(repo)
+    repaso(repo, [pregunta_repaso("R0-001", dominio=0, tarea="CP", objetivo="CP.9")], "00-base-aws")
+    repaso(repo, [pregunta_repaso("R3-001", tarea="CP", objetivo="3.1.1")])
+    errs = validar(repo, minimos=False)[0]
+    assert any("CP.9" in e for e in errs) and any("solo se admite en el dominio 0" in e for e in errs)
+
+
+def test_repaso_no_copia_preguntas_de_examen(repo):
+    con_repaso(repo)
+    repaso(repo, [pregunta_repaso(enunciado=BASE[0]["enunciado"])])
+    assert any("no debe copiar preguntas de examen" in e for e in validar(repo, minimos=False)[0])
+
+
+def test_ids_de_repaso_unicos_en_el_curso_y_minimo(repo):
+    con_repaso(repo, minimo_por_modulo=3)
+    repaso(repo, [pregunta_repaso(), pregunta_repaso(enunciado="Otra pregunta de repaso distinta")])
+    errs = validar(repo)[0]
+    assert any("id duplicado" in e for e in errs) and any("repaso.yaml: 2 preguntas, mínimo 3" in e for e in errs)
+
+
+def test_simulacro_sin_banco_de_repaso(repo):
+    con_repaso(repo)
+    repaso(repo, [pregunta_repaso()], "06-simulacro")
+    assert any("no lleva banco de repaso" in e for e in validar(repo, minimos=False)[0])

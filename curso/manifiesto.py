@@ -9,6 +9,7 @@ from jsonschema import Draft202012Validator
 
 RAIZ_REPO = Path(__file__).resolve().parent.parent
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$")
+NOMBRE_PREVIOS = "Conocimientos previos"
 TIPOS = ("multiple_choice", "multiple_response", "ordering", "matching")
 
 
@@ -30,6 +31,14 @@ class Manifiesto:
     minimo_por_objetivo: int | None = None
     cobertura: dict[str, str] = field(default_factory=dict)  # módulo -> fichero de fuentes que debe cubrir
     distribucion: dict[str, float] = field(default_factory=dict)
+    repaso_minimo_por_modulo: int | None = None
+    repaso_minimo_por_objetivo: int | None = None
+    previos: str | None = None  # fuente de los conocimientos previos (dominio 0, tarea CP), si el curso los evalúa en el repaso
+
+    @property
+    def nombres_dominio(self) -> dict[int, dict]:
+        """Dominios del manifiesto más el 0 (conocimientos previos) si el curso lo usa."""
+        return ({0: {"nombre": NOMBRE_PREVIOS, "peso": 0}} if self.previos else {}) | self.dominios
 
     @property
     def tiene_simulacro(self) -> bool:
@@ -71,6 +80,7 @@ def cargar_manifiesto(carpeta: Path, esquemas: Path | None = None) -> Manifiesto
         raise ManifiestoError(f"{carpeta.name}: los pesos de los dominios deben sumar 100")
     banco = datos.get("banco") or {}
     examen = datos.get("examen") or {}
+    repaso = datos.get("repaso") or {}
     return Manifiesto(
         slug=datos["slug"], titulo=datos["titulo"], idioma=datos["idioma"], carpeta=carpeta,
         proveedor=datos.get("proveedor"), fuentes_oficiales=tuple(datos.get("fuentes_oficiales") or ()),
@@ -80,6 +90,8 @@ def cargar_manifiesto(carpeta: Path, esquemas: Path | None = None) -> Manifiesto
         minimo_por_tarea=banco.get("minimo_por_tarea"), minimo_por_objetivo=banco.get("minimo_por_objetivo"),
         cobertura=dict(datos.get("cobertura") or {}),
         distribucion=dict(banco.get("distribucion") or {}),
+        repaso_minimo_por_modulo=repaso.get("minimo_por_modulo"), repaso_minimo_por_objetivo=repaso.get("minimo_por_objetivo"),
+        previos=repaso.get("previos"),
     )
 
 

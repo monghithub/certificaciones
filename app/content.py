@@ -12,6 +12,7 @@ from markdown_it import MarkdownIt
 
 from curso import glosario as glosario_mod
 from curso.anclas import GeneradorAnclas
+from curso.cobertura import mapa as mapa_cobertura
 from curso.secciones import SECCIONES
 from curso.manifiesto import Manifiesto
 
@@ -33,7 +34,8 @@ class Modulo:
     numero: str
     titulo: str
     secciones: list[Seccion] = field(default_factory=list)
-    preguntas: list[str] = field(default_factory=list)
+    preguntas: list[str] = field(default_factory=list)  # banco de examen (preguntas.yaml)
+    repaso: list[str] = field(default_factory=list)  # banco de repaso de conocimientos (repaso.yaml)
     es_simulacro: bool = False
 
 
@@ -151,7 +153,8 @@ class Contenido:
         self.raiz = manifiesto.carpeta
         self.esquemas = Path(esquemas)
         self.modulos: dict[str, Modulo] = {}
-        self.preguntas: dict[str, dict] = {}
+        self.preguntas: dict[str, dict] = {}  # todas, de examen y de repaso; p["banco"] dice de cuál
+        self.teoria: dict[str, tuple[str, str]] = {}  # objetivo -> (módulo, ancla) según los mapas de cobertura
         self.avisos: list[str] = []
         self.glosario: glosario_mod.Glosario | None = None
         self._md = _md(self)
@@ -159,7 +162,7 @@ class Contenido:
         self.cargar()
 
     def cargar(self):
-        self.modulos, self.preguntas, self.avisos, self._html = {}, {}, [], {}
+        self.modulos, self.preguntas, self.teoria, self.avisos, self._html = {}, {}, {}, [], {}
         self.glosario, errores = glosario_mod.leer(self.raiz, self.esquemas)
         self.avisos += errores
         esquema = self.esquemas / "pregunta.schema.json"
@@ -172,7 +175,11 @@ class Contenido:
             titulo = d.name[3:].replace("-", " ").capitalize()
             readme = d / "README.md"
             if readme.exists():
-                for linea in readme.read_text(encoding="utf8").splitlines():
+                texto = readme.read_text(encoding="utf8")
+                for objetivo, anclas in mapa_cobertura(texto).items():
+                    if anclas:
+                        self.teoria.setdefault(objetivo, (d.name, anclas[0]))
+                for linea in texto.splitlines():
                     if linea.startswith("# "):
                         titulo = linea[2:].strip()
                         break
@@ -180,9 +187,11 @@ class Contenido:
             mod.secciones = [Seccion(i, t, d / f) for i, f, t in SECCIONES if (d / f).is_file()]
             self.modulos[mod.id] = mod
             self._cargar_preguntas(d, mod, validador)
+            if not mod.es_simulacro:
+                self._cargar_preguntas(d, mod, validador, repaso=True)
 
-    def _cargar_preguntas(self, d: Path, mod: Modulo, validador):
-        f = d / "preguntas.yaml"
+    def _cargar_preguntas(self, d: Path, mod: Modulo, validador, repaso: bool = False):
+        f = d / ("repaso.yaml" if repaso else "preguntas.yaml")
         if not f.is_file():
             return
         try:
@@ -198,15 +207,21 @@ class Contenido:
             if errs:
                 self.avisos.append(f"{mod.id}:{p['id']}: no cumple el esquema ({errs[0].message})")
                 continue
-            if p["dominio"] not in self.manifiesto.dominios:
+            if p["dominio"] not in self.manifiesto.dominios and not (repaso and p["dominio"] == 0 and self.manifiesto.previos):
                 self.avisos.append(f"{mod.id}:{p['id']}: dominio {p['dominio']} no declarado en curso.yaml, ignorada")
                 continue
             if p["id"] in self.preguntas:
                 self.avisos.append(f"{mod.id}:{p['id']}: id duplicado, ignorada")
                 continue
             p["modulo"] = mod.id
+            p["banco"] = "repaso" if repaso else "examen"
             self.preguntas[p["id"]] = p
-            mod.preguntas.append(p["id"])
+            (mod.repaso if repaso else mod.preguntas).append(p["id"])
+
+    def url_teoria(self, objetivo: str | None) -> str | None:
+        """Sección de teoría que cubre un objetivo, según el mapa de cobertura de los README."""
+        destino = self.teoria.get(objetivo or "")
+        return self._url_seccion(f"{destino[0]}/teoria#{destino[1]}") if destino else None
 
     def _url_seccion(self, destino: str) -> str | None:
         """`modulo/seccion#ancla` -> URL interna del curso, o None si el módulo o la sección no existen."""

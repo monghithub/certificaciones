@@ -141,6 +141,26 @@
         "type": "string",
         "pattern": "^[a-z0-9-]+\\.md$"
       }
+    },
+    "repaso": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Bancos de repaso de conocimientos (modulos/*/repaso.yaml)",
+      "properties": {
+        "minimo_por_modulo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minimo_por_objetivo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "previos": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+\\.md$",
+          "description": "Fuente de los conocimientos previos (dominio 0, tarea CP)"
+        }
+      }
     }
   },
   "dependentRequired": {
