@@ -1,4 +1,4 @@
-// Prueba de navegador de la consola (Chrome sin interfaz): conceptos, modal, diagramas, modo oscuro, movimiento reducido y móvil.
+// Prueba de navegador de la consola (Chrome sin interfaz): conceptos, modal, diagramas, modo oscuro, movimiento reducido, móvil y tests (repaso y explicación).
 // Uso: CONSOLA_USUARIO=... CONSOLA_CLAVE=... node consola.mjs   (genera capturas en tests/e2e/capturas)
 import { chromium } from "playwright-core";
 import { mkdirSync } from "node:fs";
@@ -203,6 +203,40 @@ const RUTA = U + "/c/aif-c01/modulo/01-fundamentos-ia-ml/teoria";
   ok(caja && caja.width <= 390 && caja.x >= 0, `en móvil el modal cabe en la pantalla (${Math.round(caja.width)} px)`);
   const desborda = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   ok(!desborda, "sin desbordamiento horizontal de la página en móvil");
+  await ctx.close();
+}
+// ---------------------------------------------------------------- tests: repaso y explicación tras responder
+{
+  const { ctx, page, errores } = await sesion();
+  await page.goto(U + "/c/aif-c01/tests");
+  for (const paso of ["1. Repaso de conocimientos", "2. Preguntas de examen", "3. Repetir falladas", "4. Simulacro"])
+    ok(await page.getByRole("heading", { name: paso }).count() === 1, `la página de tests muestra «${paso}»`);
+  ok(await page.locator('input[name="estudio"]').count() === 1, "el simulacro ofrece el modo estudio");
+  const repaso = page.locator('form:has(input[name="modo"][value="repaso"])');
+  await repaso.locator("select").selectOption("00-base-aws");
+  await repaso.locator('input[name="n"]').fill("1");
+  await Promise.all([page.waitForURL(/\/tests\/\d+\/p\/1/), repaso.locator("button").click()]);
+  ok((await page.textContent("main")).includes("Repaso de conocimientos"), "la pregunta se identifica como de repaso");
+  const marcar = page.locator("form[action$='/responder'] input[type=radio], form[action$='/responder'] input[type=checkbox]");
+  if (await marcar.count()) await marcar.first().check();
+  const listas = page.locator("form[action$='/responder'] select");
+  for (let k = 0; k < await listas.count(); k++) await listas.nth(k).selectOption({ index: k + 1 });  // un elemento distinto en cada lista
+  await page.click("form[action$='/responder'] button[type=submit]");
+  await page.waitForSelector("details.explicacion", { timeout: 10000 }).catch(() => {});
+  const det = page.locator("details.explicacion");
+  ok(await det.count() === 1, "tras responder aparece el desplegable de explicación");
+  if (!(await det.evaluate(d => d.open))) await det.locator("summary").click();
+  ok(await det.evaluate(d => d.open) && (await det.textContent()).includes("Referencia oficial"), "«Ver explicación» muestra la explicación y la referencia");
+  ok(await det.locator("a.btn", { hasText: "Repasar en la teoría" }).count() === 1, "la explicación enlaza a la teoría del objetivo");
+  await page.screenshot({ path: `${SH}/repaso-explicacion.png`, fullPage: true });
+  ok(errores.length === 0, `tests sin errores de consola ni HTTP (${errores.join(" | ")})`);
+  await ctx.close();
+}
+{
+  const { ctx, page } = await sesion({ viewport: { width: 390, height: 800 }, isMobile: true, hasTouch: true });
+  await page.goto(U + "/c/aif-c01/tests");
+  const desborda = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+  ok(!desborda, "la página de tests no desborda en móvil");
   await ctx.close();
 }
 await browser.close();

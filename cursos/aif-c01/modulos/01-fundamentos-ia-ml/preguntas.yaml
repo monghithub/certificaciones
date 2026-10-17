@@ -66,7 +66,7 @@
   tipo: ordering
   dificultad: baja
   enunciado: Para una formación interna, la dirección de una empresa quiere un esquema con la relación entre conceptos
-    de IA. Ordene los siguientes conceptos de más amplio a más específico.
+    de IA. Ordena los siguientes conceptos de más amplio a más específico.
   opciones:
   - id: a
     texto: IA generativa
@@ -188,7 +188,7 @@
   objetivo: 1.1.3
   tipo: matching
   dificultad: alta
-  enunciado: Empareje cada situación con el tipo de inferencia más adecuado.
+  enunciado: Empareja cada situación con el tipo de inferencia más adecuado.
   prompts:
   - id: '1'
     texto: Un asistente de voz que necesita respuestas interactivas de baja latencia
@@ -510,7 +510,7 @@
   objetivo: 1.2.5
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada necesidad con el servicio gestionado de AWS que la cubre.
+  enunciado: Empareja cada necesidad con el servicio gestionado de AWS que la cubre.
   prompts:
   - id: '1'
     texto: Convertir en texto las grabaciones de reuniones
@@ -670,7 +670,7 @@
   objetivo: 1.3.1
   tipo: ordering
   dificultad: media
-  enunciado: Tras haber definido el objetivo de negocio, ordene las etapas siguientes del ciclo de vida de un proyecto
+  enunciado: Tras haber definido el objetivo de negocio, ordena las etapas siguientes del ciclo de vida de un proyecto
     de ML.
   opciones:
   - id: a
@@ -820,7 +820,7 @@
   objetivo: 1.3.2
   tipo: ordering
   dificultad: alta
-  enunciado: Ordene las opciones para obtener un modelo con Amazon SageMaker AI, de menor a mayor esfuerzo.
+  enunciado: Ordena las opciones para obtener un modelo con Amazon SageMaker AI, de menor a mayor esfuerzo.
   opciones:
   - id: a
     texto: Modelos preentrenados listos para desplegar o ajustar
@@ -935,7 +935,7 @@
   objetivo: 1.3.6
   tipo: matching
   dificultad: alta
-  enunciado: Empareje cada descripción con la métrica correspondiente.
+  enunciado: Empareja cada descripción con la métrica correspondiente.
   prompts:
   - id: '1'
     texto: Media armónica de precisión y exhaustividad
@@ -1058,7 +1058,7 @@
   objetivo: 1.3.4
   tipo: matching
   dificultad: media
-  enunciado: Una empresa organiza su ciclo de vida de ML en AWS. Empareje cada necesidad con el servicio o funcionalidad
+  enunciado: Una empresa organiza su ciclo de vida de ML en AWS. Empareja cada necesidad con el servicio o funcionalidad
     que la cubre.
   prompts:
   - id: '1'
@@ -1219,7 +1219,7 @@
   objetivo: 1.3.2
   tipo: ordering
   dificultad: media
-  enunciado: Una tienda online quiere clasificar las reseñas de sus clientes. Ordene estas opciones de menor a mayor
+  enunciado: Una tienda online quiere clasificar las reseñas de sus clientes. Ordena estas opciones de menor a mayor
     coste y esfuerzo.
   opciones:
   - id: a
@@ -2084,7 +2084,7 @@
   objetivo: 1.3.5
   tipo: ordering
   dificultad: media
-  enunciado: Un modelo de previsión ya está en producción. Ordene los pasos del ciclo de monitorización y mejora.
+  enunciado: Un modelo de previsión ya está en producción. Ordena los pasos del ciclo de monitorización y mejora.
   opciones:
   - id: a
     texto: Reentrenar el modelo con datos actualizados
@@ -2111,7 +2111,7 @@
   objetivo: 1.2.5
   tipo: ordering
   dificultad: alta
-  enunciado: Una empresa quiere analizar textos de sus clientes. Ordene estas opciones de MENOR a MAYOR control
+  enunciado: Una empresa quiere analizar textos de sus clientes. Ordena estas opciones de MENOR a MAYOR control
     sobre el modelo y la infraestructura.
   opciones:
   - id: a
@@ -2137,7 +2137,7 @@
   objetivo: 1.3.6
   tipo: ordering
   dificultad: media
-  enunciado: Un equipo quiere evaluar un clasificador de fraude con datos que el modelo no haya visto. Ordene los
+  enunciado: Un equipo quiere evaluar un clasificador de fraude con datos que el modelo no haya visto. Ordena los
     pasos.
   opciones:
   - id: a
@@ -2165,7 +2165,7 @@
   objetivo: 1.3.2
   tipo: ordering
   dificultad: media
-  enunciado: Una empresa necesita un modelo fundacional para generar textos. Ordene estas fuentes de MENOR a MAYOR
+  enunciado: Una empresa necesita un modelo fundacional para generar textos. Ordena estas fuentes de MENOR a MAYOR
     esfuerzo.
   opciones:
   - id: a
@@ -2191,7 +2191,7 @@
   objetivo: 1.2.4
   tipo: matching
   dificultad: baja
-  enunciado: Empareje cada aplicación con el campo de la IA que la resuelve.
+  enunciado: Empareja cada aplicación con el campo de la IA que la resuelve.
   prompts:
   - id: '1'
     texto: Detectar defectos en fotos de piezas
@@ -2232,7 +2232,7 @@
   objetivo: 1.2.3
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada problema de negocio con la técnica de ML adecuada.
+  enunciado: Empareja cada problema de negocio con la técnica de ML adecuada.
   prompts:
   - id: '1'
     texto: Estimar el precio de venta de un piso
@@ -2274,7 +2274,7 @@
   objetivo: 1.2.5
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada necesidad con el servicio de IA de AWS que la cubre.
+  enunciado: Empareja cada necesidad con el servicio de IA de AWS que la cubre.
   prompts:
   - id: '1'
     texto: Extraer importes y tablas de facturas escaneadas
@@ -2315,7 +2315,7 @@
   objetivo: 1.3.6
   tipo: matching
   dificultad: alta
-  enunciado: Empareje cada situación con la métrica que conviene priorizar.
+  enunciado: Empareja cada situación con la métrica que conviene priorizar.
   prompts:
   - id: '1'
     texto: 'Cribado de una enfermedad grave: no se puede dejar sin detectar a ningún enfermo'

@@ -1,0 +1,782 @@
+- id: R5-001
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.1"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Según el modelo de responsabilidad compartida, ¿qué le corresponde proteger al cliente cuando usa Amazon Bedrock por API?
+  opciones:
+  - id: a
+    texto: El hardware y la red de los centros de datos donde se alojan los modelos
+  - id: b
+    texto: Las cuentas de despliegue de Bedrock en las que se ejecutan los modelos de los proveedores
+  - id: c
+    texto: Los permisos de IAM, el cifrado con sus claves y los datos que envía al modelo
+  - id: d
+    texto: El alojamiento del modelo fundacional y la infraestructura que lo sirve
+  correctas: [c]
+  explicacion: AWS protege «la nube» (centros de datos, hardware, red y servicios gestionados) y el cliente protege lo que pone «en la nube» (datos, accesos, configuración). En Bedrock, AWS se ocupa de la infraestructura, del alojamiento del modelo y de las cuentas de despliegue; el cliente, de los permisos, el cifrado con sus claves, la red, los datos, los guardrails y los registros. Pista, cuanto más gestionado es el servicio, menos tareas tiene el cliente, pero las de datos y permisos no desaparecen.
+  distractores:
+    a: Es seguridad «de la nube»; la protege AWS sea cual sea el servicio que se use.
+    b: Las cuentas de despliegue de Bedrock las gestiona AWS; ni el cliente ni los proveedores de modelos acceden a ellas.
+    d: En un servicio gestionado como Bedrock, el alojamiento y la infraestructura del modelo los gestiona AWS. Solo pasarían al cliente si autoalojara el modelo, por ejemplo en EC2.
+  referencia: https://aws.amazon.com/compliance/shared-responsibility-model/
+
+- id: R5-002
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.1"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué aporta AWS PrivateLink a la seguridad de una aplicación que llama a Amazon Bedrock?
+  opciones:
+  - id: a
+    texto: Que el tráfico entre la VPC y Bedrock no pase por Internet, mediante endpoints de interfaz
+  - id: b
+    texto: Que los datos viajen cifrados entre la aplicación y Bedrock, porque PrivateLink sustituye a TLS
+  - id: c
+    texto: Que solo determinados usuarios puedan invocar cada modelo de Bedrock
+  - id: d
+    texto: Que se detecten datos personales en los buckets de S3 que usa la aplicación
+  correctas: [a]
+  explicacion: PrivateLink crea endpoints de interfaz de VPC para llegar a Bedrock sin pasarela de Internet ni NAT, y admite políticas de endpoint para limitar el acceso. Es una medida de red, no de cifrado ni de identidad. Pista para recordarlo, PrivateLink es «el camino privado», no «el candado».
+  distractores:
+    b: El cifrado en tránsito lo da TLS (Bedrock exige TLS 1.2 y recomienda 1.3); PrivateLink mantiene el tráfico fuera de Internet, no lo cifra.
+    c: Quién puede invocar qué modelo se controla con políticas de IAM y el principio de mínimo privilegio.
+    d: Descubrir datos sensibles en S3 es la función de Amazon Macie.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/vpc-interface-endpoints.html
+
+- id: R5-003
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.1"
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada necesidad de seguridad con el servicio de AWS que la cubre.
+  prompts:
+  - id: "1"
+    texto: Cifrar en reposo un modelo personalizado con una clave que controla la empresa
+  - id: "2"
+    texto: Localizar datos personales en los buckets de S3 antes de usarlos con un modelo
+  - id: "3"
+    texto: Guardar y rotar la clave de API de un servicio externo que usa la herramienta de un agente
+  - id: "4"
+    texto: Limitar qué roles pueden invocar un modelo concreto
+  - id: "5"
+    texto: Llegar a Bedrock desde subredes privadas sin salir a Internet
+  opciones:
+  - id: a
+    texto: AWS Secrets Manager
+  - id: b
+    texto: AWS KMS
+  - id: c
+    texto: AWS PrivateLink
+  - id: d
+    texto: Amazon Macie
+  - id: e
+    texto: AWS IAM
+  - id: f
+    texto: AWS Config
+  correctas: [["1", "b"], ["2", "d"], ["3", "a"], ["4", "e"], ["5", "c"]]
+  explicacion: KMS gestiona claves de cifrado; Macie descubre datos sensibles en S3; Secrets Manager guarda y rota secretos como claves de API; IAM decide quién puede hacer qué; PrivateLink da conectividad privada. Pista, cada capa (datos, secretos, identidad y red) tiene su servicio y ninguno sustituye a otro.
+  distractores:
+    f: AWS Config inventaría y evalúa la configuración de los recursos con reglas; es un servicio de gobierno, no cubre ninguna de estas necesidades directamente.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html
+
+- id: R5-004
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.1"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué hace Policy in AgentCore?
+  opciones:
+  - id: a
+    texto: Gestiona las identidades y credenciales con las que un agente accede a recursos en nombre del usuario
+  - id: b
+    texto: Filtra los ataques de prompt y el contenido dañino en las entradas y respuestas del modelo
+  - id: c
+    texto: Guarda y rota las claves de API que usan las herramientas de un agente
+  - id: d
+    texto: Decide con reglas deterministas qué puede hacer un agente con cada herramienta y con qué límites
+  correctas: [d]
+  explicacion: Policy in AgentCore define qué puede hacer cada agente con sus herramientas y con qué límites, con políticas deterministas en Cedar o redactadas en lenguaje natural que se evalúan en el Gateway antes de permitir la llamada. Ejemplo típico, impedir que un agente de reembolsos apruebe importes por encima de un límite. Pista, Identity responde a «quién es el agente», Policy a «qué puede hacer».
+  distractores:
+    a: Es Amazon Bedrock AgentCore Identity, que se ocupa de la identidad y las credenciales del agente, no de limitar sus acciones.
+    b: Es Amazon Bedrock Guardrails; actúa sobre el contenido, no sobre las herramientas del agente.
+    c: Es AWS Secrets Manager, que guarda secretos en lugar de escribirlos en el código.
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html
+
+- id: R5-005
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.1"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS afirmaciones sobre la privacidad de los datos en Amazon Bedrock son correctas?
+  opciones:
+  - id: a
+    texto: Las entradas y salidas se comparten con el proveedor del modelo para que lo mejore
+  - id: b
+    texto: Ni AWS ni los proveedores de modelos usan las entradas y salidas para entrenar modelos
+  - id: c
+    texto: Los proveedores de modelos acceden a las cuentas de Bedrock donde se despliegan sus modelos
+  - id: d
+    texto: El cliente puede fijar por Región un modo de retención cero, con el que Bedrock rechaza los modelos que exigen retener datos
+  - id: e
+    texto: Para evitar que se usen los prompts en el entrenamiento hay que activar AWS PrivateLink
+  correctas: [b, d]
+  explicacion: Bedrock no comparte las entradas y salidas con los proveedores ni las usa para entrenar modelos, y los modelos se despliegan en cuentas a las que los proveedores no tienen acceso. Además, el cliente puede configurar la retención cero (zero data retention) por Región; con ella, Bedrock rechaza los modelos que exigen retener datos. Pista, en Bedrock tus prompts siguen siendo tuyos.
+  distractores:
+    a: Falso; las entradas y salidas no se comparten con los proveedores de modelos.
+    c: Falso; los modelos se despliegan en cuentas de Bedrock a las que los proveedores no tienen acceso.
+    e: PrivateLink saca el tráfico de Internet, pero no tiene relación con el entrenamiento; los prompts no se usan para entrenar en ningún caso.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html
+
+- id: R5-006
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué documenta el linaje de los datos (data lineage) en un proyecto de ML?
+  opciones:
+  - id: a
+    texto: De qué documentos sale cada respuesta que da el modelo al usuario
+  - id: b
+    texto: El recorrido de datos y artefactos desde su origen hasta el modelo desplegado
+  - id: c
+    texto: El inventario de los conjuntos de datos con su ubicación y su esquema
+  - id: d
+    texto: Qué usuarios tienen permiso para leer cada columna del lago de datos
+  correctas: [b]
+  explicacion: El linaje registra qué conjunto de datos, qué versión, qué trabajo de entrenamiento y qué endpoint componen un modelo, para reproducir el flujo y auditarlo. En AWS lo registran SageMaker ML Lineage Tracking y MLflow en SageMaker AI. Pista, el linaje habla del modelo; las citas, de una respuesta.
+  distractores:
+    a: Eso es la citación de fuentes, por ejemplo las citas que devuelve Amazon Bedrock Knowledge Bases.
+    c: Eso es la catalogación de datos, que en AWS hace AWS Glue Data Catalog.
+    d: Es control de acceso a los datos, que en el lago de datos gestiona AWS Lake Formation.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html
+
+- id: R5-007
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.2"
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada necesidad de documentación del origen de los datos con la herramienta que la cubre.
+  prompts:
+  - id: "1"
+    texto: Comprobar de qué documento sale cada respuesta del asistente
+  - id: "2"
+    texto: Saber con qué versión de los datos se entrenó el modelo en producción
+  - id: "3"
+    texto: Encontrar qué conjuntos de datos existen y cuál es su esquema
+  - id: "4"
+    texto: Recoger el uso previsto y los datos de entrenamiento de un modelo para el comité de riesgos
+  opciones:
+  - id: a
+    texto: SageMaker ML Lineage Tracking
+  - id: b
+    texto: Amazon SageMaker Model Cards
+  - id: c
+    texto: Citas de Amazon Bedrock Knowledge Bases
+  - id: d
+    texto: AWS Glue Data Catalog
+  - id: e
+    texto: AWS Lake Formation
+  correctas: [["1", "c"], ["2", "a"], ["3", "d"], ["4", "b"]]
+  explicacion: Las citas de Knowledge Bases señalan los fragmentos y documentos de origen de una respuesta; el linaje registra los datos y pasos que construyeron un modelo; Glue Data Catalog es el catálogo central de metadatos; las Model Cards documentan el modelo, su uso previsto y sus datos, con versiones inmutables. Pista, respuesta → cita, modelo → linaje, datos → catálogo, ficha → Model Card.
+  distractores:
+    e: Lake Formation gobierna quién accede a los datos (por columna, fila o celda); no describe su origen ni su esquema.
+  referencia: https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html
+
+- id: R5-008
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.2"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué es una Amazon SageMaker Model Card?
+  opciones:
+  - id: a
+    texto: Un registro automático de cada artefacto y trabajo de entrenamiento para reproducir el flujo
+  - id: b
+    texto: Un catálogo de los conjuntos de datos de la organización con su ubicación y metadatos
+  - id: c
+    texto: Un documento versionado e inmutable sobre el uso previsto, los datos y el entrenamiento de un modelo
+  - id: d
+    texto: Una política que limita qué usuarios pueden invocar un modelo desplegado
+  correctas: [c]
+  explicacion: Las Model Cards documentan un modelo (uso previsto, datos, entrenamiento y evaluación) y sus versiones son inmutables, lo que las hace útiles para auditoría y transparencia. Forman parte del gobierno de ML de SageMaker AI junto con el Model Dashboard. Pista, es la «ficha técnica» del modelo, escrita para personas.
+  distractores:
+    a: Describe el linaje (SageMaker ML Lineage Tracking o MLflow), que sigue el recorrido técnico de los artefactos.
+    b: Describe AWS Glue Data Catalog, que cataloga conjuntos de datos, no modelos.
+    d: Limitar quién invoca un modelo se hace con políticas de IAM.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/governance.html
+
+- id: R5-009
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.3"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS de estas técnicas son tecnologías de mejora de la privacidad (privacy-enhancing technologies)?
+  opciones:
+  - id: a
+    texto: Versionado de S3 de los datos de entrenamiento
+  - id: b
+    texto: Seudonimización o tokenización de los identificadores personales
+  - id: c
+    texto: Reglas de AWS Glue Data Quality con puntuación de calidad
+  - id: d
+    texto: Privacidad diferencial
+  - id: e
+    texto: Un endpoint de VPC con AWS PrivateLink
+  correctas: [b, d]
+  explicacion: Las tecnologías de mejora de la privacidad permiten usar los datos protegiendo a las personas, mediante minimización, anonimización, seudonimización o tokenización, enmascarado, privacidad diferencial y datos sintéticos. Pista, si la técnica cambia el dato para que identifique menos a una persona, es una PET.
+  distractores:
+    a: Protege la integridad de los datos (permite ver y recuperar versiones), pero no reduce la identificación de las personas.
+    c: Sirve para evaluar la calidad de los datos (completos, correctos, coherentes y actuales), otra práctica distinta.
+    e: Es protección de la infraestructura de red; no transforma los datos personales.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp02.html
+
+- id: R5-010
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un registro «Juan Pérez, diabético, calle Mayor 12» se transforma en «Paciente_2384, afección_tipo_2, zona_14». ¿Qué consigue esta transformación?
+  opciones:
+  - id: a
+    texto: Reduce mucho la posibilidad de identificar a la persona y conserva el valor analítico
+  - id: b
+    texto: Elimina el dato de forma irreversible, así que ya no hay que protegerlo
+  - id: c
+    texto: Convierte el registro en un dato sintético generado de forma artificial
+  - id: d
+    texto: Cifra el registro con una clave gestionada por AWS KMS
+  correctas: [a]
+  explicacion: Es minimización y seudonimización, una de las tecnologías de mejora de la privacidad que cita el Responsible AI Lens de AWS. Se conserva lo útil para el análisis (tipo de afección, zona) y se quita lo que identifica (nombre, dirección). Ojo, el dato seudonimizado sigue procediendo de una persona y hay que seguir protegiéndolo. Pista, seudonimizar es cambiar el nombre por un código, no borrar a la persona.
+  distractores:
+    b: El registro sigue existiendo y procede de una persona real; seudonimizar reduce la identificación, no elimina el dato ni la obligación de protegerlo.
+    c: Los datos sintéticos se generan de forma artificial; este registro se ha transformado, pero sigue procediendo de una persona real.
+    d: El cifrado con AWS KMS protege el dato en reposo, pero el registro transformado se puede leer; aquí se han sustituido los campos que identifican.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp02.html
+
+- id: R5-011
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué servicio de AWS permite dar permisos sobre el lago de datos por columna, fila y celda?
+  opciones:
+  - id: a
+    texto: AWS Glue Data Catalog
+  - id: b
+    texto: Amazon Macie
+  - id: c
+    texto: AWS Glue DataBrew
+  - id: d
+    texto: AWS Lake Formation
+  correctas: [d]
+  explicacion: El control de acceso a los datos significa que cada persona o sistema accede solo a lo que necesita. Además de IAM y las políticas de bucket de S3, AWS Lake Formation gobierna el acceso al lago de datos con permisos por columna, fila y celda. Pista, el catálogo describe los datos y Lake Formation decide quién los ve.
+  distractores:
+    a: Es el catálogo central de metadatos (ubicación y esquema); describe los datos, no controla el acceso detallado.
+    b: Descubre datos sensibles en S3, pero no concede ni limita permisos.
+    c: Perfila y limpia datos de forma visual, sin código; sirve para la calidad de los datos.
+  referencia: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
+
+- id: R5-012
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.4"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿En qué consiste la inyección de prompts (prompt injection)?
+  opciones:
+  - id: a
+    texto: En que el modelo genere una respuesta plausible pero no respaldada por las fuentes
+  - id: b
+    texto: En que un usuario o un documento cambien las instrucciones que sigue el modelo
+  - id: c
+    texto: En que un atacante altere los datos de entrenamiento para sesgar el modelo
+  - id: d
+    texto: En que el modelo revele datos personales que no debería mostrar
+  correctas: [b]
+  explicacion: En la inyección de prompts, un texto del usuario o de un documento recuperado introduce instrucciones que sustituyen o amplían las originales (cambio de personaje, extracción de la plantilla, ignorar la plantilla, etc.). Se mitiga con el filtro de ataques de prompt de Guardrails, separando instrucciones y datos y con mínimo privilegio para los agentes. Pista, «inyectar» es colar instrucciones nuevas.
+  distractores:
+    a: Es una alucinación, que se combate con grounding (RAG con citas, comprobación de grounding).
+    c: Es envenenamiento de datos, un riesgo para la integridad de los datos de entrenamiento.
+    d: Es una fuga de datos; puede ser consecuencia de una inyección, pero no es lo mismo.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/common-attacks.html
+
+- id: R5-013
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué mecanismo guarda el texto de las peticiones y respuestas de los modelos de Amazon Bedrock?
+  opciones:
+  - id: a
+    texto: El historial de eventos de AWS CloudTrail
+  - id: b
+    texto: El historial de configuración de AWS Config
+  - id: c
+    texto: El registro de invocaciones de modelos de Bedrock
+  - id: d
+    texto: Las trazas que devuelve Bedrock Guardrails asociadas a cada petición del usuario
+  correctas: [c]
+  explicacion: El registro de invocaciones de modelos de Bedrock guarda la petición, la respuesta y sus metadatos en CloudWatch Logs o en S3, y hay que activarlo porque está desactivado por defecto. CloudTrail, en cambio, registra quién llamó a qué API y cuándo, sin el contenido. Pista, CloudTrail es el «quién»; el registro de invocaciones, el «qué se dijo».
+  distractores:
+    a: CloudTrail registra la llamada a InvokeModel o Converse, pero no el texto del prompt ni de la respuesta.
+    b: Config registra la configuración de los recursos y sus cambios, no el contenido de las interacciones.
+    d: La traza de Guardrails informa de lo que detectó el guardrail en una petición, no es un registro completo de peticiones y respuestas.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
+
+- id: R5-014
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.4"
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: ¿Qué DOS afirmaciones sobre el registro de la actividad de Amazon Bedrock en AWS CloudTrail son correctas?
+  opciones:
+  - id: a
+    texto: InvokeModel y Converse son eventos de administración y aparecen en el historial de eventos sin configurar nada
+  - id: b
+    texto: CloudTrail guarda el texto de cada prompt junto con el evento InvokeModel
+  - id: c
+    texto: Retrieve y RetrieveAndGenerate son eventos de datos y solo se registran con un trail con selectores avanzados
+  - id: d
+    texto: ApplyGuardrail es un evento de administración que se ve en el historial de eventos por defecto
+  - id: e
+    texto: Los eventos de datos de Bedrock se registran sin coste adicional en el historial de eventos
+  correctas: [a, c]
+  explicacion: Bedrock registra InvokeModel y Converse como eventos de administración, visibles sin configurar nada. Las consultas a Knowledge Bases (Retrieve, RetrieveAndGenerate), a agentes (InvokeAgent), a flujos (InvokeFlow) y ApplyGuardrail son eventos de datos; necesitan un trail con selectores avanzados y tienen coste. Pista, invocar el modelo sale gratis en el historial; lo demás hay que pedirlo.
+  distractores:
+    b: CloudTrail no guarda el contenido; el texto se conserva con el registro de invocaciones de modelos de Bedrock.
+    d: ApplyGuardrail es un evento de datos; solo aparece con un trail configurado para ello.
+    e: Los eventos de datos no van al historial de eventos y tienen coste; requieren un trail.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html
+
+- id: R5-015
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.4"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS medidas reducen el riesgo de un agente con exceso de autonomía (excessive agency)?
+  opciones:
+  - id: a
+    texto: Bajar la temperatura del modelo a 0
+  - id: b
+    texto: Escanear los buckets del agente con Amazon Macie
+  - id: c
+    texto: Conceder al agente solo los permisos que necesita (mínimo privilegio)
+  - id: d
+    texto: Limitar con Policy in AgentCore lo que puede hacer con cada herramienta
+  - id: e
+    texto: Descargar de AWS Artifact los informes de cumplimiento de AWS
+  correctas: [c, d]
+  explicacion: Un agente con más permisos de los necesarios multiplica el daño de una inyección de prompts. Se limita con mínimo privilegio, con Policy in AgentCore y con aprobación humana para las acciones sensibles. Pista, cuanto menos pueda hacer el agente, menos daño hace si lo engañan.
+  distractores:
+    a: La temperatura reduce la variabilidad de la respuesta, pero no limita las acciones que el agente puede ejecutar.
+    b: Macie descubre datos sensibles en S3; no restringe qué hace el agente.
+    e: Artifact da informes de cumplimiento de la infraestructura de AWS; no controla el comportamiento de un agente.
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html
+
+- id: R5-016
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.4"
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Si Bedrock Guardrails enmascara los datos personales de las peticiones, ¿qué guarda el campo de entrada del registro de invocaciones en CloudWatch Logs?
+  opciones:
+  - id: a
+    texto: La petición original, sin enmascarar
+  - id: b
+    texto: La petición ya enmascarada, igual que la que recibe el modelo
+  - id: c
+    texto: Solo los metadatos de la petición, sin su contenido
+  - id: d
+    texto: Nada, porque el registro se desactiva al usar un guardrail
+  correctas: [a]
+  explicacion: El enmascarado de PII de Guardrails solo se aplica a lo que entra al modelo y a lo que devuelve; el campo de entrada del registro de invocaciones guarda la petición original y la traza de Guardrails devuelve el valor detectado. Para proteger los registros se usa la protección de datos de CloudWatch Logs y se limita el acceso a ellos. Pista, Guardrails protege al modelo y al usuario, no a tus registros.
+  distractores:
+    b: Es la trampa típica; el enmascarado no llega a los registros.
+    c: El registro de invocaciones guarda la petición, la respuesta y los metadatos, no solo estos últimos.
+    d: Usar un guardrail no desactiva el registro de invocaciones; este funciona mientras exista su configuración.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
+
+- id: R5-017
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.5"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué tres piezas necesita la comprobación de grounding contextual (contextual grounding check) de Bedrock Guardrails?
+  opciones:
+  - id: a
+    texto: El prompt del sistema, la temperatura y la respuesta
+  - id: b
+    texto: La respuesta, el historial de la conversación y la puntuación de confianza
+  - id: c
+    texto: La pregunta, la respuesta y las reglas lógicas de negocio
+  - id: d
+    texto: La fuente de referencia, la pregunta y la respuesta
+  correctas: [d]
+  explicacion: La comprobación compara la respuesta con la fuente para medir si se basa en ella (grounding) y con la pregunta para medir si es pertinente (relevancia). Está pensada para resúmenes, paráfrasis y preguntas y respuestas sobre una fuente, no para chat conversacional. Pista, «fuente + pregunta + respuesta» dan las dos puntuaciones.
+  distractores:
+    a: La temperatura no interviene; además, sin la fuente no se podría medir el grounding.
+    b: El chat conversacional no está admitido, y la puntuación es el resultado de la comprobación, no una entrada.
+    c: Las reglas lógicas las usan los Automated Reasoning checks, otra técnica de validación distinta.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html
+
+- id: R5-018
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.5"
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Con umbrales de 0,7 en grounding y en relevancia, una respuesta obtiene 0,85 de grounding y 0,40 de relevancia. ¿Qué ocurre?
+  opciones:
+  - id: a
+    texto: Se entrega, porque el grounding supera el umbral
+  - id: b
+    texto: Se bloquea, porque es irrelevante para la pregunta aunque se base en la fuente
+  - id: c
+    texto: Se bloquea, porque no se basa en la fuente
+  - id: d
+    texto: Se entrega con un aviso, porque la media de ambas puntuaciones supera 0,6
+  correctas: [b]
+  explicacion: La comprobación mide dos cosas y la respuesta debe superar los dos umbrales. Aquí el grounding (0,85) indica que el contenido está en la fuente, pero la relevancia (0,40) indica que no responde a la pregunta, así que se bloquea. Pista, se puede fallar por cualquiera de las dos puntuaciones; subir los umbrales bloquea más alucinaciones y también más respuestas válidas.
+  distractores:
+    a: Un grounding alto no basta; también hay que superar el umbral de relevancia.
+    c: El grounding (0,85) supera el umbral; el fallo está en la relevancia.
+    d: Las puntuaciones no se promedian; cada una se compara con su propio umbral.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html
+
+- id: R5-019
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.5"
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada problema de exactitud de la salida con la técnica que lo aborda.
+  prompts:
+  - id: "1"
+    texto: El asistente inventa datos que no están en los documentos internos
+  - id: "2"
+    texto: Las respuestas deben cumplir reglas de negocio complejas
+  - id: "3"
+    texto: La aplicación espera un JSON con campos concretos
+  - id: "4"
+    texto: Las respuestas dudosas deben revisarse antes de enviarse
+  opciones:
+  - id: a
+    texto: Validación del formato de la salida
+  - id: b
+    texto: Puntuación de confianza con umbral y revisión humana
+  - id: c
+    texto: RAG con citas y comprobación de grounding contextual
+  - id: d
+    texto: Automated Reasoning checks
+  - id: e
+    texto: Bajar la temperatura a 0
+  correctas: [["1", "c"], ["2", "d"], ["3", "a"], ["4", "b"]]
+  explicacion: El grounding con RAG hace que el modelo responda desde documentos recuperados y con citas; los Automated Reasoning checks validan la respuesta contra reglas lógicas; la validación de formato comprueba el esquema esperado; la puntuación de confianza decide según un umbral si se entrega, se avisa o se deriva a una persona. Pista, cada técnica valida la respuesta contra algo distinto (fuente, reglas, formato o confianza).
+  distractores:
+    e: La temperatura 0 hace la respuesta menos variable, no más veraz; no corrige ninguno de estos problemas.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html
+
+- id: R5-020
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.5"
+  tipo: ordering
+  dificultad: media
+  enunciado: Ordena los pasos de una respuesta con RAG y comprobación de grounding, desde la pregunta del usuario.
+  opciones:
+  - id: a
+    texto: Comparar la puntuación de grounding con el umbral
+  - id: b
+    texto: Recuperar los fragmentos relevantes con su fuente
+  - id: c
+    texto: Entregar la respuesta con sus citas, o bloquearla o derivarla a una persona
+  - id: d
+    texto: Generar la respuesta con citas a partir de los fragmentos
+  correctas: [b, d, a, c]
+  explicacion: Tras la pregunta, se recuperan los fragmentos con su fuente, el modelo genera la respuesta con citas, se compara la puntuación de grounding con el umbral y, según el resultado, se entrega con sus fuentes o se bloquea o deriva. Pista, primero se busca, luego se escribe, después se comprueba y al final se decide.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve-generate.html
+
+- id: R5-021
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.1"
+  tipo: matching
+  dificultad: baja
+  enunciado: Empareja cada servicio de gobierno y cumplimiento con lo que hace.
+  prompts:
+  - id: "1"
+    texto: AWS Config
+  - id: "2"
+    texto: Amazon Inspector
+  - id: "3"
+    texto: AWS Artifact
+  - id: "4"
+    texto: AWS CloudTrail
+  - id: "5"
+    texto: AWS Trusted Advisor
+  opciones:
+  - id: a
+    texto: Registra la actividad de la API, es decir, quién hizo qué, cuándo y desde dónde
+  - id: b
+    texto: Ofrece recomendaciones de coste, rendimiento, disponibilidad, seguridad y límites de servicio
+  - id: c
+    texto: Inventaría la configuración de los recursos, su historial y su evaluación con reglas
+  - id: d
+    texto: Escanea de forma continua EC2, imágenes de contenedores y Lambda en busca de vulnerabilidades
+  - id: e
+    texto: Da acceso bajo demanda a los informes de cumplimiento de AWS y gestiona acuerdos
+  - id: f
+    texto: Descubre datos sensibles almacenados en los buckets de S3
+  correctas: [["1", "c"], ["2", "d"], ["3", "e"], ["4", "a"], ["5", "b"]]
+  explicacion: Son los cinco servicios que cita la guía y cada uno responde a una pregunta distinta, como cómo está configurado (Config), qué es vulnerable (Inspector), qué certifica AWS (Artifact), quién hizo qué (CloudTrail) y qué se puede mejorar (Trusted Advisor). Pista, asocia cada servicio a su pregunta.
+  distractores:
+    f: Es Amazon Macie, un servicio de protección de datos, no uno de los cinco de gobierno de la lista.
+  referencia: https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html
+
+- id: R5-022
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.1"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué ofrece AWS Artifact?
+  opciones:
+  - id: a
+    texto: Una certificación de cumplimiento de la aplicación de IA del cliente
+  - id: b
+    texto: La evaluación de la configuración de los recursos del cliente con reglas
+  - id: c
+    texto: Informes de cumplimiento de AWS (SOC, ISO, PCI) bajo demanda
+  - id: d
+    texto: Recomendaciones para cerrar brechas de seguridad en la cuenta
+  correctas: [c]
+  explicacion: AWS Artifact permite descargar los informes de cumplimiento de la infraestructura de AWS (SOC, ISO, PCI) y gestionar acuerdos, por ejemplo para entregarlos a un auditor. Certifica lo que protege AWS, no lo que construye el cliente. Pista, Artifact enseña los «papeles» de AWS.
+  distractores:
+    a: Artifact ofrece los informes de AWS; el cumplimiento de la aplicación del cliente es responsabilidad del cliente.
+    b: Es AWS Config, que evalúa la configuración de los recursos del cliente con reglas.
+    d: Es AWS Trusted Advisor, que da recomendaciones de buenas prácticas.
+  referencia: https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html
+
+- id: R5-023
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.1"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS de estos servicios o funcionalidades ya no admiten clientes nuevos y no son la respuesta para un proyecto nuevo?
+  opciones:
+  - id: a
+    texto: AWS Config
+  - id: b
+    texto: AWS Audit Manager
+  - id: c
+    texto: Amazon SageMaker Model Cards
+  - id: d
+    texto: AWS Artifact
+  - id: e
+    texto: SageMaker Role Manager
+  correctas: [b, e]
+  explicacion: AWS Audit Manager (recopilación de evidencias con marcos predefinidos) y SageMaker Role Manager ya no admiten clientes nuevos. Para Role Manager, AWS remite a roles y políticas de IAM, IAM Identity Center e infraestructura como código. Pista, si el enunciado habla de una cuenta o un proyecto nuevo, descártalos.
+  distractores:
+    a: AWS Config sigue disponible y es la opción para evaluar la configuración de los recursos con reglas.
+    c: Las Model Cards siguen disponibles dentro del gobierno de ML de SageMaker AI, junto con el Model Dashboard.
+    d: AWS Artifact sigue disponible para descargar los informes de cumplimiento de AWS.
+  referencia: https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html
+
+- id: R5-024
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.1"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El historial de eventos de AWS CloudTrail guarda 90 días de eventos de administración. ¿Qué hace falta para conservar la actividad más tiempo o registrar eventos de datos?
+  opciones:
+  - id: a
+    texto: Configurar un trail
+  - id: b
+    texto: Activar el registro de invocaciones de Bedrock
+  - id: c
+    texto: Crear una regla de AWS Config
+  - id: d
+    texto: Ampliar la retención del historial de eventos desde Trusted Advisor
+  correctas: [a]
+  explicacion: El historial de eventos sirve sin configurar nada, pero solo cubre 90 días de eventos de administración. Los eventos de datos y la conservación más larga requieren un trail. Pista, historial para lo reciente, trail para lo que hay que guardar.
+  distractores:
+    b: Guarda el contenido de las peticiones y respuestas, pero no conserva los eventos de CloudTrail.
+    c: Config evalúa la configuración de los recursos; no amplía el registro de la actividad de la API.
+    d: Trusted Advisor da recomendaciones; no configura la retención de CloudTrail.
+  referencia: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html
+
+- id: R5-025
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.2"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Con la inferencia entre Regiones de Bedrock, ¿qué opción mantiene el procesamiento dentro de una geografía, como la UE?
+  opciones:
+  - id: a
+    texto: El perfil de inferencia global
+  - id: b
+    texto: Un endpoint de AWS PrivateLink en una Región de la UE
+  - id: c
+    texto: Una clave de KMS creada en una Región de la UE
+  - id: d
+    texto: Un perfil de inferencia geográfico
+  correctas: [d]
+  explicacion: La residencia decide en qué Región o geografía se almacenan y procesan los datos. Los perfiles geográficos de inferencia entre Regiones mantienen el procesamiento dentro de una geografía (EE. UU., UE…), mientras que el global puede usar otras Regiones comerciales admitidas. Pista, «geográfico» se queda en casa; «global» viaja.
+  distractores:
+    a: El perfil global puede enviar las peticiones a Regiones comerciales admitidas de otras geografías.
+    b: PrivateLink mantiene el tráfico fuera de Internet, pero no decide dónde se procesa la inferencia.
+    c: La clave cifra los datos en reposo, pero no limita las Regiones de procesamiento.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+
+- id: R5-026
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Cuánto tiempo conserva por defecto un grupo de registros de Amazon CloudWatch Logs?
+  opciones:
+  - id: a
+    texto: 30 días, tras los cuales los registros se borran
+  - id: b
+    texto: Indefinidamente, salvo que se fije una retención
+  - id: c
+    texto: 90 días, igual que el historial de eventos de CloudTrail
+  - id: d
+    texto: Un año, salvo que se amplíe la retención
+  correctas: [b]
+  explicacion: Los grupos de CloudWatch Logs guardan los datos indefinidamente por defecto, así que la retención es una decisión de gobierno que hay que configurar. Afecta, por ejemplo, al registro de invocaciones de Bedrock que se envía a CloudWatch Logs. Pista, los registros no se borran solos.
+  distractores:
+    a: No hay borrado a los 30 días por defecto; la retención hay que fijarla.
+    c: Los 90 días son del historial de eventos de CloudTrail, no de CloudWatch Logs.
+    d: No hay un plazo de un año por defecto; sin una retención configurada, los registros no caducan.
+  referencia: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html
+
+- id: R5-027
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué mecanismo de AWS automatiza que los objetos de S3 pasen a una clase de archivo y se borren al vencer su plazo?
+  opciones:
+  - id: a
+    texto: El versionado de S3
+  - id: b
+    texto: Una regla de AWS Config
+  - id: c
+    texto: Una regla de S3 Lifecycle
+  - id: d
+    texto: Un trail de AWS CloudTrail
+  correctas: [c]
+  explicacion: El ciclo de vida de los datos decide qué pasa con ellos desde que se crean hasta que se borran. S3 Lifecycle aplica reglas de transición (por ejemplo, a S3 Glacier) y de expiración, de modo que el cumplimiento de la política no depende de que alguien se acuerde. Pista, Lifecycle = transición + expiración.
+  distractores:
+    a: El versionado conserva versiones para proteger la integridad; no mueve ni borra objetos por plazo.
+    b: Config evalúa si la configuración cumple una regla, pero no mueve ni borra objetos.
+    d: CloudTrail registra la actividad de la API; no gestiona el ciclo de vida de los objetos.
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
+
+- id: R5-028
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.3"
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada proceso de gobierno de la IA con un ejemplo.
+  prompts:
+  - id: "1"
+    texto: Políticas
+  - id: "2"
+    texto: Cadencia de revisión
+  - id: "3"
+    texto: Estrategias de revisión
+  - id: "4"
+    texto: Estándares de transparencia
+  - id: "5"
+    texto: Requisitos de formación de los equipos
+  opciones:
+  - id: a
+    texto: Comprobaciones diarias de incidencias, análisis semanal de tendencias y revisión mensual de patrones
+  - id: b
+    texto: Que quienes desarrollan, aprueban o usan la IA conozcan las políticas, los riesgos y el uso responsable
+  - id: c
+    texto: Uso aceptable de la IA y lista de proveedores y modelos autorizados
+  - id: d
+    texto: Documentar el sistema con Model Cards e informar a los usuarios de que interviene una IA
+  - id: e
+    texto: Revisión técnica, legal y de seguridad antes de lanzar, y pruebas adversarias
+  - id: f
+    texto: Registrar con qué versión de los datos se entrenó cada modelo
+  correctas: [["1", "c"], ["2", "a"], ["3", "e"], ["4", "d"], ["5", "b"]]
+  explicacion: Las políticas fijan las reglas (uso aceptable, clasificación de datos, modelos autorizados); la cadencia marca cada cuánto se revisa; las estrategias de revisión dicen cómo y quién revisa; la transparencia documenta e informa; la formación asegura que las personas conocen todo lo anterior. Pista, qué se permite, cada cuánto, cómo, cómo se explica y quién lo sabe.
+  distractores:
+    f: Es linaje de los datos, una técnica para documentar el origen de los datos, no un proceso de gobierno de esta lista.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+
+- id: R5-029
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Con qué criterio clasifica la Generative AI Security Scoping Matrix los casos de uso en sus cinco ámbitos?
+  opciones:
+  - id: a
+    texto: Según cuánto controla la organización el modelo y sus datos
+  - id: b
+    texto: Según el coste mensual de la inferencia del caso de uso
+  - id: c
+    texto: Según la Región de AWS en la que se procesan los datos
+  - id: d
+    texto: Según el número de usuarios que tendrá la aplicación
+  correctas: [a]
+  explicacion: La matriz ordena los casos de uso del 1 (app de consumo) al 5 (modelo propio entrenado desde cero) según el control que tiene la organización sobre el modelo y sus datos; cuanto mayor es el ámbito, más responsabilidades de seguridad asume. Después cruza los ámbitos con cinco disciplinas (gobierno y cumplimiento, aspectos legales y privacidad, gestión de riesgos, controles y resiliencia). Pista, más control, más responsabilidad.
+  distractores:
+    b: El coste no es un eje de la matriz; la matriz trata de responsabilidades de seguridad.
+    c: La Región es una cuestión de residencia de los datos, una estrategia de gobierno de datos distinta.
+    d: El número de usuarios no determina el ámbito; una aplicación propia sobre Amazon Bedrock es ámbito 3 tanto si la usan diez personas como un millón.
+  referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
+
+- id: R5-030
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: En la Generative AI Security Scoping Matrix, ¿qué ámbito corresponde a ajustar un modelo de terceros con datos propios?
+  opciones:
+  - id: a
+    texto: Ámbito 3
+  - id: b
+    texto: Ámbito 4
+  - id: c
+    texto: Ámbito 2
+  - id: d
+    texto: Ámbito 5
+  correctas: [b]
+  explicacion: El ámbito 4 es el de un modelo de terceros ajustado con datos propios; la matriz recomienda clasificar ese modelo con el nivel de sensibilidad más alto de sus datos de entrenamiento, limitar quién puede invocarlo y evitar datos personales en el entrenamiento. Pista, 3 usa el modelo tal cual, 4 lo ajusta y 5 lo entrena desde cero.
+  distractores:
+    a: El ámbito 3 es una aplicación propia que usa un modelo de terceros por API sin ajustarlo, por ejemplo un chatbot con RAG en Bedrock.
+    c: El ámbito 2 es una aplicación SaaS de terceros con IA integrada y contrato con el proveedor.
+    d: El ámbito 5 es entrenar un modelo propio desde cero; es el ámbito con más responsabilidades.
+  referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/

@@ -2,7 +2,7 @@
 
 Curso en español de España para preparar el examen **AWS Certified AI Practitioner (AIF-C01)**. Está pensado para perfiles junior con conocimientos básicos de programación y poca experiencia en AWS, y lo revisa un arquitecto de software sénior.
 
-> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)). Quedan cuatro marcadores `PENDIENTE DE VERIFICAR` por contradicciones en las propias fuentes de AWS; ninguna pregunta depende de ellos. Cada uno tiene su issue de seguimiento y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
+> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)), más 210 preguntas de repaso de conocimientos en los módulos 00 a 05. Quedan cuatro marcadores `PENDIENTE DE VERIFICAR` por contradicciones en las propias fuentes de AWS; ninguna pregunta depende de ellos. Cada uno tiene su issue de seguimiento y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
 
 Manifiesto del curso: [curso.yaml](curso.yaml).
 
@@ -52,9 +52,10 @@ Cada módulo contiene `README.md` (teoría), `servicios.md`, `trampas.md`, `preg
 1. Lee el `README.md` del módulo y comprueba su mapa de cobertura frente a [fuentes/](fuentes/).
 2. Repasa `servicios.md` (qué servicio, para qué y cuándo no usarlo) y `trampas.md`.
 3. Haz el laboratorio, si lo hay. **Genera costes en tu cuenta de AWS: sigue siempre la sección de limpieza.**
-4. Practica con el cuestionario: `python scripts/quiz.py --dominio 3 --n 10`.
-5. Anota los fallos por tarea y vuelve a la teoría antes de pasar al siguiente módulo.
-6. Al terminar el curso, haz el [conjunto oficial de práctica de AWS Skill Builder](#antes-de-reservar-el-examen).
+4. Haz el **repaso de conocimientos** del módulo (preguntas directas para fijar conceptos y servicios, también en el módulo 00) hasta acertar casi todo. En la consola es el paso 1 de «Tests»; en la terminal, `python scripts/quiz.py --modulo 03 --repaso`.
+5. Pasa a las **preguntas de examen** (escenarios): `python scripts/quiz.py --dominio 3 --n 10`. Al responder cada pregunta, abre «Ver explicación» y, si fallas, sigue el enlace a la teoría.
+6. Repite las falladas («Repetir falladas» en la consola) hasta que salgan de la lista y vuelve a la teoría de las tareas débiles antes de pasar al siguiente módulo.
+7. Al terminar el curso, haz el [conjunto oficial de práctica de AWS Skill Builder](#antes-de-reservar-el-examen).
 
 ## Plan de 4 semanas
 

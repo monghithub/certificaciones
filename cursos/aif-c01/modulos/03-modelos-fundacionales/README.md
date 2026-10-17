@@ -684,6 +684,7 @@ Documentación oficial consultada el 15 de octubre de 2026:
 - Amazon S3 Vectors: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html>
 - Personalización de modelos: <https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html>, *fine-tuning*: <https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-fine-tuning.html>, *reinforcement fine-tuning*: <https://docs.aws.amazon.com/bedrock/latest/userguide/reinforcement-fine-tuning.html> y destilación: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html>
 - Preparación de datos para personalizar modelos: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html>
+- *Transfer learning*: <https://aws.amazon.com/what-is/transfer-learning/>
 - Preguntas frecuentes de Bedrock (preentrenamiento continuado): <https://aws.amazon.com/bedrock/faqs/>
 - RLHF: <https://aws.amazon.com/what-is/reinforcement-learning-from-human-feedback/>
 - Agentes de IA: <https://aws.amazon.com/what-is/ai-agents/>

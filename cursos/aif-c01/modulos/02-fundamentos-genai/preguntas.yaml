@@ -280,7 +280,7 @@
   objetivo: 2.1.2
   tipo: matching
   dificultad: baja
-  enunciado: Una consultora clasifica las peticiones de sus clientes. Empareje cada petición con el caso de uso
+  enunciado: Una consultora clasifica las peticiones de sus clientes. Empareja cada petición con el caso de uso
     de IA generativa que describe.
   prompts:
   - id: '1'
@@ -323,7 +323,7 @@
   objetivo: 2.1.3
   tipo: ordering
   dificultad: media
-  enunciado: Un equipo de investigación crea su propio modelo fundacional desde cero. Ordene las etapas del ciclo
+  enunciado: Un equipo de investigación crea su propio modelo fundacional desde cero. Ordena las etapas del ciclo
     de vida en el orden en que se realizan.
   opciones:
   - id: a
@@ -576,7 +576,7 @@
   objetivo: 2.1.4
   tipo: ordering
   dificultad: alta
-  enunciado: Un modelo cuesta 1 USD por millón de tokens de entrada y 4 USD por millón de salida. Ordene estas cargas
+  enunciado: Un modelo cuesta 1 USD por millón de tokens de entrada y 4 USD por millón de salida. Ordena estas cargas
     mensuales de MENOR a MAYOR coste.
   opciones:
   - id: a
@@ -716,7 +716,7 @@
   objetivo: 2.1.5
   tipo: ordering
   dificultad: media
-  enunciado: Un equipo prepara los manuales de producto para que el asistente pueda usarlos como contexto. Ordene
+  enunciado: Un equipo prepara los manuales de producto para que el asistente pueda usarlos como contexto. Ordena
     los pasos de principio a fin.
   opciones:
   - id: a
@@ -883,7 +883,7 @@
   objetivo: 2.1.6
   tipo: matching
   dificultad: media
-  enunciado: Un equipo de arquitectura documenta el diseño de su primer agente de atención al cliente. Empareje
+  enunciado: Un equipo de arquitectura documenta el diseño de su primer agente de atención al cliente. Empareja
     cada pieza descrita con el concepto de IA agéntica que le corresponde.
   prompts:
   - id: '1'
@@ -1149,7 +1149,7 @@
   objetivo: 2.2.2
   tipo: matching
   dificultad: alta
-  enunciado: Un equipo ajusta los parámetros de inferencia de un modelo en Amazon Bedrock. Empareje cada efecto
+  enunciado: Un equipo ajusta los parámetros de inferencia de un modelo en Amazon Bedrock. Empareja cada efecto
     deseado con el ajuste que lo produce.
   prompts:
   - id: '1'
@@ -1300,7 +1300,7 @@
   objetivo: 2.2.3
   tipo: ordering
   dificultad: media
-  enunciado: Un equipo sigue un proceso para elegir el modelo de su asistente. Ordene los pasos de forma lógica.
+  enunciado: Un equipo sigue un proceso para elegir el modelo de su asistente. Ordena los pasos de forma lógica.
   opciones:
   - id: a
     texto: Evaluar los candidatos con casos reales de la empresa
@@ -1458,7 +1458,7 @@
   objetivo: 2.2.4
   tipo: matching
   dificultad: media
-  enunciado: Una empresa define los indicadores de varios proyectos de IA generativa. Empareje cada objetivo con
+  enunciado: Una empresa define los indicadores de varios proyectos de IA generativa. Empareja cada objetivo con
     la métrica más adecuada.
   prompts:
   - id: '1'
@@ -1699,7 +1699,7 @@
   objetivo: 2.3.1
   tipo: matching
   dificultad: media
-  enunciado: Un grupo empresarial recoge las peticiones de IA generativa de sus filiales. Empareje cada necesidad
+  enunciado: Un grupo empresarial recoge las peticiones de IA generativa de sus filiales. Empareja cada necesidad
     con el servicio de AWS que mejor la cubre.
   prompts:
   - id: '1'
@@ -1832,7 +1832,7 @@
   objetivo: 2.3.2
   tipo: ordering
   dificultad: baja
-  enunciado: Una empresa quiere validar una idea de IA generativa con el menor riesgo. Ordene los pasos de un enfoque
+  enunciado: Una empresa quiere validar una idea de IA generativa con el menor riesgo. Ordena los pasos de un enfoque
     típico con servicios de AWS.
   opciones:
   - id: a
@@ -1968,7 +1968,7 @@
   objetivo: 2.3.3
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada necesidad de una aplicación de IA generativa con el beneficio o control de AWS que la
+  enunciado: Empareja cada necesidad de una aplicación de IA generativa con el beneficio o control de AWS que la
     cubre.
   prompts:
   - id: '1'
@@ -2151,7 +2151,7 @@
   objetivo: 2.3.4
   tipo: matching
   dificultad: alta
-  enunciado: Una empresa revisa sus cargas en Amazon Bedrock. Empareje cada una con la opción MÁS adecuada.
+  enunciado: Una empresa revisa sus cargas en Amazon Bedrock. Empareja cada una con la opción MÁS adecuada.
   prompts:
   - id: '1'
     texto: Asistente web con tráfico variable e impredecible
@@ -2193,7 +2193,7 @@
   objetivo: 2.3.4
   tipo: ordering
   dificultad: media
-  enunciado: Para un modelo de Amazon Bedrock que admite procesamiento por lotes y niveles de servicio, ordene estas
+  enunciado: Para un modelo de Amazon Bedrock que admite procesamiento por lotes y niveles de servicio, ordena estas
     formas de invocarlo de MENOR a MAYOR precio por token.
   opciones:
   - id: a

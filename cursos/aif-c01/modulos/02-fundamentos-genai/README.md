@@ -570,6 +570,7 @@ Documentación oficial consultada el 14 de octubre de 2026:
 - LLM: <https://aws.amazon.com/what-is/large-language-model/> y *transformers*: <https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/>
 - *Embeddings*: <https://aws.amazon.com/what-is/embeddings-in-machine-learning/> y bases de datos vectoriales: <https://aws.amazon.com/what-is/vector-databases/>
 - Ingeniería de *prompts*: <https://aws.amazon.com/what-is/prompt-engineering/>
+- Ingeniería de contexto (AWS Prescriptive Guidance): <https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-context.html>
 - Modelos de difusión (Stable Diffusion): <https://aws.amazon.com/what-is/stable-diffusion/>
 - Alucinaciones: <https://aws.amazon.com/what-is/ai-hallucinations/>
 - IA agéntica: <https://aws.amazon.com/what-is/agentic-ai/>
