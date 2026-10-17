@@ -197,3 +197,9 @@ figure.diagrama.visible :is(.edgePaths, .edgeLabels) { animation: aparece-suave 
 }
 .solucion{margin:.3rem 0 .6rem;padding-left:1.2rem}
 .solucion li{margin:.15rem 0}
+/* Explicación plegable tras responder una pregunta */
+details.explicacion { border: 1px solid var(--borde); border-radius: 12px; padding: 8px 14px; margin: 10px 0; background: var(--panel); }
+details.explicacion > summary { cursor: pointer; font-weight: 600; color: var(--acento-fuerte); padding: 4px 0; }
+details.explicacion[open] > summary { margin-bottom: 6px; }
+.ruta-paso { margin: 22px 0 4px; }
+.ruta-paso .suave { margin-top: 2px; }

@@ -52,7 +52,7 @@ def test_los_cuatro_tipos_se_corrigen_y_muestran_explicacion(app):
     for n, pid in enumerate(preguntas(app, iid), 1):
         assert responder(c, iid, n, RESP[pid]).status_code == 303
         html = c.get(f"/c/aif-c01/tests/{iid}/p/{n}").text
-        assert "Correcto" in html and "Referencia:" in html
+        assert "Correcto" in html and "Ver explicación" in html and "Referencia oficial:" in html
     with app.state.sesiones() as db:
         assert all(r.correcta for r in db.query(IntentoRespuesta))
     post(c, f"/c/aif-c01/tests/{iid}/finalizar")

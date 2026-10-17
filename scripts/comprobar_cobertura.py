@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Comprueba que el mapa de cobertura de cada módulo cubre todos los objetivos oficiales y que hay preguntas por tarea.
+"""Comprueba que el mapa de cobertura de cada módulo cubre todos los objetivos oficiales y que hay preguntas por tarea
+(banco de examen) y por objetivo (bancos de examen y de repaso).
 
 Formato del mapa de cobertura (README.md del módulo): una tabla Markdown cuya primera columna es el id del
 objetivo (p. ej. `1.2.3` o `CP.1`) y que enlaza en alguna celda a un encabezado del mismo README (`[texto](#ancla)`).
@@ -18,15 +19,15 @@ RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ))
 
 from curso.anclas import ancla, anclas_de  # noqa: E402,F401  (reexportadas: las usan los tests)
+from curso.cobertura import grupo, mapa  # noqa: E402
 from curso.manifiesto import Manifiesto, descubrir  # noqa: E402
 
 ID_FUENTE = re.compile(r"\*\*((?:[A-Z]+|\d+)(?:\.\d+)+)\*\*")
-FILA = re.compile(r"^\|\s*((?:[A-Z]+|\d+)(?:\.\d+)+)\s*\|(.*)$")
-ENLACE = re.compile(r"\]\(#([^)\s]+)\)")
-def grupo(id_: str) -> str:
-    """Tarea a la que pertenece un objetivo: 1.2.3 -> 1.2; CP.1 -> CP."""
-    partes = id_.split(".")
-    return ".".join(partes[:2]) if partes[0].isdigit() else partes[0]
+
+
+def leer_banco(f: Path) -> list[dict]:
+    datos = yaml.safe_load(f.read_text(encoding="utf8")) if f.is_file() else []
+    return [p for p in datos or [] if isinstance(p, dict)]
 
 
 def objetivos_de(fuente: Path) -> list[str]:
@@ -44,11 +45,7 @@ def comprobar_modulo(curso: Manifiesto, modulo: str, fichero: str, con_preguntas
     if not readme.is_file():
         return ([f"{pref}: falta README.md"], [], True) if explicito else ([], [], False)
     texto = readme.read_text(encoding="utf8")
-    filas = {}
-    for linea in texto.splitlines():
-        m = FILA.match(linea)
-        if m:
-            filas[m.group(1)] = ENLACE.findall(m.group(2))
+    filas = mapa(texto)
     if not filas:
         return ([f"{pref}: el README no tiene mapa de cobertura"], [], True) if explicito else ([], [], False)
     errores, existentes = [], anclas_de(texto)
@@ -64,10 +61,8 @@ def comprobar_modulo(curso: Manifiesto, modulo: str, fichero: str, con_preguntas
                     errores.append(f"{pref}: objetivo {o} enlaza a #{a}, que no existe en el README")
     errores += [f"{pref}: el mapa incluye {o}, que no existe en fuentes/{fichero}" for o in filas if o not in objetivos]
 
-    preguntas = []
-    pq = carpeta / "preguntas.yaml"
-    if pq.is_file():
-        preguntas = yaml.safe_load(pq.read_text(encoding="utf8")) or []
+    preguntas = leer_banco(carpeta / "preguntas.yaml")
+    repaso = leer_banco(carpeta / "repaso.yaml")
     por_tarea = Counter(p.get("tarea") for p in preguntas if isinstance(p, dict))
     por_objetivo = Counter(p.get("objetivo") for p in preguntas if isinstance(p, dict) and p.get("objetivo"))
     resumen = []
@@ -78,6 +73,8 @@ def comprobar_modulo(curso: Manifiesto, modulo: str, fichero: str, con_preguntas
         linea = f"{pref} {t}: {len(cubiertos)}/{len(propios)} objetivos"
         if preguntas:
             linea += f", {por_tarea.get(t, 0)} preguntas"
+        if repaso:
+            linea += f", {sum(1 for p in repaso if p.get('tarea') == t)} de repaso"
         resumen.append(linea)
     if con_preguntas and preguntas:
         minimo = curso.minimo_por_tarea or 1
@@ -96,7 +93,22 @@ def comprobar_modulo(curso: Manifiesto, modulo: str, fichero: str, con_preguntas
                     errores.append(f"{pref}: el objetivo {o} tiene {n} preguntas, mínimo {min_obj}")
         else:
             errores.append(f"{pref}: las preguntas no declaran `objetivo`; no se puede comprobar la cobertura por objetivo")
+    if con_preguntas and curso.repaso_minimo_por_objetivo is not None:
+        errores += comprobar_repaso(curso, pref, objetivos, repaso, fichero)
     return errores, resumen, True
+
+
+def comprobar_repaso(curso: Manifiesto, pref: str, objetivos: list[str], repaso: list[dict], fichero: str) -> list[str]:
+    """Cobertura del banco de repaso: cada objetivo del módulo con al menos `repaso.minimo_por_objetivo` preguntas."""
+    if not repaso:
+        return [f"{pref}: falta el banco de repaso (repaso.yaml)"]
+    minimo = curso.repaso_minimo_por_objetivo
+    por_objetivo = Counter(p.get("objetivo") for p in repaso)
+    errores = [f"{pref}: repaso: el objetivo {o} tiene {por_objetivo.get(o, 0)} preguntas, mínimo {minimo}"
+               for o in objetivos if por_objetivo.get(o, 0) < minimo]
+    errores += [f"{pref}: repaso: {p.get('id')} declara el objetivo {p.get('objetivo')}, que no está en fuentes/{fichero}"
+                for p in repaso if p.get("objetivo") not in objetivos]
+    return errores
 
 
 def comprobar(raiz: Path, cursos=None, modulo=None, con_preguntas=False):

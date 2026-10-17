@@ -229,6 +229,26 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Hallazgo nuevo:** la página de revisiones transcribe el objetivo 1.3.4 nuevo como «Amazon Bedrock, Amazon Q, Amazon Quick, Kiro, SageMaker AI», pero el objetivo vigente (HTML y PDF) dice «Amazon Bedrock, Amazon Quick, Kiro, SageMaker AI». La página de revisiones no coincide con la guía en ningún punto donde cita Amazon Q.
 - **Decisión:** se sigue la parte normativa de la guía: Amazon Q no es evaluable. Se quita el marcador en `fuentes/servicios-alcance.md` y en `02/servicios.md` (queda una nota con la explicación) y se ajusta la nota del módulo 01. No cambia ninguna pregunta.
 
+## 2026-10-17
+
+### Repaso de conocimientos y estudio con los tests
+
+- Peticiones: «base aws no tiene preguntas test???»; «la idea es revisar conocimientos y estudiar a base de los test, Puedes hacer mas test generales de conocimiento y deespues los propios de examenes? la idea es que ahciendo test se vayan quedando los conocimientos»; «quiero en cada test aunque sea de examen, que aprezca una opcion de explicacion de la pregunta una vez contestada, pregunta a pregunta».
+- Rama `aif-c01/repaso`, cambio de OpenSpec `repaso-y-estudio`.
+- **Hecho:**
+  - Bancos `repaso.yaml` en los módulos 00 a 05 (210 preguntas, ≥ 2 por objetivo; el 00 con dominio 0 y tarea `CP`). Redactados a partir de la teoría ya verificada de cada módulo y revisados por un revisor independiente por módulo.
+  - Consola: ruta de estudio en «Tests», «Repetir falladas», «Ver explicación» con enlace a la teoría en todos los tests, «Modo estudio» en el simulacro y «Conocimientos previos» en las estadísticas.
+  - Validador, cobertura y `quiz.py` admiten los bancos de repaso; 17 pruebas nuevas (245 en total) y comprobaciones de navegador del repaso y del desplegable (50 en total).
+- **Revisión independiente:** ningún hallazgo crítico. Importantes: tres distractores defendibles (R3-009, R3-011, R3-038), una explicación ambigua del ámbito de la Scoping Matrix (R5-029), respuestas que salían del enunciado (R5-030, R5-004), referencias poco pertinentes (R1-014, R1-015, R2-012, R2-013, R2-023, R3-017, R3-021, R3-027, R3-030, R4-013, R4-015, R4-030) y la opción correcta como la más larga en muchas preguntas (reequilibrado). Todo aplicado.
+- **Decisiones:**
+  - Fichero aparte (`repaso.yaml`) con el mismo esquema: los tests de examen y el simulacro no cambian.
+  - Las respuestas de repaso cuentan en los aciertos por dominio y tarea; el dominio 0 aparece como «Conocimientos previos».
+  - El modo estudio del simulacro se guarda en `filtro = "estudio"` para no migrar la base de datos.
+  - La explicación va en un desplegable cerrado si se acierta y abierto si se falla.
+  - R5-010 preguntaba por el RGPD, que no tiene fuente de AWS: se reformula sobre lo que consigue la seudonimización según el *Responsible AI Lens*.
+  - Se añaden a las referencias de los módulos 02 y 03 las páginas de ingeniería de contexto y de *transfer learning* que citan las preguntas de repaso.
+  - Se unifica el tuteo en los enunciados de examen de los módulos 01 a 03.
+
 ### Pendiente
 
 - Lo que siguen las issues #9 a #12 y #14 a #16.

@@ -17,4 +17,4 @@ def mis_estadisticas(request: Request, c: Contenido = Depends(requiere_curso),
     dominios, tareas = stats.aciertos_por(db, usuario.id, slug)
     return render(request, "estadisticas.html", progreso=stats.progreso_modulos(db, usuario.id, c), dominios=dominios,
                   tareas=tareas, debiles=stats.puntos_debiles(tareas), intentos=stats.intentos(db, usuario.id, slug),
-                  posicion=stats.ultima_posicion(db, usuario.id, request.app.state.catalogo, slug), nombres=c.manifiesto.dominios)
+                  posicion=stats.ultima_posicion(db, usuario.id, request.app.state.catalogo, slug), nombres=c.manifiesto.nombres_dominio)

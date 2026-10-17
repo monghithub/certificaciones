@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Valida de cada curso: manifiesto, bancos de preguntas (modulos/*/preguntas.yaml), glosario y estilo e información de los diagramas."""
+"""Valida de cada curso: manifiesto, bancos de preguntas de examen (modulos/*/preguntas.yaml) y de repaso
+(modulos/*/repaso.yaml), glosario y estilo e información de los diagramas."""
 import argparse
 import json
 import re
@@ -62,11 +63,18 @@ def objetivos_oficiales(curso: Manifiesto) -> dict[int, set[str]]:
     return resultado
 
 
+def objetivos_previos(curso: Manifiesto) -> set[str]:
+    """Objetivos CP.N de la fuente de conocimientos previos (dominio 0 de los bancos de repaso)."""
+    f = curso.carpeta / "fuentes" / curso.previos if curso.previos else None
+    return set(re.findall(r"\*\*(CP\.\d+)\*\*", f.read_text(encoding="utf8"))) if f and f.is_file() else set()
+
+
 def ids_de(items):
     return [i.get("id") for i in items or []]
 
 
-def comprobar_pregunta(p: dict, curso: Manifiesto, tareas: dict[int, set[str]], objetivos: dict[int, set[str]] | None = None) -> list[str]:
+def comprobar_pregunta(p: dict, curso: Manifiesto, tareas: dict[int, set[str]], objetivos: dict[int, set[str]] | None = None,
+                       repaso: bool = False) -> list[str]:
     objetivos = objetivos or {}
     errs = []
     tipo = p.get("tipo")
@@ -106,6 +114,19 @@ def comprobar_pregunta(p: dict, curso: Manifiesto, tareas: dict[int, set[str]], 
     # dominio y tarea oficiales del curso
     d = p.get("dominio")
     t = p.get("tarea")
+    obj = p.get("objetivo")
+    if d == 0:
+        if not (repaso and curso.previos):
+            errs.append("el dominio 0 (conocimientos previos) solo se admite en bancos de repaso de cursos con `repaso.previos`")
+        else:
+            if t != "CP":
+                errs.append(f"tarea '{t}' no válida en el dominio 0: debe ser 'CP'")
+            if obj not in objetivos_previos(curso):
+                errs.append(f"objetivo '{obj}' no existe en fuentes/{curso.previos}")
+        d = None  # el resto de comprobaciones de dominio no aplican
+    elif t == "CP":
+        errs.append("la tarea 'CP' solo se admite en el dominio 0")
+        d = None
     if isinstance(d, int) and d not in curso.dominios:
         errs.append(f"dominio {d} no declarado en curso.yaml de {curso.slug}")
     elif isinstance(t, str) and isinstance(d, int):
@@ -115,7 +136,6 @@ def comprobar_pregunta(p: dict, curso: Manifiesto, tareas: dict[int, set[str]], 
             errs.append(f"tarea '{t}' no existe en fuentes/dominio-{d}.md")
         elif d not in tareas:
             errs.append(f"falta fuentes/dominio-{d}.md")
-    obj = p.get("objetivo")
     if isinstance(obj, str) and isinstance(d, int):
         if not obj.startswith(f"{d}."):
             errs.append(f"objetivo '{obj}' no pertenece al dominio {d}")
@@ -141,8 +161,9 @@ def referencia_oficial(url: str, hosts: tuple[str, ...]) -> bool:
     return any(host == h or host.endswith("." + h) for h in hosts)
 
 
-def avisos_calidad(p: dict) -> list[str]:
-    """Heurísticas de calidad que no bloquean: pistas en los distractores y enunciados de definición."""
+def avisos_calidad(p: dict, repaso: bool = False) -> list[str]:
+    """Heurísticas de calidad que no bloquean: pistas en los distractores y enunciados de definición (estos, solo en los
+    bancos de examen: las preguntas de repaso son directas a propósito)."""
     avisos = []
     tipo = p.get("tipo")
     if tipo in ("multiple_choice", "multiple_response"):
@@ -150,7 +171,7 @@ def avisos_calidad(p: dict) -> list[str]:
         absolutas = [o["id"] for o in p.get("opciones") or [] if o.get("id") not in cor and ABSOLUTOS.search(str(o.get("texto", "")))]
         if absolutas:
             avisos.append(f"distractores con términos absolutos que delatan la respuesta: {absolutas}")
-        if len(str(p.get("enunciado", ""))) < MIN_ENUNCIADO:
+        if not repaso and len(str(p.get("enunciado", ""))) < MIN_ENUNCIADO:
             avisos.append("enunciado muy corto: plantéalo como un escenario de negocio")
     return avisos
 
@@ -163,10 +184,15 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
     enunciados_modulos: dict[str, str] = {}   # enunciado normalizado -> id (bancos de los módulos)
     palabras_modulos: list[tuple[str, int, set[str]]] = []  # (id, dominio, palabras de enunciado + correctas)
     simulacro: list[tuple[str, str, str, int, set[str]]] = []  # (fichero, id, enunciado normalizado, dominio, palabras)
+    repasos: list[tuple[str, str, str]] = []  # (fichero, id, enunciado normalizado) de los bancos de repaso
     if curso.simulacro and not (curso.carpeta / "modulos" / curso.simulacro).is_dir():
         errores.append(f"{curso.slug}: el módulo de simulacro '{curso.simulacro}' no existe")
-    for f in sorted((curso.carpeta / "modulos").glob("*/preguntas.yaml")):
+    bancos = sorted((curso.carpeta / "modulos").glob("*/preguntas.yaml")) + sorted((curso.carpeta / "modulos").glob("*/repaso.yaml"))
+    for f in bancos:
         rel = f.relative_to(raiz)
+        es_repaso = f.name == "repaso.yaml"
+        if es_repaso and f.parent.name == curso.simulacro:
+            errores.append(f"{rel}: el módulo de simulacro no lleva banco de repaso")
         try:
             datos = yaml.safe_load(f.read_text(encoding="utf8")) or []
         except yaml.YAMLError as e:
@@ -182,14 +208,16 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
                 errores.append(f"{rel}:{pid}: esquema [{ruta}]: {e.message}")
             if not isinstance(p, dict):
                 continue
-            errores += [f"{rel}:{pid}: {m}" for m in comprobar_pregunta(p, curso, tareas, objetivos)]
-            avisos += [f"{rel}:{pid}: {m}" for m in avisos_calidad(p)]
+            errores += [f"{rel}:{pid}: {m}" for m in comprobar_pregunta(p, curso, tareas, objetivos, es_repaso)]
+            avisos += [f"{rel}:{pid}: {m}" for m in avisos_calidad(p, es_repaso)]
             if pid in ids_vistos:
                 errores.append(f"{rel}:{pid}: id duplicado (también en {ids_vistos[pid]})")
             ids_vistos[pid] = str(rel)
             if p.get("enunciado"):
                 clave = palabras(f"{p['enunciado']} {texto_correctas(p)}")
-                if f.parent.name == curso.simulacro:
+                if es_repaso:
+                    repasos.append((str(rel), pid, normalizar(p["enunciado"])))
+                elif f.parent.name == curso.simulacro:
                     simulacro.append((str(rel), pid, normalizar(p["enunciado"]), p.get("dominio"), clave))
                 else:
                     enunciados_modulos.setdefault(normalizar(p["enunciado"]), pid)
@@ -206,14 +234,21 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
         resumen[str(rel)] = (len(datos), tipos)
         n = len(datos)
         es_simulacro = f.parent.name == curso.simulacro
-        exigido = curso.minimo_simulacro if es_simulacro else curso.minimo_por_modulo
+        exigido = curso.repaso_minimo_por_modulo if es_repaso else curso.minimo_simulacro if es_simulacro else curso.minimo_por_modulo
         if minimos and n and exigido and n < exigido:
             errores.append(f"{rel}: {n} preguntas, mínimo {exigido}")
-        if n and exigido and n >= exigido:
+        if n and exigido and n >= exigido and not es_repaso:
             for t, obj in curso.distribucion.items():
                 real = 100 * tipos.get(t, 0) / n
                 if abs(real - obj) > TOLERANCIA:
                     avisos.append(f"{rel}: {t} es el {real:.0f} % (objetivo ~{obj:g} %)")
+    vistos_repaso: dict[str, str] = {}
+    for rel, pid, texto in repasos:
+        if texto in enunciados_modulos:
+            errores.append(f"{rel}:{pid}: el repaso no debe copiar preguntas de examen y repite el enunciado de {enunciados_modulos[texto]}")
+        if texto in vistos_repaso:
+            errores.append(f"{rel}:{pid}: repite el enunciado de {vistos_repaso[texto]}")
+        vistos_repaso.setdefault(texto, pid)
     vistos_simulacro: dict[str, str] = {}
     for rel, pid, texto, dominio, clave in simulacro:
         if texto in enunciados_modulos:

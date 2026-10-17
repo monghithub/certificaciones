@@ -7,7 +7,7 @@
   {% if n < total %}<a class="btn" href="{{ base }}/tests/{{ i.id }}/p/{{ n + 1 }}">Siguiente</a>{% endif %}</div>
 {% else %}
 <div class="card">
-  <p class="suave">{{ p.id }} · Tarea {{ p.tarea }}</p>
+  <p class="suave">{{ p.id }} · {% if p.banco == 'repaso' %}Repaso de conocimientos{% else %}Pregunta de examen{% endif %} · {% if p.tarea == 'CP' %}Conocimientos previos{% else %}Tarea {{ p.tarea }}{% endif %}{% if i.modo == 'simulacro' and i.filtro == 'estudio' %} · Modo estudio{% endif %}</p>
   <p>{{ p.enunciado }}</p>
   {% if respondida %}
     {% if p.tipo == 'matching' %}<p><strong>Elementos:</strong></p><ul>{% for x in p.prompts %}<li>{{ x.id }}. {{ x.texto }}</li>{% endfor %}</ul>{% endif %}
@@ -17,9 +17,13 @@
         {% if not retro.correcta %}
         <p>Solución:</p><ul class="solucion">{% for l in legible(p, retro.solucion) %}<li>{{ l }}</li>{% endfor %}</ul>
         <p>Tu respuesta:</p><ul class="solucion">{% for l in legible(p, retro.respuesta) %}<li>{{ l }}</li>{% endfor %}</ul>{% endif %}</div>
-      <p>{{ retro.explicacion }}</p>
-      {% if retro.distractores %}<ul>{% for k, v in retro.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
-      <p class="suave">Referencia: <a href="{{ retro.referencia }}" rel="noopener noreferrer">{{ retro.referencia }}</a></p>
+      <details class="explicacion"{% if not retro.correcta %} open{% endif %}><summary>Ver explicación</summary>
+        <p>{{ retro.explicacion }}</p>
+        {% if retro.distractores %}<p><strong>Por qué no son correctas las demás opciones:</strong></p>
+        <ul>{% for k, v in retro.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
+        {% if retro.teoria %}<p><a class="btn sec" href="{{ retro.teoria }}">Repasar en la teoría</a></p>{% endif %}
+        <p class="suave">Referencia oficial: <a href="{{ retro.referencia }}" rel="noopener noreferrer">{{ retro.referencia }}</a></p>
+      </details>
     {% else %}<div class="msg">Respuesta registrada. Verás la corrección al finalizar.</div>{% endif %}
   {% else %}
   <form method="post" action="{{ base }}/tests/{{ i.id }}/responder">
@@ -49,7 +53,7 @@
 {% endif %}
 <div style="display:flex;gap:10px;flex-wrap:wrap">
   {% if n > 1 %}<a class="btn sec" href="{{ base }}/tests/{{ i.id }}/p/{{ n - 1 }}">Anterior</a>{% endif %}
-  {% if n < total %}<a class="btn sec" href="{{ base }}/tests/{{ i.id }}/p/{{ n + 1 }}">{{ 'Siguiente' if respondida or simulacro else 'Saltar' }}</a>{% endif %}
+  {% if n < total %}<a class="btn{{ '' if respondida else ' sec' }}" href="{{ base }}/tests/{{ i.id }}/p/{{ n + 1 }}">{{ 'Siguiente' if respondida or simulacro else 'Saltar' }}</a>{% endif %}
   <form method="post" action="{{ base }}/tests/{{ i.id }}/finalizar" style="margin:0"><input type="hidden" name="csrf" value="{{ csrf }}">
     <button type="submit" class="{{ 'sec' if hechas < total }}">{{ 'Ver resultado' if hechas == total else 'Finalizar test' }}</button></form>
 </div>

@@ -1,0 +1,1038 @@
+- id: R4-001
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué dimensión de la IA responsable de AWS consiste en tener en cuenta el impacto del sistema en los distintos
+    grupos de personas afectadas?
+  opciones:
+  - id: a
+    texto: Transparencia (transparency)
+  - id: b
+    texto: Equidad (fairness)
+  - id: c
+    texto: Controlabilidad (controllability)
+  - id: d
+    texto: Gobierno (governance)
+  correctas:
+  - b
+  explicacion: 'La equidad (fairness) mira cómo afecta el sistema a cada grupo de personas: es lo contrario del sesgo en sentido
+    ético, es decir, del trato desigual sin motivo. Pista: si la pregunta habla de «grupos» que salen peor parados, piensa
+    en equidad.'
+  distractores:
+    a: La transparencia consiste en informar a las personas (que hay IA, uso previsto, límites) para que decidan; no trata
+      del trato desigual entre grupos.
+    c: La controlabilidad son los mecanismos para supervisar y dirigir el comportamiento del sistema, por ejemplo poder detener
+      un agente.
+    d: El gobierno incorpora buenas prácticas en toda la cadena de suministro de la IA, de proveedores a implantadores.
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+- id: R4-002
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.1
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada dimensión de la IA responsable de AWS con su significado.
+  prompts:
+  - id: '1'
+    texto: Controlabilidad
+  - id: '2'
+    texto: Transparencia
+  - id: '3'
+    texto: Gobierno
+  - id: '4'
+    texto: Veracidad y robustez
+  - id: '5'
+    texto: Privacidad y seguridad
+  opciones:
+  - id: a
+    texto: Obtener, usar y proteger adecuadamente los datos y los modelos
+  - id: b
+    texto: Entender y evaluar las salidas del sistema
+  - id: c
+    texto: Tener mecanismos para supervisar y dirigir el comportamiento del sistema
+  - id: d
+    texto: Permitir que las personas decidan con información sobre su relación con un sistema de IA
+  - id: e
+    texto: Salidas correctas, incluso ante entradas inesperadas o maliciosas
+  - id: f
+    texto: Incorporar buenas prácticas en la cadena de suministro de la IA, de proveedores a implantadores
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - d
+  - - '3'
+    - f
+  - - '4'
+    - e
+  - - '5'
+    - a
+  explicacion: AWS concreta la IA responsable en dimensiones que conviene reconocer por su definición. Controlabilidad = poder
+    dirigir; transparencia = informar para decidir; gobierno = buenas prácticas en la cadena; veracidad y robustez = salidas
+    correctas aunque la entrada cambie; privacidad y seguridad = proteger datos y modelos.
+  distractores:
+    b: 'Es la explicabilidad: entender por qué el sistema dio una salida. No corresponde a ninguna de las dimensiones de la
+      columna izquierda.'
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+- id: R4-003
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un modelo da la respuesta correcta a una pregunta, pero responde otra cosa cuando la misma pregunta llega con
+    una errata o con un sinónimo. ¿Qué rasgo de la IA responsable falla?
+  opciones:
+  - id: a
+    texto: Veracidad
+  - id: b
+    texto: Inclusividad
+  - id: c
+    texto: Robustez
+  - id: d
+    texto: Seguridad frente a daños (safety)
+  correctas:
+  - c
+  explicacion: 'La robustez es que la salida siga siendo correcta ante variaciones de la entrada (erratas, sinónimos, otro
+    idioma) o ataques. Pista: veracidad = la respuesta es correcta; robustez = sigue siéndolo aunque la entrada cambie un
+    poco.'
+  distractores:
+    a: La veracidad es que la salida sea factualmente correcta; aquí el modelo sí sabe la respuesta, lo que falla es la estabilidad
+      ante cambios pequeños de la entrada.
+    b: La inclusividad es que el sistema funcione bien para todos los grupos que lo usan, incluidos los minoritarios; el problema
+      descrito no depende del grupo.
+    d: La seguridad frente a daños es evitar salidas dañinas (odio, violencia, consejos peligrosos); una respuesta distinta
+      por una errata no es contenido dañino.
+  referencia: https://aws.amazon.com/ai/responsible-ai/
+- id: R4-004
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Según la política de IA responsable de AWS, ¿qué debe hacer el cliente que usa servicios de IA para decisiones
+    con consecuencias sobre los derechos, la salud o la seguridad de las personas?
+  opciones:
+  - id: a
+    texto: Evaluar los riesgos e implantar supervisión humana, pruebas y salvaguardas
+  - id: b
+    texto: Delegar en AWS la responsabilidad de las decisiones tomadas con el modelo
+  - id: c
+    texto: Activar Automated Reasoning checks para que bloquee las decisiones incorrectas
+  - id: d
+    texto: Usar únicamente modelos de código abierto para poder auditar sus pesos
+  correctas:
+  - a
+  explicacion: La AWS Responsible AI Policy pide que, en decisiones con consecuencias (crédito, empleo, diagnóstico médico,
+    vivienda…), el cliente evalúe los riesgos e implante supervisión humana. La salida del modelo es probabilística y el cliente
+    responde de lo que decide con ella.
+  distractores:
+    b: 'La política dice lo contrario: el cliente y sus usuarios son responsables de las decisiones que toman con la salida
+      del modelo.'
+    c: 'Automated Reasoning checks solo detecta: devuelve hallazgos y la aplicación decide; además no sustituye a la supervisión
+      humana que exige la política.'
+    d: Un modelo abierto mejora la transparencia, pero la política no lo exige; lo que pide para estas decisiones es evaluar
+      riesgos y supervisión humana.
+  referencia: https://aws.amazon.com/ai/responsible-ai/policy/
+- id: R4-005
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada salvaguarda de Amazon Bedrock Guardrails con lo que hace.
+  prompts:
+  - id: '1'
+    texto: Filtros de contenido
+  - id: '2'
+    texto: Temas denegados
+  - id: '3'
+    texto: Filtros de palabras
+  - id: '4'
+    texto: Filtros de información sensible
+  - id: '5'
+    texto: Comprobación de grounding contextual
+  - id: '6'
+    texto: Automated Reasoning checks
+  opciones:
+  - id: a
+    texto: Bloquear palabras o frases exactas, como los nombres de la competencia
+  - id: b
+    texto: Detectar respuestas no basadas en la fuente de referencia o irrelevantes para la pregunta
+  - id: c
+    texto: Detectar odio, insultos, violencia o ataques de prompt con una intensidad configurable
+  - id: d
+    texto: Validar la respuesta con lógica formal contra reglas definidas por la empresa
+  - id: e
+    texto: Bloquear un tema descrito en lenguaje natural, como los consejos de inversión
+  - id: f
+    texto: Bloquear o enmascarar datos personales y patrones propios
+  - id: g
+    texto: Controlar qué usuarios pueden invocar el modelo
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - e
+  - - '3'
+    - a
+  - - '4'
+    - f
+  - - '5'
+    - b
+  - - '6'
+    - d
+  explicacion: 'Guardrails tiene seis salvaguardas con funciones distintas. Truco para no confundirlas: tema (lenguaje natural)
+    → temas denegados; palabra exacta → filtro de palabras; datos personales → información sensible; ¿se basa en la fuente?
+    → grounding; ¿cumple las reglas lógicas? → Automated Reasoning.'
+  distractores:
+    g: Eso es control de acceso con permisos de IAM (módulo 05). Guardrails filtra contenido; no decide quién puede invocar
+      el modelo.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
+- id: R4-006
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué permite la API ApplyGuardrail de Amazon Bedrock Guardrails?
+  opciones:
+  - id: a
+    texto: Publicar una versión inmutable del guardrail para usarla en producción
+  - id: b
+    texto: Aplicar el guardrail a modelos de embeddings, de reordenación y de imágenes
+  - id: c
+    texto: Cifrar los datos que la aplicación envía al modelo fundacional
+  - id: d
+    texto: Evaluar un texto con las políticas del guardrail sin invocar un modelo
+  correctas:
+  - d
+  explicacion: 'ApplyGuardrail evalúa un texto con las políticas configuradas sin llamar a ningún modelo. Por eso sirve para
+    aplicar las mismas salvaguardas a modelos alojados fuera de Bedrock. Pista: «Apply» = aplico el guardrail por mi cuenta,
+    donde quiera.'
+  distractores:
+    a: La versión inmutable se publica desde el borrador (working draft) del guardrail; no es la función de ApplyGuardrail.
+    b: Los modelos de embeddings, de reordenación y de generación de imágenes no admiten guardrails.
+    c: Guardrails filtra contenido; el cifrado de los datos se trata con otros servicios (módulo 05).
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html
+- id: R4-007
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: ¿Qué ocurre cuando Automated Reasoning checks de Amazon Bedrock Guardrails detecta que una respuesta no cumple
+    las reglas definidas?
+  opciones:
+  - id: a
+    texto: Se bloquea la respuesta y se devuelve el mensaje de bloqueo configurado
+  - id: b
+    texto: El guardrail reescribe la respuesta para que cumpla las reglas de la política
+  - id: c
+    texto: Se devuelven hallazgos y explicaciones; decide la aplicación
+  - id: d
+    texto: Se enmascaran las frases que incumplen las reglas antes de entregarla
+  correctas:
+  - c
+  explicacion: 'Automated Reasoning checks funciona solo en modo de detección: devuelve hallazgos y explicaciones (por qué
+    es correcta o no, supuestos no declarados) y la aplicación decide si entrega, reescribe o pide aclaraciones. Pista: detecta,
+    no bloquea.'
+  distractores:
+    a: Bloquear con un mensaje es lo que hacen otras políticas, como los filtros de contenido; Automated Reasoning checks
+      no bloquea.
+    b: El guardrail no reescribe nada; reescribir es una decisión que puede tomar la aplicación a partir de los hallazgos.
+    d: Enmascarar es propio del filtro de información sensible con los datos personales, no de Automated Reasoning checks.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html
+- id: R4-008
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: ¿Qué DOS afirmaciones sobre los límites de Amazon Bedrock Guardrails son correctas? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: La comprobación de grounding contextual no admite casos de chat conversacional
+  - id: b
+    texto: Automated Reasoning checks protege frente a la inyección de prompts
+  - id: c
+    texto: Los filtros de contenido solo evalúan las respuestas del modelo, no las entradas
+  - id: d
+    texto: Los modelos de embeddings, de reordenación y de imágenes no admiten guardrails
+  - id: e
+    texto: Guardrails sustituye a los permisos de IAM para controlar el acceso a los modelos
+  correctas:
+  - a
+  - d
+  explicacion: El grounding contextual está pensado para resúmenes, paráfrasis y preguntas y respuestas sobre una fuente;
+    el chat conversacional no está admitido. Y los modelos de embeddings, de reordenación y de generación de imágenes no admiten
+    guardrails. Recordar los límites ayuda a descartar opciones trampa.
+  distractores:
+    b: No protege contra la inyección de prompts; para eso están los filtros de contenido (categoría de ataque de prompt).
+    c: Un guardrail evalúa la entrada del usuario y también la respuesta del modelo; si la entrada infringe una política,
+      ni se llama al modelo.
+    e: Guardrails filtra contenido; quién accede a qué se controla con IAM (módulo 05).
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
+- id: R4-009
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: ordering
+  dificultad: media
+  enunciado: Ordena los pasos para llevar un guardrail de Amazon Bedrock desde su configuración hasta su uso en producción.
+  opciones:
+  - id: a
+    texto: Publicar una versión inmutable del guardrail
+  - id: b
+    texto: Configurar las políticas en el borrador (working draft)
+  - id: c
+    texto: Indicar el identificador y la versión del guardrail al invocar el modelo
+  - id: d
+    texto: Probar el guardrail en la ventana de prueba de la consola
+  correctas:
+  - b
+  - d
+  - a
+  - c
+  explicacion: 'Se trabaja sobre un borrador, se prueba en la ventana de prueba de la consola y se publica una versión inmutable;
+    en producción, la aplicación invoca el modelo indicando el identificador y la versión. Pista: borrador → prueba → versión
+    → uso.'
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
+- id: R4-010
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.3
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Según las buenas prácticas de sostenibilidad de AWS, ¿qué modelo conviene elegir cuando varios cumplen los requisitos
+    de calidad de un caso de uso?
+  opciones:
+  - id: a
+    texto: El de mayor número de parámetros, para tener margen de calidad
+  - id: b
+    texto: El más pequeño que cumple los requisitos
+  - id: c
+    texto: El que obtiene la mejor puntuación en las pruebas públicas
+  - id: d
+    texto: El más reciente del catálogo del proveedor
+  correctas:
+  - b
+  explicacion: 'Un modelo más grande consume más energía en cada inferencia. La práctica responsable es elegir el del tamaño
+    justo: el más pequeño que cumple los requisitos. Antes incluso, conviene preguntarse si hace falta IA generativa.'
+  distractores:
+    a: Más parámetros suele significar más consumo por inferencia; si un modelo menor ya cumple, ese margen se paga en energía
+      y coste.
+    c: Una puntuación pública alta no dice nada del consumo ni de si hace falta tanto para el caso; se evalúa con datos propios.
+    d: Que sea el más reciente no lo hace más eficiente ni más adecuado; el criterio es cumplir los requisitos con el menor
+      tamaño.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html
+- id: R4-011
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS prácticas reducen el impacto ambiental de una solución de IA generativa según las buenas prácticas de
+    AWS? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Preentrenar un modelo propio desde cero para controlarlo mejor
+  - id: b
+    texto: Probar prompt engineering y RAG antes de ajustar o entrenar un modelo
+  - id: c
+    texto: Mantener instancias con GPU encendidas de forma permanente para reducir la latencia
+  - id: d
+    texto: Usar servicios serverless y autoescalado para no tener capacidad ociosa
+  - id: e
+    texto: Elegir el modelo más capaz del catálogo para no repetir inferencias
+  correctas:
+  - b
+  - d
+  explicacion: 'La personalización eficiente (prompt engineering y RAG antes que ajustar o entrenar) y los recursos que se
+    ajustan a la demanda (serverless, autoescalado) evitan consumo innecesario. Pista: reutilizar y escalar con la demanda
+    ahorra energía.'
+  distractores:
+    a: 'Es lo contrario: reutilizar un modelo preentrenado evita la enorme huella de un preentrenamiento propio.'
+    c: 'Las instancias encendidas sin carga son capacidad ociosa: consumen energía sin aportar nada.'
+    e: Un modelo más capaz suele ser más grande y consumir más por inferencia; lo responsable es el más pequeño que cumple.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html
+- id: R4-012
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué indica AWS sobre las instancias Inf2, basadas en AWS Inferentia2, en relación con la sostenibilidad?
+  opciones:
+  - id: a
+    texto: Ofrecen hasta un 50 % más de rendimiento por vatio que instancias EC2 comparables
+  - id: b
+    texto: Eliminan el consumo energético de la inferencia de modelos de deep learning
+  - id: c
+    texto: Son obligatorias para usar los modelos de Amazon Bedrock bajo demanda
+  - id: d
+    texto: Están pensadas para el entrenamiento distribuido y no admiten inferencia
+  correctas:
+  - a
+  explicacion: AWS Inferentia es un chip de AWS diseñado para la inferencia de deep learning, y AWS indica que Inf2 ofrece
+    hasta un 50 % más de rendimiento por vatio que instancias EC2 comparables. Elegir hardware eficiente es parte de una selección
+    responsable.
+  distractores:
+    b: Reducen el consumo por unidad de trabajo, pero la inferencia sigue consumiendo energía.
+    c: Si se usa un modelo por API en Bedrock no se gestiona infraestructura; Inferentia tiene sentido cuando se despliega
+      el modelo uno mismo.
+    d: Inferentia está diseñada precisamente para la inferencia; su nombre lo indica.
+  referencia: https://aws.amazon.com/ai/machine-learning/inferentia/
+- id: R4-013
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.4
+  tipo: matching
+  dificultad: baja
+  enunciado: Empareja cada riesgo legal de la IA generativa con un ejemplo de cómo se materializa.
+  prompts:
+  - id: '1'
+    texto: Reclamación por infracción de propiedad intelectual
+  - id: '2'
+    texto: Riesgo para el usuario final
+  - id: '3'
+    texto: Alucinaciones
+  - id: '4'
+    texto: Pérdida de confianza de los clientes
+  opciones:
+  - id: a
+    texto: Un asistente promete una condición comercial que no existe
+  - id: b
+    texto: Un usuario sigue un consejo médico erróneo del asistente
+  - id: c
+    texto: Una imagen generada se parece mucho a una obra protegida
+  - id: d
+    texto: Un chat insulta a un cliente y el caso se hace público
+  - id: e
+    texto: Un modelo grande consume más energía en cada inferencia
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - b
+  - - '3'
+    - a
+  - - '4'
+    - d
+  explicacion: 'La guía enumera riesgos legales concretos de la IA generativa: propiedad intelectual, resultados sesgados,
+    pérdida de confianza, riesgo para el usuario final y alucinaciones. Asociar cada uno a un ejemplo ayuda a reconocerlo
+    en un escenario.'
+  distractores:
+    e: Es una cuestión de sostenibilidad, que se tiene en cuenta al elegir el modelo (4.1.3); no es uno de los riesgos legales
+      de la guía.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
+- id: R4-014
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.4
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: ¿Qué cubre la indemnización de propiedad intelectual que AWS ofrece según las preguntas frecuentes de Amazon
+    Bedrock?
+  opciones:
+  - id: a
+    texto: Los daños causados por decisiones tomadas a partir de la salida del modelo
+  - id: b
+    texto: Las sanciones por incumplir el Reglamento de IA de la UE en la aplicación
+  - id: c
+    texto: Reclamaciones de derechos de autor por la salida de modelos de Amazon y servicios cubiertos
+  - id: d
+    texto: Reclamaciones por la salida de los modelos de terceros del catálogo, sin requisitos de uso
+  correctas:
+  - c
+  explicacion: 'AWS ofrece una indemnización sin límite frente a reclamaciones de terceros por derechos de autor sobre la
+    salida de los modelos de Amazon y de los servicios que enumeran las condiciones (Service Terms), siempre con uso responsable:
+    no introducir material que infrinja derechos ni desactivar los filtros.'
+  distractores:
+    a: Las decisiones tomadas con la salida son responsabilidad del cliente según la política de IA responsable; la indemnización
+      trata de derechos de autor.
+    b: Cumplir las leyes aplicables, incluido el Reglamento de IA de la UE, corresponde al cliente; no es lo que cubre la
+      indemnización.
+    d: 'No cubre cualquier modelo de cualquier proveedor y exige uso responsable: hay que comprobar qué servicios incluye.'
+  referencia: https://aws.amazon.com/bedrock/faqs/
+- id: R4-015
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué TRES de los siguientes son riesgos legales de la IA generativa según la guía del examen? (Elige TRES.)
+  opciones:
+  - id: a
+    texto: Resultados sesgados del modelo
+  - id: b
+    texto: Subajuste del modelo
+  - id: c
+    texto: Pérdida de confianza de los clientes
+  - id: d
+    texto: Latencia elevada en la inferencia
+  - id: e
+    texto: Alucinaciones
+  - id: f
+    texto: Desequilibrio de clases en los datos
+  correctas:
+  - a
+  - c
+  - e
+  explicacion: Los riesgos legales que cita la guía son la infracción de propiedad intelectual, los resultados sesgados, la
+    pérdida de confianza de los clientes, el riesgo para el usuario final y las alucinaciones. Todos tienen consecuencias
+    frente a terceros (clientes, titulares de derechos, reguladores).
+  distractores:
+    b: El subajuste es un error estadístico del modelo (alto sesgo), del objetivo 4.1.6; puede causar problemas, pero no es
+      un riesgo legal de la lista.
+    d: La latencia es una cuestión de rendimiento y de experiencia de usuario, no un riesgo legal.
+    f: El desequilibrio de clases es una característica de los datos (4.1.5) que puede llevar a resultados sesgados; el riesgo
+      legal es el resultado sesgado.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
+- id: R4-016
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.5
+  tipo: matching
+  dificultad: baja
+  enunciado: Empareja cada característica de un conjunto de datos con su descripción.
+  prompts:
+  - id: '1'
+    texto: Inclusividad
+  - id: '2'
+    texto: Diversidad
+  - id: '3'
+    texto: Fuentes curadas
+  - id: '4'
+    texto: Conjunto equilibrado
+  opciones:
+  - id: a
+    texto: Variedad de situaciones, idiomas, acentos, condiciones de captura y casos límite
+  - id: b
+    texto: Cada grupo y cada clase tienen suficientes ejemplos para aprender y para medir
+  - id: c
+    texto: El conjunto representa a los grupos que usarán el sistema, incluidos los minoritarios
+  - id: d
+    texto: Datos de origen conocido, revisados, con licencia y sin contenido inadecuado
+  - id: e
+    texto: Etiquetas demográficas inferidas por un modelo a partir de los propios datos
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - a
+  - - '3'
+    - d
+  - - '4'
+    - b
+  explicacion: Un modelo aprende lo que hay en sus datos. Inclusividad = están los grupos; diversidad = variedad de casos;
+    fuentes curadas = origen conocido y revisado; equilibrado = suficientes ejemplos por grupo y por clase.
+  distractores:
+    e: 'No es una característica deseable: el Responsible AI Lens recomienda preferir las etiquetas demográficas declaradas
+      por las personas a las inferidas.'
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+- id: R4-017
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un conjunto tiene 7 000 ejemplos del grupo a y 3 000 del grupo d. ¿Cuál es el desequilibrio de clases (CI) que
+    define AWS, (n_a − n_d) / (n_a + n_d)?
+  opciones:
+  - id: a
+    texto: 0,7
+  - id: b
+    texto: 0,4
+  - id: c
+    texto: 0,3
+  - id: d
+    texto: 2,33
+  correctas:
+  - b
+  explicacion: CI = (7 000 − 3 000) / 10 000 = 0,4. Un valor cercano a 0 indica grupos equilibrados; cuanto más se aleja,
+    más riesgo de que el modelo se ajuste peor al grupo pequeño.
+  distractores:
+    a: 0,7 es la proporción del grupo a sobre el total (7 000 / 10 000), no la diferencia normalizada entre grupos.
+    c: 0,3 es la proporción del grupo d sobre el total (3 000 / 10 000).
+    d: 2,33 es el cociente entre grupos (7 000 / 3 000); CI no es un cociente, sino la diferencia dividida por el total.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-data-bias.html
+- id: R4-018
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un conjunto de datos no incluye el origen de las personas, pero sí su código postal, que en la práctica lo refleja.
+    ¿Qué fuente de sesgo de los datos es esta?
+  opciones:
+  - id: a
+    texto: Representación insuficiente de un grupo (sesgo de muestreo)
+  - id: b
+    texto: Etiquetas sesgadas por los anotadores
+  - id: c
+    texto: Alta varianza del modelo
+  - id: d
+    texto: Una variable sustituta (proxy) de un atributo demográfico
+  correctas:
+  - d
+  explicacion: Una variable sustituta (proxy) permite al modelo «reconstruir» un atributo demográfico aunque se haya quitado.
+    Las fuentes de sesgo de los datos son la representación insuficiente, las etiquetas sesgadas, las variables proxy y los
+    datos que reflejan desigualdades existentes.
+  distractores:
+    a: El sesgo de muestreo es que un grupo tenga pocos ejemplos; aquí el problema es que una variable revela indirectamente
+      el grupo.
+    b: Las etiquetas sesgadas vienen de anotadores que etiquetan distinto a un grupo; aquí el sesgo entra por una característica,
+      no por la etiqueta.
+    c: La alta varianza es un error estadístico del modelo (sobreajuste), no una fuente de sesgo de los datos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-data-bias.html
+- id: R4-019
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.6
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: AWS pone el ejemplo de un modelo de rendimiento académico entrenado solo con alumnos de una universidad privada
+    de rentas altas. ¿Qué cabe esperar al usarlo con alumnos de universidades públicas?
+  opciones:
+  - id: a
+    texto: Que su exactitud caiga, porque ese grupo apenas estaba en los datos
+  - id: b
+    texto: Que mejore su exactitud, porque recibe datos nuevos de otro grupo
+  - id: c
+    texto: Que no cambie, porque su exactitud global en prueba era alta
+  - id: d
+    texto: Que pase a tener subajuste con los alumnos de los dos tipos de universidad
+  correctas:
+  - a
+  explicacion: 'Un grupo con pocos ejemplos se aprende peor: el modelo no generaliza a quien no se parece a lo que vio. Es
+    uno de los efectos del sesgo y la varianza sobre los grupos demográficos que pide la guía.'
+  distractores:
+    b: 'Aplicarlo a otro grupo no le enseña nada: el modelo sigue reflejando solo el grupo con el que se entrenó, y por eso
+      se equivoca más.'
+    c: Una exactitud alta medida con el grupo de entrenamiento no dice nada de un grupo distinto; puede ocultar mucho más
+      error en él.
+    d: El subajuste es fallar también con los datos de entrenamiento; con los alumnos de la universidad privada el modelo
+      funciona bien.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: R4-020
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.6
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada medida con el problema que ayuda a corregir.
+  prompts:
+  - id: '1'
+    texto: Usar un modelo más capaz o entrenarlo durante más tiempo
+  - id: '2'
+    texto: Añadir datos más diversos y aplicar regularización
+  - id: '3'
+    texto: Recoger datos representativos del grupo infrarrepresentado
+  opciones:
+  - id: a
+    texto: Subajuste (alto sesgo)
+  - id: b
+    texto: Sobreajuste (alta varianza)
+  - id: c
+    texto: Más error con un grupo demográfico con pocos ejemplos
+  - id: d
+    texto: Alucinaciones de un modelo generativo
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: 'El subajuste se corrige con un modelo más capaz, mejores características o más entrenamiento; el sobreajuste,
+    con más datos y más diversos, menos complejidad o regularización y validación cruzada; el error con un grupo pequeño,
+    con datos representativos de ese grupo. Pista: al simple le falta capacidad; al que memoriza le sobra.'
+  distractores:
+    d: Las alucinaciones se mitigan con RAG con citas, grounding contextual y revisión humana, no con estas medidas de entrenamiento.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: R4-021
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.6
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué indica que un modelo tenga un error alto tanto con los datos de entrenamiento como con los datos nuevos?
+  opciones:
+  - id: a
+    texto: 'Alta varianza: memoriza el ruido de los datos de entrenamiento'
+  - id: b
+    texto: 'Alto sesgo: el modelo es demasiado simple o se entrenó poco'
+  - id: c
+    texto: 'Sesgo ético: el modelo discrimina a un grupo concreto'
+  - id: d
+    texto: 'Equilibrio: el error es parecido en los dos conjuntos'
+  correctas:
+  - b
+  explicacion: 'Fallar en los dos conjuntos es subajuste (alto sesgo estadístico): el modelo no capta la relación. Pista:
+    mal en los dos = subajuste; bien en entrenamiento y mal en prueba = sobreajuste.'
+  distractores:
+    a: La alta varianza da error bajo en entrenamiento y alto en datos nuevos; aquí también falla en entrenamiento.
+    c: 'Es el otro sentido de «sesgo»: trato desigual a grupos. El enunciado habla de error general, no de diferencias entre
+      grupos.'
+    d: El equilibrio exige error bajo en los dos conjuntos; un error parecido pero alto es subajuste.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: R4-022
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un modelo concede un resultado positivo al 50 % del grupo favorecido y al 40 % del grupo desfavorecido. ¿Cuál
+    es el impacto dispar (DI) que define AWS?
+  opciones:
+  - id: a
+    texto: 0,1
+  - id: b
+    texto: 1,25
+  - id: c
+    texto: 0,8
+  - id: d
+    texto: 0,4
+  correctas:
+  - c
+  explicacion: 'DI es la proporción de resultados positivos del grupo desfavorecido entre la del favorecido: 0,40 / 0,50 =
+    0,8. Un valor de 1 indica paridad; por debajo de 1, el grupo desfavorecido recibe menos resultados positivos.'
+  distractores:
+    a: 0,1 es la diferencia entre las dos tasas (0,50 − 0,40); DI es un cociente, no una resta.
+    b: 1,25 es el cociente al revés (0,50 / 0,40); DI pone el grupo desfavorecido en el numerador.
+    d: 0,4 es solo la tasa del grupo desfavorecido; falta dividirla entre la del favorecido.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-di.html
+- id: R4-023
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué práctica ayuda a analizar la calidad de las etiquetas puestas por anotadores humanos?
+  opciones:
+  - id: a
+    texto: Exportar la ficha del modelo a PDF para que la revise el equipo de datos
+  - id: b
+    texto: Aumentar la intensidad de los filtros de contenido del guardrail
+  - id: c
+    texto: Sustituir las etiquetas humanas por sintéticas sin compararlas con el juicio humano
+  - id: d
+    texto: Medir el acuerdo entre anotadores e incluir ejemplos con respuesta conocida
+  correctas:
+  - d
+  explicacion: Las etiquetas humanas también tienen sesgos y errores. Para analizarlas se forma a los anotadores, se mide
+    cuánto coinciden entre sí, se meten ejemplos de control con respuesta conocida y se buscan anotadores que etiqueten distinto
+    a un grupo.
+  distractores:
+    a: Documentar el modelo en una Model Card es transparencia; no mide la calidad de las etiquetas.
+    b: Los filtros de contenido actúan sobre entradas y respuestas en ejecución, no sobre las etiquetas del conjunto de datos.
+    c: 'Las etiquetas sintéticas también se revisan: hay que compararlas con el juicio humano antes de fiarse de ellas.'
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+- id: R4-024
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Un modelo tiene un 95 % de exactitud global. ¿Por qué ese dato no basta para descartar que tenga sesgo?
+  opciones:
+  - id: a
+    texto: Porque la media puede ocultar que un grupo pequeño tiene mucho más error
+  - id: b
+    texto: Porque la exactitud global solo se puede calcular con datos de entrenamiento
+  - id: c
+    texto: Porque el sesgo solo se detecta con una auditoría humana, no con métricas
+  - id: d
+    texto: Porque una exactitud superior al 90 % indica sobreajuste
+  correctas:
+  - a
+  explicacion: 'La exactitud global es un promedio: puede ser alta aunque un grupo pequeño acumule mucho más error. Por eso
+    se hace análisis por subgrupos, que calcula las mismas métricas (exactitud, precisión, recall, tasa de aprobación) para
+    cada grupo, incluidos los interseccionales, y las compara con un umbral; y se repite en producción. Pista: la media
+    esconde a las minorías.'
+  distractores:
+    b: La exactitud se calcula también con datos de prueba o de producción; el problema es que es un promedio de todos los
+      grupos.
+    c: Las auditorías humanas son útiles, pero el sesgo también se mide con métricas por grupo (CI, DPL, DI, diferencia de
+      exactitud).
+    d: Una exactitud alta no implica sobreajuste por sí misma; el sobreajuste se ve comparando el error en entrenamiento y
+      en prueba.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+- id: R4-025
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué concepto describe entender por qué un sistema de IA dio una salida concreta, aunque el modelo sea complejo?
+  opciones:
+  - id: a
+    texto: Transparencia
+  - id: b
+    texto: Interpretabilidad
+  - id: c
+    texto: Explicabilidad
+  - id: d
+    texto: Controlabilidad
+  correctas:
+  - c
+  explicacion: 'La explicabilidad trata de por qué salió esta respuesta. La transparencia da información para decidir (que
+    hay IA, uso previsto, límites) y la interpretabilidad es entender el modelo por dentro sin herramientas. Pista: explicar
+    = el porqué de una salida.'
+  distractores:
+    a: La transparencia informa sobre el sistema en general (que se usa IA, con qué datos, para qué y con qué límites), no
+      sobre una salida concreta.
+    b: La interpretabilidad es entender cómo funciona el modelo por dentro sin herramientas, como los coeficientes de una
+      regresión lineal; un modelo complejo no la tiene.
+    d: La controlabilidad son los mecanismos para supervisar y dirigir el sistema, no para entender sus salidas.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
+- id: R4-026
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Cuál de estos modelos es interpretable por sí mismo, sin herramientas de explicación adicionales?
+  opciones:
+  - id: a
+    texto: Una red neuronal profunda de clasificación de imágenes
+  - id: b
+    texto: Un modelo fundacional de lenguaje sin documentación
+  - id: c
+    texto: Una regresión lineal
+  - id: d
+    texto: Una red neuronal profunda acompañada de explicaciones SHAP
+  correctas:
+  - c
+  explicacion: 'En una regresión lineal cada coeficiente dice cuánto pesa cada variable: la explicación sale del propio modelo.
+    Los modelos simples (regresión lineal o logística, árbol de decisión pequeño) son interpretables; las redes profundas
+    y los modelos fundacionales son opacos (black box).'
+  distractores:
+    a: 'Una red profunda es un modelo opaco: solo se ven entradas y salidas, no por qué decide.'
+    b: Un modelo fundacional sin documentación ni explicaciones es el ejemplo típico de modelo opaco.
+    d: SHAP la hace explicable, pero con una explicación a posteriori y aproximada; el modelo en sí sigue sin ser interpretable.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
+- id: R4-027
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué diferencia hay entre una explicación local y una explicación global de un modelo?
+  opciones:
+  - id: a
+    texto: La local se calcula en el equipo del usuario y la global, en la nube
+  - id: b
+    texto: La local sirve para modelos interpretables y la global, para modelos opacos
+  - id: c
+    texto: La local dice qué variables pesan en general y la global, por qué se dio una predicción
+  - id: d
+    texto: La local explica una predicción concreta y la global, qué variables pesan en general
+  correctas:
+  - d
+  explicacion: 'Una explicación global describe qué variables pesan en el modelo en general; una local, por qué se dio esta
+    predicción concreta (por ejemplo, el rechazo de un préstamo). Pista: local = un caso; global = el modelo entero.'
+  distractores:
+    a: 'La diferencia no está en dónde se calcula, sino en el alcance: un caso concreto frente al modelo en general.'
+    b: Las dos se aplican a cualquier tipo de modelo; SHAP, por ejemplo, da explicaciones locales de modelos complejos.
+    c: 'Es la definición al revés: lo general es la explicación global y el caso concreto, la local.'
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
+- id: R4-028
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué recurso publica AWS para dar a conocer el uso previsto, las limitaciones y las decisiones de diseño responsable
+    de sus propios servicios y modelos?
+  opciones:
+  - id: a
+    texto: Amazon SageMaker Model Cards
+  - id: b
+    texto: AWS AI Service Cards
+  - id: c
+    texto: Amazon SageMaker Model Registry
+  - id: d
+    texto: Amazon Bedrock Evaluations
+  correctas:
+  - b
+  explicacion: 'Las AWS AI Service Cards son fichas que publica AWS sobre sus servicios y modelos (por ejemplo, Amazon Nova
+    o Bedrock Guardrails). Pista: Service Cards = AWS documenta lo suyo; Model Cards = tú documentas tu modelo.'
+  distractores:
+    a: Con SageMaker Model Cards el cliente documenta sus propios modelos; no son las fichas que publica AWS sobre sus servicios.
+    c: Model Registry cataloga versiones de modelos propios con su estado de aprobación; no describe los servicios de AWS.
+    d: Bedrock Evaluations mide el comportamiento de modelos con métricas; no es una ficha de uso previsto y limitaciones.
+  referencia: https://aws.amazon.com/ai/responsible-ai/resources/
+- id: R4-029
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.2
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS funciones ofrece Amazon SageMaker Model Cards? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Calcular métricas de sesgo como CI o DPL sobre el conjunto de datos
+  - id: b
+    texto: Registrar el uso previsto y la calificación de riesgo de un modelo propio
+  - id: c
+    texto: Generar explicaciones SHAP para cada predicción del modelo
+  - id: d
+    texto: Crear una versión inmutable con cada cambio y exportarla a PDF
+  - id: e
+    texto: Publicar las limitaciones de los servicios de IA de AWS
+  correctas:
+  - b
+  - d
+  explicacion: 'Model Cards documenta en un sitio el uso previsto (y el no previsto), la calificación de riesgo, el entrenamiento
+    y los resultados de evaluación. Cada cambio crea una versión inmutable, se exporta a PDF y se integra con Model Registry.
+    Pista: documenta, no mide.'
+  distractores:
+    a: Calcular métricas de sesgo es lo que hace SageMaker Clarify para sus clientes actuales; Model Cards puede recoger resultados,
+      pero no los calcula.
+    c: Las explicaciones SHAP las ofrece SageMaker Clarify a sus clientes actuales, o la biblioteca SHAP directamente.
+    e: Las limitaciones de los servicios de AWS se publican en las AWS AI Service Cards.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
+- id: R4-030
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué aporta un modelo de código abierto a la transparencia de un sistema de IA?
+  opciones:
+  - id: a
+    texto: Pesos y arquitectura visibles, que se pueden inspeccionar y auditar
+  - id: b
+    texto: Indemnización automática frente a reclamaciones de propiedad intelectual
+  - id: c
+    texto: Libertad de uso comercial sin necesidad de revisar la licencia
+  - id: d
+    texto: Explicaciones de cada predicción integradas en el propio modelo
+  correctas:
+  - a
+  explicacion: 'Un modelo abierto deja ver sus pesos y su arquitectura: se puede inspeccionar, auditar y desplegar con control
+    propio, por ejemplo desde SageMaker JumpStart. Aun así, la licencia sigue diciendo qué se puede hacer con él.'
+  distractores:
+    b: La indemnización de AWS cubre la salida de los modelos de Amazon y de los servicios enumerados en las condiciones;
+      no viene de que un modelo sea abierto.
+    c: 'Las licencias de los modelos abiertos difieren (uso comercial, modificación, redistribución) y forman parte de la
+      transparencia: hay que revisarlas.'
+    d: Ver los pesos no da explicaciones de cada predicción; para eso se usan herramientas como SHAP.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
+- id: R4-031
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué riesgo tiene publicar las instrucciones del sistema y las reglas exactas de los filtros de un asistente
+    de IA?
+  opciones:
+  - id: a
+    texto: Que aumente el coste del guardrail por cada unidad de texto evaluada
+  - id: b
+    texto: Que el modelo pierda exactitud al conocerse sus instrucciones
+  - id: c
+    texto: Que deje de ser posible documentar el modelo en una Model Card
+  - id: d
+    texto: Que ayude a quien quiere saltarse las salvaguardas o extraer información
+  correctas:
+  - d
+  explicacion: 'Transparencia frente a seguridad: contar demasiado sobre el sistema facilita los ataques. Se publica lo que
+    los usuarios necesitan para decidir (que hay IA, uso previsto, limitaciones) sin los detalles que ayudan a saltarse los
+    filtros.'
+  distractores:
+    a: El precio de Guardrails depende de las unidades de texto y de las salvaguardas usadas, no de que se publiquen las reglas.
+    b: Publicar las instrucciones no cambia cómo responde el modelo; el riesgo es que se usen para atacarlo.
+    c: Una Model Card documenta el modelo con independencia de lo que se publique fuera.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/responsible-ai.html
+- id: R4-032
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.3
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: ¿Qué DOS afirmaciones sobre los compromisos entre interpretabilidad, rendimiento y seguridad son correctas? (Elige
+    DOS.)
+  opciones:
+  - id: a
+    texto: Un modelo complejo con SHAP es tan interpretable como una regresión lineal
+  - id: b
+    texto: Un modelo simple se explica solo, pero puede acertar menos en problemas complejos
+  - id: c
+    texto: Un guardrail más estricto reduce los bloqueos de respuestas legítimas
+  - id: d
+    texto: El Responsible AI Lens recomienda fijar mínimos aceptables para cada criterio
+  - id: e
+    texto: Lo responsable es elegir el modelo de mayor rendimiento sin medir su interpretabilidad
+  correctas:
+  - b
+  - d
+  explicacion: Interpretabilidad y rendimiento tiran en sentidos opuestos, así que se miden las dos cosas en el caso concreto
+    y se fijan mínimos aceptables para cada criterio (exactitud, privacidad…) en lugar de maximizar uno a costa del resto.
+  distractores:
+    a: SHAP da una explicación a posteriori y aproximada que conviene validar con expertos; el modelo no se vuelve interpretable
+      por dentro.
+    c: 'Es al revés: un guardrail muy estricto bloquea más contenido dañino, pero también más respuestas legítimas (falsos
+      positivos).'
+    e: Si un regulador exige explicar cada decisión y el modelo interpretable cumple el mínimo de rendimiento, suele ser la
+      opción preferible.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
+- id: R4-033
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Cuál de estas prácticas es un ejemplo de transparencia de las decisiones de la IA (AI decision transparency)?
+  opciones:
+  - id: a
+    texto: Incluir botones para que el usuario valore cada respuesta del asistente
+  - id: b
+    texto: Avisar de que interviene una IA y mostrar los factores y la confianza
+  - id: c
+    texto: Permitir que el usuario deshaga una acción o la escale a una persona
+  - id: d
+    texto: Identificar los requisitos de accesibilidad de cada grupo de usuarios
+  correctas:
+  - b
+  explicacion: La transparencia de las decisiones consiste en avisar de que interviene una IA y mostrar los factores que pesaron,
+    la confianza o las fuentes citadas, y explicar cuándo conviene comprobar la recomendación.
+  distractores:
+    a: Los botones de valoración son un mecanismo de feedback de los usuarios, otro principio del diseño centrado en las personas.
+    c: Corregir, deshacer o escalar a una persona es el principio de control del usuario.
+    d: Es el principio de accesibilidad e inclusión, no el de transparencia de las decisiones.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+- id: R4-034
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS elementos forman parte de un mecanismo de feedback de los usuarios en un sistema de IA? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Un diseño visual más atractivo de la interfaz del asistente
+  - id: b
+    texto: Opciones para valorar respuestas y notificar errores o contenido inadecuado
+  - id: c
+    texto: Ocultar que interviene una IA para no condicionar la valoración
+  - id: d
+    texto: Un circuito que lleve el feedback a mejoras con revisiones periódicas
+  - id: e
+    texto: Publicar las reglas exactas de los filtros para que los usuarios las comenten
+  correctas:
+  - b
+  - d
+  explicacion: Un mecanismo de feedback recoge valoraciones y avisos de los usuarios y los convierte en mejoras del sistema
+    (ajustar guardrails, prompts o datos) mediante revisiones periódicas. Recoger sin actuar no cierra el circuito.
+  distractores:
+    a: 'El diseño centrado en las personas no es una interfaz bonita: trata de feedback, transparencia, supervisión humana
+      y explicaciones adaptadas.'
+    c: Va contra la transparencia de las decisiones, que pide avisar de que interviene una IA.
+    e: Publicar las reglas exactas de los filtros facilita saltárselos (transparencia frente a seguridad).
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html

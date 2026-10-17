@@ -94,7 +94,7 @@ def detalle(uid: int, request: Request, curso: str | None = None, db: Session = 
         dominios, tareas = stats.aciertos_por(db, uid, actual)
         ctx.update(progreso=stats.progreso_modulos(db, uid, c), dominios=dominios, tareas=tareas,
                    debiles=stats.puntos_debiles(tareas), intentos=stats.intentos(db, uid, actual),
-                   posicion=stats.ultima_posicion(db, uid, catalogo, actual), base=f"/c/{actual}", nombres=c.manifiesto.dominios)
+                   posicion=stats.ultima_posicion(db, uid, catalogo, actual), base=f"/c/{actual}", nombres=c.manifiesto.nombres_dominio)
     return render(request, "admin_usuario.html", **ctx)
 
 

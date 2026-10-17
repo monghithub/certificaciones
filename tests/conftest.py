@@ -1,3 +1,4 @@
+import re
 import shutil
 from pathlib import Path
 
@@ -14,7 +15,9 @@ def repo(tmp_path):
     shutil.copytree(RAIZ / "schemas", tmp_path / "schemas")
     curso = tmp_path / "cursos" / "aif-c01"
     curso.mkdir(parents=True)
-    shutil.copy(RAIZ / "cursos" / "aif-c01" / "curso.yaml", curso / "curso.yaml")
+    # Sin el bloque `repaso`: las pruebas de los bancos de repaso lo añaden con con_repaso().
+    texto = (RAIZ / "cursos" / "aif-c01" / "curso.yaml").read_text(encoding="utf8")
+    (curso / "curso.yaml").write_text(re.sub(r"^repaso:\n(?:  .*\n)+", "", texto, flags=re.M), encoding="utf8")
     shutil.copytree(RAIZ / "cursos" / "aif-c01" / "fuentes", curso / "fuentes")
     (curso / "modulos" / "03-modelos-fundacionales").mkdir(parents=True)
     (curso / "modulos" / "06-simulacro").mkdir(parents=True)
@@ -22,10 +25,23 @@ def repo(tmp_path):
     return tmp_path
 
 
-def escribir(raiz, preguntas, modulo="03-modelos-fundacionales", curso="aif-c01"):
+def escribir(raiz, preguntas, modulo="03-modelos-fundacionales", curso="aif-c01", fichero="preguntas.yaml"):
     d = raiz / "cursos" / curso / "modulos" / modulo
     d.mkdir(parents=True, exist_ok=True)
-    (d / "preguntas.yaml").write_text(yaml.safe_dump(preguntas, allow_unicode=True), encoding="utf8")
+    (d / fichero).write_text(yaml.safe_dump(preguntas, allow_unicode=True), encoding="utf8")
+
+
+def con_repaso(raiz, minimo_por_modulo=1, minimo_por_objetivo=1, curso="aif-c01"):
+    """Añade el bloque `repaso` (con conocimientos previos) al curso.yaml del curso."""
+    f = raiz / "cursos" / curso / "curso.yaml"
+    f.write_text(f.read_text(encoding="utf8") + f"repaso:\n  minimo_por_modulo: {minimo_por_modulo}\n"
+                 f"  minimo_por_objetivo: {minimo_por_objetivo}\n  previos: conocimientos-previos.md\n", encoding="utf8")
+
+
+def pregunta_repaso(id_="R3-001", dominio=3, tarea="3.1", objetivo="3.1.1", enunciado="¿Qué parámetro controla la aleatoriedad?"):
+    p = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))[0]
+    p.update(id=id_, dominio=dominio, tarea=tarea, objetivo=objetivo, enunciado=enunciado)
+    return p
 
 
 def segundo_curso(raiz, slug="otro-curso"):
@@ -46,7 +62,6 @@ def segundo_curso(raiz, slug="otro-curso"):
 
 
 # ---------------------------------------------------------------- consola web
-import re  # noqa: E402
 
 PASSWORD = "contraseña-de-prueba-1"
 

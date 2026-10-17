@@ -1,0 +1,703 @@
+# Banco de repaso de conocimientos del módulo 00 (Base de AWS).
+# Preguntas directas, una idea por pregunta, para fijar la teoría del módulo.
+- id: R0-001
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué servicio de AWS ejecuta código sin que el cliente aprovisione ni gestione servidores?
+  opciones:
+  - id: a
+    texto: Amazon EC2
+  - id: b
+    texto: Amazon S3
+  - id: c
+    texto: AWS Lambda
+  - id: d
+    texto: Amazon SageMaker AI
+  correctas:
+  - c
+  explicacion: AWS Lambda es el servicio de cómputo serverless de AWS. AWS se encarga de la infraestructura, la capacidad,
+    el escalado y los parches, y el cliente solo aporta su código. Pista para recordarlo, «Lambda = código sin servidores
+    que gestionar».
+  distractores:
+    a: Amazon EC2 también es cómputo, pero ofrece servidores virtuales (instancias) en los que el cliente elige el tipo
+      de instancia y gestiona el sistema operativo invitado.
+    b: Amazon S3 es almacenamiento de objetos; guarda datos, no ejecuta código.
+    d: Amazon SageMaker AI sirve para construir, entrenar y desplegar modelos de aprendizaje automático, no para ejecutar
+      código genérico sin servidores.
+  referencia: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+- id: R0-002
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué significa que un servicio de AWS sea serverless?
+  opciones:
+  - id: a
+    texto: Que el cliente no aprovisiona ni gestiona los servidores que ejecutan su código
+  - id: b
+    texto: Que el código se ejecuta sin ningún servidor físico detrás
+  - id: c
+    texto: Que el cliente gestiona el sistema operativo, pero AWS gestiona el hardware
+  - id: d
+    texto: Que el servicio solo puede almacenar datos y no ejecutar código
+  correctas:
+  - a
+  explicacion: Serverless no quiere decir «sin servidores», sino «sin gestionar servidores». Los servidores existen,
+    pero AWS los aprovisiona, escala y parchea. Recuerda que es una trampa habitual del examen tomarlo al pie de la letra.
+  distractores:
+    b: Es la lectura literal y errónea del término; los servidores existen, lo que cambia es quién los gestiona.
+    c: Ese reparto describe Amazon EC2, donde el cliente gestiona el sistema operativo invitado; en un servicio serverless
+      el cliente tampoco gestiona el sistema operativo.
+    d: Serverless se refiere a cómo se ejecuta el código (por ejemplo, AWS Lambda), no a un servicio de almacenamiento.
+  referencia: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+- id: R0-003
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: matching
+  dificultad: baja
+  enunciado: Empareja cada necesidad con el servicio central de AWS que la cubre.
+  prompts:
+  - id: "1"
+    texto: Servidores virtuales con control del sistema operativo, la red y el almacenamiento
+  - id: "2"
+    texto: Almacenar objetos para un lago de datos y para copias de seguridad
+  - id: "3"
+    texto: Ejecutar código en respuesta a un evento, como la llegada de un fichero
+  - id: "4"
+    texto: Usar modelos fundacionales de varios proveedores mediante una API
+  - id: "5"
+    texto: Construir, entrenar y desplegar modelos de aprendizaje automático propios
+  opciones:
+  - id: a
+    texto: Amazon S3
+  - id: b
+    texto: Amazon Bedrock
+  - id: c
+    texto: Amazon EC2
+  - id: d
+    texto: Amazon SageMaker AI
+  - id: e
+    texto: AWS Lambda
+  - id: f
+    texto: Amazon VPC
+  correctas:
+  - ["1", "c"]
+  - ["2", "a"]
+  - ["3", "e"]
+  - ["4", "b"]
+  - ["5", "d"]
+  explicacion: 'EC2 da servidores virtuales con control del sistema; S3 almacena objetos; Lambda ejecuta código por eventos
+    sin servidores que gestionar; Bedrock da acceso gestionado a modelos fundacionales; SageMaker AI sirve para crear tus
+    propios modelos de ML. Pista: Bedrock es «usar modelos ya hechos» y SageMaker AI es «fabricar el tuyo».'
+  distractores:
+    f: Amazon VPC es una red virtual privada en la que se lanzan los recursos; no es cómputo, almacenamiento ni un servicio
+      de modelos.
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
+- id: R0-004
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué servicio de AWS registra quién hizo cada llamada a la API de la cuenta y cuándo?
+  opciones:
+  - id: a
+    texto: Amazon CloudWatch
+  - id: b
+    texto: AWS Identity and Access Management (IAM)
+  - id: c
+    texto: AWS Cost Explorer
+  - id: d
+    texto: AWS CloudTrail
+  correctas:
+  - d
+  explicacion: 'AWS CloudTrail audita la actividad de la cuenta: qué llamada a la API se hizo, quién la hizo y cuándo.
+    Pista: CloudTrail responde a «¿quién hizo qué?» y CloudWatch a «¿cómo está funcionando?».'
+  distractores:
+    a: Amazon CloudWatch recoge métricas, registros y alarmas sobre el funcionamiento de recursos y aplicaciones (latencia,
+      CPU), no la auditoría de llamadas a la API.
+    b: IAM decide quién puede hacer qué sobre qué recursos, pero no es el registro de auditoría de lo que se ha hecho.
+    c: AWS Cost Explorer analiza el gasto por servicio y su tendencia; no registra actividad de la API.
+  referencia: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html
+- id: R0-005
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Desde el 3 de diciembre de 2024, ¿cómo se llama el servicio de AWS para construir, entrenar y desplegar
+    modelos de aprendizaje automático?
+  opciones:
+  - id: a
+    texto: Amazon SageMaker, que sigue siendo el nombre del servicio de ML
+  - id: b
+    texto: Amazon SageMaker AI
+  - id: c
+    texto: Amazon Bedrock
+  - id: d
+    texto: AWS Lambda
+  correctas:
+  - b
+  explicacion: El servicio de ML se renombró a Amazon SageMaker AI el 3 de diciembre de 2024. Ese mismo día, «Amazon
+    SageMaker» pasó a designar una plataforma unificada de datos, analítica e IA que incluye SageMaker AI. Si un enunciado
+    habla de entrenar o desplegar un modelo, se refiere a SageMaker AI.
+  distractores:
+    a: Desde esa fecha, «Amazon SageMaker» es la plataforma unificada más amplia que incluye SageMaker AI, no el nombre
+      del servicio de ML.
+    c: Amazon Bedrock da acceso a modelos fundacionales ya entrenados de varios proveedores; no es el servicio para construir
+      y entrenar modelos propios.
+    d: AWS Lambda ejecuta código sin gestionar servidores; no es un servicio de aprendizaje automático.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+- id: R0-006
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS afirmaciones sobre las Regiones de AWS son correctas?
+  opciones:
+  - id: a
+    texto: Los servicios y funcionalidades disponibles varían según la Región
+  - id: b
+    texto: Las Regiones ofrecen el mismo catálogo de servicios y de modelos
+  - id: c
+    texto: Elegir una Región cercana a los usuarios ayuda a reducir la latencia
+  - id: d
+    texto: Una Región es una red virtual privada en la que se lanzan los recursos
+  - id: e
+    texto: La Región solo influye en el precio, no en la latencia ni en los requisitos legales
+  correctas:
+  - a
+  - c
+  explicacion: Una Región es una ubicación geográfica donde se crean los recursos. Se elige por los servicios y funcionalidades
+    que ofrece (varían de una a otra, por ejemplo los modelos de Amazon Bedrock), por la cercanía a los usuarios para reducir
+    la latencia y por los requisitos legales. Comprueba la disponibilidad antes de elegir.
+  distractores:
+    b: Es la trampa típica; la disponibilidad de servicios, modelos y funcionalidades cambia de una Región a otra.
+    d: Eso describe Amazon VPC; la Región es una ubicación geográfica.
+    e: La cercanía de la Región afecta a la latencia, y también puede elegirse para cumplir requisitos legales.
+  referencia: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
+- id: R0-007
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué tipo de almacenamiento ofrece Amazon S3?
+  opciones:
+  - id: a
+    texto: Una base de datos transaccional
+  - id: b
+    texto: Un sistema de ficheros de baja latencia montado en un servidor
+  - id: c
+    texto: Una red virtual privada para aislar los recursos
+  - id: d
+    texto: Almacenamiento de objetos
+  correctas:
+  - d
+  explicacion: Amazon S3 es almacenamiento de objetos con gran escalabilidad, disponibilidad y seguridad. Sus casos
+    habituales son lagos de datos, sitios web, copias de seguridad y restauración y analítica de big data. Pista, en S3
+    se guardan «objetos en buckets», no filas de una base de datos.
+  distractores:
+    a: S3 no es una base de datos transaccional; usarlo así es uno de los casos en los que no conviene.
+    b: S3 no es el disco de un servidor ni un sistema de ficheros de baja latencia.
+    c: La red virtual privada es Amazon VPC, que no almacena datos.
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
+- id: R0-008
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: En el modelo de responsabilidad compartida, ¿qué cubre la «seguridad DE la nube» y quién la asume?
+  opciones:
+  - id: a
+    texto: AWS, que protege la infraestructura que ejecuta los servicios
+  - id: b
+    texto: El cliente, que protege sus datos, sus accesos y su configuración
+  - id: c
+    texto: AWS, que protege los datos del cliente y decide quién accede a ellos
+  - id: d
+    texto: El cliente, que protege las instalaciones físicas donde funciona el servicio
+  correctas:
+  - a
+  explicacion: 'Seguridad DE la nube (security of the cloud) es responsabilidad de AWS: la infraestructura que ejecuta
+    los servicios, incluidas las instalaciones físicas; auditores independientes verifican su eficacia. Seguridad EN la
+    nube es del cliente. Pista: «DE» = la nube misma (AWS); «EN» = lo que tú pones dentro (cliente).'
+  distractores:
+    b: Eso es la seguridad EN la nube, que corresponde al cliente.
+    c: Los datos del cliente y quién accede a ellos son responsabilidad del cliente, incluso en servicios gestionados.
+    d: Las instalaciones físicas forman parte de la seguridad DE la nube y las protege AWS, no el cliente.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/shared-responsibility.html
+- id: R0-009
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Con Amazon EC2, ¿quién aplica las actualizaciones y los parches del sistema operativo invitado de las instancias?
+  opciones:
+  - id: a
+    texto: AWS, porque el sistema operativo forma parte de la infraestructura
+  - id: b
+    texto: Los auditores independientes que verifican la seguridad de AWS
+  - id: c
+    texto: El cliente
+  - id: d
+    texto: AWS y el cliente a partes iguales, según un calendario fijo
+  correctas:
+  - c
+  explicacion: En EC2 el cliente gestiona el sistema operativo invitado (incluidas actualizaciones y parches), el software
+    de aplicación y la configuración de los grupos de seguridad. AWS se ocupa del sistema operativo del anfitrión, la virtualización
+    y la seguridad física. Pista, cuanto más control te da el servicio, más tareas te tocan.
+  distractores:
+    a: AWS gestiona el sistema operativo del anfitrión y la capa de virtualización, no el sistema operativo invitado de
+      las instancias del cliente.
+    b: Los auditores independientes verifican la eficacia de la seguridad de la infraestructura de AWS; no gestionan las
+      instancias del cliente.
+    d: El modelo no reparte los parches del sistema invitado a partes iguales; en EC2 son tarea del cliente.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/shared-responsibility.html
+- id: R0-010
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.2
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una empresa usa Amazon Bedrock, un servicio totalmente gestionado. ¿De qué DOS aspectos sigue siendo responsable
+    la empresa?
+  opciones:
+  - id: a
+    texto: La seguridad física de las instalaciones donde funciona el servicio
+  - id: b
+    texto: Sus datos y la sensibilidad de esos datos
+  - id: c
+    texto: El hardware y la red que ejecutan los modelos
+  - id: d
+    texto: Quién puede acceder a sus datos y recursos
+  - id: e
+    texto: El sistema operativo del anfitrión y la capa de virtualización
+  correctas:
+  - b
+  - d
+  explicacion: Con un servicio gestionado, AWS asume más tareas operativas, pero el cliente sigue siendo responsable
+    de sus datos, de quién accede a ellos y de cómo usa los resultados del modelo. Pista, los datos y los permisos no
+    se delegan nunca a AWS.
+  distractores:
+    a: La seguridad física de las instalaciones es seguridad DE la nube, responsabilidad de AWS.
+    c: El hardware y la red de la infraestructura los protege AWS.
+    e: El sistema operativo del anfitrión y la virtualización los opera y controla AWS.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/security.html
+- id: R0-011
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Según el modelo de responsabilidad compartida, ¿de qué depende la parte de seguridad que asume el cliente?
+  opciones:
+  - id: a
+    texto: Del tamaño de la empresa cliente
+  - id: b
+    texto: Del servicio de AWS que use
+  - id: c
+    texto: De la Región en la que cree los recursos
+  - id: d
+    texto: Del modelo de precios que contrate (On-Demand o Savings Plans)
+  correctas:
+  - b
+  explicacion: La seguridad EN la nube depende del servicio que se use. Incluye la sensibilidad de los datos, los requisitos
+    de la empresa y las leyes aplicables. Pista, el reparto no es fijo; en EC2 el cliente hace mucho más que en Bedrock.
+  distractores:
+    a: El modelo no reparte la responsabilidad según el tamaño del cliente, sino según el servicio.
+    c: La Región influye en la disponibilidad de servicios, la latencia y los requisitos legales, pero no cambia quién
+      protege qué.
+    d: El modelo de precios afecta a cómo se paga, no al reparto de la seguridad.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/shared-responsibility.html
+- id: R0-012
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Si un cliente pasa de alojar un modelo en Amazon EC2 a usar un servicio más gestionado, como AWS Lambda
+    o Amazon Bedrock, ¿qué cambia en su responsabilidad?
+  opciones:
+  - id: a
+    texto: Deja de ser responsable de la seguridad, que pasa por completo a AWS al ser un servicio gestionado
+  - id: b
+    texto: Asume más tareas operativas, porque un servicio más gestionado exige más configuración propia
+  - id: c
+    texto: Solo conserva la responsabilidad sobre la facturación y el presupuesto de su cuenta
+  - id: d
+    texto: Asume menos tareas operativas, pero sigue respondiendo de sus datos y de sus permisos
+  correctas:
+  - d
+  explicacion: Cuanto más gestionado es el servicio, menos tareas operativas asume el cliente (parches, servidores),
+    pero nunca deja de ser responsable de sus datos y de sus permisos. Pista, «AWS se encarga de toda la seguridad» es
+    falso con independencia del servicio.
+  distractores:
+    a: Es la trampa «AWS se encarga de toda la seguridad»; la seguridad EN la nube sigue siendo del cliente.
+    b: Es al revés; un servicio más gestionado traslada tareas operativas a AWS.
+    c: Además de la facturación, el cliente sigue respondiendo de sus datos, de los accesos y de cómo usa los resultados.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/security.html
+- id: R0-013
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.3
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué recomienda AWS sobre el usuario raíz (root user) de una cuenta?
+  opciones:
+  - id: a
+    texto: Reservarlo y usar a diario identidades con permisos mínimos
+  - id: b
+    texto: Usarlo para la administración diaria, porque tiene acceso completo
+  - id: c
+    texto: Compartir sus credenciales con el equipo de administración
+  - id: d
+    texto: Asignarlo a las aplicaciones que necesitan invocar modelos
+  correctas:
+  - a
+  explicacion: El usuario raíz es la identidad con la que se crea la cuenta y tiene acceso completo. Por eso AWS recomienda
+    no usarlo en el día a día y crear identidades (administradores, analistas, desarrolladores) con permisos mínimos.
+    Pista, la llave maestra se guarda, no se lleva en el bolsillo.
+  distractores:
+    b: Precisamente por su acceso completo no debe usarse en las tareas cotidianas.
+    c: Compartir credenciales va contra las prácticas recomendadas de IAM; cada persona debe tener su propia identidad.
+    d: A las aplicaciones se les dan permisos con roles de IAM y credenciales temporales, no con el usuario raíz.
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+- id: R0-014
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una función de AWS Lambda debe invocar un modelo de Amazon Bedrock. ¿Cómo se le dan los permisos según
+    las prácticas recomendadas?
+  opciones:
+  - id: a
+    texto: Guardando en el código las claves de acceso de un usuario de IAM
+  - id: b
+    texto: Añadiendo la función a un grupo de IAM con permisos de administrador
+  - id: c
+    texto: Asignándole un rol de IAM cuya política solo permite invocar ese modelo
+  - id: d
+    texto: Usando las credenciales del usuario raíz en una variable de entorno
+  correctas:
+  - c
+  explicacion: A las cargas de trabajo se les dan permisos con roles de IAM, que proporcionan credenciales temporales,
+    y la política del rol aplica el mínimo privilegio (solo el modelo concreto que usa). Pista, «aplicación = rol»; las
+    claves permanentes en el código son la trampa.
+  distractores:
+    a: Las claves de acceso permanentes en el código son justo lo que se quiere evitar; lo recomendado son credenciales
+      temporales.
+    b: Un grupo reúne usuarios, no funciones; además, los permisos de administrador incumplen el mínimo privilegio.
+    d: El usuario raíz no se usa para tareas diarias y menos aún dentro de una aplicación.
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+- id: R0-015
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.3
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada descripción con el concepto de IAM correspondiente.
+  prompts:
+  - id: "1"
+    texto: Reúne usuarios que comparten los mismos permisos
+  - id: "2"
+    texto: No tiene credenciales permanentes; lo asume quien lo necesita y recibe credenciales temporales
+  - id: "3"
+    texto: Documento JSON de permisos asociado al propio recurso, por ejemplo un bucket de S3
+  - id: "4"
+    texto: Documento JSON de permisos asociado a un usuario, un grupo o un rol
+  - id: "5"
+    texto: Conceder solo los permisos imprescindibles para cada tarea
+  opciones:
+  - id: a
+    texto: Política basada en identidad
+  - id: b
+    texto: Rol de IAM
+  - id: c
+    texto: Mínimo privilegio
+  - id: d
+    texto: Grupo de IAM
+  - id: e
+    texto: Política basada en recursos
+  - id: f
+    texto: Usuario raíz
+  correctas:
+  - ["1", "d"]
+  - ["2", "b"]
+  - ["3", "e"]
+  - ["4", "a"]
+  - ["5", "c"]
+  explicacion: 'Un grupo agrupa usuarios; un rol se asume y da credenciales temporales; las políticas son documentos
+    JSON que permiten o deniegan acciones, asociadas a una identidad (usuario, grupo o rol) o a un recurso. El mínimo
+    privilegio es la práctica recomendada central. Pista: grupo = «personas juntas»; rol = «gorra que te pones un rato».'
+  distractores:
+    f: El usuario raíz es la identidad inicial de la cuenta, con acceso completo; no encaja con ninguna descripción y
+      no se usa en el día a día.
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
+- id: R0-016
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.3
+  tipo: ordering
+  dificultad: media
+  enunciado: Ordena los pasos por los que IAM decide si una solicitud a un recurso de AWS se permite.
+  opciones:
+  - id: a
+    texto: Se evalúan las políticas aplicables a la solicitud
+  - id: b
+    texto: La solicitud llega acompañada de unas credenciales
+  - id: c
+    texto: Se permite la acción solo si las políticas conceden el permiso
+  - id: d
+    texto: IAM autentica las credenciales y las asocia a una entidad de confianza (principal)
+  correctas:
+  - b
+  - d
+  - a
+  - c
+  explicacion: 'Primero la autenticación (¿quién eres?): las credenciales se asocian a un principal, como un usuario,
+    un rol o una aplicación. Después la autorización (¿qué puedes hacer?): se evalúan las políticas y la solicitud se
+    permite si conceden el permiso. Pista: autenticar va antes que autorizar, como enseñar el DNI antes de que miren
+    la lista de invitados.'
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
+- id: R0-017
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.3
+  tipo: multiple_response
+  dificultad: baja
+  enunciado: ¿Qué TRES de estas prácticas recomienda AWS para IAM?
+  opciones:
+  - id: a
+    texto: Exigir autenticación multifactor (MFA)
+  - id: b
+    texto: Conceder permisos amplios por si se necesitan más adelante
+  - id: c
+    texto: Exigir credenciales temporales a personas y cargas de trabajo
+  - id: d
+    texto: Compartir unas mismas claves de acceso entre los miembros del equipo
+  - id: e
+    texto: Revisar y eliminar periódicamente usuarios, roles y permisos sin uso
+  - id: f
+    texto: Usar el usuario raíz para la administración diaria
+  correctas:
+  - a
+  - c
+  - e
+  explicacion: Además del mínimo privilegio, AWS recomienda exigir MFA, usar credenciales temporales (federación para
+    las personas y roles de IAM para las cargas de trabajo) y revisar y eliminar lo que no se usa. Pista, «menos permisos,
+    menos tiempo, más comprobaciones».
+  distractores:
+    b: Dar permisos «por si acaso» contradice el mínimo privilegio, la práctica central de IAM.
+    d: Las claves compartidas son credenciales permanentes y además impiden saber quién hizo cada acción.
+    f: El usuario raíz no se usa para las tareas cotidianas; para ellas se crean identidades con los permisos justos.
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+- id: R0-018
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: IAM es eventualmente consistente. ¿Qué implica para quien diseña una aplicación?
+  opciones:
+  - id: a
+    texto: Que los permisos de IAM caducan solos al cabo de unos días
+  - id: b
+    texto: Que un cambio de permisos tarda un poco en propagarse
+  - id: c
+    texto: Que IAM solo funciona en la Región en la que se creó la cuenta
+  - id: d
+    texto: Que las políticas se aplican en un orden aleatorio
+  correctas:
+  - b
+  explicacion: Eventualmente consistente significa que un cambio (crear un rol, modificar una política) tarda un poco
+    en estar disponible en todas partes. Por eso no conviene que una aplicación dependa de cambiar permisos en su ruta
+    crítica. Pista, en IAM el cambio no es instantáneo.
+  distractores:
+    a: La consistencia eventual habla del retraso en replicar los cambios, no de que los permisos caduquen.
+    c: La consistencia eventual no limita IAM a una Región; describe cuánto tarda en propagarse un cambio.
+    d: El término no se refiere al orden de evaluación de las políticas, sino a la propagación de los cambios.
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
+- id: R0-019
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué opción de compra de Amazon EC2 aprovecha capacidad sin usar a un coste significativamente menor, a
+    cambio de admitir interrupciones?
+  opciones:
+  - id: a
+    texto: On-Demand
+  - id: b
+    texto: Savings Plans
+  - id: c
+    texto: Reserved Instances
+  - id: d
+    texto: Spot Instances
+  correctas:
+  - d
+  explicacion: Las Spot Instances usan capacidad sobrante de EC2 con un coste significativamente menor. Son rentables
+    si la aplicación es flexible en cuándo se ejecuta y puede interrumpirse. Pista, «Spot = sobrante y barato, pero te
+    lo pueden quitar».
+  distractores:
+    a: On-Demand es pago por uso (por segundo) sin compromiso; no es capacidad sobrante ni se interrumpe por ese motivo.
+    b: Savings Plans rebajan el coste a cambio de un compromiso de gasto en USD por hora durante 1 o 3 años.
+    c: Las Reserved Instances rebajan el coste a cambio de comprometerse a una configuración concreta durante 1 o 3 años.
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+- id: R0-020
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada descripción con la opción de compra de Amazon EC2 que le corresponde.
+  prompts:
+  - id: "1"
+    texto: Se paga por segundo por las instancias lanzadas, sin compromiso
+  - id: "2"
+    texto: Compromiso de gasto en USD por hora durante 1 o 3 años
+  - id: "3"
+    texto: Compromiso con una configuración concreta durante 1 o 3 años
+  - id: "4"
+    texto: Capacidad sobrante a menor coste para cargas que admiten interrupciones
+  opciones:
+  - id: a
+    texto: Savings Plans
+  - id: b
+    texto: Spot Instances
+  - id: c
+    texto: Provisioned Throughput
+  - id: d
+    texto: On-Demand
+  - id: e
+    texto: Reserved Instances
+  correctas:
+  - ["1", "d"]
+  - ["2", "a"]
+  - ["3", "e"]
+  - ["4", "b"]
+  explicacion: 'Las tres lógicas de precio son pagar por uso (On-Demand), comprometerse a cambio de descuento (Savings
+    Plans en USD por hora, Reserved Instances para una configuración concreta) y aprovechar capacidad sobrante (Spot).
+    Pista: Savings Plans se comprometen con «dinero»; Reserved Instances, con «una máquina».'
+  distractores:
+    c: Provisioned Throughput es una opción de Amazon Bedrock (capacidad reservada facturada por horas), no una opción
+      de compra de EC2.
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+- id: R0-021
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué servicio de AWS define un presupuesto y avisa cuando el gasto real o previsto lo supera?
+  opciones:
+  - id: a
+    texto: AWS Budgets
+  - id: b
+    texto: AWS Cost Explorer
+  - id: c
+    texto: Amazon CloudWatch
+  - id: d
+    texto: AWS CloudTrail
+  correctas:
+  - a
+  explicacion: AWS Budgets define presupuestos de coste o uso y envía alertas al superarlos; es lo primero que conviene
+    configurar antes de un laboratorio. Pista, «Budgets avisa, Cost Explorer analiza».
+  distractores:
+    b: Cost Explorer muestra y analiza el gasto histórico por servicio y su tendencia, pero no es la herramienta de alertas
+      por umbral.
+    c: CloudWatch ofrece métricas, registros y alarmas sobre el funcionamiento de recursos, no presupuestos de gasto.
+    d: CloudTrail registra quién hizo cada llamada a la API; no controla el gasto.
+  referencia: https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html
+- id: R0-022
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un endpoint en tiempo real de Amazon SageMaker AI está desplegado, pero no recibe peticiones. ¿Qué ocurre
+    con su facturación?
+  opciones:
+  - id: a
+    texto: No se factura nada mientras no haya peticiones
+  - id: b
+    texto: Se factura por tokens de entrada y salida, así que el coste es cero
+  - id: c
+    texto: Se factura el tiempo de uso de sus instancias mientras están en marcha
+  - id: d
+    texto: Se factura solo la primera hora tras el despliegue
+  correctas:
+  - c
+  explicacion: En SageMaker AI se paga el tiempo de uso de las instancias elegidas para entrenar y para alojar el modelo.
+    Un endpoint en tiempo real factura mientras sus instancias están encendidas, aunque no reciba peticiones. Pista, lo
+    aprovisionado se paga aunque no se use; por eso hay que borrar los endpoints al terminar.
+  distractores:
+    a: Eso describe AWS Lambda, que no cobra mientras no hay invocaciones; un endpoint aprovisionado sí factura.
+    b: Los tokens son la unidad del modo on-demand de Amazon Bedrock, no de un endpoint de SageMaker AI.
+    d: La facturación por tiempo de instancia continúa mientras el endpoint existe, no solo la primera hora.
+  referencia: https://aws.amazon.com/sagemaker/ai/pricing/
+- id: R0-023
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS de estos recursos generan coste aunque no se usen, por ser capacidad aprovisionada?
+  opciones:
+  - id: a
+    texto: Una función de AWS Lambda sin invocaciones
+  - id: b
+    texto: Un endpoint en tiempo real de Amazon SageMaker AI en marcha
+  - id: c
+    texto: Un modelo de Amazon Bedrock usado en modo on-demand
+  - id: d
+    texto: Capacidad de Amazon Bedrock Provisioned Throughput
+  - id: e
+    texto: Amazon Translate cuando no se traduce ningún carácter
+  correctas:
+  - b
+  - d
+  explicacion: 'La idea que explota el examen: lo aprovisionado se paga aunque no se use (las instancias de un endpoint,
+    Provisioned Throughput facturado por horas), mientras que lo bajo demanda se paga solo por uso. Pista: si «está encendido»
+    o «está reservado», corre el taxímetro.'
+  distractores:
+    a: Lambda se factura por número de peticiones y duración; sin invocaciones no se paga.
+    c: En modo on-demand, Bedrock factura por tokens de entrada y salida, sin compromiso.
+    e: Translate factura por caracteres procesados; si no se traduce nada, no hay unidades que facturar.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html
+- id: R0-024
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué se paga al usar un modelo fundacional de Amazon Bedrock en modo on-demand?
+  opciones:
+  - id: a
+    texto: El tiempo de las instancias que alojan el modelo
+  - id: b
+    texto: Los tokens de entrada y de salida
+  - id: c
+    texto: El número de peticiones y la duración de la ejecución
+  - id: d
+    texto: Las horas de capacidad reservada
+  correctas:
+  - b
+  explicacion: 'En on-demand, Bedrock factura por tokens de entrada y de salida, sin compromiso; encaja con un tráfico
+    variable. Cada familia tiene su unidad: tokens en Bedrock, tiempo de instancia en SageMaker AI y unidades procesadas
+    en los servicios especializados.'
+  distractores:
+    a: El tiempo de instancia es la unidad de Amazon SageMaker AI.
+    c: Peticiones y duración es como se factura AWS Lambda.
+    d: Las horas de capacidad reservada corresponden a Bedrock Provisioned Throughput, no al modo on-demand.
+  referencia: https://aws.amazon.com/bedrock/pricing/

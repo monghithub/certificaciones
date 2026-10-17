@@ -118,7 +118,7 @@
   objetivo: 3.1.1
   tipo: matching
   dificultad: media
-  enunciado: Un arquitecto prepara una guía para elegir modelos. Empareje cada requisito de negocio con el criterio
+  enunciado: Un arquitecto prepara una guía para elegir modelos. Empareja cada requisito de negocio con el criterio
     de selección que decide.
   prompts:
   - id: '1'
@@ -270,7 +270,7 @@
   objetivo: 3.1.2
   tipo: matching
   dificultad: alta
-  enunciado: Una empresa usa el mismo modelo para varias tareas. Empareje cada tarea con la configuración de inferencia
+  enunciado: Una empresa usa el mismo modelo para varias tareas. Empareja cada tarea con la configuración de inferencia
     más adecuada.
   prompts:
   - id: '1'
@@ -338,7 +338,7 @@
   objetivo: 3.1.3
   tipo: ordering
   dificultad: media
-  enunciado: Ordene los pasos que sigue una aplicación RAG desde que llega la pregunta de un usuario hasta que este
+  enunciado: Ordena los pasos que sigue una aplicación RAG desde que llega la pregunta de un usuario hasta que este
     recibe la respuesta.
   opciones:
   - id: a
@@ -559,7 +559,7 @@
   objetivo: 3.1.4
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada necesidad con el almacén vectorial de AWS que mejor encaja según la guía de AWS para
+  enunciado: Empareja cada necesidad con el almacén vectorial de AWS que mejor encaja según la guía de AWS para
     elegir bases de datos vectoriales.
   prompts:
   - id: '1'
@@ -656,7 +656,7 @@
   objetivo: 3.1.5
   tipo: ordering
   dificultad: baja
-  enunciado: Ordene estas formas de adaptar un modelo fundacional de MENOR a MAYOR coste y esfuerzo habituales.
+  enunciado: Ordena estas formas de adaptar un modelo fundacional de MENOR a MAYOR coste y esfuerzo habituales.
   opciones:
   - id: a
     texto: Ingeniería de prompts con ejemplos (in-context learning)
@@ -904,7 +904,7 @@
   objetivo: 3.1.6
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada necesidad con la solución más adecuada.
+  enunciado: Empareja cada necesidad con la solución más adecuada.
   prompts:
   - id: '1'
     texto: Responder preguntas sobre el manual del empleado con citas
@@ -946,7 +946,7 @@
   tipo: matching
   dificultad: baja
   enunciado: 'Un analista revisa este prompt: «Eres agente de atención al cliente de una aerolínea. Clasifica la
-    reclamación en EQUIPAJE, RETRASO u OTROS. Reclamación: <texto>…</texto>. Responde solo con la categoría.» Empareje
+    reclamación en EQUIPAJE, RETRASO u OTROS. Reclamación: <texto>…</texto>. Responde solo con la categoría.» Empareja
     cada fragmento con el componente del prompt que representa.'
   prompts:
   - id: '1'
@@ -1178,7 +1178,7 @@
   objetivo: 3.2.2
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada prompt con la técnica que utiliza.
+  enunciado: Empareja cada prompt con la técnica que utiliza.
   prompts:
   - id: '1'
     texto: '«Clasifica el sentimiento de esta reseña: …»'
@@ -1449,7 +1449,7 @@
   objetivo: 3.2.4
   tipo: matching
   dificultad: alta
-  enunciado: Empareje cada situación con el riesgo de ingeniería de prompts que describe.
+  enunciado: Empareja cada situación con el riesgo de ingeniería de prompts que describe.
   prompts:
   - id: '1'
     texto: Un usuario usa un juego de rol para que el modelo genere instrucciones peligrosas que normalmente rechaza
@@ -1599,7 +1599,7 @@
   objetivo: 3.2.5
   tipo: ordering
   dificultad: media
-  enunciado: Ordene el flujo de trabajo típico de Prompt Management para llevar un prompt a producción.
+  enunciado: Ordena el flujo de trabajo típico de Prompt Management para llevar un prompt a producción.
   opciones:
   - id: a
     texto: Crear una versión con la configuración elegida
@@ -1704,7 +1704,7 @@
   objetivo: 3.3.1
   tipo: ordering
   dificultad: media
-  enunciado: Un proveedor crea un modelo de chat partiendo de cero. Ordene las etapas típicas de su entrenamiento,
+  enunciado: Un proveedor crea un modelo de chat partiendo de cero. Ordena las etapas típicas de su entrenamiento,
     desde la primera hasta la última.
   opciones:
   - id: a
@@ -1891,7 +1891,7 @@
   objetivo: 3.3.2
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada situación con el método de adaptación del modelo más adecuado.
+  enunciado: Empareja cada situación con el método de adaptación del modelo más adecuado.
   prompts:
   - id: '1'
     texto: Hay mucho texto sin etiquetar de un sector y el modelo no conoce su vocabulario
@@ -1987,7 +1987,7 @@
   objetivo: 3.3.3
   tipo: ordering
   dificultad: media
-  enunciado: Ordene los pasos de RLHF (aprendizaje por refuerzo con retroalimentación humana) para alinear un modelo.
+  enunciado: Ordena los pasos de RLHF (aprendizaje por refuerzo con retroalimentación humana) para alinear un modelo.
   opciones:
   - id: a
     texto: Personas comparan o puntúan esas respuestas
@@ -2176,7 +2176,7 @@
   objetivo: 3.4.1
   tipo: ordering
   dificultad: media
-  enunciado: Ordene un proceso de evaluación eficiente según la guía prescriptiva de AWS, desde el primer paso hasta
+  enunciado: Ordena un proceso de evaluación eficiente según la guía prescriptiva de AWS, desde el primer paso hasta
     el último antes de producción.
   opciones:
   - id: a
@@ -2306,7 +2306,7 @@
   objetivo: 3.4.2
   tipo: matching
   dificultad: media
-  enunciado: Empareje cada necesidad de evaluación con la métrica o el enfoque más adecuado.
+  enunciado: Empareja cada necesidad de evaluación con la métrica o el enfoque más adecuado.
   prompts:
   - id: '1'
     texto: Calidad de traducciones frente a traducciones de referencia
@@ -2428,7 +2428,7 @@
   objetivo: 3.4.3
   tipo: ordering
   dificultad: media
-  enunciado: Ordene los pasos para comprobar si un asistente de IA cumple un objetivo de negocio.
+  enunciado: Ordena los pasos para comprobar si un asistente de IA cumple un objetivo de negocio.
   opciones:
   - id: a
     texto: Comparar los resultados con la línea base y decidir
@@ -2563,7 +2563,7 @@
   objetivo: 3.4.4
   tipo: matching
   dificultad: alta
-  enunciado: Empareje cada tipo de aplicación con lo que es más importante evaluar en ella.
+  enunciado: Empareja cada tipo de aplicación con lo que es más importante evaluar en ella.
   prompts:
   - id: '1'
     texto: Aplicación RAG

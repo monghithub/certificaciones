@@ -103,6 +103,17 @@ Todas las preguntas son de elaboración propia. Los conjuntos oficiales de prác
 7. **Datos verificados:** una pregunta no puede depender de un dato marcado como `PENDIENTE DE VERIFICAR`.
 8. **Tras reordenar opciones**, comprueba que `correctas` y `distractores` siguen apuntando al texto correcto.
 
+### Banco de repaso de conocimientos
+
+Además del banco de examen, cada módulo de teoría tiene `repaso.yaml`: preguntas **directas** para fijar lo leído antes de pasar a los escenarios. La consola las ofrece como primer paso de la ruta de estudio y nunca las mezcla con los tests de examen ni con el simulacro.
+
+- Mismo esquema y formato por tipo que el banco de examen. `id`: `R<módulo>-NNN`. Mínimos en el bloque `repaso` de `curso.yaml` (`minimo_por_modulo`, `minimo_por_objetivo`), comprobados por `comprobar_cobertura.py --preguntas`.
+- **Conocimientos previos:** si `curso.yaml` declara `repaso.previos` (fuente con objetivos `CP.N`), el banco de repaso del módulo de base usa `dominio: 0`, `tarea: CP` y `objetivo: CP.N`. El dominio 0 solo se admite en bancos de repaso.
+- **Una idea por pregunta**: un concepto, servicio, métrica o criterio. Se admiten enunciados cortos (no se aplica el aviso de «enunciado muy corto»).
+- **Solo lo que dice la teoría del módulo:** cada pregunta se apoya en una afirmación ya verificada del módulo y cita la misma fuente oficial; no introduce datos nuevos.
+- **Explicaciones que enseñan:** 2–4 frases con el concepto y una pista para recordarlo; cada distractor explica por qué no es la respuesta y qué es en realidad.
+- Se mantienen las reglas 2, 3, 4, 7 y 8 de la calidad del banco de examen. El validador falla si un enunciado de repaso repite el de una pregunta de examen.
+
 Antes de cada commit: `python scripts/validar_preguntas.py && python scripts/comprobar_cobertura.py --preguntas && python -m pytest`. Revisa también los `AVISO` del validador.
 
 ## Consola, glosario y diagramas

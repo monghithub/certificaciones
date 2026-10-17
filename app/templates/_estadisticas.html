@@ -4,7 +4,7 @@
 {% for f in progreso %}<tr><td>{{ f.modulo.numero }} · {{ f.modulo.titulo }}</td><td>{{ f.estado }}</td><td>{{ f.hechas }}/{{ f.total }}</td></tr>{% endfor %}</tbody></table></div>
 <h2>Aciertos por dominio</h2>
 {% if dominios %}<div class="tablawrap"><table><thead><tr><th>Dominio</th><th>Respuestas</th><th>Aciertos</th><th></th></tr></thead><tbody>
-{% for d in dominios %}<tr><td>Dominio {{ d.dominio }}{% if nombres and nombres.get(d.dominio) %} · {{ nombres[d.dominio].nombre }}{% endif %}</td><td>{{ d.n }}</td><td>{{ d.pct }} %</td><td><div class="barra"><span style="width: {{ d.pct }}%"></span></div></td></tr>{% endfor %}</tbody></table></div>
+{% for d in dominios %}<tr><td>{% if d.dominio == 0 %}{{ nombres[0].nombre if nombres and nombres.get(0) else 'Conocimientos previos' }}{% else %}Dominio {{ d.dominio }}{% if nombres and nombres.get(d.dominio) %} · {{ nombres[d.dominio].nombre }}{% endif %}{% endif %}</td><td>{{ d.n }}</td><td>{{ d.pct }} %</td><td><div class="barra"><span style="width: {{ d.pct }}%"></span></div></td></tr>{% endfor %}</tbody></table></div>
 {% else %}<p class="suave">Aún no hay respuestas.</p>{% endif %}
 <h2>Aciertos por tarea</h2>
 {% if tareas %}<div class="tablawrap"><table><thead><tr><th>Tarea</th><th>Respuestas</th><th>Aciertos</th></tr></thead><tbody>
