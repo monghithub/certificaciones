@@ -12,6 +12,7 @@ services:
       ADMIN_USERNAME: ${ADMIN_USERNAME:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
       FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS:-127.0.0.1}
+      ACCESO_LIBRE_USUARIO: ${ACCESO_LIBRE_USUARIO:-}
     volumes:
       - datos:/data
       - ./cursos:/cursos:ro

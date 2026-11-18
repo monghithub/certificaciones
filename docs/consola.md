@@ -48,6 +48,13 @@ En ambos casos la contraseña es temporal: se obliga a cambiarla en el primer ac
 | `ADMIN_USERNAME`, `ADMIN_PASSWORD` | No | Crea el primer administrador si no hay usuarios. |
 | `PORT` | No | Puerto local publicado por Docker Compose (8000). |
 | `FORWARDED_ALLOW_IPS` | No | IPs de proxies de confianza para `X-Forwarded-For`. |
+| `ACCESO_LIBRE_USUARIO` | No | **Solo en red local.** Entra sin login como este usuario (existente y activo). Ver [Acceso libre](#acceso-libre-en-red-local). |
+
+## Acceso libre en red local
+
+Si la consola solo es accesible desde una red de confianza (por ejemplo, detrás de Traefik con una restricción a la LAN), puede usarse sin login: con `ACCESO_LIBRE_USUARIO=<usuario>`, quien llega sin sesión entra automáticamente como ese usuario. La cabecera muestra «Acceso libre (red local)» y no hay «Salir» ni página de acceso. Si el usuario no existe o está desactivado, se vuelve a exigir login y se registra un aviso. CSRF, cabeceras de seguridad y el resto de protecciones no cambian.
+
+> **Cuidado:** cualquiera que llegue a la consola tendrá los permisos de ese usuario (si es `admin`, también la gestión de usuarios). No lo actives si la consola es accesible desde internet.
 
 ## Qué se guarda
 

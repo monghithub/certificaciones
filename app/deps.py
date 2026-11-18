@@ -1,11 +1,15 @@
 """Dependencias de FastAPI: sesión de BD, usuario actual, roles y CSRF."""
+import logging
+
 from fastapi import Depends, HTTPException, Request
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .content import Contenido
-from .models import Matricula, Usuario
+from .models import Matricula, Usuario, ahora
 from .security import csrf_valido
+
+log = logging.getLogger("app")
 
 
 class CSRFInvalido(HTTPException):
@@ -25,12 +29,35 @@ def get_db(request: Request):
         yield db
 
 
+def usuario_acceso_libre(request: Request, db: Session) -> Usuario | None:
+    """Usuario fijo del modo de acceso libre (ACCESO_LIBRE_USUARIO), si está configurado, existe y está activo."""
+    nombre = request.app.state.settings.acceso_libre_usuario
+    if not nombre:
+        return None
+    usuario = db.execute(select(Usuario).where(Usuario.username == nombre)).scalar_one_or_none()
+    if not usuario or not usuario.activo:
+        log.warning("ACCESO_LIBRE_USUARIO=%s no existe o está desactivado: se exige login", nombre)
+        return None
+    return usuario
+
+
 def usuario_sin_forzar(request: Request, db: Session = Depends(get_db)) -> Usuario:
     uid = request.session.get("uid")
     usuario = db.get(Usuario, uid) if uid else None
     if not usuario or not usuario.activo:
+        libre = usuario_acceso_libre(request, db)
+        if not libre:
+            request.session.clear()
+            raise Redireccion("/login")
+        # Acceso libre: se abre la sesión al vuelo (misma cookie firmada; el token CSRF se conserva).
+        csrf = request.session.get("csrf")
         request.session.clear()
-        raise Redireccion("/login")
+        request.session["uid"] = libre.id
+        if csrf:
+            request.session["csrf"] = csrf
+        libre.ultimo_acceso = ahora()
+        db.commit()
+        usuario = libre
     request.state.user = usuario
     return usuario
 

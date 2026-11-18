@@ -36,6 +36,7 @@ class Settings:
     login_bloqueo_segundos: int = 300
     password_min_length: int = 10
     ejecutar_migraciones: bool = True
+    acceso_libre_usuario: str | None = None  # solo para despliegues en red local: entra sin login como este usuario
 
     @classmethod
     def desde_entorno(cls, env=None) -> "Settings":
@@ -51,4 +52,5 @@ class Settings:
             password_min_length=_entero(env.get("PASSWORD_MIN_LENGTH"), 10),
             admin_username=env.get("ADMIN_USERNAME") or None,
             admin_password=env.get("ADMIN_PASSWORD") or None,
+            acceso_libre_usuario=(env.get("ACCESO_LIBRE_USUARIO") or "").strip().lower() or None,
         )

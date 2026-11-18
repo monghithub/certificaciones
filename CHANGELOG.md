@@ -6,6 +6,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
 ### Añadido
 
+- **Acceso libre en red local** (2026-11-19, [issue #15](https://github.com/monghithub/certificaciones/issues/15)): con `ACCESO_LIBRE_USUARIO=<usuario>` la consola entra sin login como ese usuario; desactivado por defecto. Cabecera «Acceso libre (red local)» y sin «Salir». 6 pruebas nuevas.
 - **«Ponme a prueba» durante la lectura** (2026-11-18): botón en las páginas de lectura de los módulos que abre un modal con una pregunta tipo test del apartado visible (encabezado más cercano al centro de la ventana y sus padres → objetivos del mapa de cobertura), primero de repaso y después de examen, con corrección y explicación al momento y «Otra pregunta» hasta cerrarlo. Sin temporizador y sin registro. Rutas `GET /c/<curso>/lectura/pregunta` y `POST /c/<curso>/lectura/corregir`; la vista de la pregunta y la lectura de la respuesta pasan a `app/preguntas.py`, compartidas con los tests. 13 pruebas nuevas.
 - **Repaso de conocimientos y estudio con los tests** (2026-10-17):
   - Bancos de repaso `repaso.yaml` en los módulos 00 a 05: 210 preguntas directas (24 de conocimientos previos CP.1–CP.4, 42 del Dominio 1, 36 del 2, 44 del 3, 34 del 4 y 30 del 5), con al menos 2 por objetivo y explicaciones que enseñan. Revisión independiente por módulo: ninguna respuesta incorrecta; se corrigieron distractores defendibles (R3-009, R3-011, R3-038), referencias poco pertinentes, explicaciones y pistas por longitud de la opción correcta.

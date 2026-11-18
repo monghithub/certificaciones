@@ -45,6 +45,7 @@ def render(request: Request, nombre: str, status: int = 200, **ctx):
     ctx.setdefault("user", getattr(request.state, "user", None))
     ctx["csrf"] = token_csrf(request.session)
     ctx["min_password"] = request.app.state.settings.password_min_length
+    ctx["acceso_libre"] = bool(request.app.state.settings.acceso_libre_usuario)
     curso = getattr(request.state, "curso", None)
     ctx.setdefault("curso", curso)
     ctx.setdefault("base", f"/c/{curso.manifiesto.slug}" if curso else "")

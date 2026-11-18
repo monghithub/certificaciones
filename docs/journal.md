@@ -288,3 +288,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 ### Pendiente
 
 - #11 (a la espera de AWS), #15 y publicación de la v1.0.0 (#16).
+
+## 2026-11-19
+
+### Acceso libre en red local (#15)
+
+- Petición: «la 15 significa quitar el login de la consola. Dejarla libre para poder entrar ya que solo va a funcionar en el entorno local».
+- Rama `feat/acceso-libre`, cambio de OpenSpec `acceso-libre`, aprobado por el usuario (usuario fijo: `admin`).
+- **Decisiones:** opción por variable de entorno, desactivada por defecto, para no cambiar otros despliegues; usuario existente (no anónimo) para que el progreso y las matrículas sigan funcionando; la sesión se crea al vuelo y CSRF se mantiene; en titan solo es accesible por la LAN (Traefik `lan-only`).
+- Riesgo aceptado por el usuario: cualquiera en la red local entra como `admin`.
+

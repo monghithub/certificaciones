@@ -5,7 +5,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..deps import get_db, usuario_sin_forzar, verificar_csrf
+from ..deps import get_db, usuario_acceso_libre, usuario_sin_forzar, verificar_csrf
 from ..models import Usuario, ahora
 from ..security import HASH_FICTICIO, error_password, hashear, verificar
 from ..web import flash, render
@@ -18,8 +18,8 @@ def _ip(request: Request) -> str:
 
 
 @router.get("/login")
-def login_form(request: Request):
-    if request.session.get("uid"):
+def login_form(request: Request, db: Session = Depends(get_db)):
+    if request.session.get("uid") or usuario_acceso_libre(request, db):
         return RedirectResponse("/", 303)
     return render(request, "login.html")
 
