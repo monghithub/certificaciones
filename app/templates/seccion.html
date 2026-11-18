@@ -8,4 +8,16 @@
   <input type="hidden" name="csrf" value="{{ csrf }}">
   <button type="submit" class="{{ 'sec' if completada }}">{{ 'Marcar como no completada' if completada else 'Marcar sección como completada' }}</button>
 </form>
+{% if not mod.es_simulacro and (mod.repaso or mod.preguntas) %}
+<button type="button" class="btn-prueba" data-ponme-a-prueba data-modulo="{{ mod.id }}" data-url="{{ base }}/lectura">Ponme a prueba</button>
+<dialog id="modal-pregunta" class="modal-concepto modal-pregunta" aria-labelledby="mp-titulo">
+  <div class="mc-cuerpo">
+    <header class="mc-cab">
+      <div><span class="mc-cat" id="mp-origen"></span><h2 id="mp-titulo" tabindex="-1">Ponte a prueba</h2></div>
+      <button type="button" class="mc-cerrar" data-mp-cerrar aria-label="Cerrar">✕</button>
+    </header>
+    <div id="mp-cuerpo" aria-live="polite"></div>
+  </div>
+</dialog>
+{% endif %}
 {% endblock %}

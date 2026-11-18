@@ -2,7 +2,7 @@
 import json
 import logging
 import re
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -155,6 +155,7 @@ class Contenido:
         self.modulos: dict[str, Modulo] = {}
         self.preguntas: dict[str, dict] = {}  # todas, de examen y de repaso; p["banco"] dice de cuál
         self.teoria: dict[str, tuple[str, str]] = {}  # objetivo -> (módulo, ancla) según los mapas de cobertura
+        self.objetivos_ancla: dict[tuple[str, str], list[str]] = {}  # (módulo, ancla) -> objetivos que la enlazan
         self.avisos: list[str] = []
         self.glosario: glosario_mod.Glosario | None = None
         self._md = _md(self)
@@ -163,6 +164,7 @@ class Contenido:
 
     def cargar(self):
         self.modulos, self.preguntas, self.teoria, self.avisos, self._html = {}, {}, {}, [], {}
+        self.objetivos_ancla = {}
         self.glosario, errores = glosario_mod.leer(self.raiz, self.esquemas)
         self.avisos += errores
         esquema = self.esquemas / "pregunta.schema.json"
@@ -179,6 +181,10 @@ class Contenido:
                 for objetivo, anclas in mapa_cobertura(texto).items():
                     if anclas:
                         self.teoria.setdefault(objetivo, (d.name, anclas[0]))
+                    for ancla in anclas:
+                        lista = self.objetivos_ancla.setdefault((d.name, unquote(ancla)), [])
+                        if objetivo not in lista:
+                            lista.append(objetivo)
                 for linea in texto.splitlines():
                     if linea.startswith("# "):
                         titulo = linea[2:].strip()

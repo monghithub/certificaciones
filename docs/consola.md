@@ -65,6 +65,12 @@ El bloqueo por usuario permite que un tercero bloquee temporalmente una cuenta a
 - **Diagramas.** Los diagramas Mermaid usan un tema propio (claro y oscuro), colores por tipo, aparición escalonada y flechas animadas. Con la preferencia de sistema «reducir movimiento» no hay animaciones. **Cualquier caja** de un diagrama (nodo o subgrupo) abre un modal con su información y enlaces: externos (pestaña nueva) y «Ver en el curso» (apartado interno). Esa información la define el autor en el bloque `nodos` que sigue a cada diagrama, y el validador exige que no falte ninguna caja. Los títulos de apartado tienen ancla, así que los enlaces `#ancla` (mapa de cobertura, «Ver en el curso») llevan al lugar exacto.
 - Las reglas para autores (entradas del glosario y clases de colores) están en [AGENTS.md](../AGENTS.md). Las pruebas manuales en navegador, en [tests/e2e](../tests/e2e/README.md).
 
+## «Ponme a prueba» durante la lectura
+
+En las páginas de lectura de cada módulo con preguntas (no en el simulacro) hay un botón fijo **«Ponme a prueba»**, abajo a la derecha. Abre un modal con una pregunta tipo test de **lo que tienes en pantalla**: la consola toma el encabezado más cercano por encima del centro de la ventana y, si su apartado no tiene preguntas, sube a sus encabezados padres. Las preguntas salen de los objetivos que el mapa de cobertura asocia a ese apartado: primero las de repaso y, cuando se acaban, las de examen. Si el apartado no tiene ninguna (por ejemplo, en «Servicios» o «Trampas»), la pregunta sale del módulo y el modal lo indica.
+
+Se responde en el propio modal (los cuatro tipos), se ve al momento si es correcta, la solución, la explicación, la referencia oficial y el enlace «Repasar en la teoría». **Otra pregunta** pide la siguiente del apartado visible sin repetir las ya vistas en la visita; al agotar todas las del módulo, empiezan de nuevo. Se cierra con ✕, «Cerrar», `Esc` o clic fuera. El modal nunca se abre solo y **no guarda nada**: no cuenta en las estadísticas ni en «Repetir falladas».
+
 ## Tema de color
 
 La web usa por defecto un tema claro de tonos suaves. El botón de la cabecera cambia entre **Claro**, **Oscuro** y **Sistema** (sigue al sistema operativo) y recuerda la elección en el navegador. Los ficheros estáticos se sirven siempre con revalidación y versión en la URL, así que tras actualizar la consola no hay que vaciar la caché del navegador.

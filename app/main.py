@@ -17,7 +17,7 @@ from .db import crear_motor, crear_sesionmaker
 from .deps import CSRFInvalido, Redireccion
 from .migraciones import migrar
 from .models import Usuario
-from .routes import admin, auth, course, home, quiz, stats
+from .routes import admin, auth, course, home, lectura, quiz, stats
 from .security import LimitadorLogin, error_password, hashear
 from .web import flash, render
 
@@ -67,7 +67,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(SessionMiddleware, secret_key=settings.secret_key, session_cookie="sesion", same_site="lax",
                        https_only=settings.cookie_secure, max_age=settings.session_max_age)
     app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
-    for r in (auth.router, home.router, course.router, quiz.router, stats.router, admin.router):
+    for r in (auth.router, home.router, course.router, lectura.router, quiz.router, stats.router, admin.router):
         app.include_router(r)
 
     @app.exception_handler(Redireccion)

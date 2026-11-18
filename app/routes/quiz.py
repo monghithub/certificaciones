@@ -11,6 +11,7 @@ from .. import stats
 from ..content import Contenido
 from ..deps import get_db, requiere_curso, requiere_usuario, verificar_csrf
 from ..models import Intento, IntentoRespuesta, Usuario, ahora
+from ..preguntas import leer_respuesta, vista_pregunta
 from ..web import flash, render
 
 router = APIRouter(prefix="/c/{curso}/tests", dependencies=[Depends(verificar_csrf)])
@@ -118,15 +119,6 @@ def _sin_correccion(i: Intento) -> bool:
     return i.modo == "simulacro" and i.filtro != "estudio"
 
 
-def _vista_pregunta(c, pid: str):
-    p = c.preguntas.get(pid)
-    if not p:
-        return None
-    vista = {k: p.get(k) for k in ("id", "tipo", "enunciado", "opciones", "prompts", "tarea", "dominio", "banco")}
-    vista["posiciones"] = len(p["correctas"]) if p["tipo"] == "ordering" else 0  # solo el nº de huecos, no la solución
-    return vista
-
-
 @router.get("/{iid}/p/{n}")
 def ver(iid: int, n: int, request: Request, c: Contenido = Depends(requiere_curso), usuario: Usuario = Depends(requiere_usuario), db: Session = Depends(get_db)):
     i = _intento(db, iid, usuario, c)
@@ -144,35 +136,9 @@ def ver(iid: int, n: int, request: Request, c: Contenido = Depends(requiere_curs
         retro = {"correcta": resp.correcta, "solucion": p["correctas"], "explicacion": p["explicacion"],
                  "distractores": p.get("distractores") or {}, "referencia": p["referencia"], "respuesta": resp.respuesta,
                  "teoria": c.url_teoria(p.get("objetivo"))}
-    return render(request, "pregunta.html", i=i, n=n, total=len(i.preguntas), p=_vista_pregunta(c, pid), pid=pid,
+    return render(request, "pregunta.html", i=i, n=n, total=len(i.preguntas), p=vista_pregunta(c, pid), pid=pid,
                   respondida=resp is not None, retro=retro, simulacro=simulacro,
                   restante=_segundos_restantes(i), hechas=len(i.respuestas))
-
-
-def _leer_respuesta(p: dict, form) -> list:
-    """Convierte el formulario en respuesta validada. Lanza ValueError si es incompleta o inválida."""
-    opciones = {o["id"] for o in p["opciones"]}
-    tipo = p["tipo"]
-    if tipo == "multiple_choice":
-        r = form.getlist("r")
-        if len(r) != 1 or r[0] not in opciones:
-            raise ValueError("Elige una opción.")
-        return r
-    if tipo == "multiple_response":
-        r = form.getlist("r")
-        if not r or not set(r) <= opciones:
-            raise ValueError("Elige al menos una opción.")
-        return sorted(set(r))
-    if tipo == "ordering":
-        r = [form.get(f"o{k}") for k in range(1, len(p["correctas"]) + 1)]
-        if None in r or "" in r or not set(r) <= opciones or len(set(r)) != len(r):
-            raise ValueError("Indica un elemento distinto en cada posición.")
-        return r
-    prompts = {x["id"] for x in p["prompts"]}
-    pares = [[pid, form.get(f"m_{pid}")] for pid in sorted(prompts)]
-    if any(o not in opciones for _, o in pares):
-        raise ValueError("Empareja todos los elementos.")
-    return pares
 
 
 @router.post("/{iid}/responder")
@@ -192,7 +158,7 @@ async def responder(iid: int, request: Request, n: int = Form(...), c: Contenido
     if any(r.pregunta_id == pid for r in i.respuestas):
         return RedirectResponse(f"/c/{c.manifiesto.slug}/tests/{iid}/p/{n}", 303)
     try:
-        r = _leer_respuesta(p, await request.form())
+        r = leer_respuesta(p, await request.form())
     except ValueError as e:
         flash(request, str(e), "error")
         return RedirectResponse(f"/c/{c.manifiesto.slug}/tests/{iid}/p/{n}", 303)

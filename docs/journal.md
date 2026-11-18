@@ -270,6 +270,14 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - #11 sigue abierta: la guía de Bedrock solo enumera tres métodos, mientras que la FAQ y la referencia de la API mantienen el preentrenamiento continuado.
 - Este cambio no pasa por OpenSpec: es mantenimiento de fuentes y notas sin preguntas ni requisitos nuevos, como la issue #8.
 
+### «Ponme a prueba» durante la lectura
+
+- Petición: «me gustaría que en las pantallas de vez en cuando aparecieran un modal con alguna pregunta concreta tipo test de la página que estoy visitando. Pudiera cerrarla o si no la cierro me vaya haciendo cuestiones y vaya yo respondiendo hasta que me aburra y la cierre. Sobre todo de la página que esté en ese momento en la ventana del navegador».
+- Rama `feat/pregunta-en-lectura`, cambio de OpenSpec `pregunta-en-lectura`, revisado y aprobado por el usuario antes de implementar.
+- **Decisiones del usuario:** el modal solo se abre con el botón (sin temporizador); no se guarda nada; primero repaso y después examen del mismo apartado.
+- **Decisiones de diseño:** el cliente calcula la cadena de anclas visibles y el servidor elige, sin estado (el cliente manda los ids ya vistos). Índice (módulo, ancla) → objetivos con todas las anclas del mapa de cobertura. Respuestas JSON pintadas con `textContent`, compatibles con la CSP. Las rutas exigen matrícula y CSRF y rechazan el simulacro.
+- **Verificación:** 258 pruebas de pytest (13 nuevas). En navegador (Chromium headless contra la imagen de la rama): seis preguntas seguidas del apartado «Buenas prácticas de ingeniería de prompts» sin repetir (2 de repaso y 4 de examen), y luego del módulo; `Esc` y retorno del foco; «Repasar en la teoría» cierra y navega; sin botón en el simulacro; claro, oscuro y móvil; «Falladas (0)» tras fallar en el modal; sin errores de consola.
+
 ### Pendiente
 
 - #11, decisiones #14 y #15 y publicación de la v1.0.0 (#16).
