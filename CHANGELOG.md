@@ -105,6 +105,13 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
 ### Cambiado
 
+- **Guía del examen AIF-C01 v1.2** (29 de octubre de 2026), revisada el 2026-11-18: los 69 objetivos y los conocimientos previos son idénticos a los de la v1.1 y la lista *in scope* no cambia. `fuentes/` pasa a la v1.2; `servicios-alcance.md` transcribe la nueva lista *out of scope* (salen 25 servicios, la mayoría retirados; WorkSpaces Web pasa a llamarse WorkSpaces Secure Browser) y separa los cambios por versión. No cambia ninguna pregunta.
+- Marcadores `PENDIENTE DE VERIFICAR` (quedan 1 de 4):
+  - #9 (lista *out of scope*): resuelto, la lista v1.2 ya no incluye DeepComposer, IAM Identity Center, Marketplace ni Organizations.
+  - #10 (*using multiple comments*): resuelto con el blog oficial de AWS sobre *prompts* con CodeWhisperer («Utilizing multiple comments»: un comentario por requisito o paso). Se reescribe la buena práctica en el módulo 03 con un ejemplo y se añade la referencia.
+  - #12 (*task engineering*): cerrado como no verificable según su criterio de cierre. Se mantiene la interpretación con una nota, sin marcador.
+  - #11 (preentrenamiento continuado en Bedrock): sigue abierto. Se añade al marcador que la API `CreateModelCustomizationJob` todavía admite `CONTINUED_PRE_TRAINING`.
+
 - Licencia confirmada por el responsable (2026-10-16): MIT para el código y CC BY 4.0 para el contenido. `LICENSE` deja de estar pendiente de confirmación y enumera también `app/`, `curso/`, `migrations/` y `Dockerfile` como código, y `docs/` como contenido ([issue #13](https://github.com/monghithub/certificaciones/issues/13)).
 
 ### Corregido

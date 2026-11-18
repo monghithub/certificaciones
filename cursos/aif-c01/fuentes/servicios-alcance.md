@@ -1,11 +1,11 @@
 # Alcance de servicios AWS (AIF-C01)
 
-Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas son no exhaustivas y están sujetas a cambios.
+Listas literales de la guía oficial (versión 1.2, 29 de octubre de 2026). Ambas son no exhaustivas y están sujetas a cambios.
 
 ## Servicios dentro de alcance (in scope)
 
 - **Fuente:** <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-in-scope-services.html>
-- **Fecha de consulta:** 2026-10-14
+- **Fecha de consulta:** 2026-11-18
 
 ### Analytics
 
@@ -94,7 +94,7 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 ## Servicios fuera de alcance (out of scope)
 
 - **Fuente:** <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-out-of-scope-services.html>
-- **Fecha de consulta:** 2026-10-14
+- **Fecha de consulta:** 2026-11-18
 
 ### Analytics
 
@@ -110,8 +110,6 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 ### Business Applications
 
-- Amazon Chime
-- Amazon Pinpoint
 - Amazon Simple Email Service (Amazon SES)
 - AWS Supply Chain
 - AWS Wickr
@@ -120,11 +118,9 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 - AWS Application Cost Profiler
 - AWS Billing Conductor
-- AWS Marketplace
 
 ### Compute
 
-- AWS App Runner
 - AWS Elastic Beanstalk
 - EC2 Image Builder
 - Amazon Lightsail
@@ -135,7 +131,6 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 ### Customer Enablement
 
-- AWS IQ
 - AWS Managed Services (AMS)
 - AWS re:Post Private
 - AWS Support
@@ -143,7 +138,6 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 ### Database
 
 - Amazon Keyspaces (for Apache Cassandra)
-- Amazon Quantum Ledger Database (Amazon QLDB)
 - Amazon Timestream
 
 ### Developer Tools
@@ -151,8 +145,6 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 - AWS AppConfig
 - AWS Application Composer
 - AWS CloudShell
-- Amazon CodeCatalyst
-- AWS CodeStar
 - AWS Fault Injection Service
 - AWS X-Ray
 
@@ -161,7 +153,7 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 - Amazon AppStream 2.0
 - Amazon WorkSpaces
 - Amazon WorkSpaces Thin Client
-- Amazon WorkSpaces Web
+- Amazon WorkSpaces Secure Browser
 
 ### Frontend Web and Mobile
 
@@ -171,26 +163,19 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 ### Internet of Things (IoT)
 
-- AWS IoT Analytics
 - AWS IoT Core
 - AWS IoT Device Defender
 - AWS IoT Device Management
-- AWS IoT Events
 - AWS IoT FleetWise
 - FreeRTOS
 - AWS IoT Greengrass
-- AWS IoT 1-Click
-- AWS IoT RoboRunner
 - AWS IoT SiteWise
 - AWS IoT TwinMaker
 
 ### Machine Learning
 
-- AWS DeepComposer
 - AWS HealthImaging
 - AWS HealthOmics
-- Amazon Monitron
-- AWS Panorama
 
 ### Management and Governance
 
@@ -200,9 +185,6 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 - AWS License Manager
 - Amazon Managed Grafana
 - Amazon Managed Service for Prometheus
-- AWS OpsWorks
-- AWS Organizations
-- AWS Proton
 - AWS Resilience Hub
 - AWS Resource Explorer
 - AWS Resource Groups
@@ -214,15 +196,12 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 ### Media
 
-- Amazon Elastic Transcoder
 - AWS Elemental MediaConnect
 - AWS Elemental MediaConvert
 - AWS Elemental MediaLive
 - AWS Elemental MediaPackage
-- AWS Elemental MediaStore
 - AWS Elemental MediaTailor
 - Amazon Interactive Video Service (Amazon IVS)
-- Amazon Nimble Studio
 
 ### Migration and Transfer
 
@@ -236,11 +215,9 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 
 ### Networking and Content Delivery
 
-- AWS App Mesh
 - AWS Cloud Map
 - AWS Direct Connect
 - AWS Global Accelerator
-- AWS Private 5G
 - Amazon Route 53
 - Amazon Route 53 Application Recovery Controller
 - Amazon VPC IP Address Manager (IPAM)
@@ -254,7 +231,6 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 - AWS Directory Service
 - AWS Firewall Manager
 - Amazon GuardDuty
-- AWS IAM Identity Center
 - AWS Payment Cryptography
 - AWS Private Certificate Authority
 - AWS Resource Access Manager (AWS RAM)
@@ -270,7 +246,21 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 - AWS Backup
 - AWS Elastic Disaster Recovery
 
-## Cambios respecto a la versión 1.0
+## Cambios entre versiones de la guía
+
+### Versión 1.2 (29 de octubre de 2026), respecto a la 1.1
+
+AWS publica las actualizaciones de la guía aproximadamente un mes antes de que se reflejen en el examen.
+
+- **Objetivos de los dominios 1 a 5 y conocimientos previos:** sin cambios en el texto (comparados uno a uno el 2026-11-18).
+- **In scope:** sin cambios.
+- **Eliminados de out of scope según la página de revisiones:** Amazon Elastic Transcoder, AWS Elemental MediaStore, AWS IoT 1-Click, AWS IoT Analytics, AWS IoT Events y Amazon Nimble Studio.
+- **Además, ya no aparecen en la lista out of scope** (la página de revisiones no lo menciona; comparación de la lista del 2026-10-14 con la del 2026-11-18): Amazon Chime, Amazon Pinpoint, AWS Marketplace, AWS App Runner, AWS IQ, Amazon Quantum Ledger Database (Amazon QLDB), Amazon CodeCatalyst, AWS CodeStar, AWS IoT RoboRunner, AWS DeepComposer, Amazon Monitron, AWS Panorama, AWS OpsWorks, AWS Organizations, AWS Proton, AWS App Mesh, AWS Private 5G y AWS IAM Identity Center. Ninguno pasa a in scope.
+- **Renombrado en la lista out of scope:** Amazon WorkSpaces Web aparece ahora como Amazon WorkSpaces Secure Browser.
+
+Fuentes: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-revisions.html> y las páginas de cada lista.
+
+### Versión 1.1 (30 de abril de 2026), respecto a la 1.0
 
 - **Añadidos a in scope:** Amazon Aurora, Amazon Bedrock AgentCore, Kiro, Strands Agents, Amazon Q, Amazon SageMaker JumpStart, AWS Transform.
 
@@ -279,6 +269,6 @@ Listas literales de la guía oficial (versión 1.1, 30 de abril de 2026). Ambas 
 - **Eliminado de in scope:** Amazon MemoryDB.
 - **Eliminados de out of scope:** AWS DeepComposer, Amazon FinSpace, Amazon Honeycode, AWS IAM Identity Center, AWS Marketplace, AWS Organizations, Amazon WorkDocs.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de revisiones dice que AWS DeepComposer, AWS IAM Identity Center, AWS Marketplace y AWS Organizations se eliminaron de la lista out of scope, pero la lista vigente los sigue incluyendo (comprobado el 2026-10-14). La lista de esta página se transcribe tal cual; en el curso se tratan como fuera de alcance. Seguimiento: [issue #9](https://github.com/monghithub/certificaciones/issues/9).
+> **Resuelto el 2026-11-18 ([issue #9](https://github.com/monghithub/certificaciones/issues/9)).** En la versión 1.1, la página de revisiones daba AWS DeepComposer, AWS IAM Identity Center, AWS Marketplace y AWS Organizations como eliminados de la lista *out of scope*, pero la lista seguía incluyéndolos. La lista de la versión 1.2 ya no los incluye. Como tampoco están en la lista *in scope*, el curso no los trata como evaluables: solo se mencionan como contexto.
 
-Fuente: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-revisions.html>
+Fuente: página de revisiones de la guía (contenido de la versión 1.1, consultado el 2026-10-14).
