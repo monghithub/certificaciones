@@ -255,6 +255,21 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 
 ## 2026-11-18
 
+### Despliegue en titan
+
+- La consola se sirve en la red local desde `~/Sistema/aplicaciones/certificaciones` (clon de `main`, Docker Compose, Traefik: `cursos.titan`, `certificaciones.titan` y `:8093`). Detalle en el inventario de `Sistema`.
+
+### Guía v1.2 y marcadores pendientes
+
+- Petición: «que falta en el curso, puedes completarlo?».
+- Rama `aif-c01/guia-1-2`. Al revisar las fuentes de las issues #9 a #12 apareció la **guía v1.2** (29 de octubre de 2026). Comparación automática objetivo a objetivo y servicio a servicio contra `fuentes/`: objetivos, conocimientos previos e *in scope* idénticos; solo cambia la lista *out of scope* (25 servicios fuera, uno renombrado). La página de revisiones solo menciona 6 de los 25.
+- **Decisiones:**
+  - #9 se da por resuelta: la contradicción era de la v1.1 y la lista v1.2 coincide con lo que anunciaba la página de revisiones.
+  - #10 se resuelve con el blog oficial de AWS «Best Practices for Prompt Engineering with Amazon CodeWhisperer» (`aws.amazon.com`, fuente oficial del curso). La guía repite la misma pareja «specific and concise / multiple comments» de ese artículo.
+  - #12 se cierra como «no verificable» (criterio de cierre de la issue): ninguna fuente de AWS usa el término.
+  - #11 sigue abierta: la guía de Bedrock solo enumera tres métodos, mientras que la FAQ y la referencia de la API mantienen el preentrenamiento continuado.
+- Este cambio no pasa por OpenSpec: es mantenimiento de fuentes y notas sin preguntas ni requisitos nuevos, como la issue #8.
+
 ### «Ponme a prueba» durante la lectura
 
 - Petición: «me gustaría que en las pantallas de vez en cuando aparecieran un modal con alguna pregunta concreta tipo test de la página que estoy visitando. Pudiera cerrarla o si no la cierro me vaya haciendo cuestiones y vaya yo respondiendo hasta que me aburra y la cierre. Sobre todo de la página que esté en ese momento en la ventana del navegador».
@@ -262,3 +277,7 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Decisiones del usuario:** el modal solo se abre con el botón (sin temporizador); no se guarda nada; primero repaso y después examen del mismo apartado.
 - **Decisiones de diseño:** el cliente calcula la cadena de anclas visibles y el servidor elige, sin estado (el cliente manda los ids ya vistos). Índice (módulo, ancla) → objetivos con todas las anclas del mapa de cobertura. Respuestas JSON pintadas con `textContent`, compatibles con la CSP. Las rutas exigen matrícula y CSRF y rechazan el simulacro.
 - **Verificación:** 258 pruebas de pytest (13 nuevas). En navegador (Chromium headless contra la imagen de la rama): seis preguntas seguidas del apartado «Buenas prácticas de ingeniería de prompts» sin repetir (2 de repaso y 4 de examen), y luego del módulo; `Esc` y retorno del foco; «Repasar en la teoría» cierra y navega; sin botón en el simulacro; claro, oscuro y móvil; «Falladas (0)» tras fallar en el modal; sin errores de consola.
+
+### Pendiente
+
+- #11, decisiones #14 y #15 y publicación de la v1.0.0 (#16).

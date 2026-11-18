@@ -404,9 +404,7 @@ Buenas prácticas que cita la guía:
 - **Experimentación.** Probar variantes, comparar resultados con casos reales y quedarse con la mejor. Prompt Management de Bedrock permite comparar variantes.
 - ***Discovery* (exploración).** Probar primero qué sabe y qué no sabe hacer el modelo con *prompts* sencillos antes de diseñar el definitivo.
 - ***Guardrails*.** Combinar el *prompt* con controles externos (Amazon Bedrock Guardrails filtra contenido, temas denegados, datos sensibles y ataques de *prompt*). Una instrucción del tipo «no hables de política» no basta como control de seguridad.
-- **Varias indicaciones separadas** (*using multiple comments*). Interpretamos este punto de la guía como dividir una petición compleja en instrucciones o mensajes separados y claros, en lugar de un único bloque con todo mezclado.
-
-> ⚠️ PENDIENTE DE VERIFICAR: la guía del examen cita «using multiple comments» sin definirlo, y la documentación de AWS consultada no usa esa expresión. La interpretación anterior es nuestra. Ninguna pregunta del banco depende de ella. Seguimiento: [issue #10](https://github.com/monghithub/certificaciones/issues/10).
+- **Varios comentarios** (*using multiple comments*). Viene de la generación de código con asistentes como Amazon CodeWhisperer (hoy integrado en Amazon Q Developer, cuyos *plugins* de IDE dejan de tener soporte el 30 de abril de 2027; ver módulo 02), donde el *prompt* es un comentario en el código: en lugar de un único comentario largo con todos los requisitos, se escribe **un comentario por requisito o paso**. Así se da más contexto sin perder concisión y sin enredar el *prompt*. Por ejemplo, en vez de «abre un CSV, ordena las líneas, quita duplicados y añade un punto al final», tres comentarios: `# abre un CSV y devuelve sus líneas en orden alfabético`, `# elimina las líneas duplicadas`, `# añade un punto al final de cada línea`. El blog oficial de AWS que lo explica la presenta junto a «*specific and concise*», la misma pareja que cita la guía. La misma idea vale para cualquier modelo: separar una petición compleja en instrucciones cortas y claras.
 
 Otras prácticas de la guía de Bedrock: separar instrucciones y datos con **delimitadores** (por ejemplo, etiquetas XML), poner la pregunta al final de un contexto largo, dar un **papel** al modelo y descomponer tareas complejas en varios pasos (*prompt chaining*). Bedrock también ofrece un **optimizador de *prompts*** que reescribe un *prompt* para un modelo concreto (en la página de precios, el optimizador simple cuesta 0,03 USD por cada 1000 *tokens*; consultado el 15 de octubre de 2026).
 
@@ -489,7 +487,7 @@ No todas las etapas se dan siempre, ni en ese orden estricto: el diagrama muestr
 
 Métodos de personalización que ofrece hoy Amazon Bedrock según su guía: ***supervised fine-tuning*** (datos etiquetados), ***reinforcement fine-tuning*** (funciones de recompensa en lugar de pares etiquetados) y **destilación**. Para un control total del entrenamiento (cualquier modelo abierto, cualquier técnica), **Amazon SageMaker AI** y SageMaker JumpStart.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de preguntas frecuentes de Bedrock describe el preentrenamiento continuado para modelos Amazon Titan, pero la página vigente de métodos de personalización solo enumera *supervised fine-tuning*, *reinforcement fine-tuning* y destilación, y la página de modelos admitidos para preentrenamiento continuado ya no está disponible (consulta del 15 de octubre de 2026). El concepto sí es materia de examen; ninguna pregunta depende de su disponibilidad en Bedrock. Seguimiento: [issue #11](https://github.com/monghithub/certificaciones/issues/11).
+> ⚠️ PENDIENTE DE VERIFICAR: la página de preguntas frecuentes de Bedrock describe el preentrenamiento continuado para modelos Amazon Titan y la referencia de la API (`CreateModelCustomizationJob`) sigue admitiendo `customizationType` = `CONTINUED_PRE_TRAINING`, pero la página vigente de métodos de personalización solo enumera *supervised fine-tuning*, *reinforcement fine-tuning* y destilación, y la página de modelos admitidos para preentrenamiento continuado ya no está disponible (consultas del 15 de octubre y del 18 de noviembre de 2026). El concepto sí es materia de examen; ninguna pregunta depende de su disponibilidad en Bedrock. Seguimiento: [issue #11](https://github.com/monghithub/certificaciones/issues/11).
 
 #### Métodos de ajuste fino
 
@@ -618,7 +616,7 @@ Una métrica técnica alta no garantiza que el modelo aporte valor. Antes de eva
 - **Implicación de los usuarios** (*user engagement*): uso activo, sesiones, conversaciones que continúan, adopción por los empleados.
 - **Diseño de la tarea** (*task engineering*): interpretamos este punto de la guía como definir bien la tarea que hace el modelo, sus límites y su criterio de éxito, para poder medir si la cumple.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la guía cita «task engineering» como ejemplo sin definirlo, y la documentación de AWS consultada no usa ese término. La interpretación anterior es nuestra. Ninguna pregunta del banco depende de ella. Seguimiento: [issue #12](https://github.com/monghithub/certificaciones/issues/12).
+> **Nota.** La guía del examen cita «task engineering» sin definirlo, y no hay documentación, blog ni material de formación de AWS que lo use (búsquedas del 16 de octubre y del 18 de noviembre de 2026). La interpretación anterior es nuestra, y por eso ninguna pregunta del banco depende de ella.
 
 | Objetivo de negocio | Métrica que lo demuestra |
 |---|---|
@@ -690,6 +688,7 @@ Documentación oficial consultada el 15 de octubre de 2026:
 - Agentes de IA: <https://aws.amazon.com/what-is/ai-agents/>
 - Amazon Bedrock AgentCore: <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html> y AgentCore Evaluations: <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations.html>
 - Amazon Bedrock Flows: <https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html>
+- Buenas prácticas de *prompts* con CodeWhisperer («Utilizing multiple comments»), blog oficial de AWS: <https://aws.amazon.com/blogs/devops/best-practices-for-prompt-engineering-with-amazon-codewhisperer/>
 - Conceptos de ingeniería de *prompts* en Bedrock: <https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html> y diseño de *prompts*: <https://docs.aws.amazon.com/bedrock/latest/userguide/design-a-prompt.html>
 - Seguridad frente a *prompt injection*: <https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-injection.html> y ataques de *prompt* en Guardrails: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html>
 - Ataques habituales de *prompt injection* (guía prescriptiva): <https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/common-attacks.html>
