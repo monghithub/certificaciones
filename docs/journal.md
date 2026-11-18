@@ -278,6 +278,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Decisiones de diseño:** el cliente calcula la cadena de anclas visibles y el servidor elige, sin estado (el cliente manda los ids ya vistos). Índice (módulo, ancla) → objetivos con todas las anclas del mapa de cobertura. Respuestas JSON pintadas con `textContent`, compatibles con la CSP. Las rutas exigen matrícula y CSRF y rechazan el simulacro.
 - **Verificación:** 258 pruebas de pytest (13 nuevas). En navegador (Chromium headless contra la imagen de la rama): seis preguntas seguidas del apartado «Buenas prácticas de ingeniería de prompts» sin repetir (2 de repaso y 4 de examen), y luego del módulo; `Esc` y retorno del foco; «Repasar en la teoría» cierra y navega; sin botón en el simulacro; claro, oscuro y móvil; «Falladas (0)» tras fallar en el modal; sin errores de consola.
 
+### Revisión de las dudas abiertas
+
+- Petición: «revisa nuevamente los puntos donde hay dudas».
+- **#11:** pruebas nuevas en la documentación de Bedrock: los modelos Titan Text no aparecen en la disponibilidad por regiones (solo los de *embeddings*), ni tienen ficha de modelo, ni están en la lista de *fine-tuning*. Sin aviso explícito de retirada. **Decisión del usuario:** dejarla abierta hasta que AWS lo diga de forma explícita. Se amplía el marcador.
+- **#14:** el usuario confirma el formato de `ordering` y `matching`. Se quita de `AGENTS.md` la nota de pendiente y se cierra la issue.
+- Hallazgo lateral: la página de ciclo de vida de Bedrock da Nova Canvas, Nova Reel y Nova Sonic v1 como retirados desde septiembre de 2026; el curso ya lo recoge en el módulo 02.
+
 ### Pendiente
 
-- #11, decisiones #14 y #15 y publicación de la v1.0.0 (#16).
+- #11 (a la espera de AWS), #15 y publicación de la v1.0.0 (#16).

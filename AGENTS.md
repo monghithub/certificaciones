@@ -88,7 +88,7 @@ Reglas surgidas de la revisión técnica de la iteración 1 de AIF-C01. Se aplic
 | `ordering` | ≥ nº de elementos | 3–5 ids **en orden**; sin `distractores` |
 | `matching` | columna derecha; `prompts` en columna izquierda (3–7) | 3–7 pares `[prompt_id, opcion_id]`; `distractores` para las opciones sin par |
 
-Los ids de `prompts` son números (`"1"`, `"2"`…, entre comillas en YAML) y los de `opciones` letras (`a`–`j`). Las opciones incorrectas de `multiple_*` y las no usadas en `matching` deben tener su explicación en `distractores`. El formato concreto de `matching` y `ordering` es una decisión de diseño de este repositorio, pendiente de confirmar ([issue #14](https://github.com/monghithub/certificaciones/issues/14)).
+Los ids de `prompts` son números (`"1"`, `"2"`…, entre comillas en YAML) y los de `opciones` letras (`a`–`j`). Las opciones incorrectas de `multiple_*` y las no usadas en `matching` deben tener su explicación en `distractores`. El formato concreto de `matching` y `ordering` es una decisión de diseño de este repositorio, porque AWS no publica un formato de fichero; el responsable lo confirmó el 2026-11-18 ([issue #14](https://github.com/monghithub/certificaciones/issues/14)).
 
 ### Calidad del banco de preguntas
 
