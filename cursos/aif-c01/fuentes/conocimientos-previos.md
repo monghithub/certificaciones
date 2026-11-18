@@ -1,8 +1,8 @@
 # Conocimientos previos de AWS recomendados
 
 - **Fuente:** <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html> (sección «Target candidate description», subsección «Recommended AWS knowledge»)
-- **Fecha de consulta:** 2026-10-14
-- **Versión de la guía:** 1.1 (publicada el 30 de abril de 2026)
+- **Fecha de consulta:** 2026-11-18
+- **Versión de la guía:** 1.2 (publicada el 29 de octubre de 2026); texto de los objetivos idéntico al de la 1.1
 
 Texto literal en inglés de la guía oficial. Estos conocimientos no forman parte de ninguna Task Statement: son los que la guía recomienda al candidato y sirven de base al módulo 00. Se identifican como `CP.K` por orden de aparición.
 

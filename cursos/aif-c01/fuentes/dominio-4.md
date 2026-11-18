@@ -1,8 +1,8 @@
 # Dominio 4: Guidelines for Responsible AI
 
 - **Fuente:** <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html>
-- **Fecha de consulta:** 2026-10-14
-- **Versión de la guía:** 1.1 (publicada el 30 de abril de 2026)
+- **Fecha de consulta:** 2026-11-18
+- **Versión de la guía:** 1.2 (publicada el 29 de octubre de 2026); texto de los objetivos idéntico al de la 1.1
 - **Peso en el examen:** 14 % del contenido puntuable
 
 Texto literal en inglés de la guía oficial. Cada objetivo se numera como `N.M.K` (el orden de aparición, convención de la página de revisiones de AWS). No traducir ni parafrasear aquí.

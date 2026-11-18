@@ -2,13 +2,13 @@
 
 Curso en español de España para preparar el examen **AWS Certified AI Practitioner (AIF-C01)**. Está pensado para perfiles junior con conocimientos básicos de programación y poca experiencia en AWS, y lo revisa un arquitecto de software sénior.
 
-> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)), más 210 preguntas de repaso de conocimientos en los módulos 00 a 05. Quedan cuatro marcadores `PENDIENTE DE VERIFICAR` por contradicciones en las propias fuentes de AWS; ninguna pregunta depende de ellos. Cada uno tiene su issue de seguimiento y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
+> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)), más 210 preguntas de repaso de conocimientos en los módulos 00 a 05. Queda un marcador `PENDIENTE DE VERIFICAR` (preentrenamiento continuado en Bedrock, [issue #11](https://github.com/monghithub/certificaciones/issues/11)) por una contradicción en las propias fuentes de AWS; ninguna pregunta depende de él y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
 
 Manifiesto del curso: [curso.yaml](curso.yaml).
 
 ## Datos del examen
 
-Revalidados el 14 de octubre de 2026 contra la guía oficial (versión 1.1, publicada el 30 de abril de 2026) y la [página de la certificación](https://aws.amazon.com/certification/certified-ai-practitioner/).
+Revalidados el 18 de noviembre de 2026 contra la guía oficial (versión 1.2, publicada el 29 de octubre de 2026; mismos objetivos que la 1.1, solo cambia la lista de servicios fuera de alcance) y la [página de la certificación](https://aws.amazon.com/certification/certified-ai-practitioner/).
 
 | Aspecto | Valor |
 |---|---|
