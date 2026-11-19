@@ -1178,3 +1178,798 @@
     c: "BERTScore mide la similitud semántica con una referencia; es una métrica técnica."
     e: "La fidelidad es una métrica de calidad de la generación en una evaluación de RAG, no de negocio."
   referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+
+# ---------------------------------------------------------------- Ampliación del banco de repaso (2026-11-19)
+
+- id: R3-045
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.1"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada requisito de un caso con el criterio de selección de modelo que decide."
+  prompts:
+    - id: "1"
+      texto: "Atender a clientes en español, francés y alemán con la misma calidad"
+    - id: "2"
+      texto: "Un agente que planifica varios pasos y llama a herramientas"
+    - id: "3"
+      texto: "Adaptar el modelo al estilo de la marca con ajuste fino en Bedrock"
+    - id: "4"
+      texto: "Responder en una centralita de voz sin pausas perceptibles"
+  opciones:
+    - id: a
+      texto: "Personalización"
+    - id: b
+      texto: "Idiomas (multi-lingual)"
+    - id: c
+      texto: "Latencia"
+    - id: d
+      texto: "Complejidad del modelo"
+    - id: e
+      texto: "Prompt caching"
+  correctas: [["1", b], ["2", d], ["3", a], ["4", c]]
+  explicacion: "Varios idiomas de entrada y salida → criterio de idiomas; razonamiento de varios pasos y herramientas → complejidad del modelo; necesidad de ajuste fino, destilación o pesos propios → personalización; respuesta inmediata → latencia, que favorece modelos pequeños y rápidos."
+  distractores:
+    e: "El prompt caching decide cuando un contexto largo se repite en muchas peticiones; ninguno de estos requisitos lo plantea."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+
+- id: R3-046
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.2"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Qué diferencia hay entre top-k y top-p?"
+  opciones:
+    - id: a
+      texto: "Top-k fija la longitud de la respuesta y top-p la temperatura"
+    - id: b
+      texto: "Top-k solo se usa en modelos de imagen y top-p en modelos de texto"
+    - id: c
+      texto: "Top-k limita los candidatos a un número fijo y top-p a una proporción de la probabilidad acumulada"
+    - id: d
+      texto: "Top-k aumenta la creatividad y top-p la reduce"
+  correctas: [c]
+  explicacion: "Los dos recortan qué tokens se tienen en cuenta al muestrear: top-k se queda con los k más probables (un número fijo) y top-p con los que suman una proporción de la probabilidad acumulada (un umbral). Pista: k de «cantidad», p de «proporción»."
+  distractores:
+    a: "La longitud de la respuesta se controla con el máximo de tokens y la temperatura es un parámetro propio."
+    b: "Ambos son parámetros de muestreo de texto; no dependen de la modalidad de esa forma."
+    d: "Con los dos, un valor bajo reduce la variedad y uno alto la aumenta; no tienen efectos opuestos."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+
+- id: R3-047
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Una aplicación necesita que el modelo deje de generar justo al cerrar un objeto JSON. ¿Qué parámetro de inferencia usa?"
+  opciones:
+    - id: a
+      texto: "Una secuencia de parada (stop sequence)"
+    - id: b
+      texto: "Una temperatura alta"
+    - id: c
+      texto: "Un top-p más alto"
+    - id: d
+      texto: "Una penalización por repetición"
+  correctas: [a]
+  explicacion: "Una secuencia de parada indica un texto que, al aparecer, detiene la generación; sirve para cortar justo al final de un formato, como el cierre de un JSON. Pista: «stop» = dónde parar."
+  distractores:
+    b: "Una temperatura alta da más variedad a la respuesta, no decide dónde termina."
+    c: "Un top-p más alto amplía los candidatos considerados; no detiene la generación."
+    d: "Las penalizaciones desaniman repeticiones o ciertos tokens; no marcan un punto de parada."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+
+- id: R3-048
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Qué tipo de Amazon Bedrock Knowledge Base recomienda AWS para la mejor exactitud, con conectores y filtrado por permisos a nivel de documento?"
+  opciones:
+    - id: a
+      texto: "La Knowledge Base gestionada por el cliente (customer-managed)"
+    - id: b
+      texto: "La Managed Knowledge Base"
+    - id: c
+      texto: "Una Knowledge Base sobre Amazon RDS for PostgreSQL"
+    - id: d
+      texto: "Un índice de Amazon Kendra GenAI"
+  correctas: [b]
+  explicacion: "En la Managed Knowledge Base, Bedrock gestiona la ingesta, el índice, el almacenamiento y la recuperación, e incluye conectores (S3, SharePoint, Confluence…), permisos por documento y análisis de PDF, imágenes o audio. Pista: algunas funcionalidades solo existen en la gestionada."
+  distractores:
+    a: "En la customer-managed el cliente elige y gestiona el almacén vectorial; los conectores de terceros y los permisos por documento solo están en la gestionada."
+    c: "Amazon RDS for PostgreSQL tiene búsqueda vectorial, pero no figura entre los almacenes que admite Knowledge Bases."
+    d: "Knowledge Bases admite un índice de Kendra GenAI, pero Kendra queda fuera del alcance del examen y no es el tipo que AWS recomienda."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+
+- id: R3-049
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Qué servicio de AWS permite guardar miles de millones de vectores al menor coste cuando las consultas son poco frecuentes?"
+  opciones:
+    - id: a
+      texto: "Amazon ElastiCache para Valkey"
+    - id: b
+      texto: "Amazon Neptune Analytics"
+    - id: c
+      texto: "Amazon OpenSearch Service"
+    - id: d
+      texto: "Amazon S3 Vectors"
+  correctas: [d]
+  explicacion: "Amazon S3 Vectors guarda vectores en buckets vectoriales de S3, pensados para volúmenes enormes al menor coste, con latencia por debajo del segundo. Pista: S3 = mucho volumen y barato."
+  distractores:
+    a: "ElastiCache para Valkey busca vectores en memoria para latencias mínimas; es justo lo contrario de almacenar a bajo coste datos poco consultados."
+    b: "Neptune Analytics combina grafos y vectores para relaciones complejas, como GraphRAG."
+    c: "OpenSearch destaca en muchas consultas con latencia muy baja y en búsqueda híbrida de texto y vectores."
+  referencia: "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html"
+
+- id: R3-050
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.5"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Los documentos de una empresa cambian cada semana. ¿Qué ventaja de coste tiene RAG frente al ajuste fino en este caso?"
+  opciones:
+    - id: a
+      texto: "RAG no consume tokens de entrada adicionales"
+    - id: b
+      texto: "Un cambio en los documentos solo exige volver a sincronizar la Knowledge Base, sin reentrenar"
+    - id: c
+      texto: "RAG no necesita almacén vectorial"
+    - id: d
+      texto: "Con RAG se paga una única vez el entrenamiento"
+  correctas: [b]
+  explicacion: "Con ajuste fino, cada cambio en los datos obliga a volver a entrenar, con su coste por tokens × épocas y el almacenamiento mensual. Con RAG basta con volver a sincronizar los documentos. Pista: datos que cambian a menudo → RAG."
+  distractores:
+    a: "RAG sí añade tokens de entrada: los fragmentos recuperados se suman al prompt en cada pregunta."
+    c: "RAG necesita un almacén vectorial para guardar los embeddings, y su coste forma parte de la solución."
+    d: "RAG no entrena el modelo; el modelo no cambia, solo el contexto que recibe."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+
+- id: R3-051
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.6"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un proceso sigue siempre los mismos pasos: resumir el documento, consultar una Knowledge Base y guardar el resultado con una función Lambda. ¿Qué servicio basta?"
+  opciones:
+    - id: a
+      texto: "Amazon Bedrock AgentCore"
+    - id: b
+      texto: "Strands Agents con un sistema multiagente"
+    - id: c
+      texto: "Amazon Bedrock Flows"
+    - id: d
+      texto: "Amazon Bedrock Agents Classic"
+  correctas: [c]
+  explicacion: "Para flujos fijos y predecibles, Amazon Bedrock Flows enlaza prompts, modelos, Knowledge Bases y funciones Lambda en un editor visual. Un agente solo compensa cuando los pasos dependen de lo que vaya pasando. Pista: pasos fijos → Flows."
+  distractores:
+    a: "AgentCore despliega y opera agentes; aquí no hace falta que nadie decida los pasos, porque son siempre los mismos."
+    b: "Un sistema multiagente añade coste, latencia y puntos de fallo sin aportar nada a un proceso fijo."
+    d: "Bedrock Agents Classic ya no admite clientes nuevos y, además, un flujo fijo no necesita un agente."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html"
+
+- id: R3-052
+  dominio: 3
+  tarea: "3.1"
+  objetivo: "3.1.6"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "¿Qué DOS beneficios de los agentes de IA destaca AWS?"
+  opciones:
+    - id: a
+      texto: "Más productividad, al delegar tareas repetitivas"
+    - id: b
+      texto: "Respuestas deterministas e idénticas en cada ejecución"
+    - id: c
+      texto: "Mejores decisiones con datos en tiempo real"
+    - id: d
+      texto: "Menos tokens que una consulta directa al modelo"
+    - id: e
+      texto: "Eliminar la necesidad de limitar los permisos"
+  correctas: [a, c]
+  explicacion: "AWS destaca más productividad, menos costes por errores y procesos manuales, mejores decisiones con datos en tiempo real y mejor experiencia de cliente. A cambio, un agente consume más llamadas al modelo y puede ejecutar acciones, así que hay que acotar sus permisos."
+  distractores:
+    b: "Un agente se apoya en un modelo fundacional, cuyas respuestas no son deterministas."
+    d: "Un agente suele hacer varias llamadas al modelo, así que consume más tokens que una consulta directa."
+    e: "Al revés: como ejecuta acciones, hay que limitar sus permisos con mínimo privilegio y pedir confirmación humana en las críticas."
+  referencia: "https://aws.amazon.com/what-is/ai-agents/"
+
+- id: R3-053
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.1"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué son las instrucciones del sistema (system prompt) de una aplicación?"
+  opciones:
+    - id: a
+      texto: "El texto concreto que escribe el usuario en cada mensaje"
+    - id: b
+      texto: "La parte fija que define el papel, las reglas y el formato de todas las respuestas, separada del mensaje del usuario"
+    - id: c
+      texto: "Los fragmentos de documentos recuperados por RAG"
+    - id: d
+      texto: "Los parámetros de inferencia, como la temperatura"
+  correctas: [b]
+  explicacion: "Las instrucciones del sistema son la parte estable del prompt: rol, tono, reglas y formato que se aplican a todas las respuestas. El mensaje del usuario cambia en cada petición. Pista: «sistema» = lo que fija el desarrollador."
+  distractores:
+    a: "El texto del usuario son los datos de entrada o la pregunta, que cambian en cada petición."
+    c: "Los fragmentos recuperados forman parte del contexto que se añade a la petición, no de las instrucciones fijas."
+    d: "Los parámetros de inferencia se envían con la llamada, pero no forman parte del texto del prompt."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/design-a-prompt.html"
+
+- id: R3-054
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.1"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "En un prompt, ¿qué componente es «Responde en JSON con los campos categoría y urgencia»?"
+  opciones:
+    - id: a
+      texto: "Contexto"
+    - id: b
+      texto: "Datos de entrada"
+    - id: c
+      texto: "Ejemplo de demostración"
+    - id: d
+      texto: "Indicador de salida"
+  correctas: [d]
+  explicacion: "El indicador de salida fija el formato o la longitud de la respuesta: JSON, tres viñetas, menos de 50 palabras. Pista: si dice cómo debe ser la respuesta, es el indicador de salida."
+  distractores:
+    a: "El contexto da información de fondo o el papel del modelo, como «Eres un analista de riesgos»."
+    b: "Los datos de entrada son el texto concreto sobre el que trabajar, como la reclamación o el contrato."
+    c: "Un ejemplo de demostración es un par de entrada y salida que muestra lo que se espera."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/design-a-prompt.html"
+
+- id: R3-055
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué técnica pide al modelo que razone paso a paso antes de dar la respuesta?"
+  opciones:
+    - id: a
+      texto: "Chain-of-thought (cadena de pensamiento)"
+    - id: b
+      texto: "Zero-shot"
+    - id: c
+      texto: "Plantilla de prompt"
+    - id: d
+      texto: "Prompt negativo"
+  correctas: [a]
+  explicacion: "La cadena de pensamiento pide razonar paso a paso (o muestra ejemplos razonados). Mejora la exactitud en problemas de varios pasos, como cálculos o planificación, a cambio de más tokens de salida y más latencia. Pista: «paso a paso» = chain-of-thought."
+  distractores:
+    b: "Zero-shot pide la tarea sin ejemplos; no exige mostrar el razonamiento."
+    c: "Una plantilla es un prompt fijo con variables que se rellenan en cada petición."
+    d: "Un prompt negativo indica lo que no debe aparecer en la respuesta."
+  referencia: "https://aws.amazon.com/what-is/prompt-engineering/"
+
+- id: R3-056
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.2"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Por qué el zero-shot, el few-shot y la cadena de pensamiento son la forma más barata de adaptar un modelo?"
+  opciones:
+    - id: a
+      texto: "Porque reducen los tokens de entrada a cero"
+    - id: b
+      texto: "Porque se facturan con un descuento sobre el precio bajo demanda"
+    - id: c
+      texto: "Porque son in-context learning: el modelo aprende de lo que hay en el prompt sin cambiar sus parámetros"
+    - id: d
+      texto: "Porque reentrenan el modelo con muy pocos ejemplos"
+  correctas: [c]
+  explicacion: "Estas técnicas son aprendizaje en contexto (in-context learning): no se entrena nada y solo se paga la inferencia, aunque los ejemplos añaden tokens de entrada. Pista: si no cambian los parámetros, no hay coste de entrenamiento."
+  distractores:
+    a: "Los ejemplos y las instrucciones añaden tokens de entrada; few-shot, de hecho, envía más."
+    b: "No tienen un precio especial: se pagan como cualquier inferencia."
+    d: "No reentrenan el modelo; reentrenar con ejemplos etiquetados es el ajuste fino."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+
+- id: R3-057
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿En qué consiste la buena práctica de usar varios comentarios (using multiple comments) en la generación de código?"
+  opciones:
+    - id: a
+      texto: "Pedir al modelo que comente cada línea del código que genera"
+    - id: b
+      texto: "Escribir un comentario por requisito o paso, en lugar de uno largo con todo"
+    - id: c
+      texto: "Repetir la misma petición varias veces y quedarse con la respuesta más votada"
+    - id: d
+      texto: "Pedir opinión a varios revisores humanos sobre el prompt"
+  correctas: [b]
+  explicacion: "Cuando el prompt es un comentario en el código, conviene escribir un comentario por requisito o paso. Así se da más contexto sin perder concisión. La idea vale para cualquier modelo: separar una petición compleja en instrucciones cortas y claras."
+  distractores:
+    a: "La práctica trata de cómo se escribe el prompt, no de que el código resultante lleve comentarios."
+    c: "Repetir la petición y votar no es la práctica que cita la guía."
+    d: "La revisión humana es útil, pero no es lo que describe esta práctica."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+
+- id: R3-058
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.3"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada síntoma con la buena práctica de ingeniería de prompts que lo resuelve."
+  prompts:
+    - id: "1"
+      texto: "Dos redacciones del prompt parecen buenas y no se sabe cuál elegir"
+    - id: "2"
+      texto: "Una tarea compleja da resultados irregulares"
+    - id: "3"
+      texto: "Hay riesgo de contenido dañino o de ataques"
+  opciones:
+    - id: a
+      texto: "Dividir la tarea en pasos (prompt chaining)"
+    - id: b
+      texto: "Guardrails, además del prompt"
+    - id: c
+      texto: "Experimentación con casos reales"
+    - id: d
+      texto: "Subir la temperatura"
+  correctas: [["1", c], ["2", a], ["3", b]]
+  explicacion: "Para elegir entre variantes, se experimenta comparándolas con casos reales (por ejemplo, con Prompt Management). Una tarea compleja se divide en pasos. Y contra contenido dañino o ataques hacen falta controles externos como Guardrails: una instrucción en el prompt no basta."
+  distractores:
+    d: "Subir la temperatura aumenta la variedad de las respuestas; no resuelve ninguno de estos síntomas y puede empeorar la regularidad."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+
+- id: R3-059
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Alguien introduce en la Knowledge Base un documento manipulado que recomienda una web fraudulenta. ¿Qué riesgo es?"
+  opciones:
+    - id: a
+      texto: "Jailbreaking"
+    - id: b
+      texto: "Exposición"
+    - id: c
+      texto: "Prompt injection directo del usuario"
+    - id: d
+      texto: "Envenenamiento (poisoning)"
+  correctas: [d]
+  explicacion: "El envenenamiento consiste en introducir datos maliciosos o sesgados en los datos de entrenamiento, de ajuste fino o en las fuentes de RAG para alterar el comportamiento del modelo. Se mitiga con curación y gobierno de datos y controlando quién puede escribir en las fuentes. Pista: el ataque está en los datos, no en la pregunta."
+  distractores:
+    a: "El jailbreaking usa prompts para saltarse las protecciones de seguridad del modelo."
+    b: "La exposición es que el modelo revele información que no debía, como sus instrucciones o datos sensibles."
+    c: "El prompt injection intenta sustituir las instrucciones mediante el texto que llega en la petición; aquí el problema es un dato manipulado en la fuente."
+  referencia: "https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/common-attacks.html"
+
+- id: R3-060
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.4"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "¿Qué DOS tipos de ataques de prompt detecta Amazon Bedrock Guardrails?"
+  opciones:
+    - id: a
+      texto: "Jailbreaks"
+    - id: b
+      texto: "Envenenamiento de los datos de entrenamiento"
+    - id: c
+      texto: "Prompt injection"
+    - id: d
+      texto: "Inyección SQL en Amazon RDS"
+    - id: e
+      texto: "Robo de credenciales de IAM"
+  correctas: [a, c]
+  explicacion: "Guardrails detecta tres tipos de ataques de prompt: jailbreaks, prompt injection y fuga de prompt (prompt leakage, solo en la modalidad Standard). El envenenamiento se combate con curación y gobierno de datos."
+  distractores:
+    b: "El envenenamiento actúa sobre los datos de entrenamiento o de RAG, no sobre la petición que filtra Guardrails."
+    d: "La inyección SQL es un ataque a bases de datos que el cliente previene en su aplicación; no es un ataque de prompt."
+    e: "Proteger las credenciales es tarea de IAM y de las buenas prácticas de seguridad, no de Guardrails."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html"
+
+- id: R3-061
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.5"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "En Amazon Bedrock Prompt Management, ¿para qué sirve una variable como {{producto}}?"
+  opciones:
+    - id: a
+      texto: "Para elegir el modelo que responde"
+    - id: b
+      texto: "Para fijar la temperatura del prompt"
+    - id: c
+      texto: "Para crear una instantánea inmutable del prompt"
+    - id: d
+      texto: "Para dejar un hueco que se rellena al probar el prompt o en cada invocación, convirtiéndolo en plantilla"
+  correctas: [d]
+  explicacion: "Una variable es un hueco del prompt que se rellena en cada invocación o al probarlo. Con variables, el mismo prompt probado sirve para muchas peticiones: es una plantilla. Pista: {{…}} = hueco que se rellena."
+  distractores:
+    a: "El modelo forma parte de la configuración de una variante, no de una variable."
+    b: "La temperatura es un parámetro de inferencia de la variante, no una variable del texto."
+    c: "La instantánea inmutable es una versión del prompt."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html"
+
+- id: R3-062
+  dominio: 3
+  tarea: "3.2"
+  objetivo: "3.2.5"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Una nueva versión de un prompt empeora los resultados en producción. ¿Qué permite hacer Amazon Bedrock Prompt Management?"
+  opciones:
+    - id: a
+      texto: "Volver a la versión anterior sin cambiar el código de la aplicación"
+    - id: b
+      texto: "Editar la versión publicada, porque las versiones se pueden modificar"
+    - id: c
+      texto: "Reentrenar el modelo con el prompt anterior"
+    - id: d
+      texto: "Recuperar el borrador de hace un mes, que se guarda en cada cambio"
+  correctas: [a]
+  explicacion: "Las versiones son instantáneas inmutables. La aplicación invoca el prompt por su ARN y versión, así que se puede apuntar a la versión anterior sin desplegar código. Pista: versiones inmutables = poder revertir."
+  distractores:
+    b: "Una versión es inmutable; los cambios se hacen en el borrador y se publican como versión nueva."
+    c: "Cambiar el prompt no requiere reentrenar el modelo; el prompt solo es la entrada."
+    d: "Al guardar se actualiza un único borrador; lo que conserva el historial son las versiones."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-deploy.html"
+
+- id: R3-063
+  dominio: 3
+  tarea: "3.3"
+  objetivo: "3.3.1"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué datos usa el preentrenamiento de un modelo fundacional?"
+  opciones:
+    - id: a
+      texto: "Unos cientos de ejemplos etiquetados de una tarea concreta"
+    - id: b
+      texto: "Preferencias humanas entre pares de respuestas"
+    - id: c
+      texto: "Cantidades masivas de datos sin etiquetar, con aprendizaje autosupervisado"
+    - id: d
+      texto: "Las respuestas que genera un modelo maestro"
+  correctas: [c]
+  explicacion: "En el preentrenamiento, el modelo aprende el lenguaje (o las imágenes) con cantidades masivas de datos sin etiquetar, de forma autosupervisada. Cuesta meses y mucha infraestructura, y lo hacen los proveedores. Pista: preentrenar = masivo y sin etiquetas."
+  distractores:
+    a: "Unos cientos de ejemplos etiquetados es lo que usa el ajuste fino."
+    b: "Las preferencias humanas son la base del RLHF, posterior al preentrenamiento."
+    d: "Las respuestas de un modelo maestro se usan en la destilación."
+  referencia: "https://aws.amazon.com/what-is/foundation-models/"
+
+- id: R3-064
+  dominio: 3
+  tarea: "3.3"
+  objetivo: "3.3.1"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "¿Qué DOS afirmaciones sobre Amazon Bedrock Model Distillation son correctas?"
+  opciones:
+    - id: a
+      texto: "Bedrock genera respuestas del modelo maestro a partir de los prompts del caso de uso"
+    - id: b
+      texto: "El modelo alumno es más grande que el maestro"
+    - id: c
+      texto: "Solo el cliente accede al modelo destilado"
+    - id: d
+      texto: "Requiere etiquetar a mano miles de respuestas"
+    - id: e
+      texto: "El modelo destilado se comparte con el proveedor del modelo maestro"
+  correctas: [a, c]
+  explicacion: "En la destilación, Bedrock genera respuestas del maestro con los prompts del caso de uso (o las toma de los registros de invocación) y ajusta con ellas a un alumno más pequeño, rápido y barato. Solo el cliente accede al modelo resultante."
+  distractores:
+    b: "El alumno es el modelo pequeño: se busca la calidad del grande con el precio del pequeño."
+    d: "Precisamente evita etiquetar a mano: las respuestas las produce el maestro."
+    e: "Solo el cliente accede al modelo destilado."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html"
+
+- id: R3-065
+  dominio: 3
+  tarea: "3.3"
+  objetivo: "3.3.2"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un equipo quiere que el modelo genere código que pase unas pruebas automáticas, pero no tiene respuestas de referencia. ¿Qué método de ajuste encaja?"
+  opciones:
+    - id: a
+      texto: "Instruction tuning"
+    - id: b
+      texto: "Reinforcement fine-tuning"
+    - id: c
+      texto: "Preentrenamiento continuado"
+    - id: d
+      texto: "Destilación"
+  correctas: [b]
+  explicacion: "En el reinforcement fine-tuning, el modelo genera respuestas, una función de recompensa las puntúa (por ejemplo, si el código pasa las pruebas) y aprende a maximizar la puntuación. Pista: criterio de éxito medible sin respuestas de referencia = refuerzo."
+  distractores:
+    a: "El instruction tuning necesita pares instrucción → respuesta correcta, que aquí no existen."
+    c: "El preentrenamiento continuado usa texto sin etiquetar del dominio para aprender vocabulario, no para optimizar un criterio de éxito."
+    d: "La destilación busca un modelo más pequeño que imite a uno grande; no optimiza contra unas pruebas."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/reinforcement-fine-tuning.html"
+
+- id: R3-066
+  dominio: 3
+  tarea: "3.3"
+  objetivo: "3.3.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Un hospital quiere que un modelo redacte informes radiológicos con la terminología correcta del sector. ¿Qué método de ajuste describe esto?"
+  opciones:
+    - id: a
+      texto: "Transfer learning con un modelo de visión"
+    - id: b
+      texto: "Reinforcement fine-tuning con pruebas automáticas"
+    - id: c
+      texto: "Adaptación a un dominio"
+    - id: d
+      texto: "Destilación a un modelo más pequeño"
+  correctas: [c]
+  explicacion: "La adaptación a un dominio ajusta el modelo (o continúa su preentrenamiento) con datos de un sector para que domine su jerga y sus formatos, como los informes radiológicos. Pista: jerga de un sector = dominio."
+  distractores:
+    a: "El transfer learning es la idea general de reutilizar lo aprendido; el ejemplo de un modelo de visión no encaja con redactar informes."
+    b: "El refuerzo con pruebas automáticas sirve cuando hay un criterio de éxito medible, como código que pasa tests."
+    d: "La destilación busca abaratar la inferencia con un modelo menor, no aprender la terminología de un sector."
+  referencia: "https://aws.amazon.com/what-is/transfer-learning/"
+
+- id: R3-067
+  dominio: 3
+  tarea: "3.3"
+  objetivo: "3.3.3"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada actividad de preparación de datos para el ajuste fino con su aspecto."
+  prompts:
+    - id: "1"
+      texto: "Eliminar duplicados, errores y datos personales que no deban estar"
+    - id: "2"
+      texto: "Registrar de dónde viene cada dato, su licencia y su consentimiento"
+    - id: "3"
+      texto: "Comprobar que hay ejemplos de todos los productos y tipos de cliente"
+    - id: "4"
+      texto: "Asignar a cada ejemplo su respuesta correcta de forma coherente"
+  opciones:
+    - id: a
+      texto: "Gobierno"
+    - id: b
+      texto: "Etiquetado"
+    - id: c
+      texto: "Curación"
+    - id: d
+      texto: "Representatividad"
+    - id: e
+      texto: "Tamaño"
+  correctas: [["1", c], ["2", a], ["3", d], ["4", b]]
+  explicacion: "La curación selecciona y limpia; el gobierno controla el origen, la licencia y el linaje; la representatividad asegura que los datos cubren los casos reales; el etiquetado asigna la respuesta correcta a cada ejemplo."
+  distractores:
+    e: "El tamaño trata de tener suficientes ejemplos dentro de los límites del modelo; ninguna de estas actividades consiste en reunir más datos."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
+
+- id: R3-068
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.1"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué inconveniente tienen las métricas automáticas como ROUGE o BLEU?"
+  opciones:
+    - id: a
+      texto: "Son lentas y caras"
+    - id: b
+      texto: "Necesitan un modelo juez de otra familia"
+    - id: c
+      texto: "Solo funcionan con imágenes"
+    - id: d
+      texto: "No captan bien el significado ni la utilidad de la respuesta"
+  correctas: [d]
+  explicacion: "Las métricas automáticas son rápidas, baratas y objetivas, pero comparan palabras con una respuesta de referencia: una paráfrasis correcta puede puntuar bajo. Pista: cuentan palabras, no entienden."
+  distractores:
+    a: "Lo lento y caro es la evaluación humana; las métricas automáticas son rápidas y baratas."
+    b: "El juez de otra familia es una buena práctica del LLM-as-a-judge, no de ROUGE o BLEU."
+    c: "ROUGE y BLEU se aplican a texto, como resúmenes y traducciones."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+
+- id: R3-069
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.1"
+  tipo: ordering
+  dificultad: media
+  enunciado: "Según la guía prescriptiva de AWS, ordena cómo se combinan los enfoques de evaluación antes de llevar un modelo a producción."
+  opciones:
+    - id: a
+      texto: "Las personas revisan las mejores variantes como última barrera"
+    - id: b
+      texto: "Crear un conjunto de referencia «dorado» revisado por expertos"
+    - id: c
+      texto: "Filtrar las variantes con métricas automáticas y un juez LLM"
+  correctas: [b, c, a]
+  explicacion: "Primero se construye un conjunto de referencia «dorado» con preguntas y respuestas revisadas por expertos; después las métricas automáticas y el juez LLM filtran rápidamente las variantes; por último, las personas revisan las mejores. Cada etapa es más cara que la anterior, por eso se aplica a menos candidatos."
+  referencia: "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-quality.html"
+
+- id: R3-070
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué métrica se asocia sobre todo a la traducción automática y está orientada a la precisión?"
+  opciones:
+    - id: a
+      texto: "BLEU"
+    - id: b
+      texto: "ROUGE"
+    - id: c
+      texto: "Recall de unigramas"
+    - id: d
+      texto: "Tasa de tareas completadas"
+  correctas: [a]
+  explicacion: "BLEU mide cuánto de la respuesta aparece en la referencia (precisión) y penaliza las respuestas demasiado cortas; es la métrica clásica de traducción. ROUGE es la de resúmenes y se orienta a la exhaustividad. Pista: BLEU = Bilingual = traducción."
+  distractores:
+    b: "ROUGE se orienta a la exhaustividad (recall) y se asocia a los resúmenes."
+    c: "El recall de unigramas es la base de ROUGE-1, no de BLEU."
+    d: "La tasa de tareas completadas es una métrica de negocio, no de calidad de traducción."
+  referencia: "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-quality.html"
+
+- id: R3-071
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un equipo jurídico tardaba 45 minutos por contrato; con el asistente tarda 20 y detecta los mismos errores. ¿Qué concluye la evaluación de negocio?"
+  opciones:
+    - id: a
+      texto: "Que no se puede concluir nada sin un ROUGE perfecto"
+    - id: b
+      texto: "Que hay que medir la tasa de conversión antes de decidir"
+    - id: c
+      texto: "Que el modelo cumple el objetivo de productividad aunque sus métricas técnicas no sean perfectas"
+    - id: d
+      texto: "Que el modelo debe reentrenarse para reducir el tiempo a cero"
+  correctas: [c]
+  explicacion: "El objetivo de productividad se demuestra con el tiempo por tarea frente a una línea base, sin perder calidad. Una métrica técnica alta no garantiza valor, y una imperfecta no lo descarta. Pista: el negocio se mide con métricas de negocio."
+  distractores:
+    a: "ROUGE mide el solapamiento con un texto de referencia; el objetivo aquí es ahorrar tiempo sin perder calidad, y eso ya está medido."
+    b: "La tasa de conversión mide ventas, no la productividad de un equipo interno."
+    d: "El objetivo era ahorrar tiempo manteniendo la calidad, y se cumple; no hace falta reentrenar."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+
+- id: R3-072
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Para medir si un asistente de compra aumenta las ventas, ¿qué comparación es la adecuada?"
+  opciones:
+    - id: a
+      texto: "La tasa de conversión del grupo con asistente frente a un grupo de control"
+    - id: b
+      texto: "La puntuación BERTScore de las respuestas frente a las de referencia"
+    - id: c
+      texto: "El número de tokens de salida antes y después"
+    - id: d
+      texto: "La latencia media del modelo frente a la de otro modelo"
+  correctas: [a]
+  explicacion: "El objetivo de ventas se demuestra con la tasa de conversión, comparando un grupo que usa el asistente con un grupo de control (prueba A/B). Pista: objetivo de negocio → métrica de negocio con línea base o grupo de control."
+  distractores:
+    b: "BERTScore mide la similitud semántica con una referencia, no si se vende más."
+    c: "Los tokens de salida influyen en el coste, no demuestran un aumento de ventas."
+    d: "La latencia es un requisito técnico; no mide el impacto en las ventas."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+
+- id: R3-073
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "La evaluación retrieve only de un asistente RAG es buena, pero la de retrieve and generate muestra baja fidelidad. ¿Dónde está el problema?"
+  opciones:
+    - id: a
+      texto: "En el almacén vectorial, que no encuentra los fragmentos"
+    - id: b
+      texto: "En el modelo de embeddings, que hay que cambiar"
+    - id: c
+      texto: "En la sincronización de los documentos de la Knowledge Base"
+    - id: d
+      texto: "En el prompt o en el modelo de generación, que añade datos que no están en el contexto"
+  correctas: [d]
+  explicacion: "Si la recuperación trae los fragmentos correctos pero la respuesta no es fiel al contexto, el modelo está inventando: el problema está en el prompt o en el modelo, no en la Knowledge Base. Pista: separa recuperación y generación para localizar el fallo."
+  distractores:
+    a: "La evaluación retrieve only muestra que la recuperación sí funciona."
+    b: "Los embeddings afectan a la recuperación, que aquí es buena."
+    c: "Si la sincronización fallara, la recuperación traería fragmentos incorrectos o desactualizados, y no es el caso."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html"
+
+- id: R3-074
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.4"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "Al evaluar un agente de IA, ¿qué DOS aspectos hay que comprobar además de la utilidad de la respuesta?"
+  opciones:
+    - id: a
+      texto: "Si elige bien las herramientas y sus parámetros"
+    - id: b
+      texto: "La puntuación BLEU de cada paso"
+    - id: c
+      texto: "Cuántos pasos da, cuánto tarda y cuánto cuesta"
+    - id: d
+      texto: "El número de parámetros del modelo"
+    - id: e
+      texto: "El tamaño del almacén vectorial"
+  correctas: [a, c]
+  explicacion: "En un agente se evalúa si completa la tarea, si elige bien las herramientas y sus parámetros, cuántos pasos da, cuánto tarda y cuánto cuesta, y si la respuesta es útil. AgentCore Evaluations lo hace sobre las trazas del agente."
+  distractores:
+    b: "BLEU es una métrica de traducción; no evalúa decisiones ni herramientas."
+    d: "El tamaño del modelo es un criterio de selección, no una medida del comportamiento del agente."
+    e: "El tamaño del almacén vectorial no dice nada de si el agente cumple su tarea."
+  referencia: "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations.html"
+
+- id: R3-075
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.5"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Un asistente resuelve 42 000 de 60 000 consultas sin intervención humana. ¿Qué métrica es ese 70 %?"
+  opciones:
+    - id: a
+      texto: "Satisfacción de los usuarios"
+    - id: b
+      texto: "Tasa de tareas completadas"
+    - id: c
+      texto: "Coste por interacción"
+    - id: d
+      texto: "Exactitud de la recuperación"
+  correctas: [b]
+  explicacion: "La tasa de tareas completadas es la proporción de solicitudes que la aplicación resuelve sin intervención humana: 42 000 / 60 000 = 70 %. Pista: «resuelve sin persona» = tareas completadas."
+  distractores:
+    a: "La satisfacción se mide con encuestas, valoraciones o quejas de los usuarios."
+    c: "El coste por interacción divide el coste total entre las interacciones; es un importe, no un porcentaje de resolución."
+    d: "La calidad de la recuperación se evalúa en RAG con fragmentos esperados; no es una métrica de negocio."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+
+- id: R3-076
+  dominio: 3
+  tarea: "3.4"
+  objetivo: "3.4.5"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un asistente cuesta 3000 USD al mes y atiende 60 000 interacciones. ¿Cuál es su coste por interacción?"
+  opciones:
+    - id: a
+      texto: "0,50 USD"
+    - id: b
+      texto: "0,071 USD"
+    - id: c
+      texto: "0,05 USD"
+    - id: d
+      texto: "20 USD"
+  correctas: [c]
+  explicacion: "Coste por interacción = coste total / interacciones = 3000 / 60 000 = 0,05 USD. Si solo se cuentan las consultas resueltas, el resultado es mayor. Pista: divide entre todas las interacciones, no solo las resueltas."
+  distractores:
+    a: "Es diez veces el resultado correcto: un error al colocar los decimales."
+    b: "0,071 USD es el coste por consulta resuelta con una tasa de resolución del 70 % (3000 / 42 000), no por interacción."
+    d: "Sale de dividir las interacciones entre el coste (60 000 / 3000), al revés."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
