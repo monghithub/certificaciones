@@ -290,6 +290,38 @@ En ML, «sesgo» tiene **dos sentidos** que el examen mezcla a propósito:
 
 *Ejemplo resuelto:* tres modelos para detectar fraude, con exactitud en entrenamiento y en prueba: A, 62 % y 60 % (subajuste: falla en los dos); B, 99 % y 71 % (sobreajuste: 28 puntos de diferencia); C, 91 % y 89 % (equilibrado). Se elige C.
 
+Los tres modelos del ejemplo, del más simple al más complejo, y cómo se corrige cada extremo:
+
+```mermaid
+flowchart LR
+    A["📉 <b>Subajuste · alto sesgo</b><br/>A: 62 % entrenamiento · 60 % prueba"] --- C["🎯 <b>Equilibrio</b><br/>C: 91 % entrenamiento · 89 % prueba"]
+    C --- B["📈 <b>Sobreajuste · alta varianza</b><br/>B: 99 % entrenamiento · 71 % prueba"]
+    A -.-> FA["🛠️ <b>Corregir el subajuste</b><br/>modelo más capaz, mejores<br/>características, más entrenamiento"]
+    B -.-> FB["🛠️ <b>Corregir el sobreajuste</b><br/>más datos y más diversos,<br/>menos complejidad, regularización"]
+    class A,B aviso
+    class C accion
+    class FA,FB proceso
+```
+
+```nodos
+A:
+  concepto: subajuste
+  texto: 'Falla con los datos de entrenamiento y con los nuevos: el modelo es demasiado simple o se entrenó poco.'
+  seccion: 04-ia-responsable/teoria#efectos-del-sesgo-y-la-varianza
+C:
+  titulo: Equilibrio
+  texto: 'Error bajo y parecido en entrenamiento y en prueba: el modelo generaliza. En el ejemplo se elige C.'
+B:
+  concepto: sobreajuste
+  texto: 'Casi perfecto en entrenamiento y mucho peor en prueba (28 puntos de diferencia): memoriza los datos, ruido incluido.'
+FA:
+  titulo: Cómo se corrige el subajuste
+  texto: Un modelo más capaz, mejores características o más tiempo de entrenamiento.
+FB:
+  titulo: Cómo se corrige el sobreajuste
+  texto: Más datos y más diversos, menos complejidad o regularización, y validación cruzada. Se detecta comparando el error en entrenamiento y en prueba.
+```
+
 Efectos que pide la guía:
 
 - **Sobre los grupos demográficos:** un grupo con pocos ejemplos se aprende peor. AWS pone el ejemplo de un modelo que predice el rendimiento académico entrenado solo con alumnos de una universidad privada de rentas altas: su exactitud cae con alumnos de universidades públicas.

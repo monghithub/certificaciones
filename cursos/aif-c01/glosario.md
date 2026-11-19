@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 236 términos.
+Total: 237 términos.
 
 ## A
 
@@ -519,6 +519,8 @@ Total: 236 términos.
   - Usar cuando: Para analizar con SQL grandes volúmenes de datos estructurados que alimentan modelos o informes.
   - No usar cuando: Para guardar objetos y ficheros de entrenamiento sin estructura (Amazon S3).
   - Referencia: <https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html>
+- **Región de AWS** (Región, Regiones, AWS Region). *Concepto.* Ubicación geográfica donde se crean los recursos de AWS. Se elige la que ofrece los servicios y funcionalidades necesarios, cumple los requisitos legales y está cerca de los usuarios (menos latencia). La disponibilidad de servicios y modelos varía según la Región.
+  - Referencia: <https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html>
 - **registro de invocaciones de modelos** (model invocation logging, registro de invocaciones). *Técnica.* Funcionalidad de Amazon Bedrock que guarda la petición, la respuesta y los metadatos de cada invocación (Converse, InvokeModel y sus variantes) en CloudWatch Logs o en S3 de la misma cuenta y Región. Está desactivada por defecto; cuánto se conservan los registros lo decide la retención del destino. El enmascarado de PII de Guardrails no se aplica a estos registros.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html>
 - **regresión** (regression). *Técnica.* Problema supervisado cuyo valor objetivo es continuo: estima una variable dependiente a partir de otras, por ejemplo el precio de una vivienda.

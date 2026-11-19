@@ -128,6 +128,44 @@ Matices que ayudan a descartar opciones (documentación de SageMaker AI):
 - **Tiempo real**: las instancias del *endpoint* se facturan mientras están en marcha, haya o no peticiones.
 - **Por lotes**: no hay *endpoint*; se lanza un trabajo, se procesa el conjunto completo y termina.
 
+Cómo se elige el tipo de inferencia en SageMaker AI:
+
+```mermaid
+flowchart TB
+    S["🤖 <b>Modelo entrenado</b><br/>¿cómo se piden predicciones?"] --> Q{"⚡ <b>¿Hace falta la respuesta<br/>al momento?</b>"}
+    Q -->|"no: un conjunto completo"| BT["📦 <b>Por lotes</b><br/>sin endpoint persistente"]
+    Q -->|"casi: peticiones grandes o largas"| AS["📨 <b>Asíncrona</b><br/>hasta 1 GB y 1 hora; puede escalar a cero"]
+    Q -->|"sí"| T{"🌊 <b>¿Tráfico a ráfagas<br/>con periodos inactivos?</b>"}
+    T -->|"sí, sin GPU ni VPC"| SL["☁️ <b>Serverless</b><br/>pago por uso; arranques en frío"]
+    T -->|"no, o necesita GPU o VPC"| RT["🟢 <b>Tiempo real</b><br/>endpoint permanente, baja latencia"]
+    class S ml
+    class Q,T decision
+    class BT,AS,SL,RT servicio
+```
+
+```nodos
+S:
+  concepto: inferencia
+  seccion: 01-fundamentos-ia-ml/teoria#tipos-de-inferencia
+Q:
+  titulo: Latencia necesaria
+  texto: 'La primera pregunta es cuánto puede esperar quien pide la predicción: nada (interactivo), un poco (asíncrona) o hasta que termine un trabajo (lotes).'
+  enlaces:
+  - texto: Opciones de inferencia de SageMaker AI
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html
+BT:
+  concepto: transformacion-por-lotes
+AS:
+  concepto: inferencia-asincrona
+T:
+  titulo: Patrón de tráfico
+  texto: Con ráfagas y periodos sin tráfico, pagar un endpoint encendido todo el tiempo sale caro; serverless escala a cero, pero no admite GPU ni VPC y puede tener arranques en frío.
+SL:
+  concepto: inferencia-serverless
+RT:
+  concepto: inferencia-en-tiempo-real
+```
+
 Los mismos conceptos aparecen con modelos fundacionales: Amazon Bedrock ofrece inferencia bajo demanda (*on-demand*, en tiempo real) e inferencia por lotes (*batch*), más barata para grandes volúmenes que no necesitan respuesta inmediata. Se estudia en los módulos 02 y 03.
 
 #### Tipos de datos
@@ -228,6 +266,60 @@ El primer paso del ciclo de vida de ML es plantear el problema de negocio, y esa
 El criterio práctico: si hay un valor objetivo, el problema es supervisado, y se distingue entre categoría (clasificación) y número (regresión); si no hay etiquetas, se busca estructura en los datos.
 
 > **Pista de redacción:** «¿cuánto?», «¿qué importe?» → regresión; «¿cuál de estas categorías?», «¿sí o no?» → clasificación; «¿qué grupos hay?» sin etiquetas → agrupamiento; «¿qué es raro?» → detección de anomalías. La **detección de fraude** puede ser clasificación (si hay ejemplos etiquetados de fraude) o detección de anomalías (si no los hay).
+
+Las dos decisiones juntas, ¿ML o no?, y si es que sí, ¿qué técnica?:
+
+```mermaid
+flowchart TB
+    P["💼 <b>Problema de negocio</b>"] --> R{"📏 <b>¿Lo resuelven reglas sencillas<br/>o hace falta un resultado exacto?</b>"}
+    R -->|"sí"| NO["🚫 <b>Sin ML</b><br/>reglas o cálculo determinista"]
+    R -->|"no"| D{"🗃️ <b>¿Hay datos suficientes<br/>y sale el coste-beneficio?</b>"}
+    D -->|"no"| NO
+    D -->|"sí"| L{"🏷️ <b>¿Hay un valor objetivo<br/>etiquetado?</b>"}
+    L -->|"sí, un número"| REG["📈 <b>Regresión</b><br/>¿cuánto? (también series temporales)"]
+    L -->|"sí, una categoría"| CLA["🗂️ <b>Clasificación</b><br/>¿cuál? ¿sí o no?"]
+    L -->|"no"| U{"🔍 <b>¿Qué se busca<br/>en los datos?</b>"}
+    U -->|"grupos parecidos"| AGR["🫧 <b>Agrupamiento</b>"]
+    U -->|"lo que se sale de lo normal"| ANO["🚨 <b>Detección de anomalías</b>"]
+    class P dato
+    class R,D,L,U decision
+    class NO aviso
+    class REG,CLA,AGR,ANO ml
+```
+
+```nodos
+P:
+  titulo: Problema de negocio
+  texto: El primer paso del ciclo de vida de ML es plantear el problema y decidir si ML es realmente la mejor opción.
+  seccion: 01-fundamentos-ia-ml/teoria#cuándo-no-usar-ml
+R:
+  titulo: ¿Reglas o resultado exacto?
+  texto: Si la lógica se puede escribir de forma explícita, o el negocio exige siempre un valor exacto y comprobable (un cálculo fiscal), un modelo probabilístico no es la herramienta.
+  seccion: 01-fundamentos-ia-ml/teoria#cuándo-no-usar-ml
+'NO':
+  titulo: Sin ML
+  texto: 'Reglas de negocio o un cálculo determinista: más simple, exacto y barato.'
+D:
+  titulo: Datos y coste-beneficio
+  texto: Sin datos suficientes no se puede entrenar, y el valor de negocio debe poder medirse frente a criterios de éxito concretos.
+  seccion: 01-fundamentos-ia-ml/teoria#cuándo-no-usar-ml
+L:
+  concepto: aprendizaje-supervisado
+  titulo: ¿Hay etiqueta?
+  texto: 'Si hay un valor objetivo, el problema es supervisado: número → regresión; categoría → clasificación.'
+REG:
+  concepto: regresion
+CLA:
+  concepto: clasificacion
+U:
+  concepto: aprendizaje-no-supervisado
+  titulo: Sin etiquetas
+  texto: 'Sin valor objetivo se busca estructura en los datos: grupos o casos raros.'
+AGR:
+  concepto: agrupamiento
+ANO:
+  concepto: deteccion-de-anomalias
+```
 
 #### Aplicaciones reales de la IA
 
@@ -383,6 +475,34 @@ Ejemplo aplicado a una empresa de telecomunicaciones que quiere reducir bajas:
 
 **Regla de coste y esfuerzo:** usar un modelo preentrenado tal cual < adaptarlo (*prompts*, RAG, *fine-tuning*) < entrenar un modelo propio desde cero. **Preentrenar** un modelo fundacional desde cero exige enormes volúmenes de datos y capacidad de cómputo, y casi nunca es la respuesta correcta en un escenario de negocio.
 
+La regla de coste y esfuerzo, de menos a más:
+
+```mermaid
+flowchart LR
+    A["📦 <b>Usar tal cual</b><br/>modelo preentrenado o FM por API"] -->|"más coste y esfuerzo"| B["🧩 <b>Adaptar</b><br/>prompts, RAG o fine-tuning"]
+    B -->|"más coste y esfuerzo"| C["🏗️ <b>Entrenar un modelo propio</b><br/>con SageMaker AI"]
+    C -->|"mucho más"| D["🏔️ <b>Preentrenar un FM desde cero</b><br/>datos y cómputo enormes"]
+    class A,B,C proceso
+    class D aviso
+```
+
+```nodos
+A:
+  titulo: Usar un modelo tal cual
+  texto: Modelos preentrenados de código abierto (SageMaker JumpStart) o modelos fundacionales de proveedores por API (Amazon Bedrock, familia Amazon Nova). Es lo más rápido y barato.
+  seccion: 01-fundamentos-ia-ml/teoria#de-dónde-salen-los-modelos
+B:
+  titulo: Adaptar el modelo
+  texto: 'Prompts, RAG o ajuste fino: se aprovecha un modelo existente y se adapta al caso. Las diferencias de coste se ven en el módulo 03.'
+  seccion: 03-modelos-fundacionales/teoria#coste-de-las-formas-de-personalización
+C:
+  concepto: amazon-sagemaker-ai
+  titulo: Entrenar un modelo propio
+  texto: 'Con SageMaker AI, el esfuerzo crece con la personalización: partir de un modelo preentrenado, usar un algoritmo integrado, escribir código propio en un framework compatible o traer un contenedor propio.'
+D:
+  concepto: preentrenamiento
+```
+
 #### Cómo se usa un modelo en producción
 
 - **API de servicio gestionado.** El cliente invoca un modelo que AWS aloja y opera: los servicios de IA especializados (Rekognition, Transcribe…) y Amazon Bedrock. Se evita gestionar la infraestructura de inferencia.
@@ -436,6 +556,42 @@ MLOps (*ML Operations*) es la metodología que aplica las prácticas de **DevOps
 | Monitorización del modelo | Vigilar la calidad y la deriva en producción | Model Monitor (cerrado a clientes nuevos), CloudWatch |
 | Reentrenamiento | Volver a entrenar cuando el modelo se degrada | *Pipelines* automatizados |
 
+El ciclo que automatiza MLOps:
+
+```mermaid
+flowchart TB
+    EX["🧪 <b>Experimentar</b><br/>MLflow"] --> PI["🔁 <b>Pipeline repetible</b><br/>SageMaker Pipelines"]
+    PI --> RG["🗄️ <b>Registrar y aprobar</b><br/>Model Registry"]
+    RG --> DP["🚀 <b>Desplegar</b>"]
+    DP --> MO["📡 <b>Monitorizar</b><br/>calidad y deriva"]
+    MO -->|"se degrada: reentrenar"| PI
+    class EX,PI,RG,DP,MO proceso
+```
+
+```nodos
+EX:
+  concepto: sagemaker-mlflow
+  titulo: Experimentación
+  texto: Probar y comparar variantes de modelo de forma registrada.
+  seccion: 01-fundamentos-ia-ml/teoria#mlops
+PI:
+  concepto: amazon-sagemaker-pipelines
+  titulo: Procesos repetibles
+  texto: Automatizar el flujo (datos, entrenamiento, evaluación) para obtener los mismos resultados cada vez.
+RG:
+  concepto: amazon-sagemaker-model-registry
+  titulo: Preparación para producción
+  texto: Versionar los modelos y aprobarlos tras los controles de calidad y de gobierno.
+DP:
+  titulo: Despliegue
+  texto: El modelo aprobado se publica con el tipo de inferencia adecuado.
+  seccion: 01-fundamentos-ia-ml/teoria#tipos-de-inferencia
+MO:
+  concepto: deriva
+  titulo: Monitorización
+  texto: Vigilar la calidad y la deriva en producción, por ejemplo con CloudWatch (SageMaker Model Monitor ya no admite clientes nuevos). Cuando el modelo se degrada, el mismo pipeline lo vuelve a entrenar.
+```
+
 #### Métricas de rendimiento y de negocio
 
 Una **métrica técnica** mide el modelo; una **métrica de negocio** mide el valor que aporta. Hay que definir cómo se relacionan (por ejemplo, la exactitud y las ventas) y que los responsables de negocio las acepten.
@@ -460,6 +616,55 @@ Una **métrica técnica** mide el modelo; una **métrica de negocio** mide el va
 - Exactitud = (15 + 970) / 1.000 = 98,5 %.
 - Precisión = 15 / (15 + 10) = 60 %: de cada 10 alertas, 6 son fraude real.
 - Exhaustividad = 15 / (15 + 5) = 75 %: se escapa uno de cada cuatro fraudes.
+
+De qué celdas de la matriz sale cada métrica del ejemplo:
+
+```mermaid
+flowchart LR
+    subgraph MC["🧮 Matriz de confusión"]
+        direction TB
+        VP["✅ <b>VP = 15</b><br/>real: fraude · predicho: fraude"]
+        FN["😶 <b>FN = 5</b><br/>real: fraude · predicho: legítima"]
+        FP["🔔 <b>FP = 10</b><br/>real: legítima · predicho: fraude"]
+        VN["✅ <b>VN = 970</b><br/>real: legítima · predicho: legítima"]
+    end
+    VP --> PR["🎯 <b>Precisión = 60 %</b><br/>15 / (15 + 10)"]
+    FP --> PR
+    VP --> RC["🕸️ <b>Exhaustividad = 75 %</b><br/>15 / (15 + 5)"]
+    FN --> RC
+    VP --> EXA["📊 <b>Exactitud = 98,5 %</b><br/>(15 + 970) / 1.000"]
+    VN --> EXA
+    class VP,VN dato
+    class FN,FP aviso
+    class PR,RC,EXA proceso
+```
+
+```nodos
+MC:
+  concepto: matriz-de-confusion
+  seccion: 01-fundamentos-ia-ml/teoria#métricas-de-rendimiento-y-de-negocio
+VP:
+  titulo: Verdaderos positivos
+  texto: 15 fraudes que el modelo marca como fraude.
+FN:
+  titulo: Falsos negativos
+  texto: '5 fraudes que el modelo da por legítimos: los que se escapan. Bajan la exhaustividad.'
+FP:
+  titulo: Falsos positivos
+  texto: '10 transacciones legítimas marcadas como fraude: falsas alarmas. Bajan la precisión.'
+VN:
+  titulo: Verdaderos negativos
+  texto: 970 transacciones legítimas bien clasificadas. Con clases desequilibradas, inflan la exactitud.
+PR:
+  concepto: precision
+  texto: De cada 10 alertas, 6 son fraude real. Importa cuando un falso positivo es caro.
+RC:
+  concepto: exhaustividad
+  texto: Se escapa uno de cada cuatro fraudes. Importa cuando un falso negativo es caro.
+EXA:
+  concepto: exactitud
+  texto: Parece excelente, pero un modelo que dijera siempre «legítima» tendría un 98 % sin detectar ningún fraude.
+```
 
 > **Trampa de la exactitud.** Con clases desequilibradas, la exactitud engaña: un modelo que dijera siempre «legítima» tendría un 98 % de exactitud y no detectaría ningún fraude. En esos casos se miran la precisión, la exhaustividad, F1 o AUC.
 
