@@ -306,3 +306,14 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Decisiones:** mismo sistema que los 25 existentes (Mermaid + `nodos`: animación, modal por caja, claro, oscuro y móvil); sin datos nuevos, cada caja resume el texto del apartado; cadenas largas en vertical por el móvil; títulos de subgrupo cortos (Mermaid corta los largos).
 - **Revisión independiente:** 0 críticos, 4 importantes (orden del árbol de pago, que mandaba a On-Demand una carga interrumpible; orden de los criterios de elección de modelo; alcance de Guardrails frente al envenenamiento; RAG frente a no meter datos personales en el modelo) y 11 menores. Todo aplicado.
 - **Verificación:** validador, 44/44 diagramas Mermaid válidos y navegador (todas las cajas abren su modal, sin errores de consola, claro, oscuro y móvil).
+
+## 2026-11-20
+
+### Repaso ampliado
+
+- Petición: «crea más preguntas de repaso».
+- Rama `aif-c01/repaso-ampliado`. Criterio: llevar cada objetivo oficial a un mínimo de 4 preguntas de repaso (muchos tenían 2). El módulo 00 ya tenía 5 o más por objetivo y no cambia.
+- 93 preguntas nuevas, añadidas al final de cada `repaso.yaml` tras el comentario «Ampliación del banco de repaso»: R1-043 a R1-068, R2-037 a R2-056, R3-045 a R3-076, R4-035 a R4-045 y R5-031 a R5-034. Total: 303.
+- **Decisiones:** cada pregunta se apoya en una afirmación de la teoría del módulo y cita una fuente ya usada para ese objetivo; ninguna depende de los marcadores pendientes (preentrenamiento continuado en Bedrock, *task engineering*). Se mezclan los cuatro tipos y se reparten las letras correctas. `repaso.minimo_por_objetivo` pasa de 2 a 4 para que la CI mantenga el mínimo.
+- El trabajo se pausó a petición del usuario tras el módulo 03 (2026-11-19) y se retomó el 2026-11-20.
+- **Verificación:** validador sin errores ni avisos, cobertura con `--preguntas` y pytest.

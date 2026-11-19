@@ -780,3 +780,110 @@
     c: El ámbito 2 es una aplicación SaaS de terceros con IA integrada y contrato con el proveedor.
     d: El ámbito 5 es entrenar un modelo propio desde cero; es el ámbito con más responsabilidades.
   referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
+
+# ---------------------------------------------------------------- Ampliación del banco de repaso (2026-11-20)
+
+- id: R5-031
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Los analistas necesitan saber qué conjuntos de datos existen, dónde están y cuál es su esquema. ¿Qué servicio de AWS lo cubre?"
+  opciones:
+    - id: a
+      texto: "SageMaker ML Lineage Tracking"
+    - id: b
+      texto: "Citas de Amazon Bedrock Knowledge Bases"
+    - id: c
+      texto: "Amazon SageMaker Model Cards"
+    - id: d
+      texto: "AWS Glue Data Catalog"
+  correctas: [d]
+  explicacion: "La catalogación de datos es un inventario de los conjuntos de datos con su ubicación, su esquema y sus metadatos; AWS Glue Data Catalog es el catálogo central de metadatos en AWS. Pista: «qué datos hay y cómo son» = catálogo."
+  distractores:
+    a: "ML Lineage Tracking registra el recorrido de datos y artefactos hasta un modelo concreto, no el inventario de todos los conjuntos."
+    b: "Las citas indican de qué documentos sale una respuesta de RAG; no describen los conjuntos de datos de la empresa."
+    c: "Una Model Card documenta un modelo (uso previsto, datos de entrenamiento, evaluación), no el inventario de datos."
+  referencia: "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
+
+- id: R5-032
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Antes de usar unos datos para entrenar, un equipo quiere comprobar con reglas que son completos, correctos y coherentes. ¿Qué servicio usa?"
+  opciones:
+    - id: a
+      texto: "AWS Lake Formation"
+    - id: b
+      texto: "AWS Glue Data Quality"
+    - id: c
+      texto: "AWS CloudTrail"
+    - id: d
+      texto: "Amazon Bedrock Guardrails"
+  correctas: [b]
+  explicacion: "Evaluar la calidad de los datos es una práctica de ingeniería de datos segura. AWS Glue Data Quality aplica reglas, calcula una puntuación de calidad y detecta anomalías. Pista: «Data Quality» = calidad de los datos."
+  distractores:
+    a: "Lake Formation controla quién accede al lago de datos (por columna, fila y celda), no si los datos son correctos."
+    c: "CloudTrail registra la actividad de las APIs; ayuda a la integridad, pero no evalúa la calidad de los datos."
+    d: "Guardrails filtra las entradas y salidas de un modelo; no valida un conjunto de entrenamiento."
+  referencia: "https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html"
+
+- id: R5-033
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.2"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada estrategia de gobierno de datos con el ejemplo de AWS que la aplica."
+  prompts:
+    - id: "1"
+      texto: "Ver las trazas de un agente: sus pasos y las herramientas que usa"
+    - id: "2"
+      texto: "Vigilar métricas con alarmas en Amazon CloudWatch"
+    - id: "3"
+      texto: "Mantener el procesamiento de la inferencia entre Regiones dentro de la UE"
+    - id: "4"
+      texto: "Decidir cuánto tiempo se guardan los grupos de CloudWatch Logs"
+  opciones:
+    - id: a
+      texto: "Monitorización"
+    - id: b
+      texto: "Retención"
+    - id: c
+      texto: "Observación"
+    - id: d
+      texto: "Residencia"
+    - id: e
+      texto: "Catalogación"
+  correctas: [["1", c], ["2", a], ["3", d], ["4", b]]
+  explicacion: "La observación muestra qué hace el sistema por dentro (trazas, pasos, herramientas); la monitorización vigila métricas con alarmas; la residencia decide dónde se almacenan y procesan los datos (perfiles geográficos); la retención fija cuánto se guardan, y en CloudWatch Logs es indefinida por defecto."
+  distractores:
+    e: "La catalogación es el inventario de los conjuntos de datos con su esquema; pertenece a la documentación del origen de los datos, no a ninguno de estos ejemplos."
+  referencia: "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability.html"
+
+- id: R5-034
+  dominio: 5
+  tarea: "5.2"
+  objetivo: "5.2.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un equipo revisa cada día las incidencias de su asistente, cada semana las tendencias y cada mes los patrones. ¿Qué proceso de gobierno aplica?"
+  opciones:
+    - id: a
+      texto: "Una cadencia de revisión (review cadence)"
+    - id: b
+      texto: "Un requisito de formación de los equipos"
+    - id: c
+      texto: "Un estándar de transparencia"
+    - id: d
+      texto: "La aprobación del caso de uso antes de empezar"
+  correctas: [a]
+  explicacion: "La cadencia de revisión fija revisiones periódicas de los sistemas en producción; el Responsible AI Lens pone como ejemplo comprobaciones diarias, análisis semanal y revisión mensual, y reevaluar en cada cambio. Pista: «cada día, cada semana, cada mes» = cadencia."
+  distractores:
+    b: "La formación asegura que quienes desarrollan o usan la IA conocen las políticas y los riesgos; no es una revisión periódica del sistema."
+    c: "Los estándares de transparencia tratan de documentar el sistema e informar de que interviene una IA."
+    d: "Aprobar el caso de uso es una estrategia de revisión que se hace una vez, antes de empezar, no de forma periódica."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon02-bp01.html"
