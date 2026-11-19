@@ -431,6 +431,60 @@ Amazon Bedrock Guardrails detecta tres tipos de **ataques de *prompt***: *jailbr
 
 **Responsabilidad compartida:** AWS protege la infraestructura y el servicio Bedrock; **prevenir el *prompt injection* en la aplicación es responsabilidad del cliente**, igual que prevenir la inyección SQL en una base de datos de RDS. Buenas prácticas de AWS: validar la entrada, programar de forma segura, hacer pruebas de seguridad y mantener actualizadas las dependencias.
 
+Por dónde entra cada ataque y qué lo frena:
+
+```mermaid
+flowchart LR
+    AT["🦹 <b>Atacante</b>"] -->|"escribe en el chat"| U["💬 <b>Prompt del usuario</b>"]
+    AT -->|"esconde instrucciones"| DOC["📄 <b>Documento o web</b><br/>que lee el modelo"]
+    AT -->|"manipula datos"| DAT["🗃️ <b>Datos de entrenamiento,<br/>ajuste fino o RAG</b>"]
+    U -->|"injection, jailbreak, exposición"| APP["🧠 <b>Aplicación con el modelo</b>"]
+    DOC -->|"injection indirecta"| APP
+    DAT -->|"envenenamiento"| APP
+    G["🛡️ <b>Bedrock Guardrails</b><br/>detecta ataques de prompt"] -.-> U
+    G -.-> DOC
+    CL["🔒 <b>Controles de la aplicación</b><br/>validar la entrada, separar<br/>instrucciones y datos, mínimo privilegio"] -.-> APP
+    CD["🧹 <b>Curación de los datos</b><br/>y control de quién escribe"] -.-> DAT
+    class AT aviso
+    class U,DOC,DAT dato
+    class APP gen
+    class G servicio
+    class CL,CD accion
+```
+
+```nodos
+AT:
+  titulo: Atacante
+  texto: Tres de los cuatro riesgos de la guía los usa un atacante a través del prompt; el envenenamiento ataca los datos.
+  seccion: 03-modelos-fundacionales/teoria#riesgos-de-los-prompts
+U:
+  concepto: prompt-injection
+  titulo: Prompt del usuario
+  texto: Por aquí entran la inyección (ignorar y sustituir las instrucciones), el jailbreaking (saltarse las protecciones) y los intentos de exposición («repite todo lo que hay encima»).
+DOC:
+  concepto: prompt-injection
+  titulo: Instrucciones escondidas
+  texto: 'La inyección también llega en un documento o una web que el modelo lee: no hace falta que el atacante escriba en el chat.'
+DAT:
+  concepto: envenenamiento-de-datos
+APP:
+  titulo: Aplicación con el modelo
+  texto: AWS protege la infraestructura y el servicio; prevenir la inyección en la aplicación es responsabilidad del cliente, igual que la inyección SQL.
+  seccion: 00-base-aws/teoria#responsabilidad-compartida
+G:
+  concepto: amazon-bedrock-guardrails
+  titulo: Ataques de prompt en Guardrails
+  texto: Detecta jailbreaks, prompt injection y fuga de prompt (esta última, solo en la modalidad Standard). Actúa sobre lo que entra en la petición; no detecta el envenenamiento de los datos.
+CL:
+  titulo: Controles de la aplicación
+  texto: Validar y limpiar la entrada, separar instrucciones y datos, dar a las herramientas y a los agentes solo los permisos imprescindibles y no poner secretos en el prompt.
+CD:
+  concepto: curacion-de-datos
+  titulo: Contra el envenenamiento
+  texto: Curación y gobierno de los datos, control de quién puede escribir en las fuentes de RAG y revisión de los datos de entrenamiento.
+  seccion: 05-seguridad-gobierno/teoria#consideraciones-de-seguridad-y-privacidad
+```
+
 **Limitaciones** de la ingeniería de *prompts*: no añade conocimiento que el modelo no tiene (para eso, RAG), no garantiza el mismo resultado en todos los modelos ni en todas las versiones de un modelo, los *prompts* largos cuestan más y no sustituye a los controles de seguridad.
 
 #### Amazon Bedrock Prompt Management
@@ -442,6 +496,46 @@ Amazon Bedrock Guardrails detecta tres tipos de **ataques de *prompt***: *jailbr
 - ***Prompt builder*:** el editor visual de la consola para crear y probar *prompts* y variantes.
 - **Borrador y versiones:** al guardar se actualiza el **borrador** (*draft*). Cuando el *prompt* está listo para producción se crea una **versión**: una **instantánea inmutable** del *prompt* en ese momento. Las versiones permiten cambiar entre configuraciones, comparar versiones y volver a una anterior. Un *prompt* borrado se conserva en AWS hasta 14 días, y al borrarlo se borran todas sus versiones.
 - **Integración:** la aplicación invoca el *prompt* por su ARN (y versión) en la llamada de inferencia, o lo usa en un nodo de *prompt* de Amazon Bedrock Flows.
+
+El recorrido de un *prompt* en Prompt Management:
+
+```mermaid
+flowchart TB
+    P["📝 <b>Prompt con variables</b><br/>huecos que se rellenan"] --> V["🔀 <b>Variantes</b><br/>otro texto, modelo o parámetros"]
+    V --> C["⚖️ <b>Comparar</b><br/>en el prompt builder"]
+    C -->|"Save as draft"| B["✏️ <b>Borrador</b><br/>cambia al guardar"]
+    B -->|"listo para producción"| VER["📌 <b>Versión</b><br/>instantánea inmutable"]
+    VER --> APP["🚀 <b>Aplicación</b><br/>invoca por ARN y versión"]
+    APP -.->|"si empeora, volver a la anterior"| VER
+    class P,V dato
+    class C,B proceso
+    class VER servicio
+    class APP accion
+```
+
+```nodos
+P:
+  concepto: plantilla-de-prompt
+  titulo: Variables
+  texto: Huecos como el nombre del hotel o el texto de la reseña, que se rellenan al probar el prompt o en cada invocación. Convierten el prompt en una plantilla.
+  seccion: 03-modelos-fundacionales/teoria#amazon-bedrock-prompt-management
+V:
+  titulo: Variantes
+  texto: 'Configuraciones alternativas del mismo prompt: otro texto, otro modelo u otros parámetros de inferencia.'
+C:
+  titulo: Comparación
+  texto: En el modo de comparación del prompt builder se prueban varias variantes a la vez con casos reales.
+B:
+  titulo: Borrador
+  texto: 'Al quedarse con una variante (Save as draft), las demás se descartan: el prompt guarda una sola variante en su borrador. Cada guardado actualiza el borrador.'
+VER:
+  concepto: amazon-bedrock-prompt-management
+  titulo: Versión
+  texto: Instantánea inmutable del prompt en ese momento. Permite comparar versiones y volver a una anterior.
+APP:
+  titulo: Aplicación
+  texto: Invoca el prompt por su ARN y versión, o lo usa en un nodo de Amazon Bedrock Flows. Cambiar el prompt no exige desplegar la aplicación.
+```
 
 Por qué importa: si el *prompt* vive en el código, cada cambio exige desplegar la aplicación y no queda registro de qué texto produjo qué resultados. Con Prompt Management, los equipos de negocio y de desarrollo trabajan sobre el mismo catálogo, prueban antes de publicar y **revierten** a la versión anterior si una nueva empeora los resultados.
 
@@ -637,6 +731,47 @@ Una aplicación no es solo el modelo: hay que evaluar **cada pieza** y el result
 | **RAG** | **Recuperación**: ¿trae los fragmentos relevantes? **Generación**: ¿la respuesta es correcta, completa y **fiel** al contexto recuperado (sin inventar)? | Bedrock Evaluations para RAG: *retrieve only* o *retrieve and generate*, con un conjunto de preguntas y respuestas o fragmentos esperados |
 | **Agentes** | ¿Completa la tarea? ¿Elige bien las herramientas y sus parámetros? ¿Cuántos pasos, cuánto tarda y cuánto cuesta? ¿Es útil la respuesta? | **AgentCore Evaluations**: evaluadores integrados o propios (LLM-as-a-judge) sobre las trazas del agente, antes y después del despliegue |
 | **Flujos** (*workflows*) | El resultado de cada nodo y el de extremo a extremo; los errores y los tiempos | Probar cada *prompt* y nodo, y el flujo completo con casos de referencia |
+
+Dónde se evalúa una aplicación RAG:
+
+```mermaid
+flowchart LR
+    Q["💬 <b>Pregunta del conjunto<br/>de evaluación</b>"] --> RET["🔎 <b>Recuperación</b><br/>¿trae los fragmentos relevantes?"]
+    RET --> GEN["🧠 <b>Generación</b><br/>¿correcta, completa y fiel?"]
+    GEN --> A["✅ <b>Respuesta</b>"]
+    E1["🧪 <b>retrieve only</b><br/>evalúa la recuperación"] -.-> RET
+    E2["🧪 <b>retrieve and generate</b><br/>evalúa las dos piezas"] -.-> GEN
+    E2 -.-> RET
+    class Q dato
+    class RET,GEN proceso
+    class A accion
+    class E1,E2 servicio
+```
+
+```nodos
+Q:
+  titulo: Pregunta del conjunto de evaluación
+  texto: 'Preguntas con sus respuestas o fragmentos esperados: la referencia contra la que se mide.'
+  seccion: 03-modelos-fundacionales/teoria#evaluación-de-aplicaciones-con-modelos-fundacionales
+RET:
+  concepto: rag
+  titulo: Recuperación
+  texto: ¿La base de conocimiento devuelve los fragmentos relevantes? Si no los trae, ningún modelo podrá responder bien.
+GEN:
+  titulo: Generación
+  texto: ¿La respuesta es correcta, completa y fiel al contexto recuperado, sin inventar? La fidelidad baja cuando el modelo añade datos que no estaban en los fragmentos.
+A:
+  titulo: Respuesta final
+  texto: 'Evaluar cada pieza por separado dice dónde está el fallo: en la recuperación o en la generación.'
+E1:
+  concepto: amazon-bedrock-model-evaluation
+  titulo: Evaluación retrieve only
+  texto: Mide solo la recuperación de la base de conocimiento.
+E2:
+  concepto: amazon-bedrock-model-evaluation
+  titulo: Evaluación retrieve and generate
+  texto: Mide la recuperación y la respuesta generada, incluida la fidelidad al contexto.
+```
 
 *Ejemplo:* un asistente RAG responde mal. La evaluación *retrieve only* muestra que la recuperación sí trae los fragmentos correctos; la de *retrieve and generate* muestra baja **fidelidad**: el modelo añade datos que no están en el contexto. El problema está en el *prompt* o en el modelo, no en la Knowledge Base.
 

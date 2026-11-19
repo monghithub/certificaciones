@@ -28,6 +28,64 @@ Estos conocimientos proceden de la sección «Recommended AWS knowledge» de la 
 
 AWS ofrece servicios que se consumen bajo demanda a través de Regiones. Una **Región** es una ubicación geográfica donde se crean los recursos; al preparar una carga de trabajo conviene elegir una Región que ofrezca los servicios y funcionalidades necesarios y que esté cerca de los usuarios para reducir la latencia, o que cumpla requisitos legales. La disponibilidad de servicios y funcionalidades **varía según la Región**, algo que el examen y los laboratorios de este curso tienen en cuenta (por ejemplo, para Amazon Bedrock).
 
+Cómo se elige la Región de una carga de trabajo:
+
+```mermaid
+flowchart TB
+    W["🧳 <b>Carga de trabajo</b><br/>por ejemplo, un asistente con Bedrock"] --> Q1{"🧩 <b>¿Tiene los servicios<br/>necesarios?</b>"}
+    BR["✨ <b>Amazon Bedrock</b><br/>cada modelo, en unas Regiones"] -.-> Q1
+    Q1 -->|"no"| X["🚫 <b>Descartar la Región</b><br/>la disponibilidad varía"]
+    Q1 -->|"sí"| Q2{"⚖️ <b>¿Cumple los<br/>requisitos legales?</b>"}
+    Q2 -->|"no"| X
+    Q2 -->|"sí"| C["📍 <b>Región candidata</b>"]
+    C --> R["✅ <b>La más cercana a los usuarios</b><br/>menos latencia"]
+    class W dato
+    class BR servicio
+    class Q1,Q2 decision
+    class X aviso
+    class C proceso
+    class R accion
+```
+
+```nodos
+W:
+  titulo: Carga de trabajo
+  texto: 'Lo que se quiere desplegar: una aplicación, un modelo o un trabajo de datos. Sus recursos se crean en una Región concreta.'
+  seccion: 00-base-aws/teoria#servicios-centrales
+BR:
+  concepto: amazon-bedrock
+  titulo: Modelos de Bedrock por Región
+  texto: Cada modelo de Amazon Bedrock está disponible en unas Regiones concretas. Antes de elegir la Región, se comprueba que tiene el modelo que necesita la aplicación; los laboratorios del curso indican la Región que usan.
+  enlaces:
+  - texto: Modelos por Región en Amazon Bedrock
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/models-region-compatibility.html
+Q1:
+  concepto: region-de-aws
+  titulo: Servicios y funcionalidades
+  texto: 'La disponibilidad de servicios y funcionalidades varía según la Región. Es el primer filtro: una Región sin el servicio o la funcionalidad necesarios no sirve, por cerca que esté.'
+  enlaces:
+  - texto: Regiones de AWS
+    url: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
+Q2:
+  concepto: residencia-de-datos
+  titulo: Requisitos legales
+  texto: Algunas cargas deben quedarse en una geografía concreta por ley o por la normativa del sector (residencia de los datos). Se estudia en el módulo 05.
+  seccion: 05-seguridad-gobierno/teoria#estrategias-de-gobierno-de-datos
+X:
+  titulo: Región descartada
+  texto: Si falta un servicio o no se cumplen los requisitos legales, se busca otra Región.
+C:
+  titulo: Región candidata
+  texto: Ofrece lo necesario y cumple los requisitos. Si hay varias, decide la latencia.
+R:
+  titulo: Cerca de los usuarios
+  texto: Elegir la Región más cercana a los usuarios reduce la latencia.
+  enlaces:
+  - texto: Regiones de AWS
+    url: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
+  seccion: 00-base-aws/teoria#servicios-centrales
+```
+
 Los servicios centrales que el examen da por conocidos son estos:
 
 | Servicio | Qué es | Idea clave |
@@ -179,6 +237,66 @@ En los sistemas de IA, IAM decide quién puede invocar un modelo, leer los datos
 
 **Ejemplo.** Una función Lambda que resume documentos con Amazon Bedrock no debe llevar claves de acceso en el código: se le asigna un **rol de IAM** cuya política solo permite invocar el modelo concreto que usa (mínimo privilegio) y leer el bucket de S3 de entrada.
 
+Cómo decide IAM si una petición sigue adelante:
+
+```mermaid
+flowchart LR
+    P["🪪 <b>Principal</b><br/>usuario, rol, federado o aplicación"] --> AU{"🔑 <b>Autenticación</b><br/>¿credenciales válidas?"}
+    AU -->|"no"| N["⛔ <b>Petición rechazada</b>"]
+    AU -->|"sí"| AZ{"📜 <b>Autorización</b><br/>¿las políticas lo permiten?"}
+    PI["👤 <b>Política basada en identidad</b><br/>de un usuario, grupo o rol"] -.-> AZ
+    PR["🪣 <b>Política basada en recurso</b><br/>por ejemplo, de un bucket de S3"] -.-> AZ
+    AZ -->|"no"| N
+    AZ -->|"sí"| OK["✅ <b>Acción permitida</b>"]
+    class P dato
+    class AU,AZ decision
+    class N aviso
+    class PI,PR proceso
+    class OK accion
+```
+
+```nodos
+P:
+  titulo: Principal
+  texto: 'La entidad que hace la petición: un usuario de IAM, una entidad federada, un rol de IAM o una aplicación. Ejemplo del apartado: una función Lambda que usa un rol de IAM, sin claves en el código.'
+  enlaces:
+  - texto: Qué es IAM
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
+  seccion: 00-base-aws/teoria#iam-identidades-y-permisos
+AU:
+  concepto: aws-iam
+  titulo: Autenticación
+  texto: 'Asocia las credenciales a una entidad de confianza: ¿quién eres? Las prácticas recomendadas piden credenciales temporales (federación y roles) y MFA.'
+N:
+  titulo: Petición rechazada
+  texto: Sin autenticación, o sin una política que conceda el permiso, la petición no sigue adelante.
+AZ:
+  concepto: politica-de-iam
+  titulo: Autorización
+  texto: Una vez autenticada, la petición se autoriza si las políticas aplicables conceden el permiso para esa acción sobre ese recurso.
+PI:
+  concepto: politica-de-iam
+  titulo: Política basada en identidad
+  texto: 'Documento JSON asociado a un usuario, un grupo o un rol: qué acciones puede hacer sobre qué recursos.'
+  enlaces:
+  - texto: Políticas y permisos en IAM
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
+PR:
+  concepto: politica-de-iam
+  titulo: Política basada en recurso
+  texto: 'Documento JSON asociado al propio recurso, por ejemplo un bucket de S3: quién puede acceder a él.'
+  enlaces:
+  - texto: Políticas y permisos en IAM
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
+OK:
+  concepto: minimo-privilegio
+  titulo: Acción permitida
+  texto: 'La petición se ejecuta. Buena práctica al escribir las políticas: mínimo privilegio, solo los permisos imprescindibles. En el ejemplo, el rol de la Lambda solo puede invocar el modelo que usa y leer el bucket de entrada.'
+  enlaces:
+  - texto: Prácticas recomendadas de IAM
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+```
+
 ### Modelos de precios
 
 AWS factura por el uso de cada servicio, y cada servicio ofrece sus propias opciones. Para el examen basta reconocer la lógica general: **pagar por uso**, **comprometerse a cambio de descuento** o **aprovechar capacidad sobrante**.
@@ -190,6 +308,48 @@ AWS factura por el uso de cada servicio, y cada servicio ofrece sus propias opci
 | Capacidad sobrante a coste reducido | Amazon EC2 *Spot Instances*: instancias sin usar, con un coste significativamente menor; es una opción rentable si la aplicación es flexible en cuándo se ejecuta y admite interrupciones |
 | Elegir la clase de almacenamiento según el patrón de acceso | Amazon S3: clase Standard por defecto y otras clases para datos de acceso infrecuente, raro o cambiante (*Intelligent-Tiering*) |
 | Capacidad reservada con facturación por horas | Amazon Bedrock *Provisioned Throughput*: rendimiento fijo, facturado por horas |
+
+Qué opción de pago encaja según cómo se usa el recurso:
+
+```mermaid
+flowchart TB
+    U["💳 <b>¿Cómo se va a usar?</b>"] --> F{"⏸️ <b>¿Admite interrupciones<br/>y horario flexible?</b>"}
+    F -->|"sí"| SPOT["🏷️ <b>Spot Instances</b><br/>capacidad sobrante, más barata"]
+    F -->|"no"| E{"📅 <b>¿Uso estable<br/>y duradero?</b>"}
+    E -->|"sí, en EC2"| SP["🤝 <b>Savings Plans o Reserved Instances</b><br/>compromiso de 1 o 3 años"]
+    E -->|"sí, en Bedrock: tráfico alto<br/>o modelo personalizado"| PT["📦 <b>Provisioned Throughput</b><br/>se paga por horas aunque no se use"]
+    E -->|"no: variable o imprevisible"| OD["⏱️ <b>On-Demand</b><br/>pago por uso, sin compromiso"]
+    class U dato
+    class F,E decision
+    class OD,SP,PT,SPOT servicio
+```
+
+```nodos
+U:
+  titulo: Patrón de uso
+  texto: 'La lógica general de precios de AWS: pagar por uso, comprometerse a cambio de descuento o aprovechar capacidad sobrante. Cada servicio ofrece sus propias opciones.'
+  seccion: 00-base-aws/teoria#modelos-de-precios
+F:
+  titulo: Cargas flexibles
+  texto: Si la carga puede ejecutarse cuando haya capacidad y tolera interrupciones (por ejemplo, un trabajo por lotes), aprovecha la capacidad sobrante, aunque su volumen sea variable.
+SPOT:
+  concepto: spot-instances
+E:
+  titulo: Uso estable
+  texto: Si el consumo es predecible y se mantiene en el tiempo, comprometerse sale más barato. Si es variable o imprevisible, lo prudente es no comprometerse.
+SP:
+  concepto: savings-plans
+  titulo: Savings Plans o Reserved Instances
+  texto: 'Compromiso de uso a 1 o 3 años a cambio de menor coste: los Savings Plans se comprometen en USD por hora; las Reserved Instances, con una configuración concreta.'
+  enlaces:
+  - texto: Opciones de compra de EC2
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+PT:
+  concepto: provisioned-throughput
+  texto: 'Capacidad reservada de Amazon Bedrock con rendimiento fijo, facturada por horas: para tráfico alto y estable, o para un modelo personalizado. Lo aprovisionado se paga aunque no se use.'
+OD:
+  concepto: on-demand
+```
 
 #### Cómo se pagan los servicios de IA
 

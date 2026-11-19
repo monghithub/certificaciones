@@ -297,3 +297,12 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - Rama `feat/acceso-libre`, cambio de OpenSpec `acceso-libre`, aprobado por el usuario (usuario fijo: `admin`).
 - **Decisiones:** opción por variable de entorno, desactivada por defecto, para no cambiar otros despliegues; usuario existente (no anónimo) para que el progreso y las matrículas sigan funcionando; la sesión se crea al vuelo y CSRF se mantiene; en titan solo es accesible por la LAN (Traefik `lan-only`).
 - Riesgo aceptado por el usuario: cualquiera en la red local entra como `admin`.
+
+### Diagramas de refuerzo
+
+- Petición: «aquí por ejemplo puedes poner un diagrama dinámico para reforzar la idea, por favor revisa en el curso todos los sitios donde aplicaría un diagrama dinámico e interactivo».
+- Rama `aif-c01/diagramas`, cambio de OpenSpec `diagramas-refuerzo`, aprobado por el usuario (los 19 propuestos).
+- Revisión de los 33 apartados de teoría sin diagrama; descartados los que una tabla explica mejor, los que ya tienen un diagrama equivalente y los parámetros de inferencia (el orden en que se aplican depende del modelo).
+- **Decisiones:** mismo sistema que los 25 existentes (Mermaid + `nodos`: animación, modal por caja, claro, oscuro y móvil); sin datos nuevos, cada caja resume el texto del apartado; cadenas largas en vertical por el móvil; títulos de subgrupo cortos (Mermaid corta los largos).
+- **Revisión independiente:** 0 críticos, 4 importantes (orden del árbol de pago, que mandaba a On-Demand una carga interrumpible; orden de los criterios de elección de modelo; alcance de Guardrails frente al envenenamiento; RAG frente a no meter datos personales en el modelo) y 11 menores. Todo aplicado.
+- **Verificación:** validador, 44/44 diagramas Mermaid válidos y navegador (todas las cajas abren su modal, sin errores de consola, claro, oscuro y móvil).

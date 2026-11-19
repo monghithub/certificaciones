@@ -28,6 +28,15 @@
   no_usar_cuando: "Cuando se necesita control sobre el servidor o el sistema operativo."
   referencia: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 
+- id: region-de-aws
+  termino: Región de AWS
+  alias: [Región, Regiones, AWS Region]
+  categoria: concepto
+  definicion: "Ubicación geográfica donde se crean los recursos de AWS. Se elige la que ofrece los servicios y funcionalidades necesarios, cumple los requisitos legales y está cerca de los usuarios (menos latencia). La disponibilidad de servicios y modelos varía según la Región."
+  enlaces:
+    - {texto: "Modelos de Amazon Bedrock por Región", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/models-region-compatibility.html"}
+  referencia: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
+
 - id: aws-iam
   termino: AWS Identity and Access Management (IAM)
   alias: [IAM, AWS IAM, AWS Identity and Access Management]

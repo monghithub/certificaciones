@@ -251,6 +251,58 @@ Conclusiones que el examen explota:
 - **El modelo elegido es la palanca principal.** Un modelo más pequeño y barato puede bastar para tareas sencillas; uno más grande cuesta más por *token* y suele responder más despacio.
 - **Hay opciones más baratas** para cargas que no necesitan respuesta inmediata (inferencia por lotes, nivel Flex) y para contextos repetidos (*prompt caching*). Se detallan en [Compromisos de coste](#compromisos-de-coste).
 
+De qué depende la factura y qué palancas la reducen:
+
+```mermaid
+flowchart LR
+    IN["📥 <b>Tokens de entrada</b><br/>instrucciones, contexto y pregunta"] --> FM["🧠 <b>Modelo elegido</b><br/>fija el precio por token"]
+    FM --> OUT["📤 <b>Tokens de salida</b><br/>suelen costar varias veces más"]
+    FM -.->|"precio por token"| C
+    IN --> C["💶 <b>Coste de la petición</b><br/>entrada × precio + salida × precio"]
+    OUT --> C
+    L1["✂️ <b>Enviar solo lo relevante</b><br/>RAG, resumir el historial"] -.-> IN
+    L2["📏 <b>Limitar la longitud</b><br/>de la respuesta"] -.-> OUT
+    L3["🗂️ <b>Lotes, Flex o prompt caching</b><br/>sin prisa o contexto repetido"] -.-> C
+    class IN,OUT dato
+    class FM gen
+    class C proceso
+    class L1,L2,L3 accion
+```
+
+```nodos
+IN:
+  concepto: token
+  titulo: Tokens de entrada
+  texto: 'Todo lo que se envía: instrucciones, contexto (documentos, historial) y la pregunta. En el ejemplo, pegar el manual completo casi triplica el coste.'
+  seccion: 02-fundamentos-genai/teoria#precios-por-tokens
+FM:
+  titulo: Modelo elegido
+  texto: 'El precio depende del modelo, del proveedor, de la modalidad y de la Región. Es la palanca principal: un modelo más pequeño puede bastar.'
+  enlaces:
+  - texto: Precios de Amazon Bedrock
+    url: https://aws.amazon.com/bedrock/pricing/
+  seccion: 02-fundamentos-genai/teoria#cómo-elegir-un-modelo
+OUT:
+  titulo: Tokens de salida
+  texto: Lo que genera el modelo. La salida suele costar varias veces más que la entrada y se genera token a token, así que también añade latencia.
+C:
+  titulo: Coste de la petición
+  texto: Entrada y salida se pagan por separado, cada una a su precio por millón de tokens.
+L1:
+  concepto: ingenieria-de-contexto
+  titulo: Menos contexto
+  texto: Enviar solo los fragmentos relevantes (RAG) y resumir el historial reduce coste y latencia.
+  seccion: 02-fundamentos-genai/teoria#ingeniería-de-contexto
+L2:
+  titulo: Respuestas más cortas
+  texto: 'Limitar la longitud máxima de la respuesta reduce el coste de salida y la latencia: en el ejemplo, de 167 a 130 USD al mes.'
+L3:
+  concepto: prompt-caching
+  titulo: Opciones más baratas
+  texto: Inferencia por lotes o nivel Flex para lo que no necesita respuesta inmediata, y prompt caching para contextos repetidos.
+  seccion: 02-fundamentos-genai/teoria#compromisos-de-coste
+```
+
 > Los precios cambian y dependen de la Región: consulta siempre la [página de precios de Amazon Bedrock](https://aws.amazon.com/bedrock/pricing/). Lo que se evalúa es el **mecanismo** (entrada + salida, por modelo), no las cifras.
 
 #### Ingeniería de contexto
@@ -264,6 +316,53 @@ Piezas del contexto:
 - **Conocimiento recuperado**: fragmentos de documentos propios mediante RAG.
 - **Herramientas**: la descripción de las herramientas que el modelo puede usar y los resultados que devuelven.
 - **Ejemplos**: pares de entrada y salida que muestran lo que se espera (*few-shot*).
+
+Todo lo que el modelo «sabe» en una petición cabe en su ventana de contexto:
+
+```mermaid
+flowchart LR
+    subgraph VC["🪟 Ventana de contexto"]
+        direction TB
+        SYS["📋 <b>Instrucciones del sistema</b><br/>rol, reglas y formato"]
+        MEM["🧠 <b>Historial y memoria</b><br/>corto y largo plazo"]
+        RAG["📚 <b>Conocimiento recuperado</b><br/>fragmentos con RAG"]
+        HER["🔧 <b>Herramientas</b><br/>descripción y resultados"]
+        EJ["🧾 <b>Ejemplos</b><br/>few-shot"]
+        PQ["💬 <b>Pregunta del usuario</b>"]
+    end
+    VC --> FM["🤖 <b>Modelo fundacional</b><br/>sin memoria entre peticiones"]
+    FM --> R["✅ <b>Respuesta</b>"]
+    class SYS,MEM,RAG,HER,EJ,PQ dato
+    class FM gen
+    class R accion
+```
+
+```nodos
+VC:
+  concepto: ventana-de-contexto
+  seccion: 02-fundamentos-genai/teoria#ingeniería-de-contexto
+SYS:
+  concepto: instrucciones-del-sistema
+MEM:
+  concepto: memoria-del-agente
+  titulo: Historial y memoria
+  texto: Lo dicho en la sesión (corto plazo) y lo aprendido de sesiones anteriores, como las preferencias del usuario (largo plazo).
+RAG:
+  concepto: rag
+HER:
+  concepto: uso-de-herramientas
+EJ:
+  concepto: few-shot
+PQ:
+  titulo: Pregunta del usuario
+  texto: 'Sola, a veces no tiene sentido («¿y para mañana?»): el resto del contexto le da significado.'
+FM:
+  concepto: modelo-fundacional
+  texto: En cada llamada solo sabe lo que aprendió en el entrenamiento y lo que contiene la petición. La ingeniería de contexto decide qué entra en ella.
+R:
+  titulo: Respuesta
+  texto: 'Tan buena como el contexto que la acompaña: los datos de la empresa solo aparecen si alguien los pone en la petición.'
+```
 
 Por qué importa:
 
@@ -390,6 +489,52 @@ No existe «el mejor modelo»: se elige el que cumple los requisitos del caso al
 | Coste | ¿Precio por *token* de entrada y salida para el volumen previsto? | Millones de peticiones simples → modelo barato |
 | Latencia | ¿Respuesta interactiva o puede esperar? | Asistente de voz → modelo rápido; informes nocturnos → lotes |
 | Complejidad del modelo | ¿Hace falta un modelo grande o basta uno pequeño, más rápido y barato? | Un modelo más grande no siempre da más valor si la tarea es sencilla |
+
+Los criterios de la guía, empezando por los que descartan modelos:
+
+```mermaid
+flowchart TB
+    A["🗂️ <b>Catálogo de modelos</b>"] --> F3["🌍 <b>Restricciones y cumplimiento</b><br/>Región, cuotas, ajuste fino, residencia"]
+    F3 --> F1["🖼️ <b>Modalidad</b><br/>texto, imagen, voz, multimodal"]
+    F1 --> F2["🧠 <b>Rendimiento y capacidades</b><br/>calidad, razonamiento, herramientas, contexto"]
+    F2 --> F4["💶 <b>Coste, latencia y complejidad</b><br/>para el volumen previsto"]
+    F4 --> F5["🔬 <b>Evaluar con casos reales</b>"]
+    F5 --> R["✅ <b>El más pequeño que cumpla</b>"]
+    class A dato
+    class F1,F2,F3,F4 proceso
+    class F5 servicio
+    class R accion
+```
+
+```nodos
+A:
+  titulo: Catálogo
+  texto: 'No existe «el mejor modelo»: se elige el que cumple los requisitos del caso al menor coste.'
+  seccion: 02-fundamentos-genai/teoria#cómo-elegir-un-modelo
+F1:
+  concepto: modelo-multimodal
+  titulo: Tipo de modelo y modalidad
+  texto: ¿Texto, imagen, vídeo, voz o embeddings? ¿Varias entradas a la vez? Analizar fotos con una pregunta en texto exige un modelo multimodal.
+F2:
+  titulo: Rendimiento y capacidades
+  texto: La calidad que necesita la tarea y cuántas peticiones por minuto; razonamiento complejo, uso de herramientas, idiomas o una ventana de contexto grande (contratos de 300 páginas).
+F3:
+  concepto: residencia-de-datos
+  titulo: Restricciones y cumplimiento
+  texto: ¿Está disponible en la Región? ¿Cuotas? ¿Admite ajuste fino? ¿Residencia de datos, normativa o licencia? Si los datos no pueden salir de la UE, Región de la UE o inferencia entre Regiones limitada a la UE. Son los criterios que descartan modelos sin discusión.
+  seccion: 05-seguridad-gobierno/teoria#estrategias-de-gobierno-de-datos
+F4:
+  titulo: Coste, latencia y complejidad
+  texto: Precio por token de entrada y salida para el volumen previsto, si la respuesta debe ser interactiva o puede ir por lotes, y si hace falta un modelo grande o basta uno pequeño.
+  seccion: 02-fundamentos-genai/teoria#precios-por-tokens
+F5:
+  concepto: amazon-bedrock-model-evaluation
+  titulo: Evaluar con casos reales
+  texto: Amazon Bedrock permite comparar modelos con evaluaciones, y la API Converse permite cambiar de modelo modificando un solo parámetro.
+R:
+  titulo: El más pequeño que cumpla
+  texto: 'Un modelo más grande no siempre da más valor si la tarea es sencilla: es más caro y suele responder más despacio.'
+```
 
 Reglas prácticas:
 

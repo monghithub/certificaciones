@@ -168,6 +168,47 @@ Saber **de dónde sale** una respuesta o un modelo es una exigencia de seguridad
 | Los analistas deben encontrar qué conjuntos de datos existen y su esquema | **AWS Glue Data Catalog** |
 | El comité de riesgos quiere el uso previsto y los datos de entrenamiento de un modelo | **SageMaker Model Cards** |
 
+El caso del banco: qué herramienta responde a cada pregunta del auditor:
+
+```mermaid
+flowchart LR
+    CAT["📚 <b>AWS Glue Data Catalog</b><br/>de qué sistemas salió"] -.-> DS
+    subgraph LIN["🧬 Linaje del modelo"]
+        direction LR
+        DS["🗃️ <b>Conjunto de datos</b><br/>de marzo"] --> TJ["⚙️ <b>Trabajo de entrenamiento</b>"]
+        TJ --> MV["🏷️ <b>Modelo, versión 7</b>"]
+        MV --> EP["🚀 <b>Modelo en producción</b>"]
+    end
+    MC["🪪 <b>SageMaker Model Card</b><br/>uso previsto y evaluación"] -.-> MV
+    class DS dato
+    class TJ proceso
+    class MV ml
+    class EP accion
+    class CAT,MC servicio
+```
+
+```nodos
+LIN:
+  concepto: linaje-de-datos
+  seccion: 05-seguridad-gobierno/teoria#citación-de-fuentes-y-origen-de-los-datos
+CAT:
+  concepto: aws-glue-data-catalog
+DS:
+  titulo: Conjunto de datos
+  texto: Gracias al linaje, el banco sabe con qué conjunto (y qué versión) se entrenó el modelo que tomó la decisión.
+TJ:
+  titulo: Trabajo de entrenamiento
+  texto: El linaje enlaza los datos con el trabajo que los usó y con el modelo que produjo (SageMaker ML Lineage Tracking o MLflow).
+MV:
+  titulo: Versión del modelo
+  texto: La versión 7 es la que estaba en producción cuando se tomó la decisión reclamada.
+EP:
+  titulo: Modelo en producción
+  texto: Con toda la cadena, el banco puede reconstruir y justificar la decisión ante el cliente y el auditor.
+MC:
+  concepto: amazon-sagemaker-model-cards
+```
+
 *Ejemplo de negocio:* un banco recibe una reclamación sobre una decisión de su modelo de riesgo. Gracias al linaje sabe que la versión 7 se entrenó con el conjunto de marzo; el catálogo indica de qué sistemas salió ese conjunto; la Model Card recoge su uso previsto y su evaluación. Puede reconstruir y justificar la decisión.
 
 #### Ingeniería de datos segura
@@ -180,6 +221,50 @@ Las buenas prácticas que cita la guía:
 | **Tecnologías de mejora de la privacidad** (*privacy-enhancing technologies*) | Usar los datos protegiendo a las personas: minimización, anonimización, seudonimización o tokenización, enmascarado, privacidad diferencial y datos sintéticos | Filtros de información sensible de Guardrails, Macie para localizar PII; AWS Clean Rooms existe pero está fuera del alcance del examen |
 | **Control de acceso a los datos** | Cada persona o sistema accede solo a los datos que necesita | **IAM**, políticas de *bucket* de S3 y **Lake Formation** (permisos por columna, fila y celda) |
 | **Integridad de los datos** | Los datos no se alteran sin control: versiones, registros y protección frente al **envenenamiento** | Versionado de S3, CloudTrail, permisos de escritura mínimos |
+
+Las cuatro prácticas sobre el camino de los datos hasta el modelo:
+
+```mermaid
+flowchart TB
+    subgraph PROT["🔐 Con acceso e integridad"]
+        direction TB
+        RAW["🗃️ <b>Datos en bruto</b>"] --> QA["🧹 <b>Calidad</b><br/>completos, correctos, actuales"]
+        QA --> PRIV["🕶️ <b>Privacidad</b><br/>minimizar, seudonimizar, enmascarar"]
+        PRIV --> TR["🏋️ <b>Entrenamiento o ajuste fino</b><br/>sin datos personales"]
+        PRIV --> RG["📚 <b>RAG en la inferencia</b><br/>datos personales con permisos"]
+    end
+    class RAW dato
+    class QA,PRIV proceso
+    class TR ml
+    class RG gen
+```
+
+```nodos
+PROT:
+  titulo: Control de acceso e integridad
+  texto: 'Dos prácticas que abarcan todo el recorrido: cada persona o sistema accede solo a lo que necesita (IAM, políticas de bucket de S3 y Lake Formation, con permisos por columna, fila y celda), y los datos no se alteran sin control (versionado de S3, CloudTrail, permisos de escritura mínimos, protección frente al envenenamiento).'
+  enlaces:
+  - texto: AWS Lake Formation
+    url: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
+  seccion: 05-seguridad-gobierno/teoria#ingeniería-de-datos-segura
+RAW:
+  titulo: Datos en bruto
+  texto: Los datos tal como llegan de los sistemas de origen, con posibles errores y datos personales.
+QA:
+  concepto: aws-glue-data-quality
+  titulo: Evaluar la calidad
+  texto: Comprobar que los datos son completos, correctos, coherentes y actuales antes de usarlos, por ejemplo con AWS Glue Data Quality.
+PRIV:
+  concepto: tecnologias-de-mejora-de-la-privacidad
+TR:
+  titulo: Entrenamiento o ajuste fino
+  texto: 'Es más seguro no meter datos personales en el modelo que intentar sacarlos después: borrar los datos de una persona puede obligar a reentrenar.'
+RG:
+  concepto: rag
+  titulo: RAG en la inferencia
+  texto: 'Si hacen falta datos personales, mejor recuperarlos en cada petición con RAG, comprobando antes los permisos de quien pregunta: se pueden borrar sin reentrenar.'
+  seccion: 05-seguridad-gobierno/teoria#estrategias-de-gobierno-de-datos
+```
 
 *Ejemplo resuelto de minimización y seudonimización* (adaptado del *Responsible AI Lens*): el registro «Juan Pérez, diabético, calle Mayor 12» se transforma en «Paciente_2384, afección_tipo_2, zona_14». Mantiene el valor analítico (tipo de afección, zona) y reduce mucho la posibilidad de identificar a la persona. Ojo: según el RGPD, los datos seudonimizados siguen siendo datos personales; solo los anonimizados de forma irreversible dejan de serlo.
 
@@ -201,6 +286,70 @@ La guía enumera las consideraciones que hay que reconocer. Las de la columna iz
 | **Filtrado y validación de la salida** (IA) | Que la respuesta sea segura y tenga el formato esperado | Guardrails, validación de formato y de reglas de negocio |
 | **Registro y auditoría de las interacciones** (IA) | Saber qué se preguntó, qué se respondió y quién lo hizo | **CloudTrail** (llamadas a la API) y **registro de invocaciones de Bedrock** (*prompts* y respuestas) en CloudWatch Logs o S3 |
 | **Toxicidad** (IA) | Contenido ofensivo o dañino | Filtros de contenido de Guardrails, evaluaciones de toxicidad |
+
+Los controles específicos de la IA sobre el recorrido de una petición:
+
+```mermaid
+flowchart TB
+    U["👤 <b>Usuario autenticado</b><br/>seguridad de la aplicación"] --> IN{"🛡️ <b>¿Inyección o contenido<br/>prohibido?</b>"}
+    IN -->|"sí"| BL["⛔ <b>Bloqueo o enmascarado</b>"]
+    IN -->|"no"| CTX["🔐 <b>Control de acceso</b><br/>antes de añadir datos al contexto"]
+    CTX --> FM["🧠 <b>Modelo</b>"]
+    FM --> OUT{"🔍 <b>¿La salida filtra datos,<br/>es tóxica o no es válida?</b>"}
+    OUT -->|"sí"| BL
+    OUT -->|"no"| R["✅ <b>Respuesta</b>"]
+    subgraph TRV["🧱 En todo el recorrido"]
+        direction LR
+        LOG["🧾 <b>Registro y auditoría</b><br/>CloudTrail e invocaciones"]
+        KMS["🔑 <b>Cifrado</b><br/>KMS y TLS"]
+    end
+    class U dato
+    class IN,OUT decision
+    class BL aviso
+    class CTX proceso
+    class FM gen
+    class R accion
+    class LOG,KMS servicio
+```
+
+```nodos
+U:
+  titulo: Seguridad de la aplicación
+  texto: La aplicación que llama al modelo autentica a los usuarios, valida las entradas y aplica el mínimo privilegio.
+  seccion: 05-seguridad-gobierno/teoria#consideraciones-de-seguridad-y-privacidad
+IN:
+  concepto: prompt-injection
+  titulo: Filtro de entrada
+  texto: El filtro de ataques de prompt de Guardrails, la separación de instrucciones y datos y el mínimo privilegio de los agentes frenan la inyección; los filtros de contenido frenan las entradas tóxicas o prohibidas.
+TRV:
+  titulo: Controles transversales
+  texto: 'El cifrado y el registro no son un paso: protegen y dejan rastro de todo el recorrido.'
+  seccion: 05-seguridad-gobierno/teoria#consideraciones-de-seguridad-y-privacidad
+BL:
+  concepto: amazon-bedrock-guardrails
+  titulo: Bloqueo o enmascarado
+  texto: Con Guardrails, la entrada o la respuesta que infringe una política se bloquea o, en el caso de la información sensible, se enmascara. La validación del formato y de las reglas de negocio la hace la aplicación.
+CTX:
+  titulo: Control de acceso antes del contexto
+  texto: 'Los modelos fundacionales no controlan el acceso a los datos que reciben: la aplicación debe comprobar los permisos antes de añadir datos a la petición.'
+FM:
+  concepto: modelo-fundacional
+OUT:
+  concepto: validacion-de-la-salida
+  titulo: Filtrado y validación de la salida
+  texto: Filtros de información sensible para evitar fugas, filtros de contenido contra la toxicidad y validación del formato y de las reglas de negocio.
+R:
+  titulo: Respuesta
+  texto: Solo llega al usuario lo que ha pasado todos los controles.
+LOG:
+  concepto: registro-de-invocaciones
+  titulo: Registro y auditoría
+  texto: CloudTrail registra quién llamó a qué API y cuándo; el registro de invocaciones de Bedrock guarda los prompts y las respuestas.
+KMS:
+  concepto: aws-kms
+  titulo: Cifrado en reposo y en tránsito
+  texto: AWS KMS para los datos almacenados y TLS para los datos en movimiento.
+```
 
 Matices que separan opciones parecidas:
 
@@ -338,6 +487,40 @@ TA:
 | **Retención** (*retention*) | Cuánto tiempo se guardan los datos y los registros | Retención de los grupos de CloudWatch Logs (**indefinida por defecto**), expiración de S3, modos de retención de datos de Bedrock |
 
 *Ejemplo resuelto de ciclo de vida:* una aseguradora guarda los registros de invocación de su asistente en S3. Su política dice: 90 días en S3 Standard para investigar incidencias, después a S3 Glacier hasta cumplir 5 años por la normativa y luego borrado. Con una regla de S3 Lifecycle de transición a los 90 días y de expiración a los 1 825 días (5 × 365), el cumplimiento es automático y no depende de que alguien se acuerde.
+
+La política de la aseguradora como línea de tiempo:
+
+```mermaid
+flowchart LR
+    LOG["🧾 <b>Registro de invocación</b><br/>se guarda en S3"] -->|"días 0 a 90"| STD["🪣 <b>S3 Standard</b><br/>investigar incidencias"]
+    STD -->|"transición a los 90 días"| GL["🧊 <b>S3 Glacier</b><br/>conservar por normativa"]
+    GL -->|"expiración el día 1 825<br/>desde la creación"| DEL["🗑️ <b>Borrado</b><br/>a los 5 años"]
+    RULE["⚙️ <b>Regla de S3 Lifecycle</b><br/>lo aplica sin intervención"] -.-> STD
+    RULE -.-> GL
+    class LOG dato
+    class STD,GL servicio
+    class DEL aviso
+    class RULE accion
+```
+
+```nodos
+LOG:
+  concepto: registro-de-invocaciones
+  seccion: 05-seguridad-gobierno/teoria#estrategias-de-gobierno-de-datos
+STD:
+  titulo: S3 Standard
+  texto: Los primeros 90 días los registros están a mano para investigar incidencias.
+GL:
+  concepto: amazon-s3-glacier
+  texto: Después pasan a una clase de archivo más barata hasta cumplir los 5 años que exige la normativa.
+DEL:
+  concepto: retencion-de-datos
+  titulo: Borrado
+  texto: 'A los 1 825 días (5 × 365) la regla los expira: no se guardan más de lo necesario.'
+RULE:
+  concepto: s3-lifecycle
+  texto: 'Una regla con transición a los 90 días y expiración a los 1 825: el cumplimiento es automático y no depende de que alguien se acuerde.'
+```
 
 Otras ideas que el examen puede plantear:
 
