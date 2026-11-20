@@ -40,6 +40,104 @@
     - {texto: "Modelos de Amazon Bedrock por Región", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/models-region-compatibility.html"}
   referencia: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
 
+- id: computacion-en-la-nube
+  termino: computación en la nube
+  alias: [cloud computing]
+  categoria: concepto
+  definicion: "Entrega bajo demanda, por internet y con pago por uso, de capacidad de cómputo, bases de datos, almacenamiento, aplicaciones y otros recursos de TI, en lugar de comprar y mantener centros de datos y servidores propios."
+  enlaces:
+    - {texto: "Seis ventajas de la computación en la nube", url: "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"}
+    - {texto: "Modelos de despliegue", url: "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"}
+  referencia: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/what-is-cloud-computing.html
+
+- id: nube-hibrida
+  termino: nube híbrida
+  alias: [despliegue híbrido, hybrid cloud]
+  categoria: concepto
+  definicion: "Modelo de despliegue que conecta recursos de la nube con recursos que siguen fuera de ella, normalmente en el centro de datos propio. Los otros dos modelos son la nube (todo en la nube) y el local u on-premises (todo en el centro de datos propio, también llamado nube privada)."
+  usar_cuando: "Cuando parte de la carga debe quedarse en las instalaciones propias (sistemas heredados, ubicación de los datos) y otra parte se lleva a la nube."
+  no_usar_cuando: "Si toda la aplicación puede ejecutarse en la nube: un despliegue solo en la nube es más sencillo de operar."
+  referencia: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html
+
+- id: iaas
+  termino: IaaS (Infrastructure as a Service)
+  alias: [IaaS, Infrastructure as a Service, infraestructura como servicio]
+  categoria: concepto
+  definicion: "Tipo de servicio en la nube que ofrece los bloques básicos de TI (cómputo, almacenamiento y red). El cliente gestiona el sistema operativo, el software, la aplicación y los datos. AWS cita Amazon EC2 como ejemplo."
+  usar_cuando: "Cuando se necesita el máximo control sobre el servidor y su sistema operativo."
+  no_usar_cuando: "Cuando no se quiere gestionar servidores: un servicio más gestionado (AWS Lambda, Amazon Bedrock, un servicio de IA preentrenado) reduce las tareas operativas."
+  referencia: https://aws.amazon.com/compliance/shared-responsibility-model/
+
+- id: paas
+  termino: PaaS (Platform as a Service)
+  alias: [PaaS, Platform as a Service, plataforma como servicio]
+  categoria: concepto
+  definicion: "Tipo de servicio en la nube que ofrece una plataforma para desarrollar y mantener aplicaciones sin gestionar la infraestructura de debajo. El cliente gestiona su aplicación y sus datos."
+  usar_cuando: "Cuando el equipo quiere centrarse en su código y no en el sistema operativo ni en la infraestructura."
+  no_usar_cuando: "Cuando hace falta controlar el sistema operativo o el hardware: IaaS (Amazon EC2)."
+  referencia: https://aws.amazon.com/types-of-cloud-computing/
+
+- id: saas
+  termino: SaaS (Software as a Service)
+  alias: [SaaS, Software as a Service, software como servicio]
+  categoria: concepto
+  definicion: "Tipo de servicio en la nube en el que el proveedor ejecuta y gestiona una aplicación completa; el usuario solo la usa y la configura. El ejemplo clásico es el correo web."
+  usar_cuando: "Cuando una aplicación ya hecha cubre la necesidad y no se quiere desarrollar ni operar nada."
+  no_usar_cuando: "Cuando hay que construir una aplicación propia: PaaS o IaaS."
+  referencia: https://aws.amazon.com/types-of-cloud-computing/
+
+- id: zona-de-disponibilidad
+  termino: zona de disponibilidad
+  alias: [zonas de disponibilidad, Availability Zone, Availability Zones, AZ]
+  categoria: concepto
+  definicion: "Uno o varios centros de datos separados, con alimentación, red y conectividad redundantes, dentro de una Región de AWS. Cada Región tiene al menos tres. Repartir una aplicación entre varias zonas permite diseñar aplicaciones de alta disponibilidad."
+  enlaces:
+    - {texto: "Infraestructura global de AWS", url: "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html"}
+  referencia: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html
+
+- id: aws-local-zones
+  termino: AWS Local Zones
+  alias: [Local Zones, Local Zone]
+  categoria: concepto
+  definicion: "Extensiones de una Región que acercan cómputo, almacenamiento, bases de datos y otros servicios a grandes núcleos de población e industria, para dar latencia muy baja a los usuarios de esa zona."
+  usar_cuando: "Cuando una aplicación necesita latencia de milisegundos de un dígito para usuarios de una ciudad concreta."
+  no_usar_cuando: "Para entregar contenido estático o en caché a usuarios de todo el mundo: Amazon CloudFront y sus ubicaciones de borde."
+  referencia: https://docs.aws.amazon.com/local-zones/latest/ug/what-is-aws-local-zones.html
+
+- id: ubicacion-de-borde
+  termino: ubicación de borde
+  alias: [ubicaciones de borde, edge location, edge locations, punto de presencia]
+  categoria: concepto
+  definicion: "Centro de datos de la red mundial de Amazon CloudFront donde se guardan copias en caché del contenido para entregarlo desde el punto más cercano al usuario, con menos latencia."
+  referencia: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html
+
+- id: dedicated-hosts
+  termino: Dedicated Hosts
+  alias: [Dedicated Host, hosts dedicados]
+  categoria: concepto
+  definicion: "Opción de compra de Amazon EC2: un servidor físico dedicado por completo al cliente. Permite usar licencias de software existentes por socket, por núcleo o por máquina virtual, o cumplir el requisito de ejecutar en hardware dedicado."
+  usar_cuando: "Para reutilizar licencias ligadas al hardware o cuando se exige hardware dedicado."
+  no_usar_cuando: "Si solo se busca ahorrar: Savings Plans, Reserved Instances o Spot Instances."
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html
+
+- id: aws-pricing-calculator
+  termino: AWS Pricing Calculator
+  alias: [Pricing Calculator, calculadora de precios de AWS]
+  categoria: servicio
+  definicion: "Herramienta web gratuita para estimar el coste de usar servicios de AWS antes de desplegarlos, según la Región y el uso previsto. Es una estimación y no incluye impuestos."
+  usar_cuando: "Para presupuestar una arquitectura antes de crearla."
+  no_usar_cuando: "Para recibir avisos cuando el gasto real supera un umbral (AWS Budgets) o para analizar el gasto ya hecho (AWS Cost Explorer)."
+  referencia: https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html
+
+- id: iam-access-analyzer
+  termino: IAM Access Analyzer
+  alias: [Access Analyzer]
+  categoria: servicio
+  definicion: "Funcionalidad de IAM que identifica recursos compartidos con entidades externas a la cuenta u organización y accesos concedidos que no se usan. También valida políticas y puede generarlas a partir de la actividad registrada en AWS CloudTrail."
+  usar_cuando: "Para revisar permisos y acercarse al mínimo privilegio."
+  no_usar_cuando: "Para descubrir datos sensibles en Amazon S3 (Amazon Macie) o auditar quién hizo cada llamada (AWS CloudTrail)."
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html
+
 - id: aws-iam
   termino: AWS Identity and Access Management (IAM)
   alias: [IAM, AWS IAM, AWS Identity and Access Management]
@@ -529,8 +627,8 @@
   termino: Savings Plans
   alias: [Savings Plan]
   categoria: concepto
-  definicion: "Modelo de precios que reduce el coste de Amazon EC2 a cambio de comprometerse a un uso constante, en dólares por hora, durante 1 o 3 años."
-  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+  definicion: "Modelo de precios que reduce el coste a cambio de comprometerse a un uso constante, en dólares por hora, durante 1 o 3 años. Hay varios tipos, entre ellos de cómputo, de instancias de EC2 y de Amazon SageMaker AI. El compromiso no se puede cambiar después de comprarlo."
+  referencia: https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html
 
 - id: reserved-instances
   termino: Reserved Instances

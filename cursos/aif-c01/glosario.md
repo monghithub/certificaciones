@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 237 términos.
+Total: 248 términos.
 
 ## A
 
@@ -150,6 +150,8 @@ Total: 237 términos.
   - Usar cuando: Para analizar texto: opiniones de clientes, entidades o temas de un conjunto de documentos.
   - No usar cuando: Cuando el problema no es de lenguaje natural: imágenes (Amazon Rekognition) o datos tabulares (Amazon SageMaker AI).
   - Referencia: <https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html>
+- **computación en la nube** (cloud computing). *Concepto.* Entrega bajo demanda, por internet y con pago por uso, de capacidad de cómputo, bases de datos, almacenamiento, aplicaciones y otros recursos de TI, en lugar de comprar y mantener centros de datos y servidores propios.
+  - Referencia: <https://docs.aws.amazon.com/whitepapers/latest/aws-overview/what-is-cloud-computing.html>
 - **AWS Config** (Config). *Servicio.* Servicio que registra la configuración de los recursos de AWS, cómo se relacionan y cómo ha cambiado con el tiempo, y la evalúa con reglas y paquetes de conformidad.
   - Usar cuando: Para comprobar que los recursos de un sistema de IA cumplen reglas (cifrado, acceso público) y ver su historial de configuración.
   - No usar cuando: Para saber quién hizo una llamada a la API (CloudTrail).
@@ -183,6 +185,10 @@ Total: 237 términos.
   - Referencia: <https://aws.amazon.com/what-is/data-labeling/>
 - **decisiones con consecuencias** (consequential decisions). *Concepto.* Decisiones que afectan a derechos, salud o seguridad de las personas (diagnóstico médico, crédito, empleo, vivienda, prestaciones, asesoramiento legal o financiero). Según la política de AWS, exigen evaluar riesgos e implantar supervisión humana y pruebas.
   - Referencia: <https://aws.amazon.com/ai/responsible-ai/policy/>
+- **Dedicated Hosts** (Dedicated Host, hosts dedicados). *Concepto.* Opción de compra de Amazon EC2: un servidor físico dedicado por completo al cliente. Permite usar licencias de software existentes por socket, por núcleo o por máquina virtual, o cumplir el requisito de ejecutar en hardware dedicado.
+  - Usar cuando: Para reutilizar licencias ligadas al hardware o cuando se exige hardware dedicado.
+  - No usar cuando: Si solo se busca ahorrar: Savings Plans, Reserved Instances o Spot Instances.
+  - Referencia: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html>
 - **deriva** (deriva del modelo, deriva de datos, drift). *Concepto.* Cambio con el tiempo de los datos de producción (o de la relación entre entradas y resultados) respecto a los de entrenamiento, que degrada la calidad del modelo. Se detecta monitorizando y se corrige reentrenando.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html>
 - **desequilibrio de clases** (class imbalance). *Métrica.* Métrica de sesgo previa al entrenamiento: CI = (na − nd) / (na + nd), con na y nd el número de miembros de cada grupo. Va de −1 a 1; cerca de 0 indica grupos equilibrados.
@@ -299,6 +305,14 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/decision-guides/latest/generative-ai-on-aws-how-to-choose/guide.html>
 - **IA responsable** (responsible AI). *Concepto.* Disciplina de diseñar, desarrollar y usar la IA con el objetivo de maximizar los beneficios y minimizar los riesgos. AWS la concreta en dimensiones: equidad, explicabilidad, privacidad y seguridad, seguridad frente a daños, controlabilidad, veracidad y robustez, gobierno y transparencia.
   - Referencia: <https://aws.amazon.com/ai/responsible-ai/>
+- **IaaS (Infrastructure as a Service)** (IaaS, Infrastructure as a Service, infraestructura como servicio). *Concepto.* Tipo de servicio en la nube que ofrece los bloques básicos de TI (cómputo, almacenamiento y red). El cliente gestiona el sistema operativo, el software, la aplicación y los datos. AWS cita Amazon EC2 como ejemplo.
+  - Usar cuando: Cuando se necesita el máximo control sobre el servidor y su sistema operativo.
+  - No usar cuando: Cuando no se quiere gestionar servidores: un servicio más gestionado (AWS Lambda, Amazon Bedrock, un servicio de IA preentrenado) reduce las tareas operativas.
+  - Referencia: <https://aws.amazon.com/compliance/shared-responsibility-model/>
+- **IAM Access Analyzer** (Access Analyzer). *Servicio.* Funcionalidad de IAM que identifica recursos compartidos con entidades externas a la cuenta u organización y accesos concedidos que no se usan. También valida políticas y puede generarlas a partir de la actividad registrada en AWS CloudTrail.
+  - Usar cuando: Para revisar permisos y acercarse al mínimo privilegio.
+  - No usar cuando: Para descubrir datos sensibles en Amazon S3 (Amazon Macie) o auditar quién hizo cada llamada (AWS CloudTrail).
+  - Referencia: <https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html>
 - **AWS Identity and Access Management (IAM)** (IAM, AWS IAM, AWS Identity and Access Management). *Servicio.* Servicio que controla de forma segura el acceso a los recursos de AWS: quién está autenticado (ha iniciado sesión) y quién está autorizado (tiene permisos) para usar qué recursos.
   - No usar cuando: No es un servicio de datos ni de cómputo: no sustituye al cifrado (AWS KMS) ni a los controles de la propia aplicación.
   - Referencia: <https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html>
@@ -385,6 +399,10 @@ Total: 237 términos.
   - Referencia: <https://aws.amazon.com/what-is/large-language-model/>
 - **LLM-as-a-judge** (modelo juez, LLM como juez). *Técnica.* Evaluación en la que un segundo modelo puntúa las respuestas de otro con una rúbrica (corrección, fidelidad, relevancia, tono…) y explica la nota. Escala bien, pero el juez debe validarse con personas y conviene que sea de otra familia de modelos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html>
+- **AWS Local Zones** (Local Zones, Local Zone). *Concepto.* Extensiones de una Región que acercan cómputo, almacenamiento, bases de datos y otros servicios a grandes núcleos de población e industria, para dar latencia muy baja a los usuarios de esa zona.
+  - Usar cuando: Cuando una aplicación necesita latencia de milisegundos de un dígito para usuarios de una ciudad concreta.
+  - No usar cuando: Para entregar contenido estático o en caché a usuarios de todo el mundo: Amazon CloudFront y sus ubicaciones de borde.
+  - Referencia: <https://docs.aws.amazon.com/local-zones/latest/ug/what-is-aws-local-zones.html>
 
 ## M
 
@@ -432,6 +450,10 @@ Total: 237 términos.
   - Usar cuando: Cuando se busca un modelo fundacional propio de Amazon dentro de Bedrock, por ejemplo por precio-rendimiento.
   - No usar cuando: Cuando basta un servicio de IA especializado (Comprehend, Rekognition, Textract…) o un modelo de ML tradicional (SageMaker AI) para una tarea acotada.
   - Referencia: <https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html>
+- **nube híbrida** (despliegue híbrido, hybrid cloud). *Concepto.* Modelo de despliegue que conecta recursos de la nube con recursos que siguen fuera de ella, normalmente en el centro de datos propio. Los otros dos modelos son la nube (todo en la nube) y el local u on-premises (todo en el centro de datos propio, también llamado nube privada).
+  - Usar cuando: Cuando parte de la carga debe quedarse en las instalaciones propias (sistemas heredados, ubicación de los datos) y otra parte se lleva a la nube.
+  - No usar cuando: Si toda la aplicación puede ejecutarse en la nube: un despliegue solo en la nube es más sencillo de operar.
+  - Referencia: <https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html>
 
 ## O
 
@@ -446,6 +468,10 @@ Total: 237 términos.
 
 ## P
 
+- **PaaS (Platform as a Service)** (PaaS, Platform as a Service, plataforma como servicio). *Concepto.* Tipo de servicio en la nube que ofrece una plataforma para desarrollar y mantener aplicaciones sin gestionar la infraestructura de debajo. El cliente gestiona su aplicación y sus datos.
+  - Usar cuando: Cuando el equipo quiere centrarse en su código y no en el sistema operativo ni en la infraestructura.
+  - No usar cuando: Cuando hace falta controlar el sistema operativo o el hardware: IaaS (Amazon EC2).
+  - Referencia: <https://aws.amazon.com/types-of-cloud-computing/>
 - **parámetros de inferencia** (inference parameters, temperatura de muestreo, top-p, Top-p, top-k, Top-k). *Concepto.* Ajustes de cada petición que cambian la generación. La temperatura baja favorece los tokens más probables (respuestas más deterministas) y la alta da más variedad; top-k limita a los k candidatos más probables; top-p, a los que suman una proporción de la probabilidad acumulada; la longitud máxima limita la respuesta.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html>
 - **Amazon Personalize** (Personalize). *Servicio.* Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad.
@@ -474,6 +500,10 @@ Total: 237 términos.
   - Usar cuando: Cuando el modelo no conoce la jerga de un dominio y hay mucho texto propio sin etiquetar.
   - No usar cuando: Cuando el problema es la información actualizada (RAG) o una tarea concreta con ejemplos etiquetados (fine-tuning).
   - Referencia: <https://aws.amazon.com/bedrock/faqs/>
+- **AWS Pricing Calculator** (Pricing Calculator, calculadora de precios de AWS). *Servicio.* Herramienta web gratuita para estimar el coste de usar servicios de AWS antes de desplegarlos, según la Región y el uso previsto. Es una estimación y no incluye impuestos.
+  - Usar cuando: Para presupuestar una arquitectura antes de crearla.
+  - No usar cuando: Para recibir avisos cuando el gasto real supera un umbral (AWS Budgets) o para analizar el gasto ya hecho (AWS Cost Explorer).
+  - Referencia: <https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html>
 - **AWS PrivateLink** (PrivateLink). *Servicio.* Conectividad privada entre una VPC y servicios de AWS (como Amazon Bedrock) mediante endpoints de interfaz, sin exponer el tráfico a internet.
   - Usar cuando: Cuando el tráfico hacia el servicio no debe pasar por internet.
   - No usar cuando: Como sustituto de los permisos (IAM) o del cifrado (AWS KMS).
@@ -567,6 +597,10 @@ Total: 237 términos.
   - Usar cuando: Miles de millones de vectores al menor coste, con consultas poco frecuentes.
   - No usar cuando: Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo: Amazon OpenSearch Service.
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html>
+- **SaaS (Software as a Service)** (SaaS, Software as a Service, software como servicio). *Concepto.* Tipo de servicio en la nube en el que el proveedor ejecuta y gestiona una aplicación completa; el usuario solo la usa y la configura. El ejemplo clásico es el correo web.
+  - Usar cuando: Cuando una aplicación ya hecha cubre la necesidad y no se quiere desarrollar ni operar nada.
+  - No usar cuando: Cuando hay que construir una aplicación propia: PaaS o IaaS.
+  - Referencia: <https://aws.amazon.com/types-of-cloud-computing/>
 - **Amazon SageMaker AI** (SageMaker AI, SageMaker). *Servicio.* Servicio totalmente gestionado de aprendizaje automático para construir, entrenar y desplegar modelos propios en un entorno de alojamiento listo para producción. Antes del 3 de diciembre de 2024 se llamaba Amazon SageMaker; desde esa fecha, «Amazon SageMaker» es el nombre de una plataforma unificada de datos, analítica e IA que incluye SageMaker AI.
   - Usar cuando: Cuando hace falta un modelo propio y la máxima flexibilidad y control sobre el algoritmo.
   - No usar cuando: Cuando un servicio de IA preentrenado (Rekognition, Comprehend, Transcribe…) o un modelo fundacional de Amazon Bedrock resuelve el caso con menos esfuerzo.
@@ -602,8 +636,8 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html>
 - **satisfacción del usuario** (user satisfaction, CSAT). *Métrica.* Valoración de los usuarios de una aplicación de IA: encuestas (CSAT), votos positivos o negativos y quejas.
   - Referencia: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html>
-- **Savings Plans** (Savings Plan). *Concepto.* Modelo de precios que reduce el coste de Amazon EC2 a cambio de comprometerse a un uso constante, en dólares por hora, durante 1 o 3 años.
-  - Referencia: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>
+- **Savings Plans** (Savings Plan). *Concepto.* Modelo de precios que reduce el coste a cambio de comprometerse a un uso constante, en dólares por hora, durante 1 o 3 años. Hay varios tipos, entre ellos de cómputo, de instancias de EC2 y de Amazon SageMaker AI. El compromiso no se puede cambiar después de comprarlo.
+  - Referencia: <https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html>
 - **AWS Secrets Manager** (Secrets Manager). *Servicio.* Servicio para guardar, recuperar y rotar credenciales de bases de datos, claves de API, tokens OAuth y otros secretos, para no escribirlos en el código de las aplicaciones.
   - Usar cuando: Para las claves de API y credenciales que usan las herramientas de un agente o una aplicación de IA.
   - No usar cuando: Para claves de cifrado (KMS) o credenciales de AWS (IAM).
@@ -679,6 +713,8 @@ Total: 237 términos.
 
 ## U
 
+- **ubicación de borde** (ubicaciones de borde, edge location, edge locations, punto de presencia). *Concepto.* Centro de datos de la red mundial de Amazon CloudFront donde se guardan copias en caché del contenido para entregarlo desde el punto más cercano al usuario, con menos latencia.
+  - Referencia: <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html>
 - **uso de herramientas** (tool use, llamadas a herramientas, function calling). *Concepto.* Capacidad de un modelo para decidir qué herramienta (API, función, base de datos) llamar y con qué parámetros. La aplicación o la plataforma la ejecuta y devuelve el resultado al modelo.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html>
 - **usuario raíz** (root user). *Concepto.* Identidad de inicio de sesión con la que empieza toda cuenta de AWS, con acceso completo a todos los servicios y recursos. AWS recomienda no usarla en las tareas diarias.
@@ -711,3 +747,5 @@ Total: 237 términos.
 
 - **zero-shot** (zero-shot prompting). *Técnica.* Técnica de prompt que pide la tarea sin incluir ejemplos. Sirve para tareas que el modelo ya hace bien.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html>
+- **zona de disponibilidad** (zonas de disponibilidad, Availability Zone, Availability Zones, AZ). *Concepto.* Uno o varios centros de datos separados, con alimentación, red y conectividad redundantes, dentro de una Región de AWS. Cada Región tiene al menos tres. Repartir una aplicación entre varias zonas permite diseñar aplicaciones de alta disponibilidad.
+  - Referencia: <https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html>

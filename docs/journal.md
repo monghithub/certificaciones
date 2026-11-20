@@ -325,3 +325,30 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Diseño:** el cuadro se genera del glosario para que no se desactualice; la categoría y el alcance salen de `fuentes/servicios-alcance.md`, y los módulos, de los `servicios.md`. Los 51 servicios *in scope* ya tenían entrada en el glosario.
 - **Lección de Mermaid:** dentro de un subgrupo, `direction TB` pone en fila las cajas sin enlaces y `direction LR` las apila; las flechas que cruzan subgrupos desordenan el diagrama: mejor enlazar subgrupos enteros y usar `~~~` para colocar un bloque.
 - **Verificación:** 270 pruebas de pytest (6 nuevas), validador, 4/4 diagramas válidos y navegador (enlace en el menú, 80 filas en 13 grupos, iconos, filtro, modal, claro, oscuro y móvil, sin errores de consola).
+
+### Revisión con las guías de estudio: módulo 00 (#31)
+
+- Petición: «revisar tema por tema y confrontarlo con la información de los libros .md […] haz una issue por apartado del curso para ir capítulo a capítulo de la certificación en la web validando». Issues #31 a #37 (módulos 00 a 05 y, al final, simulacro, chuleta, glosario y mapa). Se empieza por el 00.
+- Material: las dos guías de estudio de 2025 en Markdown y sus 201 preguntas de práctica, en titan y fuera del repositorio (`CLAUDE.local.md`). No se copia nada; cada dato se comprueba y se cita en `docs.aws.amazon.com` o `aws.amazon.com`.
+- Rama `aif-c01/revision-libros-00`. Mantenimiento de contenido sin requisitos nuevos de la consola: sin cambio de OpenSpec (como #26).
+- **Hallazgos para el 00** (Taulli, cap. 1 y 2; preguntas TAU-C2 y TAU-PE-1 a 6):
+
+  | Tema | Estado antes | Qué se hizo |
+  |---|---|---|
+  | Qué es la nube y sus ventajas | Faltaba | Definición de AWS y las seis ventajas |
+  | Modelos de despliegue (nube, híbrido, local) | Faltaba | Tabla con cuándo encaja cada uno |
+  | IaaS, PaaS y SaaS | Faltaba (lo preguntan dos cuestionarios) | Tabla, diagrama anidado y relación con la responsabilidad compartida |
+  | Zonas de disponibilidad, Local Zones y ubicaciones de borde | Solo había Regiones | Apartado «Infraestructura global» con diagrama |
+  | Responsabilidad compartida | Faltaban el cifrado, los servicios abstraídos y los controles compartidos | Añadidos |
+  | IAM | Faltaba Access Analyzer | Añadido |
+  | Precios | Faltaban el aviso de Spot, Dedicated Hosts, los tipos de Savings Plans y Pricing Calculator | Añadidos; el glosario decía que Savings Plans era solo para EC2 |
+  | Responsabilidad compartida básica, IAM, EC2, S3, Lambda | Ya cubierto | Sin cambios |
+
+- **Discrepancias de los libros con la documentación vigente** (prevalece la documentación):
+  - Uno de los libros dice que Amazon VPC permite lanzar recursos en las instalaciones del cliente: es AWS Outposts; VPC es una red virtual dentro de AWS.
+  - Una zona de disponibilidad no es «varios» centros de datos, sino **uno o varios**.
+  - Capa gratuita: los libros describen la de 12 meses; desde julio de 2025 son créditos y un plan gratuito de hasta seis meses (el curso ya lo recogía).
+  - Ejemplos de SaaS de AWS que ya no sirven: Amazon Chime dejó de tener soporte el 20 de febrero de 2026 y la página de Amazon WorkDocs ya no existe. AWS no clasifica sus servicios como PaaS o SaaS: el curso usa la distinción oficial entre servicios de infraestructura y servicios abstraídos.
+  - Los libros dan 36 Regiones o similares; la documentación consultada da 34 y la portada de AWS, 39. El curso no cita la cifra.
+- **Verificación:** validador sin avisos, cobertura (CP 4/4, 33 de repaso), 270 pruebas de pytest y 7/7 diagramas Mermaid válidos.
+

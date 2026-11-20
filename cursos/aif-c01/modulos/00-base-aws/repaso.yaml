@@ -701,3 +701,247 @@
     c: Peticiones y duración es como se factura AWS Lambda.
     d: Las horas de capacidad reservada corresponden a Bedrock Provisioned Throughput, no al modo on-demand.
   referencia: https://aws.amazon.com/bedrock/pricing/
+- id: R0-025
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Cómo define AWS la computación en la nube?
+  opciones:
+  - id: a
+    texto: La entrega bajo demanda, por internet y con pago por uso, de recursos de TI como cómputo, almacenamiento y bases de datos
+  - id: b
+    texto: Un conjunto de servidores físicos que la empresa compra e instala en su propio centro de datos
+  - id: c
+    texto: Un contrato de alquiler a largo plazo de un centro de datos dedicado a una sola empresa
+  - id: d
+    texto: Un sistema de cómputo de alto rendimiento reservado para entrenar modelos de IA
+  correctas:
+  - a
+  explicacion: 'Las tres ideas de la definición son «bajo demanda», «por internet» y «pago por uso»: en lugar de comprar
+    y mantener servidores, se usan los recursos cuando hacen falta. Pista: la nube cambia gasto fijo por gasto variable.'
+  distractores:
+    b: Comprar e instalar servidores propios es justo lo contrario de la nube; describe un despliegue local (on-premises).
+    c: Un centro de datos dedicado y con contrato a largo plazo no tiene ni el acceso bajo demanda ni el pago por uso.
+    d: La nube sirve para cualquier carga de TI, no solo para IA; esa definición es demasiado estrecha.
+  referencia: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/what-is-cloud-computing.html
+- id: R0-026
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: matching
+  dificultad: baja
+  enunciado: Empareja cada tipo de servicio en la nube con lo que ofrece el proveedor.
+  prompts:
+  - id: "1"
+    texto: IaaS
+  - id: "2"
+    texto: PaaS
+  - id: "3"
+    texto: SaaS
+  opciones:
+  - id: a
+    texto: Una aplicación completa que el proveedor ejecuta y gestiona; el usuario solo la usa
+  - id: b
+    texto: Cómputo, almacenamiento y red; el cliente gestiona el sistema operativo y lo que corre encima
+  - id: c
+    texto: Una plataforma para desarrollar y mantener aplicaciones sin gestionar la infraestructura de debajo
+  - id: d
+    texto: El centro de datos propio conectado con recursos de la nube
+  correctas:
+  - ["1", b]
+  - ["2", c]
+  - ["3", a]
+  explicacion: 'De menos a más gestionado por el proveedor: IaaS da la infraestructura (como Amazon EC2, donde el cliente
+    gestiona el sistema operativo), PaaS añade la plataforma y SaaS entrega la aplicación terminada. Pista: cuanto más
+    a la derecha en I-P-S, menos tareas operativas para el cliente.'
+  distractores:
+    d: Conectar el centro de datos propio con la nube es un modelo de despliegue (híbrido), no un tipo de servicio.
+  referencia: https://aws.amazon.com/types-of-cloud-computing/
+- id: R0-027
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué es una zona de disponibilidad de AWS?
+  opciones:
+  - id: a
+    texto: Una ubicación geográfica aislada que agrupa varias Regiones
+  - id: b
+    texto: Un único centro de datos donde se guarda en caché el contenido de CloudFront
+  - id: c
+    texto: Un grupo de seguridad que aísla los recursos de una cuenta
+  - id: d
+    texto: Uno o varios centros de datos separados, con alimentación, red y conectividad redundantes, dentro de una Región
+  correctas:
+  - d
+  explicacion: 'La zona de disponibilidad está dentro de la Región, y cada Región tiene al menos tres. No es un único centro
+    de datos: puede tener uno o varios. Repartir una aplicación entre varias zonas da alta disponibilidad. Pista: Región
+    ⊃ zonas ⊃ centros de datos.'
+  distractores:
+    a: Es al revés; la Región es la ubicación geográfica y contiene las zonas de disponibilidad.
+    b: Guardar en caché el contenido de CloudFront es la función de las ubicaciones de borde, y una zona no es necesariamente
+      un único centro de datos.
+    c: Un grupo de seguridad es un cortafuegos virtual de las instancias; no es una pieza de la infraestructura global.
+  referencia: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html
+- id: R0-028
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué caracteriza un despliegue híbrido?
+  opciones:
+  - id: a
+    texto: Que toda la aplicación se ejecuta en la nube
+  - id: b
+    texto: Que conecta recursos de la nube con recursos que siguen en el centro de datos propio
+  - id: c
+    texto: Que todo se ejecuta en el centro de datos propio con herramientas de virtualización
+  - id: d
+    texto: Que la infraestructura la comparten muchos clientes
+  correctas:
+  - b
+  explicacion: 'Híbrido significa que una parte está en la nube y otra fuera de ella, normalmente en el centro de datos
+    propio, y ambas están conectadas. Encaja cuando hay sistemas heredados o datos que deben quedarse en las instalaciones.
+    Pista: híbrido = nube + centro de datos propio.'
+  distractores:
+    a: Todo en la nube es el modelo de despliegue «nube».
+    c: Todo en el centro de datos propio es el despliegue local (on-premises), también llamado nube privada.
+    d: Compartir la infraestructura entre clientes describe la nube pública, no lo que hace híbrido a un despliegue.
+  referencia: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html
+- id: R0-029
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué pieza de la infraestructura de AWS acerca cómputo, almacenamiento y bases de datos a una gran ciudad
+    para dar latencia muy baja a sus usuarios?
+  opciones:
+  - id: a
+    texto: Una ubicación de borde de Amazon CloudFront
+  - id: b
+    texto: Una zona de disponibilidad adicional
+  - id: c
+    texto: Una Local Zone
+  - id: d
+    texto: Una Amazon VPC
+  correctas:
+  - c
+  explicacion: 'Las Local Zones extienden una Región y ejecutan servicios (cómputo, almacenamiento, bases de datos) cerca
+    de grandes núcleos de población e industria. Pista: Local Zone ejecuta; ubicación de borde guarda en caché.'
+  distractores:
+    a: Una ubicación de borde guarda en caché y entrega contenido, pero no ejecuta servidores ni bases de datos del cliente.
+    b: Las zonas de disponibilidad sirven para la alta disponibilidad dentro de la Región, no para acercarse a una ciudad
+      concreta.
+    d: Una VPC es una red virtual aislada; no cambia dónde están físicamente los recursos.
+  referencia: https://docs.aws.amazon.com/local-zones/latest/ug/what-is-aws-local-zones.html
+- id: R0-030
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: En un servicio abstraído como Amazon S3, ¿qué sigue siendo responsabilidad del cliente?
+  opciones:
+  - id: a
+    texto: Aplicar los parches del sistema operativo de los servidores de S3
+  - id: b
+    texto: La seguridad física de los centros de datos donde se guardan los objetos
+  - id: c
+    texto: Gestionar sus datos, incluidas las opciones de cifrado, y los permisos de acceso
+  - id: d
+    texto: Mantener la red que conecta las zonas de disponibilidad
+  correctas:
+  - c
+  explicacion: 'En los servicios abstraídos, AWS opera la infraestructura, el sistema operativo y la plataforma. El cliente
+    nunca deja de responder de sus datos: decide cómo cifrarlos y quién accede con IAM. Pista: los datos y los permisos
+    siempre son del cliente.'
+  distractores:
+    a: En S3 el sistema operativo de la plataforma lo gestiona AWS; parchear el sistema operativo invitado es tarea del cliente
+      solo en servicios como Amazon EC2.
+    b: La seguridad física es seguridad «de» la nube, responsabilidad de AWS.
+    d: La red de la infraestructura global también es responsabilidad de AWS.
+  referencia: https://aws.amazon.com/compliance/shared-responsibility-model/
+- id: R0-031
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Con cuánta antelación avisa Amazon EC2 antes de recuperar una Spot Instance?
+  opciones:
+  - id: a
+    texto: Con 24 horas
+  - id: b
+    texto: Con dos minutos
+  - id: c
+    texto: No da aviso previo; la recupera en el acto
+  - id: d
+    texto: Con siete días, para dar tiempo a migrar
+  correctas:
+  - b
+  explicacion: 'El aviso de interrupción llega dos minutos antes de que EC2 detenga o termine la instancia. Por eso Spot
+    solo encaja en cargas flexibles que toleran interrupciones, como trabajos por lotes. Pista: Spot es barato porque
+    puede desaparecer casi sin aviso.'
+  distractores:
+    a: Un día de margen permitiría usar Spot para cargas críticas; el aviso real es mucho más corto.
+    c: Sí hay aviso, de dos minutos (la única excepción es la hibernación, que empieza de inmediato).
+    d: No existe un plazo de días; quien necesita estabilidad usa On-Demand, Savings Plans o Reserved Instances.
+  referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-instance-termination-notices.html
+- id: R0-032
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué herramienta de AWS estima el coste de una arquitectura antes de desplegarla?
+  opciones:
+  - id: a
+    texto: AWS Budgets
+  - id: b
+    texto: AWS Cost Explorer
+  - id: c
+    texto: AWS CloudTrail
+  - id: d
+    texto: AWS Pricing Calculator
+  correctas:
+  - d
+  explicacion: 'AWS Pricing Calculator es una herramienta web gratuita para estimar el coste según los servicios, la Región
+    y el uso previsto; no incluye impuestos. Pista: antes de desplegar, Pricing Calculator estima; después, Budgets avisa
+    y Cost Explorer analiza.'
+  distractores:
+    a: Budgets avisa cuando el gasto real o previsto supera un presupuesto; necesita que ya haya gasto.
+    b: Cost Explorer analiza el gasto ya hecho y su tendencia.
+    c: CloudTrail registra las llamadas a la API; no calcula costes.
+  referencia: https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html
+- id: R0-033
+  dominio: 0
+  tarea: "CP"
+  objetivo: CP.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué funcionalidad de IAM detecta recursos compartidos con entidades externas a la cuenta y permisos que
+    no se usan?
+  opciones:
+  - id: a
+    texto: IAM Access Analyzer
+  - id: b
+    texto: AWS CloudTrail
+  - id: c
+    texto: Amazon CloudWatch
+  - id: d
+    texto: Los grupos de IAM
+  correctas:
+  - a
+  explicacion: 'IAM Access Analyzer revisa los permisos: recursos compartidos con el exterior, accesos sin usar y validación
+    de políticas; incluso genera políticas a partir de la actividad de CloudTrail. Pista: Access Analyzer mira los permisos;
+    CloudTrail, la actividad.'
+  distractores:
+    b: CloudTrail registra quién hizo cada llamada a la API, pero no analiza qué recursos están compartidos con el exterior.
+    c: CloudWatch recoge métricas, registros y alarmas sobre el funcionamiento, no revisa permisos.
+    d: Un grupo reúne usuarios para darles permisos comunes; no analiza nada.
+  referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html

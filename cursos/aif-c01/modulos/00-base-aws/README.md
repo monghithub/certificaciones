@@ -26,7 +26,142 @@ Estos conocimientos proceden de la sección «Recommended AWS knowledge» de la 
 
 ### Servicios centrales
 
-AWS ofrece servicios que se consumen bajo demanda a través de Regiones. Una **Región** es una ubicación geográfica donde se crean los recursos; al preparar una carga de trabajo conviene elegir una Región que ofrezca los servicios y funcionalidades necesarios y que esté cerca de los usuarios para reducir la latencia, o que cumpla requisitos legales. La disponibilidad de servicios y funcionalidades **varía según la Región**, algo que el examen y los laboratorios de este curso tienen en cuenta (por ejemplo, para Amazon Bedrock).
+#### Qué es la nube
+
+AWS define la **computación en la nube** (*cloud computing*) como la entrega bajo demanda, por internet y con pago por uso, de capacidad de cómputo, bases de datos, almacenamiento, aplicaciones y otros recursos de TI. En lugar de comprar y mantener centros de datos y servidores, la empresa usa esos recursos cuando los necesita y paga por lo que consume.
+
+AWS resume sus ventajas en seis ideas:
+
+| Ventaja | Qué quiere decir |
+|---|---|
+| Cambiar gasto fijo por gasto variable | No se invierte por adelantado en servidores; se paga por el uso |
+| Economías de escala masivas | Al agregar el uso de muchos clientes, el proveedor consigue precios por uso más bajos |
+| Dejar de adivinar la capacidad | Se amplía o reduce según la demanda real, sin quedarse corto ni sobredimensionar |
+| Velocidad y agilidad | Los recursos están disponibles en minutos, lo que abarata experimentar |
+| Dejar de mantener centros de datos | El equipo se dedica a la aplicación, no al hardware |
+| Desplegar en todo el mundo en minutos | La aplicación puede llegar a varias Regiones con poco esfuerzo |
+
+**Modelos de despliegue** (*deployment models*). Dicen *dónde* se ejecuta la aplicación:
+
+| Modelo | Qué es | Cuándo encaja |
+|---|---|---|
+| Nube (*cloud*), también llamada nube pública | Toda la aplicación se despliega y se ejecuta en la nube; la infraestructura del proveedor la comparten muchos clientes | Aplicaciones nuevas o migradas por completo |
+| Híbrido (*hybrid*) | Conecta recursos de la nube con recursos que siguen fuera de ella, normalmente el centro de datos propio | Cuando parte de la carga debe quedarse en las instalaciones (sistemas heredados, requisitos de ubicación de los datos) y otra parte se lleva a la nube. AWS Outposts lleva infraestructura de AWS a las instalaciones del cliente (se nombra solo para reconocerlo) |
+| Local (*on-premises*), también llamado nube privada | Recursos en el centro de datos propio, con herramientas de virtualización y de gestión | Control total del hardware. A cambio, la empresa compra, mantiene y renueva todo |
+
+**Tipos de servicio en la nube.** Dicen *cuánto gestiona el proveedor*:
+
+| Tipo | Qué ofrece | Qué gestiona el cliente | En AWS |
+|---|---|---|---|
+| IaaS (*Infrastructure as a Service*) | Los bloques básicos de TI: cómputo, almacenamiento y red | Sistema operativo, software, aplicación y datos | Amazon EC2, que AWS cita como IaaS en el modelo de responsabilidad compartida |
+| PaaS (*Platform as a Service*) | Una plataforma para desarrollar y mantener aplicaciones sin gestionar la infraestructura de debajo | Su aplicación y sus datos | AWS no publica una lista de servicios por tipo |
+| SaaS (*Software as a Service*) | Una aplicación completa que ejecuta y gestiona el proveedor | Solo su uso y su configuración, y sus datos | El ejemplo clásico es el correo web |
+
+En la práctica, AWS no clasifica sus servicios con estas tres siglas: en el modelo de responsabilidad compartida distingue los servicios de **infraestructura** (como EC2) de los servicios **abstraídos** (como Amazon S3 o Amazon DynamoDB), en los que AWS opera la infraestructura, el sistema operativo y la plataforma. Lo que importa para el examen es la idea de fondo: **cuanto más gestionado es el servicio, menos tareas operativas asume el cliente**, como se ve en [Responsabilidad compartida](#responsabilidad-compartida).
+
+```mermaid
+flowchart LR
+    subgraph SAAS["📦 <b>SaaS</b><br/>el proveedor lo gestiona todo"]
+        direction TB
+        subgraph PAAS["🧰 <b>PaaS</b><br/>plataforma gestionada"]
+            direction TB
+            subgraph IAAS["🧱 <b>IaaS</b><br/>cómputo, almacenamiento y red"]
+                I1["🖥️ <b>Amazon EC2</b><br/>el cliente gestiona el SO"]
+            end
+            P1["⚙️ <b>Plataforma</b><br/>SO y entorno de ejecución"]
+        end
+        S1["📧 <b>Aplicación lista</b><br/>por ejemplo, correo web"]
+    end
+    class I1 servicio
+    class P1 proceso
+    class S1 accion
+```
+
+```nodos
+SAAS:
+  concepto: saas
+IAAS:
+  concepto: iaas
+PAAS:
+  concepto: paas
+I1:
+  concepto: amazon-ec2
+  texto: AWS cita Amazon EC2 como ejemplo de IaaS. El cliente gestiona el sistema operativo invitado, sus parches, la aplicación y los grupos de seguridad.
+  enlaces:
+  - texto: Modelo de responsabilidad compartida
+    url: https://aws.amazon.com/compliance/shared-responsibility-model/
+P1:
+  titulo: Plataforma gestionada
+  texto: En PaaS, el proveedor gestiona también el sistema operativo y el entorno donde corre la aplicación. El cliente solo despliega su código y gestiona sus datos.
+  enlaces:
+  - texto: Tipos de computación en la nube
+    url: https://aws.amazon.com/types-of-cloud-computing/
+S1:
+  titulo: Aplicación lista para usar
+  texto: En SaaS, el proveedor ejecuta y gestiona la aplicación completa; el usuario solo la usa y la configura. El ejemplo clásico es el correo web.
+  enlaces:
+  - texto: Tipos de computación en la nube
+    url: https://aws.amazon.com/types-of-cloud-computing/
+```
+
+#### Infraestructura global
+
+La infraestructura de AWS se organiza en piezas que se contienen unas a otras:
+
+- **Región:** ubicación geográfica, aislada de las demás, donde se crean los recursos.
+- **Zona de disponibilidad** (*Availability Zone*, AZ): uno o varios centros de datos separados, con alimentación, red y conectividad redundantes, dentro de una Región. Cada Región tiene al menos tres. Repartir una aplicación entre varias AZ permite que siga funcionando si falla una: es la base de la **alta disponibilidad**.
+- **Local Zone:** extensión de una Región que acerca cómputo, almacenamiento, bases de datos y otros servicios a grandes núcleos de población e industria, para dar **latencia muy baja** a los usuarios de esa zona.
+- **Ubicación de borde** (*edge location* o punto de presencia): centro de datos de la red mundial donde **Amazon CloudFront** guarda copias en caché del contenido para entregarlo desde el punto más cercano al usuario.
+
+```mermaid
+flowchart LR
+    subgraph REG["🌍 <b>Región</b><br/>ubicación geográfica aislada"]
+        direction TB
+        subgraph AZ1["🏢 <b>Zona de disponibilidad A</b>"]
+            DC1["🧱 <b>Centros de datos</b><br/>uno o varios"]
+        end
+        subgraph AZ2["🏢 <b>Zona de disponibilidad B</b>"]
+            DC2["🧱 <b>Centros de datos</b><br/>uno o varios"]
+        end
+        LZ["📍 <b>Local Zone</b><br/>cerca de una gran ciudad"]
+    end
+    EDGE["🚀 <b>Ubicación de borde</b><br/>caché de CloudFront"]
+    REG ~~~ EDGE
+    class DC1,DC2 servicio
+    class LZ proceso
+    class EDGE servicio
+```
+
+```nodos
+REG:
+  concepto: region-de-aws
+AZ1:
+  concepto: zona-de-disponibilidad
+AZ2:
+  concepto: zona-de-disponibilidad
+  titulo: Varias zonas, alta disponibilidad
+  texto: Si la aplicación se reparte entre al menos dos zonas de disponibilidad, sigue funcionando aunque una falle.
+DC1:
+  titulo: Centros de datos
+  texto: Cada zona de disponibilidad está formada por uno o varios centros de datos separados, con alimentación, red y conectividad redundantes.
+  enlaces:
+  - texto: Infraestructura global de AWS
+    url: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html
+DC2:
+  titulo: Centros de datos
+  texto: Una zona de disponibilidad no es un único centro de datos, sino uno o varios.
+  enlaces:
+  - texto: Zonas de disponibilidad
+    url: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html
+LZ:
+  concepto: aws-local-zones
+EDGE:
+  concepto: ubicacion-de-borde
+```
+
+#### Elegir la Región
+
+Una **Región** es una ubicación geográfica donde se crean los recursos; al preparar una carga de trabajo conviene elegir una Región que ofrezca los servicios y funcionalidades necesarios y que esté cerca de los usuarios para reducir la latencia, o que cumpla requisitos legales. La disponibilidad de servicios y funcionalidades **varía según la Región**, algo que el examen y los laboratorios de este curso tienen en cuenta (por ejemplo, para Amazon Bedrock).
 
 Cómo se elige la Región de una carga de trabajo:
 
@@ -85,6 +220,10 @@ R:
     url: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
   seccion: 00-base-aws/teoria#servicios-centrales
 ```
+
+Además de los servicios, el **precio** puede variar de una Región a otra, así que entra en la comparación cuando hay varias candidatas.
+
+#### Los servicios
 
 Los servicios centrales que el examen da por conocidos son estos:
 
@@ -154,7 +293,9 @@ La seguridad y el cumplimiento normativo son una responsabilidad compartida entr
 - **Seguridad *de* la nube** (*security of the cloud*): responsabilidad de AWS. Protege la infraestructura que ejecuta los servicios: hardware, software, redes e instalaciones. Auditores independientes verifican periódicamente su eficacia.
 - **Seguridad *en* la nube** (*security in the cloud*): responsabilidad del cliente, y **depende del servicio que use**. Incluye la sensibilidad de sus datos, los requisitos de su empresa y las leyes y normativas aplicables.
 
-El reparto cambia con el servicio. Con Amazon EC2, el cliente gestiona el sistema operativo invitado (incluidas actualizaciones y parches), el software de aplicación y la configuración de los grupos de seguridad. Con un servicio gestionado como Amazon Bedrock, AWS asume más tareas operativas, pero el cliente sigue siendo responsable de sus datos, de quién accede a ellos y de cómo usa los resultados del modelo.
+El reparto cambia con el servicio. Con Amazon EC2, un servicio de infraestructura (IaaS), el cliente gestiona el sistema operativo invitado (incluidas actualizaciones y parches), el software de aplicación y la configuración de los grupos de seguridad. Con los servicios abstraídos, como Amazon S3 o Amazon DynamoDB, AWS opera la infraestructura, el sistema operativo y la plataforma, y el cliente gestiona sus datos (incluidas las opciones de **cifrado**) y los permisos de IAM. Con un servicio gestionado como Amazon Bedrock, AWS asume más tareas operativas, pero el cliente sigue siendo responsable de sus datos, de quién accede a ellos y de cómo usa los resultados del modelo.
+
+Algunos controles son **compartidos**: cada parte los aplica en su terreno. AWS parchea y configura su infraestructura, y el cliente, sus sistemas operativos invitados y sus aplicaciones. AWS forma a sus empleados, y el cliente, a los suyos.
 
 ```mermaid
 flowchart LR
@@ -163,6 +304,7 @@ flowchart LR
         D["🔐 Datos y su sensibilidad"]
         A["🪪 Accesos e identidades"]
         C["⚙️ Configuración y aplicaciones"]
+        K["🔒 Cifrado y tráfico de red"]
     end
     subgraph AWS["☁️ DE la nube: AWS"]
         direction TB
@@ -170,7 +312,7 @@ flowchart LR
         F["🏢 Instalaciones físicas"]
     end
     Cliente --> AWS
-    class D,A,C proceso
+    class D,A,C,K proceso
     class I,F servicio
 ```
 
@@ -206,6 +348,12 @@ C:
     - {texto: "Responsabilidad compartida (Well-Architected)", url: "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/shared-responsibility.html"}
     - {texto: "Amazon EC2", url: "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"}
   seccion: 00-base-aws/teoria#responsabilidad-compartida
+K:
+  titulo: Cifrado y protección del tráfico
+  texto: 'El cliente decide y configura el cifrado de sus datos y la protección del tráfico de red, también en los servicios abstraídos como Amazon S3: AWS ofrece las herramientas (por ejemplo, AWS KMS para las claves), pero elegirlas y aplicarlas es tarea del cliente.'
+  enlaces:
+    - {texto: "Modelo de responsabilidad compartida", url: "https://aws.amazon.com/compliance/shared-responsibility-model/"}
+  seccion: 00-base-aws/teoria#responsabilidad-compartida
 I:
   titulo: Hardware, software y red
   texto: AWS opera, gestiona y controla los componentes desde el sistema operativo del anfitrión y la capa de virtualización hasta la seguridad física de las instalaciones donde funciona el servicio.
@@ -231,6 +379,7 @@ AWS Identity and Access Management (IAM) es el servicio que controla de forma se
 - **Mínimo privilegio** (*least privilege*): conceder solo los permisos imprescindibles para cada tarea. Es la práctica recomendada central de IAM.
 - Otras prácticas recomendadas: exigir **credenciales temporales** a las personas (federación con un proveedor de identidad) y a las cargas de trabajo (roles de IAM), exigir autenticación multifactor (MFA) y revisar y eliminar periódicamente usuarios, roles y permisos sin uso.
 - Los permisos se escriben en **políticas** (documentos JSON que permiten o deniegan acciones sobre recursos). Las **basadas en identidad** se asocian a usuarios, grupos o roles; las **basadas en recursos** se asocian al propio recurso (por ejemplo, un bucket de S3). Un **grupo** reúne usuarios que comparten permisos; un **rol** no tiene credenciales permanentes: lo asume quien lo necesita (una persona federada, una función Lambda o un servicio de AWS) y recibe credenciales temporales.
+- **IAM Access Analyzer** ayuda a revisar los permisos: detecta recursos compartidos con entidades externas a la cuenta u organización y accesos concedidos que no se usan, y puede generar políticas a partir de la actividad real registrada en AWS CloudTrail.
 - IAM es **eventualmente consistente**: un cambio de permisos puede tardar un poco en replicarse y no debe formar parte de rutas críticas de una aplicación.
 
 En los sistemas de IA, IAM decide quién puede invocar un modelo, leer los datos de entrenamiento o administrar un endpoint; se profundiza en el módulo 05.
@@ -304,8 +453,9 @@ AWS factura por el uso de cada servicio, y cada servicio ofrece sus propias opci
 | Idea | Ejemplo verificado en la documentación |
 |---|---|
 | Pago por uso, sin compromiso | Amazon EC2 *On-Demand*: se paga por segundo por las instancias lanzadas |
-| Compromiso de uso a 1 o 3 años a cambio de menor coste | Amazon EC2 *Savings Plans* (compromiso en USD por hora) y *Reserved Instances* (configuración concreta) |
-| Capacidad sobrante a coste reducido | Amazon EC2 *Spot Instances*: instancias sin usar, con un coste significativamente menor; es una opción rentable si la aplicación es flexible en cuándo se ejecuta y admite interrupciones |
+| Compromiso de uso a 1 o 3 años a cambio de menor coste | *Savings Plans* (compromiso en USD por hora; hay varios tipos, entre ellos de cómputo, de instancias de EC2 y de **SageMaker AI**) y *Reserved Instances* de EC2 (configuración concreta). El compromiso no se puede cambiar después de comprarlo |
+| Capacidad sobrante a coste reducido | Amazon EC2 *Spot Instances*: instancias sin usar, con un coste significativamente menor. AWS puede recuperarlas avisando con **dos minutos** de antelación, así que solo son rentables si la aplicación es flexible en cuándo se ejecuta y admite interrupciones |
+| Servidor físico dedicado | Amazon EC2 *Dedicated Hosts*: un servidor físico solo para el cliente. Permite reutilizar licencias de software por socket, por núcleo o por máquina virtual, o cumplir un requisito de hardware dedicado |
 | Elegir la clase de almacenamiento según el patrón de acceso | Amazon S3: clase Standard por defecto y otras clases para datos de acceso infrecuente, raro o cambiante (*Intelligent-Tiering*) |
 | Capacidad reservada con facturación por horas | Amazon Bedrock *Provisioned Throughput*: rendimiento fijo, facturado por horas |
 
@@ -366,6 +516,7 @@ La idea que el examen explota: **lo aprovisionado se paga aunque no se use** (in
 
 #### Controlar el gasto
 
+- **AWS Pricing Calculator**: herramienta web gratuita para **estimar antes de desplegar** cuánto costará una arquitectura, según los servicios, la Región y el uso previsto. Es una estimación (no incluye impuestos): el coste real depende del uso.
 - **AWS Budgets**: define un presupuesto y avisa cuando el gasto real o previsto lo supera. Es lo primero que conviene configurar antes de un laboratorio.
 - **AWS Cost Explorer**: muestra y analiza el gasto histórico por servicio y su tendencia.
 - **Capa gratuita (*Free Tier*)**: desde julio de 2025, las cuentas nuevas reciben créditos (100 USD al crearla, ampliables hasta 200 USD) y eligen entre un plan gratuito de hasta seis meses y un plan de pago. Algunos servicios mantienen además una cuota gratuita mensual permanente. Comprueba siempre las condiciones de tu cuenta.
@@ -374,21 +525,38 @@ Los precios concretos no se citan en este curso; consúltalos siempre en las pá
 
 ## Puntos clave para el examen
 
+- La nube es la entrega bajo demanda de recursos de TI por internet con pago por uso. Modelos de despliegue: nube, híbrido (nube y centro de datos propio conectados) y local. Tipos de servicio: IaaS (EC2), PaaS y SaaS, de menos a más gestionado por el proveedor.
+- Una Región contiene al menos tres zonas de disponibilidad, y cada una tiene uno o varios centros de datos. Repartir entre varias AZ da alta disponibilidad; las Local Zones y las ubicaciones de borde (CloudFront) reducen la latencia.
 - AWS protege la infraestructura (seguridad *de* la nube); el cliente protege sus datos, accesos y configuración (seguridad *en* la nube), y el reparto depende del servicio.
 - Cuanto más gestionado es el servicio (por ejemplo, Lambda o Bedrock), menos tareas operativas asume el cliente, pero nunca deja de ser responsable de sus datos y de sus permisos.
 - El usuario raíz no se usa en el día a día; se usan identidades con permisos mínimos.
 - A las cargas de trabajo se les dan permisos mediante **roles de IAM** (credenciales temporales), no con claves de acceso permanentes.
 - *Serverless* quiere decir «sin gestionar servidores», no «sin servidores».
 - La disponibilidad de servicios y modelos depende de la Región elegida.
-- Pago por uso (*On-Demand*) frente a compromiso (*Savings Plans*, *Reserved Instances*) frente a capacidad sobrante (*Spot*) son las tres lógicas de precio que hay que reconocer. En IA: *tokens* en Bedrock, tiempo de instancia en SageMaker AI y unidades procesadas en los servicios especializados.
+- Pago por uso (*On-Demand*) frente a compromiso (*Savings Plans*, *Reserved Instances*) frente a capacidad sobrante (*Spot*, con aviso de dos minutos antes de recuperarla) son las tres lógicas de precio que hay que reconocer. Pricing Calculator estima antes de desplegar; Budgets avisa después. En IA: *tokens* en Bedrock, tiempo de instancia en SageMaker AI y unidades procesadas en los servicios especializados.
 - Lo aprovisionado (un *endpoint* encendido, *Provisioned Throughput*) se paga aunque no se use; AWS Budgets avisa antes de que el gasto se dispare.
 - Amazon SageMaker AI es el nombre actual del servicio de ML que se llamaba Amazon SageMaker; «Amazon SageMaker» designa ahora una plataforma unificada más amplia.
 
 ## Referencias
 
-Documentación oficial consultada el 14 de octubre de 2026:
+Documentación oficial consultada el 14 de octubre de 2026 (las marcadas con «2026-11-20», en la revisión con las guías de estudio):
 
 - Guía del examen AIF-C01, «Recommended AWS knowledge»: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html>
+- Qué es la computación en la nube (2026-11-20): <https://docs.aws.amazon.com/whitepapers/latest/aws-overview/what-is-cloud-computing.html>
+- Seis ventajas de la computación en la nube (2026-11-20): <https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html>
+- Modelos de despliegue (2026-11-20): <https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html>
+- IaaS, PaaS y SaaS (2026-11-20): <https://aws.amazon.com/types-of-cloud-computing/>
+- Infraestructura global (2026-11-20): <https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html>
+- Zonas de disponibilidad (2026-11-20): <https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html>
+- AWS Local Zones (2026-11-20): <https://docs.aws.amazon.com/local-zones/latest/ug/what-is-aws-local-zones.html>
+- AWS Outposts (2026-11-20): <https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html>
+- Amazon CloudFront y ubicaciones de borde (2026-11-20): <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html>
+- Modelo de responsabilidad compartida (2026-11-20): <https://aws.amazon.com/compliance/shared-responsibility-model/>
+- IAM Access Analyzer (2026-11-20): <https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html>
+- Avisos de interrupción de Spot (2026-11-20): <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-instance-termination-notices.html>
+- Dedicated Hosts (2026-11-20): <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html>
+- Savings Plans (2026-11-20): <https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html>
+- AWS Pricing Calculator (2026-11-20): <https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html>
 - Regiones de AWS: <https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html>
 - Amazon EC2, ¿qué es?: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html>
 - Amazon EC2, opciones de facturación y compra: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>
