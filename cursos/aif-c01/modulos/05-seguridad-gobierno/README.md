@@ -430,7 +430,7 @@ NOK:
 | **AWS Trusted Advisor** | **Recomendaciones** para ahorrar costes, mejorar el rendimiento y la disponibilidad y cerrar brechas de seguridad. El plan de soporte Basic incluye los límites de servicio y algunas comprobaciones de seguridad y tolerancia a fallos | Avisar de un *bucket* con permisos abiertos o de una cuota a punto de agotarse |
 | **Amazon CloudWatch** | Métricas, registros y alarmas | Alarma si sube la tasa de errores o de bloqueos de un *guardrail* |
 | **AWS Well-Architected Tool** | Revisar una carga de trabajo frente a las buenas prácticas y a las lentes del catálogo oficial de AWS | Revisar un asistente de IA generativa con la lente correspondiente |
-| **AWS Audit Manager** | Recopila evidencias para auditorías con marcos predefinidos | **Ya no admite clientes nuevos**; no es la respuesta para un proyecto nuevo |
+| **AWS Audit Manager** | Recopila evidencias para auditorías con marcos predefinidos | **Ya no admite clientes nuevos**; no es la respuesta para un proyecto nuevo: AWS recomienda los *conformance packs* de AWS Config, que no equivalen del todo (no hay plantillas para SOC 2 ni RGPD) |
 | **Gobierno de ML en SageMaker AI** | Model Cards y Model Dashboard (visión centralizada de los modelos; sus métricas de monitorización dependen de Model Monitor). Role Manager **ya no admite clientes nuevos**: AWS remite a roles y políticas de IAM, IAM Identity Center e infraestructura como código | Documentar y localizar los modelos de la cuenta |
 
 ```mermaid
@@ -624,7 +624,7 @@ La matriz cruza esos ámbitos con cinco disciplinas de seguridad: **gobierno y c
 - AWS Artifact: <https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html>
 - AWS CloudTrail: <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html>
 - AWS Trusted Advisor: <https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html>
-- AWS Audit Manager: <https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html>
+- AWS Audit Manager: <https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html> y su cambio de disponibilidad (alternativa: *conformance packs* de AWS Config): <https://docs.aws.amazon.com/audit-manager/latest/userguide/audit-manager-availability-change.html>
 - Lentes en AWS Well-Architected Tool: <https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html>
 - S3 Lifecycle: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
 - Retención en CloudWatch Logs: <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html>

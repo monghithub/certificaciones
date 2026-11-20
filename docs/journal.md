@@ -306,3 +306,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Decisiones:** mismo sistema que los 25 existentes (Mermaid + `nodos`: animación, modal por caja, claro, oscuro y móvil); sin datos nuevos, cada caja resume el texto del apartado; cadenas largas en vertical por el móvil; títulos de subgrupo cortos (Mermaid corta los largos).
 - **Revisión independiente:** 0 críticos, 4 importantes (orden del árbol de pago, que mandaba a On-Demand una carga interrumpible; orden de los criterios de elección de modelo; alcance de Guardrails frente al envenenamiento; RAG frente a no meter datos personales en el modelo) y 11 menores. Todo aplicado.
 - **Verificación:** validador, 44/44 diagramas Mermaid válidos y navegador (todas las cajas abren su modal, sin errores de consola, claro, oscuro y móvil).
+
+## 2026-11-20
+
+### Alternativas en cada «cuándo no usar» (#26)
+
+- Petición: «se debe dar más explicaciones; por ejemplo, en 00-base-aws/teoria, cuando se habla de Amazon S3 se dice que no debe usarse para bases de datos transaccionales: hay que indicar qué se debe usar en ese caso». El usuario pidió primero dejarlo anotado (issues #26 y #27) y después «dale».
+- Rama `aif-c01/alternativas`. Mantenimiento de contenido sin requisitos nuevos de la consola, sin cambio de OpenSpec (como la guía v1.2); la regla queda en `AGENTS.md`.
+- **Decisiones:** la alternativa, dentro del alcance si existe (EBS y EFS, que el examen no evalúa, solo se nombran); para productos cerrados, el sustituto oficial o la constancia de que AWS no lo indica, comprobado en sus avisos de disponibilidad (Audit Manager, A2I, Ground Truth); Clarify se mantiene como respuesta clásica del examen para sesgo y SHAP.
+- **Revisión independiente:** 0 críticos; 5 importantes (lista incompleta de almacenes de Knowledge Bases, Bedrock Evaluations presentado como sustituto de Clarify en ML clásico, Trainium, filas de `05/servicios.md` sin trasladar, filas que seguían sin alternativa) y 7 menores. Todo aplicado.
+

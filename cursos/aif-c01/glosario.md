@@ -53,13 +53,13 @@ Total: 237 términos.
 - **AUC** (área bajo la curva ROC). *Métrica.* Área bajo la curva ROC: resume el rendimiento de un clasificador en todos los umbrales. 1 es perfecto y 0,5 equivale a adivinar al azar.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html>
 - **AWS Audit Manager** (Audit Manager). *Servicio.* Servicio que recopila automáticamente evidencias para auditorías con marcos predefinidos o propios. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo.
-  - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos.
+  - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos. AWS recomienda los conformance packs de AWS Config, que no equivalen del todo (no hay plantillas para SOC 2 ni RGPD).
   - Referencia: <https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html>
 - **auditoría humana** (human audit, auditorías humanas). *Técnica.* Revisión por personas, idealmente independientes del equipo y con sus propios datos de evaluación, de los aspectos críticos o subjetivos de un sistema de IA (seguridad, sesgo, experiencia de usuario) antes de lanzarlo y de forma periódica.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raier01-bp02.html>
 - **Amazon Augmented AI** (Amazon A2I, A2I). *Servicio.* Servicio para añadir revisión humana a predicciones de ML con baja confianza o a muestras aleatorias (Textract, Rekognition, modelos propios). Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo.
   - Usar cuando: Clientes actuales que necesitan revisión humana de predicciones de baja confianza.
-  - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos.
+  - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos, y su documentación no indica un sustituto; la revisión humana se tendría que diseñar en la propia aplicación.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html>
 - **Amazon Aurora** (Aurora, Aurora PostgreSQL). *Servicio.* Base de datos relacional gestionada compatible con MySQL y PostgreSQL. Con la extensión pgvector de PostgreSQL almacena embeddings y combina consultas SQL con búsqueda por similitud; Bedrock Knowledge Bases la admite como almacén vectorial.
   - Usar cuando: Cuando la aplicación ya usa SQL relacional y quiere combinar filtros relacionales y búsqueda vectorial en la misma base de datos.
@@ -76,11 +76,11 @@ Total: 237 términos.
   - Referencia: <https://aws.amazon.com/what-is/vector-databases/>
 - **Amazon Bedrock** (Bedrock). *Servicio.* Servicio totalmente gestionado que da acceso seguro a modelos fundacionales de alto rendimiento de las principales compañías de IA para crear y escalar aplicaciones de IA generativa.
   - Usar cuando: Para usar modelos fundacionales de varios proveedores mediante API, sin gestionar la infraestructura.
-  - No usar cuando: Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento.
+  - No usar cuando: Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento: Amazon SageMaker AI.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html>
 - **Amazon Bedrock AgentCore** (AgentCore). *Servicio.* Plataforma agéntica para crear, desplegar y operar agentes de IA de forma segura y a escala, con cualquier framework y modelo fundacional.
   - Usar cuando: Cuando hay un caso de uso agéntico que necesita ejecución, memoria, identidad y observabilidad gestionadas.
-  - No usar cuando: Cuando basta una consulta sencilla a un modelo: no hace falta un agente.
+  - No usar cuando: Cuando basta una consulta sencilla a un modelo (una llamada a Bedrock, por ejemplo con la API Converse) o un flujo de pasos fijos (Amazon Bedrock Flows): no hace falta un agente.
   - Referencia: <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html>
 - **Amazon Bedrock Agents** (Bedrock Agents, Amazon Bedrock Agents Classic). *Servicio.* Permite crear y configurar agentes autónomos en una aplicación: orquestan las interacciones entre modelos fundacionales, fuentes de datos, aplicaciones y usuarios, y llaman a APIs para ejecutar acciones. Ahora se llama Agents Classic y ya no está abierto a clientes nuevos.
   - No usar cuando: En proyectos nuevos: AWS remite a Amazon Bedrock AgentCore para capacidades similares.
@@ -91,11 +91,11 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html>
 - **Amazon Bedrock Guardrails** (Bedrock Guardrails, Guardrails). *Servicio.* Salvaguardas configurables para detectar y filtrar contenido no deseado y proteger información sensible en las entradas y respuestas de los modelos: filtros de contenido, temas denegados, filtros de palabras, filtros de información sensible, comprobación de grounding contextual y Automated Reasoning checks. Se aplica al invocar un modelo de Bedrock o con la API ApplyGuardrail, sin invocar un modelo.
   - Usar cuando: Para aplicar políticas de uso responsable y privacidad a una aplicación de IA generativa.
-  - No usar cuando: Como sustituto de los permisos IAM o del cifrado de los datos.
+  - No usar cuando: Como sustituto de los permisos (IAM) o del cifrado de los datos (AWS KMS).
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html>
 - **Amazon Bedrock Knowledge Bases** (Bedrock Knowledge Bases, Knowledge Bases). *Servicio.* Permite integrar información propia en aplicaciones de IA generativa mediante RAG: busca en tus datos la información relevante para una consulta y la usa para mejorar las respuestas del modelo. Hay dos tipos: Managed Knowledge Base (Bedrock gestiona ingesta, índice y almacén, con conectores y permisos por documento) y customer-managed (el cliente elige y gestiona el almacén vectorial).
   - Usar cuando: Cuando el modelo debe responder con información propia, específica o actualizada.
-  - No usar cuando: Cuando el modelo no necesita datos propios ni actualizados.
+  - No usar cuando: Cuando el modelo no necesita datos propios ni actualizados: basta invocar el modelo con un buen prompt.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html>
 - **Amazon Bedrock Model Evaluation** (Bedrock Model Evaluation, Amazon Bedrock Evaluations, Bedrock Evaluations). *Servicio.* Evaluaciones de Amazon Bedrock: programáticas (conjuntos integrados o propios con métricas de exactitud, robustez y toxicidad), con trabajadores humanos, con un modelo juez (LLM-as-a-judge) y de fuentes RAG o Knowledge Bases.
   - Usar cuando: Para comparar modelos, prompts o Knowledge Bases con datos del caso antes de elegir o de pasar a producción.
@@ -148,7 +148,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html>
 - **Amazon Comprehend** (Comprehend). *Servicio.* Usa procesamiento del lenguaje natural (NLP) para extraer información del contenido de los documentos: reconoce entidades, frases clave, idioma, opiniones y otros elementos.
   - Usar cuando: Para analizar texto: opiniones de clientes, entidades o temas de un conjunto de documentos.
-  - No usar cuando: Cuando el problema no es de lenguaje natural (imágenes, datos tabulares).
+  - No usar cuando: Cuando el problema no es de lenguaje natural: imágenes (Amazon Rekognition) o datos tabulares (Amazon SageMaker AI).
   - Referencia: <https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html>
 - **AWS Config** (Config). *Servicio.* Servicio que registra la configuración de los recursos de AWS, cómo se relacionan y cómo ha cambiado con el tiempo, y la evalúa con reglas y paquetes de conformidad.
   - Usar cuando: Para comprobar que los recursos de un sistema de IA cumplen reglas (cifrado, acceso público) y ver su historial de configuración.
@@ -199,18 +199,18 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp04.html>
 - **Amazon DocumentDB** (DocumentDB). *Servicio.* Base de datos de documentos compatible con MongoDB, con búsqueda vectorial nativa desde la versión 5.0.
   - Usar cuando: Aplicaciones que ya usan la API de MongoDB y quieren añadir búsqueda semántica.
-  - No usar cuando: Cuando el caso no usa documentos JSON ni la API de MongoDB.
+  - No usar cuando: Cuando el caso no usa documentos JSON ni la API de MongoDB: para búsqueda vectorial, Aurora PostgreSQL con pgvector u OpenSearch Service.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html>
 - **Amazon DynamoDB** (DynamoDB). *Servicio.* Base de datos NoSQL sin servidor y totalmente gestionada. Tiene índices vectoriales nativos que se consultan con la API SearchVectors para buscar por similitud junto a los datos operativos, sin otra base de datos ni réplicas.
   - Usar cuando: RAG o memoria de agentes cuando los datos operativos ya están en DynamoDB.
-  - No usar cuando: Como almacén de una Bedrock Knowledge Base: no está admitido.
+  - No usar cuando: Como almacén de una Bedrock Knowledge Base: no está admitido (sí OpenSearch Serverless o clústeres gestionados de OpenSearch, Aurora PostgreSQL, Neptune Analytics, S3 Vectors y terceros como Pinecone; ver el módulo 03).
   - Referencia: <https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/VectorSearch.html>
 
 ## E
 
 - **Amazon EC2** (EC2, Amazon Elastic Compute Cloud). *Servicio.* Capacidad de cómputo escalable bajo demanda en la nube de AWS: servidores virtuales llamados instancias. El cliente elige el tipo de instancia, la red y el almacenamiento, y gestiona el sistema operativo invitado.
   - Usar cuando: Cuando se necesita control del sistema operativo, de la red y del almacenamiento (por ejemplo, para alojar un modelo propio).
-  - No usar cuando: Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor.
+  - No usar cuando: Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor: código por eventos con AWS Lambda; modelos con Amazon Bedrock o un endpoint de SageMaker AI.
   - Referencia: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html>
 - **Amazon ECS** (ECS, Amazon Elastic Container Service). *Servicio.* Servicio totalmente gestionado de orquestación de contenedores para desplegar, gestionar y escalar aplicaciones en contenedores, integrado con Amazon ECR.
   - Usar cuando: Para desplegar en contenedores una aplicación o un modelo propio sin gestionar Kubernetes.
@@ -222,7 +222,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html>
 - **Amazon ElastiCache** (ElastiCache, ElastiCache para Valkey). *Servicio.* Caché y almacén de datos en memoria totalmente gestionado (Valkey, Redis OSS, Memcached). Desde Valkey 8.2 ofrece búsqueda vectorial en memoria con latencias mínimas.
   - Usar cuando: Búsqueda semántica en tiempo real, caché semántica o memoria de agentes con latencias mínimas.
-  - No usar cuando: Como almacén de una Bedrock Knowledge Base: no está admitido.
+  - No usar cuando: Como almacén de una Bedrock Knowledge Base: no está admitido (sí OpenSearch Serverless o clústeres gestionados de OpenSearch, Aurora PostgreSQL, Neptune Analytics, S3 Vectors y terceros como Pinecone; ver el módulo 03).
   - Referencia: <https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/vector-search-overview.html>
 - **embedding** (embeddings, incrustaciones vectoriales). *Concepto.* Representación numérica (un vector) de un objeto del mundo real, como un texto o una imagen, que captura su significado. Objetos parecidos tienen embeddings cercanos, lo que permite buscar por similitud semántica.
   - Referencia: <https://aws.amazon.com/what-is/embeddings-in-machine-learning/>
@@ -300,7 +300,7 @@ Total: 237 términos.
 - **IA responsable** (responsible AI). *Concepto.* Disciplina de diseñar, desarrollar y usar la IA con el objetivo de maximizar los beneficios y minimizar los riesgos. AWS la concreta en dimensiones: equidad, explicabilidad, privacidad y seguridad, seguridad frente a daños, controlabilidad, veracidad y robustez, gobierno y transparencia.
   - Referencia: <https://aws.amazon.com/ai/responsible-ai/>
 - **AWS Identity and Access Management (IAM)** (IAM, AWS IAM, AWS Identity and Access Management). *Servicio.* Servicio que controla de forma segura el acceso a los recursos de AWS: quién está autenticado (ha iniciado sesión) y quién está autorizado (tiene permisos) para usar qué recursos.
-  - No usar cuando: No es un servicio de datos ni de cómputo: no sustituye al cifrado ni a las políticas de la propia aplicación.
+  - No usar cuando: No es un servicio de datos ni de cómputo: no sustituye al cifrado (AWS KMS) ni a los controles de la propia aplicación.
   - Referencia: <https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html>
 - **impacto dispar** (disparate impact). *Métrica.* Métrica de sesgo posterior al entrenamiento: DI = q'd / q'a, la proporción de predicciones positivas del grupo desfavorecido entre la del favorecido. 1 indica paridad; por debajo de 1, el grupo d recibe menos resultados positivos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-di.html>
@@ -320,7 +320,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html>
 - **inferencia por lotes de Bedrock** (batch inference). *Concepto.* Modo de Amazon Bedrock que procesa de forma asíncrona muchos prompts de una vez: la entrada y la salida van a Amazon S3. En los modelos que lo admiten cuesta un 50 % menos que bajo demanda. No admite llamadas a herramientas.
   - Usar cuando: Para grandes volúmenes que no necesitan respuesta inmediata.
-  - No usar cuando: En aplicaciones interactivas o conversaciones de varios turnos.
+  - No usar cuando: En aplicaciones interactivas o conversaciones de varios turnos: inferencia bajo demanda.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html>
 - **inferencia serverless** (Serverless Inference). *Técnica.* Opción de SageMaker AI que despliega y escala modelos sin gestionar la infraestructura. Es ideal para cargas con periodos de inactividad entre ráfagas de tráfico que toleran arranques en frío, y se paga por uso.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html>
@@ -358,7 +358,7 @@ Total: 237 términos.
 
 - **Kiro**. *Servicio.* Plataforma de desarrollo con IA de AWS, basada en especificaciones (spec-driven development), con un IDE y una CLI en los que agentes de IA ayudan a planificar, escribir y probar código.
   - Usar cuando: Para acelerar el desarrollo de software (incluidas aplicaciones de IA) con un asistente agéntico.
-  - No usar cuando: Cuando la pregunta trata de entrenar o desplegar un modelo de ML.
+  - No usar cuando: Cuando la pregunta trata de entrenar o desplegar un modelo de ML: Amazon SageMaker AI.
   - Referencia: <https://aws.amazon.com/documentation-overview/kiro/>
 - **AWS KMS** (AWS Key Management Service, KMS). *Servicio.* Servicio gestionado para crear y controlar las claves de cifrado y firma. Las claves se protegen en módulos de seguridad de hardware y no salen del servicio sin cifrar. En Bedrock cifra con claves del cliente modelos personalizados, agentes, ingesta de Knowledge Bases y evaluaciones.
   - Usar cuando: Para cifrar en reposo datos y modelos con claves que controla la empresa y auditar su uso.
@@ -373,11 +373,11 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html>
 - **AWS Lambda** (Lambda). *Servicio.* Servicio de cómputo serverless: ejecuta código sin aprovisionar ni gestionar servidores. AWS se encarga del mantenimiento, la capacidad, el escalado y los parches.
   - Usar cuando: Para ejecutar código en respuesta a eventos o llamadas a una API sin gestionar servidores.
-  - No usar cuando: Cuando se necesita control sobre el servidor o el sistema operativo.
+  - No usar cuando: Cuando se necesita control sobre el servidor o el sistema operativo: Amazon EC2.
   - Referencia: <https://docs.aws.amazon.com/lambda/latest/dg/welcome.html>
 - **Amazon Lex** (Lex, Amazon Lex V2). *Servicio.* Servicio para crear interfaces conversacionales por voz y texto en las aplicaciones, con comprensión del lenguaje natural (NLU) y reconocimiento automático del habla (ASR).
   - Usar cuando: Para construir un chatbot o asistente de voz propio.
-  - No usar cuando: Cuando solo se quiere analizar texto existente, sin diálogo con el usuario.
+  - No usar cuando: Cuando solo se quiere analizar texto existente, sin diálogo con el usuario: Amazon Comprehend.
   - Referencia: <https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html>
 - **linaje de datos** (data lineage, linaje). *Concepto.* Recorrido de los datos y artefactos desde su origen hasta el modelo desplegado (conjunto de datos, versión, trabajo de entrenamiento, endpoint). SageMaker ML Lineage Tracking lo registra para reproducir el flujo y auditarlo.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html>
@@ -396,7 +396,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html>
 - **MCP** (Model Context Protocol). *Concepto.* Model Context Protocol: protocolo abierto que proporciona una capa de comunicación estándar para que los agentes de IA interactúen con datos, herramientas y servicios externos, y también con otros agentes.
   - Usar cuando: Para exponer una herramienta o fuente de datos una sola vez y que la use cualquier agente compatible.
-  - No usar cuando: No es un modelo ni un servicio de AWS: no genera respuestas por sí mismo.
+  - No usar cuando: No es un modelo ni un servicio de AWS: no genera respuestas por sí mismo (eso lo hace el modelo, por ejemplo en Amazon Bedrock). Para comunicar agentes entre sí, A2A.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/getting-started-with-mcp.html>
 - **mecanismo de feedback** (user-feedback mechanism, feedback de los usuarios). *Técnica.* Forma de que los usuarios valoren o notifiquen respuestas incorrectas o inadecuadas, unida a un circuito de revisión periódica que convierte ese feedback en mejoras del sistema (guardrails, prompts, datos).
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon02-bp01.html>
@@ -422,7 +422,7 @@ Total: 237 términos.
 
 - **Amazon Neptune** (Neptune, Neptune Analytics, Amazon Neptune Analytics). *Servicio.* Base de datos de grafos gestionada. Neptune Analytics añade búsqueda vectorial combinada con recorridos y algoritmos de grafos, la base de GraphRAG; Bedrock Knowledge Bases la admite.
   - Usar cuando: Cuando importan las relaciones entre entidades: GraphRAG, redes de fraude, vista 360 del cliente, respuestas explicables por relaciones.
-  - No usar cuando: Para una búsqueda semántica sencilla sobre documentos sin relaciones relevantes.
+  - No usar cuando: Para una búsqueda semántica sencilla sobre documentos sin relaciones relevantes: Amazon OpenSearch Service, Aurora PostgreSQL con pgvector o Amazon S3 Vectors.
   - Referencia: <https://docs.aws.amazon.com/neptune-analytics/latest/userguide/vector-similarity.html>
 - **niveles de servicio de Bedrock** (service tiers, nivel Flex, nivel Priority, nivel Reserved, nivel Standard). *Concepto.* Niveles de inferencia de Amazon Bedrock: Standard (por defecto), Priority (respuesta más rápida con un recargo del 75 %), Flex (un 50 % de descuento para cargas que toleran más tiempo) y Reserved (capacidad reservada de tokens por minuto durante 1 o 3 meses, con objetivo de disponibilidad del 99,5 %; el exceso pasa a Standard).
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html>
@@ -430,7 +430,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html>
 - **Amazon Nova** (Nova). *Servicio.* Familia de modelos fundacionales de Amazon que se usan mediante API a través de Amazon Bedrock: Micro (solo texto), Lite, Pro y Premier, y la generación Nova 2 (Lite, Sonic y Multimodal Embeddings). Nova Canvas (imagen), Nova Reel (vídeo) y Nova Sonic v1 están retirados desde septiembre de 2026.
   - Usar cuando: Cuando se busca un modelo fundacional propio de Amazon dentro de Bedrock, por ejemplo por precio-rendimiento.
-  - No usar cuando: Cuando basta un servicio de IA especializado o un modelo de ML tradicional para una tarea acotada.
+  - No usar cuando: Cuando basta un servicio de IA especializado (Comprehend, Rekognition, Textract…) o un modelo de ML tradicional (SageMaker AI) para una tarea acotada.
   - Referencia: <https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html>
 
 ## O
@@ -450,7 +450,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html>
 - **Amazon Personalize** (Personalize). *Servicio.* Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad.
   - Usar cuando: Para personalizar recomendaciones (por ejemplo, en una aplicación de vídeo).
-  - No usar cuando: Cuando no se dispone de datos propios de usuarios y elementos con los que generar recomendaciones.
+  - No usar cuando: Cuando no se dispone de datos propios de usuarios y elementos con los que generar recomendaciones: hasta reunirlos, una regla sencilla (por ejemplo, los más vendidos).
   - Referencia: <https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html>
 - **PII** (datos personales, personally identifiable information). *Concepto.* Información de identificación personal: datos que identifican a una persona, como nombre, dirección, correo, teléfono, número de documento o de tarjeta.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html>
@@ -476,7 +476,7 @@ Total: 237 términos.
   - Referencia: <https://aws.amazon.com/bedrock/faqs/>
 - **AWS PrivateLink** (PrivateLink). *Servicio.* Conectividad privada entre una VPC y servicios de AWS (como Amazon Bedrock) mediante endpoints de interfaz, sin exponer el tráfico a internet.
   - Usar cuando: Cuando el tráfico hacia el servicio no debe pasar por internet.
-  - No usar cuando: Como sustituto de los permisos IAM o del cifrado.
+  - No usar cuando: Como sustituto de los permisos (IAM) o del cifrado (AWS KMS).
   - Referencia: <https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html>
 - **procesamiento del lenguaje natural** (NLP, PLN). *Concepto.* Tecnología que permite a los ordenadores interpretar, manipular y comprender el lenguaje humano, en texto y en voz.
   - Referencia: <https://aws.amazon.com/what-is/nlp/>
@@ -502,7 +502,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/what-is.html>
 - **Amazon Quick** (Quick). *Servicio.* Servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar. Se usa mediante chat en lenguaje natural y emplea agentes de IA sobre los datos y aplicaciones conectados.
   - Usar cuando: Para dar a los empleados un asistente con agentes que consulte los datos de la empresa, automatice tareas, analice datos e investigue, sin desarrollar.
-  - No usar cuando: Cuando se necesita un modelo propio con control sobre el entrenamiento, o una aplicación propia para clientes.
+  - No usar cuando: Cuando se necesita un modelo propio con control sobre el entrenamiento (Amazon SageMaker AI) o una aplicación propia para clientes (Amazon Bedrock).
   - Referencia: <https://docs.aws.amazon.com/quick/latest/userguide/what-is.html>
 
 ## R
@@ -555,48 +555,50 @@ Total: 237 términos.
 ## S
 
 - **Amazon S3** (S3, Amazon Simple Storage Service). *Servicio.* Servicio de almacenamiento de objetos con gran escalabilidad, disponibilidad, seguridad y rendimiento. Se usa, entre otros, para lagos de datos, sitios web, copias de seguridad y analítica de big data.
-  - No usar cuando: Como base de datos transaccional o como sistema de ficheros de baja latencia para un servidor.
+  - No usar cuando: Como base de datos transaccional: para eso, una base de datos (Amazon RDS o Amazon Aurora si es relacional; Amazon DynamoDB si es clave-valor). Tampoco como disco de baja latencia de un servidor: eso es almacenamiento de bloques o de ficheros (Amazon EBS o Amazon EFS, que este examen no evalúa).
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html>
 - **Amazon S3 Glacier** (S3 Glacier). *Servicio.* Clases de almacenamiento de archivo de Amazon S3, de bajo coste, para datos que se consultan poco y deben conservarse mucho tiempo. (El servicio original de bóvedas, Amazon Glacier, es distinto.)
   - Usar cuando: Para conservar años datos de entrenamiento o registros que exige la normativa.
-  - No usar cuando: Para datos que se consultan a menudo o con baja latencia.
+  - No usar cuando: Para datos que se consultan a menudo o con baja latencia: S3 Standard.
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
 - **S3 Lifecycle** (ciclo de vida de S3). *Técnica.* Reglas de Amazon S3 que mueven automáticamente los objetos a clases de almacenamiento más baratas (transición) o los borran al cumplirse un plazo (expiración).
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
 - **Amazon S3 Vectors** (S3 Vectors). *Servicio.* Almacenamiento vectorial de Amazon S3 (buckets e índices vectoriales) optimizado en coste para volúmenes enormes, con latencias por debajo del segundo en consultas poco frecuentes y de unos 100 ms en las frecuentes. Se integra con Bedrock Knowledge Bases.
   - Usar cuando: Miles de millones de vectores al menor coste, con consultas poco frecuentes.
-  - No usar cuando: Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo.
+  - No usar cuando: Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo: Amazon OpenSearch Service.
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html>
 - **Amazon SageMaker AI** (SageMaker AI, SageMaker). *Servicio.* Servicio totalmente gestionado de aprendizaje automático para construir, entrenar y desplegar modelos propios en un entorno de alojamiento listo para producción. Antes del 3 de diciembre de 2024 se llamaba Amazon SageMaker; desde esa fecha, «Amazon SageMaker» es el nombre de una plataforma unificada de datos, analítica e IA que incluye SageMaker AI.
   - Usar cuando: Cuando hace falta un modelo propio y la máxima flexibilidad y control sobre el algoritmo.
-  - No usar cuando: Cuando un servicio de IA preentrenado resuelve el caso con menos esfuerzo.
+  - No usar cuando: Cuando un servicio de IA preentrenado (Rekognition, Comprehend, Transcribe…) o un modelo fundacional de Amazon Bedrock resuelve el caso con menos esfuerzo.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html>
 - **Amazon SageMaker Canvas** (SageMaker Canvas). *Servicio.* Funcionalidad de SageMaker AI para generar predicciones con ML sin escribir código: modelos listos para usar (basados en Rekognition, Textract y Comprehend) o modelos propios de regresión, clasificación, previsión de series temporales, imagen y texto.
   - Usar cuando: Cuando analistas de negocio sin experiencia en ML ni en programación necesitan un modelo predictivo con sus datos.
-  - No usar cuando: Cuando un equipo de ciencia de datos necesita control total sobre el algoritmo y el código.
+  - No usar cuando: Cuando un equipo de ciencia de datos necesita control total sobre el algoritmo y el código: SageMaker AI con cuadernos o código propio.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html>
 - **SageMaker Clarify** (Amazon SageMaker Clarify). *Servicio.* Herramienta de SageMaker AI para detectar sesgo en los datos (por ejemplo, CI y DPL) y en las predicciones (por ejemplo, DI) y explicarlas con SHAP. Ya no está abierta a clientes nuevos; los existentes pueden seguir usándola. AWS indica como sustituto calcular las mismas métricas con bibliotecas abiertas y SHAP, y Amazon Bedrock Evaluations para modelos fundacionales.
   - Usar cuando: Clientes actuales que necesitan métricas de sesgo y explicaciones de modelos de ML clásico.
-  - No usar cuando: Como opción para un proyecto nuevo, o para evaluar modelos fundacionales: Amazon Bedrock Evaluations.
+  - No usar cuando: Como opción para un proyecto nuevo: métricas de sesgo y SHAP con bibliotecas abiertas (pandas, scikit-learn, SHAP) en ML clásico; Amazon Bedrock Evaluations solo para modelos fundacionales. En las preguntas del examen sigue siendo la respuesta clásica para sesgo y SHAP.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html>
 - **Amazon SageMaker Ground Truth** (SageMaker Ground Truth, Ground Truth). *Servicio.* Servicio para crear conjuntos de datos de entrenamiento etiquetados con trabajadores humanos (propios, de un proveedor o de Amazon Mechanical Turk) y etiquetado automático. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo.
+  - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos, y su documentación no indica sustituto.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html>
 - **Amazon SageMaker JumpStart** (SageMaker JumpStart, JumpStart). *Servicio.* Ofrece modelos preentrenados de código abierto para muchos tipos de problemas, que se pueden entrenar de forma incremental y ajustar antes de desplegarlos, además de plantillas de solución y cuadernos de ejemplo.
   - Usar cuando: Para partir de un modelo preentrenado y ajustarlo con datos propios sin entrenar desde cero.
-  - No usar cuando: Cuando se necesita un modelo totalmente a medida con un algoritmo propio, sin partir de uno preentrenado.
+  - No usar cuando: Cuando se necesita un modelo totalmente a medida con un algoritmo propio, sin partir de uno preentrenado: SageMaker AI con código o contenedor propios.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html>
 - **Amazon SageMaker Model Cards** (SageMaker Model Cards, Model Cards, model card). *Servicio.* Documentación de un modelo de ML en un único sitio: uso previsto y no previsto, calificación de riesgo (desconocido, bajo, medio, alto), detalles de entrenamiento, métricas y resultados de evaluación. Cada cambio crea una versión inmutable; se exporta a PDF y se integra con el Model Registry.
   - Usar cuando: Para gobierno y auditoría: comunicar a riesgos, cumplimiento o reguladores para qué sirve un modelo y cómo se evaluó.
-  - No usar cuando: Para detectar sesgo o explicar predicciones: documenta, no mide.
+  - No usar cuando: Para detectar sesgo o explicar predicciones: documenta, no mide. Para medir, métricas de sesgo y SHAP con bibliotecas abiertas o, en el examen, SageMaker Clarify (ya no admite clientes nuevos); para modelos fundacionales, Amazon Bedrock Evaluations.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html>
 - **SageMaker Model Monitor** (Model Monitor, Amazon SageMaker Model Monitor). *Servicio.* Vigila modelos de SageMaker AI en producción: deriva de la calidad de los datos y del modelo, deriva del sesgo y de la atribución de características, con alertas. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo. AWS indica como sustituto sus soluciones abiertas de monitorización con CloudWatch.
+  - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos; AWS remite a sus soluciones abiertas de monitorización con Amazon CloudWatch.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html>
 - **SageMaker Model Registry** (Model Registry, Amazon SageMaker Model Registry). *Servicio.* Catálogo de modelos de SageMaker AI: gestiona versiones, metadatos (como métricas de entrenamiento), linaje, estado de aprobación y despliegue a producción.
   - Usar cuando: Para versionar modelos, aprobarlos antes de producción y saber qué versión está desplegada.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html>
 - **Amazon SageMaker Pipelines** (SageMaker Pipelines). *Servicio.* Servicio de orquestación de flujos de trabajo de SageMaker AI para automatizar el procesamiento de datos, el entrenamiento, la evaluación, el despliegue y la monitorización de modelos, con versionado y trazabilidad (lineage).
   - Usar cuando: Para que el entrenamiento y el despliegue sean repetibles y automatizados (MLOps).
-  - No usar cuando: Para un experimento puntual que no se va a repetir.
+  - No usar cuando: Para un experimento puntual que no se va a repetir: basta un trabajo de entrenamiento suelto o un cuaderno.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html>
 - **satisfacción del usuario** (user satisfaction, CSAT). *Métrica.* Valoración de los usuarios de una aplicación de IA: encuestas (CSAT), votos positivos o negativos y quejas.
   - Referencia: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html>
@@ -649,7 +651,7 @@ Total: 237 términos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/count-tokens.html>
 - **AWS Trainium** (Trainium). *Servicio.* Chips diseñados por AWS para entrenar y servir (inferencia) modelos de IA a escala con la mejor relación coste-rendimiento, disponibles en instancias de Amazon EC2.
   - Usar cuando: Para entrenar modelos grandes propios (o servirlos) en EC2 optimizando el coste.
-  - No usar cuando: Cuando se consume un modelo por API en Bedrock: ahí no se eligen chips.
+  - No usar cuando: Cuando se consume un modelo por API: ahí no se eligen chips (basta Amazon Bedrock).
   - Referencia: <https://aws.amazon.com/ai/machine-learning/trainium/>
 - **Amazon Transcribe** (Transcribe). *Servicio.* Servicio de reconocimiento automático del habla que usa modelos de aprendizaje automático para convertir audio en texto.
   - Usar cuando: Para transcribir audio (reuniones, llamadas) a texto.
@@ -666,7 +668,7 @@ Total: 237 términos.
 - **transformer** (transformers, arquitectura transformer). *Concepto.* Arquitectura de red neuronal en la que se basan los LLM. Su mecanismo de autoatención (self-attention) analiza a la vez todas las partes de la secuencia y decide cuáles son más importantes, en lugar de procesarla palabra a palabra.
   - Referencia: <https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/>
 - **Amazon Translate** (Translate). *Servicio.* Servicio de traducción de texto bajo demanda que usa aprendizaje automático. Sirve para traducir documentos de texto no estructurado y para crear aplicaciones multilingües.
-  - No usar cuando: Cuando hay que transcribir audio o extraer información del contenido de un documento.
+  - No usar cuando: Cuando hay que transcribir audio (Amazon Transcribe) o extraer información del contenido de un documento (Amazon Textract o Amazon Comprehend).
   - Referencia: <https://docs.aws.amazon.com/translate/latest/dg/what-is.html>
 - **transparencia** (transparency). *Concepto.* Dimensión de la IA responsable: permitir que las personas decidan con información sobre su relación con un sistema de IA (que se usa IA, uso previsto, limitaciones, datos). Se documenta con Model Cards, AI Service Cards o fichas de datos.
   - Referencia: <https://aws.amazon.com/ai/responsible-ai/>
@@ -702,7 +704,7 @@ Total: 237 términos.
 
 - **AWS Well-Architected Tool** (Well-Architected Tool, AWS WA Tool). *Servicio.* Herramienta para revisar una carga de trabajo frente a las buenas prácticas del AWS Well-Architected Framework y a lentes adicionales del catálogo oficial o propias, con un plan de mejora.
   - Usar cuando: Para revisar de forma estructurada la arquitectura de un sistema de IA.
-  - No usar cuando: Para escanear vulnerabilidades o recopilar evidencias de auditoría automáticamente.
+  - No usar cuando: Para escanear vulnerabilidades (Amazon Inspector) o recopilar evidencias de cumplimiento de los recursos (conformance packs de AWS Config).
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html>
 
 ## Z

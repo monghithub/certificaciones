@@ -4,13 +4,13 @@ Servicios dentro de alcance que el examen da por conocidos. La columna final ind
 
 | Servicio | Caso de uso | Cuándo NO usarlo |
 |---|---|---|
-| Amazon EC2 | Servidores virtuales cuando se necesita control del sistema operativo, de la red y del almacenamiento (por ejemplo, para alojar un modelo propio) | Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor |
-| Amazon S3 | Almacenamiento de objetos: lagos de datos, copias de seguridad y restauración, sitios web y analítica de datos | Como base de datos transaccional o como sistema de ficheros de baja latencia para un servidor |
-| AWS Lambda | Ejecutar código en respuesta a eventos sin gestionar servidores (por ejemplo, invocar un modelo cuando llega un fichero) | Cuando se necesita control sobre el servidor o el sistema operativo |
-| AWS Identity and Access Management (IAM) | Definir quién puede hacer qué sobre qué recursos: usuarios, roles y políticas | No es un servicio de datos ni de cómputo: no sustituye al cifrado ni a las políticas de la propia aplicación |
-| Amazon Bedrock | Usar modelos fundacionales de varios proveedores mediante API, sin gestionar la infraestructura | Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento |
-| Amazon SageMaker AI | Construir, entrenar y desplegar modelos de aprendizaje automático propios | Cuando un servicio de IA preentrenado o gestionado resuelve el caso con menos esfuerzo |
-| Amazon VPC | Aislar en una red privada los recursos propios (por ejemplo, un *endpoint* de modelo) | No es un servicio de cómputo ni de almacenamiento: solo define la red |
+| Amazon EC2 | Servidores virtuales cuando se necesita control del sistema operativo, de la red y del almacenamiento (por ejemplo, para alojar un modelo propio) | Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor: código por eventos con AWS Lambda; modelos con Amazon Bedrock o un *endpoint* de SageMaker AI |
+| Amazon S3 | Almacenamiento de objetos: lagos de datos, copias de seguridad y restauración, sitios web y analítica de datos | Como base de datos transaccional: para eso, una base de datos (Amazon RDS o Amazon Aurora si es relacional; Amazon DynamoDB si es clave-valor, ver módulo 03). Tampoco como disco de baja latencia de un servidor: eso es almacenamiento de bloques o de ficheros (Amazon EBS o Amazon EFS, que este examen no evalúa) |
+| AWS Lambda | Ejecutar código en respuesta a eventos sin gestionar servidores (por ejemplo, invocar un modelo cuando llega un fichero) | Cuando se necesita control sobre el servidor o el sistema operativo (es Amazon EC2) |
+| AWS Identity and Access Management (IAM) | Definir quién puede hacer qué sobre qué recursos: usuarios, roles y políticas | No es un servicio de datos ni de cómputo: no sustituye al cifrado (AWS KMS) ni a los controles de la propia aplicación |
+| Amazon Bedrock | Usar modelos fundacionales de varios proveedores mediante API, sin gestionar la infraestructura | Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento (es Amazon SageMaker AI) |
+| Amazon SageMaker AI | Construir, entrenar y desplegar modelos de aprendizaje automático propios | Cuando un servicio de IA preentrenado (Rekognition, Comprehend, Transcribe…) o un modelo de Amazon Bedrock resuelve el caso con menos esfuerzo |
+| Amazon VPC | Aislar en una red privada los recursos propios (por ejemplo, un *endpoint* de modelo) | No es un servicio de cómputo ni de almacenamiento: solo define la red. Los permisos son de IAM y el cifrado, de AWS KMS |
 | Amazon CloudWatch | Métricas, registros y alarmas sobre el funcionamiento de recursos y aplicaciones | Para saber quién hizo una llamada a la API (es AWS CloudTrail) |
 | AWS CloudTrail | Auditar la actividad de la cuenta: quién hizo qué llamada a la API y cuándo | Para vigilar la latencia o el uso de CPU (es Amazon CloudWatch) |
 | AWS Budgets | Presupuestos de coste o uso con alertas al superarlos | Para analizar en detalle el gasto histórico (es AWS Cost Explorer) |
