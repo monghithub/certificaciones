@@ -18,7 +18,7 @@
 - **Solo se pagan los *tokens* de salida.** Se pagan entrada **y** salida. Enviar el manual entero en cada petición dispara el coste de entrada.
 - **La salida cuesta lo mismo que la entrada.** Normalmente cuesta varias veces más: limitar la longitud de la respuesta ahorra.
 - **Provisioned Throughput para ahorrar en un piloto.** Es capacidad dedicada que se paga por horas aunque no se use. Para tráfico bajo o variable, bajo demanda.
-- **Lotes para un chat.** La inferencia por lotes es asíncrona (S3) y no admite llamadas a herramientas: no sirve para conversaciones.
+- **Lotes para un chat.** La inferencia por lotes es asíncrona (S3) y no admite llamadas a herramientas: no sirve para conversaciones (para eso, inferencia bajo demanda).
 - **Inferencia entre Regiones global con residencia de datos.** La global puede procesar en cualquier Región comercial; si los datos no pueden salir de la UE, la geográfica de la UE.
 - **La inferencia entre Regiones cuesta más.** No hay coste adicional de enrutamiento; la global incluso ahorra aproximadamente un 10 %.
 

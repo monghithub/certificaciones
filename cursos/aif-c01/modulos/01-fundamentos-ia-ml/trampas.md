@@ -21,7 +21,7 @@
 ## Inferencia
 
 - **Tiempo real, *serverless*, asíncrona y por lotes no son intercambiables.** Baja latencia interactiva: tiempo real. Ráfagas con inactividad: *serverless*. Cargas grandes (hasta 1 GB) o largas (hasta una hora) que se encolan: asíncrona. Conjunto de datos completo sin *endpoint* permanente: por lotes.
-- ***Serverless* tiene límites.** No admite GPU ni configuración de VPC y tiene arranques en frío: si el caso pide GPU o red privada, no es la opción.
+- ***Serverless* tiene límites.** No admite GPU ni configuración de VPC y tiene arranques en frío: si el caso pide GPU o red privada, no es la opción; mejor inferencia en tiempo real (o asíncrona, si puede esperar).
 - **Un *endpoint* en tiempo real cuesta aunque no tenga tráfico.** Si el tráfico es esporádico, *serverless* o asíncrona (que escala a cero) son más baratas.
 - **Entrenar no es inferir.** Entrenar crea el modelo; inferir lo usa para predecir.
 
@@ -40,7 +40,7 @@
 - **Comprehend frente a modelo fundacional.** Para extraer opiniones o entidades a escala con un servicio preentrenado, Comprehend; para redactar o resumir, un modelo fundacional en Bedrock.
 - **«Servicio gestionado» no significa «sin red privada».** La mayoría de los servicios de IA de AWS y Bedrock admiten *endpoints* de VPC; lo que cambia con un modelo autoalojado es quién lo opera y qué modelo se puede usar.
 - **Servicio gestionado frente a SageMaker AI.** Si un servicio preentrenado cubre el caso, es la opción de menor esfuerzo; SageMaker AI es para modelos propios y mayor control.
-- **Servicios cerrados a nuevos clientes.** Model Monitor, Clarify, Ground Truth y Bedrock Agents Classic siguen funcionando para quien ya los usa, pero no son la opción para proyectos nuevos. SageMaker Experiments es ahora *Classic*: para experimentos, MLflow en SageMaker AI.
+- **Servicios cerrados a nuevos clientes.** Model Monitor, Clarify, Ground Truth y Bedrock Agents Classic siguen funcionando para quien ya los usa, pero no son la opción para proyectos nuevos. Alternativas: CloudWatch para monitorizar, métricas de sesgo y SHAP con bibliotecas abiertas (o Bedrock Evaluations para modelos fundacionales) y Amazon Bedrock AgentCore para agentes; Ground Truth no tiene sustituto indicado por AWS. SageMaker Experiments es ahora *Classic*: para experimentos, MLflow en SageMaker AI.
 - **Preentrenar desde cero casi nunca es la respuesta.** Es la opción de mayor coste y esfuerzo; antes se prueban un servicio preentrenado o un modelo fundacional adaptado.
 
 ## Ciclo de vida y métricas

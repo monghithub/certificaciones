@@ -124,7 +124,7 @@ Una vez entrenado el modelo, se despliega para obtener predicciones. Según la l
 Matices que ayudan a descartar opciones (documentación de SageMaker AI):
 
 - **Asíncrona**: admite cargas de hasta 1 GB y tiempos de procesamiento de hasta una hora; la petición se deja en Amazon S3 y el resultado vuelve a S3.
-- ***Serverless***: escala a cero sin tráfico, pero no admite GPU ni configuración de VPC, y puede sufrir arranques en frío. Si el caso exige GPU o red privada, no es la opción.
+- ***Serverless***: escala a cero sin tráfico, pero no admite GPU ni configuración de VPC, y puede sufrir arranques en frío. Si el caso exige GPU o red privada, no es la opción; mejor tiempo real o asíncrona.
 - **Tiempo real**: las instancias del *endpoint* se facturan mientras están en marcha, haya o no peticiones.
 - **Por lotes**: no hay *endpoint*; se lanza un trabajo, se procesa el conjunto completo y termina.
 

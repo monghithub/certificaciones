@@ -8,7 +8,7 @@
   categoria: servicio
   definicion: "Capacidad de cómputo escalable bajo demanda en la nube de AWS: servidores virtuales llamados instancias. El cliente elige el tipo de instancia, la red y el almacenamiento, y gestiona el sistema operativo invitado."
   usar_cuando: "Cuando se necesita control del sistema operativo, de la red y del almacenamiento (por ejemplo, para alojar un modelo propio)."
-  no_usar_cuando: "Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor."
+  no_usar_cuando: "Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor: código por eventos con AWS Lambda; modelos con Amazon Bedrock o un endpoint de SageMaker AI."
   referencia: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
 
 - id: amazon-s3
@@ -16,7 +16,7 @@
   alias: [S3, Amazon Simple Storage Service]
   categoria: servicio
   definicion: "Servicio de almacenamiento de objetos con gran escalabilidad, disponibilidad, seguridad y rendimiento. Se usa, entre otros, para lagos de datos, sitios web, copias de seguridad y analítica de big data."
-  no_usar_cuando: "Como base de datos transaccional o como sistema de ficheros de baja latencia para un servidor."
+  no_usar_cuando: "Como base de datos transaccional: para eso, una base de datos (Amazon RDS o Amazon Aurora si es relacional; Amazon DynamoDB si es clave-valor). Tampoco como disco de baja latencia de un servidor: eso es almacenamiento de bloques o de ficheros (Amazon EBS o Amazon EFS, que este examen no evalúa)."
   referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
 
 - id: aws-lambda
@@ -25,7 +25,7 @@
   categoria: servicio
   definicion: "Servicio de cómputo serverless: ejecuta código sin aprovisionar ni gestionar servidores. AWS se encarga del mantenimiento, la capacidad, el escalado y los parches."
   usar_cuando: "Para ejecutar código en respuesta a eventos o llamadas a una API sin gestionar servidores."
-  no_usar_cuando: "Cuando se necesita control sobre el servidor o el sistema operativo."
+  no_usar_cuando: "Cuando se necesita control sobre el servidor o el sistema operativo: Amazon EC2."
   referencia: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 
 - id: region-de-aws
@@ -42,7 +42,7 @@
   alias: [IAM, AWS IAM, AWS Identity and Access Management]
   categoria: servicio
   definicion: "Servicio que controla de forma segura el acceso a los recursos de AWS: quién está autenticado (ha iniciado sesión) y quién está autorizado (tiene permisos) para usar qué recursos."
-  no_usar_cuando: "No es un servicio de datos ni de cómputo: no sustituye al cifrado ni a las políticas de la propia aplicación."
+  no_usar_cuando: "No es un servicio de datos ni de cómputo: no sustituye al cifrado (AWS KMS) ni a los controles de la propia aplicación."
   referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
 
 - id: amazon-bedrock
@@ -51,7 +51,7 @@
   categoria: servicio
   definicion: "Servicio totalmente gestionado que da acceso seguro a modelos fundacionales de alto rendimiento de las principales compañías de IA para crear y escalar aplicaciones de IA generativa."
   usar_cuando: "Para usar modelos fundacionales de varios proveedores mediante API, sin gestionar la infraestructura."
-  no_usar_cuando: "Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento."
+  no_usar_cuando: "Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento: Amazon SageMaker AI."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
 
 - id: amazon-bedrock-agentcore
@@ -60,7 +60,7 @@
   categoria: servicio
   definicion: "Plataforma agéntica para crear, desplegar y operar agentes de IA de forma segura y a escala, con cualquier framework y modelo fundacional."
   usar_cuando: "Cuando hay un caso de uso agéntico que necesita ejecución, memoria, identidad y observabilidad gestionadas."
-  no_usar_cuando: "Cuando basta una consulta sencilla a un modelo: no hace falta un agente."
+  no_usar_cuando: "Cuando basta una consulta sencilla a un modelo (una llamada a Bedrock, por ejemplo con la API Converse) o un flujo de pasos fijos (Amazon Bedrock Flows): no hace falta un agente."
   referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html
 
 - id: amazon-bedrock-agents
@@ -77,7 +77,7 @@
   categoria: servicio
   definicion: "Permite integrar información propia en aplicaciones de IA generativa mediante RAG: busca en tus datos la información relevante para una consulta y la usa para mejorar las respuestas del modelo. Hay dos tipos: Managed Knowledge Base (Bedrock gestiona ingesta, índice y almacén, con conectores y permisos por documento) y customer-managed (el cliente elige y gestiona el almacén vectorial)."
   usar_cuando: "Cuando el modelo debe responder con información propia, específica o actualizada."
-  no_usar_cuando: "Cuando el modelo no necesita datos propios ni actualizados."
+  no_usar_cuando: "Cuando el modelo no necesita datos propios ni actualizados: basta invocar el modelo con un buen prompt."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
 
 - id: amazon-sagemaker-ai
@@ -86,7 +86,7 @@
   categoria: servicio
   definicion: "Servicio totalmente gestionado de aprendizaje automático para construir, entrenar y desplegar modelos propios en un entorno de alojamiento listo para producción. Antes del 3 de diciembre de 2024 se llamaba Amazon SageMaker; desde esa fecha, «Amazon SageMaker» es el nombre de una plataforma unificada de datos, analítica e IA que incluye SageMaker AI."
   usar_cuando: "Cuando hace falta un modelo propio y la máxima flexibilidad y control sobre el algoritmo."
-  no_usar_cuando: "Cuando un servicio de IA preentrenado resuelve el caso con menos esfuerzo."
+  no_usar_cuando: "Cuando un servicio de IA preentrenado (Rekognition, Comprehend, Transcribe…) o un modelo fundacional de Amazon Bedrock resuelve el caso con menos esfuerzo."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
 
 - id: amazon-sagemaker-jumpstart
@@ -95,7 +95,7 @@
   categoria: servicio
   definicion: "Ofrece modelos preentrenados de código abierto para muchos tipos de problemas, que se pueden entrenar de forma incremental y ajustar antes de desplegarlos, además de plantillas de solución y cuadernos de ejemplo."
   usar_cuando: "Para partir de un modelo preentrenado y ajustarlo con datos propios sin entrenar desde cero."
-  no_usar_cuando: "Cuando se necesita un modelo totalmente a medida con un algoritmo propio, sin partir de uno preentrenado."
+  no_usar_cuando: "Cuando se necesita un modelo totalmente a medida con un algoritmo propio, sin partir de uno preentrenado: SageMaker AI con código o contenedor propios."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html
 
 - id: amazon-sagemaker-model-monitor
@@ -103,6 +103,7 @@
   alias: [Model Monitor, Amazon SageMaker Model Monitor]
   categoria: servicio
   definicion: "Vigila modelos de SageMaker AI en producción: deriva de la calidad de los datos y del modelo, deriva del sesgo y de la atribución de características, con alertas. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo. AWS indica como sustituto sus soluciones abiertas de monitorización con CloudWatch."
+  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos; AWS remite a sus soluciones abiertas de monitorización con Amazon CloudWatch."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html
 
 - id: amazon-sagemaker-clarify
@@ -111,7 +112,7 @@
   categoria: servicio
   definicion: "Herramienta de SageMaker AI para detectar sesgo en los datos (por ejemplo, CI y DPL) y en las predicciones (por ejemplo, DI) y explicarlas con SHAP. Ya no está abierta a clientes nuevos; los existentes pueden seguir usándola. AWS indica como sustituto calcular las mismas métricas con bibliotecas abiertas y SHAP, y Amazon Bedrock Evaluations para modelos fundacionales."
   usar_cuando: "Clientes actuales que necesitan métricas de sesgo y explicaciones de modelos de ML clásico."
-  no_usar_cuando: "Como opción para un proyecto nuevo, o para evaluar modelos fundacionales: Amazon Bedrock Evaluations."
+  no_usar_cuando: "Como opción para un proyecto nuevo: métricas de sesgo y SHAP con bibliotecas abiertas (pandas, scikit-learn, SHAP) en ML clásico; Amazon Bedrock Evaluations solo para modelos fundacionales. En las preguntas del examen sigue siendo la respuesta clásica para sesgo y SHAP."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
 
 - id: amazon-transcribe
@@ -128,7 +129,7 @@
   alias: [Translate]
   categoria: servicio
   definicion: "Servicio de traducción de texto bajo demanda que usa aprendizaje automático. Sirve para traducir documentos de texto no estructurado y para crear aplicaciones multilingües."
-  no_usar_cuando: "Cuando hay que transcribir audio o extraer información del contenido de un documento."
+  no_usar_cuando: "Cuando hay que transcribir audio (Amazon Transcribe) o extraer información del contenido de un documento (Amazon Textract o Amazon Comprehend)."
   referencia: https://docs.aws.amazon.com/translate/latest/dg/what-is.html
 
 - id: amazon-comprehend
@@ -137,7 +138,7 @@
   categoria: servicio
   definicion: "Usa procesamiento del lenguaje natural (NLP) para extraer información del contenido de los documentos: reconoce entidades, frases clave, idioma, opiniones y otros elementos."
   usar_cuando: "Para analizar texto: opiniones de clientes, entidades o temas de un conjunto de documentos."
-  no_usar_cuando: "Cuando el problema no es de lenguaje natural (imágenes, datos tabulares)."
+  no_usar_cuando: "Cuando el problema no es de lenguaje natural: imágenes (Amazon Rekognition) o datos tabulares (Amazon SageMaker AI)."
   referencia: https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html
 
 - id: amazon-lex
@@ -146,7 +147,7 @@
   categoria: servicio
   definicion: "Servicio para crear interfaces conversacionales por voz y texto en las aplicaciones, con comprensión del lenguaje natural (NLU) y reconocimiento automático del habla (ASR)."
   usar_cuando: "Para construir un chatbot o asistente de voz propio."
-  no_usar_cuando: "Cuando solo se quiere analizar texto existente, sin diálogo con el usuario."
+  no_usar_cuando: "Cuando solo se quiere analizar texto existente, sin diálogo con el usuario: Amazon Comprehend."
   referencia: https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html
 
 - id: amazon-polly
@@ -182,7 +183,7 @@
   categoria: servicio
   definicion: "Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad."
   usar_cuando: "Para personalizar recomendaciones (por ejemplo, en una aplicación de vídeo)."
-  no_usar_cuando: "Cuando no se dispone de datos propios de usuarios y elementos con los que generar recomendaciones."
+  no_usar_cuando: "Cuando no se dispone de datos propios de usuarios y elementos con los que generar recomendaciones: hasta reunirlos, una regla sencilla (por ejemplo, los más vendidos)."
   referencia: https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html
 
 - id: amazon-quick
@@ -191,7 +192,7 @@
   categoria: servicio
   definicion: "Servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar. Se usa mediante chat en lenguaje natural y emplea agentes de IA sobre los datos y aplicaciones conectados."
   usar_cuando: "Para dar a los empleados un asistente con agentes que consulte los datos de la empresa, automatice tareas, analice datos e investigue, sin desarrollar."
-  no_usar_cuando: "Cuando se necesita un modelo propio con control sobre el entrenamiento, o una aplicación propia para clientes."
+  no_usar_cuando: "Cuando se necesita un modelo propio con control sobre el entrenamiento (Amazon SageMaker AI) o una aplicación propia para clientes (Amazon Bedrock)."
   referencia: https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
 
 - id: kiro
@@ -199,7 +200,7 @@
   categoria: servicio
   definicion: "Plataforma de desarrollo con IA de AWS, basada en especificaciones (spec-driven development), con un IDE y una CLI en los que agentes de IA ayudan a planificar, escribir y probar código."
   usar_cuando: "Para acelerar el desarrollo de software (incluidas aplicaciones de IA) con un asistente agéntico."
-  no_usar_cuando: "Cuando la pregunta trata de entrenar o desplegar un modelo de ML."
+  no_usar_cuando: "Cuando la pregunta trata de entrenar o desplegar un modelo de ML: Amazon SageMaker AI."
   referencia: https://aws.amazon.com/documentation-overview/kiro/
   enlaces:
     - {texto: "Documentación de Kiro", url: "https://kiro.dev/docs/"}
@@ -540,7 +541,7 @@
   categoria: servicio
   definicion: "Familia de modelos fundacionales de Amazon que se usan mediante API a través de Amazon Bedrock: Micro (solo texto), Lite, Pro y Premier, y la generación Nova 2 (Lite, Sonic y Multimodal Embeddings). Nova Canvas (imagen), Nova Reel (vídeo) y Nova Sonic v1 están retirados desde septiembre de 2026."
   usar_cuando: "Cuando se busca un modelo fundacional propio de Amazon dentro de Bedrock, por ejemplo por precio-rendimiento."
-  no_usar_cuando: "Cuando basta un servicio de IA especializado o un modelo de ML tradicional para una tarea acotada."
+  no_usar_cuando: "Cuando basta un servicio de IA especializado (Comprehend, Rekognition, Textract…) o un modelo de ML tradicional (SageMaker AI) para una tarea acotada."
   referencia: https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html
 
 - id: aws-glue
@@ -567,7 +568,7 @@
   categoria: servicio
   definicion: "Funcionalidad de SageMaker AI para generar predicciones con ML sin escribir código: modelos listos para usar (basados en Rekognition, Textract y Comprehend) o modelos propios de regresión, clasificación, previsión de series temporales, imagen y texto."
   usar_cuando: "Cuando analistas de negocio sin experiencia en ML ni en programación necesitan un modelo predictivo con sus datos."
-  no_usar_cuando: "Cuando un equipo de ciencia de datos necesita control total sobre el algoritmo y el código."
+  no_usar_cuando: "Cuando un equipo de ciencia de datos necesita control total sobre el algoritmo y el código: SageMaker AI con cuadernos o código propio."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html
 
 - id: amazon-sagemaker-ground-truth
@@ -575,6 +576,7 @@
   alias: [SageMaker Ground Truth, Ground Truth]
   categoria: servicio
   definicion: "Servicio para crear conjuntos de datos de entrenamiento etiquetados con trabajadores humanos (propios, de un proveedor o de Amazon Mechanical Turk) y etiquetado automático. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
+  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos, y su documentación no indica sustituto."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html
 
 - id: amazon-sagemaker-pipelines
@@ -583,7 +585,7 @@
   categoria: servicio
   definicion: "Servicio de orquestación de flujos de trabajo de SageMaker AI para automatizar el procesamiento de datos, el entrenamiento, la evaluación, el despliegue y la monitorización de modelos, con versionado y trazabilidad (lineage)."
   usar_cuando: "Para que el entrenamiento y el despliegue sean repetibles y automatizados (MLOps)."
-  no_usar_cuando: "Para un experimento puntual que no se va a repetir."
+  no_usar_cuando: "Para un experimento puntual que no se va a repetir: basta un trabajo de entrenamiento suelto o un cuaderno."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html
 
 - id: amazon-sagemaker-model-registry
@@ -786,7 +788,7 @@
   categoria: concepto
   definicion: "Model Context Protocol: protocolo abierto que proporciona una capa de comunicación estándar para que los agentes de IA interactúen con datos, herramientas y servicios externos, y también con otros agentes."
   usar_cuando: "Para exponer una herramienta o fuente de datos una sola vez y que la use cualquier agente compatible."
-  no_usar_cuando: "No es un modelo ni un servicio de AWS: no genera respuestas por sí mismo."
+  no_usar_cuando: "No es un modelo ni un servicio de AWS: no genera respuestas por sí mismo (eso lo hace el modelo, por ejemplo en Amazon Bedrock). Para comunicar agentes entre sí, A2A."
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/getting-started-with-mcp.html
 
 - id: uso-de-herramientas
@@ -848,7 +850,7 @@
   categoria: concepto
   definicion: "Modo de Amazon Bedrock que procesa de forma asíncrona muchos prompts de una vez: la entrada y la salida van a Amazon S3. En los modelos que lo admiten cuesta un 50 % menos que bajo demanda. No admite llamadas a herramientas."
   usar_cuando: "Para grandes volúmenes que no necesitan respuesta inmediata."
-  no_usar_cuando: "En aplicaciones interactivas o conversaciones de varios turnos."
+  no_usar_cuando: "En aplicaciones interactivas o conversaciones de varios turnos: inferencia bajo demanda."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
 
 - id: niveles-de-servicio-bedrock
@@ -878,7 +880,7 @@
   categoria: servicio
   definicion: "Salvaguardas configurables para detectar y filtrar contenido no deseado y proteger información sensible en las entradas y respuestas de los modelos: filtros de contenido, temas denegados, filtros de palabras, filtros de información sensible, comprobación de grounding contextual y Automated Reasoning checks. Se aplica al invocar un modelo de Bedrock o con la API ApplyGuardrail, sin invocar un modelo."
   usar_cuando: "Para aplicar políticas de uso responsable y privacidad a una aplicación de IA generativa."
-  no_usar_cuando: "Como sustituto de los permisos IAM o del cifrado de los datos."
+  no_usar_cuando: "Como sustituto de los permisos (IAM) o del cifrado de los datos (AWS KMS)."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
 
 - id: amazon-q
@@ -897,7 +899,7 @@
   categoria: servicio
   definicion: "Chips diseñados por AWS para entrenar y servir (inferencia) modelos de IA a escala con la mejor relación coste-rendimiento, disponibles en instancias de Amazon EC2."
   usar_cuando: "Para entrenar modelos grandes propios (o servirlos) en EC2 optimizando el coste."
-  no_usar_cuando: "Cuando se consume un modelo por API en Bedrock: ahí no se eligen chips."
+  no_usar_cuando: "Cuando se consume un modelo por API: ahí no se eligen chips (basta Amazon Bedrock)."
   referencia: https://aws.amazon.com/ai/machine-learning/trainium/
 
 - id: aws-inferentia
@@ -954,7 +956,7 @@
   categoria: servicio
   definicion: "Conectividad privada entre una VPC y servicios de AWS (como Amazon Bedrock) mediante endpoints de interfaz, sin exponer el tráfico a internet."
   usar_cuando: "Cuando el tráfico hacia el servicio no debe pasar por internet."
-  no_usar_cuando: "Como sustituto de los permisos IAM o del cifrado."
+  no_usar_cuando: "Como sustituto de los permisos (IAM) o del cifrado (AWS KMS)."
   referencia: https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
 
 - id: api-converse
@@ -1005,7 +1007,7 @@
   categoria: servicio
   definicion: "Base de datos de grafos gestionada. Neptune Analytics añade búsqueda vectorial combinada con recorridos y algoritmos de grafos, la base de GraphRAG; Bedrock Knowledge Bases la admite."
   usar_cuando: "Cuando importan las relaciones entre entidades: GraphRAG, redes de fraude, vista 360 del cliente, respuestas explicables por relaciones."
-  no_usar_cuando: "Para una búsqueda semántica sencilla sobre documentos sin relaciones relevantes."
+  no_usar_cuando: "Para una búsqueda semántica sencilla sobre documentos sin relaciones relevantes: Amazon OpenSearch Service, Aurora PostgreSQL con pgvector o Amazon S3 Vectors."
   referencia: https://docs.aws.amazon.com/neptune-analytics/latest/userguide/vector-similarity.html
 
 - id: amazon-documentdb
@@ -1014,7 +1016,7 @@
   categoria: servicio
   definicion: "Base de datos de documentos compatible con MongoDB, con búsqueda vectorial nativa desde la versión 5.0."
   usar_cuando: "Aplicaciones que ya usan la API de MongoDB y quieren añadir búsqueda semántica."
-  no_usar_cuando: "Cuando el caso no usa documentos JSON ni la API de MongoDB."
+  no_usar_cuando: "Cuando el caso no usa documentos JSON ni la API de MongoDB: para búsqueda vectorial, Aurora PostgreSQL con pgvector u OpenSearch Service."
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
 
 - id: amazon-s3-vectors
@@ -1023,7 +1025,7 @@
   categoria: servicio
   definicion: "Almacenamiento vectorial de Amazon S3 (buckets e índices vectoriales) optimizado en coste para volúmenes enormes, con latencias por debajo del segundo en consultas poco frecuentes y de unos 100 ms en las frecuentes. Se integra con Bedrock Knowledge Bases."
   usar_cuando: "Miles de millones de vectores al menor coste, con consultas poco frecuentes."
-  no_usar_cuando: "Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo."
+  no_usar_cuando: "Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo: Amazon OpenSearch Service."
   referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html
 
 - id: graphrag
@@ -1258,7 +1260,7 @@
   categoria: servicio
   definicion: "Base de datos NoSQL sin servidor y totalmente gestionada. Tiene índices vectoriales nativos que se consultan con la API SearchVectors para buscar por similitud junto a los datos operativos, sin otra base de datos ni réplicas."
   usar_cuando: "RAG o memoria de agentes cuando los datos operativos ya están en DynamoDB."
-  no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido."
+  no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido (sí OpenSearch Serverless o clústeres gestionados de OpenSearch, Aurora PostgreSQL, Neptune Analytics, S3 Vectors y terceros como Pinecone; ver el módulo 03)."
   referencia: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/VectorSearch.html
 
 - id: amazon-elasticache
@@ -1267,7 +1269,7 @@
   categoria: servicio
   definicion: "Caché y almacén de datos en memoria totalmente gestionado (Valkey, Redis OSS, Memcached). Desde Valkey 8.2 ofrece búsqueda vectorial en memoria con latencias mínimas."
   usar_cuando: "Búsqueda semántica en tiempo real, caché semántica o memoria de agentes con latencias mínimas."
-  no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido."
+  no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido (sí OpenSearch Serverless o clústeres gestionados de OpenSearch, Aurora PostgreSQL, Neptune Analytics, S3 Vectors y terceros como Pinecone; ver el módulo 03)."
   referencia: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/vector-search-overview.html
 
 - id: instrucciones-del-sistema
@@ -1500,7 +1502,7 @@
   categoria: servicio
   definicion: "Documentación de un modelo de ML en un único sitio: uso previsto y no previsto, calificación de riesgo (desconocido, bajo, medio, alto), detalles de entrenamiento, métricas y resultados de evaluación. Cada cambio crea una versión inmutable; se exporta a PDF y se integra con el Model Registry."
   usar_cuando: "Para gobierno y auditoría: comunicar a riesgos, cumplimiento o reguladores para qué sirve un modelo y cómo se evaluó."
-  no_usar_cuando: "Para detectar sesgo o explicar predicciones: documenta, no mide."
+  no_usar_cuando: "Para detectar sesgo o explicar predicciones: documenta, no mide. Para medir, métricas de sesgo y SHAP con bibliotecas abiertas o, en el examen, SageMaker Clarify (ya no admite clientes nuevos); para modelos fundacionales, Amazon Bedrock Evaluations."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
 
 - id: aws-ai-service-cards
@@ -1518,7 +1520,7 @@
   categoria: servicio
   definicion: "Servicio para añadir revisión humana a predicciones de ML con baja confianza o a muestras aleatorias (Textract, Rekognition, modelos propios). Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
   usar_cuando: "Clientes actuales que necesitan revisión humana de predicciones de baja confianza."
-  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos."
+  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos, y su documentación no indica un sustituto; la revisión humana se tendría que diseñar en la propia aplicación."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
 
 - id: responsible-ai-lens
@@ -1666,7 +1668,7 @@
   categoria: servicio
   definicion: "Herramienta para revisar una carga de trabajo frente a las buenas prácticas del AWS Well-Architected Framework y a lentes adicionales del catálogo oficial o propias, con un plan de mejora."
   usar_cuando: "Para revisar de forma estructurada la arquitectura de un sistema de IA."
-  no_usar_cuando: "Para escanear vulnerabilidades o recopilar evidencias de auditoría automáticamente."
+  no_usar_cuando: "Para escanear vulnerabilidades (Amazon Inspector) o recopilar evidencias de cumplimiento de los recursos (conformance packs de AWS Config)."
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html
 
 - id: aws-audit-manager
@@ -1674,7 +1676,7 @@
   alias: [Audit Manager]
   categoria: servicio
   definicion: "Servicio que recopila automáticamente evidencias para auditorías con marcos predefinidos o propios. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
-  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos."
+  no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos. AWS recomienda los conformance packs de AWS Config, que no equivalen del todo (no hay plantillas para SOC 2 ni RGPD)."
   referencia: https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html
 
 - id: amazon-s3-glacier
@@ -1683,7 +1685,7 @@
   categoria: servicio
   definicion: "Clases de almacenamiento de archivo de Amazon S3, de bajo coste, para datos que se consultan poco y deben conservarse mucho tiempo. (El servicio original de bóvedas, Amazon Glacier, es distinto.)"
   usar_cuando: "Para conservar años datos de entrenamiento o registros que exige la normativa."
-  no_usar_cuando: "Para datos que se consultan a menudo o con baja latencia."
+  no_usar_cuando: "Para datos que se consultan a menudo o con baja latencia: S3 Standard."
   referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
 
 - id: s3-lifecycle

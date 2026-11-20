@@ -204,7 +204,7 @@
     habituales son lagos de datos, sitios web, copias de seguridad y restauración y analítica de big data. Pista, en S3
     se guardan «objetos en buckets», no filas de una base de datos.
   distractores:
-    a: S3 no es una base de datos transaccional; usarlo así es uno de los casos en los que no conviene.
+    a: S3 no es una base de datos transaccional; usarlo así es uno de los casos en los que no conviene. Para transacciones se usa una base de datos (Amazon RDS o Aurora, relacionales; DynamoDB, clave-valor).
     b: S3 no es el disco de un servidor ni un sistema de ficheros de baja latencia.
     c: La red virtual privada es Amazon VPC, que no almacena datos.
   referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
