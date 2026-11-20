@@ -351,4 +351,3 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - Ejemplos de SaaS de AWS que ya no sirven: Amazon Chime dejó de tener soporte el 20 de febrero de 2026 y la página de Amazon WorkDocs ya no existe. AWS no clasifica sus servicios como PaaS o SaaS: el curso usa la distinción oficial entre servicios de infraestructura y servicios abstraídos.
   - Los libros dan 36 Regiones o similares; la documentación consultada da 34 y la portada de AWS, 39. El curso no cita la cifra.
 - **Verificación:** validador sin avisos, cobertura (CP 4/4, 33 de repaso), 270 pruebas de pytest y 7/7 diagramas Mermaid válidos.
-
