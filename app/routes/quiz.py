@@ -49,21 +49,31 @@ def inicio(request: Request, c: Contenido = Depends(requiere_curso), usuario: Us
     banco_sim = c.modulos.get(m.simulacro) if m.tiene_simulacro else None
     n_sim = len(banco_sim.preguntas) if banco_sim else 0
     dominios = sorted({c.preguntas[p]["dominio"] for x in modulos for p in x.preguntas})
+    libros = [x for x in c.modulos.values() if x.libros]
     return render(request, "tests_inicio.html", modulos=modulos, repaso=repaso, n_repaso=sum(len(x.repaso) for x in repaso),
                   n_falladas=len(stats.falladas(db, usuario.id, c)), dominios=dominios, n_sim=n_sim, nombres=m.dominios,
                   hay_simulacro=m.tiene_simulacro, sim_ok=m.tiene_simulacro and n_sim >= m.examen_preguntas,
-                  sim_n=m.examen_preguntas, sim_min=m.examen_minutos)
+                  sim_n=m.examen_preguntas, sim_min=m.examen_minutos, libros=libros, n_libros=sum(len(x.libros) for x in libros))
 
 
 @router.post("/iniciar")
-def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: int = Form(10), estudio: str = Form(""),
+def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: int = Form(10), estudio: str = Form(""), todas: str = Form(""),
             c: Contenido = Depends(requiere_curso), usuario: Usuario = Depends(requiere_usuario),
             db: Session = Depends(get_db)):
     m = c.manifiesto
     base = f"/c/{m.slug}"
     n = max(1, min(n, 100))
     limite = None
-    if modo == "simulacro":
+    if modo == "libros":
+        if filtro and (filtro not in c.modulos or not c.modulos[filtro].libros):
+            raise HTTPException(400, "Módulo no válido")
+        fuente = c.modulos[filtro].libros if filtro else [p for x in c.modulos.values() for p in x.libros]
+        if not fuente:
+            flash(request, "No hay preguntas de los libros.", "error")
+            return RedirectResponse(f"{base}/tests", 303)
+        # «Todas»: el test completo (también el final con todas las preguntas de los libros), sin el tope de 100.
+        ids = random.sample(fuente, len(fuente) if todas else min(n, len(fuente)))
+    elif modo == "simulacro":
         if not m.tiene_simulacro:
             raise HTTPException(400, "Este curso no tiene simulacro")
         banco = c.modulos.get(m.simulacro)
@@ -134,7 +144,7 @@ def ver(iid: int, n: int, request: Request, c: Contenido = Depends(requiere_curs
     retro = None
     if resp and not simulacro and p:
         retro = {"correcta": resp.correcta, "solucion": p["correctas"], "explicacion": p["explicacion"],
-                 "distractores": p.get("distractores") or {}, "referencia": p["referencia"], "respuesta": resp.respuesta,
+                 "distractores": p.get("distractores") or {}, "referencia": p.get("referencia"), "respuesta": resp.respuesta,
                  "teoria": c.url_teoria(p.get("objetivo"))}
     return render(request, "pregunta.html", i=i, n=n, total=len(i.preguntas), p=vista_pregunta(c, pid), pid=pid,
                   respondida=resp is not None, retro=retro, simulacro=simulacro,
