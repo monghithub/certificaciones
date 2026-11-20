@@ -78,6 +78,14 @@ En las páginas de lectura de cada módulo con preguntas (no en el simulacro) ha
 
 Se responde en el propio modal (los cuatro tipos), se ve al momento si es correcta, la solución, la explicación, la referencia oficial y el enlace «Repasar en la teoría». **Otra pregunta** pide la siguiente del apartado visible sin repetir las ya vistas en la visita; al agotar todas las del módulo, empiezan de nuevo. Se cierra con ✕, «Cerrar», `Esc` o clic fuera. El modal nunca se abre solo y **no guarda nada**: no cuenta en las estadísticas ni en «Repetir falladas».
 
+## Mapa de servicios
+
+`/c/<curso>/mapa` («Mapa de servicios» en el menú) es la revisión global de los servicios del curso:
+
+- **Diagramas** de `cursos/<curso>/mapa-servicios.md` (opcional), con el mismo sistema que los de los módulos: cada caja abre su ficha.
+- **Cuadro resumen** generado del glosario: todas las entradas de categoría `servicio`, agrupadas por la categoría de la lista oficial *in scope* (`fuentes/servicios-alcance.md`), luego las funcionalidades y servicios que no figuran en ella y, al final, los que están fuera de alcance. Cada fila muestra el icono, qué es, cuándo usarlo, cuándo no (y qué usar), y los módulos cuyo `servicios.md` lo trata, con enlace. Tiene un filtro de texto.
+- **Iconos:** el campo `icono` del glosario (`proveedor/fichero.svg`, relativo a `app/static/iconos/`); las funcionalidades usan el del servicio al que pertenecen. El validador comprueba que el fichero existe. Los de AWS son los *AWS Architecture Icons* oficiales (ver `LICENSE`).
+
 ## Tema de color
 
 La web usa por defecto un tema claro de tonos suaves. El botón de la cabecera cambia entre **Claro**, **Oscuro** y **Sistema** (sigue al sistema operativo) y recuerda la elección en el navegador. Los ficheros estáticos se sirven siempre con revalidación y versión en la URL, así que tras actualizar la consola no hay que vaciar la caché del navegador.

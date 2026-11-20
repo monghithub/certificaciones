@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block titulo %}Mapa de servicios{% endblock %}
+{% block contenido %}
+<p class="suave"><a href="/">Mis cursos</a> › <a href="{{ base }}/">{{ curso.manifiesto.titulo }}</a></p>
+<h1>Mapa de servicios</h1>
+{% if html %}<article class="card md">{{ html|safe }}</article>{% endif %}
+<section class="card mapa-servicios" aria-labelledby="cuadro-titulo">
+  <h2 id="cuadro-titulo">Cuadro resumen</h2>
+  <p class="suave">{{ total }} servicios y funcionalidades del curso, agrupados por la categoría de la lista oficial del examen. Pulsa un nombre para ver su ficha completa; las funcionalidades llevan el icono del servicio al que pertenecen.</p>
+  <label for="filtro-mapa" class="sr-only">Filtrar servicios</label>
+  <input id="filtro-mapa" type="search" placeholder="Filtrar: por ejemplo, vector, Bedrock, cifrado…" autocomplete="off" data-filtro-mapa>
+  {% for g in grupos %}
+  <div class="mapa-grupo" data-grupo>
+    <h3 class="mapa-cat mapa-{{ g.estado }}">{{ g.nombre }}{% if g.original %} <span class="suave">({{ g.original }})</span>{% endif %}</h3>
+    <div class="tabla-mapa">
+    <table>
+      <thead><tr><th scope="col"><span class="sr-only">Icono</span></th><th scope="col">Servicio</th><th scope="col">Qué es</th><th scope="col">Cuándo usarlo</th><th scope="col">Cuándo no (y qué usar)</th><th scope="col">Módulos</th></tr></thead>
+      <tbody>
+      {% for s in g.servicios %}{% set e = s.entrada %}
+        <tr data-buscar="{{ (e.termino ~ ' ' ~ e.alias|join(' ') ~ ' ' ~ e.definicion ~ ' ' ~ (e.usar_cuando or '') ~ ' ' ~ (e.no_usar_cuando or ''))|lower }}">
+          <td class="mapa-icono">{% if e.icono %}<img src="{{ static('iconos/' ~ e.icono) }}" alt="" width="40" height="40" loading="lazy">{% else %}<span class="mapa-sin-icono" aria-hidden="true">{{ e.termino[:1] }}</span>{% endif %}</td>
+          <td><button type="button" class="concepto concepto-fila" data-concepto="{{ e.id }}">{{ e.termino }}</button></td>
+          <td>{{ e.definicion }}</td>
+          <td>{{ e.usar_cuando or '—' }}</td>
+          <td>{{ e.no_usar_cuando or '—' }}</td>
+          <td class="mapa-mods">{% for m in s.modulos %}<a href="{{ m.url }}" title="{{ m.titulo }}">{{ m.numero }}</a>{% else %}—{% endfor %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  {% endfor %}
+  <p id="mapa-sin-resultados" class="suave" hidden>Ningún servicio coincide con el filtro.</p>
+  <p class="suave mapa-aviso">Los iconos son marcas de Amazon Web Services (AWS Architecture Icons), usados con fines formativos; no forman parte de la licencia del curso.</p>
+</section>
+<script type="application/json" id="datos-glosario">{{ datos_conceptos|safe }}</script>
+{% endblock %}
