@@ -315,4 +315,3 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - Rama `aif-c01/alternativas`. Mantenimiento de contenido sin requisitos nuevos de la consola, sin cambio de OpenSpec (como la guía v1.2); la regla queda en `AGENTS.md`.
 - **Decisiones:** la alternativa, dentro del alcance si existe (EBS y EFS, que el examen no evalúa, solo se nombran); para productos cerrados, el sustituto oficial o la constancia de que AWS no lo indica, comprobado en sus avisos de disponibilidad (Audit Manager, A2I, Ground Truth); Clarify se mantiene como respuesta clásica del examen para sesgo y SHAP.
 - **Revisión independiente:** 0 críticos; 5 importantes (lista incompleta de almacenes de Knowledge Bases, Bedrock Evaluations presentado como sustituto de Clarify en ML clásico, Trainium, filas de `05/servicios.md` sin trasladar, filas que seguían sin alternativa) y 7 menores. Todo aplicado.
-
