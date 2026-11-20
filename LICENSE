@@ -34,5 +34,10 @@ Copyright (c) 2026 Contribuidores del curso AIF-C01
    a efectos de trazabilidad y estudio. Siguen sujetos a los términos de AWS y no
    quedan cubiertos por las licencias anteriores.
 
+4. Los iconos de app/static/iconos/aws/ son los AWS Architecture Icons oficiales
+   (paquete de julio de 2026), sin modificar. Son marcas de Amazon.com, Inc., se
+   usan con fines formativos según las condiciones de AWS para sus iconos y no
+   quedan cubiertos por las licencias anteriores.
+
 AWS y los nombres de servicios de AWS son marcas de Amazon.com, Inc. Este proyecto
 no está afiliado a AWS.

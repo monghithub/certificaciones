@@ -113,6 +113,7 @@
     });
     document.addEventListener("input", function (ev) {
       if (ev.target.matches && ev.target.matches("[data-filtro-glosario]")) filtrarGlosario(ev.target.value);
+      if (ev.target.matches && ev.target.matches("[data-filtro-mapa]")) filtrarMapa(ev.target.value);
     });
     document.addEventListener("close", function (ev) {
       if (ev.target && ev.target.id === "modal-concepto") alCerrarModal();
@@ -136,6 +137,22 @@
     });
     var vacio = $("#sin-resultados");
     if (vacio) vacio.hidden = visibles !== 0;
+  }
+
+  function filtrarMapa(texto) {
+    var q = texto.trim().toLowerCase(), total = 0;
+    $$("[data-grupo]").forEach(function (g) {
+      var visibles = 0;
+      $$("tr[data-buscar]", g).forEach(function (tr) {
+        var ok = !q || (tr.getAttribute("data-buscar") || "").indexOf(q) !== -1;
+        tr.hidden = !ok;
+        if (ok) visibles++;
+      });
+      g.hidden = visibles === 0;
+      total += visibles;
+    });
+    var vacio = $("#mapa-sin-resultados");
+    if (vacio) vacio.hidden = total !== 0;
   }
 
   // ------------------------------------------------------------------ diagramas

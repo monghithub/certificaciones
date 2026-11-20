@@ -315,3 +315,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - Rama `aif-c01/alternativas`. Mantenimiento de contenido sin requisitos nuevos de la consola, sin cambio de OpenSpec (como la guía v1.2); la regla queda en `AGENTS.md`.
 - **Decisiones:** la alternativa, dentro del alcance si existe (EBS y EFS, que el examen no evalúa, solo se nombran); para productos cerrados, el sustituto oficial o la constancia de que AWS no lo indica, comprobado en sus avisos de disponibilidad (Audit Manager, A2I, Ground Truth); Clarify se mantiene como respuesta clásica del examen para sesgo y SHAP.
 - **Revisión independiente:** 0 críticos; 5 importantes (lista incompleta de almacenes de Knowledge Bases, Bedrock Evaluations presentado como sustituto de Clarify en ML clásico, Trainium, filas de `05/servicios.md` sin trasladar, filas que seguían sin alternativa) y 7 menores. Todo aplicado.
+
+### Mapa de servicios (#27)
+
+- Petición: «necesito cuadro resumen de los servicios que hay en AWS con su logo, como apartado de revisión global para hacernos una idea de la foto global, y un diagrama de dónde se usa o se relaciona cada uno».
+- Rama `feat/mapa-servicios`, cambio de OpenSpec `mapa-servicios`.
+- **Decisiones del usuario:** subir los iconos al repositorio (excluidos de MIT y CC BY con una nota en `LICENSE`) y una página aparte del curso, no un módulo.
+- **Iconos:** las condiciones de AWS permiten usar sus *Architecture Icons* en diagramas y materiales como presentaciones, pero no dan permiso explícito para redistribuir los ficheros; el paquete no trae licencia. Se usan sin modificar (paquete de julio de 2026, 54 ficheros de 48 px, 304 KB). Las funcionalidades llevan el icono de su servicio; Kiro, Strands Agents, Trainium, Inferentia, fmeval y AI Service Cards no tienen icono propio.
+- **Diseño:** el cuadro se genera del glosario para que no se desactualice; la categoría y el alcance salen de `fuentes/servicios-alcance.md`, y los módulos, de los `servicios.md`. Los 51 servicios *in scope* ya tenían entrada en el glosario.
+- **Lección de Mermaid:** dentro de un subgrupo, `direction TB` pone en fila las cajas sin enlaces y `direction LR` las apila; las flechas que cruzan subgrupos desordenan el diagrama: mejor enlazar subgrupos enteros y usar `~~~` para colocar un bloque.
+- **Verificación:** 270 pruebas de pytest (6 nuevas), validador, 4/4 diagramas válidos y navegador (enlace en el menú, 80 filas en 13 grupos, iconos, filtro, modal, claro, oscuro y móvil, sin errores de consola).

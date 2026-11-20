@@ -18,7 +18,7 @@
   {% if user %}
   <nav aria-label="Principal">
     <a href="/">Mis cursos</a>
-    {% if curso %}<a href="{{ base }}/"><strong>{{ curso.manifiesto.titulo }}</strong></a><a href="{{ base }}/tests">Tests</a><a href="{{ base }}/estadisticas">Mis estadísticas</a>{% if curso.glosario %}<a href="{{ base }}/glosario">Glosario</a>{% endif %}{% endif %}
+    {% if curso %}<a href="{{ base }}/"><strong>{{ curso.manifiesto.titulo }}</strong></a><a href="{{ base }}/tests">Tests</a><a href="{{ base }}/estadisticas">Mis estadísticas</a>{% if curso.glosario %}<a href="{{ base }}/mapa">Mapa de servicios</a><a href="{{ base }}/glosario">Glosario</a>{% endif %}{% endif %}
     {% if user.rol == 'admin' %}<a href="/admin/usuarios">Usuarios</a><a href="/admin/cursos">Cursos</a>{% endif %}
   </nav>
   <button type="button" class="tema-btn" data-alternar-tema aria-label="Cambiar el tema de color" title="Cambiar el tema de color"><span aria-hidden="true">◐</span> <span data-tema-etiqueta>Claro</span></button>

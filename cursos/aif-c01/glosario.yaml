@@ -6,6 +6,7 @@
   termino: Amazon EC2
   alias: [EC2, Amazon Elastic Compute Cloud]
   categoria: servicio
+  icono: aws/Arch_Amazon-EC2_48.svg
   definicion: "Capacidad de cómputo escalable bajo demanda en la nube de AWS: servidores virtuales llamados instancias. El cliente elige el tipo de instancia, la red y el almacenamiento, y gestiona el sistema operativo invitado."
   usar_cuando: "Cuando se necesita control del sistema operativo, de la red y del almacenamiento (por ejemplo, para alojar un modelo propio)."
   no_usar_cuando: "Cuando basta un servicio gestionado y no se quiere asumir parches, actualizaciones ni configuración del servidor: código por eventos con AWS Lambda; modelos con Amazon Bedrock o un endpoint de SageMaker AI."
@@ -15,6 +16,7 @@
   termino: Amazon S3
   alias: [S3, Amazon Simple Storage Service]
   categoria: servicio
+  icono: aws/Arch_Amazon-Simple-Storage-Service_48.svg
   definicion: "Servicio de almacenamiento de objetos con gran escalabilidad, disponibilidad, seguridad y rendimiento. Se usa, entre otros, para lagos de datos, sitios web, copias de seguridad y analítica de big data."
   no_usar_cuando: "Como base de datos transaccional: para eso, una base de datos (Amazon RDS o Amazon Aurora si es relacional; Amazon DynamoDB si es clave-valor). Tampoco como disco de baja latencia de un servidor: eso es almacenamiento de bloques o de ficheros (Amazon EBS o Amazon EFS, que este examen no evalúa)."
   referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
@@ -23,6 +25,7 @@
   termino: AWS Lambda
   alias: [Lambda]
   categoria: servicio
+  icono: aws/Arch_AWS-Lambda_48.svg
   definicion: "Servicio de cómputo serverless: ejecuta código sin aprovisionar ni gestionar servidores. AWS se encarga del mantenimiento, la capacidad, el escalado y los parches."
   usar_cuando: "Para ejecutar código en respuesta a eventos o llamadas a una API sin gestionar servidores."
   no_usar_cuando: "Cuando se necesita control sobre el servidor o el sistema operativo: Amazon EC2."
@@ -41,6 +44,7 @@
   termino: AWS Identity and Access Management (IAM)
   alias: [IAM, AWS IAM, AWS Identity and Access Management]
   categoria: servicio
+  icono: aws/Arch_AWS-Identity-and-Access-Management_48.svg
   definicion: "Servicio que controla de forma segura el acceso a los recursos de AWS: quién está autenticado (ha iniciado sesión) y quién está autorizado (tiene permisos) para usar qué recursos."
   no_usar_cuando: "No es un servicio de datos ni de cómputo: no sustituye al cifrado (AWS KMS) ni a los controles de la propia aplicación."
   referencia: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
@@ -49,6 +53,7 @@
   termino: Amazon Bedrock
   alias: [Bedrock]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
   definicion: "Servicio totalmente gestionado que da acceso seguro a modelos fundacionales de alto rendimiento de las principales compañías de IA para crear y escalar aplicaciones de IA generativa."
   usar_cuando: "Para usar modelos fundacionales de varios proveedores mediante API, sin gestionar la infraestructura."
   no_usar_cuando: "Cuando se necesita entrenar un modelo propio desde cero o controlar toda la infraestructura de entrenamiento: Amazon SageMaker AI."
@@ -58,6 +63,7 @@
   termino: Amazon Bedrock AgentCore
   alias: [AgentCore]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock-AgentCore_48.svg
   definicion: "Plataforma agéntica para crear, desplegar y operar agentes de IA de forma segura y a escala, con cualquier framework y modelo fundacional."
   usar_cuando: "Cuando hay un caso de uso agéntico que necesita ejecución, memoria, identidad y observabilidad gestionadas."
   no_usar_cuando: "Cuando basta una consulta sencilla a un modelo (una llamada a Bedrock, por ejemplo con la API Converse) o un flujo de pasos fijos (Amazon Bedrock Flows): no hace falta un agente."
@@ -67,6 +73,7 @@
   termino: Amazon Bedrock Agents
   alias: [Bedrock Agents, Amazon Bedrock Agents Classic]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
   definicion: "Permite crear y configurar agentes autónomos en una aplicación: orquestan las interacciones entre modelos fundacionales, fuentes de datos, aplicaciones y usuarios, y llaman a APIs para ejecutar acciones. Ahora se llama Agents Classic y ya no está abierto a clientes nuevos."
   no_usar_cuando: "En proyectos nuevos: AWS remite a Amazon Bedrock AgentCore para capacidades similares."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html
@@ -75,6 +82,7 @@
   termino: Amazon Bedrock Knowledge Bases
   alias: [Bedrock Knowledge Bases, Knowledge Bases]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
   definicion: "Permite integrar información propia en aplicaciones de IA generativa mediante RAG: busca en tus datos la información relevante para una consulta y la usa para mejorar las respuestas del modelo. Hay dos tipos: Managed Knowledge Base (Bedrock gestiona ingesta, índice y almacén, con conectores y permisos por documento) y customer-managed (el cliente elige y gestiona el almacén vectorial)."
   usar_cuando: "Cuando el modelo debe responder con información propia, específica o actualizada."
   no_usar_cuando: "Cuando el modelo no necesita datos propios ni actualizados: basta invocar el modelo con un buen prompt."
@@ -84,6 +92,7 @@
   termino: Amazon SageMaker AI
   alias: [SageMaker AI, SageMaker]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Servicio totalmente gestionado de aprendizaje automático para construir, entrenar y desplegar modelos propios en un entorno de alojamiento listo para producción. Antes del 3 de diciembre de 2024 se llamaba Amazon SageMaker; desde esa fecha, «Amazon SageMaker» es el nombre de una plataforma unificada de datos, analítica e IA que incluye SageMaker AI."
   usar_cuando: "Cuando hace falta un modelo propio y la máxima flexibilidad y control sobre el algoritmo."
   no_usar_cuando: "Cuando un servicio de IA preentrenado (Rekognition, Comprehend, Transcribe…) o un modelo fundacional de Amazon Bedrock resuelve el caso con menos esfuerzo."
@@ -93,6 +102,7 @@
   termino: Amazon SageMaker JumpStart
   alias: [SageMaker JumpStart, JumpStart]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Ofrece modelos preentrenados de código abierto para muchos tipos de problemas, que se pueden entrenar de forma incremental y ajustar antes de desplegarlos, además de plantillas de solución y cuadernos de ejemplo."
   usar_cuando: "Para partir de un modelo preentrenado y ajustarlo con datos propios sin entrenar desde cero."
   no_usar_cuando: "Cuando se necesita un modelo totalmente a medida con un algoritmo propio, sin partir de uno preentrenado: SageMaker AI con código o contenedor propios."
@@ -102,6 +112,7 @@
   termino: SageMaker Model Monitor
   alias: [Model Monitor, Amazon SageMaker Model Monitor]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Vigila modelos de SageMaker AI en producción: deriva de la calidad de los datos y del modelo, deriva del sesgo y de la atribución de características, con alertas. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo. AWS indica como sustituto sus soluciones abiertas de monitorización con CloudWatch."
   no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos; AWS remite a sus soluciones abiertas de monitorización con Amazon CloudWatch."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html
@@ -110,6 +121,7 @@
   termino: SageMaker Clarify
   alias: [Amazon SageMaker Clarify]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Herramienta de SageMaker AI para detectar sesgo en los datos (por ejemplo, CI y DPL) y en las predicciones (por ejemplo, DI) y explicarlas con SHAP. Ya no está abierta a clientes nuevos; los existentes pueden seguir usándola. AWS indica como sustituto calcular las mismas métricas con bibliotecas abiertas y SHAP, y Amazon Bedrock Evaluations para modelos fundacionales."
   usar_cuando: "Clientes actuales que necesitan métricas de sesgo y explicaciones de modelos de ML clásico."
   no_usar_cuando: "Como opción para un proyecto nuevo: métricas de sesgo y SHAP con bibliotecas abiertas (pandas, scikit-learn, SHAP) en ML clásico; Amazon Bedrock Evaluations solo para modelos fundacionales. En las preguntas del examen sigue siendo la respuesta clásica para sesgo y SHAP."
@@ -119,6 +131,7 @@
   termino: Amazon Transcribe
   alias: [Transcribe]
   categoria: servicio
+  icono: aws/Arch_Amazon-Transcribe_48.svg
   definicion: "Servicio de reconocimiento automático del habla que usa modelos de aprendizaje automático para convertir audio en texto."
   usar_cuando: "Para transcribir audio (reuniones, llamadas) a texto."
   no_usar_cuando: "Cuando se necesita generar voz a partir de texto (Amazon Polly) o traducir (Amazon Translate)."
@@ -128,6 +141,7 @@
   termino: Amazon Translate
   alias: [Translate]
   categoria: servicio
+  icono: aws/Arch_Amazon-Translate_48.svg
   definicion: "Servicio de traducción de texto bajo demanda que usa aprendizaje automático. Sirve para traducir documentos de texto no estructurado y para crear aplicaciones multilingües."
   no_usar_cuando: "Cuando hay que transcribir audio (Amazon Transcribe) o extraer información del contenido de un documento (Amazon Textract o Amazon Comprehend)."
   referencia: https://docs.aws.amazon.com/translate/latest/dg/what-is.html
@@ -136,6 +150,7 @@
   termino: Amazon Comprehend
   alias: [Comprehend]
   categoria: servicio
+  icono: aws/Arch_Amazon-Comprehend_48.svg
   definicion: "Usa procesamiento del lenguaje natural (NLP) para extraer información del contenido de los documentos: reconoce entidades, frases clave, idioma, opiniones y otros elementos."
   usar_cuando: "Para analizar texto: opiniones de clientes, entidades o temas de un conjunto de documentos."
   no_usar_cuando: "Cuando el problema no es de lenguaje natural: imágenes (Amazon Rekognition) o datos tabulares (Amazon SageMaker AI)."
@@ -145,6 +160,7 @@
   termino: Amazon Lex
   alias: [Lex, Amazon Lex V2]
   categoria: servicio
+  icono: aws/Arch_Amazon-Lex_48.svg
   definicion: "Servicio para crear interfaces conversacionales por voz y texto en las aplicaciones, con comprensión del lenguaje natural (NLU) y reconocimiento automático del habla (ASR)."
   usar_cuando: "Para construir un chatbot o asistente de voz propio."
   no_usar_cuando: "Cuando solo se quiere analizar texto existente, sin diálogo con el usuario: Amazon Comprehend."
@@ -154,6 +170,7 @@
   termino: Amazon Polly
   alias: [Polly]
   categoria: servicio
+  icono: aws/Arch_Amazon-Polly_48.svg
   definicion: "Servicio en la nube que convierte texto en voz realista, con varios idiomas y voces. Solo se paga por el texto sintetizado."
   usar_cuando: "Para dar voz a aplicaciones: lectura de artículos, asistentes, accesibilidad."
   no_usar_cuando: "Cuando se necesita el proceso inverso, de voz a texto (Amazon Transcribe)."
@@ -163,6 +180,7 @@
   termino: Amazon Rekognition
   alias: [Rekognition]
   categoria: servicio
+  icono: aws/Arch_Amazon-Rekognition_48.svg
   definicion: "Servicio de análisis de imágenes y vídeo basado en aprendizaje profundo que añade capacidades de visión por computador a las aplicaciones sin necesidad de experiencia en ML."
   usar_cuando: "Para analizar imágenes y vídeos: objetos, escenas, moderación de contenido."
   no_usar_cuando: "Cuando hay que extraer texto estructurado de documentos (Amazon Textract)."
@@ -172,6 +190,7 @@
   termino: Amazon Textract
   alias: [Textract]
   categoria: servicio
+  icono: aws/Arch_Amazon-Textract_48.svg
   definicion: "Detecta y analiza texto mecanografiado y manuscrito en documentos, y extrae texto, formularios y tablas de documentos con datos estructurados."
   usar_cuando: "Para digitalizar formularios, facturas y documentos escaneados."
   no_usar_cuando: "Cuando se trata de reconocer objetos o rostros en fotografías (Amazon Rekognition)."
@@ -181,6 +200,7 @@
   termino: Amazon Personalize
   alias: [Personalize]
   categoria: servicio
+  icono: aws/Arch_Amazon-Personalize_48.svg
   definicion: "Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad."
   usar_cuando: "Para personalizar recomendaciones (por ejemplo, en una aplicación de vídeo)."
   no_usar_cuando: "Cuando no se dispone de datos propios de usuarios y elementos con los que generar recomendaciones: hasta reunirlos, una regla sencilla (por ejemplo, los más vendidos)."
@@ -190,6 +210,7 @@
   termino: Amazon Quick
   alias: [Quick]
   categoria: servicio
+  icono: aws/Arch_Amazon-Quick_48.svg
   definicion: "Servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar. Se usa mediante chat en lenguaje natural y emplea agentes de IA sobre los datos y aplicaciones conectados."
   usar_cuando: "Para dar a los empleados un asistente con agentes que consulte los datos de la empresa, automatice tareas, analice datos e investigue, sin desarrollar."
   no_usar_cuando: "Cuando se necesita un modelo propio con control sobre el entrenamiento (Amazon SageMaker AI) o una aplicación propia para clientes (Amazon Bedrock)."
@@ -539,6 +560,7 @@
   termino: Amazon Nova
   alias: [Nova]
   categoria: servicio
+  icono: aws/Arch_Amazon-Nova_48.svg
   definicion: "Familia de modelos fundacionales de Amazon que se usan mediante API a través de Amazon Bedrock: Micro (solo texto), Lite, Pro y Premier, y la generación Nova 2 (Lite, Sonic y Multimodal Embeddings). Nova Canvas (imagen), Nova Reel (vídeo) y Nova Sonic v1 están retirados desde septiembre de 2026."
   usar_cuando: "Cuando se busca un modelo fundacional propio de Amazon dentro de Bedrock, por ejemplo por precio-rendimiento."
   no_usar_cuando: "Cuando basta un servicio de IA especializado (Comprehend, Rekognition, Textract…) o un modelo de ML tradicional (SageMaker AI) para una tarea acotada."
@@ -548,6 +570,7 @@
   termino: AWS Glue
   alias: [Glue]
   categoria: servicio
+  icono: aws/Arch_AWS-Glue_48.svg
   definicion: "Servicio serverless de integración de datos para descubrir, preparar, mover e integrar datos de varias fuentes (ETL), con un catálogo de datos centralizado (AWS Glue Data Catalog)."
   usar_cuando: "Para preparar y transformar datos (ETL) antes de entrenar un modelo o analizarlos."
   no_usar_cuando: "Para entrenar o desplegar modelos: eso es SageMaker AI."
@@ -557,6 +580,7 @@
   termino: AWS Glue DataBrew
   alias: [DataBrew, Glue DataBrew]
   categoria: servicio
+  icono: aws/Arch_AWS-Glue-DataBrew_48.svg
   definicion: "Herramienta visual de preparación de datos que permite limpiar y normalizar datos sin escribir código, con más de 250 transformaciones predefinidas. Es serverless."
   usar_cuando: "Cuando analistas sin experiencia en programación deben limpiar datos para analítica o ML."
   no_usar_cuando: "Cuando se necesita un pipeline ETL programado a medida (AWS Glue) o entrenar un modelo."
@@ -566,6 +590,7 @@
   termino: Amazon SageMaker Canvas
   alias: [SageMaker Canvas]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Funcionalidad de SageMaker AI para generar predicciones con ML sin escribir código: modelos listos para usar (basados en Rekognition, Textract y Comprehend) o modelos propios de regresión, clasificación, previsión de series temporales, imagen y texto."
   usar_cuando: "Cuando analistas de negocio sin experiencia en ML ni en programación necesitan un modelo predictivo con sus datos."
   no_usar_cuando: "Cuando un equipo de ciencia de datos necesita control total sobre el algoritmo y el código: SageMaker AI con cuadernos o código propio."
@@ -575,6 +600,7 @@
   termino: Amazon SageMaker Ground Truth
   alias: [SageMaker Ground Truth, Ground Truth]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-Ground-Truth_48.svg
   definicion: "Servicio para crear conjuntos de datos de entrenamiento etiquetados con trabajadores humanos (propios, de un proveedor o de Amazon Mechanical Turk) y etiquetado automático. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
   no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos, y su documentación no indica sustituto."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html
@@ -583,6 +609,7 @@
   termino: Amazon SageMaker Pipelines
   alias: [SageMaker Pipelines]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Servicio de orquestación de flujos de trabajo de SageMaker AI para automatizar el procesamiento de datos, el entrenamiento, la evaluación, el despliegue y la monitorización de modelos, con versionado y trazabilidad (lineage)."
   usar_cuando: "Para que el entrenamiento y el despliegue sean repetibles y automatizados (MLOps)."
   no_usar_cuando: "Para un experimento puntual que no se va a repetir: basta un trabajo de entrenamiento suelto o un cuaderno."
@@ -592,6 +619,7 @@
   termino: SageMaker Model Registry
   alias: [Model Registry, Amazon SageMaker Model Registry]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Catálogo de modelos de SageMaker AI: gestiona versiones, metadatos (como métricas de entrenamiento), linaje, estado de aprobación y despliegue a producción."
   usar_cuando: "Para versionar modelos, aprobarlos antes de producción y saber qué versión está desplegada."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
@@ -600,6 +628,7 @@
   termino: MLflow en SageMaker AI
   alias: [MLflow, SageMaker Experiments]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "MLflow totalmente gestionado en SageMaker AI para registrar, organizar y comparar experimentos y registrar los mejores modelos. Sustituye como opción recomendada a SageMaker Experiments, que ahora es Experiments Classic y solo funciona en Studio Classic."
   usar_cuando: "Para que los experimentos de ML sean reproducibles y comparables."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow.html
@@ -608,6 +637,7 @@
   termino: Amazon CloudWatch
   alias: [CloudWatch]
   categoria: servicio
+  icono: aws/Arch_Amazon-CloudWatch_48.svg
   definicion: "Servicio de monitorización de recursos y aplicaciones de AWS: recoge métricas y registros (logs) y permite crear alarmas cuando una métrica supera un umbral."
   usar_cuando: "Para vigilar el rendimiento y el uso de un endpoint o una aplicación y recibir alarmas."
   no_usar_cuando: "Para auditar quién hizo qué llamada a la API (AWS CloudTrail)."
@@ -617,6 +647,7 @@
   termino: AWS CloudTrail
   alias: [CloudTrail]
   categoria: servicio
+  icono: aws/Arch_AWS-CloudTrail_48.svg
   definicion: "Servicio que registra la actividad de la cuenta (llamadas a la API de AWS: quién, qué, cuándo y desde dónde) para auditoría, gobierno y cumplimiento."
   usar_cuando: "Para auditar el uso de los servicios, por ejemplo quién invocó un modelo o cambió un permiso."
   no_usar_cuando: "Para monitorizar métricas de rendimiento (Amazon CloudWatch)."
@@ -626,6 +657,7 @@
   termino: Amazon VPC
   alias: [VPC, Amazon Virtual Private Cloud]
   categoria: servicio
+  icono: aws/Arch_Amazon-Virtual-Private-Cloud_48.svg
   definicion: "Red virtual aislada lógicamente dentro de AWS en la que el cliente lanza sus recursos y controla direcciones IP, subredes, tablas de rutas y acceso."
   usar_cuando: "Cuando los recursos (por ejemplo, un endpoint de modelo) deben quedar en una red privada controlada por el cliente."
   referencia: https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
@@ -634,6 +666,7 @@
   termino: AWS Budgets
   alias: [Budgets]
   categoria: servicio
+  icono: aws/Arch_AWS-Budgets_48.svg
   definicion: "Permite definir presupuestos de coste o de uso y recibir alertas cuando el gasto real o previsto los supera."
   usar_cuando: "Para avisar antes de que un laboratorio o un proyecto de IA supere un gasto previsto."
   no_usar_cuando: "Para analizar en detalle el gasto histórico (AWS Cost Explorer)."
@@ -643,6 +676,7 @@
   termino: AWS Cost Explorer
   alias: [Cost Explorer]
   categoria: servicio
+  icono: aws/Arch_AWS-Cost-Explorer_48.svg
   definicion: "Herramienta para visualizar, entender y analizar los costes y el uso de AWS a lo largo del tiempo, con previsiones."
   usar_cuando: "Para ver qué servicios generan el gasto (por ejemplo, la inferencia de un modelo) y su tendencia."
   no_usar_cuando: "Para recibir alertas automáticas al superar un umbral (AWS Budgets)."
@@ -878,6 +912,7 @@
   termino: Amazon Bedrock Guardrails
   alias: [Bedrock Guardrails, Guardrails]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
   definicion: "Salvaguardas configurables para detectar y filtrar contenido no deseado y proteger información sensible en las entradas y respuestas de los modelos: filtros de contenido, temas denegados, filtros de palabras, filtros de información sensible, comprobación de grounding contextual y Automated Reasoning checks. Se aplica al invocar un modelo de Bedrock o con la API ApplyGuardrail, sin invocar un modelo."
   usar_cuando: "Para aplicar políticas de uso responsable y privacidad a una aplicación de IA generativa."
   no_usar_cuando: "Como sustituto de los permisos (IAM) o del cifrado de los datos (AWS KMS)."
@@ -887,6 +922,7 @@
   termino: Amazon Q
   alias: [Amazon Q Business, Amazon Q Developer]
   categoria: servicio
+  icono: aws/Arch_Amazon-Q_48.svg
   definicion: "Asistentes de IA generativa de AWS. Amazon Q Business ya no admite clientes nuevos (AWS remite a Amazon Quick) y los plugins de IDE de Amazon Q Developer dejan de tener soporte el 30 de abril de 2027 (AWS remite a Kiro)."
   no_usar_cuando: "En proyectos nuevos: para asistentes empresariales, Amazon Quick; para desarrollo, Kiro."
   referencia: https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/what-is.html
@@ -936,6 +972,7 @@
   termino: AWS Transform
   alias: [Transform]
   categoria: servicio
+  icono: aws/Arch_AWS-Transform_48.svg
   definicion: "Servicio con IA agéntica para acelerar la transformación de infraestructura, aplicaciones y código: modernizar y migrar cargas existentes, por ejemplo mainframes o servidores VMware, a AWS."
   usar_cuando: "Para modernizar o migrar sistemas y código heredados con ayuda de agentes."
   no_usar_cuando: "Para desarrollar software nuevo (Kiro) o crear una aplicación de IA generativa propia (Amazon Bedrock)."
@@ -954,6 +991,7 @@
   termino: AWS PrivateLink
   alias: [PrivateLink]
   categoria: servicio
+  icono: aws/Arch_AWS-PrivateLink_48.svg
   definicion: "Conectividad privada entre una VPC y servicios de AWS (como Amazon Bedrock) mediante endpoints de interfaz, sin exponer el tráfico a internet."
   usar_cuando: "Cuando el tráfico hacia el servicio no debe pasar por internet."
   no_usar_cuando: "Como sustituto de los permisos (IAM) o del cifrado (AWS KMS)."
@@ -978,6 +1016,7 @@
   termino: Amazon OpenSearch Service
   alias: [OpenSearch Service, OpenSearch Serverless, Amazon OpenSearch Serverless]
   categoria: servicio
+  icono: aws/Arch_Amazon-OpenSearch-Service_48.svg
   definicion: "Servicio gestionado de búsqueda y análisis con búsqueda vectorial (k-NN). Combina búsqueda de texto completo y vectorial con latencias muy bajas; OpenSearch Serverless es la opción de creación rápida más habitual para Bedrock Knowledge Bases y, junto con los clústeres gestionados, la única que admite vectores binarios."
   usar_cuando: "Búsqueda híbrida (texto completo + vectores), muchas consultas con baja latencia o el almacén vectorial de una Knowledge Base."
   no_usar_cuando: "Cuando la aplicación ya usa PostgreSQL y basta añadir pgvector, o cuando hay que guardar miles de millones de vectores al menor coste con consultas poco frecuentes (S3 Vectors)."
@@ -987,6 +1026,7 @@
   termino: Amazon Aurora
   alias: [Aurora, Aurora PostgreSQL]
   categoria: servicio
+  icono: aws/Arch_Amazon-Aurora_48.svg
   definicion: "Base de datos relacional gestionada compatible con MySQL y PostgreSQL. Con la extensión pgvector de PostgreSQL almacena embeddings y combina consultas SQL con búsqueda por similitud; Bedrock Knowledge Bases la admite como almacén vectorial."
   usar_cuando: "Cuando la aplicación ya usa SQL relacional y quiere combinar filtros relacionales y búsqueda vectorial en la misma base de datos."
   no_usar_cuando: "Cuando el caso pide relaciones de grafo (Neptune) o búsqueda de texto completo a gran escala (OpenSearch)."
@@ -996,6 +1036,7 @@
   termino: Amazon RDS
   alias: [RDS for PostgreSQL, Amazon RDS for PostgreSQL, Amazon Relational Database Service]
   categoria: servicio
+  icono: aws/Arch_Amazon-RDS_48.svg
   definicion: "Servicio de bases de datos relacionales gestionadas. Amazon RDS for PostgreSQL con la extensión pgvector puede almacenar y consultar embeddings sin otra base de datos."
   usar_cuando: "Aplicaciones RAG propias de equipos que ya gestionan PostgreSQL en RDS."
   no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido (Aurora PostgreSQL sí)."
@@ -1005,6 +1046,7 @@
   termino: Amazon Neptune
   alias: [Neptune, Neptune Analytics, Amazon Neptune Analytics]
   categoria: servicio
+  icono: aws/Arch_Amazon-Neptune_48.svg
   definicion: "Base de datos de grafos gestionada. Neptune Analytics añade búsqueda vectorial combinada con recorridos y algoritmos de grafos, la base de GraphRAG; Bedrock Knowledge Bases la admite."
   usar_cuando: "Cuando importan las relaciones entre entidades: GraphRAG, redes de fraude, vista 360 del cliente, respuestas explicables por relaciones."
   no_usar_cuando: "Para una búsqueda semántica sencilla sobre documentos sin relaciones relevantes: Amazon OpenSearch Service, Aurora PostgreSQL con pgvector o Amazon S3 Vectors."
@@ -1014,6 +1056,7 @@
   termino: Amazon DocumentDB
   alias: [DocumentDB]
   categoria: servicio
+  icono: aws/Arch_Amazon-DocumentDB_48.svg
   definicion: "Base de datos de documentos compatible con MongoDB, con búsqueda vectorial nativa desde la versión 5.0."
   usar_cuando: "Aplicaciones que ya usan la API de MongoDB y quieren añadir búsqueda semántica."
   no_usar_cuando: "Cuando el caso no usa documentos JSON ni la API de MongoDB: para búsqueda vectorial, Aurora PostgreSQL con pgvector u OpenSearch Service."
@@ -1023,6 +1066,7 @@
   termino: Amazon S3 Vectors
   alias: [S3 Vectors]
   categoria: servicio
+  icono: aws/Arch_Amazon-Simple-Storage-Service_48.svg
   definicion: "Almacenamiento vectorial de Amazon S3 (buckets e índices vectoriales) optimizado en coste para volúmenes enormes, con latencias por debajo del segundo en consultas poco frecuentes y de unos 100 ms en las frecuentes. Se integra con Bedrock Knowledge Bases."
   usar_cuando: "Miles de millones de vectores al menor coste, con consultas poco frecuentes."
   no_usar_cuando: "Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo: Amazon OpenSearch Service."
@@ -1038,6 +1082,7 @@
   termino: Amazon Bedrock Prompt Management
   alias: [Prompt Management, Bedrock Prompt Management]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
   definicion: "Funcionalidad de Amazon Bedrock para crear, guardar, probar y versionar prompts reutilizables: variables, variantes comparables, borrador y versiones inmutables que la aplicación invoca por su ARN o desde Bedrock Flows."
   usar_cuando: "Para reutilizar prompts probados, compararlos y desplegarlos o revertirlos por versiones sin tocar el código."
   no_usar_cuando: "Como control de seguridad: los ataques de prompt se filtran con Guardrails."
@@ -1047,6 +1092,7 @@
   termino: Amazon Bedrock Flows
   alias: [Bedrock Flows]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
   definicion: "Constructor visual de flujos de trabajo de IA generativa que enlaza prompts, modelos fundacionales, Knowledge Bases y otros servicios como AWS Lambda, y despliega flujos inmutables. Se paga por los recursos que usa."
   usar_cuando: "Procesos con pasos fijos y predecibles."
   no_usar_cuando: "Cuando los pasos dependen de lo que vaya pasando y el sistema debe decidir por sí mismo: eso es un agente (AgentCore)."
@@ -1056,6 +1102,7 @@
   termino: Amazon Bedrock Model Evaluation
   alias: [Bedrock Model Evaluation, Amazon Bedrock Evaluations, Bedrock Evaluations]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
   definicion: "Evaluaciones de Amazon Bedrock: programáticas (conjuntos integrados o propios con métricas de exactitud, robustez y toxicidad), con trabajadores humanos, con un modelo juez (LLM-as-a-judge) y de fuentes RAG o Knowledge Bases."
   usar_cuando: "Para comparar modelos, prompts o Knowledge Bases con datos del caso antes de elegir o de pasar a producción."
   no_usar_cuando: "Para evaluar agentes a partir de sus trazas: AgentCore Evaluations."
@@ -1258,6 +1305,7 @@
   termino: Amazon DynamoDB
   alias: [DynamoDB]
   categoria: servicio
+  icono: aws/Arch_Amazon-DynamoDB_48.svg
   definicion: "Base de datos NoSQL sin servidor y totalmente gestionada. Tiene índices vectoriales nativos que se consultan con la API SearchVectors para buscar por similitud junto a los datos operativos, sin otra base de datos ni réplicas."
   usar_cuando: "RAG o memoria de agentes cuando los datos operativos ya están en DynamoDB."
   no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido (sí OpenSearch Serverless o clústeres gestionados de OpenSearch, Aurora PostgreSQL, Neptune Analytics, S3 Vectors y terceros como Pinecone; ver el módulo 03)."
@@ -1267,6 +1315,7 @@
   termino: Amazon ElastiCache
   alias: [ElastiCache, ElastiCache para Valkey]
   categoria: servicio
+  icono: aws/Arch_Amazon-ElastiCache_48.svg
   definicion: "Caché y almacén de datos en memoria totalmente gestionado (Valkey, Redis OSS, Memcached). Desde Valkey 8.2 ofrece búsqueda vectorial en memoria con latencias mínimas."
   usar_cuando: "Búsqueda semántica en tiempo real, caché semántica o memoria de agentes con latencias mínimas."
   no_usar_cuando: "Como almacén de una Bedrock Knowledge Base: no está admitido (sí OpenSearch Serverless o clústeres gestionados de OpenSearch, Aurora PostgreSQL, Neptune Analytics, S3 Vectors y terceros como Pinecone; ver el módulo 03)."
@@ -1283,6 +1332,7 @@
   termino: AgentCore Evaluations
   alias: [Amazon Bedrock AgentCore Evaluations]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock-AgentCore_48.svg
   definicion: "Servicio de Amazon Bedrock AgentCore que evalúa agentes y herramientas a partir de sus trazas (por ejemplo, de Strands o LangGraph) con evaluadores integrados o propios basados en LLM-as-a-judge, antes y después del despliegue."
   usar_cuando: "Para medir de forma continua la calidad de un agente: utilidad, elección de herramientas, cumplimiento de la tarea."
   no_usar_cuando: "Para comparar modelos en tareas estándar: Amazon Bedrock Model Evaluation."
@@ -1500,6 +1550,7 @@
   termino: Amazon SageMaker Model Cards
   alias: [SageMaker Model Cards, Model Cards, model card]
   categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
   definicion: "Documentación de un modelo de ML en un único sitio: uso previsto y no previsto, calificación de riesgo (desconocido, bajo, medio, alto), detalles de entrenamiento, métricas y resultados de evaluación. Cada cambio crea una versión inmutable; se exporta a PDF y se integra con el Model Registry."
   usar_cuando: "Para gobierno y auditoría: comunicar a riesgos, cumplimiento o reguladores para qué sirve un modelo y cómo se evaluó."
   no_usar_cuando: "Para detectar sesgo o explicar predicciones: documenta, no mide. Para medir, métricas de sesgo y SHAP con bibliotecas abiertas o, en el examen, SageMaker Clarify (ya no admite clientes nuevos); para modelos fundacionales, Amazon Bedrock Evaluations."
@@ -1518,6 +1569,7 @@
   termino: Amazon Augmented AI
   alias: [Amazon A2I, A2I]
   categoria: servicio
+  icono: aws/Arch_Amazon-Augmented-AI-A2I_48.svg
   definicion: "Servicio para añadir revisión humana a predicciones de ML con baja confianza o a muestras aleatorias (Textract, Rekognition, modelos propios). Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
   usar_cuando: "Clientes actuales que necesitan revisión humana de predicciones de baja confianza."
   no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos, y su documentación no indica un sustituto; la revisión humana se tendría que diseñar en la propia aplicación."
@@ -1551,6 +1603,7 @@
   termino: AWS KMS
   alias: [AWS Key Management Service, KMS]
   categoria: servicio
+  icono: aws/Arch_AWS-Key-Management-Service_48.svg
   definicion: "Servicio gestionado para crear y controlar las claves de cifrado y firma. Las claves se protegen en módulos de seguridad de hardware y no salen del servicio sin cifrar. En Bedrock cifra con claves del cliente modelos personalizados, agentes, ingesta de Knowledge Bases y evaluaciones."
   usar_cuando: "Para cifrar en reposo datos y modelos con claves que controla la empresa y auditar su uso."
   no_usar_cuando: "Para guardar contraseñas o claves de API de terceros (Secrets Manager)."
@@ -1560,6 +1613,7 @@
   termino: Amazon Macie
   alias: [Macie]
   categoria: servicio
+  icono: aws/Arch_Amazon-Macie_48.svg
   definicion: "Servicio de seguridad de datos que descubre datos sensibles en Amazon S3 con aprendizaje automático y coincidencia de patrones, mantiene un inventario de los buckets y avisa de riesgos, como un bucket que pasa a ser público."
   usar_cuando: "Antes de usar un bucket para ajustar un modelo o como fuente de una Knowledge Base, para saber si contiene datos personales."
   no_usar_cuando: "Para filtrar datos personales en tiempo real en las respuestas de un modelo (Bedrock Guardrails)."
@@ -1569,6 +1623,7 @@
   termino: AWS Secrets Manager
   alias: [Secrets Manager]
   categoria: servicio
+  icono: aws/Arch_AWS-Secrets-Manager_48.svg
   definicion: "Servicio para guardar, recuperar y rotar credenciales de bases de datos, claves de API, tokens OAuth y otros secretos, para no escribirlos en el código de las aplicaciones."
   usar_cuando: "Para las claves de API y credenciales que usan las herramientas de un agente o una aplicación de IA."
   no_usar_cuando: "Para claves de cifrado (KMS) o credenciales de AWS (IAM)."
@@ -1578,6 +1633,7 @@
   termino: AgentCore Identity
   alias: [Amazon Bedrock AgentCore Identity]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock-AgentCore_48.svg
   definicion: "Servicio de Amazon Bedrock AgentCore de identidad y gestión de credenciales para agentes: autentica y autoriza a los agentes y sus herramientas para acceder a recursos de AWS y de terceros en nombre de los usuarios, con trazas de auditoría."
   usar_cuando: "Cuando un agente debe acceder a servicios externos o de AWS con la identidad y los permisos del usuario."
   no_usar_cuando: "Para limitar qué acciones puede hacer el agente con cada herramienta (Policy in AgentCore)."
@@ -1587,6 +1643,7 @@
   termino: Policy in AgentCore
   alias: [Policy in Amazon Bedrock AgentCore]
   categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock-AgentCore_48.svg
   definicion: "Políticas deterministas, en lenguaje Cedar o redactadas en lenguaje natural, que un motor de políticas evalúa en el AgentCore Gateway antes de permitir cada llamada de un agente a una herramienta: qué puede hacer y con qué límites."
   usar_cuando: "Para impedir que un agente actúe fuera de su autoridad, por ejemplo aprobar importes por encima de un límite."
   no_usar_cuando: "Para filtrar contenido dañino en los prompts (Guardrails) o gestionar las credenciales del agente (AgentCore Identity)."
@@ -1603,6 +1660,7 @@
   termino: AWS Lake Formation
   alias: [Lake Formation]
   categoria: servicio
+  icono: aws/Arch_AWS-Lake-Formation_48.svg
   definicion: "Servicio para gobernar, proteger y compartir los datos de un lago de datos con permisos detallados por columna, fila y celda sobre los datos de S3 y sus metadatos del AWS Glue Data Catalog."
   usar_cuando: "Para que cada equipo o modelo acceda solo a las columnas o filas que necesita."
   no_usar_cuando: "Para descubrir datos personales en S3 (Macie) o catalogar los conjuntos de datos (Glue Data Catalog)."
@@ -1612,6 +1670,7 @@
   termino: AWS Glue Data Catalog
   alias: [Glue Data Catalog, Data Catalog]
   categoria: servicio
+  icono: aws/Arch_AWS-Glue_48.svg
   definicion: "Repositorio central de metadatos de los conjuntos de datos de la organización: ubicación, esquema y métricas. Se rellena con rastreadores (crawlers) o a mano y lo usan Athena, Lake Formation o EMR."
   usar_cuando: "Para saber qué conjuntos de datos existen, dónde están y con qué esquema."
   no_usar_cuando: "Para controlar permisos detallados sobre esos datos (Lake Formation)."
@@ -1621,6 +1680,7 @@
   termino: AWS Glue Data Quality
   alias: [Glue Data Quality]
   categoria: servicio
+  icono: aws/Arch_AWS-Glue_48.svg
   definicion: "Funcionalidad serverless de AWS Glue para medir y vigilar la calidad de los datos con reglas (recomendadas o propias), una puntuación de calidad y detección de anomalías con ML."
   usar_cuando: "Para comprobar la calidad de los datos antes de entrenar o ajustar un modelo."
   no_usar_cuando: "Para descubrir datos personales (Macie)."
@@ -1630,6 +1690,7 @@
   termino: AWS Config
   alias: [Config]
   categoria: servicio
+  icono: aws/Arch_AWS-Config_48.svg
   definicion: "Servicio que registra la configuración de los recursos de AWS, cómo se relacionan y cómo ha cambiado con el tiempo, y la evalúa con reglas y paquetes de conformidad."
   usar_cuando: "Para comprobar que los recursos de un sistema de IA cumplen reglas (cifrado, acceso público) y ver su historial de configuración."
   no_usar_cuando: "Para saber quién hizo una llamada a la API (CloudTrail)."
@@ -1639,6 +1700,7 @@
   termino: Amazon Inspector
   alias: [Inspector]
   categoria: servicio
+  icono: aws/Arch_Amazon-Inspector_48.svg
   definicion: "Servicio de gestión de vulnerabilidades que descubre y escanea de forma continua instancias EC2, imágenes de contenedores en ECR y funciones Lambda en busca de vulnerabilidades de software y exposición de red no deseada."
   usar_cuando: "Para detectar bibliotecas vulnerables en el software que sirve o rodea a un modelo."
   no_usar_cuando: "Para obtener informes de cumplimiento de AWS (Artifact) o recomendaciones generales (Trusted Advisor)."
@@ -1648,6 +1710,7 @@
   termino: AWS Artifact
   alias: [Artifact]
   categoria: servicio
+  icono: aws/Arch_AWS-Artifact_48.svg
   definicion: "Portal de descarga bajo demanda de los informes de seguridad y cumplimiento de AWS (por ejemplo, SOC, ISO o PCI) y de gestión de los acuerdos con AWS."
   usar_cuando: "Para entregar a un auditor la evidencia de cumplimiento de la infraestructura de AWS."
   no_usar_cuando: "Para demostrar la configuración o el cumplimiento de los recursos del propio cliente (Config)."
@@ -1657,6 +1720,7 @@
   termino: AWS Trusted Advisor
   alias: [Trusted Advisor]
   categoria: servicio
+  icono: aws/Arch_AWS-Trusted-Advisor_48.svg
   definicion: "Servicio que inspecciona el entorno de AWS y recomienda mejoras para ahorrar costes, mejorar la disponibilidad y el rendimiento y cerrar brechas de seguridad. Con el plan Basic se accede a los límites de servicio y a algunas comprobaciones de seguridad y tolerancia a fallos."
   usar_cuando: "Para revisar buenas prácticas de la cuenta (permisos abiertos, cuotas, costes)."
   no_usar_cuando: "Para escanear vulnerabilidades de software (Inspector)."
@@ -1666,6 +1730,7 @@
   termino: AWS Well-Architected Tool
   alias: [Well-Architected Tool, AWS WA Tool]
   categoria: servicio
+  icono: aws/Arch_AWS-Well-Architected-Tool_48.svg
   definicion: "Herramienta para revisar una carga de trabajo frente a las buenas prácticas del AWS Well-Architected Framework y a lentes adicionales del catálogo oficial o propias, con un plan de mejora."
   usar_cuando: "Para revisar de forma estructurada la arquitectura de un sistema de IA."
   no_usar_cuando: "Para escanear vulnerabilidades (Amazon Inspector) o recopilar evidencias de cumplimiento de los recursos (conformance packs de AWS Config)."
@@ -1675,6 +1740,7 @@
   termino: AWS Audit Manager
   alias: [Audit Manager]
   categoria: servicio
+  icono: aws/Arch_AWS-Audit-Manager_48.svg
   definicion: "Servicio que recopila automáticamente evidencias para auditorías con marcos predefinidos o propios. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
   no_usar_cuando: "Como opción para un proyecto nuevo: ya no admite clientes nuevos. AWS recomienda los conformance packs de AWS Config, que no equivalen del todo (no hay plantillas para SOC 2 ni RGPD)."
   referencia: https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html
@@ -1683,6 +1749,7 @@
   termino: Amazon S3 Glacier
   alias: [S3 Glacier]
   categoria: servicio
+  icono: aws/Arch_Amazon-Simple-Storage-Service-Glacier_48.svg
   definicion: "Clases de almacenamiento de archivo de Amazon S3, de bajo coste, para datos que se consultan poco y deben conservarse mucho tiempo. (El servicio original de bóvedas, Amazon Glacier, es distinto.)"
   usar_cuando: "Para conservar años datos de entrenamiento o registros que exige la normativa."
   no_usar_cuando: "Para datos que se consultan a menudo o con baja latencia: S3 Standard."
@@ -1699,6 +1766,7 @@
   termino: Amazon GuardDuty
   alias: [GuardDuty]
   categoria: servicio
+  icono: aws/Arch_Amazon-GuardDuty_48.svg
   definicion: "Servicio de detección de amenazas que analiza de forma continua registros y datos de la cuenta con inteligencia de amenazas y ML para encontrar actividad sospechosa, como credenciales comprometidas o exfiltración de datos. Está fuera del alcance del examen AIF-C01: basta reconocerlo."
   referencia: https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html
 
@@ -1791,6 +1859,7 @@
   termino: AWS Data Exchange
   alias: [Data Exchange]
   categoria: servicio
+  icono: aws/Arch_AWS-Data-Exchange_48.svg
   definicion: "Servicio para compartir y gestionar a escala datos de otras organizaciones (concesiones de datos y suscripciones de AWS Marketplace) y usarlos con servicios de analítica y ML."
   usar_cuando: "Para obtener conjuntos de datos de terceros con los que entrenar o enriquecer un modelo."
   no_usar_cuando: "Para preparar o transformar los datos (AWS Glue, Amazon EMR)."
@@ -1800,6 +1869,7 @@
   termino: Amazon EMR
   alias: [EMR, Amazon Elastic MapReduce]
   categoria: servicio
+  icono: aws/Arch_Amazon-EMR_48.svg
   definicion: "Plataforma gestionada de clústeres para ejecutar marcos de big data como Apache Hadoop y Apache Spark y procesar y analizar grandes volúmenes de datos."
   usar_cuando: "Para preparar con Spark o Hadoop volúmenes de datos muy grandes antes de entrenar un modelo."
   no_usar_cuando: "Para una preparación visual y sin código (AWS Glue DataBrew)."
@@ -1809,6 +1879,7 @@
   termino: Amazon Redshift
   alias: [Redshift]
   categoria: servicio
+  icono: aws/Arch_Amazon-Redshift_48.svg
   definicion: "Almacén de datos (data warehouse) totalmente gestionado a escala de petabytes; con Redshift Serverless se analizan datos sin configurar un almacén aprovisionado."
   usar_cuando: "Para analizar con SQL grandes volúmenes de datos estructurados que alimentan modelos o informes."
   no_usar_cuando: "Para guardar objetos y ficheros de entrenamiento sin estructura (Amazon S3)."
@@ -1818,6 +1889,7 @@
   termino: Amazon ECS
   alias: [ECS, Amazon Elastic Container Service]
   categoria: servicio
+  icono: aws/Arch_Amazon-Elastic-Container-Service_48.svg
   definicion: "Servicio totalmente gestionado de orquestación de contenedores para desplegar, gestionar y escalar aplicaciones en contenedores, integrado con Amazon ECR."
   usar_cuando: "Para desplegar en contenedores una aplicación o un modelo propio sin gestionar Kubernetes."
   no_usar_cuando: "Cuando la organización ya estandariza en Kubernetes (Amazon EKS) o basta un endpoint gestionado de SageMaker AI."
@@ -1827,6 +1899,7 @@
   termino: Amazon EKS
   alias: [EKS, Amazon Elastic Kubernetes Service]
   categoria: servicio
+  icono: aws/Arch_Amazon-Elastic-Kubernetes-Service_48.svg
   definicion: "Servicio gestionado de Kubernetes que elimina la complejidad de operar clústeres de Kubernetes para desplegar aplicaciones en contenedores."
   usar_cuando: "Para desplegar modelos o aplicaciones en Kubernetes cuando la organización ya usa ese estándar."
   no_usar_cuando: "Cuando basta un servicio de contenedores más sencillo (Amazon ECS) o un endpoint gestionado de SageMaker AI."
@@ -1836,6 +1909,7 @@
   termino: Amazon CloudFront
   alias: [CloudFront]
   categoria: servicio
+  icono: aws/Arch_Amazon-CloudFront_48.svg
   definicion: "Red de distribución de contenido que acelera la entrega de contenido web estático y dinámico a los usuarios desde ubicaciones de borde de todo el mundo."
   usar_cuando: "Para servir con baja latencia la interfaz web de una aplicación que usa IA."
   no_usar_cuando: "Para invocar o alojar el modelo (Bedrock, SageMaker AI)."

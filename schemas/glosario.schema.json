@@ -54,6 +54,11 @@
         "minLength": 5,
         "maxLength": 400
       },
+      "icono": {
+        "description": "Icono del servicio en app/static/iconos/ (proveedor/fichero.svg). Las funcionalidades usan el del servicio al que pertenecen.",
+        "type": "string",
+        "pattern": "^[a-z0-9-]+/[A-Za-z0-9._-]+\\.svg$"
+      },
       "referencia": {
         "type": "string",
         "pattern": "^https://[^\\s]+$"
