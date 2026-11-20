@@ -1,5 +1,14 @@
 # Trampas habituales del módulo 00
 
+## La nube y la infraestructura global
+
+- **«Una zona de disponibilidad es un centro de datos».** Falso: es **uno o varios** centros de datos separados, con alimentación, red y conectividad redundantes. Una Región tiene al menos tres zonas.
+- **Confundir Región y zona de disponibilidad.** La Región es la ubicación geográfica (y la que responde a la residencia de los datos); la zona está *dentro* de la Región y responde a la alta disponibilidad.
+- **Local Zone frente a ubicación de borde.** Una Local Zone ejecuta servicios (cómputo, bases de datos) cerca de una gran ciudad para dar baja latencia; una ubicación de borde guarda en caché el contenido que entrega Amazon CloudFront.
+- **«Amazon VPC lleva los recursos a mi centro de datos».** Falso: una VPC es una red virtual aislada *dentro* de AWS, que puede conectarse al centro de datos propio. Llevar infraestructura de AWS a las instalaciones del cliente es AWS Outposts.
+- **IaaS, PaaS y SaaS al revés.** IaaS da la infraestructura (el cliente gestiona el sistema operativo, como en EC2); SaaS da la aplicación terminada. Cuanto más gestionado, menos tareas operativas para el cliente.
+- **Nube híbrida no es «varias nubes públicas».** Es la nube conectada con recursos que siguen fuera de ella, normalmente el centro de datos propio.
+
 ## Responsabilidad compartida
 
 - **«AWS se encarga de toda la seguridad».** Falso: AWS protege la infraestructura (seguridad *de* la nube); el cliente protege sus datos, accesos y configuración (seguridad *en* la nube).
@@ -13,6 +22,7 @@
 - **Dar permisos amplios «por si acaso».** El criterio correcto es el **mínimo privilegio**.
 - **Confundir grupo y rol.** Un grupo reúne usuarios con permisos comunes; un rol lo *asume* una persona, una aplicación o un servicio y da credenciales temporales.
 - **Esperar que un cambio de permisos sea instantáneo.** IAM es eventualmente consistente.
+- **IAM Access Analyzer frente a CloudTrail.** Access Analyzer revisa los *permisos* (recursos compartidos con el exterior, accesos sin usar); CloudTrail registra la *actividad* (quién hizo qué llamada).
 
 ## Servicios
 
@@ -25,7 +35,8 @@
 ## Precios
 
 - **Confundir On-Demand con compromiso.** On-Demand no exige compromiso; *Savings Plans* y *Reserved Instances* sí (1 o 3 años).
-- **Usar *Spot* para una carga que no admite interrupciones.** *Spot* aprovecha capacidad sobrante a menor coste y es rentable si la aplicación es flexible en cuándo se ejecuta y puede interrumpirse.
+- **Usar *Spot* para una carga que no admite interrupciones.** *Spot* aprovecha capacidad sobrante a menor coste, pero AWS puede recuperarla con un aviso de dos minutos: solo encaja si la aplicación es flexible y tolera interrupciones. Para una carga estable que no puede parar, *Savings Plans* o *Reserved Instances*; para una variable, *On-Demand*.
+- **«Los Savings Plans solo son para EC2».** También hay planes de cómputo y planes de Amazon SageMaker AI.
 - **Pensar que un *endpoint* sin tráfico no cuesta.** Lo aprovisionado (instancias de un *endpoint* de SageMaker AI, *Provisioned Throughput* de Bedrock) se factura mientras existe, se use o no.
-- **Confundir Budgets con Cost Explorer.** Budgets avisa al superar un umbral; Cost Explorer analiza el gasto.
+- **Budgets, Cost Explorer y Pricing Calculator.** Pricing Calculator *estima* antes de desplegar; Budgets *avisa* al superar un umbral; Cost Explorer *analiza* el gasto ya hecho.
 - **Dar precios por sabidos.** Los precios cambian y dependen de la Región: se consultan en las páginas oficiales, no se memorizan.

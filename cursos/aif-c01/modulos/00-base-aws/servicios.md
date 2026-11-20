@@ -13,7 +13,9 @@ Servicios dentro de alcance que el examen da por conocidos. La columna final ind
 | Amazon VPC | Aislar en una red privada los recursos propios (por ejemplo, un *endpoint* de modelo) | No es un servicio de cómputo ni de almacenamiento: solo define la red. Los permisos son de IAM y el cifrado, de AWS KMS |
 | Amazon CloudWatch | Métricas, registros y alarmas sobre el funcionamiento de recursos y aplicaciones | Para saber quién hizo una llamada a la API (es AWS CloudTrail) |
 | AWS CloudTrail | Auditar la actividad de la cuenta: quién hizo qué llamada a la API y cuándo | Para vigilar la latencia o el uso de CPU (es Amazon CloudWatch) |
-| AWS Budgets | Presupuestos de coste o uso con alertas al superarlos | Para analizar en detalle el gasto histórico (es AWS Cost Explorer) |
-| AWS Cost Explorer | Visualizar y analizar el gasto por servicio y su tendencia | Para recibir una alerta automática al superar un umbral (es AWS Budgets) |
+| Amazon CloudFront | Entregar con baja latencia el contenido web (por ejemplo, la interfaz de un asistente) desde ubicaciones de borde de todo el mundo | Para ejecutar la lógica o el modelo: eso es AWS Lambda, Amazon EC2, Amazon Bedrock o SageMaker AI |
+| AWS Budgets | Presupuestos de coste o uso con alertas al superarlos | Para analizar en detalle el gasto histórico (es AWS Cost Explorer) o para estimar antes de desplegar (es AWS Pricing Calculator) |
+| AWS Cost Explorer | Visualizar y analizar el gasto por servicio y su tendencia | Para recibir una alerta automática al superar un umbral (es AWS Budgets) o para estimar una arquitectura que aún no existe (es AWS Pricing Calculator) |
+| AWS Pricing Calculator | Estimar antes de desplegar el coste de una arquitectura, según la Región y el uso previsto | Para vigilar el gasto real: alertas con AWS Budgets y análisis con AWS Cost Explorer |
 
 Referencias: las de [README.md](README.md#referencias).
