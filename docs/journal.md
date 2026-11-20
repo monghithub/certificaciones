@@ -325,3 +325,12 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Diseño:** el cuadro se genera del glosario para que no se desactualice; la categoría y el alcance salen de `fuentes/servicios-alcance.md`, y los módulos, de los `servicios.md`. Los 51 servicios *in scope* ya tenían entrada en el glosario.
 - **Lección de Mermaid:** dentro de un subgrupo, `direction TB` pone en fila las cajas sin enlaces y `direction LR` las apila; las flechas que cruzan subgrupos desordenan el diagrama: mejor enlazar subgrupos enteros y usar `~~~` para colocar un bloque.
 - **Verificación:** 270 pruebas de pytest (6 nuevas), validador, 4/4 diagramas válidos y navegador (enlace en el menú, 80 filas en 13 grupos, iconos, filtro, modal, claro, oscuro y móvil, sin errores de consola).
+
+### Banco local de preguntas de los libros
+
+- Petición: «incluir más test en cada apartado en base a los test en español que existan en los documentos que he subido […] no revises si están repetidas sino añade las que hay en las revisiones de cada capítulo y aparte un test nuevo final con todas las preguntas que haya en los libros».
+- **Decisión del usuario:** las preguntas de los libros tienen copyright y este repositorio es público, así que **solo viven en titan**, fuera de git, hasta que se resuelva la privacidad del repositorio. Aquí solo entra el soporte genérico de la consola.
+- **Diseño:** `cursos/<curso>/modulos/<NN>/libros.yaml`, opcional e ignorado por git. Banco aparte (`banco: libros`), con validación mínima (no pasa por el esquema de las preguntas propias, que exige referencia oficial y explicación de cada distractor) y fuera del repaso, el examen, el mixto, el dominio y el simulacro. Sí entra en «Repetir falladas». En «Tests», apartado «Preguntas de los libros»: por módulo, con un número de preguntas o todas, y un test final con todas, sin el tope de 100.
+- Los ficheros los genera un script que vive junto a los libros, fuera del repositorio. El preparado de las preguntas, su reparto por módulo y la clasificación por dominio del test inicial y del examen de práctica están en su propio journal.
+- **Verificación:** 274 pruebas de pytest (4 nuevas), validador, cobertura y glosario sin cambios.
+

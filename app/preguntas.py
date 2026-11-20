@@ -6,7 +6,7 @@ def vista_pregunta(c, pid: str) -> dict | None:
     p = c.preguntas.get(pid)
     if not p:
         return None
-    vista = {k: p.get(k) for k in ("id", "tipo", "enunciado", "opciones", "prompts", "tarea", "dominio", "banco")}
+    vista = {k: p.get(k) for k in ("id", "tipo", "enunciado", "opciones", "prompts", "tarea", "dominio", "banco", "origen")}
     vista["posiciones"] = len(p["correctas"]) if p["tipo"] == "ordering" else 0  # solo el nº de huecos, no la solución
     return vista
 
