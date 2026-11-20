@@ -46,4 +46,19 @@
     <button>Empezar simulacro</button>{% else %}<p class="suave">No disponible: hay {{ n_sim }} de {{ sim_n }} preguntas.</p>{% endif %}</form>
 </div>
 {% endif %}
+{% if libros %}
+<div class="ruta-paso"><h2>{{ '5' if hay_simulacro else '4' }}. Preguntas de los libros</h2><p class="suave">Preguntas de las guías de estudio, solo en esta instalación (material de terceros, no se publica). Son de 2025: si una respuesta choca con la documentación vigente de AWS, prevalece la documentación.</p></div>
+<div class="grid">
+  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="libros">
+    <h2 style="margin-top:0">Por módulo</h2>
+    <label for="l-filtro">Módulo</label><select id="l-filtro" name="filtro">{% for m in libros %}<option value="{{ m.id }}">{{ m.numero }} · {{ 'Test inicial y examen de práctica' if m.es_simulacro else m.titulo }} ({{ m.libros|length }})</option>{% endfor %}</select>
+    <label for="l-n">Número de preguntas</label><input id="l-n" type="number" name="n" value="10" min="1" max="100">
+    <label class="opcion"><input type="checkbox" name="todas" value="1"><span>Todas las del módulo</span></label>
+    <p><button>Empezar</button></p></form>
+  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="libros"><input type="hidden" name="filtro" value=""><input type="hidden" name="todas" value="1">
+    <h2 style="margin-top:0">Test final de los libros</h2>
+    <p>Las {{ n_libros }} preguntas de los libros, en orden aleatorio, con corrección y explicación al responder cada una.</p>
+    <p><button>Empezar test final</button></p></form>
+</div>
+{% endif %}
 {% endblock %}

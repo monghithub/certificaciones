@@ -351,3 +351,11 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - Ejemplos de SaaS de AWS que ya no sirven: Amazon Chime dejó de tener soporte el 20 de febrero de 2026 y la página de Amazon WorkDocs ya no existe. AWS no clasifica sus servicios como PaaS o SaaS: el curso usa la distinción oficial entre servicios de infraestructura y servicios abstraídos.
   - Los libros dan 36 Regiones o similares; la documentación consultada da 34 y la portada de AWS, 39. El curso no cita la cifra.
 - **Verificación:** validador sin avisos, cobertura (CP 4/4, 33 de repaso), 270 pruebas de pytest y 7/7 diagramas Mermaid válidos.
+
+### Banco local de preguntas de los libros
+
+- Petición: «incluir más test en cada apartado en base a los test en español que existan en los documentos que he subido […] no revises si están repetidas sino añade las que hay en las revisiones de cada capítulo y aparte un test nuevo final con todas las preguntas que haya en los libros».
+- **Decisión del usuario:** las preguntas de los libros tienen copyright y este repositorio es público, así que **solo viven en titan**, fuera de git, hasta que se resuelva la privacidad del repositorio. Aquí solo entra el soporte genérico de la consola.
+- **Diseño:** `cursos/<curso>/modulos/<NN>/libros.yaml`, opcional e ignorado por git. Banco aparte (`banco: libros`), con validación mínima (no pasa por el esquema de las preguntas propias, que exige referencia oficial y explicación de cada distractor) y fuera del repaso, el examen, el mixto, el dominio y el simulacro. Sí entra en «Repetir falladas». En «Tests», apartado «Preguntas de los libros»: por módulo, con un número de preguntas o todas, y un test final con todas, sin el tope de 100.
+- Los ficheros los genera un script que vive junto a los libros, fuera del repositorio. El preparado de las preguntas, su reparto por módulo y la clasificación por dominio del test inicial y del examen de práctica están en su propio journal.
+- **Verificación:** 274 pruebas de pytest (4 nuevas), validador, cobertura y glosario sin cambios.

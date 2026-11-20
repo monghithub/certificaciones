@@ -9,3 +9,6 @@ data/
 *.db
 *.db-wal
 *.db-shm
+
+# Bancos locales de preguntas de libros de terceros (copyright): solo en la instalación local
+cursos/*/modulos/*/libros.yaml

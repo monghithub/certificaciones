@@ -37,6 +37,7 @@ class Modulo:
     secciones: list[Seccion] = field(default_factory=list)
     preguntas: list[str] = field(default_factory=list)  # banco de examen (preguntas.yaml)
     repaso: list[str] = field(default_factory=list)  # banco de repaso de conocimientos (repaso.yaml)
+    libros: list[str] = field(default_factory=list)  # banco local opcional de las guías de estudio (libros.yaml, no versionado)
     es_simulacro: bool = False
 
 
@@ -196,6 +197,7 @@ class Contenido:
             self._cargar_preguntas(d, mod, validador)
             if not mod.es_simulacro:
                 self._cargar_preguntas(d, mod, validador, repaso=True)
+            self._cargar_libros(d, mod)
 
     def _cargar_preguntas(self, d: Path, mod: Modulo, validador, repaso: bool = False):
         f = d / ("repaso.yaml" if repaso else "preguntas.yaml")
@@ -224,6 +226,38 @@ class Contenido:
             p["banco"] = "repaso" if repaso else "examen"
             self.preguntas[p["id"]] = p
             (mod.repaso if repaso else mod.preguntas).append(p["id"])
+
+    def _cargar_libros(self, d: Path, mod: Modulo):
+        """Banco local opcional `libros.yaml`: preguntas de guías de estudio de terceros para uso personal.
+
+        No se versiona (material con copyright) ni pasa por el esquema de las preguntas propias: solo se exige lo
+        necesario para mostrarlas y corregirlas. Se usan únicamente en el test «Preguntas de los libros»."""
+        f = d / "libros.yaml"
+        if not f.is_file():
+            return
+        try:
+            datos = yaml.safe_load(f.read_text(encoding="utf8")) or []
+        except yaml.YAMLError as e:
+            self.avisos.append(f"{mod.id}/libros.yaml: YAML inválido ({e})")
+            return
+        for p in datos if isinstance(datos, list) else []:
+            ok = (isinstance(p, dict) and isinstance(p.get("id"), str) and p.get("tipo") in ("multiple_choice", "multiple_response")
+                  and isinstance(p.get("enunciado"), str) and isinstance(p.get("opciones"), list) and p["opciones"]
+                  and isinstance(p.get("correctas"), list) and p["correctas"]
+                  and set(p["correctas"]) <= {o.get("id") for o in p["opciones"] if isinstance(o, dict)})
+            if not ok:
+                self.avisos.append(f"{mod.id}/libros.yaml: pregunta {p.get('id') if isinstance(p, dict) else '?'} incompleta, ignorada")
+                continue
+            if p["id"] in self.preguntas:
+                self.avisos.append(f"{mod.id}/libros.yaml:{p['id']}: id duplicado, ignorada")
+                continue
+            p.setdefault("dominio", 0)
+            p.setdefault("tarea", "libros")
+            p.setdefault("explicacion", "")
+            p["modulo"] = mod.id
+            p["banco"] = "libros"
+            self.preguntas[p["id"]] = p
+            mod.libros.append(p["id"])
 
     def url_teoria(self, objetivo: str | None) -> str | None:
         """Sección de teoría que cubre un objetivo, según el mapa de cobertura de los README."""
