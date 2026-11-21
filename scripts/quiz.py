@@ -95,7 +95,7 @@ def main(argv=None, entrada=input):
         if not m.tiene_simulacro:
             print(f"El curso {curso} no tiene simulacro.", file=sys.stderr)
             return 1
-        banco = cargar(a.raiz, curso, m.simulacro)
+        banco = simulacro.cargar_banco(m, a.raiz / "schemas")  # misma carga y filtrado que la consola
         try:
             ids = simulacro.extraer(m, banco, rnd)
         except ValueError as e:
