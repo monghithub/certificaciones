@@ -4,20 +4,22 @@ Si el banco del simulacro tiene exactamente `examen.preguntas` preguntas, cada i
 (comportamiento histórico). Si tiene más, cada intento extrae `examen.preguntas` respetando:
 
 1. las cuotas por dominio (pesos de `dominios`) y por tipo (`examen.distribucion`), siempre;
-2. sin repetir objetivo dentro de un dominio, salvo que el banco lo haga inevitable;
-3. preferencia por las preguntas que no estaban en `evitar` (el intento anterior del usuario);
+2. el máximo de objetivos distintos dentro de cada dominio (óptimo exacto, por flujo de coste mínimo);
+3. entre esas soluciones, el mínimo de preguntas de `evitar` (el intento anterior del usuario);
 4. el resto, al azar.
 
 Lo usan la consola, `scripts/validar_preguntas.py` y `scripts/quiz.py --simulacro`.
 """
+import json
 import random
 from collections import Counter, defaultdict
 from fractions import Fraction
+from pathlib import Path
+
+import yaml
+from jsonschema import Draft202012Validator
 
 from .manifiesto import TIPOS, Manifiesto
-
-REINTENTOS = 20  # selecciones voraces por dominio; se queda la mejor
-
 
 def _restos_mayores(total: int, pesos: dict, desempate, capacidad: dict | None = None) -> dict:
     """Reparte `total` unidades en proporción a `pesos` (método de restos mayores, con aritmética exacta).
@@ -90,12 +92,100 @@ def _objetivo(p: dict) -> str:
     return p.get("objetivo") or p["id"]  # sin objetivo declarado, la pregunta no restringe a ninguna otra
 
 
-def repeticiones_inevitables(m: Manifiesto, banco: list[dict]) -> dict[int, int]:
-    """Por dominio, cuántas veces un intento tiene que repetir objetivo como mínimo."""
-    distintos = defaultdict(set)
+def _celdas_por_dominio(m: Manifiesto, banco: list[dict]) -> dict[int, list[tuple[list[dict], int]]]:
+    """dominio -> [(preguntas de la celda dominio × tipo, cuota de la celda)], con las preguntas en el orden del banco."""
+    con_tipo = bool(cuotas_tipo(m))
+    por_celda = defaultdict(list)
     for p in banco:
-        distintos[p.get("dominio")].add(_objetivo(p))
-    return {d: max(0, n - len(distintos[d])) for d, n in cuotas_dominio(m).items()}
+        por_celda[_celda(p, con_tipo)].append(p)
+    resultado = defaultdict(list)
+    for (d, t), n in cuotas(m).items():
+        resultado[d].append((por_celda[(d, t)], n))
+    return dict(resultado)
+
+
+class _Flujo:
+    """Flujo de coste mínimo por caminos más cortos sucesivos (Bellman-Ford). Basta para unas decenas de nodos."""
+
+    def __init__(self, n: int):
+        self.aristas: list[list[int]] = []  # [destino, capacidad, coste, índice de la inversa]
+        self.salientes: list[list[int]] = [[] for _ in range(n)]
+
+    def arista(self, a: int, b: int, capacidad: int, coste: int) -> int:
+        self.salientes[a].append(len(self.aristas))
+        self.aristas.append([b, capacidad, coste, len(self.aristas) + 1])
+        self.salientes[b].append(len(self.aristas))
+        self.aristas.append([a, 0, -coste, len(self.aristas) - 1])
+        return len(self.aristas) - 2
+
+    def flujo(self, e: int) -> int:
+        """Unidades que circulan por la arista e (la capacidad de su inversa)."""
+        return self.aristas[self.aristas[e][3]][1]
+
+    def resolver(self, origen: int, destino: int) -> None:
+        n = len(self.salientes)
+        while True:
+            dist, previa = [None] * n, [None] * n
+            dist[origen] = 0
+            for _ in range(n):  # Bellman-Ford: hay costes negativos, pero nunca ciclos negativos en el residual
+                cambio = False
+                for a in range(n):
+                    if dist[a] is None:
+                        continue
+                    for e in self.salientes[a]:
+                        b, cap, coste, _ = self.aristas[e]
+                        if cap > 0 and (dist[b] is None or dist[a] + coste < dist[b]):
+                            dist[b], previa[b], cambio = dist[a] + coste, e, True
+                if not cambio:
+                    break
+            if dist[destino] is None:
+                return
+            camino, b = [], destino
+            while b != origen:
+                e = previa[b]
+                camino.append(e)
+                b = self.aristas[self.aristas[e][3]][0]
+            delta = min(self.aristas[e][1] for e in camino)
+            for e in camino:
+                self.aristas[e][1] -= delta
+                self.aristas[self.aristas[e][3]][1] += delta
+
+
+def _optimo_dominio(celdas: list[tuple[list[dict], int]], evitar, rnd: random.Random) -> tuple[list[dict], int]:
+    """Selección exacta de un dominio: (preguntas elegidas, objetivos distintos).
+
+    Flujo de coste mínimo: origen → celda (capacidad = cuota) → pregunta (1; coste 1 si está en `evitar`) → objetivo →
+    destino por dos aristas: la primera unidad con coste −GRANDE (objetivo nuevo) y el resto con coste 0 (repetición).
+    Con GRANDE mayor que el nº de preguntas, el coste mínimo maximiza primero los objetivos distintos y, entre esas
+    soluciones, minimiza las preguntas de `evitar`. Las preguntas y los objetivos se añaden en un orden barajado con `rnd`,
+    así que los empates entre soluciones óptimas se resuelven al azar."""
+    preguntas = [(c, p) for c, (cands, _) in enumerate(celdas) for p in cands]
+    rnd.shuffle(preguntas)
+    objetivos = list(dict.fromkeys(_objetivo(p) for _, p in preguntas))
+    n_celdas = len(celdas)
+    origen, destino = 0, 1
+    nodo_obj = {o: 2 + n_celdas + len(preguntas) + i for i, o in enumerate(objetivos)}
+    f = _Flujo(2 + n_celdas + len(preguntas) + len(objetivos))
+    grande = len(preguntas) + 1
+    for c, (_, cuota) in enumerate(celdas):
+        f.arista(origen, 2 + c, cuota, 0)
+    elegida = []
+    for i, (c, p) in enumerate(preguntas):
+        elegida.append(f.arista(2 + c, 2 + n_celdas + i, 1, 1 if p["id"] in evitar else 0))
+        f.arista(2 + n_celdas + i, nodo_obj[_objetivo(p)], 1, 0)
+    nuevo = []
+    for o in objetivos:
+        nuevo.append(f.arista(nodo_obj[o], destino, 1, -grande))
+        f.arista(nodo_obj[o], destino, len(preguntas), 0)
+    f.resolver(origen, destino)
+    return [p for (_, p), e in zip(preguntas, elegida) if f.flujo(e)], sum(f.flujo(e) for e in nuevo)
+
+
+def repeticiones_inevitables(m: Manifiesto, banco: list[dict]) -> dict[int, int]:
+    """Por dominio, cuántas veces un intento tiene que repetir objetivo como mínimo: cuota del dominio menos el máximo de
+    objetivos distintos que caben respetando las cuotas por celda (dominio × tipo)."""
+    celdas = _celdas_por_dominio(m, banco)
+    return {d: n - _optimo_dominio(celdas.get(d, []), (), random.Random(0))[1] for d, n in cuotas_dominio(m).items()}
 
 
 def comprobar_banco(m: Manifiesto, banco: list[dict]) -> tuple[list[str], list[str]]:
@@ -122,20 +212,6 @@ def comprobar_banco(m: Manifiesto, banco: list[dict]) -> tuple[list[str], list[s
     return errores, resumen
 
 
-def _elegir_dominio(celdas: list[tuple[list[dict], int]], rnd: random.Random, evitar) -> tuple[tuple[int, int], list[dict]]:
-    """Una selección voraz de un dominio: ((objetivos repetidos, preguntas de evitar), preguntas)."""
-    usados: Counter = Counter()
-    elegidas: list[dict] = []
-    for candidatos, n in sorted(celdas, key=lambda c: len(c[0]) - c[1]):  # primero la celda con menos holgura
-        libres = list(candidatos)
-        for _ in range(n):
-            p = min(libres, key=lambda x: (_objetivo(x) in usados, x["id"] in evitar, rnd.random()))
-            libres.remove(p)
-            usados[_objetivo(p)] += 1
-            elegidas.append(p)
-    return (len(elegidas) - len(usados), sum(p["id"] in evitar for p in elegidas)), elegidas
-
-
 def extraer(m: Manifiesto, banco: list[dict], rnd: random.Random, evitar=frozenset()) -> list[str]:
     """Ids de un intento, en el orden de presentación. ValueError si el banco no permite formar el examen."""
     n = m.examen_preguntas
@@ -147,22 +223,24 @@ def extraer(m: Manifiesto, banco: list[dict], rnd: random.Random, evitar=frozens
     if errores:
         raise ValueError(f"El banco del simulacro no permite formar el examen: {errores[0]}.")
     evitar = set(evitar)
-    q = cuotas(m)
-    con_tipo = bool(cuotas_tipo(m))
-    por_celda = defaultdict(list)
-    for p in banco:
-        por_celda[_celda(p, con_tipo)].append(p)
-    minimo = repeticiones_inevitables(m, banco)
     ids: list[str] = []
-    for d in sorted({d for d, _ in q}):
-        celdas = [(por_celda[(d, t)], k) for (dd, t), k in q.items() if dd == d]
-        mejor = None
-        for _ in range(REINTENTOS):
-            puntos, elegidas = _elegir_dominio(celdas, rnd, evitar)
-            if mejor is None or puntos < mejor[0]:
-                mejor = (puntos, elegidas)
-            if puntos == (minimo[d], 0):
-                break
-        ids += [p["id"] for p in mejor[1]]
+    for _, celdas in sorted(_celdas_por_dominio(m, banco).items()):
+        ids += [p["id"] for p in _optimo_dominio(celdas, evitar, rnd)[0]]
     rnd.shuffle(ids)
     return ids
+
+
+def cargar_banco(m: Manifiesto, esquemas: Path) -> list[dict]:
+    """Banco del simulacro como lo carga la consola: solo `modulos/<simulacro>/preguntas.yaml`, preguntas que cumplen
+    el esquema, de dominios declarados y sin ids repetidos (gana la primera)."""
+    f = m.carpeta / "modulos" / (m.simulacro or "") / "preguntas.yaml"
+    if not m.simulacro or not f.is_file():
+        return []
+    validador = Draft202012Validator(json.loads((Path(esquemas) / "pregunta.schema.json").read_text(encoding="utf8")))
+    banco, vistos = [], set()
+    for p in yaml.safe_load(f.read_text(encoding="utf8")) or []:
+        if (isinstance(p, dict) and not any(validador.iter_errors(p)) and p["dominio"] in m.dominios
+                and p["id"] not in vistos):
+            vistos.add(p["id"])
+            banco.append(p)
+    return banco

@@ -173,3 +173,103 @@ def test_resumen_del_banco():
 
 def test_sin_simulacro_no_hay_comprobacion():
     assert s.comprobar_banco(replace(AIF, simulacro=None), banco_simulacro(PREVISTO)) == ([], [])
+
+
+# ---------------------------------------------------------------- óptimo exacto (revisión independiente)
+def _con_objetivos(banco, objetivos):
+    for p, o in zip(banco, objetivos):
+        p["objetivo"] = o
+    return banco
+
+
+def _seleccion(banco, ids, evitar=()):
+    """(objetivos repetidos, preguntas de evitar) de una selección."""
+    return sum(repetidos(banco, ids).values()), sum(i in evitar for i in ids)
+
+
+def test_contraejemplo_la_preferencia_por_no_vistas_no_repite_objetivo():
+    # Respuesta múltiple (cuota 2): o5, o4, o1, y solo o4 sin ver. Opción múltiple (cuota 3): o6, o4, o4, o6, o2.
+    m = manifiesto(n=5, pesos=(100,), distribucion={"multiple_choice": 60, "multiple_response": 40})
+    banco = _con_objetivos(banco_simulacro({1: (5, 3)}), ["o6", "o4", "o4", "o6", "o2", "o5", "o4", "o1"])
+    evitar = {p["id"] for p in banco if not (p["tipo"] == "multiple_response" and p["objetivo"] == "o4")}
+    assert s.repeticiones_inevitables(m, banco) == {1: 0}
+    for semilla in range(200):
+        ids = s.extraer(m, banco, random.Random(semilla), evitar)
+        assert repetidos(banco, ids) == Counter(), semilla
+
+
+def test_contraejemplo_repeticiones_inevitables_por_celda():
+    # Opción múltiple (cuota 2): A, A. Respuesta múltiple (cuota 1): B, C. Hay 3 objetivos, pero A se repite siempre.
+    m = manifiesto(n=3, pesos=(100,), distribucion={"multiple_choice": 67, "multiple_response": 33})
+    banco = _con_objetivos(banco_simulacro({1: (2, 2)}), ["A", "A", "B", "C"])
+    assert s.cuotas(m) == {(1, "multiple_choice"): 2, (1, "multiple_response"): 1}
+    assert s.repeticiones_inevitables(m, banco) == {1: 1}
+    assert repetidos(banco, s.extraer(m, banco, random.Random(1))) == Counter({1: 1})
+    assert "objetivos repetidos inevitables por intento: D1 1" in s.comprobar_banco(m, banco)[1]
+
+
+def _maximo_distintos(celdas):
+    """Referencia independiente: emparejamiento bipartito máximo (Kuhn) entre huecos de las celdas y objetivos."""
+    huecos = [{p["objetivo"] for p in cands} for cands, cuota in celdas for _ in range(cuota)]
+    pareja = {}
+
+    def aumentar(h, visto):
+        for o in huecos[h]:
+            if o not in visto:
+                visto.add(o)
+                if o not in pareja or aumentar(pareja[o], visto):
+                    pareja[o] = h
+                    return True
+        return False
+
+    return sum(aumentar(h, set()) for h in range(len(huecos)))
+
+
+def _banco_aif_aleatorio(rnd):
+    """Banco de 82 con la forma de AIF-C01: todos los objetivos presentes, repartidos al azar entre los tipos."""
+    banco = banco_simulacro(PREVISTO)
+    k = 0
+    for d, (n_mc, n_mr) in sorted(PREVISTO.items()):
+        objs = [f"{d}.1.{i}" for i in range(1, OBJETIVOS[d] + 1)]
+        objs += [rnd.choice(objs) for _ in range(n_mc + n_mr - len(objs))]
+        rnd.shuffle(objs)
+        _con_objetivos(banco[k:k + n_mc + n_mr], objs)
+        k += n_mc + n_mr
+    return banco
+
+
+@pytest.mark.parametrize("semilla", range(300))
+def test_fuzz_bancos_con_la_forma_de_aif_c01(semilla):
+    rnd = random.Random(semilla)
+    banco = _banco_aif_aleatorio(rnd)
+    q = s.cuotas(AIF)
+    celdas = {d: [([p for p in banco if (p["dominio"], p["tipo"]) == (dd, t)], n) for (dd, t), n in q.items() if dd == d]
+              for d in range(1, 6)}
+    minimo = {d: s.cuotas_dominio(AIF)[d] - _maximo_distintos(c) for d, c in celdas.items()}
+    assert s.repeticiones_inevitables(AIF, banco) == minimo
+    anterior = s.extraer(AIF, banco, rnd)
+    for evitar in (set(), set(anterior), set(rnd.sample([p["id"] for p in banco], 65))):
+        ids = s.extraer(AIF, banco, rnd, evitar)
+        assert Counter((p["dominio"], p["tipo"]) for p in banco if p["id"] in set(ids)) == Counter(q)
+        assert repetidos(banco, ids) == Counter({d: n for d, n in minimo.items() if n})
+
+
+@pytest.mark.parametrize("semilla", range(300))
+def test_fuzz_optimo_lexicografico_por_fuerza_bruta(semilla):
+    """Bancos pequeños de un dominio: objetivos distintos máximos y, entre esas soluciones, las mínimas de evitar."""
+    from itertools import combinations, product
+
+    rnd = random.Random(semilla)
+    m = manifiesto(n=5, pesos=(100,), distribucion={"multiple_choice": 60, "multiple_response": 40})
+    n_mc, n_mr = rnd.randint(3, 6), rnd.randint(2, 4)
+    pool = [f"o{i}" for i in range(rnd.randint(2, 6))]
+    banco = _con_objetivos(banco_simulacro({1: (n_mc, n_mr)}), [rnd.choice(pool) for _ in range(n_mc + n_mr)])
+    if len(banco) <= 5:
+        banco += _con_objetivos(banco_simulacro({1: (1, 0)}), ["extra"])
+        banco[-1]["id"] = "S-900"
+    evitar = {p["id"] for p in banco if rnd.random() < 0.5}
+    mc = [p["id"] for p in banco if p["tipo"] == "multiple_choice"]
+    mr = [p["id"] for p in banco if p["tipo"] == "multiple_response"]
+    mejor = min(_seleccion(banco, list(a) + list(b), evitar) for a, b in product(combinations(mc, 3), combinations(mr, 2)))
+    for k in range(3):
+        assert _seleccion(banco, s.extraer(m, banco, random.Random(k), evitar), evitar) == mejor
