@@ -17,7 +17,7 @@ from .db import crear_motor, crear_sesionmaker
 from .deps import CSRFInvalido, Redireccion
 from .migraciones import migrar
 from .models import Usuario
-from .routes import admin, auth, course, home, lectura, quiz, stats
+from .routes import admin, auth, consultas, course, home, lectura, quiz, stats
 from .security import LimitadorLogin, error_password, hashear
 from .web import flash, render
 
@@ -69,6 +69,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
     for r in (auth.router, home.router, course.router, lectura.router, quiz.router, stats.router, admin.router):
         app.include_router(r)
+    if settings.consultas_token:  # «Preguntar a Claude»: sin token no existen ni el panel ni la API interna
+        app.include_router(consultas.router)
+        app.include_router(consultas.api)
 
     @app.exception_handler(Redireccion)
     async def _redir(request: Request, exc: Redireccion):

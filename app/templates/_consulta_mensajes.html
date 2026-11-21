@@ -1,0 +1,23 @@
+{# Conversación de una consulta. Mientras hay una duda en cola o en curso se sondea cada 5 s (solo esta parte, no el formulario). #}
+<div class="consulta-mensajes" id="consulta-{{ pid }}-mensajes" aria-live="polite"
+  {%- if esperando %} hx-get="{{ base }}/consultas/{{ pid }}/mensajes{% if intento %}?intento={{ intento }}{% endif %}" hx-trigger="every 5s" hx-swap="outerHTML"{% endif %}>
+  {% for m in mensajes %}
+    {% if m.rol == 'claude' %}
+    <div class="consulta-msg claude"><p class="consulta-quien">Claude</p><div class="consulta-texto">{{ m.html|safe }}</div></div>
+    {% else %}
+    <div class="consulta-msg usuario"><p class="consulta-quien">Tú · {{ m.creado|fecha }} UTC
+      {% if m.estado != 'respondido' %}<span class="etiqueta consulta-estado {{ m.estado }}">{{ m.etiqueta }}</span>{% endif %}</p>
+      <div class="consulta-texto">{{ m.texto }}</div>
+      {% if m.estado == 'error' %}<p class="mal-t">Error: {{ m.error or 'sin detalle' }}</p>
+      {% elif m.estado == 'pendiente' and m.error %}<p class="suave">Se reintentará más tarde: {{ m.error }}</p>{% endif %}
+    </div>
+    {% endif %}
+  {% endfor %}
+  {% if error_reintento %}<div class="msg error" role="alert">{{ error_reintento }}</div>{% endif %}
+  {% if con_error %}
+  <form method="post" action="{{ base }}/consultas/{{ pid }}/reintentar"
+        hx-post="{{ base }}/consultas/{{ pid }}/reintentar" hx-target="#consulta-{{ pid }}-mensajes" hx-swap="outerHTML" hx-disabled-elt="find button">
+    <input type="hidden" name="csrf" value="{{ csrf }}">{% if intento %}<input type="hidden" name="intento" value="{{ intento }}">{% endif %}
+    <button type="submit" class="sec">Reintentar</button></form>
+  {% endif %}
+</div>

@@ -41,8 +41,15 @@ def flash(request: Request, mensaje: str, nivel: str = "info"):
     request.session.setdefault("flash", []).append([nivel, mensaje])
 
 
+def consultas_activas(request: Request, usuario=None) -> bool:
+    """«Preguntar a Claude»: solo con CONSULTAS_TOKEN configurado y para usuarios admin."""
+    usuario = usuario if usuario is not None else getattr(request.state, "user", None)
+    return bool(request.app.state.settings.consultas_token) and getattr(usuario, "rol", None) == "admin"
+
+
 def render(request: Request, nombre: str, status: int = 200, **ctx):
     ctx.setdefault("user", getattr(request.state, "user", None))
+    ctx.setdefault("consultas", consultas_activas(request, ctx["user"]))
     ctx["csrf"] = token_csrf(request.session)
     ctx["min_password"] = request.app.state.settings.password_min_length
     ctx["acceso_libre"] = bool(request.app.state.settings.acceso_libre_usuario)

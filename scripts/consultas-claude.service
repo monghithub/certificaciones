@@ -1,0 +1,29 @@
+# Servicio de usuario de systemd para el trabajador de «Preguntar a Claude» (scripts/consultas_trabajador.py).
+# Instalación en titan (ver docs/consola.md, «Activarlo»):
+#   install -m 600 /dev/null ~/.config/consultas-claude.env    # y escribe en él CONSULTAS_TOKEN=<el del .env de la consola>
+#   cp scripts/consultas-claude.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload && systemctl --user enable --now consultas-claude
+#   journalctl --user -u consultas-claude -f
+# Tras cada despliegue, si este fichero cambió: vuelve a copiarlo y haz daemon-reload y restart.
+[Unit]
+Description=Trabajador de «Preguntar a Claude» de la consola de certificaciones
+
+[Service]
+Type=simple
+# Solo CONSULTAS_TOKEN (fichero propio, permisos 600); nunca el .env de la consola, que tiene SECRET_KEY.
+EnvironmentFile=%h/.config/consultas-claude.env
+Environment=CONSULTAS_URL=http://127.0.0.1:8097
+Environment=CONSULTAS_CLAUDE=%h/.local/bin/claude
+Environment=CONSULTAS_CURSOS=%h/Sistema/aplicaciones/certificaciones/src/cursos
+Environment=CONSULTAS_LIBROS=%h/Sistema/aplicaciones/certificaciones/libros-md
+ExecStart=/usr/bin/python3 %h/Sistema/aplicaciones/certificaciones/src/scripts/consultas_trabajador.py
+Restart=always
+RestartSec=30
+TimeoutStopSec=30
+NoNewPrivileges=yes
+# InaccessiblePaths= (por ejemplo %h/.ssh y el data/ de la consola) necesita espacios de nombres de usuario en un
+# servicio de usuario, y titan los restringe (kernel.apparmor_restrict_unprivileged_userns=1): el servicio no
+# arrancaría. La lectura de esas rutas la impiden los permisos de Claude Code (--restricted, --disallowedTools).
+
+[Install]
+WantedBy=default.target

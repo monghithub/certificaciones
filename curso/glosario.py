@@ -10,6 +10,7 @@ from jsonschema import Draft202012Validator
 from .manifiesto import RAIZ_REPO
 
 CATEGORIAS = ("servicio", "concepto", "tecnica", "metrica")
+ICONOS = RAIZ_REPO / "app" / "static" / "iconos"
 
 
 @dataclass(frozen=True)
@@ -23,6 +24,7 @@ class Entrada:
     no_usar_cuando: str | None = None
     referencia: str | None = None
     enlaces: tuple[tuple[str, str], ...] = ()  # (texto, url) adicionales a `referencia`
+    icono: str | None = None  # ruta relativa a app/static/iconos/ (proveedor/fichero.svg)
 
     @property
     def nombres(self) -> tuple[str, ...]:
@@ -95,7 +97,7 @@ def leer(carpeta: Path, esquemas: Path | None = None) -> tuple[Glosario | None, 
         e = Entrada(id=d["id"], termino=d["termino"], categoria=d["categoria"], definicion=d["definicion"].strip(),
                     alias=tuple(d.get("alias") or ()), usar_cuando=d.get("usar_cuando"),
                     no_usar_cuando=d.get("no_usar_cuando"), referencia=d.get("referencia"),
-                    enlaces=tuple((l["texto"], l["url"]) for l in d.get("enlaces") or ()))
+                    enlaces=tuple((l["texto"], l["url"]) for l in d.get("enlaces") or ()), icono=d.get("icono"))
         for n in e.nombres:
             previo = nombres.get(n.lower())
             if previo and previo != e.id:
@@ -141,6 +143,8 @@ def validar(carpeta: Path, esquemas: Path | None = None) -> list[str]:
     for e in glosario:
         if e.referencia and not e.referencia.startswith("https://"):
             errores.append(f"{carpeta.name}/glosario.yaml: «{e.id}» tiene una referencia que no es https")
+        if e.icono and not (ICONOS / e.icono).is_file():
+            errores.append(f"{carpeta.name}/glosario.yaml: «{e.id}» usa el icono «{e.icono}», que no está en app/static/iconos/")
     for f in sorted((carpeta / "modulos").glob("*/servicios.md")):
         for nombre in servicios_de(f.read_text(encoding="utf8")):
             if glosario.id_de(nombre) is None:

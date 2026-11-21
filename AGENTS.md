@@ -69,6 +69,7 @@ Reglas surgidas de la revisión técnica de la iteración 1 de AIF-C01. Se aplic
 - **Fuentes con fecha.** Si una guía o un documento antiguo choca con la documentación vigente del producto, prevalece la vigente.
 - **Cada objetivo oficial, con cuatro piezas:** definición breve, criterio de decisión (tabla «escenario → producto o técnica»), ejemplo de negocio y trampa típica en `trampas.md`. Los matices que separan opciones parecidas (límites, exclusiones, modelo de facturación) se citan con su fuente.
 - **Ejemplos resueltos.** Las métricas y los cálculos se explican con un ejemplo numérico, y los ciclos de vida con un caso de principio a fin.
+- **Cada «cuándo no usar» con su alternativa.** Si el texto, el glosario (`no_usar_cuando`), la columna «Cuándo NO usarlo» de `servicios.md`, una trampa o una explicación dicen que un servicio o una técnica no conviene para algo, añaden **qué usar en su lugar** (dentro del alcance siempre que exista; si no, se nombra sin profundizar). Si el producto está cerrado a clientes nuevos, se da el sustituto que indica el proveedor o se dice que no lo indica.
 - **Productos dentro de alcance.** Cuando un objetivo pide productos «por etapa» o «para un caso», revisa la lista oficial de alcance del curso y menciona los relevantes, no solo los del ejemplo de la guía.
 - **Diagramas jerárquicos.** Las relaciones de inclusión se dibujan con `subgraph` anidados, no como una cadena de flechas que parezca un proceso.
 - **Glosario.** Todo producto o concepto nuevo lleva su entrada. No uses como alias palabras comunes que aparezcan con otro sentido: usa la forma completa del nombre.
@@ -78,6 +79,7 @@ Reglas surgidas de la revisión técnica de la iteración 1 de AIF-C01. Se aplic
 ## Banco de preguntas
 
 - Mínimos y distribución por tipos en `banco` de `curso.yaml`, comprobados por la CI (`minimo_por_modulo`, `minimo_por_tarea`, `minimo_por_objetivo`, `distribucion`). Como orientación, de 4 a 5 preguntas por objetivo; más en los objetivos de productos y de criterios de decisión.
+- **Simulacro:** si la guía oficial enumera los tipos de pregunta del examen, se declaran en `examen.tipos` de `curso.yaml` (y, opcionalmente, su reparto en `examen.distribucion`). El validador falla si el simulacro usa otro tipo; los bancos de los módulos pueden seguir usando los cuatro tipos como práctica.
 - `id`: `D<dominio>-NNN`; en el simulacro, `S-NNN`. `objetivo` (recomendado: `N.M.K`) enlaza la pregunta con un objetivo oficial de su tarea. `tarea` debe existir en `cursos/<curso>/fuentes/dominio-N.md` y `dominio` en el manifiesto. `referencia`: URL https de una de las `fuentes_oficiales` del curso.
 - Formato por tipo:
 

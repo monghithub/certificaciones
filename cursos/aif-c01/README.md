@@ -2,7 +2,7 @@
 
 Curso en español de España para preparar el examen **AWS Certified AI Practitioner (AIF-C01)**. Está pensado para perfiles junior con conocimientos básicos de programación y poca experiencia en AWS, y lo revisa un arquitecto de software sénior.
 
-> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)), más 303 preguntas de repaso de conocimientos en los módulos 00 a 05, con al menos 4 por objetivo. Queda un marcador `PENDIENTE DE VERIFICAR` (preentrenamiento continuado en Bedrock, [issue #11](https://github.com/monghithub/certificaciones/issues/11)) por una contradicción en las propias fuentes de AWS; ninguna pregunta depende de él y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
+> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)), más 355 preguntas de repaso de conocimientos en los módulos 00 a 05, con al menos 4 por objetivo. Queda un marcador `PENDIENTE DE VERIFICAR` (preentrenamiento continuado en Bedrock, [issue #11](https://github.com/monghithub/certificaciones/issues/11)) por una contradicción en las propias fuentes de AWS; ninguna pregunta depende de él y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
 
 Manifiesto del curso: [curso.yaml](curso.yaml).
 
@@ -15,7 +15,7 @@ Revalidados el 18 de noviembre de 2026 contra la guía oficial (versión 1.2, pu
 | Duración | 90 minutos |
 | Preguntas | 65 (50 puntuables y 15 no puntuables, sin identificar) |
 | Puntuación | Escala 100–1.000; aprobado con 700; modelo compensatorio |
-| Tipos de pregunta | Opción múltiple, respuesta múltiple, ordenación (3–5 elementos), emparejamiento (3–7 elementos) |
+| Tipos de pregunta | Opción múltiple (1 correcta de 4) y respuesta múltiple (2 o más correctas de 5 o más), según la guía v1.2; el simulacro usa solo estos dos. Los bancos de los módulos añaden ordenación (3–5 elementos) y emparejamiento (3–7 elementos) como práctica |
 | Penalización | Ninguna por adivinar; las preguntas sin responder cuentan como incorrectas |
 | Coste | 100 USD |
 | Validez | 3 años |

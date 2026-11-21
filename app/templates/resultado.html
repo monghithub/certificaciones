@@ -11,7 +11,7 @@
   {% if f.retirada %}<p><strong>{{ f.n }}. {{ f.id }}</strong> — pregunta retirada del contenido.
     {% if f.r %}<span class="{{ 'ok-t' if f.r.correcta else 'mal-t' }}">{{ 'Acertada' if f.r.correcta else 'Fallada' }}</span>{% endif %}</p>
   {% else %}
-  <p class="suave">{{ f.n }}. {{ f.p.id }} · Tarea {{ f.p.tarea }} ·
+  <p class="suave">{{ f.n }}. {{ f.p.id }} · {% if f.p.banco == 'libros' %}{{ f.p.origen or 'Libros' }}{% else %}Tarea {{ f.p.tarea }}{% endif %} ·
     {% if not f.r %}<span class="mal-t">Sin responder</span>{% elif f.r.correcta %}<span class="ok-t">Correcta</span>{% else %}<span class="mal-t">Incorrecta</span>{% endif %}</p>
   <p>{{ f.p.enunciado }}</p>
   {% if f.r and not f.r.correcta %}<p>Tu respuesta:</p><ul class="solucion">{% for l in legible(f.p, f.r.respuesta) %}<li>{{ l }}</li>{% endfor %}</ul>{% endif %}
@@ -19,7 +19,13 @@
   <p>{{ f.p.explicacion }}</p>
   {% if f.p.distractores %}<ul>{% for k, v in f.p.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
   {% if f.teoria %}<p><a class="btn sec" href="{{ f.teoria }}">Repasar en la teoría</a></p>{% endif %}
-  <p class="suave">Referencia: <a href="{{ f.p.referencia }}" rel="noopener noreferrer">{{ f.p.referencia }}</a></p>
+  {% if f.p.referencia %}<p class="suave">Referencia: <a href="{{ f.p.referencia }}" rel="noopener noreferrer">{{ f.p.referencia }}</a></p>{% endif %}
+  {% if consultas %}
+  <details class="consulta-plegable"><summary>Preguntar a Claude</summary>
+    <div id="consulta-{{ f.id }}" hx-get="{{ base }}/consultas/{{ f.id }}/panel?intento={{ i.id }}" hx-trigger="toggle once from:closest details" hx-swap="outerHTML">
+      <p class="suave">Cargando…</p></div>
+  </details>
+  {% endif %}
   {% endif %}
 </div>
 {% endfor %}

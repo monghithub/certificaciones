@@ -234,6 +234,30 @@
     c: Precisamente no hay que elegir tipos de instancia ni políticas de escalado; esa es la idea de serverless.
     e: Eso describe la transformación por lotes. La serverless atiende peticiones individuales en un endpoint.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+
+- id: R1-061
+  dominio: 1
+  tarea: "1.1"
+  objetivo: "1.1.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué opción de inferencia de Amazon SageMaker AI factura sus instancias mientras están en marcha, aunque no reciban peticiones?"
+  opciones:
+    - id: a
+      texto: "Inferencia serverless"
+    - id: b
+      texto: "Inferencia en tiempo real"
+    - id: c
+      texto: "Transformación por lotes"
+    - id: d
+      texto: "Inferencia asíncrona"
+  correctas: [b]
+  explicacion: "Un endpoint en tiempo real es permanente: sus instancias se cobran mientras están encendidas, haya tráfico o no. A cambio ofrece la latencia más baja para cargas interactivas. Pista: «permanente» = pagas aunque esté parado."
+  distractores:
+    a: "La inferencia serverless escala a cero sin tráfico y se paga por uso; a cambio puede tener arranques en frío."
+    c: "La transformación por lotes no tiene endpoint: lanza un trabajo que procesa el conjunto de datos y termina."
+    d: "La inferencia asíncrona encola las peticiones y puede escalar a cero cuando no hay solicitudes."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints.html"
 - id: R1-010
   dominio: 1
   tarea: '1.1'
@@ -409,6 +433,61 @@
     d: Generar contenido es propio de la IA generativa; marcar operaciones sospechosas es una tarea de clasificación
       o detección de anomalías.
   referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html
+
+- id: R1-066
+  dominio: 1
+  tarea: "1.2"
+  objetivo: "1.2.1"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada caso con la ventaja de la IA y el ML que aprovecha."
+  prompts:
+    - id: "1"
+      texto: "El modelo señala las transacciones sospechosas y un analista decide si son fraude"
+    - id: "2"
+      texto: "Revisar millones de fotos subidas al día, un volumen que ningún equipo humano podría cubrir"
+    - id: "3"
+      texto: "Extraer sin intervención los datos de cada factura que entra para registrarlos en el ERP"
+  opciones:
+    - id: a
+      texto: "Automatizar tareas repetitivas"
+    - id: b
+      texto: "Asistir la toma de decisiones humanas"
+    - id: c
+      texto: "Escalar una tarea más allá de la capacidad humana"
+    - id: d
+      texto: "Obtener un resultado exacto y determinista"
+  correctas: [["1", b], ["2", c], ["3", a]]
+  explicacion: "La guía cita tres fuentes de valor: asistir decisiones (la persona decide con la ayuda del modelo), escalar (volúmenes imposibles para personas) y automatizar tareas repetitivas. Pista: ¿decide una persona? asistir; ¿el problema es el volumen? escalar; ¿desaparece el trabajo manual? automatizar."
+  distractores:
+    d: "Un modelo da un resultado probabilístico; cuando se necesita un valor exacto y determinista, el ML no es la herramienta adecuada."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+
+- id: R1-067
+  dominio: 1
+  tarea: "1.2"
+  objetivo: "1.2.1"
+  tipo: multiple_response
+  dificultad: baja
+  enunciado: "¿Qué DOS problemas de negocio son casos habituales en los que el ML aporta valor?"
+  opciones:
+    - id: a
+      texto: "Predecir qué clientes es probable que se den de baja (churn)"
+    - id: b
+      texto: "Calcular el IVA exacto de cada factura"
+    - id: c
+      texto: "Recomendar productos personalizados a cada usuario"
+    - id: d
+      texto: "Ordenar alfabéticamente una lista de proveedores"
+    - id: e
+      texto: "Aplicar un descuento fijo del 10 % a los pedidos de más de 100 euros"
+  correctas: [a, c]
+  explicacion: "La predicción de abandono, la detección de fraude, el reconocimiento de imágenes y voz y las recomendaciones personalizadas son casos típicos de ML: hay patrones en los datos que no se escriben fácilmente como reglas. Pista: si hace falta aprender un patrón de muchos ejemplos, el ML aporta valor."
+  distractores:
+    b: "Un cálculo fiscal exige un resultado exacto y comprobable; una fórmula determinista lo resuelve mejor que un modelo probabilístico."
+    d: "Ordenar una lista es un algoritmo clásico y exacto; no hay nada que aprender de los datos."
+    e: "Es una regla de negocio sencilla y explícita: programarla es más simple y fiable que entrenar un modelo."
+  referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
 - id: R1-016
   dominio: 1
   tarea: '1.2'
@@ -510,6 +589,63 @@
     c: La clasificación predice una categoría, no un número continuo como la demanda.
     d: El refuerzo aprende con recompensas en un entorno, no a partir de un histórico de valores.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+
+- id: R1-070
+  dominio: 1
+  tarea: "1.2"
+  objetivo: "1.2.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Una inmobiliaria quiere estimar el precio de venta de cada vivienda a partir de su superficie, barrio y antigüedad. ¿Qué técnica corresponde?"
+  opciones:
+    - id: a
+      texto: "Clasificación binaria"
+    - id: b
+      texto: "Agrupamiento"
+    - id: c
+      texto: "Regresión"
+    - id: d
+      texto: "Detección de anomalías"
+  correctas: [c]
+  explicacion: "Cuando el valor objetivo es un número continuo, como un precio o una demanda, el problema es supervisado de regresión. Pista: «¿cuánto?» o «¿qué importe?» = regresión."
+  distractores:
+    a: "La clasificación binaria predice una de dos categorías (sí o no); un precio es un número continuo."
+    b: "El agrupamiento busca grupos parecidos sin etiquetas; aquí hay un valor objetivo, el precio."
+    d: "La detección de anomalías busca casos que se salen de lo normal, no estima un valor."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
+
+- id: R1-071
+  dominio: 1
+  tarea: "1.2"
+  objetivo: "1.2.3"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada pregunta de negocio con la técnica de ML adecuada."
+  prompts:
+    - id: "1"
+      texto: "¿Este correo es spam o no?"
+    - id: "2"
+      texto: "¿Qué grupos de clientes se parecen entre sí, si no tengo etiquetas?"
+    - id: "3"
+      texto: "¿Qué lecturas de este sensor se salen de lo normal?"
+    - id: "4"
+      texto: "¿Cuántas unidades venderemos cada semana del próximo trimestre?"
+  opciones:
+    - id: a
+      texto: "Agrupamiento"
+    - id: b
+      texto: "Clasificación"
+    - id: c
+      texto: "Previsión de series temporales"
+    - id: d
+      texto: "Detección de anomalías"
+    - id: e
+      texto: "Aprendizaje por refuerzo"
+  correctas: [["1", b], ["2", a], ["3", d], ["4", c]]
+  explicacion: "¿Sí o no? → clasificación. ¿Qué grupos hay, sin etiquetas? → agrupamiento. ¿Qué es raro? → detección de anomalías. ¿Cuánto a lo largo del tiempo? → previsión de series temporales, un caso particular de regresión."
+  distractores:
+    e: "El aprendizaje por refuerzo sirve cuando un agente aprende interactuando con un entorno y recibiendo recompensas; ninguna de estas preguntas tiene esa forma."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
 - id: R1-020
   dominio: 1
   tarea: '1.2'
@@ -737,6 +873,56 @@
     b: Preentrenar desde cero es la opción de mayor coste y esfuerzo y no mejora la explicabilidad.
     d: Un agente añade autonomía y pasos, lo contrario de lo que pide un requisito estricto de explicabilidad.
   referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+
+- id: R1-074
+  dominio: 1
+  tarea: "1.2"
+  objetivo: "1.2.6"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué ventaja tiene un modelo fundacional frente a un modelo de ML tradicional cuando no hay datos etiquetados?"
+  opciones:
+    - id: a
+      texto: "Se puede probar enseguida con prompts, porque ya viene preentrenado"
+    - id: b
+      texto: "Sus respuestas son deterministas y fáciles de reproducir"
+    - id: c
+      texto: "Tiene menos latencia y menos coste por petición"
+    - id: d
+      texto: "Es más fácil de interpretar ante un regulador"
+  correctas: [a]
+  explicacion: "Un modelo fundacional ya está preentrenado y se adapta con prompts o con personalización, así que se puede probar sin reunir ni etiquetar datos. Un modelo tradicional necesita datos etiquetados propios y un entrenamiento. Pista: modelo fundacional = rápido de probar."
+  distractores:
+    b: "Las respuestas de un modelo fundacional no son deterministas y pueden contener alucinaciones; la estabilidad es una ventaja del modelo tradicional."
+    c: "Los modelos fundacionales suelen tener más latencia y coste por petición, según su tamaño y los tokens."
+    d: "La explicabilidad favorece a los modelos tradicionales simples; un modelo fundacional es más difícil de interpretar."
+  referencia: "https://docs.aws.amazon.com/decision-guides/latest/generative-ai-on-aws-how-to-choose/guide.html"
+
+- id: R1-075
+  dominio: 1
+  tarea: "1.2"
+  objetivo: "1.2.6"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "¿En qué DOS casos suele encajar mejor un modelo de ML tradicional que un modelo fundacional?"
+  opciones:
+    - id: a
+      texto: "Resumir correos de clientes de temas muy variados"
+    - id: b
+      texto: "Puntuar el riesgo de cada transacción en pocos milisegundos y con bajo coste por predicción"
+    - id: c
+      texto: "Conversar con los empleados sobre documentos internos variados"
+    - id: d
+      texto: "Predecir la probabilidad de impago con un resultado que hay que explicar a un regulador"
+    - id: e
+      texto: "Redactar descripciones de productos para el catálogo"
+  correctas: [b, d]
+  explicacion: "Las tareas acotadas con restricciones operativas (latencia muy baja, coste por predicción, resultado reproducible) o con requisitos de explicabilidad favorecen un modelo tradicional, más simple de interpretar. Las tareas abiertas de redactar, resumir o conversar favorecen un modelo fundacional."
+  distractores:
+    a: "Resumir texto variado es una tarea abierta de generación: es el terreno del modelo fundacional."
+    c: "Conversar sobre documentos variados es una tarea abierta que encaja con un modelo fundacional, por ejemplo con RAG."
+    e: "Redactar contenido nuevo es IA generativa, propia de un modelo fundacional."
+  referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
 - id: R1-028
   dominio: 1
   tarea: '1.3'
@@ -839,6 +1025,50 @@
       que preentrenar.
     d: JumpStart permite partir de modelos preentrenados de código abierto y ajustarlos, sin entrenar desde cero.
   referencia: https://aws.amazon.com/what-is/foundation-models/
+
+- id: R1-078
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.2"
+  tipo: ordering
+  dificultad: media
+  enunciado: "Ordena estas formas de entrenar un modelo con Amazon SageMaker AI de MENOR a MAYOR esfuerzo."
+  opciones:
+    - id: a
+      texto: "Traer una imagen de contenedor propia"
+    - id: b
+      texto: "Partir de un modelo preentrenado"
+    - id: c
+      texto: "Escribir código propio en un framework compatible"
+    - id: d
+      texto: "Usar un algoritmo integrado (built-in)"
+  correctas: [b, d, c, a]
+  explicacion: "En SageMaker AI el esfuerzo crece con la personalización: un modelo preentrenado es lo más rápido; un algoritmo integrado solo pide datos y configuración; el código propio en un framework exige programar el entrenamiento; y un contenedor propio obliga además a construir y mantener la imagen."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
+
+- id: R1-079
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué capacidad de Amazon SageMaker AI ofrece modelos preentrenados de código abierto que se pueden ajustar y desplegar?"
+  opciones:
+    - id: a
+      texto: "SageMaker Canvas"
+    - id: b
+      texto: "SageMaker Pipelines"
+    - id: c
+      texto: "SageMaker JumpStart"
+    - id: d
+      texto: "SageMaker Model Registry"
+  correctas: [c]
+  explicacion: "SageMaker JumpStart reúne modelos preentrenados, incluidos modelos fundacionales de código abierto, para muchos tipos de problemas; se pueden entrenar de forma incremental y ajustar antes de desplegarlos. Pista: «jump start» = arrancar desde un modelo ya hecho."
+  distractores:
+    a: "Canvas permite crear modelos y obtener predicciones sin escribir código; está pensado para analistas, no es un catálogo de modelos preentrenados."
+    b: "Pipelines automatiza los flujos de ML para que sean repetibles; no proporciona modelos."
+    d: "Model Registry versiona y aprueba los modelos propios antes de desplegarlos; no ofrece modelos de partida."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
 - id: R1-032
   dominio: 1
   tarea: '1.3'
@@ -893,6 +1123,54 @@
     b: Un cliente puede autoalojar modelos fundacionales de código abierto, por ejemplo desde SageMaker JumpStart.
     d: Los servicios gestionados también responden en tiempo real, por ejemplo la inferencia bajo demanda de Bedrock.
   referencia: https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html
+
+- id: R1-080
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Cómo se paga, en general, un modelo usado mediante la API de un servicio gestionado como Amazon Bedrock?"
+  opciones:
+    - id: a
+      texto: "Por las instancias aprovisionadas, se usen o no"
+    - id: b
+      texto: "Con una licencia anual fija por modelo"
+    - id: c
+      texto: "Por las horas de entrenamiento consumidas"
+    - id: d
+      texto: "Por uso: peticiones, tokens o unidades procesadas"
+  correctas: [d]
+  explicacion: "Con una API de servicio gestionado, AWS aloja y opera el modelo y el cliente paga por lo que usa. Con un modelo alojado por el propio cliente, se paga la infraestructura aprovisionada aunque esté ociosa. Pista: gestionado = pago por uso."
+  distractores:
+    a: "Pagar por la infraestructura aprovisionada, se use o no, es propio del modelo alojado por el cliente (por ejemplo, en un endpoint o en EC2)."
+    b: "No es el modelo de cobro de una API gestionada: se factura según el consumo."
+    c: "Usar un modelo ya disponible no implica entrenarlo; el coste depende de las peticiones de inferencia."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+
+- id: R1-081
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un banco exige que el tráfico a su modelo no salga a internet. ¿Qué afirmación es correcta?"
+  opciones:
+    - id: a
+      texto: "Solo puede cumplirlo alojando el modelo en sus propias instancias de Amazon EC2"
+    - id: b
+      texto: "Puede cumplirlo también con una API gestionada, porque Amazon Bedrock y la mayoría de los servicios de IA admiten endpoints de VPC"
+    - id: c
+      texto: "Debe usar la inferencia serverless de SageMaker AI, que se ejecuta dentro de su VPC"
+    - id: d
+      texto: "No puede usar modelos fundacionales, porque solo se ofrecen por internet"
+  correctas: [b]
+  explicacion: "La red privada no obliga a autoalojar: la mayoría de los servicios de IA de AWS y Amazon Bedrock admiten endpoints de VPC (AWS PrivateLink). La diferencia clave entre las dos formas de uso es quién aloja y opera el modelo, no la red. Pista: privado no es sinónimo de autoalojado."
+  distractores:
+    a: "Autoalojar da control total de la red, pero no es la única forma de mantener el tráfico privado."
+    c: "La inferencia serverless de SageMaker AI no admite configuración de VPC; es justo la opción que no sirve aquí."
+    d: "Amazon Bedrock admite endpoints de VPC, así que los modelos fundacionales también se pueden usar sin pasar por internet."
+  referencia: "https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html"
 - id: R1-034
   dominio: 1
   tarea: '1.3'
@@ -1198,10 +1476,216 @@
     c: El coste por usuario es una métrica de negocio, no de rendimiento del clasificador.
     e: Esa es la definición de exactitud, justo la métrica que engaña con clases desequilibradas.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
-
-# ---------------------------------------------------------------- Ampliación del banco de repaso (2026-11-19)
-
 - id: R1-043
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Cuál de estos valores es un hiperparámetro de un modelo?
+  opciones:
+  - id: a
+    texto: Los pesos de las conexiones de una red neuronal
+  - id: b
+    texto: La tasa de aprendizaje (learning rate)
+  - id: c
+    texto: La etiqueta que se quiere predecir
+  - id: d
+    texto: El importe de la compra, usado como entrada del modelo
+  correctas:
+  - b
+  explicacion: 'Un hiperparámetro es una variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo, como la tasa de aprendizaje, el número de epochs o el tamaño de lote. Pista: hiper = «por encima» del aprendizaje; lo decides tú, no el modelo.'
+  distractores:
+    a: Los pesos son parámetros que el modelo aprende durante el entrenamiento; no se fijan antes.
+    c: La etiqueta es el valor objetivo que el modelo aprende a predecir, no una configuración del entrenamiento.
+    d: El importe es una característica (feature), un dato de entrada del modelo.
+  referencia: https://aws.amazon.com/what-is/hyperparameter-tuning/
+- id: R1-044
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué técnica contra el sobreajuste consiste en detener el entrenamiento antes de que el modelo empiece a aprender el ruido de los datos?
+  opciones:
+  - id: a
+    texto: Combinar varios modelos (ensembling)
+  - id: b
+    texto: Parada temprana (early stopping)
+  - id: c
+    texto: Ampliar los datos con variaciones (data augmentation)
+  - id: d
+    texto: Ajuste de hiperparámetros
+  correctas:
+  - b
+  explicacion: 'La parada temprana detiene el entrenamiento antes de que el modelo memorice el ruido de los datos de entrenamiento. Pista: «parar a tiempo» antes de memorizar.'
+  distractores:
+    a: El ensembling también combate el sobreajuste, pero combinando las predicciones de varios modelos, no deteniendo el entrenamiento.
+    c: La ampliación de datos genera variaciones de los ejemplos existentes; no decide cuándo parar.
+    d: El ajuste de hiperparámetros busca la mejor configuración del entrenamiento; no es en sí una técnica contra el sobreajuste.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: R1-045
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué tipo de aprendizaje combina técnicas supervisadas y no supervisadas para un mismo problema?
+  opciones:
+  - id: a
+    texto: Aprendizaje no supervisado
+  - id: b
+    texto: Aprendizaje por refuerzo
+  - id: c
+    texto: Aprendizaje semisupervisado
+  - id: d
+    texto: Aprendizaje autosupervisado
+  correctas:
+  - c
+  explicacion: 'El aprendizaje semisupervisado combina ambas técnicas y es útil cuando hay pocos datos etiquetados y muchos sin etiquetar. Pista: «semi» = algunas etiquetas, no todas ni ninguna.'
+  distractores:
+    a: El no supervisado trabaja sin ninguna etiqueta y solo busca estructura en los datos.
+    b: El refuerzo aprende de recompensas interactuando con un entorno, no de un conjunto de datos.
+    d: El autosupervisado genera las etiquetas a partir de los propios datos (como ocultar una palabra y predecirla); es como se preentrenan los modelos fundacionales.
+  referencia: https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/
+- id: R1-046
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada algoritmo integrado de SageMaker AI con el problema que resuelve.
+  prompts:
+  - id: '1'
+    texto: k-means
+  - id: '2'
+    texto: k-NN
+  - id: '3'
+    texto: Random Cut Forest
+  - id: '4'
+    texto: PCA
+  opciones:
+  - id: a
+    texto: Detectar observaciones que se desvían de lo normal, sin etiquetas
+  - id: b
+    texto: Reducir el número de dimensiones conservando la información importante
+  - id: c
+    texto: Clasificar o predecir un valor a partir de los ejemplos etiquetados más parecidos
+  - id: d
+    texto: Agrupar datos sin etiquetas en grupos de elementos parecidos
+  - id: e
+    texto: Generar texto nuevo a partir de una instrucción
+  correctas:
+  - - '1'
+    - d
+  - - '2'
+    - c
+  - - '3'
+    - a
+  - - '4'
+    - b
+  explicacion: 'k-means agrupa (no supervisado); k-NN clasifica o predice con etiquetas (supervisado); Random Cut Forest detecta anomalías; PCA reduce dimensiones. Pista: la «k» de k-means y de k-NN engaña; solo k-NN usa etiquetas.'
+  distractores:
+    e: Generar texto es tarea de un modelo fundacional (IA generativa), no de ninguno de estos algoritmos de ML clásico.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+
+- id: R1-064
+  dominio: 1
+  tarea: "1.1"
+  objetivo: "1.1.5"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Un robot de almacén aprende a colocar cajas probando movimientos y recibiendo una puntuación según el resultado. ¿Qué tipo de aprendizaje es?"
+  opciones:
+    - id: a
+      texto: "Aprendizaje supervisado"
+    - id: b
+      texto: "Aprendizaje no supervisado"
+    - id: c
+      texto: "Aprendizaje autosupervisado"
+    - id: d
+      texto: "Aprendizaje por refuerzo"
+  correctas: [d]
+  explicacion: "En el aprendizaje por refuerzo, un agente aprende por ensayo y error interactuando con un entorno y busca maximizar la recompensa a largo plazo. Robótica, rutas, inventario y juegos son ejemplos típicos. Pista: agente + entorno + recompensa = refuerzo."
+  distractores:
+    a: "El supervisado necesita un conjunto de ejemplos con su valor objetivo; aquí no hay respuestas correctas previas, solo recompensas."
+    b: "El no supervisado busca estructura (grupos, anomalías) en datos sin etiquetas; no hay agente ni recompensa."
+    c: "El autosupervisado genera las etiquetas a partir de los propios datos, como al preentrenar un modelo fundacional; no aprende de recompensas."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
+
+- id: R1-065
+  dominio: 1
+  tarea: "1.1"
+  objetivo: "1.1.5"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Para qué se usa el aprendizaje por refuerzo con retroalimentación humana (RLHF) en los modelos fundacionales?"
+  opciones:
+    - id: a
+      texto: "Para ajustar las respuestas del modelo ya preentrenado a las preferencias de las personas"
+    - id: b
+      texto: "Para preentrenar el modelo desde cero con datos sin etiquetar"
+    - id: c
+      texto: "Para agrupar los documentos del corpus de entrenamiento por temas"
+    - id: d
+      texto: "Para etiquetar a mano todo el corpus antes del preentrenamiento"
+  correctas: [a]
+  explicacion: "El preentrenamiento de un modelo fundacional es autosupervisado. Después, el RLHF usa valoraciones humanas de las respuestas para que el modelo responda como prefieren las personas. Pista: RLHF va después del preentrenamiento y aporta «preferencias humanas»."
+  distractores:
+    b: "El preentrenamiento con datos sin etiquetar es autosupervisado; el RLHF es una etapa posterior."
+    c: "Agrupar documentos por temas es una tarea de agrupamiento (no supervisado), no el objetivo del RLHF."
+    d: "Los corpus de preentrenamiento son enormes y no se etiquetan a mano; precisamente por eso se usa el aprendizaje autosupervisado."
+  referencia: "https://aws.amazon.com/what-is/foundation-models/"
+- id: R1-047
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué arquitectura de red neuronal se asocia sobre todo con el análisis de imágenes?
+  opciones:
+  - id: a
+    texto: Red neuronal recurrente (RNN)
+  - id: b
+    texto: Transformer
+  - id: c
+    texto: k-means
+  - id: d
+    texto: Red neuronal convolucional (CNN)
+  correctas:
+  - d
+  explicacion: 'Las redes convolucionales extraen de las imágenes las características relevantes y son la arquitectura típica para clasificar imágenes o detectar objetos. Pista: la R de RNN es de «recurrente» (secuencias); la imagen es cosa de la CNN.'
+  distractores:
+    a: Las RNN procesan secuencias (palabras, series temporales), no imágenes.
+    b: El transformer procesa secuencias con autoatención y es la base de los LLM; su caso típico es el lenguaje.
+    c: k-means es un algoritmo de agrupamiento de ML clásico, no una red neuronal.
+  referencia: https://aws.amazon.com/what-is/neural-network/
+- id: R1-048
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo tiene una tabla de 3.000 clientes con 12 columnas, poco presupuesto de cómputo y la obligación de explicar cada predicción. ¿Qué enfoque encaja mejor?
+  opciones:
+  - id: a
+    texto: ML clásico
+  - id: b
+    texto: Aprendizaje profundo con una red de muchas capas
+  - id: c
+    texto: Una red neuronal convolucional
+  - id: d
+    texto: Preentrenar un modelo fundacional propio
+  correctas:
+  - a
+  explicacion: 'El ML clásico maneja bien datos estructurados, necesita menos datos y cómputo y es más fácil de interpretar. El aprendizaje profundo destaca con datos no estructurados y grandes volúmenes, a cambio de más cómputo y menos interpretabilidad. Pista: tabla pequeña + explicar = ML clásico.'
+  distractores:
+    b: El aprendizaje profundo necesita muchos más datos y cómputo y es más difícil de explicar; con 3.000 filas tabulares no compensa.
+    c: Las CNN están pensadas para imágenes, no para una tabla de clientes.
+    d: Preentrenar un modelo fundacional exige volúmenes enormes de datos y cómputo; es lo opuesto a la restricción del enunciado.
+  referencia: https://aws.amazon.com/compare/the-difference-between-machine-learning-and-deep-learning/
+
+- id: R1-059
   dominio: 1
   tarea: "1.1"
   objetivo: "1.1.2"
@@ -1225,7 +1709,7 @@
     d: "Actuar de forma autónoma y ejecutar acciones con herramientas describe la IA agéntica, una forma de usar la IA."
   referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
 
-- id: R1-044
+- id: R1-060
   dominio: 1
   tarea: "1.1"
   objetivo: "1.1.2"
@@ -1257,185 +1741,375 @@
   distractores:
     e: "Las reglas escritas a mano no aprenden de los datos; sirven cuando la lógica es explícita y determinista, y ninguna de estas peticiones lo es."
   referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
-
-- id: R1-045
-  dominio: 1
-  tarea: "1.1"
-  objetivo: "1.1.3"
-  tipo: multiple_choice
-  dificultad: baja
-  enunciado: "¿Qué opción de inferencia de Amazon SageMaker AI factura sus instancias mientras están en marcha, aunque no reciban peticiones?"
-  opciones:
-    - id: a
-      texto: "Inferencia serverless"
-    - id: b
-      texto: "Inferencia en tiempo real"
-    - id: c
-      texto: "Transformación por lotes"
-    - id: d
-      texto: "Inferencia asíncrona"
-  correctas: [b]
-  explicacion: "Un endpoint en tiempo real es permanente: sus instancias se cobran mientras están encendidas, haya tráfico o no. A cambio ofrece la latencia más baja para cargas interactivas. Pista: «permanente» = pagas aunque esté parado."
-  distractores:
-    a: "La inferencia serverless escala a cero sin tráfico y se paga por uso; a cambio puede tener arranques en frío."
-    c: "La transformación por lotes no tiene endpoint: lanza un trabajo que procesa el conjunto de datos y termina."
-    d: "La inferencia asíncrona encola las peticiones y puede escalar a cero cuando no hay solicitudes."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints.html"
-
-- id: R1-046
-  dominio: 1
-  tarea: "1.1"
-  objetivo: "1.1.4"
-  tipo: multiple_choice
-  dificultad: baja
-  enunciado: "¿Qué tipo de datos son las lecturas de temperatura que un sensor IoT envía cada minuto?"
-  opciones:
-    - id: a
-      texto: "Datos de texto"
-    - id: b
-      texto: "Datos no estructurados"
-    - id: c
-      texto: "Series temporales"
-    - id: d
-      texto: "Datos de imagen"
-  correctas: [c]
-  explicacion: "Una serie temporal es una secuencia de datos ordenados en el tiempo, como las lecturas de sensores o las cotizaciones. El orden importa: es lo que permite prever el valor siguiente. Pista: si cada dato lleva una marca de tiempo y el orden cuenta, es una serie temporal."
-  distractores:
-    a: "El texto es la entrada típica del procesamiento del lenguaje natural; una lectura numérica de un sensor no lo es."
-    b: "Son valores numéricos con un formato fijo (instante y medida), no texto libre, audio, vídeo ni imágenes."
-    d: "Las imágenes son la entrada de la visión por computador; aquí solo hay medidas numéricas."
-  referencia: "https://aws.amazon.com/what-is/time-series-database/"
-
-- id: R1-047
-  dominio: 1
-  tarea: "1.1"
-  objetivo: "1.1.4"
-  tipo: multiple_response
-  dificultad: baja
-  enunciado: "¿Qué DOS de estos ejemplos son datos no estructurados?"
-  opciones:
-    - id: a
-      texto: "Grabaciones de las llamadas a un centro de atención"
-    - id: b
-      texto: "Una tabla de clientes con columnas de nombre, ciudad y fecha de alta"
-    - id: c
-      texto: "Fotos de vehículos siniestrados enviadas por los clientes"
-    - id: d
-      texto: "El registro de pedidos de una base de datos relacional"
-    - id: e
-      texto: "Una hoja de cálculo con las ventas mensuales por tienda"
-  correctas: [a, c]
-  explicacion: "Los datos no estructurados no siguen un formato predefinido: texto largo, audio, vídeo e imágenes. Los estructurados se organizan en filas y columnas. Pista: si cabe de forma natural en una tabla, es estructurado."
-  distractores:
-    b: "Una tabla con columnas definidas es el ejemplo típico de dato estructurado (tabular)."
-    d: "Una base de datos relacional guarda datos estructurados en tablas con un esquema."
-    e: "Una hoja de cálculo con filas y columnas contiene datos estructurados."
-  referencia: "https://aws.amazon.com/compare/the-difference-between-structured-data-and-unstructured-data/"
-
-- id: R1-048
-  dominio: 1
-  tarea: "1.1"
-  objetivo: "1.1.5"
-  tipo: multiple_choice
-  dificultad: baja
-  enunciado: "Un robot de almacén aprende a colocar cajas probando movimientos y recibiendo una puntuación según el resultado. ¿Qué tipo de aprendizaje es?"
-  opciones:
-    - id: a
-      texto: "Aprendizaje supervisado"
-    - id: b
-      texto: "Aprendizaje no supervisado"
-    - id: c
-      texto: "Aprendizaje autosupervisado"
-    - id: d
-      texto: "Aprendizaje por refuerzo"
-  correctas: [d]
-  explicacion: "En el aprendizaje por refuerzo, un agente aprende por ensayo y error interactuando con un entorno y busca maximizar la recompensa a largo plazo. Robótica, rutas, inventario y juegos son ejemplos típicos. Pista: agente + entorno + recompensa = refuerzo."
-  distractores:
-    a: "El supervisado necesita un conjunto de ejemplos con su valor objetivo; aquí no hay respuestas correctas previas, solo recompensas."
-    b: "El no supervisado busca estructura (grupos, anomalías) en datos sin etiquetas; no hay agente ni recompensa."
-    c: "El autosupervisado genera las etiquetas a partir de los propios datos, como al preentrenar un modelo fundacional; no aprende de recompensas."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
-
 - id: R1-049
   dominio: 1
-  tarea: "1.1"
-  objetivo: "1.1.5"
-  tipo: multiple_choice
-  dificultad: media
-  enunciado: "¿Para qué se usa el aprendizaje por refuerzo con retroalimentación humana (RLHF) en los modelos fundacionales?"
-  opciones:
-    - id: a
-      texto: "Para ajustar las respuestas del modelo ya preentrenado a las preferencias de las personas"
-    - id: b
-      texto: "Para preentrenar el modelo desde cero con datos sin etiquetar"
-    - id: c
-      texto: "Para agrupar los documentos del corpus de entrenamiento por temas"
-    - id: d
-      texto: "Para etiquetar a mano todo el corpus antes del preentrenamiento"
-  correctas: [a]
-  explicacion: "El preentrenamiento de un modelo fundacional es autosupervisado. Después, el RLHF usa valoraciones humanas de las respuestas para que el modelo responda como prefieren las personas. Pista: RLHF va después del preentrenamiento y aporta «preferencias humanas»."
-  distractores:
-    b: "El preentrenamiento con datos sin etiquetar es autosupervisado; el RLHF es una etapa posterior."
-    c: "Agrupar documentos por temas es una tarea de agrupamiento (no supervisado), no el objetivo del RLHF."
-    d: "Los corpus de preentrenamiento son enormes y no se etiquetan a mano; precisamente por eso se usa el aprendizaje autosupervisado."
-  referencia: "https://aws.amazon.com/what-is/foundation-models/"
-
-- id: R1-050
-  dominio: 1
-  tarea: "1.2"
-  objetivo: "1.2.1"
+  tarea: '1.3'
+  objetivo: 1.3.1
   tipo: matching
   dificultad: media
-  enunciado: "Empareja cada caso con la ventaja de la IA y el ML que aprovecha."
+  enunciado: Empareja cada actividad con el paso del procesamiento de datos al que pertenece.
+  prompts:
+  - id: '1'
+    texto: Reunir en un lago de datos los pedidos del ERP y las visitas de la web
+  - id: '2'
+    texto: Corregir fechas mal escritas y rellenar los valores ausentes
+  - id: '3'
+    texto: Dibujar histogramas y buscar valores atípicos para entender los datos
+  - id: '4'
+    texto: Crear la variable «días desde la última compra» a partir de las fechas
+  opciones:
+  - id: a
+    texto: Análisis exploratorio de datos (EDA)
+  - id: b
+    texto: Recogida e integración
+  - id: c
+    texto: Ingeniería de características
+  - id: d
+    texto: Preprocesado o preparación
+  - id: e
+    texto: Ajuste de hiperparámetros
+  correctas:
+  - - '1'
+    - b
+  - - '2'
+    - d
+  - - '3'
+    - a
+  - - '4'
+    - c
+  explicacion: 'Recoger reúne los datos de sus fuentes; preparar los limpia y corrige; el EDA los estudia para entenderlos; y la ingeniería de características crea o transforma las variables que usará el modelo. Pista: reunir, limpiar, mirar, transformar.'
+  distractores:
+    e: El ajuste de hiperparámetros pertenece al desarrollo del modelo (configura el entrenamiento), no al procesamiento de datos.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html
+
+- id: R1-076
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.1"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué etapa del ciclo de vida de ML compara los datos de producción con los de entrenamiento para detectar la deriva?"
+  opciones:
+    - id: a
+      texto: "Procesamiento de datos"
+    - id: b
+      texto: "Monitorización"
+    - id: c
+      texto: "Planteamiento del problema de ML"
+    - id: d
+      texto: "Despliegue"
+  correctas: [b]
+  explicacion: "La monitorización captura los datos que llegan en producción, los compara con los de entrenamiento y avisa de problemas de calidad de datos, de calidad del modelo y de deriva. Si hay deriva, el ciclo vuelve a los datos o al reentrenamiento. Pista: deriva = monitorización."
+  distractores:
+    a: "El procesamiento de datos prepara los datos de entrenamiento; ocurre antes de que el modelo esté en producción."
+    c: "El planteamiento traduce el problema de negocio a ML y decide qué predecir; no vigila el modelo desplegado."
+    d: "El despliegue lleva el modelo a producción; vigilar su comportamiento después es la etapa siguiente."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html"
+
+- id: R1-077
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.1"
+  tipo: matching
+  dificultad: media
+  enunciado: "En un proyecto para reducir las bajas de clientes, empareja cada actividad con su etapa del ciclo de vida de ML."
   prompts:
     - id: "1"
-      texto: "El modelo señala las transacciones sospechosas y un analista decide si son fraude"
+      texto: "Fijar la meta de reducir un 10 % las bajas este año"
     - id: "2"
-      texto: "Revisar millones de fotos subidas al día, un volumen que ningún equipo humano podría cubrir"
+      texto: "Definir el problema como clasificación binaria: ¿se dará de baja en 90 días?"
     - id: "3"
-      texto: "Extraer sin intervención los datos de cada factura que entra para registrarlos en el ERP"
+      texto: "Limpiar y preparar el historial de consumo, incidencias y bajas pasadas"
+    - id: "4"
+      texto: "Puntuar cada noche a todos los clientes para la campaña de retención"
   opciones:
     - id: a
-      texto: "Automatizar tareas repetitivas"
+      texto: "Planteamiento del problema de ML"
     - id: b
-      texto: "Asistir la toma de decisiones humanas"
+      texto: "Procesamiento de datos"
     - id: c
-      texto: "Escalar una tarea más allá de la capacidad humana"
+      texto: "Identificación del objetivo de negocio"
     - id: d
-      texto: "Obtener un resultado exacto y determinista"
-  correctas: [["1", b], ["2", c], ["3", a]]
-  explicacion: "La guía cita tres fuentes de valor: asistir decisiones (la persona decide con la ayuda del modelo), escalar (volúmenes imposibles para personas) y automatizar tareas repetitivas. Pista: ¿decide una persona? asistir; ¿el problema es el volumen? escalar; ¿desaparece el trabajo manual? automatizar."
+      texto: "Despliegue"
+    - id: e
+      texto: "Monitorización"
+  correctas: [["1", c], ["2", a], ["3", b], ["4", d]]
+  explicacion: "El objetivo de negocio fija la meta medible; el planteamiento la traduce a un problema de ML con su etiqueta y su métrica; el procesamiento prepara los datos; el despliegue pone el modelo a producir predicciones, aquí por lotes cada noche."
   distractores:
-    d: "Un modelo da un resultado probabilístico; cuando se necesita un valor exacto y determinista, el ML no es la herramienta adecuada."
-  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    e: "La monitorización vigila después la deriva (por ejemplo, si una tarifa de la competencia cambia los hábitos) y dispara el reentrenamiento; no es ninguna de estas actividades."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html"
+- id: R1-050
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué capacidad de SageMaker AI guarda las características para reutilizarlas y servir las mismas al entrenar y al inferir?
+  opciones:
+  - id: a
+    texto: SageMaker Pipelines
+  - id: b
+    texto: SageMaker Feature Store
+  - id: c
+    texto: SageMaker Data Wrangler
+  - id: d
+    texto: SageMaker Model Registry
+  correctas:
+  - b
+  explicacion: 'Feature Store es el repositorio centralizado de características: el almacén offline guarda el histórico para entrenar y el online, el último valor para inferir en milisegundos. Pista: Feature Store = «almacén de features».'
+  distractores:
+    a: Pipelines automatiza el flujo de ML (datos, entrenamiento, evaluación), pero no guarda ni sirve características.
+    c: Data Wrangler prepara y analiza los datos; no los sirve al modelo durante la inferencia.
+    d: Model Registry versiona y aprueba modelos, no características.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html
 
+- id: R1-082
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.4"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada necesidad de datos con el servicio de AWS que la cubre."
+  prompts:
+    - id: "1"
+      texto: "Limpiar datos de forma visual, sin escribir código"
+    - id: "2"
+      texto: "Suscribirse a conjuntos de datos de terceros"
+    - id: "3"
+      texto: "Procesar grandes volúmenes con Apache Spark gestionado"
+    - id: "4"
+      texto: "Definir permisos detallados sobre el lago de datos"
+  opciones:
+    - id: a
+      texto: "AWS Data Exchange"
+    - id: b
+      texto: "AWS Lake Formation"
+    - id: c
+      texto: "Amazon EMR"
+    - id: d
+      texto: "AWS Glue DataBrew"
+    - id: e
+      texto: "Amazon CloudFront"
+  correctas: [["1", d], ["2", a], ["3", c], ["4", b]]
+  explicacion: "Glue DataBrew limpia datos de forma visual sin código; Data Exchange sirve para obtener y gestionar datos de otras organizaciones; EMR ejecuta Spark y Hadoop gestionados; Lake Formation controla los permisos detallados del lago de datos."
+  distractores:
+    e: "CloudFront distribuye con baja latencia el contenido de la aplicación; no trabaja con los datos de entrenamiento."
+  referencia: "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
 - id: R1-051
   dominio: 1
-  tarea: "1.2"
-  objetivo: "1.2.1"
-  tipo: multiple_response
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Las operaciones que recibe un modelo de fraude se parecen a las de entrenamiento, pero acierta menos porque los defraudadores han cambiado de táctica. ¿Qué ocurre?
+  opciones:
+  - id: a
+    texto: Deriva de datos
+  - id: b
+    texto: Sobreajuste
+  - id: c
+    texto: Subajuste
+  - id: d
+    texto: Deriva de concepto
+  correctas:
+  - d
+  explicacion: 'En la deriva de concepto cambia la relación entre las entradas y el resultado: datos parecidos ya no significan lo mismo. Para verla hace falta comparar con el resultado real. Pista: datos iguales, significado distinto = concepto.'
+  distractores:
+    a: En la deriva de datos cambian las propiedades de las entradas; aquí las entradas se parecen a las de entrenamiento.
+    b: El sobreajuste se reconoce por la diferencia entre entrenamiento y validación; no explica que el mismo modelo empeore tras un cambio en el mundo real.
+    c: El subajuste es un modelo que falla incluso con los datos de entrenamiento; aquí funcionaba bien hasta que cambió el comportamiento.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/monitoring.html
+- id: R1-052
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Cómo se llama la técnica de SageMaker AI en la que un modelo nuevo recibe una copia de las peticiones reales, pero al cliente solo le llegan las respuestas del modelo en producción?
+  opciones:
+  - id: a
+    texto: Prueba en sombra
+  - id: b
+    texto: Despliegue canario
+  - id: c
+    texto: Prueba A/B
+  - id: d
+    texto: Despliegue azul/verde todo a la vez
+  correctas:
+  - a
+  explicacion: 'En una prueba en sombra el modelo nuevo trabaja con tráfico real, pero nadie recibe sus respuestas: se comparan sin afectar a los usuarios. Pista: la sombra acompaña, pero no habla.'
+  distractores:
+    b: En un despliegue canario una parte pequeña del tráfico sí recibe las respuestas del modelo nuevo.
+    c: En una prueba A/B parte de los usuarios recibe las respuestas del modelo nuevo.
+    d: Todo a la vez pasa todo el tráfico al modelo nuevo, que responde a todos los usuarios.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
+
+- id: R1-083
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.5"
+  tipo: multiple_choice
   dificultad: baja
-  enunciado: "¿Qué DOS problemas de negocio son casos habituales en los que el ML aporta valor?"
+  enunciado: "¿Qué es MLOps en el ciclo de vida de un modelo?"
   opciones:
     - id: a
-      texto: "Predecir qué clientes es probable que se den de baja (churn)"
+      texto: "Un servicio de AWS que entrena modelos sin código"
     - id: b
-      texto: "Calcular el IVA exacto de cada factura"
+      texto: "Una métrica que combina precisión y exhaustividad"
     - id: c
-      texto: "Recomendar productos personalizados a cada usuario"
+      texto: "La metodología que aplica las prácticas de DevOps a las cargas de trabajo de ML"
     - id: d
-      texto: "Ordenar alfabéticamente una lista de proveedores"
-    - id: e
-      texto: "Aplicar un descuento fijo del 10 % a los pedidos de más de 100 euros"
-  correctas: [a, c]
-  explicacion: "La predicción de abandono, la detección de fraude, el reconocimiento de imágenes y voz y las recomendaciones personalizadas son casos típicos de ML: hay patrones en los datos que no se escriben fácilmente como reglas. Pista: si hace falta aprender un patrón de muchos ejemplos, el ML aporta valor."
+      texto: "Un tipo de inferencia que procesa conjuntos de datos completos"
+  correctas: [c]
+  explicacion: "MLOps lleva las prácticas de DevOps al ML: integra desarrollo, operaciones, ingeniería de datos y ciencia de datos para entregar modelos con menos defectos y más productividad a lo largo de todo el ciclo de vida. Pista: MLOps = DevOps para ML."
   distractores:
-    b: "Un cálculo fiscal exige un resultado exacto y comprobable; una fórmula determinista lo resuelve mejor que un modelo probabilístico."
-    d: "Ordenar una lista es un algoritmo clásico y exacto; no hay nada que aprender de los datos."
-    e: "Es una regla de negocio sencilla y explícita: programarla es más simple y fiable que entrenar un modelo."
-  referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
+    a: "Entrenar modelos sin código es lo que hace SageMaker Canvas; MLOps es una metodología, no un servicio."
+    b: "La métrica que combina precisión y exhaustividad es la puntuación F1."
+    d: "Procesar un conjunto de datos completo es la transformación por lotes, un tipo de inferencia."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/mlops.html"
 
-- id: R1-052
+- id: R1-084
+  dominio: 1
+  tarea: "1.3"
+  objetivo: "1.3.5"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "¿Qué DOS prácticas ayudan a gestionar la deuda técnica en MLOps?"
+  opciones:
+    - id: a
+      texto: "Versionar los modelos en un registro de modelos"
+    - id: b
+      texto: "Entrenar a mano en el portátil de cada científico de datos"
+    - id: c
+      texto: "Mantener la trazabilidad (lineage) de los datos y los modelos"
+    - id: d
+      texto: "Desplegar sin controles de calidad para ganar velocidad"
+    - id: e
+      texto: "Guardar los modelos sin documentar en carpetas compartidas"
+  correctas: [a, c]
+  explicacion: "La deuda técnica en ML aparece cuando el código, los datos y los modelos están mal documentados o sin versionar. Un registro de modelos y la trazabilidad de qué datos produjeron cada modelo la reducen. Pista: lo que no está versionado ni trazado frena el desarrollo después."
+  distractores:
+    b: "Entrenar a mano y fuera de un proceso común impide repetir los resultados; MLOps busca procesos repetibles."
+    d: "Saltarse los controles de calidad va contra la preparación para producción, otro concepto de MLOps."
+    e: "Los modelos sin documentar son precisamente una fuente de deuda técnica."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html"
+- id: R1-053
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Al comparar dos modelos de regresión, ¿qué resultado indica el mejor modelo?
+  opciones:
+  - id: a
+    texto: El MSE más alto
+  - id: b
+    texto: El R² más cercano a 1
+  - id: c
+    texto: La mayor exactitud (accuracy)
+  - id: d
+    texto: Un AUC de 0,5
+  correctas:
+  - b
+  explicacion: 'R² indica qué parte de la variación del valor real explica el modelo: cuanto más cerca de 1, mejor. Las métricas de error (MSE, RMSE, MAE) son mejores cuanto más bajas. Pista: errores, abajo; R², arriba.'
+  distractores:
+    a: El MSE es un error; cuanto más alto, peor predice el modelo.
+    c: La exactitud es una métrica de clasificación (aciertos y fallos); en regresión se miden distancias al valor real.
+    d: El AUC es de clasificación, y 0,5 equivale a acertar al azar.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: R1-054
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada funcionalidad con el servicio de IA de AWS que la ofrece.
+  prompts:
+  - id: '1'
+    texto: Separar en la transcripción lo que dice cada hablante (diarización)
+  - id: '2'
+    texto: Terminología personalizada para que los nombres de marca no se traduzcan
+  - id: '3'
+    texto: Comprobar que hay una persona real ante la cámara (Face Liveness)
+  - id: '4'
+    texto: Intenciones y ranuras de un chatbot
+  opciones:
+  - id: a
+    texto: Amazon Lex
+  - id: b
+    texto: Amazon Translate
+  - id: c
+    texto: Amazon Transcribe
+  - id: d
+    texto: Amazon Rekognition
+  - id: e
+    texto: Amazon Polly
+  - id: f
+    texto: Amazon Comprehend
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - b
+  - - '3'
+    - d
+  - - '4'
+    - a
+  explicacion: 'Diarización: Transcribe (voz a texto). Terminología personalizada: Translate. Face Liveness: Rekognition (visión). Intenciones y ranuras: Lex (conversación). Pista: primero el tipo de dato (voz, texto en otro idioma, imagen, diálogo) y luego el servicio.'
+  distractores:
+    e: Polly convierte texto en voz; no transcribe, traduce, analiza imágenes ni gestiona diálogos.
+    f: Comprehend analiza texto ya escrito (entidades, opiniones, datos personales); no ofrece ninguna de estas funcionalidades.
+  referencia: https://docs.aws.amazon.com/transcribe/latest/dg/diarization.html
+- id: R1-055
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Amazon Forecast ya no admite clientes nuevos. ¿A qué servicio remite AWS a un cliente nuevo que quiere prever la demanda de las próximas semanas?
+  opciones:
+  - id: a
+    texto: Amazon Personalize
+  - id: b
+    texto: Amazon Kendra
+  - id: c
+    texto: Amazon SageMaker Canvas
+  - id: d
+    texto: Amazon Comprehend
+  correctas:
+  - c
+  explicacion: 'AWS cerró Amazon Forecast a clientes nuevos y remite a SageMaker Canvas, que hace previsiones de series temporales sin código. Pista: Forecast cerró; Canvas prevé.'
+  distractores:
+    a: Personalize genera recomendaciones para usuarios, no previsiones de demanda.
+    b: Kendra es un servicio de búsqueda, también cerrado a clientes nuevos; no hace previsiones.
+    d: Comprehend analiza texto; no predice valores futuros.
+  referencia: https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html
+- id: R1-056
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué distingue a la automatización robótica de procesos (RPA) de una solución de ML?
+  opciones:
+  - id: a
+    texto: Aprende de los datos históricos para mejorar con el tiempo
+  - id: b
+    texto: Genera contenido nuevo a partir de una instrucción
+  - id: c
+    texto: Da un resultado probabilístico con un grado de confianza
+  - id: d
+    texto: Ejecuta tareas repetitivas siguiendo reglas fijas, sin aprender de los datos
+  correctas:
+  - d
+  explicacion: 'La RPA automatiza tareas repetitivas basadas en reglas, normalmente sobre datos estructurados, y no aprende. Si las reglas se pueden escribir, basta RPA o un script; la IA aporta con datos no estructurados o reglas que no se pueden escribir. Pista: RPA repite; ML aprende.'
+  distractores:
+    a: Aprender de los datos históricos es lo propio del ML, no de la RPA.
+    b: Generar contenido es lo propio de la IA generativa.
+    c: El resultado probabilístico es característico de un modelo de ML; la RPA hace siempre lo mismo con la misma entrada.
+  referencia: https://aws.amazon.com/what-is/intelligent-automation/
+
+- id: R1-068
   dominio: 1
   tarea: "1.2"
   objetivo: "1.2.2"
@@ -1459,7 +2133,7 @@
     c: "Medir la exactitud evalúa un modelo ya construido; la pregunta de si usar ML se responde antes de construirlo."
   referencia: "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html"
 
-- id: R1-053
+- id: R1-069
   dominio: 1
   tarea: "1.2"
   objetivo: "1.2.2"
@@ -1482,65 +2156,32 @@
     c: "El idioma no impide usar ML; hay servicios y modelos para muchos idiomas."
     d: "Las solicitudes son texto libre (no estructurado), y en cualquier caso el tipo de dato no descarta el ML; el problema es la cantidad."
   referencia: "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html"
-
-- id: R1-054
+- id: R1-057
   dominio: 1
-  tarea: "1.2"
-  objetivo: "1.2.3"
+  tarea: '1.2'
+  objetivo: 1.2.4
   tipo: multiple_choice
-  dificultad: baja
-  enunciado: "Una inmobiliaria quiere estimar el precio de venta de cada vivienda a partir de su superficie, barrio y antigüedad. ¿Qué técnica corresponde?"
-  opciones:
-    - id: a
-      texto: "Clasificación binaria"
-    - id: b
-      texto: "Agrupamiento"
-    - id: c
-      texto: "Regresión"
-    - id: d
-      texto: "Detección de anomalías"
-  correctas: [c]
-  explicacion: "Cuando el valor objetivo es un número continuo, como un precio o una demanda, el problema es supervisado de regresión. Pista: «¿cuánto?» o «¿qué importe?» = regresión."
-  distractores:
-    a: "La clasificación binaria predice una de dos categorías (sí o no); un precio es un número continuo."
-    b: "El agrupamiento busca grupos parecidos sin etiquetas; aquí hay un valor objetivo, el precio."
-    d: "La detección de anomalías busca casos que se salen de lo normal, no estima un valor."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
-
-- id: R1-055
-  dominio: 1
-  tarea: "1.2"
-  objetivo: "1.2.3"
-  tipo: matching
   dificultad: media
-  enunciado: "Empareja cada pregunta de negocio con la técnica de ML adecuada."
-  prompts:
-    - id: "1"
-      texto: "¿Este correo es spam o no?"
-    - id: "2"
-      texto: "¿Qué grupos de clientes se parecen entre sí, si no tengo etiquetas?"
-    - id: "3"
-      texto: "¿Qué lecturas de este sensor se salen de lo normal?"
-    - id: "4"
-      texto: "¿Cuántas unidades venderemos cada semana del próximo trimestre?"
+  enunciado: Un hospital quiere que el sistema marque exactamente qué píxeles de una resonancia pertenecen a un tumor. ¿Qué tarea de visión por computador es?
   opciones:
-    - id: a
-      texto: "Agrupamiento"
-    - id: b
-      texto: "Clasificación"
-    - id: c
-      texto: "Previsión de series temporales"
-    - id: d
-      texto: "Detección de anomalías"
-    - id: e
-      texto: "Aprendizaje por refuerzo"
-  correctas: [["1", b], ["2", a], ["3", d], ["4", c]]
-  explicacion: "¿Sí o no? → clasificación. ¿Qué grupos hay, sin etiquetas? → agrupamiento. ¿Qué es raro? → detección de anomalías. ¿Cuánto a lo largo del tiempo? → previsión de series temporales, un caso particular de regresión."
+  - id: a
+    texto: Clasificación de imágenes
+  - id: b
+    texto: Segmentación
+  - id: c
+    texto: Detección de objetos
+  - id: d
+    texto: Reconocimiento óptico de caracteres (OCR)
+  correctas:
+  - b
+  explicacion: 'La segmentación asigna una clase a cada píxel, así que delimita el contorno exacto. Pista: clasificación = una etiqueta; detección = un recuadro; segmentación = píxel a píxel.'
   distractores:
-    e: "El aprendizaje por refuerzo sirve cuando un agente aprende interactuando con un entorno y recibiendo recompensas; ninguna de estas preguntas tiene esa forma."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
+    a: La clasificación da una etiqueta a la imagen completa («hay tumor»), sin decir dónde.
+    c: La detección localiza el objeto con un recuadro, no con su contorno exacto.
+    d: El OCR extrae texto de imágenes o documentos; no delimita objetos.
+  referencia: https://aws.amazon.com/what-is/computer-vision/
 
-- id: R1-056
+- id: R1-072
   dominio: 1
   tarea: "1.2"
   objetivo: "1.2.4"
@@ -1573,7 +2214,7 @@
     e: "La previsión anticipa tendencias a partir de datos históricos, como la demanda futura; ninguno de estos ejemplos predice valores en el tiempo."
   referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
 
-- id: R1-057
+- id: R1-073
   dominio: 1
   tarea: "1.2"
   objetivo: "1.2.4"
@@ -1596,285 +2237,77 @@
     b: "Una base de conocimiento con RAG responde preguntas con información propia de la empresa; no ejecuta acciones."
     c: "Un modelo de previsión anticipa tendencias a partir de datos históricos; no actúa."
   referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
-
 - id: R1-058
   dominio: 1
-  tarea: "1.2"
-  objetivo: "1.2.6"
+  tarea: '1.1'
+  objetivo: 1.1.4
   tipo: multiple_choice
   dificultad: baja
-  enunciado: "¿Qué ventaja tiene un modelo fundacional frente a un modelo de ML tradicional cuando no hay datos etiquetados?"
+  enunciado: ¿Cómo se clasifica un fichero JSON con campos con nombre y anidados, pero sin un esquema tabular fijo?
   opciones:
-    - id: a
-      texto: "Se puede probar enseguida con prompts, porque ya viene preentrenado"
-    - id: b
-      texto: "Sus respuestas son deterministas y fáciles de reproducir"
-    - id: c
-      texto: "Tiene menos latencia y menos coste por petición"
-    - id: d
-      texto: "Es más fácil de interpretar ante un regulador"
-  correctas: [a]
-  explicacion: "Un modelo fundacional ya está preentrenado y se adapta con prompts o con personalización, así que se puede probar sin reunir ni etiquetar datos. Un modelo tradicional necesita datos etiquetados propios y un entrenamiento. Pista: modelo fundacional = rápido de probar."
+  - id: a
+    texto: Datos semiestructurados
+  - id: b
+    texto: Datos estructurados
+  - id: c
+    texto: Datos no estructurados
+  - id: d
+    texto: Serie temporal
+  correctas:
+  - a
+  explicacion: 'Los datos semiestructurados no siguen un esquema tabular rígido, pero tienen elementos que se describen a sí mismos (etiquetas, metadatos, anidamiento), como JSON, XML o HTML. Pista: «semi» = tiene etiquetas, pero no tabla.'
   distractores:
-    b: "Las respuestas de un modelo fundacional no son deterministas y pueden contener alucinaciones; la estabilidad es una ventaja del modelo tradicional."
-    c: "Los modelos fundacionales suelen tener más latencia y coste por petición, según su tamaño y los tokens."
-    d: "La explicabilidad favorece a los modelos tradicionales simples; un modelo fundacional es más difícil de interpretar."
-  referencia: "https://docs.aws.amazon.com/decision-guides/latest/generative-ai-on-aws-how-to-choose/guide.html"
-
-- id: R1-059
-  dominio: 1
-  tarea: "1.2"
-  objetivo: "1.2.6"
-  tipo: multiple_response
-  dificultad: media
-  enunciado: "¿En qué DOS casos suele encajar mejor un modelo de ML tradicional que un modelo fundacional?"
-  opciones:
-    - id: a
-      texto: "Resumir correos de clientes de temas muy variados"
-    - id: b
-      texto: "Puntuar el riesgo de cada transacción en pocos milisegundos y con bajo coste por predicción"
-    - id: c
-      texto: "Conversar con los empleados sobre documentos internos variados"
-    - id: d
-      texto: "Predecir la probabilidad de impago con un resultado que hay que explicar a un regulador"
-    - id: e
-      texto: "Redactar descripciones de productos para el catálogo"
-  correctas: [b, d]
-  explicacion: "Las tareas acotadas con restricciones operativas (latencia muy baja, coste por predicción, resultado reproducible) o con requisitos de explicabilidad favorecen un modelo tradicional, más simple de interpretar. Las tareas abiertas de redactar, resumir o conversar favorecen un modelo fundacional."
-  distractores:
-    a: "Resumir texto variado es una tarea abierta de generación: es el terreno del modelo fundacional."
-    c: "Conversar sobre documentos variados es una tarea abierta que encaja con un modelo fundacional, por ejemplo con RAG."
-    e: "Redactar contenido nuevo es IA generativa, propia de un modelo fundacional."
-  referencia: "https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html"
-
-- id: R1-060
-  dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.1"
-  tipo: multiple_choice
-  dificultad: baja
-  enunciado: "¿Qué etapa del ciclo de vida de ML compara los datos de producción con los de entrenamiento para detectar la deriva?"
-  opciones:
-    - id: a
-      texto: "Procesamiento de datos"
-    - id: b
-      texto: "Monitorización"
-    - id: c
-      texto: "Planteamiento del problema de ML"
-    - id: d
-      texto: "Despliegue"
-  correctas: [b]
-  explicacion: "La monitorización captura los datos que llegan en producción, los compara con los de entrenamiento y avisa de problemas de calidad de datos, de calidad del modelo y de deriva. Si hay deriva, el ciclo vuelve a los datos o al reentrenamiento. Pista: deriva = monitorización."
-  distractores:
-    a: "El procesamiento de datos prepara los datos de entrenamiento; ocurre antes de que el modelo esté en producción."
-    c: "El planteamiento traduce el problema de negocio a ML y decide qué predecir; no vigila el modelo desplegado."
-    d: "El despliegue lleva el modelo a producción; vigilar su comportamiento después es la etapa siguiente."
-  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html"
-
-- id: R1-061
-  dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.1"
-  tipo: matching
-  dificultad: media
-  enunciado: "En un proyecto para reducir las bajas de clientes, empareja cada actividad con su etapa del ciclo de vida de ML."
-  prompts:
-    - id: "1"
-      texto: "Fijar la meta de reducir un 10 % las bajas este año"
-    - id: "2"
-      texto: "Definir el problema como clasificación binaria: ¿se dará de baja en 90 días?"
-    - id: "3"
-      texto: "Limpiar y preparar el historial de consumo, incidencias y bajas pasadas"
-    - id: "4"
-      texto: "Puntuar cada noche a todos los clientes para la campaña de retención"
-  opciones:
-    - id: a
-      texto: "Planteamiento del problema de ML"
-    - id: b
-      texto: "Procesamiento de datos"
-    - id: c
-      texto: "Identificación del objetivo de negocio"
-    - id: d
-      texto: "Despliegue"
-    - id: e
-      texto: "Monitorización"
-  correctas: [["1", c], ["2", a], ["3", b], ["4", d]]
-  explicacion: "El objetivo de negocio fija la meta medible; el planteamiento la traduce a un problema de ML con su etiqueta y su métrica; el procesamiento prepara los datos; el despliegue pone el modelo a producir predicciones, aquí por lotes cada noche."
-  distractores:
-    e: "La monitorización vigila después la deriva (por ejemplo, si una tarifa de la competencia cambia los hábitos) y dispara el reentrenamiento; no es ninguna de estas actividades."
-  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html"
+    b: Los estructurados siguen un formato predefinido de filas y columnas, como una tabla.
+    c: Los no estructurados no siguen ninguna regla predeterminada, como el audio, el vídeo o el texto libre.
+    d: Una serie temporal es un conjunto de datos ordenados en el tiempo; el formato JSON no lo convierte en una.
+  referencia: https://aws.amazon.com/what-is/structured-data/
 
 - id: R1-062
   dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.2"
-  tipo: ordering
-  dificultad: media
-  enunciado: "Ordena estas formas de entrenar un modelo con Amazon SageMaker AI de MENOR a MAYOR esfuerzo."
+  tarea: "1.1"
+  objetivo: "1.1.4"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué tipo de datos son las lecturas de temperatura que un sensor IoT envía cada minuto?"
   opciones:
     - id: a
-      texto: "Traer una imagen de contenedor propia"
+      texto: "Datos de texto"
     - id: b
-      texto: "Partir de un modelo preentrenado"
+      texto: "Datos no estructurados"
     - id: c
-      texto: "Escribir código propio en un framework compatible"
+      texto: "Series temporales"
     - id: d
-      texto: "Usar un algoritmo integrado (built-in)"
-  correctas: [b, d, c, a]
-  explicacion: "En SageMaker AI el esfuerzo crece con la personalización: un modelo preentrenado es lo más rápido; un algoritmo integrado solo pide datos y configuración; el código propio en un framework exige programar el entrenamiento; y un contenedor propio obliga además a construir y mantener la imagen."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
+      texto: "Datos de imagen"
+  correctas: [c]
+  explicacion: "Una serie temporal es una secuencia de datos ordenados en el tiempo, como las lecturas de sensores o las cotizaciones. El orden importa: es lo que permite prever el valor siguiente. Pista: si cada dato lleva una marca de tiempo y el orden cuenta, es una serie temporal."
+  distractores:
+    a: "El texto es la entrada típica del procesamiento del lenguaje natural; una lectura numérica de un sensor no lo es."
+    b: "Son valores numéricos con un formato fijo (instante y medida), no texto libre, audio, vídeo ni imágenes."
+    d: "Las imágenes son la entrada de la visión por computador; aquí solo hay medidas numéricas."
+  referencia: "https://aws.amazon.com/what-is/time-series-database/"
 
 - id: R1-063
   dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.2"
-  tipo: multiple_choice
-  dificultad: baja
-  enunciado: "¿Qué capacidad de Amazon SageMaker AI ofrece modelos preentrenados de código abierto que se pueden ajustar y desplegar?"
-  opciones:
-    - id: a
-      texto: "SageMaker Canvas"
-    - id: b
-      texto: "SageMaker Pipelines"
-    - id: c
-      texto: "SageMaker JumpStart"
-    - id: d
-      texto: "SageMaker Model Registry"
-  correctas: [c]
-  explicacion: "SageMaker JumpStart reúne modelos preentrenados, incluidos modelos fundacionales de código abierto, para muchos tipos de problemas; se pueden entrenar de forma incremental y ajustar antes de desplegarlos. Pista: «jump start» = arrancar desde un modelo ya hecho."
-  distractores:
-    a: "Canvas permite crear modelos y obtener predicciones sin escribir código; está pensado para analistas, no es un catálogo de modelos preentrenados."
-    b: "Pipelines automatiza los flujos de ML para que sean repetibles; no proporciona modelos."
-    d: "Model Registry versiona y aprueba los modelos propios antes de desplegarlos; no ofrece modelos de partida."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
-
-- id: R1-064
-  dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.3"
-  tipo: multiple_choice
-  dificultad: baja
-  enunciado: "¿Cómo se paga, en general, un modelo usado mediante la API de un servicio gestionado como Amazon Bedrock?"
-  opciones:
-    - id: a
-      texto: "Por las instancias aprovisionadas, se usen o no"
-    - id: b
-      texto: "Con una licencia anual fija por modelo"
-    - id: c
-      texto: "Por las horas de entrenamiento consumidas"
-    - id: d
-      texto: "Por uso: peticiones, tokens o unidades procesadas"
-  correctas: [d]
-  explicacion: "Con una API de servicio gestionado, AWS aloja y opera el modelo y el cliente paga por lo que usa. Con un modelo alojado por el propio cliente, se paga la infraestructura aprovisionada aunque esté ociosa. Pista: gestionado = pago por uso."
-  distractores:
-    a: "Pagar por la infraestructura aprovisionada, se use o no, es propio del modelo alojado por el cliente (por ejemplo, en un endpoint o en EC2)."
-    b: "No es el modelo de cobro de una API gestionada: se factura según el consumo."
-    c: "Usar un modelo ya disponible no implica entrenarlo; el coste depende de las peticiones de inferencia."
-  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
-
-- id: R1-065
-  dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.3"
-  tipo: multiple_choice
-  dificultad: media
-  enunciado: "Un banco exige que el tráfico a su modelo no salga a internet. ¿Qué afirmación es correcta?"
-  opciones:
-    - id: a
-      texto: "Solo puede cumplirlo alojando el modelo en sus propias instancias de Amazon EC2"
-    - id: b
-      texto: "Puede cumplirlo también con una API gestionada, porque Amazon Bedrock y la mayoría de los servicios de IA admiten endpoints de VPC"
-    - id: c
-      texto: "Debe usar la inferencia serverless de SageMaker AI, que se ejecuta dentro de su VPC"
-    - id: d
-      texto: "No puede usar modelos fundacionales, porque solo se ofrecen por internet"
-  correctas: [b]
-  explicacion: "La red privada no obliga a autoalojar: la mayoría de los servicios de IA de AWS y Amazon Bedrock admiten endpoints de VPC (AWS PrivateLink). La diferencia clave entre las dos formas de uso es quién aloja y opera el modelo, no la red. Pista: privado no es sinónimo de autoalojado."
-  distractores:
-    a: "Autoalojar da control total de la red, pero no es la única forma de mantener el tráfico privado."
-    c: "La inferencia serverless de SageMaker AI no admite configuración de VPC; es justo la opción que no sirve aquí."
-    d: "Amazon Bedrock admite endpoints de VPC, así que los modelos fundacionales también se pueden usar sin pasar por internet."
-  referencia: "https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html"
-
-- id: R1-066
-  dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.4"
-  tipo: matching
-  dificultad: media
-  enunciado: "Empareja cada necesidad de datos con el servicio de AWS que la cubre."
-  prompts:
-    - id: "1"
-      texto: "Limpiar datos de forma visual, sin escribir código"
-    - id: "2"
-      texto: "Suscribirse a conjuntos de datos de terceros"
-    - id: "3"
-      texto: "Procesar grandes volúmenes con Apache Spark gestionado"
-    - id: "4"
-      texto: "Definir permisos detallados sobre el lago de datos"
-  opciones:
-    - id: a
-      texto: "AWS Data Exchange"
-    - id: b
-      texto: "AWS Lake Formation"
-    - id: c
-      texto: "Amazon EMR"
-    - id: d
-      texto: "AWS Glue DataBrew"
-    - id: e
-      texto: "Amazon CloudFront"
-  correctas: [["1", d], ["2", a], ["3", c], ["4", b]]
-  explicacion: "Glue DataBrew limpia datos de forma visual sin código; Data Exchange sirve para obtener y gestionar datos de otras organizaciones; EMR ejecuta Spark y Hadoop gestionados; Lake Formation controla los permisos detallados del lago de datos."
-  distractores:
-    e: "CloudFront distribuye con baja latencia el contenido de la aplicación; no trabaja con los datos de entrenamiento."
-  referencia: "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
-
-- id: R1-067
-  dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.5"
-  tipo: multiple_choice
-  dificultad: baja
-  enunciado: "¿Qué es MLOps en el ciclo de vida de un modelo?"
-  opciones:
-    - id: a
-      texto: "Un servicio de AWS que entrena modelos sin código"
-    - id: b
-      texto: "Una métrica que combina precisión y exhaustividad"
-    - id: c
-      texto: "La metodología que aplica las prácticas de DevOps a las cargas de trabajo de ML"
-    - id: d
-      texto: "Un tipo de inferencia que procesa conjuntos de datos completos"
-  correctas: [c]
-  explicacion: "MLOps lleva las prácticas de DevOps al ML: integra desarrollo, operaciones, ingeniería de datos y ciencia de datos para entregar modelos con menos defectos y más productividad a lo largo de todo el ciclo de vida. Pista: MLOps = DevOps para ML."
-  distractores:
-    a: "Entrenar modelos sin código es lo que hace SageMaker Canvas; MLOps es una metodología, no un servicio."
-    b: "La métrica que combina precisión y exhaustividad es la puntuación F1."
-    d: "Procesar un conjunto de datos completo es la transformación por lotes, un tipo de inferencia."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/mlops.html"
-
-- id: R1-068
-  dominio: 1
-  tarea: "1.3"
-  objetivo: "1.3.5"
+  tarea: "1.1"
+  objetivo: "1.1.4"
   tipo: multiple_response
-  dificultad: media
-  enunciado: "¿Qué DOS prácticas ayudan a gestionar la deuda técnica en MLOps?"
+  dificultad: baja
+  enunciado: "¿Qué DOS de estos ejemplos son datos no estructurados?"
   opciones:
     - id: a
-      texto: "Versionar los modelos en un registro de modelos"
+      texto: "Grabaciones de las llamadas a un centro de atención"
     - id: b
-      texto: "Entrenar a mano en el portátil de cada científico de datos"
+      texto: "Una tabla de clientes con columnas de nombre, ciudad y fecha de alta"
     - id: c
-      texto: "Mantener la trazabilidad (lineage) de los datos y los modelos"
+      texto: "Fotos de vehículos siniestrados enviadas por los clientes"
     - id: d
-      texto: "Desplegar sin controles de calidad para ganar velocidad"
+      texto: "El registro de pedidos de una base de datos relacional"
     - id: e
-      texto: "Guardar los modelos sin documentar en carpetas compartidas"
+      texto: "Una hoja de cálculo con las ventas mensuales por tienda"
   correctas: [a, c]
-  explicacion: "La deuda técnica en ML aparece cuando el código, los datos y los modelos están mal documentados o sin versionar. Un registro de modelos y la trazabilidad de qué datos produjeron cada modelo la reducen. Pista: lo que no está versionado ni trazado frena el desarrollo después."
+  explicacion: "Los datos no estructurados no siguen un formato predefinido: texto largo, audio, vídeo e imágenes. Los estructurados se organizan en filas y columnas. Pista: si cabe de forma natural en una tabla, es estructurado."
   distractores:
-    b: "Entrenar a mano y fuera de un proceso común impide repetir los resultados; MLOps busca procesos repetibles."
-    d: "Saltarse los controles de calidad va contra la preparación para producción, otro concepto de MLOps."
-    e: "Los modelos sin documentar son precisamente una fuente de deuda técnica."
-  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html"
+    b: "Una tabla con columnas definidas es el ejemplo típico de dato estructurado (tabular)."
+    d: "Una base de datos relacional guarda datos estructurados en tablas con un esquema."
+    e: "Una hoja de cálculo con filas y columnas contiene datos estructurados."
+  referencia: "https://aws.amazon.com/compare/the-difference-between-structured-data-and-unstructured-data/"

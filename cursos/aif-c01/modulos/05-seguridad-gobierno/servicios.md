@@ -11,19 +11,19 @@ Servicios dentro de alcance relevantes para el Dominio 5. La columna final recog
 | Amazon Macie | Descubrir datos sensibles (PII, credenciales) y *buckets* expuestos en S3 antes de usarlos con IA | Para filtrar PII en tiempo real en las respuestas de un modelo (Guardrails) |
 | AWS PrivateLink | Llegar a Bedrock desde una VPC por *endpoints* de interfaz, sin Internet | Para controlar qué usuario puede invocar qué modelo (IAM) |
 | Amazon VPC | Aislar en red los recursos que usan la IA (subredes privadas, grupos de seguridad) | Para cifrar los datos almacenados (KMS) |
-| Amazon Bedrock AgentCore | Identity: credenciales de agentes para actuar en nombre del usuario. Policy: límites deterministas de las herramientas. Observabilidad: trazas | Para filtrar contenido dañino en los *prompts* (Guardrails) |
-| Amazon Bedrock Guardrails | Bloquear ataques de *prompt*, contenido dañino y datos personales en entradas y respuestas | Como sustituto de IAM, del cifrado o de la red privada |
+| Amazon Bedrock AgentCore | Identity: credenciales de agentes para actuar en nombre del usuario. Policy: límites deterministas de las herramientas. Observabilidad: trazas | Para filtrar contenido dañino en los *prompts* (es Amazon Bedrock Guardrails) |
+| Amazon Bedrock Guardrails | Bloquear ataques de *prompt*, contenido dañino y datos personales en entradas y respuestas | Como sustituto de IAM, del cifrado (KMS) o de la red privada (VPC y PrivateLink) |
 | AWS Secrets Manager | Guardar y rotar claves de API y credenciales que usan las herramientas de un agente | Para claves de cifrado (KMS) o credenciales de AWS (IAM) |
 
 ## Datos y origen
 
 | Servicio | Caso de uso | Cuándo NO usarlo |
 |---|---|---|
-| Amazon Bedrock Knowledge Bases | Respuestas con citas a los documentos de origen | Para registrar con qué datos se entrenó un modelo (linaje) |
+| Amazon Bedrock Knowledge Bases | Respuestas con citas a los documentos de origen | Para registrar con qué datos se entrenó un modelo (linaje: SageMaker ML Lineage Tracking o MLflow) |
 | AWS Glue | Catálogo central de metadatos (Data Catalog) y calidad de datos (Glue Data Quality) | Para controlar permisos por columna o fila (Lake Formation) |
 | AWS Glue DataBrew | Perfilar y limpiar datos de forma visual, sin código | Para catalogar los conjuntos de datos de la organización (Glue Data Catalog) |
 | AWS Lake Formation | Permisos detallados (columna, fila, celda) sobre el lago de datos | Para descubrir PII en S3 (Macie) |
-| Amazon SageMaker AI | Linaje de ML (ML Lineage Tracking, MLflow), Model Cards y Model Dashboard. Role Manager ya no admite clientes nuevos | Cuando el modelo se consume por API en Bedrock y no se entrena |
+| Amazon SageMaker AI | Linaje de ML (ML Lineage Tracking, MLflow), Model Cards y Model Dashboard. Role Manager ya no admite clientes nuevos | Para auditar el uso de un modelo que se consume por API en Bedrock (registro de invocaciones de Bedrock y CloudTrail) |
 
 ## Gobierno y cumplimiento
 
@@ -35,6 +35,6 @@ Servicios dentro de alcance relevantes para el Dominio 5. La columna final recog
 | AWS CloudTrail | Auditoría de la actividad de la API: quién hizo qué y cuándo | Para guardar el texto de los *prompts* y respuestas (registro de invocaciones de Bedrock) |
 | AWS Trusted Advisor | Recomendaciones de coste, rendimiento, disponibilidad, seguridad y límites de servicio | Para escanear vulnerabilidades de *software* (Inspector) |
 | Amazon CloudWatch | Métricas, registros (destino del registro de invocaciones) y alarmas; retención por grupo de registros | Para registrar cambios de configuración (Config) |
-| AWS Well-Architected Tool | Revisar una carga de trabajo frente a las buenas prácticas y las lentes de AWS | Para escanear vulnerabilidades o recopilar evidencias automáticamente |
-| Amazon S3 | Datos de entrenamiento y registros; S3 Lifecycle para transición y expiración | Para consultas de configuración o auditoría de API |
-| Amazon S3 Glacier | Clases de almacenamiento de archivo de S3, de bajo coste, para datos y registros que hay que conservar años | Datos que se consultan a menudo |
+| AWS Well-Architected Tool | Revisar una carga de trabajo frente a las buenas prácticas y las lentes de AWS | Para escanear vulnerabilidades (Amazon Inspector) o recopilar evidencias de cumplimiento (*conformance packs* de AWS Config) |
+| Amazon S3 | Datos de entrenamiento y registros; S3 Lifecycle para transición y expiración | Para consultas de configuración (AWS Config) o auditoría de llamadas a la API (CloudTrail) |
+| Amazon S3 Glacier | Clases de almacenamiento de archivo de S3, de bajo coste, para datos y registros que hay que conservar años | Datos que se consultan a menudo o con baja latencia (S3 Standard) |

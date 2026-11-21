@@ -2369,3 +2369,246 @@
     b: 'Es asíncrona: un chat necesita respuesta inmediata.'
     e: Se paga por horas aunque no se use; no compensa con tráfico irregular.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
+- id: D2-082
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un proveedor describe así su modelo para generar texturas de videojuegos «durante el entrenamiento añadimos ruido a las imágenes y el modelo aprende a eliminarlo; al generar, parte de ruido aleatorio y lo va refinando en muchos pasos, guiado por la descripción del usuario». ¿Qué familia de modelos generativos describe?
+  opciones:
+  - id: a
+    texto: Una red generativa antagónica (GAN)
+  - id: b
+    texto: Un autocodificador variacional (VAE)
+  - id: c
+    texto: Un modelo de difusión
+  - id: d
+    texto: Un transformer de solo texto
+  correctas:
+  - c
+  explicacion: 'Añadir ruido en el entrenamiento y aprender a quitarlo, para generar después partiendo de ruido, es el mecanismo de los modelos de difusión.'
+  distractores:
+    a: Una GAN entrena dos redes que compiten (una genera y otra distingue lo real de lo generado); no parte de ruido para refinarlo paso a paso.
+    b: Un VAE genera variaciones a partir de una representación compacta de los datos (espacio latente), no quitando ruido en muchos pasos.
+    d: Un transformer de solo texto genera texto token a token con autoatención; no produce imágenes.
+  referencia: https://aws.amazon.com/what-is/generative-ai/
+- id: D2-083
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una empresa usa en producción un modelo de Amazon Bedrock y recibe el aviso de que esa versión ha pasado a estado legacy, con fecha de fin de vida dentro de seis meses. Quiere evitar que su aplicación falle con el MENOR riesgo. ¿Qué debe hacer?
+  opciones:
+  - id: a
+    texto: Esperar a la fecha de fin de vida, porque Bedrock redirigirá las peticiones a la versión nueva
+  - id: b
+    texto: Contratar Provisioned Throughput para ese modelo y así conservarlo después de la fecha de retirada
+  - id: c
+    texto: Evaluar con sus casos un modelo activo y migrar la aplicación antes de la fecha de retirada
+  - id: d
+    texto: Pasar las peticiones a inferencia por lotes, que no se ve afectada por la retirada del modelo
+  correctas:
+  - c
+  explicacion: 'Al llegar al fin de vida, las peticiones al modelo fallan y la migración no es automática. Lo prudente es evaluar con casos propios un modelo activo y cambiarlo antes; la API Converse facilita el cambio de modelo.'
+  distractores:
+    a: Bedrock no migra automáticamente; al llegar al fin de vida las peticiones a ese modelo fallan.
+    b: En estado legacy no se puede crear capacidad aprovisionada nueva y, en cualquier caso, el modelo deja de estar disponible en el fin de vida.
+    d: La retirada afecta al modelo, no a una forma de invocarlo; tras el fin de vida tampoco funcionaría por lotes.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+- id: D2-084
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Los usuarios de un asistente de una web de viajes se quejan de que la pantalla se queda en blanco unos ocho segundos antes de que aparezca la respuesta completa. El equipo no quiere cambiar de modelo ni acortar las respuestas. ¿Qué mejora MÁS la experiencia percibida?
+  opciones:
+  - id: a
+    texto: Devolver la respuesta en streaming (por ejemplo, con ConverseStream) para que el texto aparezca según se genera
+  - id: b
+    texto: Pasar las peticiones a inferencia por lotes
+  - id: c
+    texto: Pasar las peticiones al nivel Flex
+  - id: d
+    texto: Aumentar la temperatura del modelo
+  correctas:
+  - a
+  explicacion: 'Con streaming el usuario empieza a leer en cuanto llega el primer token, aunque la respuesta completa tarde lo mismo. Lo que percibe es el tiempo hasta el primer token (TimeToFirstToken en CloudWatch), no el tiempo total.'
+  distractores:
+    b: La inferencia por lotes es asíncrona y para grandes volúmenes; el usuario esperaría todavía más.
+    c: El nivel Flex abarata a cambio de más tiempo de proceso; empeoraría la espera.
+    d: La temperatura cambia la variabilidad de la respuesta, no la velocidad con que se muestra.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+- id: D2-085
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.4
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un asistente interno con Amazon Bedrock ha superado el piloto y pasa a producción. Su tráfico es irregular, con días casi sin uso y picos al cierre de mes, y no tiene requisitos especiales de latencia. Alguien propone contratar Provisioned Throughput «porque ya es producción». ¿Qué opción es la MÁS rentable?
+  opciones:
+  - id: a
+    texto: Provisioned Throughput con compromiso de 6 meses
+  - id: b
+    texto: Seguir con inferencia bajo demanda en el nivel Standard
+  - id: c
+    texto: El nivel Reserved con compromiso de 3 meses
+  - id: d
+    texto: Inferencia por lotes con los ficheros en Amazon S3
+  correctas:
+  - b
+  explicacion: 'Con tráfico irregular y sin requisitos especiales, bajo demanda solo se paga por los tokens usados. Pasar a producción no obliga a reservar capacidad: eso compensa con un volumen alto y estable o cuando hace falta capacidad garantizada.'
+  distractores:
+    a: Provisioned Throughput se paga mientras existe, se use o no; con días casi sin uso se pagaría capacidad ociosa.
+    c: Reserved implica compromiso y capacidad mínima; se justifica en aplicaciones críticas con volumen estable, no con tráfico irregular.
+    d: La inferencia por lotes es asíncrona; un asistente conversacional necesita respuesta inmediata.
+  referencia: https://aws.amazon.com/bedrock/pricing/
+- id: D2-086
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo ha ajustado en SageMaker AI un modelo Llama 3.1 con sus datos. Ahora quiere servirlo en us-east-1 sin gestionar servidores ni pagar una instancia encendida, porque el uso será esporádico. ¿Qué opción encaja?
+  opciones:
+  - id: a
+    texto: Un endpoint de SageMaker AI en tiempo real
+  - id: b
+    texto: Provisioned Throughput en Amazon Bedrock
+  - id: c
+    texto: Custom Model Import de Amazon Bedrock con inferencia bajo demanda
+  - id: d
+    texto: Amazon Bedrock Marketplace
+  correctas:
+  - c
+  explicacion: 'Custom Model Import trae a Bedrock los pesos de un modelo de arquitectura compatible (como Llama) ajustado fuera y permite invocarlo bajo demanda, sin servidores, en las Regiones donde está disponible.'
+  distractores:
+    a: Un endpoint en tiempo real factura sus instancias mientras están en marcha, haya o no peticiones.
+    b: Provisioned Throughput se paga mientras existe, se use o no; no encaja con un uso esporádico.
+    d: Bedrock Marketplace sirve para usar modelos de su catálogo desplegados en un endpoint con instancia; no es la vía para traer un modelo propio.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html
+- id: D2-087
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora recibe en cada siniestro un parte en PDF, fotos de los daños, la grabación de la llamada del cliente y, a veces, un vídeo. Quiere extraer de todo ello información estructurada con un único servicio de IA generativa, sin construir un flujo con varios servicios especializados. ¿Qué debe usar?
+  opciones:
+  - id: a
+    texto: Amazon Textract
+  - id: b
+    texto: Amazon Rekognition
+  - id: c
+    texto: Amazon Transcribe
+  - id: d
+    texto: Amazon Bedrock Data Automation
+  correctas:
+  - d
+  explicacion: 'Bedrock Data Automation extrae información estructurada de contenido no estructurado de varios tipos (documentos, imágenes, audio y vídeo) con un solo servicio, sin montar el flujo a mano.'
+  distractores:
+    a: Textract extrae texto y datos de documentos, pero no analiza audio ni vídeo.
+    b: Rekognition analiza imágenes y vídeo, pero no extrae los datos del parte ni transcribe la llamada.
+    c: Transcribe convierte el audio en texto, pero no procesa documentos ni imágenes.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/bda.html
+- id: D2-088
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Un equipo prepara la previsión de costes de varias aplicaciones de IA generativa en AWS. ¿Qué DOS elementos NO se facturan por tokens?
+  opciones:
+  - id: a
+    texto: Las imágenes que genera un modelo de imagen bajo demanda en Amazon Bedrock
+  - id: b
+    texto: Un modelo de Amazon Bedrock Marketplace desplegado en su endpoint
+  - id: c
+    texto: Los tokens de razonamiento que genera un modelo antes de responder
+  - id: d
+    texto: Las instrucciones del sistema enviadas en cada petición
+  - id: e
+    texto: Las respuestas de un modelo de texto en el nivel Flex
+  correctas:
+  - a
+  - b
+  explicacion: 'Los modelos de imagen se cobran por imagen generada, y los de Bedrock Marketplace por la instancia del endpoint donde se despliegan, más el cargo de software que fije el proveedor. El resto se paga por tokens.'
+  distractores:
+    c: El razonamiento genera tokens de salida adicionales, que se pagan como tales; por eso los modelos de razonamiento cuestan más.
+    d: Las instrucciones del sistema forman parte de la entrada y se pagan como tokens de entrada en cada petición.
+    e: El nivel Flex mantiene el pago por tokens, con descuento sobre el nivel Standard.
+  referencia: https://aws.amazon.com/bedrock/pricing/
+- id: D2-089
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.2
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un asistente de una compañía eléctrica responde a veces con tarifas que no existen, aunque con mucha seguridad. ¿Qué medida ataca MEJOR el problema?
+  opciones:
+  - id: a
+    texto: Bajar la temperatura a 0 y pedir en las instrucciones que no invente tarifas
+  - id: b
+    texto: Recuperar las tarifas vigentes con RAG y comprobar su anclaje con Guardrails
+  - id: c
+    texto: Ajustar el modelo con el catálogo de tarifas del año pasado
+  - id: d
+    texto: Cambiar a un modelo más grande del mismo proveedor
+  correctas:
+  - b
+  explicacion: 'El modelo no consulta por sí mismo una fuente de verdad. Darle las tarifas vigentes con RAG y comprobar con el anclaje contextual de Guardrails que la respuesta se apoya en ellas ataca la causa.'
+  distractores:
+    a: Con temperatura 0 el modelo responde de forma más repetible, y una instrucción no le da los datos; puede seguir repitiendo una tarifa inventada.
+    c: Ajustar con tarifas antiguas fija datos que ya no son vigentes y no impide que invente; para datos que cambian se usa RAG.
+    d: Un modelo más grande también alucina si no tiene las tarifas vigentes; además cuesta más.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html
+- id: D2-090
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un centro de investigación reentrena cada trimestre su propio modelo de lenguaje y después lo usa para responder millones de consultas al día en instancias de Amazon EC2. Su objetivo es reducir el consumo de energía en las dos fases. ¿Qué combinación encaja MEJOR?
+  opciones:
+  - id: a
+    texto: AWS Trainium para entrenar y AWS Inferentia para servir las consultas
+  - id: b
+    texto: AWS Inferentia para entrenar y AWS Trainium para servir las consultas
+  - id: c
+    texto: Instancias de propósito general sin aceleradores para ambas fases
+  - id: d
+    texto: Inferencia bajo demanda de Amazon Bedrock para ambas fases
+  correctas:
+  - a
+  explicacion: 'El Machine Learning Lens recomienda el silicio más eficiente para cada tarea: Trainium está diseñado para entrenar e Inferentia para la inferencia, con mejor rendimiento por vatio que otras instancias aceleradas.'
+  distractores:
+    b: Invierte los papeles; Inferentia está especializado en inferencia, no en entrenamiento.
+    c: Sin aceleradores, entrenar y servir un modelo de lenguaje sería mucho más lento y consumiría más energía en total.
+    d: Bedrock bajo demanda sirve para usar modelos del catálogo, no para entrenar un modelo propio en EC2.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus05-bp02.html
+- id: D2-091
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.2
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: El asistente público de una aerolínea ha prometido a un cliente un reembolso que la política de la empresa no contempla, y otro usuario consiguió que opinara sobre política. Quieren reducir este riesgo para la marca sin entrenar ningún modelo. ¿Qué medidas encajan MEJOR?
+  opciones:
+  - id: a
+    texto: Activar solo los filtros de información sensible de Amazon Bedrock Guardrails
+  - id: b
+    texto: Bajar la temperatura a 0 para que las respuestas sean más repetibles
+  - id: c
+    texto: Activar la comprobación de anclaje contextual de Guardrails, sin temas denegados
+  - id: d
+    texto: Configurar temas denegados en Guardrails y exigir aprobación humana de los reembolsos
+  correctas:
+  - d
+  explicacion: 'Los temas denegados bloquean asuntos ajenos al negocio, como la política, y exigir aprobación humana para los reembolsos evita compromisos no autorizados. Son controles configurables, sin entrenar nada.'
+  distractores:
+    a: Los filtros de información sensible protegen datos personales; no impiden opinar de política ni prometer reembolsos.
+    b: Respuestas más repetibles no impiden que el asistente hable de temas indebidos o prometa algo; solo lo haría de forma más constante.
+    c: El anclaje contextual comprueba que la respuesta se apoya en las fuentes, pero sin temas denegados el asistente puede seguir opinando de política, y no controla los reembolsos.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html

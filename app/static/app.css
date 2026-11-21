@@ -216,3 +216,38 @@ dialog.modal-pregunta { width: min(680px, calc(100vw - 24px)); }
 .mp-pie { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 main:has(.btn-prueba) { padding-bottom: 88px; }
 @media (max-width: 600px) { .btn-prueba { right: 12px; bottom: 12px; } }
+
+/* Mapa de servicios: cuadro resumen por categoría con iconos */
+.mapa-servicios input[type=search] { width: 100%; margin: 6px 0 14px; }
+.mapa-cat { margin: 22px 0 8px; font-size: 1.05rem; }
+.mapa-cat.mapa-fuera { color: var(--suave); }
+.tabla-mapa { overflow-x: auto; }
+.tabla-mapa table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: .92rem; }
+.tabla-mapa th, .tabla-mapa td { border-bottom: 1px solid var(--borde); padding: 8px 10px; text-align: left; vertical-align: top; }
+.tabla-mapa th { font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: var(--suave); }
+.mapa-icono { width: 52px; }
+.mapa-icono img { display: block; border-radius: 8px; }
+.mapa-sin-icono { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 8px; background: var(--acento-bg); color: var(--acento-fuerte); font-weight: 700; }
+.mapa-mods { white-space: nowrap; }
+.mapa-mods a { display: inline-block; margin-right: 4px; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--acento-borde); background: var(--acento-bg); text-decoration: none; font-weight: 600; }
+.mapa-aviso { margin-top: 16px; font-size: .82rem; }
+/* «Preguntar a Claude» (panel de consultas de los tests) */
+.consulta h2 { margin-top: 0; }
+.consulta-aviso { margin-top: -4px; }
+.consulta-mensajes { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+.consulta-msg { border: 1px solid var(--borde); border-radius: 12px; padding: 8px 14px; max-width: 92%; }
+.consulta-msg.usuario { align-self: flex-end; background: var(--acento-bg); border-color: var(--acento-borde); }
+.consulta-msg.claude { align-self: flex-start; background: var(--panel); }
+.consulta-quien { margin: 0 0 4px; font-size: .82rem; font-weight: 600; color: var(--suave); }
+.consulta-texto { white-space: pre-wrap; overflow-wrap: anywhere; }
+.consulta-msg.claude .consulta-texto { white-space: normal; }
+.consulta-texto > :first-child { margin-top: 0; } .consulta-texto > :last-child { margin-bottom: 0; }
+.consulta-texto pre { background: var(--codigo); padding: 8px 10px; border-radius: 8px; overflow-x: auto; }
+.consulta-texto table { margin: 8px 0; }
+.consulta-estado.pendiente, .consulta-estado.procesando { color: var(--acento-fuerte); border-color: var(--acento-borde); background: var(--acento-bg); }
+.consulta-estado.respondido { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, transparent); background: var(--ok-bg); }
+.consulta-estado.error { color: var(--mal); border-color: color-mix(in srgb, var(--mal) 40%, transparent); background: var(--mal-bg); }
+.consulta-form textarea { width: 100%; padding: 9px 10px; border: 1px solid var(--borde); border-radius: 10px; background: var(--panel); color: var(--texto); font: inherit; resize: vertical; }
+.consulta-acciones { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.consulta-plegable > summary { cursor: pointer; color: var(--acento-fuerte); font-weight: 600; margin-top: 8px; }
+.consulta-plegable .consulta { box-shadow: none; }

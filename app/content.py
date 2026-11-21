@@ -10,6 +10,7 @@ import yaml
 from jsonschema import Draft202012Validator
 from markdown_it import MarkdownIt
 
+from curso import alcance
 from curso import glosario as glosario_mod
 from curso.anclas import GeneradorAnclas
 from curso.cobertura import mapa as mapa_cobertura
@@ -36,6 +37,7 @@ class Modulo:
     secciones: list[Seccion] = field(default_factory=list)
     preguntas: list[str] = field(default_factory=list)  # banco de examen (preguntas.yaml)
     repaso: list[str] = field(default_factory=list)  # banco de repaso de conocimientos (repaso.yaml)
+    libros: list[str] = field(default_factory=list)  # banco local opcional de las guías de estudio (libros.yaml, no versionado)
     es_simulacro: bool = False
 
 
@@ -195,6 +197,7 @@ class Contenido:
             self._cargar_preguntas(d, mod, validador)
             if not mod.es_simulacro:
                 self._cargar_preguntas(d, mod, validador, repaso=True)
+            self._cargar_libros(d, mod)
 
     def _cargar_preguntas(self, d: Path, mod: Modulo, validador, repaso: bool = False):
         f = d / ("repaso.yaml" if repaso else "preguntas.yaml")
@@ -223,6 +226,38 @@ class Contenido:
             p["banco"] = "repaso" if repaso else "examen"
             self.preguntas[p["id"]] = p
             (mod.repaso if repaso else mod.preguntas).append(p["id"])
+
+    def _cargar_libros(self, d: Path, mod: Modulo):
+        """Banco local opcional `libros.yaml`: preguntas de guías de estudio de terceros para uso personal.
+
+        No se versiona (material con copyright) ni pasa por el esquema de las preguntas propias: solo se exige lo
+        necesario para mostrarlas y corregirlas. Se usan únicamente en el test «Preguntas de los libros»."""
+        f = d / "libros.yaml"
+        if not f.is_file():
+            return
+        try:
+            datos = yaml.safe_load(f.read_text(encoding="utf8")) or []
+        except yaml.YAMLError as e:
+            self.avisos.append(f"{mod.id}/libros.yaml: YAML inválido ({e})")
+            return
+        for p in datos if isinstance(datos, list) else []:
+            ok = (isinstance(p, dict) and isinstance(p.get("id"), str) and p.get("tipo") in ("multiple_choice", "multiple_response")
+                  and isinstance(p.get("enunciado"), str) and isinstance(p.get("opciones"), list) and p["opciones"]
+                  and isinstance(p.get("correctas"), list) and p["correctas"]
+                  and set(p["correctas"]) <= {o.get("id") for o in p["opciones"] if isinstance(o, dict)})
+            if not ok:
+                self.avisos.append(f"{mod.id}/libros.yaml: pregunta {p.get('id') if isinstance(p, dict) else '?'} incompleta, ignorada")
+                continue
+            if p["id"] in self.preguntas:
+                self.avisos.append(f"{mod.id}/libros.yaml:{p['id']}: id duplicado, ignorada")
+                continue
+            p.setdefault("dominio", 0)
+            p.setdefault("tarea", "libros")
+            p.setdefault("explicacion", "")
+            p["modulo"] = mod.id
+            p["banco"] = "libros"
+            self.preguntas[p["id"]] = p
+            mod.libros.append(p["id"])
 
     def url_teoria(self, objetivo: str | None) -> str | None:
         """Sección de teoría que cubre un objetivo, según el mapa de cobertura de los README."""
@@ -276,6 +311,59 @@ class Contenido:
     def seccion_html(self, modulo: str, seccion: str) -> str | None:
         r = self.seccion(modulo, seccion)
         return r[0] if r else None
+
+    def pagina(self, nombre: str) -> tuple[str, set[str], dict] | None:
+        """Como `seccion`, para un Markdown de la raíz del curso (por ejemplo, mapa-servicios.md)."""
+        f = self.raiz / nombre
+        if not f.is_file():
+            return None
+        clave = ("", nombre)
+        if clave not in self._html:
+            env: dict = {}
+            html = self._md.render(f.read_text(encoding="utf8"), env)
+            diagramas = {str(n): {str(k): i for k, v in cajas.items() if (i := self.info_caja(v))}
+                         for n, cajas in env.get("nodos", {}).items()}
+            self._html[clave] = (html, set(env.get("conceptos", ())), diagramas)
+        return self._html[clave]
+
+    def mapa_servicios(self) -> list[dict]:
+        """Servicios del glosario agrupados por la categoría oficial del examen, con su icono, su alcance y los módulos
+        cuyo servicios.md los trata. Primero los grupos dentro de alcance (en el orden de la guía), después el resto."""
+        if not self.glosario:
+            return []
+        f = self.raiz / "fuentes" / "servicios-alcance.md"
+        oficiales = alcance.listas(f.read_text(encoding="utf8")) if f.is_file() else {"dentro": [], "fuera": []}
+
+        def id_de(nombre):
+            return self.glosario.id_de(nombre) or self.glosario.id_de(alcance.sin_parentesis(nombre))
+
+        dentro = {i: cat for cat, n in oficiales["dentro"] if (i := id_de(n))}
+        fuera = {i for _, n in oficiales["fuera"] if (i := id_de(n))}
+        modulos: dict[str, list[dict]] = {}
+        for mod in self.modulos.values():
+            sec = next((s for s in mod.secciones if s.id == "servicios"), None)
+            if not sec:
+                continue
+            for nombre in glosario_mod.servicios_de(sec.ruta.read_text(encoding="utf8")):
+                i = self.glosario.id_de(nombre)
+                if i and all(m["id"] != mod.id for m in modulos.get(i, [])):
+                    modulos.setdefault(i, []).append({"id": mod.id, "numero": mod.numero, "titulo": mod.titulo,
+                                                      "url": f"/c/{self.manifiesto.slug}/modulo/{mod.id}/servicios"})
+        orden = list(dict.fromkeys(cat for cat, _ in oficiales["dentro"]))
+        grupos: dict[str, dict] = {}
+        for e in self.glosario:
+            if e.categoria != "servicio":
+                continue
+            if e.id in dentro:
+                clave, nombre, estado = dentro[e.id], alcance.CATEGORIAS_ES.get(dentro[e.id], dentro[e.id]), "dentro"
+            elif e.id in fuera:
+                clave, nombre, estado = "~fuera", "Fuera del alcance del examen (solo para reconocerlos)", "fuera"
+            else:
+                clave, nombre, estado = "~otros", "Funcionalidades y otros servicios citados en el curso", "otros"
+            g = grupos.setdefault(clave, {"clave": clave, "nombre": nombre, "original": clave if estado == "dentro" else None,
+                                          "estado": estado, "servicios": []})
+            g["servicios"].append({"entrada": e, "modulos": sorted(modulos.get(e.id, []), key=lambda m: m["id"])})
+        return sorted(grupos.values(), key=lambda g: (orden.index(g["clave"]) if g["clave"] in orden else len(orden) + (g["clave"] == "~fuera")))
 
     def datos_conceptos(self, ids) -> dict:
         """Datos de los conceptos indicados, listos para incrustar como JSON en la página."""

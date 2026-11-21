@@ -18,7 +18,7 @@
 - **Solo se pagan los *tokens* de salida.** Se pagan entrada **y** salida. Enviar el manual entero en cada petición dispara el coste de entrada.
 - **La salida cuesta lo mismo que la entrada.** Normalmente cuesta varias veces más: limitar la longitud de la respuesta ahorra.
 - **Provisioned Throughput para ahorrar en un piloto.** Es capacidad dedicada que se paga por horas aunque no se use. Para tráfico bajo o variable, bajo demanda.
-- **Lotes para un chat.** La inferencia por lotes es asíncrona (S3) y no admite llamadas a herramientas: no sirve para conversaciones.
+- **Lotes para un chat.** La inferencia por lotes es asíncrona (S3) y no admite llamadas a herramientas: no sirve para conversaciones (para eso, inferencia bajo demanda).
 - **Inferencia entre Regiones global con residencia de datos.** La global puede procesar en cualquier Región comercial; si los datos no pueden salir de la UE, la geográfica de la UE.
 - **La inferencia entre Regiones cuesta más.** No hay coste adicional de enrutamiento; la global incluso ahorra aproximadamente un 10 %.
 
@@ -63,3 +63,20 @@
 - **Exactitud como única métrica.** Un modelo muy exacto puede no aportar valor de negocio; se miden también ROI, eficiencia, conversión, ARPU o CLV según el objetivo.
 - **ARPU frente a CLV.** ARPU es ingreso medio por usuario en un periodo; CLV es el valor de toda la relación con el cliente (sube con la retención).
 - **Rendimiento entre dominios.** Mide si la calidad se mantiene en áreas distintas de las probadas; no es una métrica de latencia.
+
+## Revisión con las guías de estudio
+
+- ***Chunking* no es tokenizar.** En AWS, *chunking* es partir documentos en fragmentos antes de generar sus *embeddings* para RAG; dividir el texto en las unidades que procesa el modelo es tokenizar.
+- **No todo modelo generativo es un *transformer*.** «Dos redes que compiten»: GAN. «Espacio latente»: VAE. «Quitar ruido paso a paso»: difusión. «Autoatención»: *transformer*.
+- **Autosupervisado, no semisupervisado.** Los modelos fundacionales se preentrenan creando las etiquetas a partir de los propios datos (autosupervisado). Semisupervisado es combinar pocas etiquetas humanas con muchos datos sin etiquetar.
+- **RAG no es una etapa del ciclo de vida del modelo.** RAG cambia el contexto de cada petición; las etapas del ciclo de vida (datos, selección, preentrenamiento, ajuste fino, evaluación, despliegue, retroalimentación) cambian el modelo o su uso.
+- **Un modelo *legacy* no es para un proyecto nuevo.** En Bedrock, un modelo en estado *legacy* ya tiene fecha de retirada y no admite clientes nuevos; en los modelos anteriores a septiembre de 2026 puede pasar a un acceso ampliado más caro, y al llegar al fin de vida las peticiones fallan: la migración no es automática.
+- **«Producción» no implica *Provisioned Throughput*.** Con tráfico variable, bajo demanda (o Priority) sigue siendo lo adecuado; la capacidad aprovisionada se justifica por un volumen alto y estable o por capacidad garantizada.
+- **Un modelo personalizado no exige siempre *Provisioned Throughput*.** En los modelos y Regiones compatibles, y con Custom Model Import, se puede invocar bajo demanda.
+- **La licencia no cambia la factura.** En Bedrock, los modelos del catálogo *serverless* se facturan por uso sea cual sea su licencia; en SageMaker AI se paga la instancia.
+- **No todo se factura por *token*.** Imágenes, por imagen; JumpStart, por instancia; Marketplace, por instancia más el software del proveedor; Guardrails y Knowledge Bases, aparte.
+- **El mejor *benchmark* público no decide.** Orienta, pero el modelo se elige evaluando con datos y casos propios.
+- **`TimeToFirstToken` frente a `InvocationLatency`.** La primera mide hasta el primer *token* de una respuesta en *streaming*; la segunda, hasta la respuesta completa.
+- **Las alucinaciones no se curan con temperatura ni con ajuste fino.** El modelo genera a partir de patrones aprendidos y no consulta por sí mismo una fuente de verdad: el remedio principal es darle información fiable (RAG), comprobar el anclaje de la respuesta (Guardrails) y verificar.
+- **Guardrails no hace cumplir una normativa por sí solo.** Enmascarar datos personales ayuda, pero el cumplimiento depende de que el servicio esté dentro del alcance de la norma y de lo que configure el cliente (responsabilidad compartida).
+- **Sostenibilidad en el hardware.** Si el enunciado pide entrenar o servir con menos energía, el Machine Learning Lens recomienda el silicio más eficiente para cada tarea: Trainium para entrenar, Inferentia para inferir.

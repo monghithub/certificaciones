@@ -214,6 +214,30 @@
     d: Limitar quién invoca un modelo se hace con políticas de IAM.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/governance.html
 
+- id: R5-036
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Los analistas necesitan saber qué conjuntos de datos existen, dónde están y cuál es su esquema. ¿Qué servicio de AWS lo cubre?"
+  opciones:
+    - id: a
+      texto: "SageMaker ML Lineage Tracking"
+    - id: b
+      texto: "Citas de Amazon Bedrock Knowledge Bases"
+    - id: c
+      texto: "Amazon SageMaker Model Cards"
+    - id: d
+      texto: "AWS Glue Data Catalog"
+  correctas: [d]
+  explicacion: "La catalogación de datos es un inventario de los conjuntos de datos con su ubicación, su esquema y sus metadatos; AWS Glue Data Catalog es el catálogo central de metadatos en AWS. Pista: «qué datos hay y cómo son» = catálogo."
+  distractores:
+    a: "ML Lineage Tracking registra el recorrido de datos y artefactos hasta un modelo concreto, no el inventario de todos los conjuntos."
+    b: "Las citas indican de qué documentos sale una respuesta de RAG; no describen los conjuntos de datos de la empresa."
+    c: "Una Model Card documenta un modelo (uso previsto, datos de entrenamiento, evaluación), no el inventario de datos."
+  referencia: "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
+
 - id: R5-009
   dominio: 5
   tarea: "5.1"
@@ -287,6 +311,30 @@
     b: Descubre datos sensibles en S3, pero no concede ni limita permisos.
     c: Perfila y limpia datos de forma visual, sin código; sirve para la calidad de los datos.
   referencia: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
+
+- id: R5-037
+  dominio: 5
+  tarea: "5.1"
+  objetivo: "5.1.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "Antes de usar unos datos para entrenar, un equipo quiere comprobar con reglas que son completos, correctos y coherentes. ¿Qué servicio usa?"
+  opciones:
+    - id: a
+      texto: "AWS Lake Formation"
+    - id: b
+      texto: "AWS Glue Data Quality"
+    - id: c
+      texto: "AWS CloudTrail"
+    - id: d
+      texto: "Amazon Bedrock Guardrails"
+  correctas: [b]
+  explicacion: "Evaluar la calidad de los datos es una práctica de ingeniería de datos segura. AWS Glue Data Quality aplica reglas, calcula una puntuación de calidad y detecta anomalías. Pista: «Data Quality» = calidad de los datos."
+  distractores:
+    a: "Lake Formation controla quién accede al lago de datos (por columna, fila y celda), no si los datos son correctos."
+    c: "CloudTrail registra la actividad de las APIs; ayuda a la integridad, pero no evalúa la calidad de los datos."
+    d: "Guardrails filtra las entradas y salidas de un modelo; no valida un conjunto de entrenamiento."
+  referencia: "https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html"
 
 - id: R5-012
   dominio: 5
@@ -780,58 +828,56 @@
     c: El ámbito 2 es una aplicación SaaS de terceros con IA integrada y contrato con el proveedor.
     d: El ámbito 5 es entrenar un modelo propio desde cero; es el ámbito con más responsabilidades.
   referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
-
-# ---------------------------------------------------------------- Ampliación del banco de repaso (2026-11-20)
-
 - id: R5-031
   dominio: 5
-  tarea: "5.1"
-  objetivo: "5.1.2"
+  tarea: '5.2'
+  objetivo: 5.2.1
   tipo: multiple_choice
-  dificultad: baja
-  enunciado: "Los analistas necesitan saber qué conjuntos de datos existen, dónde están y cuál es su esquema. ¿Qué servicio de AWS lo cubre?"
+  dificultad: media
+  enunciado: ¿Dónde acepta un cliente de AWS el acuerdo BAA que exige HIPAA para tratar información sanitaria protegida?
   opciones:
-    - id: a
-      texto: "SageMaker ML Lineage Tracking"
-    - id: b
-      texto: "Citas de Amazon Bedrock Knowledge Bases"
-    - id: c
-      texto: "Amazon SageMaker Model Cards"
-    - id: d
-      texto: "AWS Glue Data Catalog"
-  correctas: [d]
-  explicacion: "La catalogación de datos es un inventario de los conjuntos de datos con su ubicación, su esquema y sus metadatos; AWS Glue Data Catalog es el catálogo central de metadatos en AWS. Pista: «qué datos hay y cómo son» = catálogo."
+  - id: a
+    texto: En AWS Config
+  - id: b
+    texto: En Amazon Macie
+  - id: c
+    texto: En AWS Trusted Advisor
+  - id: d
+    texto: En AWS Artifact
+  correctas:
+  - d
+  explicacion: 'AWS Artifact da acceso a los informes de cumplimiento de AWS y permite revisar, aceptar y seguir los acuerdos con AWS, como el BAA de HIPAA. Pista: Artifact = documentos de cumplimiento y acuerdos.'
   distractores:
-    a: "ML Lineage Tracking registra el recorrido de datos y artefactos hasta un modelo concreto, no el inventario de todos los conjuntos."
-    b: "Las citas indican de qué documentos sale una respuesta de RAG; no describen los conjuntos de datos de la empresa."
-    c: "Una Model Card documenta un modelo (uso previsto, datos de entrenamiento, evaluación), no el inventario de datos."
-  referencia: "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
-
+    a: Config registra y evalúa la configuración de los recursos; no gestiona acuerdos.
+    b: Macie descubre datos sensibles en S3; no es donde se firman acuerdos.
+    c: Trusted Advisor da recomendaciones de coste, rendimiento y seguridad; no gestiona acuerdos.
+  referencia: https://aws.amazon.com/compliance/hipaa-compliance/
 - id: R5-032
   dominio: 5
-  tarea: "5.1"
-  objetivo: "5.1.3"
+  tarea: '5.2'
+  objetivo: 5.2.2
   tipo: multiple_choice
-  dificultad: baja
-  enunciado: "Antes de usar unos datos para entrenar, un equipo quiere comprobar con reglas que son completos, correctos y coherentes. ¿Qué servicio usa?"
+  dificultad: media
+  enunciado: ¿En qué se diferencia la soberanía de los datos de su residencia?
   opciones:
-    - id: a
-      texto: "AWS Lake Formation"
-    - id: b
-      texto: "AWS Glue Data Quality"
-    - id: c
-      texto: "AWS CloudTrail"
-    - id: d
-      texto: "Amazon Bedrock Guardrails"
-  correctas: [b]
-  explicacion: "Evaluar la calidad de los datos es una práctica de ingeniería de datos segura. AWS Glue Data Quality aplica reglas, calcula una puntuación de calidad y detecta anomalías. Pista: «Data Quality» = calidad de los datos."
+  - id: a
+    texto: La residencia es dónde están los datos; la soberanía, a qué leyes quedan sujetos por estar allí
+  - id: b
+    texto: Son sinónimos en la documentación de AWS
+  - id: c
+    texto: La soberanía es cuánto tiempo se conservan los datos
+  - id: d
+    texto: La residencia es quién puede leer los datos
+  correctas:
+  - a
+  explicacion: 'La residencia es dónde están físicamente los datos; la soberanía, que quedan sujetos a las leyes de ese lugar. Elegir la Región es una decisión clave para ambas. Pista: residencia = lugar; soberanía = ley.'
   distractores:
-    a: "Lake Formation controla quién accede al lago de datos (por columna, fila y celda), no si los datos son correctos."
-    c: "CloudTrail registra la actividad de las APIs; ayuda a la integridad, pero no evalúa la calidad de los datos."
-    d: "Guardrails filtra las entradas y salidas de un modelo; no valida un conjunto de entrenamiento."
-  referencia: "https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html"
+    b: AWS las define por separado; están relacionadas, pero no significan lo mismo.
+    c: Cuánto tiempo se conservan los datos es la retención.
+    d: Quién puede leer los datos es el control de acceso (IAM).
+  referencia: https://aws.amazon.com/what-is/data-sovereignty/
 
-- id: R5-033
+- id: R5-038
   dominio: 5
   tarea: "5.2"
   objetivo: "5.2.2"
@@ -863,8 +909,90 @@
   distractores:
     e: "La catalogación es el inventario de los conjuntos de datos con su esquema; pertenece a la documentación del origen de los datos, no a ninguno de estos ejemplos."
   referencia: "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability.html"
-
+- id: R5-033
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Según el pilar de seguridad de AWS Well-Architected, ¿dónde se aplican los controles de seguridad de una carga de trabajo?
+  opciones:
+  - id: a
+    texto: Solo en el perímetro de la red
+  - id: b
+    texto: Solo en la capa de datos, cifrándolos
+  - id: c
+    texto: En cada capa, de la organización y las cuentas a la red, el cómputo, la aplicación y los datos
+  - id: d
+    texto: Solo en la aplicación, validando las entradas
+  correctas:
+  - c
+  explicacion: 'El pilar de seguridad pide un enfoque por capas: controles en la organización y las cuentas, la red, el cómputo, la aplicación y los datos, para que una debilidad en una capa no ponga en riesgo toda la carga. Es la defensa en profundidad.'
+  distractores:
+    a: El perímetro de red es una de las capas; si solo se protege esa, una debilidad allí expone todo.
+    b: El cifrado protege la capa de datos, pero no controla quién accede ni qué hace la aplicación.
+    d: Validar entradas protege la aplicación, pero deja sin control la red, las cuentas y los datos.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
 - id: R5-034
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.1
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada norma con lo que hace el cliente en AWS para cumplirla.
+  prompts:
+  - id: '1'
+    texto: HIPAA
+  - id: '2'
+    texto: PCI DSS
+  - id: '3'
+    texto: RGPD
+  opciones:
+  - id: a
+    texto: Usar el informe de proveedor de nivel 1 de AWS y certificar su propia aplicación
+  - id: b
+    texto: Elegir la Región donde se guardan los datos personales y atender derechos como la supresión
+  - id: c
+    texto: Aceptar el BAA en AWS Artifact y tratar los datos solo en servicios aptos
+  - id: d
+    texto: Activar Amazon Macie, que certifica el cumplimiento de la cuenta
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - a
+  - - '3'
+    - b
+  explicacion: 'HIPAA: BAA en Artifact y servicios aptos. PCI DSS: AWS aporta su informe de nivel 1, pero la aplicación la certifica el cliente. RGPD: elegir la Región y aplicar los derechos de las personas. En todos, el cumplimiento de la aplicación es del cliente.'
+  distractores:
+    d: Macie descubre datos sensibles en S3, pero no certifica el cumplimiento de ninguna norma.
+  referencia: https://aws.amazon.com/compliance/hipaa-compliance/
+- id: R5-035
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Según la AI Security Scoping Matrix, ¿en qué ámbito el cliente se apoya en protecciones contractuales y de exclusión para que sus datos no se usen para entrenar o mejorar el modelo del proveedor?
+  opciones:
+  - id: a
+    texto: Ámbito 4, modelo ajustado
+  - id: b
+    texto: Ámbito 3, aplicación propia sobre un modelo preentrenado
+  - id: c
+    texto: Ámbito 1, aplicación de consumo
+  - id: d
+    texto: Ámbito 2, aplicación empresarial
+  correctas:
+  - d
+  explicacion: 'En el ámbito 2 se usa una aplicación empresarial de terceros con IA integrada; el cliente se protege con el contrato y con la exclusión (opt-out) para que sus datos no entrenen el modelo del proveedor. Pista: ámbito 2 = SaaS empresarial, protegido por contrato.'
+  distractores:
+    a: En el ámbito 4 el cliente ajusta un modelo con sus propios datos; ya no es la aplicación de un proveedor.
+    b: En el ámbito 3 el cliente construye su propia aplicación sobre un modelo fundacional.
+    c: En el ámbito 1 se usa un servicio público de consumo, sin el contrato empresarial que da esas protecciones.
+  referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
+
+- id: R5-039
   dominio: 5
   tarea: "5.2"
   objetivo: "5.2.3"

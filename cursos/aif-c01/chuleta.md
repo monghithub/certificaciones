@@ -4,7 +4,9 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 
 ## Examen
 
-65 preguntas (50 puntúan, 15 no y no se sabe cuáles), 90 minutos, escala 100–1.000, aprobado con 700. Opción múltiple, respuesta múltiple (acertar todas), ordenación y emparejamiento. No penaliza fallar: **no dejes nada en blanco**. Pesos: D1 20 %, D2 24 %, D3 28 %, D4 14 %, D5 14 %.
+65 preguntas (50 puntúan, 15 no y no se sabe cuáles), 90 minutos, escala 100–1.000, aprobado con 700. La guía vigente (v1.2) enumera dos tipos: **opción múltiple** (1 correcta de 4) y **respuesta múltiple** (2 o más correctas de 5 o más; hay que acertarlas todas). El simulacro usa solo estos dos tipos; la ordenación y el emparejamiento de los bancos de los módulos son práctica del curso. Una pregunta sin responder cuenta como fallo y fallar no resta: **no dejes nada en blanco**. La puntuación es **compensatoria**: no hace falta aprobar cada dominio por separado. Pesos: D1 20 %, D2 24 %, D3 28 %, D4 14 %, D5 14 %.
+
+**Estrategia:** 90 minutos para 65 preguntas son unos 83 segundos por pregunta. En cada una, localiza la restricción que decide (MENOR esfuerzo, MÁS rentable, sin código, en milisegundos) y, en las de respuesta múltiple, cuántas correctas pide el enunciado.
 
 ## D1. Fundamentos de IA y ML ([módulo 01](modulos/01-fundamentos-ia-ml/README.md))
 
@@ -15,6 +17,7 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 - **Servicios de IA:** Textract (documentos), Comprehend (texto: sentimiento, entidades), Transcribe (voz→texto), Polly (texto→voz), Translate, Rekognition (imagen y vídeo), Lex (bots), Personalize (recomendaciones).
 - **Pipeline:** datos → preparación (Glue, DataBrew, EMR) → entrenamiento (SageMaker AI, JumpStart, Canvas sin código) → evaluación → despliegue → monitorización. MLOps: Pipelines, Model Registry, MLflow.
 - **Métricas:** precisión = VP/(VP+FP); exhaustividad (*recall*) = VP/(VP+FN); F1 = media armónica; AUC para clasificación; RMSE/MAE para regresión. Negocio: ROI, coste por usuario.
+- **Más de D1:** contra el sobreajuste, más datos, parada temprana o regularización; **EDA** entiende los datos e **ingeniería de características** los transforma; **deriva de datos** (cambian las entradas) frente a **deriva de concepto** (cambia su relación con el resultado); k-means agrupa, k-NN clasifica. Forecast, Fraud Detector, Kendra y Studio Lab no admiten clientes nuevos.
 - **Trampas:** Clarify, Model Monitor, Ground Truth y A2I ya no admiten clientes nuevos (siguen siendo la respuesta si el enunciado no dice que el cliente es nuevo).
 
 ## D2. Fundamentos de IA generativa ([módulo 02](modulos/02-fundamentos-genai/README.md))
@@ -28,6 +31,7 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 - **Métricas de negocio:** conversión, ingreso medio por usuario (ARPU), valor del ciclo de vida del cliente (CLV), ROI, eficiencia, rendimiento entre dominios.
 - **Servicios:** Bedrock (modelos por API), JumpStart (modelos para desplegar en SageMaker AI), AgentCore (operar agentes: Runtime, Memory, Identity, Gateway, Policy, Observability), Strands Agents (SDK), Quick (asistente para empleados), Kiro (desarrollo agéntico), Transform (modernización).
 - **Infraestructura:** Trainium (entrenar), Inferentia (inferencia, mejor rendimiento por vatio).
+- **Familias generativas:** *transformer* (autoatención; en su forma original, codificador y decodificador), difusión (quitar ruido), GAN (dos redes que compiten), VAE (espacio latente). Los modelos de Bedrock pasan de activo a *legacy* y a fin de vida: hay que migrar a tiempo.
 - **Coste de Bedrock:** bajo demanda (tráfico variable); **lotes** y **Flex** (−50 %) si se puede esperar; **Priority** (+75 %) para la respuesta más rápida; **Provisioned Throughput** (capacidad garantizada, se paga por hora aunque no se use); *prompt caching* para contextos repetidos; **inferencia entre Regiones** para absorber picos (perfil geográfico si hay residencia). Los **modelos personalizados** pagan entrenamiento, almacenamiento mensual e inferencia (bajo demanda si el modelo lo admite o con Provisioned Throughput).
 
 ## D3. Aplicaciones de modelos fundacionales ([módulo 03](modulos/03-modelos-fundacionales/README.md))
@@ -38,6 +42,7 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 - **RAG = datos propios y cambiantes con citas** (Knowledge Bases); *fine-tuning* = tono, formato o tarea fija. Almacenes de Knowledge Bases: OpenSearch (Serverless y gestionado), **Aurora** PostgreSQL, Neptune Analytics, S3 Vectors, Pinecone, MongoDB Atlas y Redis Enterprise Cloud (DynamoDB, ElastiCache y RDS for PostgreSQL tienen búsqueda vectorial pero **no** son almacén de Knowledge Bases).
 - **Prompts:** zero-shot, few-shot (ejemplos del formato), chain-of-thought (pasos), plantillas, *prompt* negativo. Riesgos: inyección, *jailbreak*, fuga de *prompt*, envenenamiento. **Prompt Management:** plantillas con variables y versiones.
 - **Evaluación:** humana (subjetivo), *benchmarks*, métricas automáticas (**ROUGE** resúmenes, **BLEU** traducción, **BERTScore** semántica), *LLM-as-a-judge*. **Bedrock Evaluations:** programática, humana, juez y RAG. Negocio: coste por interacción, tareas completadas, satisfacción.
+- **Knowledge Bases y agentes:** `Retrieve` devuelve fragmentos; `RetrieveAndGenerate`, la respuesta con citas; filtros por metadatos para no mezclar documentos. En Bedrock Agents, la Knowledge Base guarda y recupera y los **grupos de acciones** ejecutan. el nivel Classic de Guardrails solo admite inglés, francés y español.
 
 ## D4. IA responsable ([módulo 04](modulos/04-ia-responsable/README.md))
 
@@ -48,6 +53,7 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 - **Herramientas:** **Clarify** (sesgo y explicaciones SHAP de ML clásico), **Model Monitor** (deriva, también de sesgo), **A2I** (revisión humana de predicciones con poca confianza), **Bedrock Evaluations** (toxicidad, robustez, estereotipos de modelos fundacionales). Las tres primeras ya no admiten clientes nuevos, pero siguen siendo la respuesta esperada si el enunciado no lo menciona.
 - **Riesgos legales:** propiedad intelectual (AWS indemniza por derechos de autor en sus modelos y servicios cubiertos), sesgo, pérdida de confianza, riesgo para el usuario, alucinaciones. **Decisiones con consecuencias → supervisión humana.**
 - **Transparencia:** **Model Cards** (tu modelo: uso previsto, riesgo, evaluación) frente a **AI Service Cards** (servicios de AWS). Interpretable (árbol, regresión) frente a opaco con SHAP. Sostenible: modelo del tamaño justo.
+- **No confundir:** A2I revisa **predicciones** (baja confianza o muestreo) y Ground Truth **etiqueta datos**; Model Cards **documenta** y Model Registry **versiona y aprueba**; *Balance data* (SMOTE) reequilibra clases.
 
 ## D5. Seguridad, cumplimiento y gobierno ([módulo 05](modulos/05-seguridad-gobierno/README.md))
 
@@ -58,7 +64,8 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 - **Gobierno:** **Config** (configuración y reglas), **Inspector** (vulnerabilidades), **Artifact** (informes de AWS), **Trusted Advisor** (recomendaciones), Well-Architected Tool (revisión con lentes). Audit Manager y Role Manager no admiten clientes nuevos.
 - **Datos:** S3 Lifecycle (transición y expiración), CloudWatch Logs (retención indefinida por defecto), residencia con perfiles geográficos de inferencia (el global puede salir de la geografía).
 - **Security Scoping Matrix:** 1 app de consumo, 2 app empresarial, 3 modelo preentrenado por API, 4 modelo ajustado, 5 modelo propio. Más ámbito, más responsabilidad.
+- **Normativas:** HIPAA (BAA en Artifact y servicios aptos), PCI DSS (informe de AWS, tu aplicación la certificas tú), RGPD (Región y derechos). Residencia = dónde están los datos; soberanía = qué leyes se les aplican. Defensa en profundidad = controles en cada capa.
 
 ## Antes de reservar
 
-Haz el [simulacro](modulos/06-simulacro/README.md) y después el conjunto oficial de práctica de AWS Skill Builder (enlace en el [README del curso](README.md#antes-de-reservar-el-examen)). Repasa las trampas del dominio en el que más falles.
+El examen se hace en un centro de Pearson VUE o en línea con supervisión, cuesta 100 USD y se ofrece, entre otros idiomas, en español de España; la certificación vale 3 años (consulta la [página de la certificación](https://aws.amazon.com/certification/certified-ai-practitioner/) antes de reservar). Haz el [simulacro](modulos/06-simulacro/README.md) y después el conjunto oficial de práctica de AWS Skill Builder (enlace en el [README del curso](README.md#antes-de-reservar-el-examen)). Repasa las trampas del dominio en el que más falles.

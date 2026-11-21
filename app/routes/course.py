@@ -65,6 +65,18 @@ def completar(modulo: str, seccion: str, c: Contenido = Depends(requiere_curso),
     return RedirectResponse(f"/c/{c.manifiesto.slug}/modulo/{modulo}/{seccion}", 303)
 
 
+@router.get("/mapa")
+def mapa(request: Request, c: Contenido = Depends(requiere_curso)):
+    grupos = c.mapa_servicios()
+    if not grupos:
+        raise HTTPException(404, "Este curso no tiene mapa de servicios")
+    pagina = c.pagina("mapa-servicios.md")
+    html, ids, diagramas = pagina if pagina else ("", set(), {})
+    ids = set(ids) | {s["entrada"].id for g in grupos for s in g["servicios"]}
+    return render(request, "mapa.html", grupos=grupos, html=html, total=sum(len(g["servicios"]) for g in grupos),
+                  datos_conceptos=datos_json(c.datos_pagina(ids, diagramas)))
+
+
 @router.get("/glosario")
 def glosario(request: Request, c: Contenido = Depends(requiere_curso)):
     entradas = list(c.glosario) if c.glosario else []
