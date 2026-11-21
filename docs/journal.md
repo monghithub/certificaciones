@@ -461,3 +461,23 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - El acceso a los modelos ya no se solicita modelo a modelo.
 - **Revisión independiente:** 1 hallazgo crítico (la tabla de analizadores solo vale para la *customer-managed* Knowledge Base; la gestionada usa siempre su análisis inteligente: corregidos teoría, glosario y dos preguntas), 7 importantes (la ampliación de «exposición» a los datos de entrenamiento no tenía fuente oficial y se retiró; una pregunta de modos de inferencia en un objetivo de coste de personalización, sustituida por una de destilación; las modalidades de Guardrails no estaban en la teoría; pistas de forma en dos preguntas; un alias del glosario que chocaba con la evaluación de RAG; y una mención a los libros en la nota de #11, retirada) y 6 menores. Aplicados todos salvo el de no titular secciones «Revisión con las guías de estudio» en las referencias de los módulos 01 y 02, que se deja como en el módulo 00 (el journal ya documenta la revisión).
 - **Verificación:** validador sin avisos, cobertura (3.1: 37 preguntas y 21 de repaso; 3.2: 24 y 12; 3.3: 16 y 7; 3.4: 24 y 11), 274 pruebas, 47/47 diagramas, markdownlint sin errores y glosario regenerado (281 términos, 3 nuevos).
+
+### Revisión con las guías de estudio: módulo 04 (#35)
+
+- Rama `aif-c01/revision-libros-04`, a partir de la del 03. Material: Elango, capítulo 9; Taulli, capítulo 8; preguntas ELA-C9, TAU-C8 y las de ELA-AT y TAU-PE del dominio 4. Desde esta issue se trabaja en paralelo: el análisis de los módulos 04 y 05 y de la #37 se lanzó a la vez.
+- El módulo ya cubría los 11 objetivos y estaba más al día que los libros. **Hallazgos:**
+
+  | Objetivo | Tema | Estado antes | Qué se hizo |
+  |---|---|---|---|
+  | 4.1.5 | Reequilibrar un conjunto (sobremuestreo, submuestreo, SMOTE con *Balance data* de Canvas) | Faltaba | Párrafo |
+  | 4.1.6 | Parada temprana y regularización contra el sobreajuste | Parcial | Ampliado |
+  | 4.1.7 | Los cuatro tipos de Model Monitor (calidad de datos y del modelo, deriva del sesgo y de la atribución) | Parcial | Párrafo con el sustituto para proyectos nuevos |
+  | 4.1.7 | A2I: flujos integrados para Textract y Rekognition (umbral de confianza o muestreo aleatorio) frente a Ground Truth | Una fila | Párrafo y trampa |
+  | 4.2.2 | Model Registry frente a Model Cards | De pasada | Fila en la tabla y trampa |
+  | 4.2.4 | RLHF como alineamiento con valoraciones humanas | Faltaba | Frase con remisión al módulo 03 |
+  | Resto | Rasgos, Guardrails, riesgos legales, sesgo, transparencia, compromisos, diseño centrado en las personas | Ya cubierto | Sin cambios |
+
+- **Preguntas de los libros:** de 20 revisadas, 11 ya estaban cubiertas, 8 tenían el concepto pero no la trampa y 1 era de otro dominio (RLHF, cubierta en el 03). Se añaden 5 preguntas de repaso (R4-035 a R4-039) y 5 de examen (D4-076 a D4-080). Se descartan, sin fuente oficial de AWS: los principios de diseño centrado en las personas de un curso de formación, las explicaciones contrafactuales y la elección de Región por su huella de carbono (la página del pilar de sostenibilidad se marca como solo de referencia histórica).
+- **Discrepancias de los libros con la documentación vigente:** presentan Clarify, Model Monitor, A2I y Ground Truth como vigentes para cualquier cliente; uno atribuye a Clarify la deriva de la calidad de los datos (es Model Monitor); uno da a entender que Automated Reasoning checks evita errores (solo detecta y solo admite inglés de EE. UU.); y una pregunta tiene opciones que no encajan con el enunciado.
+- **Revisión independiente:** 0 críticos, 12 importantes (una pregunta de examen casi igual a otra existente y otra de repaso que repetía una anterior, rehechas; pistas en enunciados y respuestas que destacaban por su forma; repaso que adelantaba el examen; la lista de integraciones de A2I exageraba lo que dice AWS; RLHF colocado como principio de la guía; trampas sin el sustituto de los servicios cerrados) y 5 menores. Todos aplicados.
+- **Verificación:** validador sin avisos, cobertura (4.1: 53 preguntas y 29 de repaso; 4.2: 27 y 10), 274 pruebas, markdownlint sin errores y glosario regenerado (284 términos, 3 nuevos).

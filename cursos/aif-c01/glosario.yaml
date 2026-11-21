@@ -2276,3 +2276,24 @@
   categoria: concepto
   definicion: "Forma en que una Knowledge Base de Amazon Bedrock lee los documentos al ingerirlos. La Managed Knowledge Base usa un análisis inteligente automático; en una customer-managed se elige: el analizador por defecto solo extrae texto, y Bedrock Data Automation o un modelo fundacional procesan también tablas, gráficos e imágenes."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-advanced-parsing.html
+
+- id: smote
+  termino: SMOTE
+  alias: [Synthetic Minority Oversampling Technique]
+  categoria: tecnica
+  definicion: "Técnica para reequilibrar un conjunto de datos de clasificación binaria generando ejemplos sintéticos de la clase minoritaria. Es una de las opciones de la transformación Balance data de SageMaker Canvas, junto con el sobremuestreo aleatorio (repetir ejemplos de la clase minoritaria) y el submuestreo aleatorio (quitar ejemplos de la mayoritaria)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html
+
+- id: parada-temprana
+  termino: parada temprana
+  alias: [early stopping]
+  categoria: tecnica
+  definicion: "Técnica contra el sobreajuste que detiene el entrenamiento antes de que el modelo empiece a aprender el ruido de los datos de entrenamiento."
+  referencia: https://aws.amazon.com/what-is/overfitting/
+
+- id: deriva-de-la-atribucion
+  termino: deriva de la atribución de características
+  alias: [feature attribution drift]
+  categoria: concepto
+  definicion: "Cambio, respecto a una línea base, en cuánto pesa cada variable en las predicciones de un modelo en producción. Es uno de los cuatro tipos de monitorización de SageMaker Model Monitor (junto con la calidad de los datos, la calidad del modelo y la deriva del sesgo) y se apoya en SageMaker Clarify."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html

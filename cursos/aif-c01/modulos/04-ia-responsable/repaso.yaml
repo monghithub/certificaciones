@@ -1036,3 +1036,139 @@
     c: Va contra la transparencia de las decisiones, que pide avisar de que interviene una IA.
     e: Publicar las reglas exactas de los filtros facilita saltárselos (transparencia frente a seguridad).
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+- id: R4-035
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.5
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada técnica con lo que hace sobre un conjunto de datos desequilibrado.
+  prompts:
+  - id: '1'
+    texto: Sobremuestreo aleatorio
+  - id: '2'
+    texto: Submuestreo aleatorio
+  - id: '3'
+    texto: SMOTE
+  - id: '4'
+    texto: Muestreo estratificado
+  opciones:
+  - id: a
+    texto: Genera ejemplos sintéticos de la clase minoritaria
+  - id: b
+    texto: Repite ejemplos de la clase minoritaria
+  - id: c
+    texto: Divide la población en subgrupos y toma una muestra de cada uno
+  - id: d
+    texto: Quita ejemplos de la clase mayoritaria
+  - id: e
+    texto: Elimina la columna con el atributo sensible
+  correctas:
+  - - '1'
+    - b
+  - - '2'
+    - d
+  - - '3'
+    - a
+  - - '4'
+    - c
+  explicacion: 'Sobremuestrear repite ejemplos de la clase minoritaria; submuestrear quita de la mayoritaria; SMOTE genera ejemplos sintéticos de la minoritaria; el muestreo estratificado toma una muestra de cada subgrupo. Pista: sobre = más, sub = menos, SMOTE = sintéticos.'
+  distractores:
+    e: Quitar el atributo sensible no cambia cuántos ejemplos hay de cada clase, y otras variables pueden seguir actuando como sustituto de ese atributo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html
+- id: R4-036
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: En los flujos integrados de Amazon Augmented AI (A2I) para Textract y Rekognition, ¿qué hace que una predicción vaya a revisión humana?
+  opciones:
+  - id: a
+    texto: Que su confianza baje de un umbral, o que entre en una muestra aleatoria
+  - id: b
+    texto: Que cambien las métricas de deriva del modelo
+  - id: c
+    texto: Que Guardrails bloquee la respuesta
+  - id: d
+    texto: Que el modelo devuelva un error de ejecución
+  correctas:
+  - a
+  explicacion: 'Los flujos integrados de A2I envían a revisión humana las predicciones con confianza por debajo de un umbral o una muestra aleatoria de ellas. Con otros servicios o modelos propios, la aplicación decide cuándo iniciar la revisión. Pista: A2I revisa predicciones dudosas, no datos de entrenamiento.'
+  distractores:
+    b: Vigilar la deriva es tarea de SageMaker Model Monitor, que alerta pero no organiza revisiones humanas.
+    c: Guardrails filtra entradas y salidas de modelos fundacionales; no inicia revisiones de A2I.
+    d: Un error de ejecución no es una predicción dudosa; A2I revisa predicciones válidas con poca confianza o muestreadas.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
+- id: R4-037
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué aspecto vigila SageMaker Model Monitor cuando comprueba si cambia el peso que tiene cada variable en las predicciones?
+  opciones:
+  - id: a
+    texto: La calidad de los datos
+  - id: b
+    texto: La calidad del modelo
+  - id: c
+    texto: La deriva del sesgo
+  - id: d
+    texto: La deriva de la atribución de características
+  correctas:
+  - d
+  explicacion: 'Model Monitor vigila cuatro aspectos: calidad de los datos, calidad del modelo, deriva del sesgo y deriva de la atribución de características, que mide cuánto pesa cada variable en las predicciones. Pista: atribución = qué variable «tiene la culpa» de la predicción.'
+  distractores:
+    a: La calidad de los datos compara las estadísticas de las entradas con una línea base, no el peso de cada variable.
+    b: La calidad del modelo compara las predicciones con el resultado real (exactitud, precisión).
+    c: La deriva del sesgo mide si cambian las métricas de equidad entre grupos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+- id: R4-038
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué idioma admite Automated Reasoning checks de Amazon Bedrock Guardrails?
+  opciones:
+  - id: a
+    texto: Inglés, francés y español, como los filtros de la modalidad Classic
+  - id: b
+    texto: Las decenas de idiomas de la modalidad Standard
+  - id: c
+    texto: Los idiomas que admita el modelo invocado
+  - id: d
+    texto: Solo inglés de EE. UU.
+  correctas:
+  - d
+  explicacion: 'Automated Reasoning checks solo admite inglés de EE. UU.; además solo detecta (devuelve hallazgos) y no bloquea. Pista: es la política de Guardrails con menos idiomas.'
+  distractores:
+    a: Inglés, francés y español son los idiomas de los filtros principales en la modalidad Classic, no de Automated Reasoning checks.
+    b: La modalidad Standard amplía los idiomas de los filtros de contenido, temas denegados y anclaje contextual, no los de Automated Reasoning checks.
+    c: El idioma admitido depende de cada política de Guardrails, no del modelo invocado.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html
+- id: R4-039
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Al aplicar parada temprana contra el sobreajuste, ¿qué ocurre si el entrenamiento se detiene demasiado pronto?
+  opciones:
+  - id: a
+    texto: El modelo puede quedar subajustado
+  - id: b
+    texto: El modelo memoriza el ruido de los datos
+  - id: c
+    texto: Aumenta el desequilibrio de clases
+  - id: d
+    texto: El modelo se vuelve más difícil de explicar
+  correctas:
+  - a
+  explicacion: 'La parada temprana detiene el entrenamiento antes de que el modelo aprenda el ruido, pero si se para demasiado pronto no llega a captar la relación entre entradas y salidas: queda subajustado. Pista: elegir el momento importa.'
+  distractores:
+    b: Memorizar el ruido es lo que pasa si se entrena demasiado tiempo, el problema que la parada temprana intenta evitar.
+    c: El momento de parar no cambia cuántos ejemplos hay de cada clase.
+    d: Parar antes no hace el modelo más complejo ni más opaco.
+  referencia: https://aws.amazon.com/what-is/overfitting/

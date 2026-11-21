@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 281 términos.
+Total: 284 términos.
 
 ## A
 
@@ -219,6 +219,8 @@ Total: 281 términos.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html>
 - **deriva de concepto** (concept drift). *Concepto.* Cambio en la relación entre las entradas y el resultado: los mismos datos ya no predicen lo mismo (por ejemplo, los defraudadores cambian de táctica). Las entradas pueden no cambiar, así que se detecta comparando las predicciones con el resultado real (ground truth). Se corrige reentrenando con datos recientes.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/monitoring.html>
+- **deriva de la atribución de características** (feature attribution drift). *Concepto.* Cambio, respecto a una línea base, en cuánto pesa cada variable en las predicciones de un modelo en producción. Es uno de los cuatro tipos de monitorización de SageMaker Model Monitor (junto con la calidad de los datos, la calidad del modelo y la deriva del sesgo) y se apoya en SageMaker Clarify.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html>
 - **desequilibrio de clases** (class imbalance). *Métrica.* Métrica de sesgo previa al entrenamiento: CI = (na − nd) / (na + nd), con na y nd el número de miembros de cada grupo. Va de −1 a 1; cerca de 0 indica grupos equilibrados.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html>
 - **destilación** (model distillation, distillation, Amazon Bedrock Model Distillation). *Técnica.* Transferir el conocimiento de un modelo grande (maestro) a uno más pequeño, rápido y barato (alumno) para un caso de uso. Bedrock genera respuestas del maestro con los prompts del cliente (o las toma de los registros de invocación) y ajusta al alumno.
@@ -526,6 +528,8 @@ Total: 281 términos.
   - Usar cuando: Cuando el equipo quiere centrarse en su código y no en el sistema operativo ni en la infraestructura.
   - No usar cuando: Cuando hace falta controlar el sistema operativo o el hardware: IaaS (Amazon EC2).
   - Referencia: <https://aws.amazon.com/types-of-cloud-computing/>
+- **parada temprana** (early stopping). *Técnica.* Técnica contra el sobreajuste que detiene el entrenamiento antes de que el modelo empiece a aprender el ruido de los datos de entrenamiento.
+  - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **parámetros de inferencia** (inference parameters, temperatura de muestreo, top-p, Top-p, top-k, Top-k). *Concepto.* Ajustes de cada petición que cambian la generación. La temperatura baja favorece los tokens más probables (respuestas más deterministas) y la alta da más variedad; top-k limita a los k candidatos más probables; top-p, a los que suman una proporción de la probabilidad acumulada; la longitud máxima limita la respuesta.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html>
 - **Amazon Personalize** (Personalize). *Servicio.* Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad.
@@ -737,6 +741,8 @@ Total: 281 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html>
 - **sistema multiagente** (sistemas multiagente, multi-agent). *Concepto.* Varios agentes con roles o especialidades distintos que colaboran en una tarea compleja, bien con un coordinador que delega (flujo centralizado), bien como iguales que negocian y comparten información.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/multi-agent-collaboration.html>
+- **SMOTE** (Synthetic Minority Oversampling Technique). *Técnica.* Técnica para reequilibrar un conjunto de datos de clasificación binaria generando ejemplos sintéticos de la clase minoritaria. Es una de las opciones de la transformación Balance data de SageMaker Canvas, junto con el sobremuestreo aleatorio (repetir ejemplos de la clase minoritaria) y el submuestreo aleatorio (quitar ejemplos de la mayoritaria).
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html>
 - **sobreajuste** (overfitting). *Concepto.* El modelo acierta con los datos de entrenamiento pero no con datos reales porque se ajusta demasiado a ellos y no generaliza. Es un modelo de alta varianza.
   - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **sostenibilidad de la IA** (sostenibilidad). *Concepto.* Reducir el impacto ambiental de una carga de IA: comprobar si la IA generativa hace falta, elegir el modelo del tamaño justo, personalizar de forma eficiente y usar recursos que se ajustan a la demanda (serverless, autoescalado, chips eficientes).
