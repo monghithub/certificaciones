@@ -15,7 +15,7 @@ from jsonschema import Draft202012Validator
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ))
 
-from curso import diagramas, glosario  # noqa: E402
+from curso import diagramas, glosario, simulacro as composicion  # noqa: E402
 from curso.manifiesto import Manifiesto, descubrir  # noqa: E402
 
 TOLERANCIA = 10
@@ -25,6 +25,7 @@ ABSOLUTOS = re.compile(r"\b(siempre|nunca|cualquier[a]?|garantiza[r]?|todos los|
 MIN_ENUNCIADO = 80          # caracteres: por debajo suele ser una pregunta de definición, no un escenario
 MAX_POSICION = 40           # % máximo de respuestas de opción múltiple en una misma letra
 MIN_MC_POSICION = 12        # nº de preguntas de opción múltiple a partir del cual se comprueba el reparto
+ID_SIMULACRO = re.compile(r"^S-\d{3}$")
 SIMILITUD_SIMULACRO = 0.5   # Jaccard (enunciado + correctas) a partir del cual una pregunta del simulacro se parece demasiado
 
 
@@ -176,8 +177,9 @@ def avisos_calidad(p: dict, repaso: bool = False) -> list[str]:
     return avisos
 
 
-def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
+def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool, info: list[str] | None = None):
     errores, avisos, resumen = [], [], {}
+    banco_simulacro: list[dict] = []  # preguntas del simulacro con dominio y tipo, para comprobar la composición
     tareas = tareas_oficiales(curso)
     objetivos = objetivos_oficiales(curso)
     ids_vistos: dict[str, str] = {}
@@ -213,6 +215,13 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
             if pid in ids_vistos:
                 errores.append(f"{rel}:{pid}: id duplicado (también en {ids_vistos[pid]})")
             ids_vistos[pid] = str(rel)
+            es_del_simulacro = f.parent.name == curso.simulacro and not es_repaso
+            if isinstance(pid, str) and es_del_simulacro and not ID_SIMULACRO.match(pid):
+                errores.append(f"{rel}:{pid}: las preguntas del simulacro llevan id S-NNN")
+            elif isinstance(pid, str) and not es_del_simulacro and pid.startswith("S-"):
+                errores.append(f"{rel}:{pid}: los ids S-NNN son exclusivos del simulacro")
+            if es_del_simulacro and isinstance(p.get("dominio"), int) and isinstance(p.get("tipo"), str):
+                banco_simulacro.append(p)
             if p.get("enunciado"):
                 clave = palabras(f"{p['enunciado']} {texto_correctas(p)}")
                 if es_repaso:
@@ -250,6 +259,12 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
                 real = 100 * tipos.get(t, 0) / n
                 if abs(real - obj) > TOLERANCIA:
                     avisos.append(f"{rel}: {t} es el {real:.0f} % (objetivo ~{obj:g} %)")
+    if curso.tiene_simulacro and banco_simulacro:
+        e, r = composicion.comprobar_banco(curso, banco_simulacro)
+        rel = f"cursos/{curso.slug}/modulos/{curso.simulacro}/preguntas.yaml"
+        errores += [f"{rel}: {m}" for m in e]
+        if info is not None:
+            info += [f"{rel}: {m}" for m in r]
     vistos_repaso: dict[str, str] = {}
     for rel, pid, texto in repasos:
         if texto in enunciados_modulos:
@@ -273,8 +288,9 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
     return errores, avisos, resumen
 
 
-def validar(raiz: Path, minimos: bool = True, cursos: list[str] | None = None):
-    """Valida los cursos de raiz/cursos (o solo los indicados). Devuelve (errores, avisos, resumen)."""
+def validar(raiz: Path, minimos: bool = True, cursos: list[str] | None = None, info: list[str] | None = None):
+    """Valida los cursos de raiz/cursos (o solo los indicados). Devuelve (errores, avisos, resumen). Si se pasa `info`,
+    añade en ella las líneas informativas (composición de los intentos del simulacro rotatorio)."""
     raiz = Path(raiz)
     validador = Draft202012Validator(json.loads((raiz / "schemas" / "pregunta.schema.json").read_text(encoding="utf8")))
     manifiestos, errores = descubrir(raiz / "cursos", raiz / "schemas")
@@ -285,7 +301,7 @@ def validar(raiz: Path, minimos: bool = True, cursos: list[str] | None = None):
         errores += [f"curso '{c}' no encontrado o inválido" for c in faltan if not any(e.startswith(f"{c}:") for e in errores)]
         manifiestos = {k: v for k, v in manifiestos.items() if k in cursos}
     for curso in manifiestos.values():
-        e, a, r = _validar_curso(raiz, curso, validador, minimos)
+        e, a, r = _validar_curso(raiz, curso, validador, minimos, info)
         errores += e + glosario.validar(curso.carpeta, raiz / "schemas") + diagramas.validar(curso.carpeta, raiz / "schemas")
         avisos += a
         resumen.update(r)
@@ -298,9 +314,12 @@ def main(argv=None):
     ap.add_argument("--curso", action="append", help="slug del curso a validar (repetible); por defecto, todos")
     ap.add_argument("--sin-minimos", action="store_true", help="no exigir nº mínimo de preguntas")
     a = ap.parse_args(argv)
-    errores, avisos, resumen = validar(a.raiz, minimos=not a.sin_minimos, cursos=a.curso)
+    info: list[str] = []
+    errores, avisos, resumen = validar(a.raiz, minimos=not a.sin_minimos, cursos=a.curso, info=info)
     for r, (n, tipos) in resumen.items():
         print(f"{r}: {n} preguntas {dict(tipos)}")
+    for linea in info:
+        print(linea)
     if not resumen:
         print("No hay bancos de preguntas todavía.")
     for w in avisos:

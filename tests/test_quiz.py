@@ -97,3 +97,22 @@ def test_cargar_repaso(repo):
     escribir(repo, [pregunta_repaso()], fichero="repaso.yaml")
     assert [p["id"] for p in cargar(repo, "aif-c01", repaso=True)] == ["R3-001"]
     assert all(not p["id"].startswith("R") for p in cargar(repo, "aif-c01"))
+
+
+def test_simulacro_reproducible_con_la_composicion_de_la_consola(repo, capsys):
+    from conftest import banco_simulacro, escribir
+    escribir(repo, banco_simulacro({1: (15, 3), 2: (15, 4), 3: (17, 5), 4: (9, 3), 5: (8, 3)}), "06-simulacro")
+    salidas = []
+    for _ in range(2):
+        assert main(["--raiz", str(repo), "--simulacro", "--semilla", "3", "--dominio", "2", "--n", "4"], entrada=lambda: "a") == 0
+        salidas.append(capsys.readouterr().out)
+    assert salidas[0] == salidas[1]
+    assert "[65/65]" in salidas[0] and "/65 (" in salidas[0]
+    assert sum("· Tarea 2.1 ·" in linea for linea in salidas[0].splitlines()) == 16  # ignora --dominio: cuota del Dominio 2
+
+
+def test_simulacro_que_no_se_puede_formar(repo, capsys):
+    from conftest import banco_simulacro, escribir
+    escribir(repo, banco_simulacro({1: (80, 0)}), "06-simulacro")
+    assert main(["--raiz", str(repo), "--simulacro"]) == 1
+    assert "no permite formar el examen" in capsys.readouterr().err

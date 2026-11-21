@@ -172,3 +172,50 @@ def test_cobertura_del_repaso(repo):
     errs, resumen = comprobar(repo, modulo="03", con_preguntas=True)
     assert errs == [f"aif-c01/{MOD}: repaso: el objetivo {objetivos[0]} tiene 0 preguntas, mínimo 1"], errs
     assert any(r.endswith("de repaso") for r in resumen)
+
+
+# ------------------------------------------------------------- simulacro
+def _simulacro(repo, objetivos, minimo=1):
+    f = repo / "cursos" / "aif-c01" / "curso.yaml"
+    if minimo is not None:
+        f.write_text(f.read_text(encoding="utf8").replace("  minimo_simulacro: 65\n",
+                     f"  minimo_simulacro: 65\n  minimo_simulacro_por_objetivo: {minimo}\n"), encoding="utf8")
+    base = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))[0]
+    banco = []
+    for k, o in enumerate(objetivos, 1):
+        p = copy.deepcopy(base)
+        d = int(o.split(".")[0])
+        p.update(id=f"S-{k:03d}", dominio=d, tarea=o.rsplit(".", 1)[0], objetivo=o)
+        banco.append(p)
+    escribir(repo, banco, "06-simulacro")
+
+
+def todos_los_objetivos(repo):
+    out = []
+    for d in range(1, 6):
+        t = (repo / "cursos" / "aif-c01" / "fuentes" / f"dominio-{d}.md").read_text(encoding="utf8")
+        out += list(dict.fromkeys(re.findall(r"\*\*(\d+\.\d+\.\d+)\*\*", t)))
+    return out
+
+
+def test_simulacro_cubre_todos_los_objetivos(repo):
+    objetivos = todos_los_objetivos(repo)
+    assert len(objetivos) == 69
+    _simulacro(repo, objetivos)
+    errores, resumen = comprobar(repo, con_preguntas=True)
+    assert not any("simulacro" in e for e in errores), errores
+    assert "aif-c01/06-simulacro: 69/69 objetivos en el simulacro, 69 preguntas" in resumen
+
+
+def test_simulacro_con_objetivo_sin_pregunta(repo):
+    _simulacro(repo, [o for o in todos_los_objetivos(repo) if o != "1.2.3"])
+    errores, resumen = comprobar(repo, con_preguntas=True)
+    assert "aif-c01/06-simulacro: el objetivo 1.2.3 tiene 0 preguntas en el simulacro, mínimo 1" in errores
+    assert "aif-c01/06-simulacro: 68/69 objetivos en el simulacro, 68 preguntas" in resumen
+    assert main(["--raiz", str(repo), "--preguntas"]) == 1
+
+
+def test_simulacro_sin_minimo_declarado_no_se_comprueba(repo):
+    _simulacro(repo, ["1.1.1"], minimo=None)
+    errores, resumen = comprobar(repo, con_preguntas=True)
+    assert not any("simulacro" in x for x in errores + resumen)

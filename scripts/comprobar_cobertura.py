@@ -111,6 +111,24 @@ def comprobar_repaso(curso: Manifiesto, pref: str, objetivos: list[str], repaso:
     return errores
 
 
+def comprobar_simulacro(curso: Manifiesto) -> tuple[list[str], list[str]]:
+    """Cobertura del banco del simulacro: cada objetivo oficial de los dominios del manifiesto con al menos
+    `banco.minimo_simulacro_por_objetivo` preguntas. Devuelve (errores, lineas_resumen)."""
+    pref = f"{curso.slug}/{curso.simulacro}"
+    objetivos = []
+    for d in curso.dominios:
+        fuente = curso.carpeta / "fuentes" / f"dominio-{d}.md"
+        if fuente.is_file():
+            objetivos += [o for o in objetivos_de(fuente) if o[0].isdigit()]
+    banco = leer_banco(curso.carpeta / "modulos" / curso.simulacro / "preguntas.yaml")
+    por_objetivo = Counter(p.get("objetivo") for p in banco)
+    minimo = curso.minimo_simulacro_por_objetivo
+    errores = [f"{pref}: el objetivo {o} tiene {por_objetivo.get(o, 0)} preguntas en el simulacro, mínimo {minimo}"
+               for o in objetivos if por_objetivo.get(o, 0) < minimo]
+    cubiertos = sum(1 for o in objetivos if por_objetivo.get(o, 0) >= max(minimo, 1))
+    return errores, [f"{pref}: {cubiertos}/{len(objetivos)} objetivos en el simulacro, {len(banco)} preguntas"]
+
+
 def comprobar(raiz: Path, cursos=None, modulo=None, con_preguntas=False):
     manifiestos, errores = descubrir(raiz / "cursos", raiz / "schemas")
     if cursos:
@@ -126,6 +144,12 @@ def comprobar(raiz: Path, cursos=None, modulo=None, con_preguntas=False):
             errores += e
             resumen += r
             comprobados += hecho
+        if (con_preguntas and curso.simulacro and curso.minimo_simulacro_por_objetivo is not None
+                and (not modulo or curso.simulacro.startswith(modulo))):
+            e, r = comprobar_simulacro(curso)
+            errores += e
+            resumen += r
+            comprobados += 1
     if modulo and not comprobados and not errores:
         errores.append(f"módulo '{modulo}' no encontrado en el bloque `cobertura` de los cursos indicados")
     return errores, resumen
