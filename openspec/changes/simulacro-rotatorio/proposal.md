@@ -1,4 +1,4 @@
-> Guía de implementación en `design.md`. Pendiente de revisión humana: no implementar hasta que se apruebe.
+> Guía de implementación en `design.md`. Aprobada por el responsable el 2026-11-21; el código está implementado y el contenido del banco (tarea 5) espera a la fusión del PR #52.
 
 ## Why
 
@@ -19,7 +19,7 @@ El simulacro de AIF-C01 son 65 preguntas fijas (`cursos/aif-c01/modulos/06-simul
   - `validar_preguntas.py`: error si un banco mayor que el examen no permite formar un examen válido (preguntas insuficientes en algún dominio y tipo); error si un id del simulacro no es `S-NNN` o un `S-NNN` aparece fuera del simulacro; resumen con el reparto por intento y las repeticiones de objetivo inevitables.
   - `comprobar_cobertura.py --preguntas`: cobertura de los objetivos oficiales en el banco del simulacro con el mínimo `banco.minimo_simulacro_por_objetivo` (nuevo, opcional; AIF-C01 declara 1).
 - **Manifiesto:** `banco.minimo_simulacro_por_objetivo` en `schemas/curso.schema.json` y `curso/manifiesto.py`. AIF-C01 sube `banco.minimo_simulacro` de 65 a 80.
-- **Contenido (tarea posterior, tras integrar la rama `aif-c01/simulacro-cobertura`):** redactar unas 17 preguntas nuevas `S-066`… para llegar a 82 (18/19/22/12/11 por dominio, con al menos 3/4/5/3/3 de respuesta múltiple) y cubrir los objetivos que falten.
+- **Contenido (tarea posterior, tras integrar la rama `aif-c01/simulacro-cobertura`):** redactar unas 17 preguntas nuevas `S-070`… para llegar a 82 (18/19/22/12/11 por dominio, con al menos 3/4/5/3/3 de respuesta múltiple) y cubrir los objetivos que falten.
 - **Documentación:** README del simulacro y del curso, `docs/consola.md`, `AGENTS.md`, página de tests de la consola, CHANGELOG y journal.
 
 ## Capabilities

@@ -1,6 +1,6 @@
 ## Context
 
-Guía de implementación autocontenida. Las decisiones marcadas como **pendientes de revisión** se confirman con el responsable antes de implementar.
+Guía de implementación autocontenida. **Aprobada por el responsable el 2026-11-21** con las recomendaciones de los puntos abiertos (ver «Decisiones aprobadas» y «Open Questions», ya resueltas).
 
 ### Estado de partida (2026-11-21, `main` en `b7ffcfa`)
 
@@ -33,6 +33,25 @@ Guía de implementación autocontenida. Las decisiones marcadas como **pendiente
 
 ## Decisions
 
+### Decisiones aprobadas (responsable, 2026-11-21)
+
+1. Reparto por dominio **calculado** a partir de los pesos con restos mayores (D2).
+2. Respuesta múltiple por dominio **2/3/4/2/2** (D3).
+3. Banco de **82** preguntas.
+4. Un intento **abandonado cuenta** para la rotación (D5).
+5. La dificultad **solo se informa** (resumen del validador), no se estratifica.
+
+### Respuesta múltiple: 13 por intento, no 14 (decisión de implementación, 2026-11-21)
+
+El banco actual tiene 51 de opción múltiple y 14 de respuesta múltiple, y el de la rama `aif-c01/simulacro-cobertura` (PR #52) también. Pero `examen.distribucion` es 80/20 y el 20 % de 65 son **exactamente 13** (52 + 13): ahí no hay redondeo que decidir. 2/3/4/2/2 suma 13, así que es coherente con el manifiesto y **no se cambia a 3/3/4/2/2** (14 = 21,5 %, que contradiría `examen.distribucion`). Los 51/14 del banco no son un intento: son la composición del banco fijo, que el validador acepta porque se desvía menos de 10 puntos (aviso de reparto) y que en el camino compatible (banco = examen) se sigue usando entera. Cuando el banco sea rotatorio, cada intento tendrá 52/13; el banco necesita al menos 2/3/4/2/2 de respuesta múltiple por dominio (los objetivos de contenido, 3/4/5/3/3, dejan holgura). Si se quisiera 14 por intento, lo coherente sería declarar `examen.distribucion` 78,5/21,5, no forzar la matriz.
+
+### Notas de implementación
+
+- `comprobar_banco` y `extraer` reciben las preguntas como diccionarios (`id`, `dominio`, `tipo`, `objetivo`, `dificultad`); la consola los toma de `Contenido.preguntas` y el validador y la CLI, del YAML.
+- La regla «sin repetir objetivo» trata una pregunta sin `objetivo` como de un objetivo propio.
+- El validador imprime la composición del intento en líneas informativas (no son avisos); `validar()` las devuelve si se le pasa `info`.
+- En AIF-C01 no se declaran todavía `minimo_simulacro: 80` ni `minimo_simulacro_por_objetivo: 1`: entran con el contenido (tarea 5), porque con el banco de 65 la CI fallaría.
+
 ### D1. Módulo compartido `curso/simulacro.py`
 
 Funciones puras, sin dependencias de la consola, usadas por la consola, el validador y la CLI:
@@ -54,7 +73,7 @@ def extraer(m: Manifiesto, banco: list[dict], rnd: random.Random, evitar: set[st
 
 `cuota_d = examen.preguntas × peso_d / 100`, parte entera y las unidades que faltan a los mayores restos (desempate: mayor peso y, después, menor id de dominio). Para AIF-C01: 13 / 15,6 / 18,2 / 9,1 / 9,1 → 13/16/18/9/9, el reparto actual.
 
-*Descartado:* declararlo en `curso.yaml` (p. ej. `examen.reparto: {1: 13, …}`): duplica los pesos y puede desincronizarse; si un curso lo necesitara, se añadiría como opción sin romper nada. **Pendiente de revisión.**
+*Descartado:* declararlo en `curso.yaml` (p. ej. `examen.reparto: {1: 13, …}`): duplica los pesos y puede desincronizarse; si un curso lo necesitara, se añadiría como opción sin romper nada. Aprobado el 2026-11-21.
 
 ### D3. Reparto por tipo: cuotas globales y matriz dominio × tipo determinista
 
@@ -94,7 +113,7 @@ Al iniciar un simulacro, `iniciar` lee el último `Intento` del mismo usuario y 
 
 ### D7. Compatibilidad
 
-- **Intentos antiguos:** su lista de ids (los 65 primeros por orden) sigue siendo válida; reanudar y revisar no cambian. Regla nueva en `AGENTS.md`: los ids `S-NNN` no se renumeran ni se reutilizan; las preguntas nuevas toman el siguiente número libre (`S-066`…). Si se retira una, los intentos antiguos la muestran como «pregunta retirada», como hoy.
+- **Intentos antiguos:** su lista de ids (los 65 primeros por orden) sigue siendo válida; reanudar y revisar no cambian. Regla nueva en `AGENTS.md`: los ids `S-NNN` no se renumeran ni se reutilizan; las preguntas nuevas toman el siguiente número libre (`S-070`… tras el PR #52). Si se retira una, los intentos antiguos la muestran como «pregunta retirada», como hoy.
 - **Banco del tamaño del examen:** mismo comportamiento que hoy (todas, ordenadas por id), sin exigir la matriz de D3; el validador mantiene el aviso de reparto de tipos actual. Así, el código puede desplegarse antes que el contenido: AIF-C01 sigue igual hasta que su banco pase de 65.
 - **Banco menor que el examen:** el simulacro no se ofrece, como hoy.
 - **Intentos en curso durante el despliegue:** conservan su lista.
@@ -142,9 +161,11 @@ Al iniciar un simulacro, `iniciar` lee el último `Intento` del mismo usuario y 
 
 ## Open Questions
 
-1. **Reparto por dominio** calculado (recomendado) o declarado en `curso.yaml`.
-2. **Desempate de la respuesta múltiple:** 2/3/4/2/2 (recomendado: el resto va al dominio con más preguntas) o 3/3/3/2/2 (menor id).
-3. **Tamaño del banco:** 82 (mínimo para cubrir los 69 objetivos con algo de holgura en cada dominio) o hasta 90 (más rotación, unas 8 preguntas más que redactar).
-4. **Rotación:** recomendada (D5). ¿Cuenta el intento anterior aunque se abandonara sin responder? Propuesta: sí, por sencillez.
-5. **Dificultad:** ¿basta con informar o se quiere estratificar? Propuesta: informar.
-6. **Rama paralela:** confirmar con qué cobertura queda; con 13/16/18/9/9 no puede pasar de 62 objetivos, así que el número exacto de preguntas nuevas por objetivo se fija al empezar la tarea 5.
+Resueltas el 2026-11-21:
+
+1. Reparto por dominio: calculado.
+2. Respuesta múltiple: 2/3/4/2/2 (13 por intento, coherente con `examen.distribucion`; ver la decisión de implementación).
+3. Tamaño del banco: 82.
+4. Rotación: sí, y el intento anterior cuenta aunque se abandonara.
+5. Dificultad: solo se informa.
+6. Rama paralela (PR #52, sin fusionar): deja 62/69 objetivos, con `S-066` a `S-069` nuevas (quita `S-004`, `S-017`, `S-018` y `S-038`) y 51/14 por tipo. El banco rotatorio partirá de ahí: faltan 7 objetivos y, como los ids no se reutilizan, las preguntas nuevas empiezan en `S-070`. Para llegar a 82 harán falta 17 (`S-070` a `S-086`).
