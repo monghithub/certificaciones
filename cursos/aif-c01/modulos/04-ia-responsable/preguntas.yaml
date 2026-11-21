@@ -2178,3 +2178,126 @@
     c: Es para respuestas de modelos generativos frente a una fuente; no revisa extracciones de Textract.
     d: Model Monitor vigila modelos alojados en SageMaker AI; no envía casos concretos a revisión humana.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
+- id: D4-076
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una aseguradora, cliente de SageMaker Model Monitor desde hace años, vigila un modelo de tarificación. Las distribuciones de los datos de entrada siguen dentro de la línea base y la equidad entre grupos no ha cambiado, pero el equipo de riesgos sospecha que el modelo ha empezado a apoyarse sobre todo en la antigüedad del vehículo, que al validarlo tenía poca importancia. ¿Qué monitorización detecta ese cambio?
+  opciones:
+  - id: a
+    texto: Deriva de la atribución de características
+  - id: b
+    texto: Calidad de los datos
+  - id: c
+    texto: Calidad del modelo
+  - id: d
+    texto: Deriva del sesgo
+  correctas:
+  - a
+  explicacion: 'La deriva de la atribución de características compara la importancia de cada variable en las predicciones con la de la línea base; detecta que el modelo se apoya en otra variable aunque las entradas y la equidad no hayan cambiado.'
+  distractores:
+    b: La calidad de los datos vigila las estadísticas de las entradas, que el enunciado dice que siguen dentro de la línea base.
+    c: La calidad del modelo compara las predicciones con el resultado real; no explica en qué variables se apoya el modelo.
+    d: La deriva del sesgo vigila las métricas de equidad entre grupos, que no han cambiado.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+- id: D4-077
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo de analistas prepara en SageMaker Canvas los datos de un modelo que clasifica registros como avería o no avería. Solo el 3 % son averías, el modelo casi nunca las detecta y no es posible conseguir más en los próximos meses. Sin escribir código, ¿qué preparación de los datos ayuda MÁS?
+  opciones:
+  - id: a
+    texto: Muestreo estratificado del conjunto actual
+  - id: b
+    texto: La transformación Balance data con SMOTE
+  - id: c
+    texto: Una receta de limpieza de AWS Glue DataBrew
+  - id: d
+    texto: Eliminar las columnas con valores ausentes
+  correctas:
+  - b
+  explicacion: 'Balance data, en SageMaker Canvas, corrige el desequilibrio de clases en problemas binarios; con SMOTE genera ejemplos sintéticos de la clase minoritaria (las averías) sin código.'
+  distractores:
+    a: El muestreo estratificado mantiene la proporción de cada grupo en la muestra; no crea ejemplos nuevos de la clase escasa.
+    c: DataBrew limpia y normaliza datos, pero no genera ejemplos de la clase minoritaria.
+    d: Quitar columnas con valores ausentes puede mejorar la calidad, pero no cambia la proporción de averías.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html
+- id: D4-078
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una red social usa Amazon Rekognition para moderar las fotos que suben los usuarios y es cliente desde hace años de la revisión humana gestionada de AWS. Para auditar el sistema quiere que, además de las imágenes dudosas, una persona revise cada día una muestra al azar de las que Rekognition aprobó con confianza alta. ¿Qué debe configurar?
+  opciones:
+  - id: a
+    texto: Un trabajo de etiquetado de SageMaker Ground Truth con las fotos del día
+  - id: b
+    texto: Métricas de sesgo de SageMaker Clarify sobre las predicciones
+  - id: c
+    texto: Un flujo integrado de Amazon A2I para Rekognition con muestreo aleatorio
+  - id: d
+    texto: Una alarma de SageMaker Model Monitor sobre la calidad del modelo
+  correctas:
+  - c
+  explicacion: 'El flujo integrado de A2I para Rekognition envía a revisión humana tanto las predicciones con confianza por debajo de un umbral como una muestra aleatoria de las demás, que es lo que necesita la auditoría.'
+  distractores:
+    a: Ground Truth etiqueta datos para entrenar; revisar las fotos del día no es una auditoría por muestreo ni se integra con las predicciones de Rekognition.
+    b: Clarify mide sesgo y explica modelos de SageMaker AI; no organiza revisiones humanas de moderación.
+    d: Model Monitor vigila modelos alojados en SageMaker AI; Rekognition es un servicio gestionado y la alarma no lleva fotos a revisión.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
+- id: D4-079
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Las instrucciones del sistema de un asistente bancario le prohíben dar recomendaciones de inversión. Aun así, algunos usuarios lo consiguen reformulando la pregunta con otras palabras. El banco quiere un control de Amazon Bedrock Guardrails que actúe aunque el modelo no siga sus instrucciones. ¿Cuál debe configurar?
+  opciones:
+  - id: a
+    texto: Un filtro de palabras con «inversión» y «invertir»
+  - id: b
+    texto: Un tema denegado que describa las recomendaciones de inversión
+  - id: c
+    texto: El filtro de ataques de prompt
+  - id: d
+    texto: La comprobación de anclaje contextual
+  correctas:
+  - b
+  explicacion: 'Un tema denegado se define con una descripción en lenguaje natural y detecta el asunto aunque el usuario cambie las palabras; Guardrails lo evalúa de forma independiente del modelo y bloquea la entrada o la respuesta.'
+  distractores:
+    a: Un filtro de palabras solo detecta términos exactos; reformular la pregunta sin esas palabras lo esquiva.
+    c: El filtro de ataques de prompt detecta intentos de saltarse o sustituir las instrucciones, no un tema de conversación concreto.
+    d: El anclaje contextual comprueba que la respuesta se apoya en las fuentes; una recomendación de inversión podría estar bien anclada y seguir siendo indebida.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-denied-topics.html
+- id: D4-080
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Un banco, cliente de SageMaker Clarify desde hace años, quiere comprobar antes de entrenar si su conjunto de solicitudes de crédito está desequilibrado entre grupos de edad y, una vez entrenado el modelo, explicar a cada cliente qué variables pesaron en su resultado. ¿Qué DOS capacidades necesita?
+  opciones:
+  - id: a
+    texto: Métricas de sesgo previas al entrenamiento, como el desequilibrio de clases
+  - id: b
+    texto: Monitorización de la deriva de la atribución de características
+  - id: c
+    texto: Explicaciones de cada predicción con valores SHAP
+  - id: d
+    texto: Métricas de sesgo posteriores al entrenamiento, como el impacto dispar
+  - id: e
+    texto: Evaluaciones de modelos fundacionales de Amazon Bedrock
+  correctas:
+  - a
+  - c
+  explicacion: 'Antes de entrenar, Clarify calcula métricas de sesgo de los datos como el desequilibrio de clases; después, explica cada predicción con valores SHAP, que indican cuánto pesó cada variable.'
+  distractores:
+    b: La deriva de la atribución vigila en producción si cambia la importancia de las variables; no explica el resultado de un cliente concreto.
+    d: Las métricas posteriores al entrenamiento miden el sesgo de las predicciones del modelo, no el equilibrio de los datos antes de entrenar.
+    e: Las evaluaciones de Bedrock son para modelos fundacionales, no para un modelo de crédito de ML clásico.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html

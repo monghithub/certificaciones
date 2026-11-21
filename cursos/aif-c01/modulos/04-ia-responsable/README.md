@@ -273,6 +273,8 @@ Un modelo aprende lo que hay en sus datos. Las características que la guía pid
 
 Las buenas prácticas del *Responsible AI Lens* de AWS añaden: comprobar que el conjunto es **representativo** del uso real (si se evalúa con datos que no se parecen al uso real, el sistema parece mejor o peor de lo que es); cubrir los huecos recogiendo más datos o con **muestreo estratificado** (se divide la población en subgrupos y se toma una muestra de cada uno); preferir etiquetas demográficas **declaradas por las personas** a las inferidas; y documentar cada conjunto en una **ficha de datos** (*datasheet*) con su uso previsto, su origen, su forma de recogida y sus sesgos conocidos.
 
+Si faltan ejemplos de un grupo o de una clase y no se pueden recoger más, el conjunto se puede **reequilibrar**. Para problemas de clasificación binaria, la transformación *Balance data* de SageMaker Canvas (antes SageMaker Data Wrangler) ofrece tres técnicas: **sobremuestreo aleatorio** (repetir ejemplos de la clase minoritaria), **submuestreo aleatorio** (quitar ejemplos de la mayoritaria) y **SMOTE** (*Synthetic Minority Oversampling Technique*, que genera ejemplos sintéticos de la minoritaria). Reequilibrar no sustituye a recoger datos representativos: el modelo solo aprende lo que hay en ellos.
+
 *Ejemplo resuelto:* un conjunto de 10 000 solicitudes de préstamo tiene 8 000 de personas de 30 a 55 años (grupo *a*) y 2 000 de otras edades (grupo *d*). El **desequilibrio de clases** (*class imbalance*, CI) que define AWS es (n_a − n_d) / (n_a + n_d) = (8 000 − 2 000) / 10 000 = **0,6**. Un valor cercano a 0 indica grupos equilibrados; 0,6 avisa de que el modelo puede ajustarse peor al grupo pequeño. Si además se aprobó al 70 % del grupo *a* y al 50 % del *d*, la **diferencia en las proporciones de etiquetas** (DPL) es 0,70 − 0,50 = **0,2**: el modelo tenderá a reproducir esa diferencia.
 
 #### Efectos del sesgo y la varianza
@@ -326,7 +328,7 @@ Efectos que pide la guía:
 
 - **Sobre los grupos demográficos:** un grupo con pocos ejemplos se aprende peor. AWS pone el ejemplo de un modelo que predice el rendimiento académico entrenado solo con alumnos de una universidad privada de rentas altas: su exactitud cae con alumnos de universidades públicas.
 - **Inexactitud** (*inaccuracy*): con alto sesgo el modelo se equivoca con todos; con alta varianza, con todo lo que no se parece a lo que vio.
-- **Sobreajuste** (*overfitting*): se detecta comparando el error en entrenamiento y en prueba; se reduce con más datos y más diversos, menos complejidad o regularización y validación cruzada.
+- **Sobreajuste** (*overfitting*): se detecta comparando el error en entrenamiento y en prueba; se reduce con más datos y más diversos, menos complejidad, regularización (L1, L2 o *dropout*), **parada temprana** (*early stopping*, detener el entrenamiento antes de que el modelo aprenda el ruido) y validación cruzada.
 - **Subajuste** (*underfitting*): se corrige con un modelo más capaz, mejores características o más tiempo de entrenamiento.
 
 Relación con la equidad: el desequilibrio de clases hace que el modelo se ajuste mejor al grupo grande y tenga más error, o se sobreajuste, con el pequeño. Un mismo modelo puede estar bien ajustado en promedio y sobreajustado para un subgrupo.
@@ -374,7 +376,8 @@ P:
 - **Auditorías humanas:** que un equipo independiente, sin interés en el proyecto, evalúe con sus propios datos las cuestiones críticas o subjetivas (seguridad, sesgo, experiencia de usuario) y que se investiguen las discrepancias antes de lanzar.
 - **Análisis por subgrupos:** calcular las mismas métricas (exactitud, precisión, *recall*, tasa de aprobación) **por grupo** y comparar con un umbral aceptable, incluidos los grupos que combinan varias características (interseccionales).
 - **Fiabilidad y veracidad en IA generativa:** *contextual grounding check* y Automated Reasoning checks de Guardrails; métricas de corrección, fidelidad (*faithfulness*) y robustez de Bedrock Evaluations; citas de las fuentes en RAG.
-- **Monitorización continua:** el sesgo también aparece **después** del despliegue si los datos reales cambian (por ejemplo, otra población de clientes). Hay que medirlo periódicamente y alertar si supera un umbral.
+- **Monitorización continua:** el sesgo también aparece **después** del despliegue si los datos reales cambian (por ejemplo, otra población de clientes). Hay que medirlo periódicamente y alertar si supera un umbral. SageMaker Model Monitor, para sus clientes actuales, vigila cuatro aspectos: **calidad de los datos**, **calidad del modelo**, **deriva del sesgo** y **deriva de la atribución de características** (cuánto pesa cada variable en las predicciones); las dos últimas se apoyan en SageMaker Clarify. Para proyectos nuevos, AWS remite a sus soluciones abiertas de monitorización con CloudWatch.
+- **Revisión humana de predicciones en producción:** Amazon Augmented AI (A2I), para sus clientes actuales, lleva predicciones a revisión humana. Trae flujos integrados para Amazon Textract y Amazon Rekognition, que se activan cuando la confianza de la predicción baja de un umbral o por **muestreo aleatorio**; con otros servicios o con modelos propios, es la aplicación la que decide cuándo iniciar la revisión. No confundir con Ground Truth, que **etiqueta datos para entrenar**.
 
 *Ejemplo resuelto de análisis por subgrupos:* un modelo de préstamos aprueba al 60 % de las personas de 30 a 55 años y al 45 % del resto. El **impacto dispar** (*disparate impact*, DI) que define AWS es la proporción de resultados positivos del grupo desfavorecido entre la del favorecido: 0,45 / 0,60 = **0,75**. Un valor de 1 indica paridad; por debajo de 1, el grupo *d* recibe menos resultados positivos. Si además la exactitud es del 92 % en un grupo y del 78 % en el otro, la diferencia de exactitud (*accuracy difference*) es de 14 puntos: el modelo se equivoca más con el segundo grupo y merece una revisión antes de usarlo.
 
@@ -409,6 +412,7 @@ En IA generativa, la explicabilidad toma otras formas: **citas** a las fuentes e
 | Herramienta | Qué aporta a la transparencia o la explicabilidad |
 |---|---|
 | **Amazon SageMaker Model Cards** | Documenta en un único sitio el **uso previsto** (y el no previsto), la **calificación de riesgo** (desconocido, bajo, medio o alto), los detalles de entrenamiento, las métricas y los resultados de evaluación. Cada cambio crea una **versión inmutable**; se exporta a PDF para compartirla y se integra con el SageMaker Model Registry para auditoría |
+| **Amazon SageMaker Model Registry** | No es una herramienta de documentación sino de gobierno del ciclo de vida: **versiona y aprueba** los modelos antes de desplegarlos (módulo 01). Una Model Card puede asociarse a una versión registrada |
 | **AWS AI Service Cards** | Fichas que publica AWS sobre sus servicios y modelos (por ejemplo, Amazon Nova o Bedrock Guardrails): casos de uso previstos, limitaciones, decisiones de diseño responsable y buenas prácticas |
 | **Amazon Bedrock Evaluations** | Resultados comparables de exactitud, robustez, toxicidad, estereotipos o nocividad que se pueden publicar y documentar |
 | **Modelos de código abierto** | Pesos y arquitectura visibles: se puede inspeccionar, auditar y desplegar el modelo con control propio (por ejemplo, desde SageMaker JumpStart) |
@@ -486,6 +490,8 @@ El **diseño centrado en las personas** (*human-centered design*) para una IA ex
 - **Explicaciones adaptadas al usuario:** un resumen sencillo para el cliente y el detalle técnico para el analista o el auditor.
 - **Accesibilidad e inclusión:** identificar los requisitos de accesibilidad de cada grupo de usuarios.
 - **Control del usuario:** permitir corregir, deshacer o escalar a una persona.
+
+Relacionado: el aprendizaje por refuerzo con retroalimentación humana (RLHF) usa valoraciones de personas para alinear un modelo con sus preferencias (módulo 03).
 
 ```mermaid
 flowchart LR
@@ -574,3 +580,12 @@ F:
 - Interpretabilidad de modelos de ML (guía prescriptiva): <https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html>
 - Sobreajuste y subajuste: <https://aws.amazon.com/what-is/overfitting/>
 - AWS Inferentia: <https://aws.amazon.com/ai/machine-learning/inferentia/>
+
+Consultadas el 21 de noviembre de 2026:
+
+- *Balance data* (sobremuestreo, submuestreo y SMOTE) en SageMaker Canvas: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html>
+- Deriva del sesgo en Model Monitor con Clarify: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift.html>
+- Técnicas contra el sobreajuste (parada temprana, regularización): <https://aws.amazon.com/what-is/overfitting/>
+- Tipos de monitorización de SageMaker Model Monitor: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html>
+- Amazon Augmented AI (A2I): <https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html>
+- RLHF: <https://aws.amazon.com/what-is/reinforcement-learning-from-human-feedback/>
