@@ -5,7 +5,7 @@
   {% include "_consulta_mensajes.html" %}
   {% if error %}<div class="msg error" role="alert">{{ error }}</div>{% endif %}
   <form class="consulta-form" method="post" action="{{ base }}/consultas/{{ pid }}"
-        hx-post="{{ base }}/consultas/{{ pid }}" hx-target="#consulta-{{ pid }}" hx-swap="outerHTML">
+        hx-post="{{ base }}/consultas/{{ pid }}" hx-target="#consulta-{{ pid }}" hx-swap="outerHTML" hx-disabled-elt="find button">
     <input type="hidden" name="csrf" value="{{ csrf }}">
     {% if intento %}<input type="hidden" name="intento" value="{{ intento }}">{% endif %}
     <label for="consulta-{{ pid }}-texto">{{ 'Sigue preguntando' if mensajes else 'Tu duda sobre esta pregunta' }}</label>

@@ -13,7 +13,8 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse, Response
 from markdown_it import MarkdownIt
-from sqlalchemy import and_, or_, select
+from sqlalchemy import and_, func, or_, select, update
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from ..content import Contenido
@@ -29,12 +30,15 @@ MAX_TEXTO = 2000
 MAX_RESPUESTA = 100_000
 CADUCIDAD_PROCESANDO = timedelta(minutes=15)  # un «procesando» más antiguo se da por perdido (el trabajador murió)
 ESPERANDO = ("pendiente", "procesando")
+MAX_EN_ESPERA = 3  # dudas en cola o en curso por usuario, entre todas sus conversaciones
+MAX_DIA = 30  # dudas por usuario en las últimas 24 h
 ESTADOS = {"pendiente": "En cola", "procesando": "Pensando…", "respondido": "Respondida", "error": "Error"}
 
 
 def _md() -> MarkdownIt:
-    """Markdown de las respuestas de Claude: sin HTML crudo y con los enlaces en otra pestaña."""
-    md = MarkdownIt("commonmark", {"html": False}).enable("table")
+    """Markdown de las respuestas de Claude: sin HTML crudo, sin imágenes (una imagen externa podría filtrar datos al
+    cargarse; `![x](url)` queda como texto y enlace) y con los enlaces en otra pestaña."""
+    md = MarkdownIt("commonmark", {"html": False}).enable("table").disable("image")
 
     def enlace(renderer, tokens, idx, options, env):
         tokens[idx].attrSet("target", "_blank")
@@ -103,6 +107,18 @@ def _es_htmx(request: Request) -> bool:
     return request.headers.get("hx-request") == "true"
 
 
+def _limite(db: Session, usuario: Usuario) -> str | None:
+    """Tope de gasto de la cuota: dudas en espera a la vez y dudas en las últimas 24 h, por usuario."""
+    base = (select(func.count()).select_from(ConsultaMensaje).join(Consulta)
+            .where(Consulta.usuario_id == usuario.id, ConsultaMensaje.rol == "usuario"))
+    if db.scalar(base.where(ConsultaMensaje.estado.in_(ESPERANDO))) >= MAX_EN_ESPERA:
+        return (f"Ya tienes {MAX_EN_ESPERA} dudas esperando respuesta en este u otros tests: espera a que Claude "
+                "responda alguna antes de enviar otra.")
+    if db.scalar(base.where(ConsultaMensaje.creado > ahora() - timedelta(hours=24))) >= MAX_DIA:
+        return f"Has llegado al máximo de {MAX_DIA} dudas en 24 horas, para no agotar la cuota de Claude. Inténtalo más tarde."
+    return None
+
+
 def _volver(c: Contenido, db: Session, consulta: Consulta | None, pid: str, intento: int | None) -> RedirectResponse:
     """Sin htmx: vuelve a la pregunta del test si se conoce, o a la conversación."""
     base = f"/c/{c.manifiesto.slug}"
@@ -143,10 +159,17 @@ def enviar(pid: str, request: Request, texto: str = Form(""), intento: str = For
         error = f"La duda es demasiado larga (máximo {MAX_TEXTO} caracteres)."
     elif consulta and any(m.rol == "usuario" and m.estado in ESPERANDO for m in consulta.mensajes):
         error = "Ya hay una duda en curso en esta conversación: espera a que Claude la responda para enviar otra."
+    else:
+        error = _limite(db, usuario)
     if not error:
         if not consulta:
-            consulta = Consulta(usuario_id=usuario.id, curso=c.manifiesto.slug, pregunta_id=pid, intento_id=iid)
-            db.add(consulta)
+            try:
+                consulta = Consulta(usuario_id=usuario.id, curso=c.manifiesto.slug, pregunta_id=pid, intento_id=iid)
+                db.add(consulta)
+                db.flush()
+            except IntegrityError:  # otra petición simultánea creó la conversación: se usa esa
+                db.rollback()
+                consulta = _consulta(db, usuario, c, pid)
         elif consulta.intento_id is None and iid:
             consulta.intento_id = iid
         consulta.mensajes.append(ConsultaMensaje(rol="usuario", texto=texto, estado="pendiente"))
@@ -168,12 +191,18 @@ def reintentar(pid: str, request: Request, intento: str = Form(""), c: Contenido
     consulta = _consulta(db, usuario, c, pid)
     if not consulta:
         raise HTTPException(404, "Conversación no encontrada")
-    for m in consulta.mensajes:
-        if m.rol == "usuario" and m.estado == "error":
-            m.estado, m.error, m.intentos, m.actualizado = "pendiente", None, 0, ahora()
-    db.commit()
+    error = _limite(db, usuario)
+    if not error:
+        for m in consulta.mensajes:
+            if m.rol == "usuario" and m.estado == "error":
+                m.estado, m.error, m.intentos, m.actualizado = "pendiente", None, 0, ahora()
+        db.commit()
     if _es_htmx(request):
-        return _fragmento(request, "_consulta_mensajes.html", _ctx(request, c, pid, consulta, iid))
+        ctx = _ctx(request, c, pid, consulta, iid)
+        ctx["error_reintento"] = error
+        return _fragmento(request, "_consulta_mensajes.html", ctx)
+    if error:
+        flash(request, error, "error")
     return _volver(c, db, consulta, pid, iid)
 
 
@@ -212,6 +241,10 @@ def duda(cid: int, request: Request, c: Contenido = Depends(requiere_curso), usu
 # ---------------------------------------------------------------- API interna del trabajador
 
 def requiere_token(request: Request):
+    """Token correcto y petición directa: la API solo la usa el trabajador del anfitrión contra 127.0.0.1; lo que
+    llega con X-Forwarded-For viene a través del proxy (la red local) y se rechaza igual que un token incorrecto."""
+    if request.headers.get("x-forwarded-for") is not None or request.headers.get("forwarded") is not None:
+        raise HTTPException(404, "No encontrado")
     esperado = request.app.state.settings.consultas_token or ""
     cabecera = request.headers.get("authorization", "")
     recibido = cabecera[7:].strip() if cabecera[:7].lower() == "bearer " else ""
@@ -229,10 +262,14 @@ async def _cuerpo(request: Request) -> dict:
     return datos
 
 
-def _mensaje_usuario(db: Session, mid: int) -> ConsultaMensaje:
+def _mensaje_en_curso(db: Session, mid: int, datos: dict) -> ConsultaMensaje:
+    """Mensaje del usuario en «procesando» y en el mismo reparto que entregó /siguiente (si no, otro trabajador o un
+    reparto posterior lo tiene: 409)."""
     m = db.get(ConsultaMensaje, mid)
     if not m or m.rol != "usuario":
         raise HTTPException(404, "Mensaje no encontrado")
+    if m.estado != "procesando" or datos.get("reparto") != m.repartos:
+        raise HTTPException(409, "El mensaje no está en curso en este reparto")
     return m
 
 
@@ -254,13 +291,22 @@ def siguiente(request: Request, db: Session = Depends(get_db)):
     catalogo = request.app.state.catalogo
     while True:
         caducada = ahora() - CADUCIDAD_PROCESANDO
-        m = db.execute(select(ConsultaMensaje).where(
-            ConsultaMensaje.rol == "usuario",
-            or_(ConsultaMensaje.estado == "pendiente",
-                and_(ConsultaMensaje.estado == "procesando", ConsultaMensaje.actualizado < caducada)))
-            .order_by(ConsultaMensaje.id).limit(1)).scalar_one_or_none()
-        if not m:
+        repartible = or_(ConsultaMensaje.estado == "pendiente",
+                         and_(ConsultaMensaje.estado == "procesando", ConsultaMensaje.actualizado < caducada))
+        mid = db.execute(select(ConsultaMensaje.id).where(ConsultaMensaje.rol == "usuario", repartible)
+                         .order_by(ConsultaMensaje.id).limit(1)).scalar_one_or_none()
+        if mid is None:
             return Response(status_code=204)
+        # Reparto atómico: solo uno de dos repartos simultáneos cambia la fila; el otro sigue con la siguiente.
+        r = db.execute(update(ConsultaMensaje).where(ConsultaMensaje.id == mid, repartible)
+                       .values(estado="procesando", intentos=ConsultaMensaje.intentos + 1,
+                               repartos=ConsultaMensaje.repartos + 1, actualizado=ahora())
+                       .execution_options(synchronize_session=False))
+        db.commit()
+        if r.rowcount == 0:
+            continue
+        m = db.get(ConsultaMensaje, mid)
+        db.refresh(m)
         k = m.consulta
         c = catalogo.get(k.curso)
         p = c.preguntas.get(k.pregunta_id) if c else None
@@ -268,14 +314,12 @@ def siguiente(request: Request, db: Session = Depends(get_db)):
             m.estado, m.error, m.actualizado = "error", "La pregunta ya no forma parte del curso.", ahora()
             db.commit()
             continue
-        m.estado, m.intentos, m.actualizado = "procesando", (m.intentos or 0) + 1, ahora()
-        db.commit()
         r = None
         if k.intento_id:
             r = db.execute(select(IntentoRespuesta).where(IntentoRespuesta.intento_id == k.intento_id,
                                                           IntentoRespuesta.pregunta_id == k.pregunta_id)).scalar_one_or_none()
         return JSONResponse({"mensaje_id": m.id, "consulta_id": k.id, "sesion_claude": k.sesion_claude, "texto": m.texto,
-                             "intentos": m.intentos, "curso": k.curso, "pregunta": datos_pregunta(c, p),
+                             "intentos": m.intentos, "reparto": m.repartos, "curso": k.curso, "pregunta": datos_pregunta(c, p),
                              "respuesta_usuario": r.respuesta if r else None, "respondida": r is not None})
 
 
@@ -288,9 +332,7 @@ async def respuesta(mid: int, request: Request, db: Session = Depends(get_db)):
         raise HTTPException(400, "Texto no válido")
     if sesion is not None and (not isinstance(sesion, str) or len(sesion) > 64):
         raise HTTPException(400, "Sesión no válida")
-    m = _mensaje_usuario(db, mid)
-    if m.estado not in ESPERANDO:
-        raise HTTPException(409, "El mensaje no está en curso")
+    m = _mensaje_en_curso(db, mid, datos)
     k = m.consulta
     k.mensajes.append(ConsultaMensaje(rol="claude", texto=texto.strip(), estado="respondido", respondida_por=m.id))
     m.estado, m.error, m.actualizado = "respondido", None, ahora()
@@ -305,9 +347,7 @@ async def respuesta(mid: int, request: Request, db: Session = Depends(get_db)):
 async def reintentar_api(mid: int, request: Request, db: Session = Depends(get_db)):
     """Vuelve a la cola (cuota agotada o error transitorio). Con `"contar": false` no gasta un intento."""
     datos = await _cuerpo(request)
-    m = _mensaje_usuario(db, mid)
-    if m.estado not in ESPERANDO:
-        raise HTTPException(409, "El mensaje no está en curso")
+    m = _mensaje_en_curso(db, mid, datos)
     m.estado, m.error, m.actualizado = "pendiente", _motivo(datos), ahora()
     if datos.get("contar") is False:
         m.intentos = max(0, (m.intentos or 0) - 1)
@@ -318,9 +358,7 @@ async def reintentar_api(mid: int, request: Request, db: Session = Depends(get_d
 @api.post("/mensajes/{mid}/error", dependencies=[Depends(requiere_token)])
 async def error_api(mid: int, request: Request, db: Session = Depends(get_db)):
     datos = await _cuerpo(request)
-    m = _mensaje_usuario(db, mid)
-    if m.estado not in ESPERANDO:
-        raise HTTPException(409, "El mensaje no está en curso")
+    m = _mensaje_en_curso(db, mid, datos)
     m.estado, m.error, m.actualizado = "error", _motivo(datos), ahora()
     m.consulta.actualizada = ahora()
     db.commit()

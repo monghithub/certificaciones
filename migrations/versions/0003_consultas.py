@@ -34,6 +34,7 @@ def upgrade():
         sa.Column("texto", sa.Text, nullable=False),
         sa.Column("estado", sa.String(16), nullable=False),
         sa.Column("intentos", sa.Integer, nullable=False, server_default="0"),
+        sa.Column("repartos", sa.Integer, nullable=False, server_default="0"),
         sa.Column("error", sa.Text, nullable=True),
         sa.Column("respondida_por", sa.Integer, sa.ForeignKey("consulta_mensaje.id"), nullable=True),
         sa.Column("creado", sa.DateTime, nullable=False),

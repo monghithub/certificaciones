@@ -106,7 +106,8 @@ class ConsultaMensaje(Base):
     rol: Mapped[str] = mapped_column(String(16))  # usuario | claude
     texto: Mapped[str] = mapped_column(Text)
     estado: Mapped[str] = mapped_column(String(16), default="pendiente", index=True)
-    intentos: Mapped[int] = mapped_column(Integer, default=0)
+    intentos: Mapped[int] = mapped_column(Integer, default=0)  # fallos que cuentan para el tope de 3 (la cuota no cuenta)
+    repartos: Mapped[int] = mapped_column(Integer, default=0)  # veces entregado al trabajador; identifica cada reparto
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     respondida_por: Mapped[int | None] = mapped_column(ForeignKey("consulta_mensaje.id"), nullable=True)
     creado: Mapped[datetime] = mapped_column(DateTime, default=ahora)

