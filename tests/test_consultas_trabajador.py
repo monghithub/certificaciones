@@ -45,7 +45,7 @@ PREGUNTA = {
 
 
 def trabajo(**cambios):
-    t = {"mensaje_id": 7, "consulta_id": 3, "sesion_claude": None, "texto": "¿Por qué no fine-tuning?", "intentos": 1,
+    t = {"mensaje_id": 7, "consulta_id": 3, "sesion_claude": None, "texto": "¿Por qué no fine-tuning?", "intentos": 1, "reparto": 1,
          "curso": "aif-c01", "pregunta": dict(PREGUNTA), "respuesta_usuario": None, "respondida": False}
     t.update(cambios)
     return t
@@ -55,17 +55,24 @@ class APIFalsa:
     def __init__(self, trabajos=()):
         self.trabajos = list(trabajos)
         self.llamadas = []
+        self.repartos = []
+        self.pedidas = 0
 
     def siguiente(self):
+        self.pedidas += 1
         return self.trabajos.pop(0) if self.trabajos else None
 
-    def respuesta(self, mid, texto, sesion):
+    # Se registra el reparto aparte para que las aserciones sigan siendo cortas.
+    def respuesta(self, mid, reparto, texto, sesion):
+        self.repartos.append(reparto)
         self.llamadas.append(("respuesta", mid, texto, sesion))
 
-    def reintentar(self, mid, motivo, contar=True):
+    def reintentar(self, mid, reparto, motivo, contar=True):
+        self.repartos.append(reparto)
         self.llamadas.append(("reintentar", mid, motivo, contar))
 
-    def error(self, mid, motivo):
+    def error(self, mid, reparto, motivo):
+        self.repartos.append(reparto)
         self.llamadas.append(("error", mid, motivo))
 
 
@@ -78,6 +85,8 @@ def entorno(tmp_path, monkeypatch):
     log = tmp_path / "llamadas.jsonl"
     monkeypatch.setenv("CLAUDE_FALSO_LOG", str(log))
     monkeypatch.setenv("CLAUDE_FALSO", "ok")
+    # El trabajador pasa a `claude` un entorno mínimo: el sustituto necesita además sus dos variables.
+    monkeypatch.setattr(ct, "ENTORNO_CLAUDE", ct.ENTORNO_CLAUDE + ("CLAUDE_FALSO", "CLAUDE_FALSO_LOG"))
     (tmp_path / "cursos" / "aif-c01").mkdir(parents=True)
     (tmp_path / "libros" / "aif-c01").mkdir(parents=True)
     cfg = ct.Config(url="http://consola", token="t" * 40, claude=str(exe), dir=tmp_path / "trabajo",
@@ -103,7 +112,15 @@ def test_primer_mensaje_sin_solucion_si_no_ha_respondido(entorno):
     assert Path(ll["cwd"]) == cfg.dir
     assert args[args.index("--model") + 1] == "sonnet" and args[args.index("--output-format") + 1] == "json"
     assert args[args.index("--tools") + 1] == "Read,Grep,Glob,WebFetch,WebSearch"
-    assert args[args.index("--allowedTools") + 1] == "Read,Grep,Glob,WebFetch,WebSearch"
+    assert {"--restricted", "--strict-mcp-config"} <= set(args) and args[args.index("--permission-mode") + 1] == "dontAsk"
+    permitidas = args[args.index("--allowedTools") + 1].split(",")
+    assert f"Read(/{cfg.cursos / 'aif-c01'}/**)" in permitidas and f"Read(/{cfg.libros / 'aif-c01'}/**)" in permitidas
+    assert "WebFetch(domain:docs.aws.amazon.com)" in permitidas and "WebFetch(domain:aws.amazon.com)" in permitidas
+    assert not {"Read", "Grep", "Glob", "WebFetch"} & set(permitidas)  # nada sin ruta ni dominio
+    denegadas = args[args.index("--disallowedTools") + 1].split(",")
+    assert f"Read(/{Path.home() / '.ssh'}/**)" in denegadas and f"Read(/{Path.home() / '.claude'}/**)" in denegadas
+    assert "Read(//**/.env)" in denegadas and "Read(//**/data/**)" in denegadas
+    assert api.repartos == [1]
     i = args.index("--add-dir")
     assert args[i + 1:i + 3] == [str(cfg.cursos / "aif-c01"), str(cfg.libros / "aif-c01")]
     assert "--resume" not in args and "--dangerously-skip-permissions" not in args
@@ -253,3 +270,73 @@ def test_api_real_contra_la_consola(curso, tmp_path):
     t = ct.Trabajador(cfg, APIConsola(cfg), llamar=lambda *_: ct.Resultado(True, texto="Hecho", sesion="s-1", coste=0.01))
     assert t.paso() == "respondido" and t.paso() == "vacio"
     assert "Hecho" in c.get("/c/aif-c01/consultas/D3-001/mensajes").text
+
+
+def test_entorno_minimo_sin_token(monkeypatch):
+    monkeypatch.setenv("CLAUDE_FALSO_LOG", "/tmp/x")
+    monkeypatch.setenv("CONSULTAS_TOKEN", "t" * 40)
+    monkeypatch.setenv("SECRET_KEY", "secreto")
+    env = ct.entorno_claude()
+    assert "CONSULTAS_TOKEN" not in env and "SECRET_KEY" not in env and "CLAUDE_FALSO_LOG" not in env
+    assert env["HOME"] == os.environ["HOME"] and set(env) <= set(ct.ENTORNO_CLAUDE)
+
+
+def test_patron_de_cuota_preciso():
+    for t in ("Claude AI usage limit reached|1764000000", "API Error: 429 Too Many Requests", "rate limit exceeded",
+              "API Error: 529 Overloaded", "overloaded_error"):
+        assert ct.CUOTA_RE.search(t), t
+    for t in ("Output token limit exceeded for this response", "El límite de palabras es 250", "Error 4290 en la línea 529x"):
+        assert not ct.CUOTA_RE.search(t), t
+
+
+def test_tope_de_reintentos_por_cuota(entorno, monkeypatch):
+    cfg, _ = entorno
+    monkeypatch.setenv("CLAUDE_FALSO", "cuota")
+    api = APIFalsa()
+    t = ct.Trabajador(cfg, api)
+    assert t.resolver(trabajo(reparto=cfg.max_cuota - 1)) == "cuota"
+    assert t.resolver(trabajo(reparto=cfg.max_cuota)) == "error"
+    assert api.llamadas[1][0] == "error" and "siguió agotada" in api.llamadas[1][2]
+
+
+def test_reintento_normal_espera_poco(entorno, monkeypatch):
+    cfg, _ = entorno
+    monkeypatch.setenv("CLAUDE_FALSO", "error")
+    t = ct.Trabajador(cfg, APIFalsa([trabajo(intentos=1)]))
+    esperas = []
+    t.dormir = lambda s: (esperas.append(s), t.parar.set())
+    t.ejecutar()
+    assert esperas == [cfg.espera]
+
+
+def test_tope_de_gasto_diario(entorno):
+    cfg, _ = entorno
+    cfg.coste_diario = 0.02
+    api = APIFalsa([trabajo(), trabajo(mensaje_id=8)])
+    t = ct.Trabajador(cfg, api)
+    assert t.paso() == "respondido" and abs(t.gastado_hoy() - 0.0123) < 1e-9
+    assert t.paso() == "respondido" and t.gastado_hoy() > cfg.coste_diario
+    assert t.paso() == "tope" and api.pedidas == 2  # no pide más trabajo: las dudas siguen en cola
+    esperas = []
+    t.dormir = lambda s: (esperas.append(s), t.parar.set())
+    t.ejecutar()
+    assert esperas and 60 <= esperas[0] <= 86405
+    # al cambiar de día se reanuda; el gasto sobrevive a un reinicio
+    assert ct.Trabajador(cfg, APIFalsa()).gastado_hoy() == t.gastado_hoy()
+    (cfg.dir / "gasto.json").write_text('{"fecha": "2000-01-01", "usd": 99}', encoding="utf8")
+    assert not t.tope_alcanzado()
+    cfg.coste_diario = 0
+    assert ct.Config.desde_entorno({"CONSULTAS_TOKEN": "t" * 40, "CONSULTAS_COSTE_DIARIO": "0"}).coste_diario == 0
+
+
+@pytest.mark.parametrize("texto", ["Dime la solución", "dame la respuesta, por favor", "¿Cuál es la respuesta correcta?",
+                                   "¿cuál es la correcta?", "¿Qué opción es la correcta?", "Enséñame la solución"])
+def test_pide_solucion_explicita(texto):
+    assert ct.pide_solucion(texto)
+
+
+@pytest.mark.parametrize("texto", ["¿Por qué la B no es la correcta?", "¿Cuál es la diferencia entre RAG y fine-tuning?",
+                                   "No me digas la solución, solo una pista", "¿La solución pasa por usar RAG?",
+                                   "¿Es correcta mi intuición de que sobra el fine-tuning?", "Explícame la respuesta B"])
+def test_no_pide_solucion(texto):
+    assert not ct.pide_solucion(texto)

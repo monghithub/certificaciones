@@ -16,8 +16,15 @@ Solo biblioteca estándar. Configuración por variables de entorno (ver `docs/co
     CONSULTAS_CURSOS        (recomendada)             carpeta cursos/ desplegada
     CONSULTAS_LIBROS        (opcional)                libros de estudio en Markdown
     CONSULTAS_ESPERA        10                        segundos entre sondeos sin trabajo
-    CONSULTAS_ESPERA_CUOTA  900                       espera tras cuota agotada o error transitorio
+    CONSULTAS_ESPERA_CUOTA  900                       espera tras cuota agotada
     CONSULTAS_TIMEOUT       300                       tiempo máximo de cada llamada a Claude
+    CONSULTAS_COSTE_DIARIO  5                         tope de gasto diario en USD (suma de total_cost_usd); 0 = sin tope
+    CONSULTAS_MAX_CUOTA     24                        repartos máximos de una duda que choca con la cuota
+
+Seguridad: Claude Code se lanza con `--restricted` (sin ajustes, permisos ni plugins del usuario y con las
+herramientas de ficheros confinadas a los directorios de trabajo), `--strict-mcp-config` (sin servidores MCP),
+`--permission-mode dontAsk` (se deniega todo lo no permitido), lectura solo de la carpeta del curso y de los libros,
+WebFetch solo a docs.aws.amazon.com y aws.amazon.com, y con un entorno mínimo (sin CONSULTAS_TOKEN).
 
 Uso: python3 scripts/consultas_trabajador.py [--una-vez]
 """
@@ -35,12 +42,18 @@ from dataclasses import dataclass
 from pathlib import Path
 
 HERRAMIENTAS = "Read,Grep,Glob,WebFetch,WebSearch"  # solo lectura y búsqueda: sin terminal ni edición
+DOMINIOS_WEB = ("docs.aws.amazon.com", "aws.amazon.com")
+ENTORNO_CLAUDE = ("HOME", "PATH", "LANG", "USER", "XDG_RUNTIME_DIR")  # lo único que hereda `claude`
 MAX_INTENTOS = 3
-CUOTA_RE = re.compile(r"limit|overloaded", re.I)  # «usage limit», «rate limit», «limit reached»…
+CUOTA_RE = re.compile(r"usage limit|rate limit|limit reached|overloaded|\b(429|529)\b", re.I)
 SESION_PERDIDA_RE = re.compile(r"no conversation found|session[^\n]{0,80}(not found|does not exist|no existe)", re.I)
+# Solo una petición explícita de la solución: «dime la solución», «dame la respuesta», «¿cuál es la (respuesta) correcta?»…
+# No cuentan «¿por qué la B no es la correcta?» ni «¿cuál es la diferencia…?».
 PIDE_SOLUCION_RE = re.compile(
-    r"soluci[oó]n|respuesta (correcta|buena)|(la|las) correctas?\b|cu[aá]l(es)? (es|son) (la|las) (respuesta|correcta|buena|opci[oó]n)"
-    r"|dime (la|las) respuestas?|qu[eé] (opci[oó]n|respuesta) es", re.I)
+    r"\b(dime|dame|di|ens[eé][ñn]ame|mu[eé]strame|rev[eé]lame|quiero saber|necesito saber)\b[^.?!\n]{0,25}?"
+    r"\b(la|las|cu[aá]l(es)? es|cu[aá]l(es)? son)\s+(soluci[oó]n|soluciones|respuestas?(\s+correctas?)?|correctas?|opci[oó]n(es)? correctas?)"
+    r"|\bcu[aá]l(es)? (es|son) (la|las) (respuestas? |opci[oó]n(es)? )?correctas?"
+    r"|\bqu[eé] (opci[oó]n|respuesta) es (la )?correcta", re.I)
 
 SISTEMA = """Eres el tutor de la consola de estudio del curso {curso} (certificación AWS Certified AI Practitioner, nivel foundational).
 Respondes dudas sobre una pregunta de test concreta, en español de España, claro y breve (máximo ~250 palabras salvo que pidan más),
@@ -67,6 +80,8 @@ class Config:
     espera: float = 10
     espera_cuota: float = 900
     timeout: float = 300
+    coste_diario: float = 5.0
+    max_cuota: int = 24
 
     @classmethod
     def desde_entorno(cls, env=None) -> "Config":
@@ -84,7 +99,9 @@ class Config:
                    dir=ruta("CONSULTAS_DIR") or Path("~/.local/share/consultas-claude").expanduser(),
                    cursos=ruta("CONSULTAS_CURSOS"), libros=ruta("CONSULTAS_LIBROS"),
                    espera=float(env.get("CONSULTAS_ESPERA") or 10), espera_cuota=float(env.get("CONSULTAS_ESPERA_CUOTA") or 900),
-                   timeout=float(env.get("CONSULTAS_TIMEOUT") or 300))
+                   timeout=float(env.get("CONSULTAS_TIMEOUT") or 300),
+                   coste_diario=float(env.get("CONSULTAS_COSTE_DIARIO") or 5) if env.get("CONSULTAS_COSTE_DIARIO") != "0" else 0.0,
+                   max_cuota=int(env.get("CONSULTAS_MAX_CUOTA") or 24))
 
 
 def log(*partes):
@@ -100,13 +117,14 @@ class ErrorAPI(Exception):
 class API:
     def __init__(self, cfg: Config):
         self.cfg = cfg
+        self._abrir = urllib.request.build_opener(urllib.request.ProxyHandler({})).open  # directo, sin proxies del entorno
 
     def _post(self, ruta: str, datos: dict | None = None):
         req = urllib.request.Request(self.cfg.url + "/api/consultas" + ruta, method="POST",
                                      data=json.dumps(datos or {}).encode(),
                                      headers={"Authorization": f"Bearer {self.cfg.token}", "Content-Type": "application/json"})
         try:
-            with urllib.request.urlopen(req, timeout=30) as r:
+            with self._abrir(req, timeout=30) as r:
                 cuerpo = r.read()
                 return r.status, (json.loads(cuerpo) if cuerpo else None)
         except urllib.error.HTTPError as e:
@@ -118,14 +136,15 @@ class API:
         estado, datos = self._post("/siguiente")
         return datos if estado == 200 else None
 
-    def respuesta(self, mid: int, texto: str, sesion: str | None):
-        self._post(f"/mensajes/{mid}/respuesta", {"texto": texto, "sesion_claude": sesion})
+    # `reparto` identifica la entrega de /siguiente: la consola rechaza (409) lo que no sea del reparto en curso.
+    def respuesta(self, mid: int, reparto: int, texto: str, sesion: str | None):
+        self._post(f"/mensajes/{mid}/respuesta", {"reparto": reparto, "texto": texto, "sesion_claude": sesion})
 
-    def reintentar(self, mid: int, motivo: str, contar: bool = True):
-        self._post(f"/mensajes/{mid}/reintentar", {"motivo": motivo, "contar": contar})
+    def reintentar(self, mid: int, reparto: int, motivo: str, contar: bool = True):
+        self._post(f"/mensajes/{mid}/reintentar", {"reparto": reparto, "motivo": motivo, "contar": contar})
 
-    def error(self, mid: int, motivo: str):
-        self._post(f"/mensajes/{mid}/error", {"motivo": motivo})
+    def error(self, mid: int, reparto: int, motivo: str):
+        self._post(f"/mensajes/{mid}/error", {"reparto": reparto, "motivo": motivo})
 
 
 # ---------------------------------------------------------------- prompt
@@ -211,27 +230,55 @@ class Resultado:
     sesion_perdida: bool = False
 
 
-def argumentos(cfg: Config, prompt: str, curso: str, sesion: str | None) -> list[str]:
-    args = [cfg.claude, "-p", prompt, "--model", cfg.modelo, "--output-format", "json",
-            "--tools", HERRAMIENTAS, "--allowedTools", HERRAMIENTAS]
+def _regla(herramienta: str, ruta: Path | str) -> str:
+    """Regla de permisos de Claude Code con ruta absoluta (`//` delante)."""
+    return f"{herramienta}(/{Path(ruta)}/**)"
+
+
+def directorios(cfg: Config, curso: str) -> list[Path]:
     dirs = []
     if cfg.cursos:
-        dirs.append(str(cfg.cursos / curso))
+        dirs.append(cfg.cursos / curso)
     if cfg.libros:
-        dirs.append(str(cfg.libros / curso if (cfg.libros / curso).is_dir() else cfg.libros))
+        dirs.append(cfg.libros / curso if (cfg.libros / curso).is_dir() else cfg.libros)
+    return dirs
+
+
+def permisos(cfg: Config, curso: str, home: Path | None = None) -> tuple[list[str], list[str]]:
+    """Reglas permitidas y denegadas: lectura solo del curso y de los libros, web solo de la documentación de AWS."""
+    home = home or Path.home()
+    permitidas = [_regla(h, d) for d in directorios(cfg, curso) for h in ("Read", "Grep", "Glob")]
+    permitidas += [f"WebFetch(domain:{d})" for d in DOMINIOS_WEB] + ["WebSearch"]
+    denegadas = [_regla(h, d) for h in ("Read", "Grep", "Glob") for d in (home / ".ssh", home / ".claude", home / ".config")]
+    denegadas += [f"{h}(//**/.env)" for h in ("Read", "Grep", "Glob")] + [f"{h}(//**/data/**)" for h in ("Read", "Grep", "Glob")]
+    return permitidas, denegadas
+
+
+def argumentos(cfg: Config, prompt: str, curso: str, sesion: str | None) -> list[str]:
+    permitidas, denegadas = permisos(cfg, curso)
+    args = [cfg.claude, "-p", prompt, "--model", cfg.modelo, "--output-format", "json",
+            "--restricted", "--strict-mcp-config", "--permission-mode", "dontAsk",
+            "--tools", HERRAMIENTAS, "--allowedTools", ",".join(permitidas), "--disallowedTools", ",".join(denegadas)]
+    dirs = directorios(cfg, curso)
     if dirs:
-        args += ["--add-dir", *dirs]
+        args += ["--add-dir", *map(str, dirs)]
     args += ["--append-system-prompt", sistema(curso, cfg)]
     if sesion:
         args += ["--resume", sesion]
     return args
 
 
+def entorno_claude(env=None) -> dict:
+    """Entorno mínimo para `claude`: sin CONSULTAS_TOKEN ni otros secretos del servicio."""
+    env = os.environ if env is None else env
+    return {k: env[k] for k in ENTORNO_CLAUDE if env.get(k)}
+
+
 def llamar_claude(cfg: Config, prompt: str, curso: str, sesion: str | None) -> Resultado:
     cfg.dir.mkdir(parents=True, exist_ok=True)
     try:
         r = subprocess.run(argumentos(cfg, prompt, curso, sesion), cwd=cfg.dir, capture_output=True, text=True,
-                           timeout=cfg.timeout, stdin=subprocess.DEVNULL)
+                           timeout=cfg.timeout, stdin=subprocess.DEVNULL, env=entorno_claude())
     except subprocess.TimeoutExpired:
         return Resultado(False, motivo=f"Claude no respondió en {int(cfg.timeout)} s")
     except OSError as e:
@@ -266,38 +313,75 @@ class Trabajador:
     def dormir(self, segundos: float):
         self.parar.wait(segundos)
 
+    # ---- tope de gasto diario (se guarda en CONSULTAS_DIR/gasto.json para sobrevivir a los reinicios)
+    def _fichero_gasto(self) -> Path:
+        return self.cfg.dir / "gasto.json"
+
+    def gastado_hoy(self) -> float:
+        try:
+            d = json.loads(self._fichero_gasto().read_text(encoding="utf8"))
+            return float(d.get("usd", 0)) if d.get("fecha") == time.strftime("%Y-%m-%d") else 0.0
+        except (OSError, ValueError, TypeError, AttributeError):
+            return 0.0
+
+    def sumar_gasto(self, coste):
+        if not isinstance(coste, (int, float)) or coste <= 0:
+            return
+        self.cfg.dir.mkdir(parents=True, exist_ok=True)
+        total = self.gastado_hoy() + coste
+        self._fichero_gasto().write_text(json.dumps({"fecha": time.strftime("%Y-%m-%d"), "usd": round(total, 6)}), encoding="utf8")
+
+    def tope_alcanzado(self) -> bool:
+        return self.cfg.coste_diario > 0 and self.gastado_hoy() >= self.cfg.coste_diario
+
+    @staticmethod
+    def segundos_hasta_manana() -> float:
+        t = time.localtime()
+        return max(60.0, 86400 - (t.tm_hour * 3600 + t.tm_min * 60 + t.tm_sec) + 5)
+
+    def _llamar(self, prompt, curso, sesion) -> Resultado:
+        r = self.llamar(self.cfg, prompt, curso, sesion)
+        self.sumar_gasto(r.coste)
+        return r
+
     def resolver(self, trabajo: dict) -> str:
         """Resuelve una duda y la devuelve a la consola. Devuelve el resultado: respondido | reintentar | cuota | error."""
         mid, curso, sesion = trabajo["mensaje_id"], trabajo["curso"], trabajo.get("sesion_claude")
+        reparto = trabajo.get("reparto")
         inicio = time.monotonic()
         prompt = prompt_seguimiento(trabajo) if sesion else prompt_inicial(trabajo, self.cfg)
-        r = self.llamar(self.cfg, prompt, curso, sesion)
+        r = self._llamar(prompt, curso, sesion)
         if not r.ok and r.sesion_perdida:  # la sesión ya no existe (directorio cambiado o borrada): se empieza otra con contexto
             log(f"mensaje {mid}: sesión {sesion} no encontrada; se abre una nueva con el contexto")
-            r = self.llamar(self.cfg, prompt_inicial(trabajo, self.cfg), curso, None)
+            r = self._llamar(prompt_inicial(trabajo, self.cfg), curso, None)
         duracion = time.monotonic() - inicio
         coste = f"{r.coste:.4f} USD" if isinstance(r.coste, (int, float)) else "—"
         if r.ok:
-            self.api.respuesta(mid, r.texto, r.sesion)
+            self.api.respuesta(mid, reparto, r.texto, r.sesion)
             resultado = "respondido"
         elif self.parar.is_set():  # parada del servicio a mitad: vuelve a la cola sin gastar un intento
-            self.api.reintentar(mid, "El trabajador se detuvo; se reintentará", contar=False)
+            self.api.reintentar(mid, reparto, "El trabajador se detuvo; se reintentará", contar=False)
             resultado = "reintentar"
-        elif r.cuota:
-            self.api.reintentar(mid, f"Cuota de Claude agotada o servicio saturado: {r.motivo[:200]}", contar=False)
+        elif r.cuota and (reparto or 0) < self.cfg.max_cuota:
+            self.api.reintentar(mid, reparto, f"Cuota de Claude agotada o servicio saturado: {r.motivo[:200]}", contar=False)
             resultado = "cuota"
+        elif r.cuota:
+            self.api.error(mid, reparto, f"La cuota de Claude siguió agotada tras {reparto} intentos: {r.motivo[:200]}")
+            resultado = "error"
         elif trabajo.get("intentos", 1) < MAX_INTENTOS and not r.motivo.startswith("No se pudo ejecutar"):
-            self.api.reintentar(mid, r.motivo)
+            self.api.reintentar(mid, reparto, r.motivo)
             resultado = "reintentar"
         else:
-            self.api.error(mid, r.motivo)
+            self.api.error(mid, reparto, r.motivo)
             resultado = "error"
         log(f"mensaje {mid} (consulta {trabajo.get('consulta_id')}, {curso}/{trabajo['pregunta'].get('id')}): {resultado}"
             f" en {duracion:.1f} s, coste {coste}" + ("" if r.ok else f" — {r.motivo[:200]}"))
         return resultado
 
     def paso(self) -> str:
-        """Un ciclo: pide trabajo y lo resuelve. Devuelve vacio | respondido | reintentar | cuota | error | api."""
+        """Un ciclo: pide trabajo y lo resuelve. Devuelve vacio | respondido | reintentar | cuota | error | api | tope."""
+        if self.tope_alcanzado():  # no se toma ninguna duda: siguen en cola hasta mañana
+            return "tope"
         try:
             trabajo = self.api.siguiente()
             if not trabajo:
@@ -313,10 +397,14 @@ class Trabajador:
             r = self.paso()
             if una_vez:
                 return r
-            if r in ("vacio", "api"):
+            if r in ("vacio", "api", "reintentar"):
                 self.dormir(self.cfg.espera)
-            elif r in ("cuota", "reintentar"):
+            elif r == "cuota":
                 self.dormir(self.cfg.espera_cuota)
+            elif r == "tope":
+                espera = self.segundos_hasta_manana()
+                log(f"tope diario de {self.cfg.coste_diario} USD alcanzado ({self.gastado_hoy():.2f} USD): pausa de {espera / 3600:.1f} h")
+                self.dormir(espera)
         log("trabajador detenido")
 
 
