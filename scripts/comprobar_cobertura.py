@@ -18,6 +18,7 @@ import yaml
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ))
 
+from curso import simulacro  # noqa: E402
 from curso.anclas import ancla, anclas_de  # noqa: E402,F401  (reexportadas: las usan los tests)
 from curso.cobertura import grupo, mapa  # noqa: E402
 from curso.manifiesto import Manifiesto, descubrir  # noqa: E402
@@ -111,7 +112,7 @@ def comprobar_repaso(curso: Manifiesto, pref: str, objetivos: list[str], repaso:
     return errores
 
 
-def comprobar_simulacro(curso: Manifiesto) -> tuple[list[str], list[str]]:
+def comprobar_simulacro(curso: Manifiesto, esquemas: Path) -> tuple[list[str], list[str]]:
     """Cobertura del banco del simulacro: cada objetivo oficial de los dominios del manifiesto con al menos
     `banco.minimo_simulacro_por_objetivo` preguntas. Devuelve (errores, lineas_resumen)."""
     pref = f"{curso.slug}/{curso.simulacro}"
@@ -122,7 +123,7 @@ def comprobar_simulacro(curso: Manifiesto) -> tuple[list[str], list[str]]:
             objetivos += [o for o in objetivos_de(fuente) if o[0].isdigit()]
         else:
             errores.append(f"{pref}: falta la fuente fuentes/dominio-{d}.md")
-    banco = leer_banco(curso.carpeta / "modulos" / curso.simulacro / "preguntas.yaml")
+    banco = simulacro.cargar_banco(curso, esquemas)  # la misma carga y filtrado que la consola y quiz.py
     por_objetivo = Counter(p.get("objetivo") for p in banco)
     minimo = curso.minimo_simulacro_por_objetivo
     errores += [f"{pref}: el objetivo {o} tiene {por_objetivo.get(o, 0)} preguntas en el simulacro, mínimo {minimo}"
@@ -153,7 +154,7 @@ def comprobar(raiz: Path, cursos=None, modulo=None, con_preguntas=False):
             comprobados += hecho
         if (con_preguntas and curso.simulacro and curso.minimo_simulacro_por_objetivo is not None
                 and (not modulo or curso.simulacro.startswith(modulo))):
-            e, r = comprobar_simulacro(curso)
+            e, r = comprobar_simulacro(curso, raiz / "schemas")
             errores += e
             resumen += r
             comprobados += 1
