@@ -385,6 +385,30 @@
       el modelo uno mismo.
     d: Inferentia está diseñada precisamente para la inferencia; su nombre lo indica.
   referencia: https://aws.amazon.com/ai/machine-learning/inferentia/
+
+- id: R4-040
+  dominio: 4
+  tarea: "4.1"
+  objetivo: "4.1.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Desde el punto de vista de la sostenibilidad, ¿qué conviene comprobar antes de elegir un modelo generativo para un caso?"
+  opciones:
+    - id: a
+      texto: "Si un buscador, una regla o un modelo de ML clásico resuelven el problema"
+    - id: b
+      texto: "Si el modelo es el más grande del catálogo"
+    - id: c
+      texto: "Si el modelo admite la ventana de contexto más larga"
+    - id: d
+      texto: "Si el modelo se puede preentrenar desde cero con datos propios"
+  correctas: [a]
+  explicacion: "La primera buena práctica de sostenibilidad es preguntarse si la IA generativa es la solución adecuada: un buscador, una regla o un modelo clásico consumen muchos menos recursos. Pista: el modelo más sostenible es el que no hace falta usar."
+  distractores:
+    b: "Un modelo más grande consume más energía en cada inferencia; se busca el más pequeño que cumple."
+    c: "Una ventana de contexto larga solo importa si el caso la necesita, y procesar más tokens consume más."
+    d: "Preentrenar desde cero tiene una huella enorme; reutilizar un modelo preentrenado la evita."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html"
 - id: R4-013
   dominio: 4
   tarea: '4.1'
@@ -491,6 +515,30 @@
     f: El desequilibrio de clases es una característica de los datos (4.1.5) que puede llevar a resultados sesgados; el riesgo
       legal es el resultado sesgado.
   referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
+
+- id: R4-041
+  dominio: 4
+  tarea: "4.1"
+  objetivo: "4.1.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un asistente promete a un cliente una condición comercial que no existe. ¿Qué medida reduce directamente ese riesgo legal?"
+  opciones:
+    - id: a
+      texto: "Subir la temperatura para que las respuestas sean más variadas"
+    - id: b
+      texto: "Elegir un proveedor con indemnización de propiedad intelectual"
+    - id: c
+      texto: "Usar un filtro de palabras con los nombres de la competencia"
+    - id: d
+      texto: "RAG con citas y la comprobación de grounding contextual de Guardrails"
+  correctas: [d]
+  explicacion: "Prometer algo que no existe es una alucinación. Se mitiga con RAG con citas, el contextual grounding check, Automated Reasoning checks y revisión humana. Pista: identifica primero el riesgo (alucinación) y luego su mitigación."
+  distractores:
+    a: "Una temperatura alta da más variedad, lo que no reduce las alucinaciones."
+    b: "La indemnización cubre reclamaciones de terceros por derechos de autor, no promesas falsas a clientes."
+    c: "Un filtro de palabras bloquea términos exactos; no detecta afirmaciones inventadas."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
 - id: R4-016
   dominio: 4
   tarea: '4.1'
@@ -840,6 +888,30 @@
     b: Las dos se aplican a cualquier tipo de modelo; SHAP, por ejemplo, da explicaciones locales de modelos complejos.
     c: 'Es la definición al revés: lo general es la explicación global y el caso concreto, la local.'
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
+
+- id: R4-045
+  dominio: 4
+  tarea: "4.2"
+  objetivo: "4.2.1"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "En IA generativa, ¿qué forma de explicabilidad muestra los pasos y las herramientas que usó un agente?"
+  opciones:
+    - id: a
+      texto: "Los coeficientes de una regresión lineal"
+    - id: b
+      texto: "Las trazas del agente"
+    - id: c
+      texto: "La matriz de confusión"
+    - id: d
+      texto: "Los filtros de palabras de Guardrails"
+  correctas: [b]
+  explicacion: "En IA generativa la explicabilidad toma otras formas: citas a las fuentes en RAG, trazas que muestran los pasos y herramientas de un agente, razonamiento paso a paso y puntuaciones de confianza. Pista: traza = el rastro de lo que hizo el agente."
+  distractores:
+    a: "Los coeficientes explican un modelo lineal interpretable, no el comportamiento de un agente."
+    c: "La matriz de confusión resume aciertos y errores de un clasificador; no muestra los pasos de un agente."
+    d: "Los filtros de palabras bloquean términos; no explican decisiones."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp07.html"
 - id: R4-028
   dominio: 4
   tarea: '4.2'
@@ -923,6 +995,39 @@
       transparencia: hay que revisarlas.'
     d: Ver los pesos no da explicaciones de cada predicción; para eso se usan herramientas como SHAP.
   referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
+
+- id: R4-046
+  dominio: 4
+  tarea: "4.2"
+  objetivo: "4.2.2"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada necesidad de transparencia con la herramienta o recurso que la cubre."
+  prompts:
+    - id: "1"
+      texto: "El comité de riesgos pide el uso previsto, el nivel de riesgo y las métricas de cada modelo propio"
+    - id: "2"
+      texto: "Conocer el uso previsto y las limitaciones de un servicio de IA de AWS antes de adoptarlo"
+    - id: "3"
+      texto: "Inspeccionar y auditar los pesos del modelo"
+    - id: "4"
+      texto: "Comparar la toxicidad de tres modelos candidatos con datos propios"
+  opciones:
+    - id: a
+      texto: "Modelo de código abierto"
+    - id: b
+      texto: "Amazon Bedrock Evaluations"
+    - id: c
+      texto: "Amazon SageMaker Model Cards"
+    - id: d
+      texto: "AWS AI Service Cards"
+    - id: e
+      texto: "Filtro de información sensible de Guardrails"
+  correctas: [["1", c], ["2", d], ["3", a], ["4", b]]
+  explicacion: "Model Cards documenta los modelos propios (uso previsto, riesgo, evaluación); las AI Service Cards son las fichas que AWS publica sobre sus servicios; un modelo de código abierto deja ver pesos y arquitectura; y Bedrock Evaluations da resultados comparables de toxicidad, estereotipos o robustez."
+  distractores:
+    e: "El filtro de información sensible bloquea o enmascara datos personales; no documenta ni compara modelos."
+  referencia: "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
 - id: R4-031
   dominio: 4
   tarea: '4.2'
@@ -982,6 +1087,54 @@
     e: Si un regulador exige explicar cada decisión y el modelo interpretable cumple el mínimo de rendimiento, suele ser la
       opción preferible.
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
+
+- id: R4-047
+  dominio: 4
+  tarea: "4.2"
+  objetivo: "4.2.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Una aseguradora debe explicar cada rechazo y exige al menos un 85 % de exactitud. Un árbol de decisión da el 86 % y una red profunda el 90 %. ¿Qué modelo elige?"
+  opciones:
+    - id: a
+      texto: "El árbol de decisión, porque cumple el mínimo y se explica por sí mismo"
+    - id: b
+      texto: "La red profunda, porque tiene más exactitud"
+    - id: c
+      texto: "Ninguno, porque los dos tienen errores"
+    - id: d
+      texto: "La red profunda sin explicaciones, porque el requisito es solo de exactitud"
+  correctas: [a]
+  explicacion: "El compromiso entre interpretabilidad y rendimiento se decide midiendo las dos cosas. Si el modelo interpretable cumple el mínimo de rendimiento, suele ser la opción preferible en decisiones reguladas. Si el mínimo fuera el 88 %, habría que usar la red y validar sus explicaciones."
+  distractores:
+    b: "Más exactitud no compensa si el requisito regulatorio de explicar cada rechazo se cumple mejor con un modelo que ya alcanza el mínimo."
+    c: "Los dos superan el mínimo acordado; se fijan mínimos aceptables precisamente para poder decidir."
+    d: "El enunciado exige explicar cada rechazo; el requisito no es solo de exactitud."
+  referencia: "https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/overview.html"
+
+- id: R4-048
+  dominio: 4
+  tarea: "4.2"
+  objetivo: "4.2.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un guardrail muy estricto bloquea casi todo el contenido dañino, pero también muchas respuestas legítimas. ¿Qué compromiso refleja y cómo se gestiona?"
+  opciones:
+    - id: a
+      texto: "Transparencia frente a seguridad; se publican las reglas exactas de los filtros"
+    - id: b
+      texto: "Privacidad frente a exactitud; se eliminan los datos personales"
+    - id: c
+      texto: "Seguridad frente a utilidad; se ajusta la intensidad de los filtros y se prueba con casos reales"
+    - id: d
+      texto: "Interpretabilidad frente a rendimiento; se cambia a un modelo más simple"
+  correctas: [c]
+  explicacion: "Un filtro muy estricto reduce el contenido dañino pero aumenta los falsos positivos, que bloquean respuestas útiles. Se gestiona ajustando la intensidad de cada filtro y probando con casos reales. Pista: bloquear de más también tiene un coste."
+  distractores:
+    a: "Publicar las reglas exactas de los filtros ayudaría a saltárselos; además, el problema descrito no es de transparencia."
+    b: "El compromiso entre privacidad y exactitud trata de quitar datos personales, no del bloqueo de respuestas legítimas."
+    d: "Cambiar de modelo no corrige la configuración del guardrail."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-content-filters.html"
 - id: R4-033
   dominio: 4
   tarea: '4.2'
@@ -1036,6 +1189,56 @@
     c: Va contra la transparencia de las decisiones, que pide avisar de que interviene una IA.
     e: Publicar las reglas exactas de los filtros facilita saltárselos (transparencia frente a seguridad).
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
+
+- id: R4-049
+  dominio: 4
+  tarea: "4.2"
+  objetivo: "4.2.4"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "En el diseño centrado en las personas, ¿qué significa dar control al usuario?"
+  opciones:
+    - id: a
+      texto: "Que el usuario pueda cambiar los pesos del modelo"
+    - id: b
+      texto: "Que el usuario pueda corregir, deshacer o escalar a una persona"
+    - id: c
+      texto: "Que el usuario elija la temperatura de cada respuesta"
+    - id: d
+      texto: "Que el usuario apruebe cada versión del modelo antes del despliegue"
+  correctas: [b]
+  explicacion: "El control del usuario consiste en que pueda corregir el resultado, deshacer una acción o pedir que intervenga una persona. Junto con el feedback y la transparencia de las decisiones, ayuda a confiar en el sistema, o a no hacerlo cuando no conviene."
+  distractores:
+    a: "Modificar el modelo es tarea del equipo que lo desarrolla, no del usuario final."
+    c: "Los parámetros de inferencia los fija la aplicación; no es lo que el diseño centrado en las personas entiende por control."
+    d: "Aprobar versiones forma parte del gobierno interno, no del control que se da al usuario."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+
+- id: R4-050
+  dominio: 4
+  tarea: "4.2"
+  objetivo: "4.2.4"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "Una aseguradora usa IA para proponer la tramitación de siniestros. ¿Qué DOS medidas aplican la supervisión humana donde importa?"
+  opciones:
+    - id: a
+      texto: "Que decida una persona cuando la confianza es baja o el importe es alto"
+    - id: b
+      texto: "Que una persona revise a ciegas cada propuesta, sin explicación ni confianza"
+    - id: c
+      texto: "Mostrar al tramitador los factores principales y la confianza de la propuesta"
+    - id: d
+      texto: "Ocultar al tramitador la propuesta de la IA para no influirle"
+    - id: e
+      texto: "Eliminar la revisión humana para ganar velocidad"
+  correctas: [a, c]
+  explicacion: "La supervisión humana se pone donde un error tiene consecuencias graves (confianza baja, importe alto) y se da al revisor la información que necesita: explicación, confianza y casos parecidos. Pista: revisión selectiva e informada."
+  distractores:
+    b: "Revisar todo sin información es costoso y poco útil: el revisor necesita la explicación y la confianza para decidir bien."
+    d: "Ocultar la propuesta y sus factores va contra la transparencia de las decisiones de la IA."
+    e: "En decisiones con consecuencias hace falta supervisión humana."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raiuc04-bp02.html"
 - id: R4-035
   dominio: 4
   tarea: '4.1'
@@ -1076,6 +1279,30 @@
   distractores:
     e: Quitar el atributo sensible no cambia cuántos ejemplos hay de cada clase, y otras variables pueden seguir actuando como sustituto de ese atributo.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html
+
+- id: R4-042
+  dominio: 4
+  tarea: "4.1"
+  objetivo: "4.1.5"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿En qué consiste el muestreo estratificado que recomienda el Responsible AI Lens para cubrir huecos en un conjunto de datos?"
+  opciones:
+    - id: a
+      texto: "En duplicar al azar los ejemplos del grupo mayoritario"
+    - id: b
+      texto: "En dividir la población en subgrupos y tomar una muestra de cada uno"
+    - id: c
+      texto: "En eliminar los atributos demográficos del conjunto"
+    - id: d
+      texto: "En inferir las etiquetas demográficas con un modelo"
+  correctas: [b]
+  explicacion: "El muestreo estratificado divide la población en subgrupos (estratos) y toma una muestra de cada uno, de modo que ningún grupo queda sin representar. Pista: estratos = subgrupos que se muestrean por separado."
+  distractores:
+    a: "Duplicar ejemplos del grupo mayoritario aumenta el desequilibrio en lugar de corregirlo."
+    c: "Quitar los atributos demográficos no evita el sesgo, porque otras variables pueden actuar como sustituto (proxy), y además impide medirlo."
+    d: "El Responsible AI Lens recomienda preferir etiquetas demográficas declaradas por las personas a las inferidas."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp05.html"
 - id: R4-036
   dominio: 4
   tarea: '4.1'
@@ -1124,6 +1351,30 @@
     b: La calidad del modelo compara las predicciones con el resultado real (exactitud, precisión).
     c: La deriva del sesgo mide si cambian las métricas de equidad entre grupos.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+
+- id: R4-044
+  dominio: 4
+  tarea: "4.1"
+  objetivo: "4.1.7"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Qué caracteriza a una auditoría humana para detectar sesgo, según las buenas prácticas de AWS?"
+  opciones:
+    - id: a
+      texto: "La hace el mismo equipo que entrenó el modelo, con los datos de entrenamiento"
+    - id: b
+      texto: "Sustituye al análisis por subgrupos"
+    - id: c
+      texto: "Se hace una única vez, después del lanzamiento"
+    - id: d
+      texto: "Un equipo independiente, sin interés en el proyecto, evalúa con sus propios datos las cuestiones críticas"
+  correctas: [d]
+  explicacion: "En una auditoría humana, un equipo independiente evalúa con sus propios datos las cuestiones críticas o subjetivas (seguridad, sesgo, experiencia de usuario), y las discrepancias se investigan antes de lanzar. Pista: auditoría = independiente."
+  distractores:
+    a: "El equipo que construyó el modelo tiene interés en el resultado; la auditoría la hace alguien independiente."
+    b: "Es una práctica complementaria; la guía cita las tres: calidad de etiquetas, auditorías y análisis por subgrupos."
+    c: "Las discrepancias se investigan antes del lanzamiento, y el sesgo se sigue vigilando después."
+  referencia: "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp03.html"
 - id: R4-038
   dominio: 4
   tarea: '4.1'
@@ -1172,3 +1423,27 @@
     c: El momento de parar no cambia cuántos ejemplos hay de cada clase.
     d: Parar antes no hace el modelo más complejo ni más opaco.
   referencia: https://aws.amazon.com/what-is/overfitting/
+
+- id: R4-043
+  dominio: 4
+  tarea: "4.1"
+  objetivo: "4.1.6"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un modelo acierta el 99 % con los datos de entrenamiento y el 71 % con los de prueba. ¿Qué medida ayuda a corregirlo?"
+  opciones:
+    - id: a
+      texto: "Usar un modelo más complejo y entrenarlo más tiempo"
+    - id: b
+      texto: "Evaluarlo solo con los datos de entrenamiento"
+    - id: c
+      texto: "Más datos y más diversos, menos complejidad o regularización"
+    - id: d
+      texto: "Eliminar el conjunto de prueba para evitar la diferencia"
+  correctas: [c]
+  explicacion: "Una gran diferencia entre entrenamiento y prueba indica sobreajuste (alta varianza): el modelo memoriza en lugar de generalizar. Se reduce con más datos y más diversos, menos complejidad o regularización, y validación cruzada. Pista: memoriza → simplifica o dale más variedad."
+  distractores:
+    a: "Un modelo más complejo y más entrenamiento corrigen el subajuste; aquí agravarían el sobreajuste."
+    b: "Evaluar con los datos de entrenamiento oculta el problema, porque ahí el modelo acierta casi todo."
+    d: "Sin conjunto de prueba no se puede detectar el sobreajuste, pero el modelo seguiría fallando con datos nuevos."
+  referencia: "https://aws.amazon.com/what-is/overfitting/"

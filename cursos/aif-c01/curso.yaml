@@ -25,7 +25,7 @@ banco:
   distribucion: {multiple_choice: 60, multiple_response: 20, ordering: 10, matching: 10}
 repaso:
   minimo_por_modulo: 20
-  minimo_por_objetivo: 2
+  minimo_por_objetivo: 4
   previos: conocimientos-previos.md
 cobertura:
   00-base-aws: conocimientos-previos.md

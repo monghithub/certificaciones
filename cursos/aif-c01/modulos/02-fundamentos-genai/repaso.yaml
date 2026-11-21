@@ -159,6 +159,54 @@
     e: "La generación de código (funciones, pruebas, documentación) es un caso de uso de la IA generativa."
   referencia: https://aws.amazon.com/what-is/generative-ai/
 
+- id: R2-047
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué tipo de tarea es la que mejor encaja con la IA generativa?"
+  opciones:
+    - id: a
+      texto: "Predecir la demanda de la semana próxima a partir de datos tabulares"
+    - id: b
+      texto: "Producir o transformar contenido, como resumir contratos o redactar fichas de producto"
+    - id: c
+      texto: "Calcular el importe exacto de una nómina"
+    - id: d
+      texto: "Detectar transacciones fraudulentas con un histórico etiquetado"
+  correctas: [b]
+  explicacion: "La IA generativa aporta valor cuando la tarea consiste en producir o transformar contenido en lenguaje natural o en otros medios: resumir, traducir, redactar, generar código o imágenes. Pista: si el resultado es contenido nuevo, piensa en generativa."
+  distractores:
+    a: "Predecir un número con datos tabulares encaja mejor con el ML tradicional, más barato, explicable y determinista."
+    c: "Un cálculo exacto se resuelve con una fórmula determinista; ni la IA generativa ni el ML son la herramienta."
+    d: "Clasificar transacciones con ejemplos etiquetados es un problema de ML tradicional (clasificación)."
+  referencia: "https://aws.amazon.com/what-is/generative-ai/"
+
+- id: R2-048
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.2"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Una tienda quiere recomendar productos a partir del historial de compras y que el mensaje de cada recomendación suene personal. ¿Qué combinación encaja?"
+  opciones:
+    - id: a
+      texto: "Solo un modelo fundacional, que sustituye al motor de recomendaciones"
+    - id: b
+      texto: "Amazon Comprehend para recomendar y Amazon Polly para el mensaje"
+    - id: c
+      texto: "Amazon Personalize para las recomendaciones y un modelo fundacional para redactar el mensaje"
+    - id: d
+      texto: "Amazon Translate para recomendar y Amazon Lex para el mensaje"
+  correctas: [c]
+  explicacion: "Para recomendar a partir del historial de usuarios, el servicio gestionado es Amazon Personalize. La IA generativa no lo sustituye, sino que lo complementa: por ejemplo, redactando el mensaje personalizado. Pista: recomendar = Personalize; redactar = generativa."
+  distractores:
+    a: "La IA generativa puede explicar o personalizar recomendaciones, pero el motor que aprende del historial es Amazon Personalize."
+    b: "Comprehend analiza texto (entidades, opiniones) y Polly convierte texto en voz; ninguno recomienda productos."
+    d: "Translate traduce y Lex construye chatbots; ninguno genera recomendaciones a partir del historial."
+  referencia: "https://aws.amazon.com/what-is/generative-ai/"
+
 # ---------------------------------------------------------------- 2.1.3
 - id: R2-007
   dominio: 2
@@ -331,6 +379,63 @@
     d: "El corpus de preentrenamiento se usó para crear el modelo; no se envía en las peticiones y no cabría en la ventana de contexto."
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-context.html
 
+- id: R2-052
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.5"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Por qué necesita una aplicación ingeniería de contexto aunque el modelo sea muy capaz?"
+  opciones:
+    - id: a
+      texto: "Porque el modelo no tiene memoria entre peticiones y solo sabe lo que aprendió en el entrenamiento y lo que contiene la llamada"
+    - id: b
+      texto: "Porque el modelo se reentrena con cada pregunta y necesita datos limpios"
+    - id: c
+      texto: "Porque sin ella el modelo no puede generar texto en español"
+    - id: d
+      texto: "Porque es la única forma de reducir la temperatura del modelo"
+  correctas: [a]
+  explicacion: "Un modelo fundacional no recuerda las llamadas anteriores. La ingeniería de contexto decide qué información llega en cada llamada (instrucciones, historial, memoria, conocimiento recuperado, herramientas, ejemplos), en qué orden y con qué tamaño. Pista: lo que no está en la llamada, el modelo no lo sabe."
+  distractores:
+    b: "Responder a una pregunta es inferencia; el modelo no se reentrena con cada petición."
+    c: "El idioma depende de las capacidades del modelo, no de la ingeniería de contexto."
+    d: "La temperatura es un parámetro de inferencia que se fija en la llamada; no tiene relación con el contexto."
+  referencia: "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-context.html"
+
+- id: R2-053
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.5"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada problema de una aplicación con la medida de ingeniería de contexto que lo resuelve."
+  prompts:
+    - id: "1"
+      texto: "El modelo inventa datos de la empresa"
+    - id: "2"
+      texto: "El usuario tiene que repetir lo que ya dijo en sesiones anteriores"
+    - id: "3"
+      texto: "La conversación crece y el coste se dispara"
+    - id: "4"
+      texto: "El mismo documento largo se envía en cada pregunta"
+  opciones:
+    - id: a
+      texto: "Resumir o recortar el historial y enviar solo lo relevante"
+    - id: b
+      texto: "Añadir los fragmentos relevantes recuperados con RAG"
+    - id: c
+      texto: "Colocar el contenido estático al principio y usar prompt caching"
+    - id: d
+      texto: "Mantener una memoria de largo plazo, por ejemplo con AgentCore Memory"
+    - id: e
+      texto: "Subir la temperatura del modelo"
+  correctas: [["1", b], ["2", d], ["3", a], ["4", c]]
+  explicacion: "RAG aporta datos fiables de la empresa; la memoria de largo plazo conserva lo aprendido entre sesiones; resumir el historial contiene el coste; y el prompt caching abarata un prefijo largo que se repite. Pista: cada problema se arregla cambiando qué información llega al modelo."
+  distractores:
+    e: "Subir la temperatura solo hace las respuestas más variadas; no aporta información ni reduce el coste."
+  referencia: "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-context.html"
+
 # ---------------------------------------------------------------- 2.1.6
 - id: R2-014
   dominio: 2
@@ -406,6 +511,30 @@
     e: "Un único agente puede bastar; los sistemas multiagente reparten tareas complejas por roles, pero añaden coste, latencia y puntos de fallo."
   referencia: https://aws.amazon.com/what-is/agentic-ai/
 
+- id: R2-054
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.6"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "En el uso de herramientas (tool use) de un agente, ¿quién ejecuta la herramienta?"
+  opciones:
+    - id: a
+      texto: "El propio modelo, que se conecta directamente a la API"
+    - id: b
+      texto: "El usuario, que copia los parámetros y llama a la API a mano"
+    - id: c
+      texto: "El proveedor del modelo, desde sus servidores"
+    - id: d
+      texto: "La aplicación o la plataforma, que devuelve el resultado al modelo"
+  correctas: [d]
+  explicacion: "El modelo no ejecuta nada por sí mismo: decide qué herramienta llamar y con qué parámetros; la aplicación o la plataforma la ejecuta y le devuelve el resultado para que continúe. Pista: el modelo decide, la aplicación ejecuta."
+  distractores:
+    a: "El modelo solo genera la petición de uso de la herramienta; no tiene acceso directo a las APIs."
+    b: "El agente automatiza esa llamada; si el usuario tuviera que hacerla, no habría agente."
+    c: "En Amazon Bedrock, los proveedores de modelos no tienen acceso a las cuentas donde se ejecutan los modelos ni a los datos del cliente."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html"
+
 # ---------------------------------------------------------------- 2.2.1
 - id: R2-017
   dominio: 2
@@ -454,6 +583,65 @@
     b: "Eso sería determinismo, y la IA generativa es no determinista porque muestrea el siguiente token."
     c: "Eso es la adaptabilidad, otra ventaja distinta."
   referencia: https://aws.amazon.com/what-is/generative-ai/
+
+- id: R2-055
+  dominio: 2
+  tarea: "2.2"
+  objetivo: "2.2.1"
+  tipo: matching
+  dificultad: baja
+  enunciado: "Empareja cada ejemplo con la ventaja de la IA generativa que ilustra."
+  prompts:
+    - id: "1"
+      texto: "El mismo modelo resume incidencias, redacta correos y clasifica reseñas"
+    - id: "2"
+      texto: "Atención al cliente que responde en segundos a cualquier hora"
+    - id: "3"
+      texto: "Un asistente que pide los datos que faltan para tramitar una solicitud"
+    - id: "4"
+      texto: "Borradores de fichas de producto creados al momento"
+  opciones:
+    - id: a
+      texto: "Capacidad de respuesta (responsiveness)"
+    - id: b
+      texto: "Generación de contenido"
+    - id: c
+      texto: "Adaptabilidad"
+    - id: d
+      texto: "Capacidades conversacionales"
+    - id: e
+      texto: "Interpretabilidad"
+  correctas: [["1", c], ["2", a], ["3", d], ["4", b]]
+  explicacion: "Adaptabilidad: un modelo para muchas tareas cambiando el prompt. Capacidad de respuesta: segundos y 24/7. Conversación: entiende el lenguaje natural y mantiene el hilo. Generación de contenido: crea texto, imágenes, código o audio nuevos."
+  distractores:
+    e: "La interpretabilidad es una limitación de la IA generativa, no una ventaja: los modelos se comportan como cajas negras."
+  referencia: "https://aws.amazon.com/what-is/generative-ai/"
+
+- id: R2-056
+  dominio: 2
+  tarea: "2.2"
+  objetivo: "2.2.1"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "Además de sus ventajas principales, ¿qué DOS beneficios de la IA generativa cita AWS?"
+  opciones:
+    - id: a
+      texto: "Acelera la investigación, por ejemplo resumiendo y explorando alternativas"
+    - id: b
+      texto: "Elimina la necesidad de revisión humana en decisiones críticas"
+    - id: c
+      texto: "Mejora la experiencia de cliente con personalización"
+    - id: d
+      texto: "Produce respuestas idénticas ante la misma pregunta"
+    - id: e
+      texto: "Hace los modelos fáciles de explicar ante un regulador"
+  correctas: [a, c]
+  explicacion: "AWS cita también que la IA generativa acelera la investigación, mejora la experiencia de cliente mediante la personalización y optimiza procesos de negocio. Pista: son beneficios de negocio, no promesas de exactitud."
+  distractores:
+    b: "Las alucinaciones obligan a mantener la verificación humana en las decisiones críticas."
+    d: "Los modelos generativos no son deterministas: la misma pregunta puede dar respuestas distintas."
+    e: "La poca interpretabilidad es una de sus limitaciones."
+  referencia: "https://aws.amazon.com/what-is/generative-ai/"
 
 # ---------------------------------------------------------------- 2.2.2
 - id: R2-019
@@ -808,6 +996,63 @@
     e: "Configurar los permisos (IAM) es responsabilidad del cliente según el modelo de responsabilidad compartida."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
 
+- id: R2-062
+  dominio: 2
+  tarea: "2.3"
+  objetivo: "2.3.2"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada ejemplo con la ventaja de los servicios de IA generativa de AWS que ilustra."
+  prompts:
+    - id: "1"
+      texto: "Un prototipo listo en días gracias a RAG, Guardrails y evaluaciones ya disponibles"
+    - id: "2"
+      texto: "Un piloto que solo cuesta los tokens consumidos, sin inversión inicial"
+    - id: "3"
+      texto: "AWS se ocupa de servidores, escalado y parches y el equipo se centra en la lógica de negocio"
+    - id: "4"
+      texto: "Probar varios modelos de distintos proveedores en el playground en una tarde"
+  opciones:
+    - id: a
+      texto: "Eficiencia"
+    - id: b
+      texto: "Velocidad de comercialización (speed to market)"
+    - id: c
+      texto: "Accesibilidad"
+    - id: d
+      texto: "Rentabilidad"
+    - id: e
+      texto: "Interpretabilidad del modelo"
+  correctas: [["1", b], ["2", d], ["3", a], ["4", c]]
+  explicacion: "Componentes listos aceleran la llegada al mercado; el pago por uso sin inversión inicial es rentabilidad; delegar la operación en AWS es eficiencia; y tener muchos modelos tras una misma API es accesibilidad."
+  distractores:
+    e: "La interpretabilidad no es una ventaja que aporten los servicios gestionados: los modelos fundacionales siguen siendo difíciles de explicar."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
+
+- id: R2-063
+  dominio: 2
+  tarea: "2.3"
+  objetivo: "2.3.2"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué ventaja de AWS permite a una empresa cambiar a un modelo más barato cuando la calidad lo permite y medir el resultado?"
+  opciones:
+    - id: a
+      texto: "Menor barrera de entrada"
+    - id: b
+      texto: "Accesibilidad"
+    - id: c
+      texto: "Cumplir los objetivos de negocio"
+    - id: d
+      texto: "Eficiencia"
+  correctas: [c]
+  explicacion: "La ventaja de cumplir los objetivos de negocio consiste en poder elegir y cambiar de modelo según la calidad y el coste, y medir los resultados. Pista: la decisión se ajusta al objetivo del negocio, no al modelo de moda."
+  distractores:
+    a: "La menor barrera de entrada se refiere a empezar sin experiencia en ML ni infraestructura."
+    b: "La accesibilidad es tener modelos de muchos proveedores tras una misma API; facilita el cambio, pero la ventaja que describe el enunciado es ajustar la elección al objetivo."
+    d: "La eficiencia es que AWS opere servidores, escalado y parches."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
+
 # ---------------------------------------------------------------- 2.3.3
 - id: R2-032
   dominio: 2
@@ -1008,6 +1253,54 @@
     c: Las peticiones fallan cuando el modelo llega al fin de vida (EOL), el estado siguiente.
     d: El estado legacy no limita el tipo de inferencia; limita la adopción por clientes nuevos y anuncia la retirada.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+
+- id: R2-049
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.3"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "En el ciclo de vida de un modelo fundacional, ¿en qué etapa se comprueban la calidad, la seguridad y el sesgo antes de pasar a producción?"
+  opciones:
+    - id: a
+      texto: "Evaluación"
+    - id: b
+      texto: "Preentrenamiento"
+    - id: c
+      texto: "Selección de datos"
+    - id: d
+      texto: "Retroalimentación"
+  correctas: [a]
+  explicacion: "La evaluación comprueba calidad, seguridad y sesgo antes del despliegue, por ejemplo con casos que el modelo no ha visto. La suele hacer la empresa que usa el modelo. Pista: antes de desplegar, se evalúa."
+  distractores:
+    b: "El preentrenamiento es el entrenamiento autosupervisado con datos masivos que hace el proveedor; no es una comprobación previa a producción."
+    c: "La selección de datos reúne y depura el corpus de entrenamiento o de ajuste; no mide el resultado."
+    d: "La retroalimentación recoge el uso real después del despliegue para la siguiente mejora."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+
+- id: R2-050
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Una empresa que usa un modelo fundacional existente en Amazon Bedrock, ¿en qué etapa del ciclo de vida empieza normalmente?"
+  opciones:
+    - id: a
+      texto: "En el preentrenamiento del modelo"
+    - id: b
+      texto: "En el despliegue, porque las demás etapas las hace el proveedor"
+    - id: c
+      texto: "En la retroalimentación de los usuarios del proveedor"
+    - id: d
+      texto: "En la selección del modelo"
+  correctas: [d]
+  explicacion: "Quien crea el modelo recorre todas las etapas; una empresa que usa un modelo existente empieza por seleccionarlo y, si el prompt no basta, lo ajusta, lo evalúa, lo despliega y recoge retroalimentación. Pista: la empresa elige, no preentrena."
+  distractores:
+    a: "El preentrenamiento lo hace el proveedor del modelo, con meses de cómputo y datos masivos."
+    b: "La empresa sí participa en etapas anteriores al despliegue: elige el modelo, puede ajustarlo y debe evaluarlo."
+    c: "La retroalimentación es la última etapa y la empresa la recoge de su propio uso, no la del proveedor."
+  referencia: "https://aws.amazon.com/what-is/foundation-models/"
 - id: R2-039
   dominio: 2
   tarea: '2.2'
@@ -1032,6 +1325,63 @@
     c: El recuento de tokens es otra métrica; no mide tiempo.
     d: Las peticiones limitadas por cuota se miden con otras métricas, no con la latencia.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+
+- id: R2-058
+  dominio: 2
+  tarea: "2.2"
+  objetivo: "2.2.3"
+  tipo: matching
+  dificultad: media
+  enunciado: "Empareja cada requisito con el factor de selección de modelo que decide."
+  prompts:
+    - id: "1"
+      texto: "Analizar fotos de siniestros junto con una pregunta en texto"
+    - id: "2"
+      texto: "Analizar contratos de 300 páginas de una vez"
+    - id: "3"
+      texto: "El modelo debe admitir ajuste fino y estar disponible en la Región elegida"
+    - id: "4"
+      texto: "Millones de peticiones sencillas al día con un presupuesto ajustado"
+  opciones:
+    - id: a
+      texto: "Restricciones"
+    - id: b
+      texto: "Coste"
+    - id: c
+      texto: "Tipo de modelo y modalidad"
+    - id: d
+      texto: "Capacidades (ventana de contexto)"
+    - id: e
+      texto: "Cumplimiento"
+  correctas: [["1", c], ["2", d], ["3", a], ["4", b]]
+  explicacion: "Imagen más texto en una petición pide un modelo multimodal (modalidad); documentos enormes, una ventana de contexto grande (capacidades); Región, cuotas o soporte de ajuste fino son restricciones; y un gran volumen de peticiones simples se decide por coste."
+  distractores:
+    e: "El cumplimiento trata de residencia de datos, normativa sectorial o licencia del modelo; ninguno de estos requisitos lo menciona."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
+
+- id: R2-059
+  dominio: 2
+  tarea: "2.2"
+  objetivo: "2.2.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Qué ventaja ofrece la API Converse de Amazon Bedrock a la hora de elegir un modelo?"
+  opciones:
+    - id: a
+      texto: "Elige automáticamente el modelo más barato para cada petición"
+    - id: b
+      texto: "Unifica la forma de llamar a los modelos, de modo que cambiar de modelo es modificar un parámetro"
+    - id: c
+      texto: "Reserva capacidad dedicada para el modelo elegido"
+    - id: d
+      texto: "Cuenta los tokens de una petición antes de enviarla"
+  correctas: [b]
+  explicacion: "Con la API Converse, el código llama a todos los modelos de la misma forma, así que probar o cambiar de modelo solo exige modificar un parámetro. Eso reduce el riesgo de elegir mal al principio. Pista: «converse» = una conversación común para todos los modelos."
+  distractores:
+    a: "Repartir las peticiones entre modelos según calidad y coste es lo que hace Intelligent Prompt Routing, no la API Converse."
+    c: "Reservar capacidad dedicada corresponde a Provisioned Throughput o al nivel Reserved."
+    d: "Contar los tokens antes de enviar la petición es la función de la API CountTokens."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
 - id: R2-040
   dominio: 2
   tarea: '2.2'
@@ -1056,6 +1406,54 @@
     c: El CLV estima los ingresos de un cliente durante toda su relación con la empresa.
     d: La conversión es el porcentaje de usuarios que completan una acción, como comprar.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+
+- id: R2-060
+  dominio: 2
+  tarea: "2.2"
+  objetivo: "2.2.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un asistente cuesta 3 000 USD al mes y ahorra 33 300 USD al mes en tiempo de agentes. ¿Cuál es aproximadamente su ROI?"
+  opciones:
+    - id: a
+      texto: "0,09"
+    - id: b
+      texto: "11,1"
+    - id: c
+      texto: "30 300"
+    - id: d
+      texto: "10,1"
+  correctas: [d]
+  explicacion: "ROI = (beneficio − coste) / coste = (33 300 − 3 000) / 3 000 ≈ 10,1, es decir, un 1 010 %. Pista: al beneficio se le resta primero el coste y luego se divide entre el coste."
+  distractores:
+    a: "Sale de dividir el coste entre el ahorro (3 000 / 33 300); es la proporción inversa, no el retorno."
+    b: "Sale de dividir el ahorro entre el coste sin restar antes la inversión (33 300 / 3 000)."
+    c: "Es el beneficio neto en dólares, no el retorno relativo a la inversión."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
+
+- id: R2-061
+  dominio: 2
+  tarea: "2.2"
+  objetivo: "2.2.4"
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: "¿Qué mide el rendimiento entre dominios (cross-domain performance) de una solución de IA generativa?"
+  opciones:
+    - id: a
+      texto: "Si el modelo mantiene la calidad en tareas o áreas distintas de aquellas para las que se probó"
+    - id: b
+      texto: "El porcentaje de usuarios que completan la compra"
+    - id: c
+      texto: "Los ingresos esperados de un cliente durante toda su relación con la empresa"
+    - id: d
+      texto: "El tiempo ahorrado por cada caso de soporte"
+  correctas: [a]
+  explicacion: "El rendimiento entre dominios mide si la calidad se mantiene fuera del área de prueba: por ejemplo, un asistente probado con preguntas de facturación que también debe responder sobre envíos. Pista: «entre dominios» = fuera de lo que se probó."
+  distractores:
+    b: "El porcentaje de usuarios que completan la acción deseada es la tasa de conversión."
+    c: "Los ingresos de un cliente durante toda su relación son el valor del ciclo de vida del cliente (CLV)."
+    d: "El tiempo o los recursos ahorrados por tarea miden la eficiencia."
+  referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
 - id: R2-041
   dominio: 2
   tarea: '2.1'
@@ -1128,6 +1526,30 @@
     c: El pago por tokens es el de Bedrock bajo demanda; en JumpStart se paga la instancia.
     d: Aunque el catálogo no cueste, la instancia donde se ejecuta el modelo sí se paga.
   referencia: https://aws.amazon.com/sagemaker/ai/pricing/
+
+- id: R2-066
+  dominio: 2
+  tarea: "2.3"
+  objetivo: "2.3.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Qué nivel de servicio de Amazon Bedrock cobra un 50 % menos que Standard y mantiene las llamadas normales a la API, a cambio de una respuesta más lenta?"
+  opciones:
+    - id: a
+      texto: "Nivel Flex"
+    - id: b
+      texto: "Nivel Priority"
+    - id: c
+      texto: "Nivel Reserved"
+    - id: d
+      texto: "Inferencia por lotes"
+  correctas: [a]
+  explicacion: "El nivel Flex cuesta la mitad que Standard y sigue usando las llamadas normales a la API, incluidas las herramientas; encaja con evaluaciones, resúmenes o flujos agénticos no urgentes. Pista: Flex = mismo uso de la API, más paciencia, mitad de precio."
+  distractores:
+    b: "Priority cuesta un 75 % más que Standard a cambio de la respuesta más rápida."
+    c: "Reserved es un precio fijo por capacidad reservada de 1 o 3 meses, para aplicaciones críticas."
+    d: "La inferencia por lotes también cuesta un 50 % menos, pero no usa llamadas normales: procesa de forma asíncrona ficheros en S3 y no admite herramientas."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html"
 - id: R2-044
   dominio: 2
   tarea: '2.3'
@@ -1152,6 +1574,56 @@
     c: Un modelo más grande suele necesitar más cómputo y más energía, no menos.
     d: El cifrado es un requisito de seguridad y no es la palanca de eficiencia energética que recomienda AWS.
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus05-bp02.html
+
+- id: R2-064
+  dominio: 2
+  tarea: "2.3"
+  objetivo: "2.3.3"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Qué chip diseñado por AWS sirve tanto para entrenar como para servir modelos de IA a escala?"
+  opciones:
+    - id: a
+      texto: "AWS Inferentia"
+    - id: b
+      texto: "AWS Trainium"
+    - id: c
+      texto: "AWS Graviton"
+    - id: d
+      texto: "AWS Nitro"
+  correctas: [b]
+  explicacion: "AWS Trainium está pensado para entrenar y también para servir modelos de IA con la mejor relación coste-rendimiento; AWS Inferentia es específico de la inferencia de aprendizaje profundo e IA generativa al menor coste en Amazon EC2. Pista: Trainium entrena (y sirve); Inferentia solo infiere."
+  distractores:
+    a: "Inferentia está especializado en inferencia; no es el chip de AWS para entrenar."
+    c: "Graviton es el procesador de uso general de AWS para instancias EC2, no un acelerador de IA del temario."
+    d: "Nitro es el sistema de virtualización y seguridad de las instancias EC2, no un acelerador de IA."
+  referencia: "https://aws.amazon.com/ai/machine-learning/inferentia/"
+
+- id: R2-065
+  dominio: 2
+  tarea: "2.3"
+  objetivo: "2.3.3"
+  tipo: multiple_response
+  dificultad: media
+  enunciado: "¿Qué DOS afirmaciones sobre la protección de datos en Amazon Bedrock son correctas?"
+  opciones:
+    - id: a
+      texto: "Al personalizar un modelo, se trabaja sobre una copia privada"
+    - id: b
+      texto: "Los proveedores de modelos reciben los prompts para mejorar sus modelos"
+    - id: c
+      texto: "Se puede conectar desde una VPC sin pasar por internet con AWS PrivateLink"
+    - id: d
+      texto: "El contenido se almacena en reposo en una Región de EE. UU., sea cual sea la Región de uso"
+    - id: e
+      texto: "Los datos solo se cifran si el cliente aporta sus propias claves"
+  correctas: [a, c]
+  explicacion: "En Bedrock el contenido del cliente no se usa para mejorar los modelos base ni se comparte con los proveedores; la personalización trabaja sobre una copia privada; PrivateLink permite el acceso privado desde la VPC; y los datos se cifran en tránsito y en reposo en la Región donde se usa el servicio."
+  distractores:
+    b: "Los modelos se despliegan en cuentas operadas por AWS a las que los proveedores no tienen acceso, y el contenido no se comparte con ellos."
+    d: "El contenido procesado se cifra y se almacena en reposo en la Región en la que se usa el servicio."
+    e: "El cifrado en tránsito y en reposo está activo; las claves propias son una opción adicional."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
 - id: R2-045
   dominio: 2
   tarea: '2.1'
@@ -1176,6 +1648,30 @@
     b: Razonar no garantiza que los datos sean ciertos; las alucinaciones se combaten con información fiable y verificación.
     d: La ventana de contexto sigue limitando lo que el modelo puede manejar en una petición.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-reasoning.html
+
+- id: R2-051
+  dominio: 2
+  tarea: "2.1"
+  objetivo: "2.1.4"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "Un asistente envía 1 500 tokens de entrada y recibe 400 de salida por conversación. Si se pega el manual completo y la entrada sube a 6 000 tokens, ¿qué ocurre?"
+  opciones:
+    - id: a
+      texto: "El coste no cambia, porque solo se facturan los tokens de salida"
+    - id: b
+      texto: "Sube el coste de entrada y también la latencia, sin cambiar de modelo"
+    - id: c
+      texto: "Baja la latencia, porque el modelo tiene más información"
+    - id: d
+      texto: "Solo aumenta el coste si se cambia a un modelo más grande"
+  correctas: [b]
+  explicacion: "En modo bajo demanda se pagan los tokens de entrada y los de salida. Cuadruplicar la entrada encarece cada conversación y aumenta el tiempo de respuesta. En el ejemplo del módulo, el coste mensual pasa de 167 a 446 USD con el mismo modelo. Pista: más contexto, más coste y más latencia."
+  distractores:
+    a: "Se factura tanto la entrada como la salida, cada una con su precio."
+    c: "Procesar más tokens lleva más tiempo; enviar solo lo relevante es lo que reduce la latencia."
+    d: "El modelo es la palanca principal, pero con el mismo modelo el coste crece con los tokens enviados."
+  referencia: "https://aws.amazon.com/bedrock/pricing/"
 - id: R2-046
   dominio: 2
   tarea: '2.2'
@@ -1200,3 +1696,27 @@
     b: El anclaje contextual detecta respuestas que no se apoyan en las fuentes.
     d: Prompt caching reduce el coste de contextos repetidos; no es un control de Guardrails.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
+
+- id: R2-057
+  dominio: 2
+  tarea: "2.2"
+  objetivo: "2.2.2"
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: "¿Por qué la misma pregunta a un modelo fundacional puede dar respuestas distintas?"
+  opciones:
+    - id: a
+      texto: "Porque el modelo se reentrena entre una petición y otra"
+    - id: b
+      texto: "Porque el proveedor cambia de modelo sin avisar"
+    - id: c
+      texto: "Porque el modelo muestrea el siguiente token de una distribución de probabilidad"
+    - id: d
+      texto: "Porque la ventana de contexto se vacía de forma aleatoria"
+  correctas: [c]
+  explicacion: "Para cada posición, el modelo calcula la probabilidad de cada posible token y toma una muestra. Ese muestreo es la causa del no determinismo; una temperatura baja, un formato de salida estructurado y la validación de la respuesta lo atenúan. Pista: muestrear = no determinismo."
+  distractores:
+    a: "Responder es inferencia; el modelo no cambia sus parámetros entre peticiones."
+    b: "La variabilidad aparece aunque se use siempre la misma versión del modelo."
+    d: "La ventana de contexto contiene lo que la aplicación envía en cada llamada; no se vacía al azar."
+  referencia: "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"

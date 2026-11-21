@@ -556,3 +556,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - La propuesta de OpenSpec se dio por aprobada con el «hazlo todo» del usuario; cambio archivado y especificación `consultas-claude` creada.
 - **Despliegue (2026-11-21):** `CONSULTAS_TOKEN` en el `.env` del despliegue, `./desplegar.sh` (migración `0003`), servicio de usuario `consultas-claude` habilitado. La copia de la base de datos previa a la migración falló porque titan no tiene el binario `sqlite3`; se hizo después con el módulo de Python y se comprobó que los datos siguen (la `0003` solo añade tablas). Inventario de `~/Sistema` actualizado.
 - **Prueba de extremo a extremo:** duda antes de responder (orienta sin dar la solución y cita la documentación de AWS), segunda duda en la misma conversación, duda con el servicio parado («En cola» y resuelta al arrancarlo) y «Mis dudas»; unas 0,02–0,03 USD por duda.
+
+### Repaso ampliado
+
+- Petición: «crea más preguntas de repaso».
+- Rama `aif-c01/repaso-ampliado`. Criterio: llevar cada objetivo oficial a un mínimo de 4 preguntas de repaso (muchos tenían 2). El módulo 00 ya tenía 5 o más por objetivo y no cambia.
+- 93 preguntas nuevas: R1-059 a R1-084, R2-047 a R2-066, R3-052 a R3-083, R4-040 a R4-050 y R5-036 a R5-039. Total: 355.
+- **Integración con `main` (2026-11-21):** el PR #28 quedó en conflicto porque las revisiones con las guías de estudio (#31 a #37) añadieron preguntas de repaso con los mismos ids. Se fusionó `main` en la rama (sin reescribir la historia): se conservan intactas las preguntas de `main` y las 93 del PR se renumeran a continuación de las existentes y se colocan junto a las de su objetivo. Ningún enunciado coincide con los de `main`. Antes de la fusión, `main` incumplía el mínimo de 4 en 44 objetivos.
+- **Decisiones:** cada pregunta se apoya en una afirmación de la teoría del módulo y cita una fuente ya usada para ese objetivo; ninguna depende de los marcadores pendientes (preentrenamiento continuado en Bedrock, *task engineering*). Se mezclan los cuatro tipos y se reparten las letras correctas. `repaso.minimo_por_objetivo` pasa de 2 a 4 para que la CI mantenga el mínimo.
+- El trabajo se pausó a petición del usuario tras el módulo 03 (2026-11-19) y se retomó el 2026-11-20.
+- **Verificación:** validador sin errores ni avisos, cobertura con `--preguntas` y pytest.
