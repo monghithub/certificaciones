@@ -518,3 +518,19 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Decisiones del usuario:** en todos los tests y siempre (también antes de responder y en el simulacro cronometrado); modelo Sonnet; solo `admin`; fuentes: teoría del curso, documentación oficial de AWS y libros en Markdown.
 - **Diseño:** cola en la base de datos de la consola, API interna con token y un trabajador en el anfitrión que llama a `claude -p` (con `--resume` para seguir la conversación) y solo usa herramientas de lectura y búsqueda. Comprobado en titan: la salida JSON trae `result` y `session_id`, y `--resume` solo encuentra la sesión si se lanza desde el mismo directorio de trabajo.
 - No se implementa en esta sesión: el usuario pidió dejarlo «perfectamente indicado» para que lo desarrolle otra IA. Todo está en `openspec/changes/consultas-claude/` (guía de implementación en `design.md`, tareas en `tasks.md`) y en la issue de seguimiento.
+
+### Implementación: «Preguntar a Claude» en los tests (#40)
+
+- Rama `feat/consultas-claude` (en el *worktree* `~/Cursos/certificaciones-40`), tareas 1 y 2 de `openspec/changes/consultas-claude/tasks.md`. Lo hace otra IA a partir de la guía de `design.md`; el despliegue en titan (tarea 3.4) y el inventario de `~/Sistema` (3.5) quedan para quien lo encargó.
+- **Consola:** `CONSULTAS_TOKEN` en `Settings` (mínimo 32 caracteres; sin él no se registran las rutas), modelos `Consulta` y `ConsultaMensaje` con la migración `0003`, `app/routes/consultas.py` (panel htmx, envío, «Reintentar», «Mis dudas» y conversación; solo `admin`, con CSRF) y la API interna con `Authorization: Bearer` (404 sin el token correcto). Panel en `pregunta.html` (todos los modos, antes y después de responder) y plegado en `resultado.html`; enlace «Mis dudas» en la cabecera.
+- **Trabajador:** `scripts/consultas_trabajador.py` (biblioteca estándar) y la unidad `scripts/consultas-claude.service`. Prueba real única en titan de `claude -p … --model sonnet --output-format json --tools … --allowedTools … --add-dir …`: `permission_denials` vacío, sin pedir permisos, con `result`, `session_id`, `total_cost_usd` e `is_error`. Las pruebas usan un `claude` simulado.
+- **Ajustes sobre el diseño:**
+  - `consulta_mensaje` lleva además `actualizado`, porque la recuperación de los «procesando» de más de 15 minutos necesita la hora del último cambio de estado.
+  - El sondeo cada 5 s se hace sobre un fragmento aparte con solo la conversación (`GET …/consultas/<pid>/mensajes`), no sobre el panel entero, para no borrar lo que se esté escribiendo en el formulario.
+  - `reintentar` acepta `"contar": false`: la cuota agotada no gasta intentos (si no, tras tres esperas la duda acabaría en error). La respuesta de `siguiente` incluye `intentos`.
+  - Se pasa también `--allowedTools` con las mismas herramientas, para que `WebFetch` y `WebSearch` no se denieguen en `-p`.
+  - Los mensajes siguientes (`--resume`) añaden una nota con la respuesta del estudiante y la solución si ya ha respondido, para que Claude pueda comentarla aunque la primera duda fuera antes de responder.
+  - La solución se incluye en el primer *prompt* sin haber respondido solo si la duda la pide de forma explícita («solución», «respuesta correcta», «cuál es la respuesta»…); un «¿cuál es la diferencia…?» no cuenta.
+  - Las instrucciones fijas añaden «Escribe en Markdown, con los enlaces en formato [texto](URL)», porque la consola no convierte en enlaces las URL sueltas.
+  - En `app.js`, los fragmentos del panel no relanzan la inicialización de la página (el sondeo reiniciaba el cronómetro del simulacro).
+- **Verificación:** 304 pruebas de pytest (30 nuevas), validador, cobertura y glosario sin cambios, markdownlint sin errores e imagen Docker construida.

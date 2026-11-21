@@ -49,6 +49,7 @@ En ambos casos la contraseña es temporal: se obliga a cambiarla en el primer ac
 | `PORT` | No | Puerto local publicado por Docker Compose (8000). |
 | `FORWARDED_ALLOW_IPS` | No | IPs de proxies de confianza para `X-Forwarded-For`. |
 | `ACCESO_LIBRE_USUARIO` | No | **Solo en red local.** Entra sin login como este usuario (existente y activo). Ver [Acceso libre](#acceso-libre-en-red-local). |
+| `CONSULTAS_TOKEN` | No | Activa «Preguntar a Claude» (≥ 32 caracteres) y protege la API interna de su trabajador. Vacío = desactivado. Ver [Preguntar a Claude](#preguntar-a-claude-en-los-tests). |
 
 ## Acceso libre en red local
 
@@ -58,7 +59,7 @@ Si la consola solo es accesible desde una red de confianza (por ejemplo, detrás
 
 ## Qué se guarda
 
-Usuarios (nombre de usuario, nombre, rol, hash argon2 de la contraseña, fecha de alta y último acceso), sus matrículas por curso, secciones leídas y completadas por curso, y cada intento de test con sus respuestas. No se guardan contraseñas en claro ni se registran en logs. El administrador puede ver el progreso y las estadísticas de todos los usuarios.
+Usuarios (nombre de usuario, nombre, rol, hash argon2 de la contraseña, fecha de alta y último acceso), sus matrículas por curso, secciones leídas y completadas por curso, cada intento de test con sus respuestas y, si está activado «Preguntar a Claude», las conversaciones con Claude (dudas, respuestas e identificador de la sesión de Claude Code). No se guardan contraseñas en claro ni se registran en logs. El administrador puede ver el progreso y las estadísticas de todos los usuarios.
 
 ## Seguridad
 
@@ -77,6 +78,65 @@ El bloqueo por usuario permite que un tercero bloquee temporalmente una cuenta a
 En las páginas de lectura de cada módulo con preguntas (no en el simulacro) hay un botón fijo **«Ponme a prueba»**, abajo a la derecha. Abre un modal con una pregunta tipo test de **lo que tienes en pantalla**: la consola toma el encabezado más cercano por encima del centro de la ventana y, si su apartado no tiene preguntas, sube a sus encabezados padres. Las preguntas salen de los objetivos que el mapa de cobertura asocia a ese apartado: primero las de repaso y, cuando se acaban, las de examen. Si el apartado no tiene ninguna (por ejemplo, en «Servicios» o «Trampas»), la pregunta sale del módulo y el modal lo indica.
 
 Se responde en el propio modal (los cuatro tipos), se ve al momento si es correcta, la solución, la explicación, la referencia oficial y el enlace «Repasar en la teoría». **Otra pregunta** pide la siguiente del apartado visible sin repetir las ya vistas en la visita; al agotar todas las del módulo, empiezan de nuevo. Se cierra con ✕, «Cerrar», `Esc` o clic fuera. El modal nunca se abre solo y **no guarda nada**: no cuenta en las estadísticas ni en «Repetir falladas».
+
+## Preguntar a Claude en los tests
+
+Panel de conversación en cada pregunta de los tests para resolver dudas con Claude Code en segundo plano ([issue #40](https://github.com/monghithub/certificaciones/issues/40)). **Desactivado por defecto:** solo existe si se define `CONSULTAS_TOKEN`, y solo lo ven los usuarios `admin` (usa la cuenta de Claude del responsable). Los estudiantes no ven el panel y las rutas les responden 403.
+
+- **Dónde:** en todos los modos (repaso, examen, mixto, dominio, falladas, libros y simulacro, también el cronometrado), antes y después de responder, y plegado en cada pregunta de la página de resultado. Antes de responder, Claude orienta sin dar la solución salvo que se le pida expresamente.
+- **Cómo:** la duda se guarda «En cola» y se puede seguir con el test; el panel consulta cada 5 s mientras hay una duda en curso y muestra la respuesta cuando llega, sin recargar. Hay una conversación por pregunta y usuario, con una sola duda en curso cada vez; se puede seguir preguntando en la misma conversación (Claude conserva el contexto). Si una duda acaba en error, el botón «Reintentar» la devuelve a la cola.
+- **Mis dudas** (`/c/<curso>/dudas`, en el menú): todas las conversaciones del curso con su estado y enlace a la conversación completa, que muestra el enunciado, la solución y la explicación.
+- Las respuestas se muestran como Markdown sin HTML y con los enlaces en otra pestaña. El panel recuerda que Claude puede equivocarse y que prevalece la documentación oficial de AWS.
+
+### El trabajador
+
+`scripts/consultas_trabajador.py` (solo biblioteca estándar) corre **en el anfitrión**, no en el contenedor, con la sesión de Claude Code de la cuenta del responsable. Recoge las dudas de la API interna de la consola (`POST /api/consultas/siguiente`, `…/mensajes/<id>/respuesta`, `…/reintentar` y `…/error`, con `Authorization: Bearer <CONSULTAS_TOKEN>`; sin el token correcto responden 404) y las resuelve **de una en una** con:
+
+```text
+cd $CONSULTAS_DIR && claude -p <prompt> --model sonnet --output-format json \
+  --tools Read,Grep,Glob,WebFetch,WebSearch --allowedTools Read,Grep,Glob,WebFetch,WebSearch \
+  --add-dir $CONSULTAS_CURSOS/<curso> [$CONSULTAS_LIBROS/<curso>] --append-system-prompt <instrucciones> [--resume <sesión>]
+```
+
+- Solo herramientas de lectura y búsqueda (sin terminal ni edición) y sin `--dangerously-skip-permissions`. Fuentes: la teoría del curso, la documentación oficial de AWS en la web y, si se configuran, los libros de estudio en Markdown (que no se copian al repositorio).
+- El primer mensaje lleva el contexto de la pregunta (enunciado, opciones, la respuesta del estudiante si ya respondió y, solo entonces o si la pide, la solución, la explicación, los distractores y la referencia) y la ruta de la teoría. Los siguientes continúan la sesión con `--resume`; si la sesión ya no existe, se abre otra con el contexto.
+- Las sesiones de Claude Code se guardan por directorio de trabajo: `CONSULTAS_DIR` debe ser siempre el mismo.
+- **Cuota agotada** (o servicio saturado): la duda vuelve a la cola sin gastar intentos y el trabajador espera `CONSULTAS_ESPERA_CUOTA`. Otros fallos (tiempo agotado, salida inesperada) se reintentan hasta 3 veces y después la duda queda en error. Una duda que lleva más de 15 minutos «procesando» (el trabajador murió) se vuelve a repartir. Con `SIGTERM` termina limpio y devuelve a la cola la duda en curso.
+- Registra en la salida estándar (journald) una línea por duda: id, resultado, duración y coste.
+
+| Variable | Por defecto | Uso |
+|---|---|---|
+| `CONSULTAS_URL` | `http://127.0.0.1:8097` | Base de la consola |
+| `CONSULTAS_TOKEN` | — (obligatoria) | El mismo que en el `.env` de la consola |
+| `CONSULTAS_CLAUDE` | `claude` | Ejecutable de Claude Code |
+| `CONSULTAS_MODELO` | `sonnet` | Modelo |
+| `CONSULTAS_DIR` | `~/.local/share/consultas-claude` | Directorio de trabajo fijo |
+| `CONSULTAS_CURSOS` | — | Carpeta `cursos/` desplegada |
+| `CONSULTAS_LIBROS` | — (opcional) | Libros de estudio en Markdown |
+| `CONSULTAS_ESPERA` | `10` | Segundos entre sondeos sin trabajo |
+| `CONSULTAS_ESPERA_CUOTA` | `900` | Espera tras cuota agotada o error transitorio |
+| `CONSULTAS_TIMEOUT` | `300` | Tiempo máximo de cada llamada a Claude |
+
+### Activarlo
+
+1. Genera el token (`openssl rand -hex 32`), ponlo como `CONSULTAS_TOKEN` en el `.env` de la consola y comprueba que `compose.yaml` lo pasa al contenedor (`CONSULTAS_TOKEN: ${CONSULTAS_TOKEN:-}`). Reconstruye y arranca: la migración `0003` crea las tablas de consultas.
+2. Instala el servicio de usuario de systemd del trabajador, `scripts/consultas-claude.service` (rutas de titan; ajústalas si cambian):
+
+   ```bash
+   cp scripts/consultas-claude.service ~/.config/systemd/user/
+   systemctl --user daemon-reload && systemctl --user enable --now consultas-claude
+   journalctl --user -u consultas-claude -f
+   ```
+
+   El servicio necesita el `HOME` del usuario para que `claude` encuentre su sesión (`~/.claude`) y *linger* activo para correr sin sesión abierta.
+
+### Riesgos
+
+- **Cuota:** cada duda consume la cuota de la cuenta de Claude, compartida con las sesiones interactivas. Por eso solo `admin`, una duda cada vez y modelo Sonnet, con el coste en el log.
+- **Acceso libre:** con `ACCESO_LIBRE_USUARIO` apuntando a un `admin`, cualquiera que llegue a la consola en la red local puede preguntar y gastar esa cuota.
+- **Contenido que lee Claude:** podría contener instrucciones (por ejemplo, en los libros). Se mitiga con herramientas solo de lectura sobre carpetas sin secretos y con la respuesta mostrada como Markdown sin HTML.
+- **El token:** se trata como `SECRET_KEY` (solo en el `.env`, nunca en Git).
+- **Respuestas incorrectas:** se pide la URL oficial que respalda la respuesta y el panel recuerda que prevalece la documentación.
 
 ## Mapa de servicios
 
@@ -101,7 +161,7 @@ Con Docker, `./cursos` se monta en solo lectura en `/cursos`, así que basta con
 
 ## Copia de seguridad y restauración
 
-Haz siempre una copia **antes de actualizar** la imagen: el arranque aplica las migraciones de base de datos (la `0002` añadió los cursos y las matrículas; los estudiantes existentes quedan matriculados en `aif-c01`).
+Haz siempre una copia **antes de actualizar** la imagen: el arranque aplica las migraciones de base de datos (la `0002` añadió los cursos y las matrículas; los estudiantes existentes quedan matriculados en `aif-c01`; la `0003`, las tablas de «Preguntar a Claude»).
 
 Los datos están en el volumen `datos` (`/data/app.db`). Copia consistente con la API de copia de SQLite, que es segura con la aplicación en marcha:
 

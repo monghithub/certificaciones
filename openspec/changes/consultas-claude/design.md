@@ -203,6 +203,15 @@ manteniendo en inglés los nombres de servicios y términos del examen.
 4. Prueba de extremo a extremo: en `http://cursos.titan/c/aif-c01/tests`, empezar un test, preguntar una duda antes de responder (no debe revelar la solución), responder, preguntar otra (misma conversación, `--resume`), ver «Mis dudas». Parar el servicio, enviar una duda (queda «En cola»), arrancarlo y ver que se resuelve.
 5. Inventario de `~/Sistema` (`CLAUDE.md` de ese repo): entrada en `registro.md`, servicio nuevo en `aplicaciones.md` si procede, commit con rutas propias.
 
+### Ajustes de la implementación (2026-11-21)
+
+- `consulta_mensaje.actualizado` (DateTime): hora del último cambio de estado, para recuperar los «procesando» de más de 15 minutos.
+- Sondeo sobre `GET /c/{curso}/consultas/{pid}/mensajes` (solo la conversación) en lugar del panel entero, para no borrar el texto del formulario. Botón «Reintentar» del navegador: `POST /c/{curso}/consultas/{pid}/reintentar`.
+- `POST /api/consultas/mensajes/{mid}/reintentar` acepta `"contar": false` (cuota agotada: no gasta intento). `siguiente` devuelve también `intentos`.
+- El trabajador pasa `--allowedTools` con las mismas herramientas que `--tools`; comprobado en titan con una llamada real: `permission_denials` vacío.
+- En los mensajes con `--resume`, si el estudiante ya ha respondido, se antepone una nota con su respuesta y la solución.
+- Unidad de systemd versionada en `scripts/consultas-claude.service`.
+
 ## Risks / Trade-offs
 
 - [Consumo de la cuota de la cuenta] → solo `admin`, una duda cada vez, modelo Sonnet, coste registrado en el log.
