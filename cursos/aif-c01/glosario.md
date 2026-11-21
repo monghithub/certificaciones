@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 297 términos.
+Total: 299 términos.
 
 ## A
 
@@ -689,6 +689,10 @@ Total: 297 términos.
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
 - **S3 Lifecycle** (ciclo de vida de S3). *Técnica.* Reglas de Amazon S3 que mueven automáticamente los objetos a clases de almacenamiento más baratas (transición) o los borran al cumplirse un plazo (expiración).
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
+- **S3 Object Lock** (Object Lock). *Técnica.* Funcionalidad de Amazon S3 que guarda objetos con el modelo WORM (escribir una vez, leer muchas): durante un periodo de retención no se pueden sobrescribir ni borrar. En el modo de cumplimiento nadie puede hacerlo, ni el usuario raíz de la cuenta, y la retención no se puede acortar; en el modo de gobierno, solo los usuarios con permisos especiales.
+  - Usar cuando: Cuando una norma exige conservar sin cambios durante años un conjunto de datos, por ejemplo el que se usó para entrenar un modelo, o unos registros de auditoría. Funciona solo con el versionado activado y protege versiones concretas: una escritura con la misma clave crea una versión nueva.
+  - No usar cuando: Para protegerse solo de borrados accidentales, basta el versionado de S3; para archivar al menor coste, las clases de almacenamiento S3 Glacier, que no impiden borrar.
+  - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html>
 - **Amazon S3 Vectors** (S3 Vectors). *Servicio.* Almacenamiento vectorial de Amazon S3 (buckets e índices vectoriales) optimizado en coste para volúmenes enormes, con latencias por debajo del segundo en consultas poco frecuentes y de unos 100 ms en las frecuentes. Se integra con Bedrock Knowledge Bases.
   - Usar cuando: Miles de millones de vectores al menor coste, con consultas poco frecuentes.
   - No usar cuando: Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo: Amazon OpenSearch Service.
@@ -845,6 +849,10 @@ Total: 297 términos.
 
 - **VAE** (autocodificador variacional, variational autoencoder). *Concepto.* Familia de modelos generativos que aprende una representación compacta de los datos, llamada espacio latente, y genera variaciones a partir de ella.
   - Referencia: <https://aws.amazon.com/what-is/generative-ai/>
+- **validación de integridad de los ficheros de registro de CloudTrail** (CloudTrail log file integrity validation, log file integrity validation). *Técnica.* Funcionalidad de AWS CloudTrail que permite determinar si un fichero de registro se modificó, se borró o sigue intacto desde que CloudTrail lo entregó. Con ella activada en el trail, CloudTrail entrega cada hora un fichero resumen (digest) firmado (SHA-256 y SHA-256 con RSA) con los hashes de los ficheros de esa hora, y la comprobación se hace, por ejemplo, con la AWS CLI.
+  - Usar cuando: Cuando un auditor o una investigación exige demostrar que los registros de actividad de una plataforma de IA no se han alterado desde su entrega.
+  - No usar cuando: Para impedir el borrado, no solo detectarlo: S3 Object Lock en el bucket de registros.
+  - Referencia: <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html>
 - **validación de la salida** (output validation). *Técnica.* Comprobar la respuesta de un modelo antes de usarla: contra la fuente (grounding), contra reglas lógicas (Automated Reasoning), contra un formato o esquema esperado, o con revisión humana.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/security.html>
 - **vector** (vectores). *Concepto.* Lista de valores numéricos que representa información en un espacio de muchas dimensiones. Es la forma de un embedding; la distancia entre vectores mide la similitud.

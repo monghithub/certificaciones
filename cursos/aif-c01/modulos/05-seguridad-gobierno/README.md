@@ -158,7 +158,7 @@ LOG:
 
 Saber **de dónde sale** una respuesta o un modelo es una exigencia de seguridad, de auditoría y de confianza:
 
-- **Citación de fuentes** (*source citation*): la respuesta indica de qué documentos sale. Amazon Bedrock Knowledge Bases devuelve **citas** con los fragmentos y documentos de origen, lo que permite comprobar la respuesta y detectar alucinaciones.
+- **Citación de fuentes** (*source citation*): la respuesta indica de qué documentos sale. Amazon Bedrock Knowledge Bases devuelve **citas** con los fragmentos y documentos de origen, lo que permite comprobar la respuesta y detectar alucinaciones. Con documentos PDF y un almacén vectorial de Amazon OpenSearch Serverless o Amazon Aurora, guarda además el **número de página** de cada fragmento en el metadato `x-amz-bedrock-kb-document-page-number`, pero no si se elige no fragmentar los documentos; y como la estrategia de fragmentación no se puede cambiar después de conectar el origen de datos, para cambiarla hay que crear otro origen y volver a ingerir.
 - **Linaje de los datos** (*data lineage*): el recorrido de los datos y de los artefactos desde su origen hasta el modelo desplegado: qué conjunto de datos, qué versión, qué trabajo de entrenamiento y qué *endpoint*. **SageMaker ML Lineage Tracking** registra esa información para reproducir el flujo y auditarlo; **MLflow en SageMaker AI** registra los experimentos y sus artefactos.
 - **Catalogación de datos** (*data cataloging*): un inventario de los conjuntos de datos con su ubicación, esquema y metadatos. **AWS Glue Data Catalog** es el catálogo central de metadatos en AWS, y **AWS Lake Formation** gobierna el acceso a esos datos.
 - **Amazon SageMaker Model Cards**: documenta, entre otras cosas, los datos y el entrenamiento de un modelo, con versiones inmutables (módulo 04).
@@ -223,7 +223,7 @@ Las buenas prácticas que cita la guía:
 | **Evaluar la calidad de los datos** | Comprobar que son completos, correctos, coherentes y actuales antes de usarlos | **AWS Glue Data Quality** (reglas y puntuación de calidad, detección de anomalías); **AWS Glue DataBrew** (perfilado visual) |
 | **Tecnologías de mejora de la privacidad** (*privacy-enhancing technologies*) | Usar los datos protegiendo a las personas: minimización, anonimización, seudonimización o tokenización, enmascarado, privacidad diferencial y datos sintéticos | Filtros de información sensible de Guardrails, Macie para localizar PII; AWS Clean Rooms existe pero está fuera del alcance del examen |
 | **Control de acceso a los datos** | Cada persona o sistema accede solo a los datos que necesita | **IAM**, políticas de *bucket* de S3 y **Lake Formation** (permisos por columna, fila y celda) |
-| **Integridad de los datos** | Los datos no se alteran sin control: versiones, registros y protección frente al **envenenamiento** | Versionado de S3, CloudTrail, permisos de escritura mínimos |
+| **Integridad de los datos** | Los datos no se alteran sin control: versiones, registros y protección frente al **envenenamiento** | Versionado de S3, CloudTrail, permisos de escritura mínimos; **S3 Object Lock** cuando hay que conservar los datos sin cambios durante años (en modo de cumplimiento nadie puede sobrescribirlos ni borrarlos durante la retención, ni el usuario raíz) |
 
 Las cuatro prácticas sobre el camino de los datos hasta el modelo:
 
@@ -371,6 +371,7 @@ Una **alucinación** es una respuesta plausible pero falsa o no respaldada. Las 
 - ***Grounding* con RAG:** el modelo responde a partir de documentos recuperados, con **citas**, en lugar de su memoria.
 - **Comprobación de *grounding* contextual** de Guardrails: está pensada para resúmenes, paráfrasis y preguntas y respuestas sobre una fuente (no para chat conversacional) y necesita tres piezas: la fuente, la pregunta y la respuesta.
 - **Validación de la salida:** comprobar la respuesta antes de usarla: contra la fuente (*contextual grounding check*), contra reglas lógicas (**Automated Reasoning checks**), contra un formato o esquema esperado, o con revisión humana.
+- **Citas en el propio *prompt*:** con documentos largos pegados en el *prompt*, numerar los pasajes y pedir al modelo que cite el que respalda cada afirmación antes de completar la tarea (lo recomienda la guía de *prompts* de Amazon Nova); así se centra en lo pertinente y cada afirmación se puede comprobar contra su pasaje.
 - **Puntuación de confianza** (*confidence scoring*): asignar a cada respuesta una puntuación y actuar según un umbral (entregar, avisar, derivar a una persona o no responder). La comprobación de *grounding* de Guardrails da puntuaciones de *grounding* y de relevancia; muchos servicios de IA de AWS (Textract, Comprehend, Rekognition) devuelven una confianza con cada predicción.
 
 ```mermaid
@@ -431,7 +432,7 @@ NOK:
 | **AWS Config** | Inventario de la configuración de los recursos, su historial y su evaluación con **reglas** (y paquetes de conformidad) | Comprobar que los *buckets* con datos de entrenamiento están cifrados y no son públicos, y ver cuándo cambió una configuración |
 | **Amazon Inspector** | **Gestión de vulnerabilidades**: escanea de forma continua EC2, imágenes de contenedores en ECR y funciones Lambda | Detectar una biblioteca vulnerable en el contenedor de inferencia |
 | **AWS Artifact** | Descarga bajo demanda de **informes de cumplimiento de AWS** (SOC, ISO, PCI) y de documentos de proveedores de *software* independientes (ISV), y gestión de acuerdos con AWS, como el BAA de HIPAA | Entregar al auditor el informe SOC de la infraestructura de AWS |
-| **AWS CloudTrail** | Registro de **la actividad de la API**: quién hizo qué, cuándo y desde dónde. El historial de eventos guarda 90 días de eventos de administración; los eventos de datos y la conservación más larga requieren un *trail* | Saber quién borró un *guardrail* o quién invocó un modelo |
+| **AWS CloudTrail** | Registro de **la actividad de la API**: quién hizo qué, cuándo y desde dónde. El historial de eventos guarda 90 días de eventos de administración; los eventos de datos y la conservación más larga requieren un *trail*, y la **validación de integridad de los ficheros de registro** permite demostrar que no se han modificado ni borrado desde su entrega: se activa en el *trail* (por defecto en los nuevos creados desde la consola), CloudTrail entrega cada hora un fichero resumen (*digest*) firmado con los *hashes* de los ficheros de esa hora, solo se comprueban los ficheros referenciados en esos resúmenes, es decir, los entregados desde la activación, y la comprobación se hace con la AWS CLI | Saber quién borró un *guardrail* o quién invocó un modelo |
 | **AWS Trusted Advisor** | **Recomendaciones** para ahorrar costes, mejorar el rendimiento y la disponibilidad y cerrar brechas de seguridad. El plan de soporte Basic incluye los límites de servicio y algunas comprobaciones de seguridad y tolerancia a fallos | Avisar de un *bucket* con permisos abiertos o de una cuota a punto de agotarse |
 | **Amazon CloudWatch** | Métricas, registros y alarmas | Alarma si sube la tasa de errores o de bloqueos de un *guardrail* |
 | **AWS Well-Architected Tool** | Revisar una carga de trabajo frente a las buenas prácticas y a las lentes del catálogo oficial de AWS | Revisar un asistente de IA generativa con la lente correspondiente |
@@ -620,6 +621,11 @@ La matriz cruza esos ámbitos con cinco disciplinas de seguridad: **gobierno y c
 - Cifrado de datos en Bedrock: <https://docs.aws.amazon.com/bedrock/latest/userguide/data-encryption.html>
 - Bedrock con AWS PrivateLink: <https://docs.aws.amazon.com/bedrock/latest/userguide/vpc-interface-endpoints.html>
 - Retención de datos en Bedrock: <https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html>
+- Metadatos y número de página en Knowledge Bases: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html>
+- Estrategia de fragmentación de un origen de datos: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-data-source-customize-ingestion.html>
+- S3 Object Lock: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html>
+- Validación de integridad de los registros de CloudTrail: <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html>
+- Documentos largos y citas en los prompts de Amazon Nova: <https://docs.aws.amazon.com/nova/latest/userguide/prompting-long-context.html>
 - Detección de abusos en Bedrock: <https://docs.aws.amazon.com/bedrock/latest/userguide/abuse-detection.html>
 - Preguntas frecuentes de Amazon Bedrock: <https://aws.amazon.com/bedrock/faqs/>
 - Registro de invocaciones de modelos: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html>

@@ -853,7 +853,7 @@
   correctas:
   - a
   explicacion: Generar contenido nuevo (texto, imágenes, código, datos de prueba) es una de las ventajas que cita
-    la guía, junto con la adaptabilidad, la capacidad de respuesta y las capacidades conversacionales.
+    la guía para la IA generativa.
   distractores:
     b: La inexactitud es una de sus desventajas.
     c: La IA generativa no es determinista; aquí interesa la variedad.
@@ -982,7 +982,7 @@
     texto: Selección de datos, reuniendo y revisando ejemplos de contratos de temporada para otra ronda de ajuste
   correctas:
   - d
-  explicacion: 'La retroalimentación cierra el ciclo: las correcciones de los usuarios muestran qué le falta al modelo. El fallo está en las cláusulas y el formato de un tipo de contrato posterior al ajuste, y el prompt no basta, así que la siguiente iteración empieza por seleccionar y depurar ejemplos etiquetados de ese contrato; después vienen el ajuste fino, la evaluación y el despliegue de la nueva versión.'
+  explicacion: 'La retroalimentación cierra el ciclo: las correcciones de los usuarios muestran qué le falta al modelo. El fallo está en las cláusulas y el formato de un tipo de contrato posterior al ajuste, y el prompt no basta, así que la siguiente iteración empieza por seleccionar y depurar ejemplos etiquetados de ese contrato.'
   distractores:
     a: El preentrenamiento es la etapa más cara, con meses de trabajo y datos masivos, y la hace el proveedor del modelo; para un tipo de contrato nuevo basta con ajustar el modelo que ya se usa.
     b: Ampliar la evaluación mide mejor el fallo, pero no lo corrige, porque el modelo desplegado seguiría siendo el mismo.
@@ -2157,3 +2157,318 @@
     b: CloudTrail registra quién llamó a qué API; no es la herramienta para seguir la latencia ni avisar de los límites de capacidad.
     c: AWS Config evalúa si la configuración de los recursos cumple unas reglas; no mide el tráfico ni la latencia del modelo.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+- id: S-088
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora clasifica 1 millón de correos al mes con un modelo de Amazon Bedrock bajo demanda. Cada petición lleva 2 000 tokens de entrada (instrucciones, 15 ejemplos y el correo) y la respuesta es una etiqueta de 5 tokens. Con precios supuestos de 0,50 USD por millón de tokens de entrada y 2 USD por millón de salida, ¿qué cambio reduce MÁS la factura mensual?
+  opciones:
+  - id: a
+    texto: Quitar los ejemplos que no aportan hasta dejar la entrada en 800 tokens
+  - id: b
+    texto: Pedir como respuesta un código de 2 tokens en lugar de la etiqueta
+  - id: c
+    texto: Pasar a Provisioned Throughput para pagar por hora en lugar de por token
+  - id: d
+    texto: Bajar la temperatura para que las respuestas salgan más cortas
+  correctas:
+  - a
+  explicacion: 'La factura depende de los tokens de entrada y de salida, cada uno con su precio, y aquí domina la entrada: 1 millón de peticiones × 2 000 tokens son 2 000 millones de tokens, a 0,50 USD por millón, 1 000 USD al mes, frente a 5 millones de tokens de salida a 2 USD por millón, 10 USD. Dejar la entrada en 800 tokens quita 1 200 millones de tokens, 600 USD al mes.'
+  distractores:
+    b: 'Ahorra 3 millones de tokens de salida, unos 6 USD al mes: la salida apenas pesa en esta factura.'
+    c: Provisioned Throughput cambia la forma de pago (por hora mientras está contratado, se use o no), pero no reduce los tokens que se envían, que son lo que pesa en esta factura.
+    d: La temperatura controla la variabilidad de la respuesta, no su longitud ni el número de tokens de entrada.
+  referencia: https://aws.amazon.com/bedrock/pricing/
+- id: S-089
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un agente de compras consulta el ERP con una herramienta que devuelve la ficha completa de cada pedido, un JSON de unos 25 000 tokens con cientos de campos, aunque el agente solo trabaja con el estado, la fecha y el importe. Tras cuatro o cinco consultas, la conversación se acerca al límite del modelo y cada petición cuesta mucho más. ¿Qué técnica de ingeniería de contexto aplica?
+  opciones:
+  - id: a
+    texto: Cambiar a un modelo con una ventana de contexto mayor
+  - id: b
+    texto: Activar la caché de prompts para la conversación
+  - id: c
+    texto: Quedarse solo con los campos útiles de cada ficha
+  - id: d
+    texto: Ajustar el modelo con ejemplos de fichas del ERP
+  correctas:
+  - c
+  explicacion: La ingeniería de contexto consiste en montar en cada llamada el conjunto de información que el modelo necesita para la tarea, y nada más. Si de cada ficha del ERP se conservan los tres campos que el agente usa, la conversación deja de crecer sin control y cada petición lleva muchos menos tokens.
+  distractores:
+    a: Una ventana mayor retrasa el problema, pero cada petición seguiría cargando decenas de miles de tokens inútiles, con su coste.
+    b: 'La caché abarata los tokens de un prefijo que se repite, también el historial, pero no reduce el tamaño del contexto: la conversación seguiría acercándose al límite del modelo.'
+    d: El ajuste fino no cambia lo que la herramienta devuelve en cada consulta ni el tamaño del contexto.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-context.html
+- id: S-090
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.4
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Una empresa invoca un modelo de Amazon Bedrock desde eu-west-1 y quiere absorber los picos de tráfico con la inferencia entre Regiones. Su departamento legal exige que las peticiones con datos de clientes europeos se procesen dentro de la UE; un proceso interno de clasificación de documentos públicos no tiene esa restricción. ¿Qué DOS afirmaciones sobre el coste son correctas? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: El perfil geográfico de la UE es más barato que el global porque limita las Regiones
+  - id: b
+    texto: Los perfiles de inferencia permiten contratar Provisioned Throughput para los picos
+  - id: c
+    texto: El precio es el de la Región desde la que se invoca, sin cargo por enrutar
+  - id: d
+    texto: Cada Región de destino hay que habilitarla antes y pagar su activación
+  - id: e
+    texto: Para el proceso interno, un perfil global puede ahorrar en torno a un 10 %
+  correctas:
+  - c
+  - e
+  explicacion: Según la guía de Bedrock, la inferencia entre Regiones no tiene coste adicional de enrutamiento y el precio se calcula según la Región desde la que se invoca el perfil. El perfil geográfico mantiene el procesamiento dentro de su zona con el precio estándar; el global puede enviar peticiones a cualquier Región comercial compatible y ahorra aproximadamente un 10 %, así que encaja con el proceso sin requisitos de residencia, no con los datos de clientes.
+  distractores:
+    a: 'Es al revés: el perfil geográfico tiene el precio estándar y el global ahorra en torno a un 10 %.'
+    b: Según la guía de Bedrock, los perfiles de inferencia no admiten Provisioned Throughput.
+    d: La inferencia entre Regiones puede enviar peticiones a Regiones que no se han habilitado manualmente en la cuenta, y no hay cuota de activación.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+- id: S-091
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una editorial mantiene encendida día y noche una instancia de Amazon EC2 con GPU para un modelo de lenguaje que aloja ella misma, aunque sus redactores solo le hacen unas 200 peticiones al día, en horario de oficina. ¿Qué ventaja de los servicios de IA generativa de AWS aprovecharía al pasar a la inferencia bajo demanda de Amazon Bedrock?
+  opciones:
+  - id: a
+    texto: La accesibilidad
+  - id: b
+    texto: La velocidad de comercialización
+  - id: c
+    texto: La redundancia entre Regiones
+  - id: d
+    texto: La rentabilidad
+  correctas:
+  - d
+  explicacion: Amazon Bedrock es serverless, así que no hay infraestructura que gestionar, y en la inferencia bajo demanda se paga por los tokens de entrada y de salida que se procesan. Con 200 peticiones al día, la editorial deja de pagar una GPU encendida las 24 horas para un uso de pocas horas, que es la rentabilidad que aportan los servicios gestionados con pago por uso.
+  distractores:
+    a: La accesibilidad es poder usar modelos de muchos proveedores tras una misma API; el problema de la editorial es lo que paga por una capacidad ociosa.
+    b: La velocidad de comercialización ayuda a lanzar antes un producto nuevo; aquí el asistente ya funciona.
+    c: Repartir la carga entre Regiones mejora la disponibilidad ante picos; con 200 peticiones al día no es lo que está en juego.
+  referencia: https://aws.amazon.com/bedrock/pricing/
+- id: S-092
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Durante las dos semanas de la campaña de la renta, una gestoría recibe veinte veces más consultas que el resto del año, muchas de noche y en fin de semana. Contratar personal temporal para ese periodo no es viable. ¿Qué ventaja de la IA generativa le ayuda MÁS?
+  opciones:
+  - id: a
+    texto: La adaptabilidad a tareas distintas con el mismo modelo
+  - id: b
+    texto: La capacidad de respuesta inmediata, a cualquier hora
+  - id: c
+    texto: La generación de contenido nuevo, como imágenes o textos
+  - id: d
+    texto: La interpretabilidad de cada una de sus respuestas
+  correctas:
+  - b
+  explicacion: 'La capacidad de respuesta (responsiveness) es una de las ventajas que cita la guía: un asistente generativo responde con rapidez a cualquier hora. Es lo que necesita la gestoría para absorber un pico temporal que no puede cubrir con personas.'
+  distractores:
+    a: La adaptabilidad permite usar el mismo modelo para tareas distintas, pero el problema de la gestoría es el volumen y el horario, no la variedad de tareas.
+    c: Generar contenido nuevo es otra ventaja, pero no es lo que resuelve atender más consultas en menos tiempo.
+    d: La falta de interpretabilidad es una desventaja de la IA generativa, no una de sus ventajas.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+- id: S-093
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Un banco debe migrar 300 procedimientos almacenados escritos en un dialecto SQL antiguo a otro dialecto. Su equipo es pequeño y quiere acelerar el trabajo, revisando el resultado antes de usarlo. ¿Qué enfoque encaja?
+  opciones:
+  - id: a
+    texto: Amazon Translate con una terminología personalizada
+  - id: b
+    texto: Amazon Textract para extraer el texto de los procedimientos
+  - id: c
+    texto: Un modelo fundacional que genere el código en el nuevo dialecto
+  - id: d
+    texto: Amazon Comprehend para extraer las entidades y la sintaxis de cada procedimiento
+  correctas:
+  - c
+  explicacion: La generación de código es uno de los casos de uso de la IA generativa que cita la guía. Un modelo fundacional puede reescribir cada procedimiento en el nuevo dialecto, y el equipo revisa y prueba el resultado antes de usarlo.
+  distractores:
+    a: Amazon Translate traduce entre idiomas humanos; no convierte código de un dialecto SQL a otro.
+    b: Textract extrae texto y datos de documentos escaneados e imágenes; el código ya es texto, y Textract no lo convierte a otro dialecto.
+    d: Comprehend analiza textos en lenguaje natural (entidades, sentimiento, sintaxis); no reescribe código.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+- id: S-094
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora usa un asistente generativo que rellena los partes de siniestro a partir de las fotos y del relato del cliente. El objetivo que aprobó la dirección es que los tramitadores dejen de corregir los partes a mano. ¿Qué métrica muestra mejor si se cumple?
+  opciones:
+  - id: a
+    texto: La exactitud de los campos que rellena el asistente
+  - id: b
+    texto: El número de partes que genera el asistente cada mes
+  - id: c
+    texto: El retorno de la inversión del primer trimestre de uso
+  - id: d
+    texto: La valoración media que dan los asegurados al servicio
+  correctas:
+  - a
+  explicacion: Si los tramitadores tienen que corregir los partes, es porque el asistente rellena campos mal. La exactitud, que la guía incluye entre las métricas de valor de negocio de la IA generativa, mide directamente cuántos campos acierta y, por tanto, cuánto trabajo de corrección queda.
+  distractores:
+    b: El volumen mide el uso, no si los partes salen bien; se pueden generar muchos partes que luego hay que corregir.
+    c: El ROI resume el resultado económico, pero no dice si se ha cumplido el objetivo concreto de evitar correcciones.
+    d: La satisfacción de los asegurados es útil, pero no mide el trabajo de corrección de los tramitadores.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+- id: S-095
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una agencia de viajes ha terminado en Amazon Bedrock el ajuste fino de un modelo con sus itinerarios, y la evaluación con 300 casos ha salido bien. Sin embargo, su aplicación todavía no puede invocar el modelo personalizado. ¿Qué etapa del ciclo de vida le falta?
+  opciones:
+  - id: a
+    texto: La evaluación, repitiendo las pruebas con más casos
+  - id: b
+    texto: El despliegue, configurando la inferencia del modelo
+  - id: c
+    texto: El ajuste fino, volviendo a entrenar con más épocas
+  - id: d
+    texto: La retroalimentación, recogiendo valoraciones de los agentes
+  correctas:
+  - b
+  explicacion: 'Crear un modelo personalizado no basta para usarlo: hay que desplegarlo. En Amazon Bedrock eso significa configurar su inferencia, bien con un despliegue del modelo personalizado para la inferencia bajo demanda, bien comprando Provisioned Throughput. Después la aplicación lo invoca con el ARN correspondiente.'
+  distractores:
+    a: La evaluación ya se hizo con buen resultado; repetirla no hace que el modelo se pueda invocar.
+    c: El entrenamiento ya terminó y el modelo es válido; entrenar más no resuelve que falte su inferencia.
+    d: La retroalimentación llega cuando el modelo ya está en uso, y aquí todavía no se puede usar.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html
+- id: S-096
+  dominio: 2
+  tarea: '2.3'
+  objetivo: 2.3.3
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una empresa francesa usa Amazon Bedrock en la Región de París, sin inferencia entre Regiones. Su delegado de protección de datos pregunta dónde queda almacenado el contenido que procesa el servicio. ¿Qué indica AWS?
+  opciones:
+  - id: a
+    texto: Se replica en Estados Unidos para mejorar los modelos de los proveedores
+  - id: b
+    texto: Queda en la Región solo si se cifra con una clave propia de AWS KMS
+  - id: c
+    texto: Se guarda en la Región donde tiene su sede el proveedor del modelo
+  - id: d
+    texto: Se cifra y se almacena en reposo en la Región donde se usa el servicio
+  correctas:
+  - d
+  explicacion: Según las preguntas frecuentes de Amazon Bedrock, el contenido del cliente que procesa el servicio se cifra y se almacena en reposo en la Región de AWS en la que se usa Bedrock. Es uno de los beneficios de seguridad y cumplimiento de la infraestructura de AWS para las aplicaciones de IA generativa.
+  distractores:
+    a: El contenido del cliente no se usa para mejorar los modelos base ni se comparte con los proveedores de modelos.
+    b: 'La ubicación no depende de cómo se cifre: el contenido se cifra siempre en reposo, con una clave de AWS o con una propia, y queda en la Región de uso.'
+    c: Según las preguntas frecuentes de Bedrock, las entradas y las salidas no se comparten con los proveedores de modelos, y el contenido queda en la Región donde se usa el servicio.
+  referencia: https://aws.amazon.com/bedrock/faqs/
+- id: S-097
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.2
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un despacho de abogados tiene sus dictámenes en PDF en una base de conocimiento de Amazon Bedrock con Amazon OpenSearch Serverless como almacén vectorial, y exige que cada respuesta cite el documento y la página de la que sale. Al conectar el origen de datos, el equipo eligió indexar cada dictamen entero, porque son cortos. Las citas indican el documento, pero ninguna muestra la página. ¿Qué debe hacer?
+  opciones:
+  - id: a
+    texto: Crear un origen de datos nuevo con fragmentación y volver a ingerir los PDF
+  - id: b
+    texto: Cambiar la estrategia de fragmentación del origen de datos actual y sincronizarlo
+  - id: c
+    texto: Pasar a un modelo con una ventana de contexto mayor
+  - id: d
+    texto: Pedir en el prompt que el modelo añada la página de cada cita
+  correctas:
+  - a
+  explicacion: 'Con documentos PDF y OpenSearch Serverless o Aurora como almacén vectorial, Knowledge Bases genera el número de página y lo guarda en el metadato x-amz-bedrock-kb-document-page-number, pero no si se elige no fragmentar los documentos. Y la estrategia de fragmentación no se puede cambiar después de conectar el origen de datos: hay que crear uno nuevo con fragmentación y volver a ingerir los documentos, y eliminar el origen anterior para no duplicar fragmentos sin página.'
+  distractores:
+    b: La documentación de Bedrock indica que la estrategia de fragmentación no se puede cambiar después de conectar el origen de datos.
+    c: El tamaño de la ventana no cambia cómo se indexan los documentos ni qué metadatos de origen llevan las citas.
+    d: El modelo no recibe el número de página entre los datos de origen; pedírselo invita a que lo invente.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html
+- id: S-098
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un regulador exige a una entidad de crédito que el conjunto exacto con el que entrenó su modelo de scoring no pueda modificarse ni borrarse durante cinco años, tampoco por los administradores de su cuenta de AWS. Los datos están en Amazon S3. ¿Qué usa?
+  opciones:
+  - id: a
+    texto: El versionado de S3 con una política de bucket que deniega los borrados
+  - id: b
+    texto: La clase de almacenamiento S3 Glacier Deep Archive
+  - id: c
+    texto: S3 Object Lock en modo de cumplimiento con cinco años de retención
+  - id: d
+    texto: Un registro de AWS CloudTrail con los eventos de datos del bucket
+  correctas:
+  - c
+  explicacion: En el modo de cumplimiento de S3 Object Lock, ninguna persona, ni siquiera el usuario raíz de la cuenta, puede sobrescribir ni borrar una versión protegida durante el periodo de retención (salvo cerrando la cuenta), y ese periodo no se puede acortar. Garantiza la integridad del conjunto de entrenamiento durante los cinco años.
+  distractores:
+    a: Un administrador puede cambiar o quitar la política de bucket y borrar versiones; protege frente a errores, no frente a quien administra la cuenta.
+    b: Es una clase de almacenamiento barata para archivar; no impide modificar ni borrar los objetos.
+    d: CloudTrail deja constancia de quién modifica o borra, pero no lo impide.
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html
+- id: S-099
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora ya guarda en un bucket de Amazon S3 los ficheros de registro de AWS CloudTrail de su plataforma de IA. Su auditor externo quiere que, llegado el caso, la empresa pueda demostrar que ningún fichero se ha modificado ni borrado después de que CloudTrail lo entregara. ¿Qué activa?
+  opciones:
+  - id: a
+    texto: El versionado del bucket donde se guardan los registros de CloudTrail
+  - id: b
+    texto: La validación de integridad de los ficheros de registro de CloudTrail
+  - id: c
+    texto: Una regla de AWS Config que compruebe el cifrado del bucket de registros
+  - id: d
+    texto: El cifrado de los ficheros de registro con una clave propia de AWS KMS
+  correctas:
+  - b
+  explicacion: La validación de integridad de los ficheros de registro de CloudTrail usa algoritmos estándar (SHA-256 para el hash y SHA-256 con RSA para la firma digital) y permite determinar si un fichero se modificó, se borró o sigue intacto desde que CloudTrail lo entregó. Es la prueba que necesita el auditor. Cubre los ficheros entregados desde que se activa; la comprobación se hace después, por ejemplo con la AWS CLI.
+  distractores:
+    a: El versionado conserva versiones anteriores, pero quien tenga permisos puede borrar versiones concretas sin dejar rastro en el bucket; no aporta una prueba verificable de que cada fichero entregado sigue intacto.
+    c: Una regla de Config comprueba la configuración del bucket, como el cifrado; no verifica el contenido de cada fichero de registro.
+    d: El cifrado protege la confidencialidad de los registros, pero no prueba que no se hayan modificado o borrado.
+  referencia: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
+- id: S-100
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: La secretaría del consejo de una cooperativa pega en un mismo prompt de un modelo Amazon Nova en Amazon Bedrock las actas de seis reuniones, de unas 40 páginas cada una, y pide un resumen de los acuerdos con sus importes. El resumen mezcla acuerdos de reuniones distintas y añade importes que no aparecen en ninguna acta. Sin crear una base de conocimiento ni cambiar de modelo, ¿qué cambio en el prompt ayuda a fundamentar el resumen en las actas?
+  opciones:
+  - id: a
+    texto: Pedir al modelo que indique su nivel de confianza en cada cifra
+  - id: b
+    texto: Pedir un resumen más breve, de una página como máximo
+  - id: c
+    texto: Añadir al prompt ejemplos de buenos resúmenes de actas
+  - id: d
+    texto: Numerar los pasajes y pedir que los cite al resumir
+  correctas:
+  - d
+  explicacion: Con documentos largos en el prompt, la guía de prompts de Amazon Nova recomienda numerar los pasajes que se pueden citar y pedir al modelo que fundamente su respuesta citándolos antes de completar la tarea. Así se centra en la información pertinente y cada dato queda ligado a su acta, lo que permite comprobarlo.
+  distractores:
+    a: Una confianza que declara el propio modelo no está ligada a ningún pasaje; puede ser alta para una cifra inventada.
+    b: Un resumen más corto tiene menos datos, pero no hace que el modelo los tome de las actas ni que se puedan comprobar.
+    c: Los ejemplos enseñan el formato del resumen, pero no ligan cada dato a su fuente.
+  referencia: https://docs.aws.amazon.com/nova/latest/userguide/prompting-long-context.html

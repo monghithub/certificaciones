@@ -1160,6 +1160,24 @@
   no_usar_cuando: "Cuando el caso no usa documentos JSON ni la API de MongoDB: para búsqueda vectorial, Aurora PostgreSQL con pgvector u OpenSearch Service."
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
 
+- id: validacion-integridad-cloudtrail
+  termino: validación de integridad de los ficheros de registro de CloudTrail
+  alias: [CloudTrail log file integrity validation, log file integrity validation]
+  categoria: tecnica
+  definicion: "Funcionalidad de AWS CloudTrail que permite determinar si un fichero de registro se modificó, se borró o sigue intacto desde que CloudTrail lo entregó. Con ella activada en el trail, CloudTrail entrega cada hora un fichero resumen (digest) firmado (SHA-256 y SHA-256 con RSA) con los hashes de los ficheros de esa hora, y la comprobación se hace, por ejemplo, con la AWS CLI."
+  usar_cuando: "Cuando un auditor o una investigación exige demostrar que los registros de actividad de una plataforma de IA no se han alterado desde su entrega."
+  no_usar_cuando: "Para impedir el borrado, no solo detectarlo: S3 Object Lock en el bucket de registros."
+  referencia: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
+
+- id: s3-object-lock
+  termino: S3 Object Lock
+  alias: [Object Lock]
+  categoria: tecnica
+  definicion: "Funcionalidad de Amazon S3 que guarda objetos con el modelo WORM (escribir una vez, leer muchas): durante un periodo de retención no se pueden sobrescribir ni borrar. En el modo de cumplimiento nadie puede hacerlo, ni el usuario raíz de la cuenta, y la retención no se puede acortar; en el modo de gobierno, solo los usuarios con permisos especiales."
+  usar_cuando: "Cuando una norma exige conservar sin cambios durante años un conjunto de datos, por ejemplo el que se usó para entrenar un modelo, o unos registros de auditoría. Funciona solo con el versionado activado y protege versiones concretas: una escritura con la misma clave crea una versión nueva."
+  no_usar_cuando: "Para protegerse solo de borrados accidentales, basta el versionado de S3; para archivar al menor coste, las clases de almacenamiento S3 Glacier, que no impiden borrar."
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html
+
 - id: amazon-s3-vectors
   termino: Amazon S3 Vectors
   alias: [S3 Vectors]

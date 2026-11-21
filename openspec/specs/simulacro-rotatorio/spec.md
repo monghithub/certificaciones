@@ -11,7 +11,7 @@ Si el banco del simulacro de un curso tiene más preguntas que `examen.preguntas
 
 #### Scenario: Intento de un banco mayor que el examen
 
-- **WHEN** el banco tiene 83 preguntas, `examen.preguntas` es 65 y el estudiante inicia el simulacro
+- **WHEN** el banco tiene 96 preguntas, `examen.preguntas` es 65 y el estudiante inicia el simulacro
 - **THEN** el intento contiene 65 preguntas distintas del banco, en orden aleatorio
 
 ### Requirement: Reparto por dominio y tipo en cada intento

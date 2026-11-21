@@ -5,7 +5,7 @@ TBD - created by archiving change iteracion-6-simulacro-cierre. Update Purpose a
 ## Requirements
 ### Requirement: Simulacro con los pesos oficiales
 
-`cursos/aif-c01/modulos/06-simulacro/preguntas.yaml` SHALL ser un banco de al menos 80 preguntas `S-NNN` que cubra los 69 objetivos oficiales con al menos una pregunta cada uno, solo de los tipos que enumera la guía oficial del examen (`examen.tipos` del manifiesto: opción múltiple y respuesta múltiple en la versión 1.2), con dificultad repartida y suficientes preguntas por dominio y tipo para formar siempre un intento de 65 con 13/16/18/9/9 por dominio y 52 de opción múltiple y 13 de respuesta múltiple. Los ids existentes no SHALL renumerarse ni reutilizarse.
+`cursos/aif-c01/modulos/06-simulacro/preguntas.yaml` SHALL ser un banco de al menos 96 preguntas `S-NNN` que cubra los 69 objetivos oficiales con al menos una pregunta cada uno, solo de los tipos que enumera la guía oficial del examen (`examen.tipos` del manifiesto: opción múltiple y respuesta múltiple en la versión 1.2), con dificultad repartida y suficientes preguntas por dominio y tipo para formar siempre un intento de 65 con 13/16/18/9/9 por dominio y 52 de opción múltiple y 13 de respuesta múltiple. Los ids existentes no SHALL renumerarse ni reutilizarse.
 
 #### Scenario: Simulacro disponible en la consola
 
@@ -34,4 +34,4 @@ TBD - created by archiving change iteracion-6-simulacro-cierre. Update Purpose a
 #### Scenario: Estudiante que quiere repetirlo
 
 - **WHEN** el estudiante lee el README antes de un segundo intento
-- **THEN** sabe que el segundo intento cambia parte de las preguntas (unas 16 de 65), que la mayoría se repiten y que conviene repasar antes de repetirlo
+- **THEN** sabe que el segundo intento cambia parte de las preguntas (unas 31 de 65), que el resto se repite y que conviene repasar antes de repetirlo

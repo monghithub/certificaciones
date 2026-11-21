@@ -649,3 +649,52 @@ La revisión confirma que el flujo es correcto (3000 casos frente a fuerza bruta
 - **Prueba real:** simulacro con el contenido de AIF-C01, 12 respuestas (8 bien): 13/16/18/9/9 por dominio, 8/65 en total, 53 sin responder, los cinco dominios y las 14 tareas enlazadas.
 - **Verificación:** pytest, validadores, markdownlint, Mermaid e imagen Docker. Cambio archivado en `openspec/changes/archive/2026-11-22-resultado-por-dominio`.
 - **Revisión independiente** (nada crítico; las 21 URLs de dominio y tarea dan 200 con anclas existentes). Correcciones menores: los libros con `dominio: 1.0` se normalizan y los de dominio o tarea de otro tipo se descartan con aviso (antes, una fila desaparecía o la página daba 500); la marca compara los porcentajes mostrados (no «69 % frente a 69 %»); el texto usa el rango real de preguntas por dominio y el proveedor del manifiesto; las retiradas no cuentan como «sin responder»; el desglose por tarea suma el total (filas «Sin tarea oficial» y retiradas; una tarea de otro dominio cuenta en la suya, cosa que el validador ya impide fuera de los libros); el total sale de una sola fuente; tablas con `caption`, cabeceras y pie accesibles. Pruebas: enlaces y anclas reales, reparto calculado y casos de redondeo, tipos, dominios cruzados y orden «1.10» frente a «1.2».
+
+### Simulacro: segunda pregunta para los objetivos fijos
+
+- Petición: que ninguna pregunta del simulacro salga en todos los intentos. Rama `aif-c01/simulacro-fijas`, en el *worktree* `~/Cursos/wt-simulacro-fijas`, a partir de `main` con el PR #53; solo contenido.
+- **Causa:** en el D2 (14 objetivos, 16 huecos) y el D5 (8 objetivos, 9 huecos) cada intento tiene que incluir todos los objetivos, así que una pregunta que es la única de su objetivo sale siempre. Eran 13: S-003, S-010, S-021, S-024, S-033, S-043, S-048, S-067 y S-068 (D2) y S-008, S-030, S-044 y S-055 (D5).
+- **Criterio de tipos:** se simuló el banco con las 13 preguntas nuevas en varias combinaciones de tipo. Con todas de opción múltiple ya no queda ninguna fija; se hace de respuesta múltiple la de 2.3.4 (S-090) para dar al D2 dos preguntas de holgura en esa celda (5 para 3 huecos). Resultado por celda: D2 23+5 (cuotas 13+3) y D5 12+4 (7+2). Ninguna celda pierde factibilidad y las repeticiones inevitables no cambian (D2 2, D5 1).
+- **Preguntas nuevas**, cada una sobre un aspecto distinto del que ya trataba la otra pregunta de su objetivo, para que no se den pistas si coinciden en un intento: S-088 (2.1.4, la entrada domina la factura), S-089 (2.1.5, filtrar los resultados de las herramientas), S-090 (2.3.4, coste de la inferencia entre Regiones: sin cargo por enrutar, precio de la Región de origen, perfil global un 10 % más barato), S-091 (2.3.2, playground de Bedrock para un equipo sin desarrolladores), S-092 (2.2.1, capacidad de respuesta ante picos), S-093 (2.1.2, generación de código), S-094 (2.2.4, exactitud como métrica de negocio), S-095 (2.1.3, despliegue de un modelo personalizado), S-096 (2.3.3, el contenido se almacena en la Región de uso), S-097 (5.1.2, sin fragmentación las citas no muestran la página), S-098 (5.1.3, S3 Object Lock en modo de cumplimiento), S-099 (5.2.1, trail de CloudTrail para conservar más de 90 días) y S-100 (5.1.5, citar pasajes numerados en documentos largos, según la guía de Amazon Nova).
+- **Inéditas:** comparadas a mano con las preguntas de su objetivo en los bancos de examen y de repaso. Se descartaron por repetir planteamientos: Amazon Inspector para vulnerabilidades (D5-028 y D5-046), personalización de contenido (cercana a S-033), RAG con fidelidad en Bedrock Evaluations (D4-045) y permisos por documento en Knowledge Bases (D3-013). Similitud de Jaccard máxima con los bancos: 0,29 (S-088 frente a R2-009).
+- **Datos verificados** en la documentación de AWS: facturación por tokens de entrada y de salida; ingeniería de contexto (Prescriptive Guidance); inferencia entre Regiones (sin coste de enrutamiento, precio según la Región de origen, perfil global con un ahorro aproximado del 10 %, Regiones de destino sin habilitar a mano); playground de Bedrock (FAQ); inferencia de modelos personalizados (despliegue bajo demanda o Provisioned Throughput); almacenamiento en reposo en la Región de uso (FAQ); citas sin número de página cuando no se fragmenta; modo de cumplimiento de S3 Object Lock (ni el usuario raíz puede borrar); historial de eventos de CloudTrail de 90 días y trails; guía de Amazon Nova para contextos largos (citas de pasajes numerados).
+- **Medidas** (2 000 extracciones sin `evitar`; 500 pares de intentos seguidos con `evitar`):
+
+  | | Antes (83) | Después (96) |
+  |---|---|---|
+  | Preguntas al 0 % | 0 | 0 |
+  | Preguntas al 100 % | 13 | 0 |
+  | Frecuencia mínima y máxima | 33 % (S-025) y 100 % | 45 % (S-056) y 96 % (S-065) |
+  | Comunes entre dos intentos seguidos | 48,1 de media | 34,1 de media |
+  | Nuevas en el segundo intento | 16,9 | 30,9 |
+  | Vistas entre los dos intentos | 81,9 de 83 | 95,9 de 96 |
+
+- Reparto final: 96 preguntas, 74 de opción múltiple y 22 de respuesta múltiple; letras de opción múltiple a 18, b 19, c 19 y d 18; dificultad 18 baja, 59 media y 19 alta. `banco.minimo_simulacro` pasa de 80 a 96 para que el banco no pueda encoger sin que lo note la CI.
+- Las cifras de las especificaciones de `openspec/specs/` (simulacro-aif-c01, quiz-engine y simulacro-rotatorio) se actualizaron al banco de 96 en un commit aparte de la misma rama.
+
+### Simulacro: correcciones de la revisión de S-088 a S-100
+
+- Revisión independiente: ninguna respuesta incorrecta, pero datos incompletos, planteamientos repetidos y pistas. Se tuvo en cuenta el modo estudio, que muestra cada explicación al momento y puede dar pistas a otra pregunta del mismo intento.
+- **Cambian de planteamiento:**
+  - S-091 (2.3.2) repetía R2-062 (playground → accesibilidad): ahora una GPU autoalojada encendida 24 horas para 200 peticiones al día → rentabilidad del pago por uso de Bedrock bajo demanda.
+  - S-097 (5.1.2): el número de página solo existe para PDF con OpenSearch Serverless o Aurora, y la estrategia de fragmentación no se puede cambiar en un origen de datos ya conectado. Ahora el escenario lo dice («indexar cada dictamen entero») y la correcta es crear un origen nuevo con fragmentación y volver a ingerir; cambiar la del origen actual pasa a ser el distractor.
+  - S-099 (5.2.1) repetía R5-024 y se resolvía con «un trail» como S-045: ahora, validación de integridad de los ficheros de registro de CloudTrail.
+  - S-100 (5.1.5) repetía el escenario de S-079 (Nova Premier y documentos financieros): ahora, actas de un consejo, sin citar la guía en el enunciado y con distractores más plausibles (confianza declarada, temperatura cero, ejemplos).
+- **Ajustes:** S-089 (la caché de prompts sí aprovecha el historial; correcta más corta; explicación sin afirmar lo que no dice la referencia), S-090 (distractores que ya no se contradicen con la correcta; los perfiles de inferencia no admiten Provisioned Throughput), S-088, S-092, S-093, S-094 y S-096 (opciones equilibradas y distractores mejor apoyados), S-098 («salvo cerrando la cuenta»). Pistas en modo estudio: la explicación de S-033 ya no enumera la capacidad de respuesta (S-092) y la de S-067 ya no anticipa el despliegue (S-095).
+- **Teoría y glosario:** el módulo 05 añade el número de página en las citas de Knowledge Bases y por qué no se puede cambiar la fragmentación (5.1.2), S3 Object Lock (5.1.3), las citas de pasajes numerados en el *prompt* (5.1.5) y la validación de integridad de los registros de CloudTrail (5.2.1), con sus referencias; nueva entrada del glosario «S3 Object Lock». README del simulacro: «inéditas» se matiza (algunas tratan el mismo concepto que una pregunta de los bancos con otro planteamiento).
+- **Comprobaciones nuevas:** (a) en las 74 preguntas de opción múltiple del banco, la correcta es estrictamente la opción más larga en 13 (18 %): S-009, S-011, S-020, S-028, S-031, S-033, S-047, S-054, S-055, S-059, S-062, S-072 y S-078; ninguna de las nuevas. (b) Comparación a mano de cada pregunta nueva o modificada con las de examen y repaso de su objetivo y de los vecinos:
+  - S-088 (2.1.4): D2-016 a D2-020, D2-076, D2-088, R2-009 a R2-011, R2-041, R2-045, R2-051, S-003; vecino 2.3.4 (D2-069 a D2-075, S-021).
+  - S-089 (2.1.5): D2-021 a D2-025, D2-077, R2-012, R2-013, R2-052 a R2-054, S-010; vecino 3.2.1 (S-013).
+  - S-090 (2.3.4): D2-069 a D2-075, D2-081, D2-085, R2-034 a R2-036, R2-043, R2-066, S-021; vecinos D2-042 (2.2.3) y D5-055 (5.2.2).
+  - S-091 (2.3.2): D2-060 a D2-063, R2-030, R2-031, R2-062, R2-063, S-024; vecino 2.3.4 (D2-070, D2-085).
+  - S-092 (2.2.1): D2-032 a D2-035, R2-017, R2-018, R2-055, R2-056, S-033.
+  - S-093 (2.1.2): D2-007 a D2-010, R2-005, R2-006, R2-047, R2-048, S-043; vecino 1.2.5 (D1-092, Translate).
+  - S-094 (2.2.4): D2-047 a D2-051, D2-079, R2-024, R2-025, R2-040, R2-060, R2-061, S-048; vecino 3.4.5 (S-078).
+  - S-095 (2.1.3): D2-011 a D2-015, D2-083, R2-007, R2-008, R2-038, R2-049, R2-050, S-067.
+  - S-096 (2.3.3): D2-064 a D2-068, D2-080, D2-090, R2-032, R2-033, R2-044, R2-064, R2-065, S-068; vecino D5-059 (5.2.2).
+  - S-097 (5.1.2): D5-011 a D5-017, R5-006 a R5-008, R5-036, S-008; vecino 2.1.1 (S-077, D2-004).
+  - S-098 (5.1.3): D5-018 a D5-025, R5-009 a R5-011, R5-037, S-030; vecino D5-057 (5.2.2).
+  - S-099 (5.2.1): D5-043 a D5-052, D5-072, R5-021 a R5-024, R5-031, R5-034, S-044; vecinos D5-034 y S-045 (5.1.4).
+  - S-100 (5.1.5): D5-035 a D5-042, R5-017 a R5-020, S-055; vecinos S-079 (3.2.3) y D4-045 (4.1.7).
+- Frecuencias tras las correcciones (2 000 extracciones): ninguna al 0 % ni al 100 %, mínima 45 % (S-056) y máxima 96 % (S-065); dos intentos seguidos comparten 34,1 preguntas de media. Dificultad del banco: 19 baja, 58 media y 19 alta.
+- Ajustes finales de la revisión (2026-11-22): S-091 (la accesibilidad, según el módulo 02, es usar modelos de muchos proveedores tras una misma API), S-097 (referencia kb-test-config y retirar el origen de datos anterior), S-099 (versionado e integridad: cubre los ficheros entregados desde la activación y se comprueba con la AWS CLI), S-100 (cooperativa con un modelo Amazon Nova en Bedrock; sin el distractor de temperatura de S-079; la correcta ya no es la más larga); módulo 05 con los detalles de la validación de integridad de CloudTrail (fichero resumen cada hora, activada por defecto en los trails nuevos de la consola) y nueva entrada del glosario para ella; S3 Object Lock requiere el versionado.
