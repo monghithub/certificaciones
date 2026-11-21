@@ -39,13 +39,15 @@ Los objetivos corresponden a las tres Task Statements del dominio (texto literal
 #### Términos básicos de IA
 
 - **Inteligencia artificial (IA).** Describe cualquier sistema capaz de replicar tareas que antes requerían inteligencia humana. La mayoría de los casos de uso de IA buscan un resultado **probabilístico**: una predicción o decisión con un alto grado de certeza, similar al juicio humano.
-- **Aprendizaje automático (*machine learning*, ML).** Técnica en la que se usan grandes cantidades de datos para crear y validar una lógica de decisión, que recibe el nombre de **modelo**. Casi todos los sistemas de IA actuales se crean con ML.
+- **Aprendizaje automático (*machine learning*, ML).** Técnica en la que se usan grandes cantidades de datos para crear y validar una lógica de decisión, que recibe el nombre de **modelo**. Casi todos los sistemas de IA actuales se crean con ML, pero no toda la IA es ML: un sistema de reglas escritas a mano también replica una tarea humana sin aprender de los datos.
 - **Algoritmo.** La «receta» con la que se resuelve un tipo de problema. Un mismo algoritmo puede servir para distintos tipos de problemas y un problema puede resolverse con varios algoritmos.
 - **Modelo.** El resultado de aplicar un algoritmo a unos datos de entrenamiento: la lógica de decisión que luego se usa para predecir.
+- **Característica y etiqueta (*feature* y *label*).** Las **características** son las variables de entrada que el modelo usa para predecir (edad del cliente, importe de la compra, píxeles de una imagen). La **etiqueta** u objetivo (*target*) es el valor que se quiere predecir (¿fraude o no?). Seleccionar y transformar las características es la **ingeniería de características** (*feature engineering*).
 - **Entrenamiento e inferencia.** *Entrenar* es ajustar el modelo con un conjunto de datos conocido. *Inferir* es usar el modelo ya entrenado para obtener predicciones sobre datos nuevos.
+- **Parámetros e hiperparámetros.** Los **parámetros** (por ejemplo, los pesos de una red neuronal) los **aprende** el modelo durante el entrenamiento. Los **hiperparámetros** son variables de configuración que se **fijan antes** de entrenar y controlan cómo se aprende: la tasa de aprendizaje (*learning rate*), el número de pasadas por los datos (*epochs*) o el tamaño de lote (*batch size*). Buscar los mejores hiperparámetros es el **ajuste de hiperparámetros** (*hyperparameter tuning*), que SageMaker AI automatiza lanzando muchos entrenamientos (ajuste automático de modelos). Cómo se ajustan queda fuera del alcance; basta con distinguir los dos términos.
 - **Red neuronal y aprendizaje profundo (*deep learning*).** Método de IA inspirado en el cerebro humano que procesa los datos mediante nodos (neuronas artificiales) interconectados y organizados en capas. Los modelos de aprendizaje profundo son redes neuronales y reconocen patrones complejos en imágenes, texto, sonido y otros datos.
 - **Visión por computador (*computer vision*).** Campo de la IA que permite a los ordenadores obtener información útil de imágenes, vídeos y otras entradas visuales.
-- **Procesamiento del lenguaje natural (*natural language processing*, NLP).** Tecnología que permite a los ordenadores interpretar, manipular y comprender el lenguaje humano (texto y voz).
+- **Procesamiento del lenguaje natural (*natural language processing*, NLP).** Tecnología que permite a los ordenadores interpretar, manipular y comprender el lenguaje humano (texto y voz). Antes de analizar el texto se suele **preprocesar**: dividirlo en unidades (tokenizar), reducir las palabras a su forma base (lematizar) y quitar las **palabras vacías** (*stop words*), que apenas aportan significado.
 - **Modelo de lenguaje de gran tamaño (*large language model*, LLM).** Modelo de aprendizaje profundo muy grande, preentrenado con enormes cantidades de datos, basado en la arquitectura *transformer*.
 - **IA generativa (*generative AI*, GenAI).** Conjunto de sistemas y modelos de IA diseñados para **generar contenido** nuevo (texto, código, imágenes, música u otros datos) a partir de patrones aprendidos de datos existentes. Funciona con modelos muy grandes preentrenados con vastos corpus, los **modelos fundacionales** (*foundation models*, FM).
 - **IA agéntica (*agentic AI*).** Sistema de IA autónomo que puede actuar de forma independiente para alcanzar objetivos predefinidos, sin una supervisión humana constante. En AWS, un agente orquesta las interacciones entre modelos fundacionales, fuentes de datos, aplicaciones de software y usuarios, y llama a APIs para ejecutar acciones.
@@ -53,6 +55,8 @@ Los objetivos corresponden a las tres Task Statements del dominio (texto literal
 - **Ajuste (*fit*).** Indica lo bien que un modelo generaliza a datos nuevos. Un modelo con **sobreajuste** (*overfitting*) acierta con los datos de entrenamiento pero no con datos reales (alta varianza). Un modelo con **subajuste** (*underfitting*) no encuentra una relación significativa entre entradas y salidas y falla incluso con los datos de entrenamiento (alto sesgo). El objetivo es el equilibrio entre ambos.
 
   *Ejemplo:* un modelo de fraude que acierta el 99 % con los datos de entrenamiento y el 62 % con las operaciones del mes siguiente está **sobreajustado**; uno que acierta el 60 % en ambos casos está **subajustado**.
+
+  **Cómo se corrige** (basta con reconocer la técnica): contra el sobreajuste, entrenar con **más datos** (o ampliarlos con variaciones, *data augmentation*), **parar antes** el entrenamiento (*early stopping*), quitar características poco útiles (*pruning*; no confundir con la poda que reduce el tamaño de un modelo ya entrenado), aplicar **regularización** o combinar varios modelos (*ensembling*). Contra el subajuste, lo contrario: un modelo más complejo, más características útiles o entrenar durante más tiempo. Que un modelo **generalice** significa precisamente que acierta con datos que no vio al entrenar.
 
 > «Sesgo» tiene dos sentidos distintos en el examen: el **trato injusto a grupos** (equidad) y el **error sistemático del modelo** (*bias* frente a *variance* en el ajuste). El contexto de la pregunta indica cuál se pide.
 
@@ -109,6 +113,24 @@ La IA «clásica» de clasificación (reconocer algo) y de predicción (anticipa
 - «Reconocer objetos en imágenes», «entender voz» con grandes volúmenes de datos no estructurados → **aprendizaje profundo**.
 - «Redactar», «resumir», «generar» imágenes o código → **IA generativa**.
 - «Decidir qué pasos dar», «usar herramientas», «ejecutar acciones» hasta cumplir un objetivo → **IA agéntica**. El detalle de los modelos fundacionales, los *tokens* y los agentes corresponde a los dominios 2 y 3.
+
+**ML clásico frente a aprendizaje profundo.** Los dos aprenden de los datos; cambian el tipo de datos, quién elige las características y lo que cuesta entrenarlos:
+
+| Criterio | ML clásico | Aprendizaje profundo |
+|---|---|---|
+| Datos que mejor maneja | Estructurados (tablas) | No estructurados (imágenes, audio, texto) |
+| Características | Las selecciona y extrae una persona (ingeniería de características manual) | El modelo las aprende con poca intervención humana |
+| Volumen de datos | Menor | Mucho mayor |
+| Cómputo y almacenamiento | Menor | Mucho mayor (normalmente GPU) |
+| Interpretabilidad | Más fácil de explicar | Más difícil |
+
+**Arquitecturas de redes neuronales que conviene reconocer** (no hace falta saber cómo funcionan por dentro):
+
+| Arquitectura | Datos típicos | Ejemplo |
+|---|---|---|
+| Red neuronal convolucional (*convolutional neural network*, CNN) | Imágenes | Clasificar radiografías o detectar defectos en fotos de una cadena de montaje |
+| Red neuronal recurrente (*recurrent neural network*, RNN) | Secuencias: palabras, frases o series temporales | Predecir la siguiente lectura de un sensor. En lenguaje, los *transformers* las han sustituido en gran medida |
+| *Transformer* | Secuencias, sobre todo lenguaje; usa un mecanismo de **autoatención** (*self-attention*) | Es la base de los LLM y de la IA generativa (módulo 02) |
 
 #### Tipos de inferencia
 
@@ -171,10 +193,13 @@ Los mismos conceptos aparecen con modelos fundacionales: Amazon Bedrock ofrece i
 #### Tipos de datos
 
 - **Etiquetados y no etiquetados.** Un dato está etiquetado cuando lleva asociado el valor correcto que el modelo debe aprender (por ejemplo, una foto marcada como «contiene un pájaro»). El aprendizaje supervisado necesita datos etiquetados.
-- **Estructurados y no estructurados.** Los datos estructurados siguen un formato predefinido, normalmente tabular, con filas y columnas. Los no estructurados no siguen reglas predeterminadas: texto largo, audio, vídeo e imágenes.
+- **Estructurados y no estructurados.** Los datos estructurados siguen un formato predefinido, normalmente tabular, con filas y columnas. Los no estructurados no siguen reglas predeterminadas: texto largo, audio, vídeo e imágenes. Entre ambos están los **semiestructurados**, sin un esquema tabular rígido pero con elementos que se describen a sí mismos (etiquetas, metadatos, anidamiento): JSON, XML o HTML.
 - **Tabulares.** Datos estructurados en tablas (por ejemplo, historial de clientes).
 - **Series temporales (*time series*).** Datos ordenados en el tiempo, como las lecturas de sensores de IoT o las cotizaciones.
 - **Imagen y texto.** Entradas típicas de la visión por computador y del procesamiento del lenguaje natural, respectivamente.
+- **Entrenamiento, validación y prueba.** Antes de entrenar, los datos etiquetados se reparten en tres conjuntos: el de **entrenamiento** ajusta el modelo; el de **validación** lo evalúa durante el desarrollo y ayuda a elegir los hiperparámetros; y el de **prueba** (*test*) se reserva para evaluar el modelo final con datos que nunca ha visto. Un reparto habitual en los ejemplos de AWS es 80 % para entrenar y 20 % para probar, y de lo de entrenar se aparta una parte para validar.
+
+> **Más columnas no es mejor.** Con muchas características (datos de **alta dimensionalidad**), el entrenamiento cuesta más y aumenta el riesgo de sobreajuste. Por eso se quitan las poco útiles o se aplica **reducción de dimensiones**, por ejemplo con el algoritmo integrado PCA de SageMaker AI.
 
 #### Tipos de aprendizaje
 
@@ -234,7 +259,23 @@ R1:
 - **Aprendizaje por refuerzo (*reinforcement learning*).** Un **agente** aprende un comportamiento por ensayo y error interactuando con un entorno dinámico, con el objetivo de maximizar las recompensas a largo plazo. Ejemplos: robótica, optimización de inventario o rutas, juegos.
 - **Aprendizaje autosupervisado (*self-supervised learning*).** Las etiquetas se generan a partir de los propios datos (por ejemplo, ocultar una palabra de una frase y predecirla). Es como se **preentrenan los modelos fundacionales** con enormes volúmenes de datos sin etiquetar. Después, técnicas como el aprendizaje por refuerzo con retroalimentación humana (*reinforcement learning from human feedback*, RLHF) ajustan sus respuestas a las preferencias de las personas.
 
-> Trampa frecuente: «el modelo fundacional se entrenó sin etiquetas humanas» no significa aprendizaje no supervisado (que busca grupos o anomalías), sino **autosupervisado**.
+- **Aprendizaje semisupervisado (*semi-supervised learning*).** Combina técnicas supervisadas y no supervisadas cuando hay **pocos datos etiquetados y muchos sin etiquetar**: por ejemplo, unos cientos de radiografías revisadas por especialistas y cientos de miles sin revisar. Evita tener que etiquetar todo a mano.
+- **Aprendizaje por transferencia (*transfer learning*).** No es un tipo de dato ni de etiqueta, sino una forma de **reutilizar**: un modelo preentrenado en una tarea se ajusta para otra relacionada, con menos datos y menos tiempo que entrenando desde cero. Es la idea en la que se basan JumpStart y el ajuste fino de los modelos fundacionales.
+
+> Trampa frecuente: «el modelo fundacional se entrenó sin etiquetas humanas» no significa aprendizaje no supervisado (que busca grupos o anomalías), sino **autosupervisado**. Y «pocas etiquetas y muchos datos sin etiquetar» es **semisupervisado**, no no supervisado.
+
+**Algoritmos integrados de SageMaker AI que aparecen en los enunciados**, por familia (basta con reconocer el nombre):
+
+| Algoritmo | Paradigma | Para qué |
+|---|---|---|
+| XGBoost | Supervisado | Clasificación o regresión con datos tabulares |
+| Linear Learner | Supervisado | Clasificación (binaria o multiclase) o regresión |
+| k-NN (*k-nearest neighbors*, k vecinos más cercanos) | **Supervisado** | Clasificación o regresión según los ejemplos etiquetados más parecidos |
+| k-means | No supervisado | Agrupamiento (*clustering*) |
+| Random Cut Forest | No supervisado | Detección de anomalías |
+| PCA (*principal component analysis*) | No supervisado | Reducción de dimensiones |
+
+> **La «k» engaña.** k-means agrupa datos **sin** etiquetas; k-NN clasifica **con** etiquetas. Y la regresión logística, pese a su nombre, es un método de **clasificación**.
 
 ### Tarea 1.2: casos de uso prácticos
 
@@ -252,6 +293,11 @@ El primer paso del ciclo de vida de ML es plantear el problema de negocio, y esa
 - **No hay datos suficientes** para entrenar un modelo.
 - **Se necesita un resultado exacto y no una predicción.** Un modelo da un resultado probabilístico: si el negocio exige siempre un valor concreto y comprobable (un cálculo fiscal, por ejemplo), un modelo no es la herramienta.
 - **El análisis coste-beneficio no sale.** El valor de negocio debe poder medirse frente a objetivos y criterios de éxito concretos, y el objetivo debe ser alcanzable con un camino claro a producción.
+- **El objetivo es ambiguo o no se puede medir.** Sin un criterio de éxito concreto no hay forma de saber si el modelo aporta valor.
+- **Los datos son de mala calidad, no representan el problema o no se tiene derecho a usarlos.** Un modelo aprende lo que hay en los datos, errores y sesgos incluidos.
+- **La normativa exige explicar cada decisión** y el modelo candidato es una caja negra. En ese caso se usan reglas o un modelo sencillo e interpretable (ver [ML tradicional frente a modelos fundacionales](#ml-tradicional-frente-a-modelos-fundacionales)).
+
+> **Automatizar no siempre es IA.** La automatización robótica de procesos (*robotic process automation*, RPA) ejecuta tareas repetitivas basadas en reglas sobre datos estructurados, como copiar importes de un formulario a otro sistema. Si la tarea es así, basta RPA o un *script*; la IA aporta cuando hay datos no estructurados (correos en lenguaje libre, documentos escaneados) o reglas que no se pueden escribir de antemano. Combinar ambas se llama automatización inteligente.
 
 #### Elegir la técnica: regresión, clasificación y agrupamiento
 
@@ -326,13 +372,22 @@ ANO:
 | Aplicación | Ejemplo |
 |---|---|
 | Visión por computador | Analizar imágenes y vídeos, moderar contenido, verificar identidad |
-| Procesamiento del lenguaje natural | Extraer entidades, frases clave y opiniones de documentos |
+| Procesamiento del lenguaje natural | Extraer entidades, frases clave y opiniones de documentos; clasificar textos; traducir |
+| Procesamiento inteligente de documentos (*intelligent document processing*, IDP) | Digitalizar facturas o expedientes, extraer sus datos y validarlos: combina el reconocimiento óptico de caracteres (OCR) y la visión con el NLP, por ejemplo Amazon Textract para extraer y Amazon Comprehend para entender el texto |
 | Reconocimiento del habla | Convertir audio en texto |
 | Sistemas de recomendación | Recomendar elementos a los usuarios |
 | Detección de fraude | Identificar observaciones anómalas o fraudulentas |
 | Previsión (*forecasting*) | Anticipar tendencias a partir de datos históricos |
 | Bases de conocimiento | Responder usando información propia de la empresa con *Retrieval Augmented Generation* (RAG), por ejemplo con Amazon Bedrock Knowledge Bases |
 | IA agéntica | Agentes que completan acciones a partir de datos de la organización y de la petición del usuario |
+
+Dentro de la visión por computador, el enunciado suele indicar la tarea con el verbo:
+
+| Tarea | Qué devuelve | Ejemplo |
+|---|---|---|
+| Clasificación de imágenes | Una etiqueta para la imagen completa | «Esta foto contiene un perro» |
+| Detección de objetos | Dónde está cada objeto (un recuadro, *bounding box*) y qué es | Contar los coches de un aparcamiento |
+| Segmentación | Una clase para **cada píxel** | Delimitar exactamente un tumor en una resonancia |
 
 #### Servicios gestionados de IA y ML de AWS
 
@@ -363,15 +418,38 @@ Los **servicios de IA especializados** son modelos preentrenados y optimizados p
 | Extraer importes y tablas de facturas escaneadas | Amazon Textract |
 | «Los clientes que vieron esto también vieron…» | Amazon Personalize |
 
+**Funcionalidades que deciden entre opciones parecidas.** Muchas preguntas se resuelven con una funcionalidad concreta del servicio:
+
+| Servicio | Funcionalidad | Para qué |
+|---|---|---|
+| Amazon Transcribe | Diarización (*speaker diarization*) | Separar en la transcripción lo que dice cada hablante (hasta 30) |
+| Amazon Transcribe | Vocabulario personalizado | Reconocer bien marcas, siglas y nombres propios del negocio |
+| Amazon Transcribe | Ocultación de datos personales (*PII redaction*) | Enmascarar datos personales en la transcripción |
+| Amazon Transcribe | Call Analytics | Analizar llamadas de un centro de atención: opinión del cliente, categorías de llamada y problemas detectados |
+| Amazon Translate | Terminología personalizada | Que los nombres de marca o los términos propios se traduzcan como decide la empresa (o no se traduzcan) |
+| Amazon Translate | Detección automática del idioma de origen y traducción por lotes | Traducir documentos en varios idiomas sin indicar cuál es cada uno |
+| Amazon Comprehend | Detección de datos personales (PII), clasificación y entidades personalizadas | Analizar texto con categorías propias del negocio |
+| Amazon Textract | Detección de texto frente a análisis de documentos | *Detectar* devuelve solo el texto; *analizar* devuelve además los pares clave-valor de los formularios y las tablas |
+| Amazon Textract | Análisis de gastos (*AnalyzeExpense*) y de identidad (*AnalyzeID*) | Extraer los datos de facturas y recibos (proveedor, importes, líneas) o de documentos de identidad |
+| Amazon Rekognition | Face Liveness, moderación de contenido, Custom Labels | Comprobar que hay una persona real ante la cámara (contra la suplantación), filtrar imágenes inapropiadas, detectar objetos propios del negocio |
+| Amazon Polly | Motores de voz (*generative*, *long-form*, *neural* y *standard*) | Elegir calidad y estilo de la voz sintetizada |
+| Amazon Lex | Intenciones (*intents*) y ranuras (*slots*) | La intención es lo que el usuario quiere hacer («reservar cita»); las ranuras, los datos que hay que pedirle (fecha, hora). La acción se ejecuta normalmente con una función de AWS Lambda |
+
 **Capacidades de SageMaker AI que conviene reconocer** (el examen evalúa *qué* hacen, no cómo se usan):
 
 | Capacidad | Para qué sirve |
 |---|---|
-| SageMaker Canvas | Crear modelos y obtener predicciones **sin escribir código**: pensado para analistas de negocio |
+| SageMaker Studio | Entorno de desarrollo web para todo el ciclo de vida de ML (cuadernos, entrenamiento, despliegue) |
+| SageMaker Canvas | Crear modelos y obtener predicciones **sin escribir código**: pensado para analistas de negocio. Incluye la previsión de series temporales |
+| SageMaker Data Wrangler | Importar, analizar y preparar datos con transformaciones integradas y poco o ningún código; hoy está dentro de Canvas |
+| SageMaker Feature Store | Repositorio centralizado de **características** para reutilizarlas entre equipos y servir **las mismas** al entrenar y al inferir |
 | SageMaker JumpStart | Partir de modelos preentrenados (incluidos modelos fundacionales de código abierto), ajustarlos y desplegarlos |
 | Algoritmos integrados y *frameworks* | Entrenar modelos propios con distintos grados de esfuerzo (ver [De dónde salen los modelos](#de-dónde-salen-los-modelos)) |
+| Ajuste automático de modelos (*automatic model tuning*) | Buscar los mejores hiperparámetros lanzando muchos entrenamientos |
 | *Endpoints* y transformación por lotes | Desplegar el modelo para inferencia (ver [Tipos de inferencia](#tipos-de-inferencia)) |
 | SageMaker Pipelines, Model Registry y MLflow | Automatizar, versionar y registrar experimentos (ver [MLOps](#mlops)) |
+
+> **Servicios que los libros y algunos cuestionarios todavía dan como respuesta y que ya no admiten clientes nuevos:** Amazon Forecast (desde el 29 de julio de 2024; AWS remite a la previsión de series temporales de SageMaker Canvas), Amazon Fraud Detector (desde el 7 de noviembre de 2025; AWS propone SageMaker AI, AutoGluon o AWS WAF Fraud Control), Amazon Kendra (búsqueda empresarial; AWS remite a Amazon Bedrock Knowledge Bases), SageMaker Studio Lab (entorno gratuito de aprendizaje sin cuenta de AWS; la alternativa es SageMaker Studio dentro de la capa gratuita) y, en Amazon Comprehend, el modelado de temas (*topic modeling*), la detección de eventos y la clasificación de seguridad de *prompts* (AWS remite a modelos de Amazon Bedrock y a Amazon Bedrock Guardrails). Los clientes existentes pueden seguir usándolos.
 
 Regla de decisión: **servicio gestionado y preentrenado** si resuelve el caso, **SageMaker AI** si hace falta un modelo a medida, e infraestructura y *frameworks* de bajo nivel solo si se necesita aún más control y se asume la gestión.
 
@@ -449,12 +527,25 @@ F:
   seccion: 01-fundamentos-ia-ml/teoria#etapas-de-un-pipeline-de-ia-y-ml
 ```
 
-1. **Identificación del objetivo de negocio.** Es la fase más importante: hay que tener clara la meta, el valor esperado y los criterios de éxito.
+1. **Identificación del objetivo de negocio.** Es la fase más importante: hay que tener clara la meta, el valor esperado y los criterios de éxito, normalmente un indicador clave (*key performance indicator*, KPI) medible.
 2. **Planteamiento del problema de ML.** Se traduce el problema de negocio a ML: qué se observa y qué se quiere predecir (la etiqueta u objetivo), y qué métrica se optimizará. Aquí se decide si ML es el enfoque adecuado.
-3. **Procesamiento de datos.** Los datos (entradas y salidas deseadas) definen el objetivo del sistema y sirven para entrenar el algoritmo.
-4. **Desarrollo del modelo.** Construcción, entrenamiento, ajuste y evaluación.
+3. **Procesamiento de datos.** Los datos (entradas y salidas deseadas) definen el objetivo del sistema y sirven para entrenar el algoritmo. Incluye varios pasos que el examen distingue:
+   - **Recogida e integración:** reunir los datos de sus fuentes (bases de datos, lagos de datos, terceros).
+   - **Preprocesado o preparación:** limpiar, corregir valores ausentes o erróneos y dar un formato común.
+   - **Análisis exploratorio de datos** (*exploratory data analysis*, EDA): **entender** los datos con estadísticas y gráficos (distribuciones, correlaciones, valores atípicos, clases desequilibradas) antes de decidir qué hacer con ellos.
+   - **Ingeniería de características:** seleccionar y **transformar** variables en las entradas que usará el modelo; por ejemplo, sacar «día de la semana» de una fecha.
+4. **Desarrollo del modelo.** Construcción, entrenamiento, ajuste de hiperparámetros y evaluación con los conjuntos de validación y de prueba.
 5. **Despliegue.** Se lleva el modelo a producción para hacer predicciones, con procesos de gobierno y automatización.
 6. **Monitorización.** Se comparan los datos en producción con los de entrenamiento y se detectan problemas de calidad de datos, de calidad del modelo y de deriva.
+
+**Dos tipos de deriva que el examen separa:**
+
+| Tipo | Qué cambia | Ejemplo | Cómo se detecta |
+|---|---|---|---|
+| Deriva de datos (*data drift*) | Las propiedades estadísticas de las **entradas** se alejan de las de entrenamiento | Un modelo de crédito entrenado con clientes de 30 a 50 años empieza a recibir sobre todo solicitudes de menores de 25 | Comparando la distribución de las entradas con una línea base de entrenamiento; no necesita conocer el resultado real |
+| Deriva de concepto (*concept drift*) | La **relación** entre las entradas y el resultado: los mismos datos ya no significan lo mismo | Los defraudadores cambian de táctica y operaciones que antes eran normales ahora son fraude | Comparando las predicciones con el resultado real (*ground truth*) cuando se conoce, porque las entradas pueden no haber cambiado |
+
+En los dos casos la respuesta es la misma: detectarlo con monitorización y alarmas (por ejemplo, Amazon CloudWatch) y **reentrenar** con datos recientes.
 
 > La ingeniería de características (*feature engineering*), el ajuste de hiperparámetros y la construcción de *pipelines* están fuera del alcance del examen: basta con reconocer en qué etapa encajan.
 
@@ -523,10 +614,11 @@ En los dos casos el acceso puede quedar dentro de la red privada: la mayoría de
 |---|---|
 | Obtención de datos de terceros | AWS Data Exchange (compartir y gestionar datos de otras organizaciones, incluidas las suscripciones de AWS Marketplace) |
 | Almacenamiento y análisis de datos | Amazon S3 (lagos de datos, datos de entrenamiento y artefactos de modelos); Amazon Redshift (almacén de datos gestionado a escala de petabytes); AWS Lake Formation (permisos detallados sobre el lago de datos); Amazon OpenSearch Service (búsqueda de texto y vectorial, por ejemplo para RAG) |
-| Preparación de datos | AWS Glue (integración y ETL *serverless*), AWS Glue DataBrew (limpieza visual sin código), Amazon EMR (Apache Spark y Hadoop gestionados para procesar grandes volúmenes) |
+| Preparación de datos | AWS Glue (integración y ETL *serverless*), AWS Glue DataBrew (limpieza visual sin código), Amazon EMR (Apache Spark y Hadoop gestionados para procesar grandes volúmenes), SageMaker Data Wrangler en Canvas (análisis y preparación de datos **para ML**) |
+| Características | SageMaker Feature Store (almacén *online* con el último valor, para inferencia en milisegundos, y *offline* con el histórico en S3, para entrenar) |
 | Etiquetado de datos | Amazon SageMaker Ground Truth (cerrado a clientes nuevos) |
 | ML sin código | Amazon SageMaker Canvas |
-| Desarrollo de modelos propios | Amazon SageMaker AI (algoritmos integrados, *frameworks*, entrenamiento), SageMaker JumpStart |
+| Desarrollo de modelos propios | Amazon SageMaker AI (SageMaker Studio, algoritmos integrados, *frameworks*, entrenamiento y ajuste automático de modelos), SageMaker JumpStart |
 | Modelos fundacionales y aplicaciones de IA generativa | Amazon Bedrock |
 | Agentes | Amazon Bedrock AgentCore: plataforma agéntica para crear, desplegar y operar agentes de forma segura a escala; Strands Agents (SDK de código abierto para programar agentes) |
 | Productividad e IA aplicada | Amazon Quick: servicio con IA para automatizar tareas, analizar datos, crear aplicaciones web e investigar mediante chat |
@@ -535,6 +627,7 @@ En los dos casos el acceso puede quedar dentro de la red privada: la mayoría de
 | Entrega de la aplicación | Amazon CloudFront (distribuye con baja latencia el contenido de la aplicación que usa el modelo) |
 | Registro y automatización | SageMaker Pipelines, SageMaker Model Registry, MLflow en SageMaker AI |
 | Monitorización | SageMaker Model Monitor (cerrado a clientes nuevos) y Amazon CloudWatch |
+| Métricas de negocio y coste | AWS Cost Explorer y AWS Budgets (coste real y presupuesto del proyecto), paneles de Amazon Quick (indicadores de negocio) |
 
 Kiro se documenta en <https://kiro.dev/> y en la documentación de AWS (por ejemplo, en la [guía de AWS GovCloud](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kiro.html)): es una plataforma de desarrollo basada en especificaciones, con IDE y CLI.
 
@@ -550,9 +643,10 @@ MLOps (*ML Operations*) es la metodología que aplica las prácticas de **DevOps
 |---|---|---|
 | Experimentación | Probar y comparar variantes de modelo de forma registrada | MLflow en SageMaker AI |
 | Procesos repetibles | Automatizar los flujos para obtener los mismos resultados | SageMaker Pipelines |
-| Sistemas escalables | Que el proceso funcione al crecer el número de modelos y de datos | Servicios gestionados y automatización |
-| Gestión de la deuda técnica | Evitar que el código, los datos y los modelos mal documentados o sin versionar frenen el desarrollo | Registro de modelos, trazabilidad (*lineage*) |
+| Sistemas escalables | Que el proceso funcione al crecer el número de modelos y de datos | Entrenamiento distribuido en SageMaker AI, *endpoints* con escalado automático |
+| Gestión de la deuda técnica | Evitar que el código, los datos y los modelos mal documentados o sin versionar frenen el desarrollo | Control de versiones, integración y entrega continuas (CI/CD), infraestructura como código, registro de modelos y trazabilidad (*lineage*) |
 | Preparación para producción | Controles de calidad y de gobierno antes del despliegue | Model Registry, proyectos de SageMaker |
+| Despliegue seguro | Sustituir un modelo en producción sin arriesgar todo el tráfico y con vuelta atrás | *Deployment guardrails* y pruebas en sombra de SageMaker AI (ver abajo) |
 | Monitorización del modelo | Vigilar la calidad y la deriva en producción | Model Monitor (cerrado a clientes nuevos), CloudWatch |
 | Reentrenamiento | Volver a entrenar cuando el modelo se degrada | *Pipelines* automatizados |
 
@@ -592,6 +686,67 @@ MO:
   texto: Vigilar la calidad y la deriva en producción, por ejemplo con CloudWatch (SageMaker Model Monitor ya no admite clientes nuevos). Cuando el modelo se degrada, el mismo pipeline lo vuelve a entrenar.
 ```
 
+**MLflow y Model Registry no compiten.** MLflow en SageMaker AI registra y compara experimentos y tiene su propio registro de modelos, que se sincroniza con SageMaker Model Registry; este último es donde se versionan y **aprueban** los modelos para desplegarlos.
+
+**Cómo se sustituye un modelo en producción sin riesgo.** Los *deployment guardrails* de SageMaker AI (para *endpoints* en tiempo real y asíncronos) crean una flota nueva junto a la actual y le pasan el tráfico de forma controlada, con un periodo de observación y **vuelta atrás automática** si salta una alarma de CloudWatch:
+
+| Estrategia | Cómo pasa el tráfico al modelo nuevo |
+|---|---|
+| Azul/verde, todo a la vez (*all at once*) | Todo el tráfico de golpe a la flota nueva («verde»); la anterior («azul») se mantiene hasta acabar la observación |
+| Azul/verde, canario (*canary*) | Primero una porción pequeña del tráfico; si va bien, el resto |
+| Azul/verde, lineal (*linear*) | En varios pasos iguales y configurables |
+| Gradual (*rolling*) | Va sustituyendo la capacidad por lotes, sin duplicar toda la flota |
+| Prueba en sombra (*shadow test*) | El modelo nuevo recibe una **copia** de las peticiones reales, pero al cliente solo le llegan las respuestas del modelo en producción: se compara sin afectar a nadie |
+
+```mermaid
+flowchart LR
+    N["🆕 <b>Modelo nuevo</b><br/>aprobado en el registro"] --> Q{"🧪 <b>¿Puede recibir<br/>tráfico real ya?</b>"}
+    Q -->|"no: solo comparar"| SH["👥 <b>Prueba en sombra</b><br/>copia de peticiones; responde el actual"]
+    Q -->|"sí, con red de seguridad"| BG["🔀 <b>Azul/verde</b><br/>todo a la vez, canario o lineal"]
+    BG --> AL{"🚨 <b>¿Alarma durante<br/>la observación?</b>"}
+    AL -->|"sí"| RB["↩️ <b>Vuelta atrás</b><br/>a la flota anterior"]
+    AL -->|"no"| OK["✅ <b>Modelo nuevo<br/>en producción</b>"]
+    SH -->|"resultados buenos"| BG
+    class N ml
+    class Q,AL decision
+    class SH,BG proceso
+    class RB aviso
+    class OK accion
+```
+
+```nodos
+N:
+  concepto: amazon-sagemaker-model-registry
+  titulo: Modelo nuevo
+  texto: Una versión aprobada en el registro de modelos, lista para sustituir a la que está en producción.
+Q:
+  titulo: ¿Tráfico real ya?
+  texto: Si todavía no se confía en el modelo nuevo, se compara en sombra; si ya se confía, se despliega con una estrategia que limita el riesgo.
+  seccion: 01-fundamentos-ia-ml/teoria#mlops
+SH:
+  concepto: prueba-en-sombra
+BG:
+  concepto: deployment-guardrails
+AL:
+  titulo: Periodo de observación
+  texto: Durante el periodo de observación (baking period), las alarmas de Amazon CloudWatch vigilan la flota nueva; si saltan, SageMaker AI devuelve el tráfico a la anterior.
+  enlaces:
+  - texto: Despliegue azul/verde en SageMaker AI
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green.html
+RB:
+  titulo: Vuelta atrás automática
+  texto: El tráfico vuelve a la flota anterior («azul»), que se ha mantenido en marcha precisamente para esto.
+  enlaces:
+  - texto: Deployment guardrails
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html
+OK:
+  titulo: Modelo nuevo en producción
+  texto: Terminada la observación sin alarmas, se retira la flota anterior. A partir de aquí, monitorización y, si se degrada, reentrenamiento.
+  seccion: 01-fundamentos-ia-ml/teoria#etapas-de-un-pipeline-de-ia-y-ml
+```
+
+> **Prueba en sombra no es prueba A/B.** En una prueba A/B, parte de los usuarios **recibe** las respuestas del modelo nuevo; en sombra, nadie las recibe.
+
 #### Métricas de rendimiento y de negocio
 
 Una **métrica técnica** mide el modelo; una **métrica de negocio** mide el valor que aporta. Hay que definir cómo se relacionan (por ejemplo, la exactitud y las ventas) y que los responsables de negocio las acepten.
@@ -604,7 +759,20 @@ Una **métrica técnica** mide el modelo; una **métrica de negocio** mide el va
 | Puntuación F1 (*F1 score*) | Media armónica de precisión y exhaustividad: 2 × (P × R) / (P + R) | Cuando se necesita equilibrio entre ambas |
 | AUC | Área bajo la curva ROC: rendimiento del clasificador en todos los umbrales; 1 es perfecto y 0,5 equivale al azar | Comparar clasificadores binarios sin fijar un umbral |
 
-*VP* = verdaderos positivos, *FP* = falsos positivos, *FN* = falsos negativos. En regresión se usan métricas de error como RMSE o MAE, cuyo cálculo queda fuera del alcance.
+*VP* = verdaderos positivos, *FP* = falsos positivos, *FN* = falsos negativos. La curva ROC enfrenta la tasa de verdaderos positivos con la de falsos positivos.
+
+La matriz de confusión vale también para **clasificación multiclase** (una fila y una columna por clase), y es la herramienta para ver **qué clases confunde** el modelo. No hay que confundirla con una matriz de correlación, que mide cómo se relacionan las variables entre sí.
+
+En **regresión** no hay aciertos y fallos, sino errores de distancia al valor real. Basta con reconocerlas:
+
+| Métrica de regresión | Qué indica | Mejor cuando |
+|---|---|---|
+| MSE (*mean squared error*, error cuadrático medio) | Media de los errores al cuadrado: al elevarlos al cuadrado, los errores grandes pesan más (ver el ejemplo) | Más bajo |
+| RMSE (raíz del MSE) | Su raíz cuadrada; como el MSE, depende de la escala del valor que se predice | Más bajo |
+| MAE (*mean absolute error*, error absoluto medio) | Media de los errores sin signo | Más bajo |
+| R² (coeficiente de determinación) | Qué parte de la variación del valor real explica el modelo | Más cerca de 1 |
+
+*Ejemplo:* un modelo predice el precio de tres pisos y se equivoca en −4, +2 y +8 miles de euros. MSE = (16 + 4 + 64) / 3 = 28; RMSE = √28 ≈ 5,3 miles de euros; MAE = (4 + 2 + 8) / 3 ≈ 4,7 miles de euros. El error de 8 pesa mucho más en el MSE que en el MAE.
 
 **Ejemplo con una matriz de confusión.** Un modelo revisa 1.000 transacciones, de las que 20 son fraude:
 
@@ -676,7 +844,7 @@ EXA:
 | Filtro de *spam* que no debe perder correos legítimos | Mandar un correo bueno a *spam* (FP) | Precisión |
 | Detección de fraude con revisión manual limitada | Ambos | F1 |
 
-**Métricas de negocio** habituales: coste por usuario, costes de desarrollo, opiniones de los clientes y retorno de la inversión (*return on investment*, ROI).
+**Métricas de negocio** habituales: coste por usuario, costes de desarrollo, opiniones de los clientes, implicación de los usuarios (frecuencia de uso, duración de las sesiones, conversión) y retorno de la inversión (*return on investment*, ROI). El ROI compara lo que aporta el modelo (ingresos nuevos, ahorro operativo) con lo que cuesta construirlo y operarlo. El coste se sigue con AWS Cost Explorer y se acota con AWS Budgets.
 
 | Pregunta de la dirección | Métrica de negocio |
 |---|---|
@@ -689,16 +857,16 @@ Un modelo con una métrica técnica excelente puede fracasar si no mejora la mé
 
 ## Puntos clave para el examen
 
-- La IA es el término más amplio; el ML aprende de datos y crea un modelo; el aprendizaje profundo usa redes neuronales; la IA generativa crea contenido nuevo con modelos fundacionales; la IA agéntica actúa de forma autónoma hacia un objetivo.
-- Con etiquetas o valor objetivo, el aprendizaje es **supervisado** (categoría: clasificación; número: regresión); sin etiquetas, **no supervisado** (agrupamiento, anomalías); un agente que aprende de recompensas es **por refuerzo**.
+- La IA es el término más amplio; el ML aprende de datos y crea un modelo; el aprendizaje profundo usa redes neuronales (CNN para imágenes, *transformers* para lenguaje); la IA generativa crea contenido nuevo con modelos fundacionales; la IA agéntica actúa de forma autónoma hacia un objetivo.
+- Con etiquetas, el aprendizaje es **supervisado** (categoría: clasificación; número: regresión); sin etiquetas, **no supervisado** (agrupamiento, anomalías); con pocas etiquetas y muchos datos sin etiquetar, **semisupervisado**; un agente que aprende de recompensas, **por refuerzo**. k-means agrupa; k-NN clasifica.
 - Tipo de inferencia: baja latencia interactiva, **tiempo real**; tráfico intermitente, ***serverless***; cargas grandes o largas con encolado, **asíncrona**; conjuntos de datos completos sin *endpoint*, **por lotes**.
-- No uses ML si unas reglas simples bastan, si faltan datos, si se exige un resultado exacto y no una predicción, o si no sale el coste-beneficio.
-- Si un servicio preentrenado resuelve el caso (Transcribe, Translate, Comprehend, Lex, Polly, Rekognition, Textract, Personalize), es la opción de menor esfuerzo; SageMaker AI es para modelos propios.
-- Las etapas del *pipeline* son: objetivo de negocio, planteamiento del problema, datos, desarrollo del modelo, despliegue y monitorización, con ciclo de mejora.
-- Precisión importa cuando el falso positivo es caro; exhaustividad, cuando lo es el falso negativo; F1 equilibra ambas. Con clases desequilibradas, la exactitud engaña.
-- MLOps es DevOps aplicado a ML: experimentación, procesos repetibles, escalabilidad, monitorización y reentrenamiento.
+- No uses ML si unas reglas simples (o RPA) bastan, si faltan datos o son malos, si se exige un resultado exacto o explicar cada decisión, o si no sale el coste-beneficio.
+- Si un servicio preentrenado resuelve el caso (Transcribe, Translate, Comprehend, Lex, Polly, Rekognition, Textract, Personalize), es la opción de menor esfuerzo; SageMaker AI es para modelos propios. Forecast, Fraud Detector, Kendra y Studio Lab ya no admiten clientes nuevos: SageMaker Canvas, SageMaker AI, Bedrock Knowledge Bases y SageMaker Studio.
+- *Pipeline*: objetivo de negocio, problema de ML, datos (recogida, preparación, **EDA** para entender, **ingeniería de características** para transformar; Feature Store las sirve igual al entrenar y al inferir), modelo, despliegue y monitorización.
+- Precisión importa cuando el falso positivo es caro; exhaustividad, cuando lo es el falso negativo; F1 equilibra ambas; con clases desequilibradas, la exactitud engaña. En regresión, MSE, RMSE y MAE cuanto más bajos mejor, y R² cuanto más cerca de 1.
+- MLOps es DevOps aplicado a ML: experimentación, procesos repetibles, despliegue seguro (azul/verde con vuelta atrás, prueba en sombra), monitorización y reentrenamiento. **Deriva de datos:** cambian las entradas; **de concepto:** cambia su relación con el resultado.
 - Coste y esfuerzo crecientes: servicio preentrenado < modelo fundacional adaptado < modelo propio en SageMaker AI < preentrenar desde cero.
-- Sobreajuste: acierta en entrenamiento y falla con datos nuevos; subajuste: falla en ambos.
+- Sobreajuste: acierta en entrenamiento y falla con datos nuevos (más datos, parar antes, regularización); subajuste: falla en ambos. Los parámetros los aprende el modelo; los hiperparámetros se fijan antes de entrenar.
 
 ## Referencias
 
@@ -748,3 +916,21 @@ Documentación oficial consultada el 14 de octubre de 2026:
 - Amazon Bedrock Knowledge Bases: <https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html>
 - Páginas conceptuales «What is» de AWS (definiciones): [aprendizaje automático](https://aws.amazon.com/what-is/machine-learning/), [aprendizaje profundo](https://aws.amazon.com/what-is/deep-learning/), [redes neuronales](https://aws.amazon.com/what-is/neural-network/), [PLN](https://aws.amazon.com/what-is/nlp/), [visión por computador](https://aws.amazon.com/what-is/computer-vision/), [LLM](https://aws.amazon.com/what-is/large-language-model/), [IA agéntica](https://aws.amazon.com/what-is/agentic-ai/), [sobreajuste](https://aws.amazon.com/what-is/overfitting/), [datos estructurados](https://aws.amazon.com/what-is/structured-data/), [etiquetado de datos](https://aws.amazon.com/what-is/data-labeling/), [bases de datos de series temporales](https://aws.amazon.com/what-is/time-series-database/) y [datos estructurados y no estructurados](https://aws.amazon.com/compare/the-difference-between-structured-data-and-unstructured-data/)
 - Kiro: <https://kiro.dev/> y <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kiro.html>
+
+Añadidas en la revisión con las guías de estudio (consultadas el 21 de noviembre de 2026):
+
+- ML frente a aprendizaje profundo: <https://aws.amazon.com/compare/the-difference-between-machine-learning-and-deep-learning/>; redes neuronales recurrentes: <https://aws.amazon.com/what-is/recurrent-neural-network/>; *transformers*: <https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/>
+- Hiperparámetros: <https://aws.amazon.com/what-is/hyperparameter-tuning/> y ajuste automático de modelos: <https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html>
+- Ingeniería de características: <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html>
+- Aprendizaje supervisado, no supervisado y semisupervisado: <https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/>; aprendizaje por transferencia: <https://aws.amazon.com/what-is/transfer-learning/>; regresión logística: <https://aws.amazon.com/what-is/logistic-regression/>
+- Algoritmos integrados de SageMaker AI: <https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html>
+- Conjuntos de entrenamiento, validación y prueba: <https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-preprocess-data.html>
+- Métricas de regresión (MSE, RMSE, MAE, R²): <https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html>
+- Procesamiento inteligente de documentos: <https://aws.amazon.com/what-is/intelligent-document-processing/>; preprocesamiento de texto en NLP: <https://aws.amazon.com/what-is/nlp/>; automatización inteligente y RPA: <https://aws.amazon.com/what-is/intelligent-automation/>
+- Funcionalidades de los servicios de IA: [diarización](https://docs.aws.amazon.com/transcribe/latest/dg/diarization.html), [vocabulario personalizado](https://docs.aws.amazon.com/transcribe/latest/dg/custom-vocabulary.html) y [ocultación de PII](https://docs.aws.amazon.com/transcribe/latest/dg/pii-redaction.html) de Transcribe; [terminología personalizada](https://docs.aws.amazon.com/translate/latest/dg/how-custom-terminology.html) y [traducción por lotes](https://docs.aws.amazon.com/translate/latest/dg/async-start.html) de Translate; [análisis de documentos de Textract](https://docs.aws.amazon.com/textract/latest/dg/how-it-works-analyzing.html); [Face Liveness](https://docs.aws.amazon.com/rekognition/latest/dg/face-liveness.html); [motores de Polly](https://docs.aws.amazon.com/polly/latest/dg/voice-engines-polly.html); [intenciones y ranuras de Lex](https://docs.aws.amazon.com/lexv2/latest/dg/how-it-works.html)
+- SageMaker Feature Store: <https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html>; Data Wrangler en Canvas: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html>; SageMaker Studio: <https://docs.aws.amazon.com/sagemaker/latest/dg/studio-updated.html>
+- *Deployment guardrails*: <https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html> y pruebas en sombra: <https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html>
+- Deriva de datos (Machine Learning Lens): <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html>; deriva de la distribución y deriva de concepto (AWS Prescriptive Guidance): <https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/monitoring.html>; calidad del modelo frente a *ground truth*: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-baseline.html>
+- Matriz de confusión y métricas de clasificación en SageMaker Canvas: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-advanced-metrics.html>
+- Análisis de facturas y recibos (*AnalyzeExpense*): <https://docs.aws.amazon.com/textract/latest/dg/invoices-receipts.html> y de documentos de identidad (*AnalyzeID*): <https://docs.aws.amazon.com/textract/latest/dg/how-it-works-identity.html>
+- Avisos de disponibilidad: [Amazon Forecast](https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html), [Amazon Fraud Detector](https://docs.aws.amazon.com/frauddetector/latest/ug/frauddetector-availability-change.html), [Amazon Kendra](https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html), [SageMaker Studio Lab](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-lab.html) y [funciones de Amazon Comprehend](https://docs.aws.amazon.com/comprehend/latest/dg/comprehend-availability-change.html)

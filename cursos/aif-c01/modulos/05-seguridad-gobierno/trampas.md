@@ -32,3 +32,12 @@
 - **Los registros se borran solos.** Los grupos de CloudWatch Logs guardan los datos **indefinidamente por defecto**; hay que fijar la retención o usar S3 Lifecycle.
 - **La inferencia entre Regiones global respeta la residencia en la UE.** Para mantener el procesamiento dentro de una geografía se usa un perfil **geográfico**, no el global.
 - **Ámbitos de la *Security Scoping Matrix*.** Usar un chatbot público = ámbito 1; un SaaS con IA = 2; una app propia sobre un modelo de Bedrock = 3; un modelo ajustado = 4; un modelo entrenado desde cero = 5. Más ámbito, más responsabilidades.
+
+## Normativas, capas y jurisdicción
+
+- **Un informe de AWS no certifica tu aplicación.** Artifact da los informes de AWS (SOC, ISO, PCI) y acuerdos como el BAA; el cumplimiento de la aplicación sigue siendo del cliente.
+- **No existe «AWS certificado HIPAA».** Para tratar PHI se acepta el BAA en Artifact y se usan solo servicios aptos para HIPAA.
+- **Qué hace el cliente en cada norma.** HIPAA: aceptar el BAA en Artifact y usar servicios aptos. PCI DSS: AWS aporta su informe de nivel 1, pero el cliente certifica su aplicación. RGPD: elegir la Región y aplicar los derechos, como la supresión.
+- **Residencia frente a soberanía.** Dónde están los datos frente a qué leyes se les aplican.
+- **Reforzar una capa no es añadir otra.** Más temas denegados en Guardrails siguen siendo la misma capa; la defensa en profundidad pone controles en la organización, la red, el cómputo, la aplicación y los datos.
+- **Detectar datos personales: ¿dónde están?** En objetos de S3, Amazon Macie; en un texto que procesa la aplicación, Amazon Comprehend; en las entradas y salidas de un modelo de Bedrock, el filtro de información sensible de Guardrails.

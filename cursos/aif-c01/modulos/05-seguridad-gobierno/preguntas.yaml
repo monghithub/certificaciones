@@ -1974,3 +1974,136 @@
     b: Es un portal de informes de cumplimiento de AWS, no un marco de clasificación.
     c: Reparte la seguridad entre AWS y el cliente, pero no clasifica los casos de IA generativa por ámbito.
   referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
+- id: D5-070
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.4
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Una aseguradora protege con Guardrails su asistente de Amazon Bedrock, que puede consultar pólizas y emitir reembolsos. La auditoría interna señala que, si un ataque de prompt esquivara los filtros, nada más limitaría el daño. ¿Qué DOS medidas añaden capas independientes de protección?
+  opciones:
+  - id: a
+    texto: Dar al rol del asistente solo los permisos de IAM que necesita para sus herramientas
+  - id: b
+    texto: Añadir más temas denegados a la misma barrera de Guardrails
+  - id: c
+    texto: Exigir la aprobación de una persona antes de emitir cualquier reembolso
+  - id: d
+    texto: Subir al máximo la intensidad de los filtros de contenido
+  - id: e
+    texto: Repetir en las instrucciones del sistema que no obedezca órdenes externas
+  correctas:
+  - a
+  - c
+  explicacion: 'Un enfoque por capas combina controles independientes. El mínimo privilegio de IAM limita lo que puede hacer el asistente aunque lo engañen, y la aprobación humana detiene las acciones con consecuencias. Ambos siguen actuando si Guardrails falla.'
+  distractores:
+    b: Más temas denegados refuerzan la misma capa (Guardrails); si el ataque la esquiva, no añaden protección.
+    d: Subir los filtros también refuerza la misma capa y puede bloquear peticiones legítimas.
+    e: Las instrucciones del sistema son la parte que el ataque de prompt intenta saltarse; no son una capa independiente.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
+- id: D5-071
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.1
+  tipo: matching
+  dificultad: media
+  enunciado: Un hospital quiere controlar los datos personales en tres puntos de su solución de IA generativa. Empareja cada necesidad con el servicio adecuado.
+  prompts:
+  - id: '1'
+    texto: Saber si los buckets de S3 con los que se ajustará un modelo contienen datos personales
+  - id: '2'
+    texto: Ocultar los datos personales de las transcripciones de llamadas antes de guardarlas
+  - id: '3'
+    texto: Impedir que el asistente de Bedrock devuelva números de historia clínica en sus respuestas
+  opciones:
+  - id: a
+    texto: Amazon Comprehend
+  - id: b
+    texto: Filtro de información sensible de Amazon Bedrock Guardrails
+  - id: c
+    texto: Amazon Macie
+  - id: d
+    texto: AWS Artifact
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - a
+  - - '3'
+    - b
+  explicacion: 'Macie descubre datos sensibles en objetos de S3; Comprehend detecta y oculta datos personales en un texto que procesa la aplicación; el filtro de información sensible de Guardrails actúa sobre las entradas y salidas del modelo (para un formato propio, como el número de historia clínica, con una expresión regular).'
+  distractores:
+    d: Artifact da informes de cumplimiento y acuerdos de AWS; no detecta datos personales.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
+- id: D5-072
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.1
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una clínica de EE. UU. quiere un asistente con Amazon Bedrock que resuma historias clínicas. Su responsable de cumplimiento pregunta qué debe hacer la clínica para tratar esa información en AWS conforme a HIPAA. ¿Qué respuesta es correcta?
+  opciones:
+  - id: a
+    texto: Nada, porque AWS está certificado para HIPAA y eso cubre a sus clientes
+  - id: b
+    texto: Aceptar el BAA en AWS Artifact y tratar la información en los servicios de AWS que ya usa
+  - id: c
+    texto: Aceptar el BAA en AWS Artifact y tratar la información solo en servicios aptos para HIPAA
+  - id: d
+    texto: Descargar de AWS Artifact el informe SOC 2 y entregarlo como prueba de cumplimiento
+  correctas:
+  - c
+  explicacion: 'HIPAA exige un acuerdo BAA con el proveedor, que se acepta en AWS Artifact, y la información sanitaria solo debe tratarse en servicios aptos para HIPAA, como Bedrock. El cumplimiento de la aplicación sigue siendo de la clínica.'
+  distractores:
+    a: No existe una certificación HIPAA para un proveedor de nube; la responsabilidad se comparte.
+    b: El BAA no basta si la información pasa por servicios que no son aptos para HIPAA.
+    d: Un informe SOC 2 describe los controles de AWS, pero no sustituye al BAA ni demuestra que la aplicación de la clínica cumple.
+  referencia: https://aws.amazon.com/compliance/hipaa-compliance/
+- id: D5-073
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un contratista de una agencia federal de EE. UU. va a llamar a Amazon Bedrock desde su aplicación en us-east-1. Su contrato exige que el tráfico con el servicio use módulos criptográficos validados según FIPS 140. ¿Qué debe hacer?
+  opciones:
+  - id: a
+    texto: Invocar el modelo a través del endpoint FIPS de Bedrock (bedrock-runtime-fips)
+  - id: b
+    texto: Cifrar los prompts con una clave propia de AWS KMS antes de enviarlos
+  - id: c
+    texto: Activar el registro de invocaciones de Bedrock en CloudWatch Logs
+  - id: d
+    texto: Usar un perfil de inferencia entre Regiones geográfico de EE. UU.
+  correctas:
+  - a
+  explicacion: 'Los endpoints FIPS de Bedrock usan módulos criptográficos validados según FIPS 140; están disponibles en algunas Regiones de EE. UU., Canadá y GovCloud, como us-east-1.'
+  distractores:
+    b: Cifrar con KMS protege el contenido, pero no hace que la conexión con el servicio use un endpoint validado FIPS.
+    c: El registro de invocaciones sirve para auditar, no para cumplir un requisito criptográfico.
+    d: Un perfil geográfico controla dónde se procesa la inferencia, no la validación FIPS de la conexión.
+  referencia: https://docs.aws.amazon.com/general/latest/gr/bedrock.html
+- id: D5-074
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una empresa entrena con sus contratos un modelo fundacional de terceros ya existente en Amazon Bedrock, para que redacte con su estilo. Según la AI Security Scoping Matrix, ¿en qué ámbito está?
+  opciones:
+  - id: a
+    texto: Ámbito 4, modelo ajustado
+  - id: b
+    texto: Ámbito 2, aplicación empresarial
+  - id: c
+    texto: Ámbito 5, modelo propio
+  - id: d
+    texto: Ámbito 3, modelo preentrenado
+  correctas:
+  - a
+  explicacion: 'Partir de un modelo fundacional de terceros y entrenarlo con datos propios es ajustarlo: ámbito 4. El proveedor entrenó el modelo base y la empresa aporta los datos del ajuste, que debe proteger y gobernar.'
+  distractores:
+    b: El ámbito 2 es una aplicación empresarial de terceros con IA integrada; aquí la empresa modifica el modelo.
+    c: El ámbito 5 es entrenar un modelo desde cero; aquí se parte de uno existente.
+    d: En el ámbito 3 se usa el modelo preentrenado tal cual, sin entrenarlo con datos propios.
+  referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/

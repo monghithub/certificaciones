@@ -2404,3 +2404,430 @@
     b: La detección de fraude busca operaciones anómalas o fraudulentas.
     c: Una base de conocimiento responde preguntas con información de documentos; no proyecta ventas.
   referencia: https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html
+- id: D1-083
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una aseguradora tiene tres equipos que calculan por su cuenta variables como «siniestros en los últimos 12 meses». Al poner un modelo en producción descubren que el servicio que lo invoca calcula esas variables con una fórmula distinta a la usada al entrenar, y las predicciones empeoran. Quieren evitar que vuelva a ocurrir y que los equipos dejen de duplicar ese trabajo. ¿Qué deben usar?
+  opciones:
+  - id: a
+    texto: Amazon SageMaker Feature Store
+  - id: b
+    texto: Amazon DynamoDB con una tabla por equipo
+  - id: c
+    texto: Ficheros CSV versionados en Amazon S3
+  - id: d
+    texto: Un flujo de Amazon SageMaker Data Wrangler
+  correctas:
+  - a
+  explicacion: 'Feature Store es un repositorio centralizado de características de ML: se definen una vez, los equipos las reutilizan, y el almacén offline (histórico para entrenar) y el online (último valor para inferir) se mantienen coherentes, así que entrenamiento e inferencia usan las mismas variables.'
+  distractores:
+    b: DynamoDB podría guardar valores con baja latencia, pero habría que construir a mano el catálogo compartido, el histórico para entrenar y la coherencia entre ambos; y una tabla por equipo mantiene la duplicación.
+    c: Unos CSV en S3 sirven para entrenar, pero no ofrecen lectura en tiempo real al inferir ni un catálogo de características reutilizable.
+    d: Data Wrangler prepara y transforma datos para entrenar, pero no guarda las características ni las sirve al modelo cuando está en producción.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html
+- id: D1-084
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un banco ha entrenado una versión nueva de su modelo de riesgo y quiere compararla con la actual usando las peticiones reales de producción, pero el regulador exige que ningún cliente reciba decisiones del modelo nuevo hasta validarlo. ¿Qué estrategia de SageMaker AI cumple la restricción?
+  opciones:
+  - id: a
+    texto: Un despliegue azul/verde canario que envíe el 5 % del tráfico al modelo nuevo
+  - id: b
+    texto: Una prueba A/B con dos variantes de producción al 50 %
+  - id: c
+    texto: Una prueba en sombra
+  - id: d
+    texto: Un despliegue azul/verde todo a la vez con vuelta atrás automática
+  correctas:
+  - c
+  explicacion: 'En una prueba en sombra el modelo nuevo recibe una copia de las peticiones reales, pero solo las respuestas del modelo en producción llegan al cliente. Así se compara con tráfico real sin que nadie reciba decisiones del modelo nuevo.'
+  distractores:
+    a: Con un canario, el 5 % de los clientes sí recibiría las decisiones del modelo nuevo, lo que el regulador no permite.
+    b: En una prueba A/B la mitad de los clientes recibiría las respuestas del modelo nuevo.
+    d: Todo a la vez pasa todo el tráfico al modelo nuevo; la vuelta atrás llega después de que los clientes hayan recibido sus decisiones.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
+- id: D1-085
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un comercio electrónico va a sustituir el modelo de recomendaciones de un endpoint de SageMaker AI en tiempo real. Quiere que al principio solo una parte pequeña de los usuarios reciba las respuestas del modelo nuevo y que, si la latencia o los errores empeoran, el tráfico vuelva solo al modelo anterior, sin intervención manual. ¿Qué opción encaja?
+  opciones:
+  - id: a
+    texto: Una prueba A/B con dos variantes de producción al 10 % y al 90 %, revisando las métricas cada semana
+  - id: b
+    texto: Un despliegue azul/verde canario con deployment guardrails y alarmas de Amazon CloudWatch
+  - id: c
+    texto: Una prueba en sombra durante una semana
+  - id: d
+    texto: Un despliegue azul/verde todo a la vez con deployment guardrails
+  correctas:
+  - b
+  explicacion: 'Los deployment guardrails de SageMaker AI crean una flota nueva junto a la actual; en modo canario envían primero una porción pequeña del tráfico y, si salta una alarma de CloudWatch durante el periodo de observación, devuelven automáticamente el tráfico a la flota anterior. Cumple las dos condiciones.'
+  distractores:
+    a: La prueba A/B sí reparte el tráfico, pero la vuelta atrás dependería de que alguien revise las métricas; no es automática.
+    c: En una prueba en sombra ningún usuario recibe las respuestas del modelo nuevo; aquí se pide que una parte pequeña sí las reciba.
+    d: Todo a la vez también vuelve atrás automáticamente, pero pasa de golpe todo el tráfico al modelo nuevo, no una parte pequeña al principio.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html
+- id: D1-086
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un modelo que predice si un cliente pagará a tiempo lleva un año en producción. La distribución de las variables de entrada (edad, ingresos, importe) es prácticamente igual que la de entrenamiento, pero al comparar las predicciones con los impagos reales de los últimos meses, la exhaustividad ha caído del 80 % al 55 % tras un cambio en los tipos de interés. ¿Qué describe mejor la situación y cómo se corrige?
+  opciones:
+  - id: a
+    texto: Deriva de datos; hay que normalizar de nuevo las variables de entrada
+  - id: b
+    texto: Sobreajuste; hay que añadir regularización y volver a validar
+  - id: c
+    texto: Falta de capacidad; hay que añadir instancias al endpoint
+  - id: d
+    texto: Deriva de concepto; hay que reentrenar el modelo con datos recientes
+  correctas:
+  - d
+  explicacion: 'Las entradas no han cambiado, pero sí su relación con el resultado: con los nuevos tipos de interés, clientes con el mismo perfil ya no se comportan igual. Es deriva de concepto, que se detecta comparando con el resultado real y se corrige reentrenando con datos recientes.'
+  distractores:
+    a: En la deriva de datos cambian las propiedades de las entradas; el enunciado dice que su distribución es prácticamente igual.
+    b: El sobreajuste se reconoce por la diferencia entre el rendimiento con los datos de entrenamiento y con los de validación; no explica que el mismo modelo empeore tras un cambio en el mundo real.
+    c: Más instancias mejoran la latencia o la capacidad, no la calidad de las predicciones.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/monitoring.html
+- id: D1-087
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una cadena de gimnasios acaba de reunir dos años de datos de socios para predecir bajas. Antes de elegir la métrica de evaluación, el equipo necesita saber qué proporción de socios se dio de baja, por si las clases están muy desequilibradas. ¿En qué paso del ciclo de vida lo averigua?
+  opciones:
+  - id: a
+    texto: En el análisis exploratorio de datos
+  - id: b
+    texto: En el etiquetado de datos
+  - id: c
+    texto: En el ajuste de hiperparámetros
+  - id: d
+    texto: En la monitorización del modelo con Amazon CloudWatch
+  correctas:
+  - a
+  explicacion: 'El análisis exploratorio (EDA) estudia los datos con estadísticas y gráficos antes de prepararlos: distribuciones, valores atípicos y, en particular, si las clases están desequilibradas, lo que condiciona la métrica (con clases desequilibradas, la exactitud engaña).'
+  distractores:
+    b: Etiquetar es asignar a cada socio su valor correcto (baja o no); aquí las bajas ya constan y lo que se quiere es estudiar su proporción.
+    c: El ajuste de hiperparámetros configura el entrenamiento; ocurre después, cuando ya se ha elegido cómo evaluar.
+    d: La monitorización vigila un modelo desplegado; aquí todavía no se ha entrenado ninguno.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html
+- id: D1-088
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Para predecir el abandono, un equipo calcula a partir del historial de compras nuevas variables como «días desde la última compra» y «gasto medio mensual», y descarta el número de teléfono porque no aporta. ¿Qué actividad están realizando?
+  opciones:
+  - id: a
+    texto: Etiquetado de datos
+  - id: b
+    texto: Análisis exploratorio de datos
+  - id: c
+    texto: Ingeniería de características
+  - id: d
+    texto: Ajuste de hiperparámetros
+  correctas:
+  - c
+  explicacion: 'La ingeniería de características selecciona y transforma las variables con las que se entrenará el modelo: crear «días desde la última compra» y descartar una columna inútil son ejemplos típicos.'
+  distractores:
+    a: Etiquetar es asignar el valor correcto (abandonó o no) a cada ejemplo, no crear variables de entrada.
+    b: El EDA describe y entiende los datos; aquí ya se están creando y descartando variables.
+    d: Los hiperparámetros controlan cómo aprende el modelo (tasa de aprendizaje, epochs); no son variables de entrada.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html
+- id: D1-089
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Un modelo de reconocimiento de defectos acierta el 98 % con las imágenes de entrenamiento y el 70 % con las de validación. La fábrica no puede aportar más imágenes reales en los próximos meses. ¿Qué DOS acciones pueden reducir la diferencia sin conseguir imágenes nuevas?
+  opciones:
+  - id: a
+    texto: Ampliar el conjunto con variaciones de las imágenes existentes (giros, recortes, cambios de brillo)
+  - id: b
+    texto: Sustituir el modelo por una red con muchos más parámetros
+  - id: c
+    texto: Combinar las predicciones de varios modelos entrenados de forma independiente
+  - id: d
+    texto: Pasar parte de las imágenes de validación al entrenamiento y evaluar solo con las de entrenamiento
+  - id: e
+    texto: Desplegar el modelo con inferencia por lotes en lugar de en tiempo real
+  correctas:
+  - a
+  - c
+  explicacion: 'La diferencia entre entrenamiento y validación indica sobreajuste. Sin datos reales nuevos, ayudan la ampliación de datos con variaciones (data augmentation) y combinar varios modelos (ensembling), que reducen lo que el modelo memoriza de un conjunto concreto.'
+  distractores:
+    b: Un modelo con más parámetros puede memorizar todavía más; es un remedio del subajuste.
+    d: Evaluar con los datos de entrenamiento ocultaría el problema; la validación existe para medir con datos no vistos.
+    e: El tipo de inferencia cambia cómo se piden las predicciones, no la calidad del modelo.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: D1-090
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un centro de atención quiere clasificar las transcripciones de llamadas por motivo. Un equipo ha revisado y clasificado a mano 1.000 llamadas; hay otras 300.000 sin clasificar, y revisarlas todas es inviable. Quiere que el modelo aproveche también las no revisadas. ¿Qué enfoque de aprendizaje encaja?
+  opciones:
+  - id: a
+    texto: Aprendizaje no supervisado con el conjunto completo de llamadas
+  - id: b
+    texto: Aprendizaje semisupervisado
+  - id: c
+    texto: Aprendizaje por refuerzo
+  - id: d
+    texto: Aprendizaje supervisado solo con las 1.000 clasificadas
+  correctas:
+  - b
+  explicacion: 'El aprendizaje semisupervisado combina técnicas supervisadas y no supervisadas cuando hay pocos datos etiquetados y muchos sin etiquetar, que es exactamente la restricción del centro de atención.'
+  distractores:
+    a: El no supervisado ignoraría las 1.000 clasificaciones hechas a mano y solo encontraría grupos, no los motivos que la empresa ya ha definido.
+    c: El refuerzo aprende de recompensas interactuando con un entorno; no hay entorno ni recompensas en este problema.
+    d: Usar solo las 1.000 clasificadas desaprovecha las 300.000 restantes, que es lo que se quiere evitar.
+  referencia: https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/
+- id: D1-091
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una eléctrica registra cada minuto la velocidad del viento, la temperatura y la potencia de sus aerogeneradores. Los ingenieros sospechan que las turbinas trabajan en unos pocos regímenes de funcionamiento típicos, pero nadie los ha definido ni etiquetado, y quieren descubrirlos. No buscan fallos, sino los grupos de funcionamiento normal. ¿Qué algoritmo integrado de SageMaker AI encaja?
+  opciones:
+  - id: a
+    texto: Random Cut Forest
+  - id: b
+    texto: k-NN
+  - id: c
+    texto: XGBoost
+  - id: d
+    texto: k-means
+  correctas:
+  - d
+  explicacion: 'Sin etiquetas y buscando grupos de lecturas parecidas, el problema es de agrupamiento no supervisado, y k-means es el algoritmo integrado de SageMaker AI que reparte los datos en grupos.'
+  distractores:
+    a: Random Cut Forest también trabaja sin etiquetas, pero detecta las lecturas que se salen de lo normal (anomalías); el enunciado dice que no se buscan fallos, sino grupos.
+    b: k-NN es supervisado; necesita ejemplos ya etiquetados con su régimen para clasificar los nuevos, y aquí nadie los ha definido.
+    c: XGBoost es supervisado (clasificación o regresión); necesitaría una etiqueta que predecir.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+- id: D1-092
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un fabricante traduce automáticamente su catálogo a ocho idiomas, pero los nombres de sus productos (por ejemplo, «Brisa Pro») aparecen traducidos de formas distintas en cada idioma. Quiere que se mantengan siempre igual, con el MENOR esfuerzo. ¿Qué debe hacer?
+  opciones:
+  - id: a
+    texto: Usar la terminología personalizada de Amazon Translate
+  - id: b
+    texto: Entrenar un modelo de traducción propio en SageMaker AI
+  - id: c
+    texto: Crear un reconocedor de entidades personalizado en Amazon Comprehend
+  - id: d
+    texto: Añadir los nombres a un vocabulario personalizado de Amazon Transcribe
+  correctas:
+  - a
+  explicacion: 'La terminología personalizada de Amazon Translate indica cómo deben traducirse (o mantenerse) los nombres de marca y términos propios, sin entrenar nada.'
+  distractores:
+    b: Entrenar un modelo de traducción propio exige datos, tiempo y gestión; no es el menor esfuerzo para fijar unos nombres.
+    c: Comprehend detectaría los nombres en el texto, pero no controla cómo los traduce Translate.
+    d: El vocabulario personalizado de Transcribe mejora el reconocimiento de palabras en audio; aquí no hay audio.
+  referencia: https://docs.aws.amazon.com/translate/latest/dg/how-custom-terminology.html
+- id: D1-093
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una gestoría recibe cada mes miles de facturas y tiques de cientos de proveedores distintos, cada uno con su propio diseño. Necesita extraer el proveedor, la fecha, el total, los impuestos y cada línea de gasto sin crear una plantilla por proveedor y sin entrenar ningún modelo. ¿Qué opción encaja con el MENOR esfuerzo?
+  opciones:
+  - id: a
+    texto: El análisis de documentos de identidad de Amazon Textract (AnalyzeID)
+  - id: b
+    texto: El análisis de gastos de Amazon Textract (AnalyzeExpense)
+  - id: c
+    texto: La detección de texto en imágenes de Amazon Rekognition
+  - id: d
+    texto: Un reconocedor de entidades personalizado de Amazon Comprehend
+  correctas:
+  - b
+  explicacion: 'El análisis de gastos de Textract está pensado para facturas y recibos: devuelve campos como el proveedor, los importes y las líneas de gasto sin plantillas por diseño ni entrenamiento.'
+  distractores:
+    a: AnalyzeID extrae datos de documentos de identidad, como permisos de conducir o pasaportes, no de facturas.
+    c: Rekognition lee texto en fotos y vídeos, pero no sabe qué es el total o una línea de gasto en una factura.
+    d: Un reconocedor personalizado exige preparar ejemplos y entrenarlo, y trabaja sobre texto ya extraído; el enunciado pide no entrenar nada.
+  referencia: https://docs.aws.amazon.com/textract/latest/dg/invoices-receipts.html
+- id: D1-094
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una empresa que acaba de abrir su cuenta de AWS quiere que sus empleados hagan preguntas en lenguaje natural sobre miles de manuales internos y reciban respuestas redactadas con citas a los documentos. ¿Qué servicio debe usar?
+  opciones:
+  - id: a
+    texto: Amazon Kendra
+  - id: b
+    texto: Amazon Comprehend
+  - id: c
+    texto: Amazon Bedrock Knowledge Bases
+  - id: d
+    texto: Amazon Lex
+  correctas:
+  - c
+  explicacion: 'Bedrock Knowledge Bases integra los documentos propios en una aplicación de IA generativa con RAG: recupera los fragmentos relevantes y el modelo redacta la respuesta citándolos. Además, es la alternativa que AWS indica a los clientes nuevos en lugar de Kendra.'
+  distractores:
+    a: Kendra es un servicio de recuperación que puede actuar como buscador dentro de un RAG, pero no redacta la respuesta y ya no está abierto a clientes nuevos, como esta empresa.
+    b: Comprehend extrae entidades u opiniones del texto; no responde preguntas sobre una colección de documentos.
+    d: Lex construye la interfaz conversacional, pero no busca en los manuales ni genera la respuesta por sí mismo.
+  referencia: https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html
+- id: D1-095
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un centro de atención graba en un solo canal las llamadas entre agentes y clientes. Para revisar la calidad, necesita transcripciones en las que se distinga qué dijo el agente y qué dijo el cliente. ¿Qué funcionalidad lo resuelve?
+  opciones:
+  - id: a
+    texto: El análisis de opiniones de Amazon Comprehend
+  - id: b
+    texto: El vocabulario personalizado de Amazon Transcribe
+  - id: c
+    texto: Un motor de voz neural de Amazon Polly
+  - id: d
+    texto: La diarización de Amazon Transcribe
+  correctas:
+  - d
+  explicacion: 'La diarización de Amazon Transcribe separa en la transcripción lo que dice cada hablante, aunque estén grabados en el mismo canal.'
+  distractores:
+    a: Comprehend analiza la opinión del texto ya transcrito, pero no separa quién habla.
+    b: El vocabulario personalizado mejora el reconocimiento de palabras concretas (marcas, siglas), no distingue hablantes.
+    c: Polly convierte texto en voz; es el proceso contrario a transcribir.
+  referencia: https://docs.aws.amazon.com/transcribe/latest/dg/diarization.html
+- id: D1-096
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una inmobiliaria compara dos modelos que predicen el precio de venta de pisos. Para el negocio, equivocarse mucho en unos pocos pisos es bastante peor que equivocarse un poco en muchos. ¿Qué métrica refleja MEJOR esta preferencia?
+  opciones:
+  - id: a
+    texto: Error cuadrático medio (MSE)
+  - id: b
+    texto: Error absoluto medio (MAE)
+  - id: c
+    texto: Puntuación F1
+  - id: d
+    texto: Exactitud (accuracy)
+  correctas:
+  - a
+  explicacion: 'El MSE eleva cada error al cuadrado, así que los errores grandes pesan mucho más que los pequeños: penaliza justo lo que el negocio quiere evitar. Cuanto más bajo, mejor.'
+  distractores:
+    b: El MAE trata todos los errores en proporción a su tamaño, sin castigar más los grandes, que es lo que pide el negocio.
+    c: F1 es una métrica de clasificación; un precio es un valor continuo (regresión).
+    d: La exactitud cuenta aciertos y fallos de clasificación; en regresión casi ninguna predicción es exacta.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: D1-097
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El departamento de compras copia cada día los pedidos de un portal web de proveedores, siempre con los mismos campos estructurados, al ERP de la empresa, aplicando reglas fijas de conversión de unidades. Quieren automatizarlo de la forma MÁS sencilla y exacta. ¿Qué deben usar?
+  opciones:
+  - id: a
+    texto: Un modelo de clasificación en SageMaker AI que aprenda a mapear los campos
+  - id: b
+    texto: Automatización robótica de procesos (RPA) o un script con las reglas
+  - id: c
+    texto: Un agente de IA en Amazon Bedrock AgentCore que decida cómo copiar cada pedido
+  - id: d
+    texto: Amazon Textract y Amazon Comprehend para procesar los pedidos
+  correctas:
+  - b
+  explicacion: 'Los datos ya están estructurados y las reglas son fijas: basta automatizarlas con RPA o un script, que es determinista, exacto y barato. La IA no aporta nada si las reglas se pueden escribir.'
+  distractores:
+    a: Un modelo daría un resultado probabilístico donde se necesita una copia exacta, y exigiría datos de entrenamiento.
+    c: Un agente decide de forma autónoma qué pasos dar; aquí los pasos son siempre los mismos y conviene que sean deterministas.
+    d: Textract y Comprehend sirven para documentos escaneados y texto libre; los pedidos ya llegan como campos estructurados.
+  referencia: https://aws.amazon.com/what-is/intelligent-automation/
+- id: D1-098
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.4
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada necesidad de negocio con la tarea de IA que la resuelve.
+  prompts:
+  - id: '1'
+    texto: Un vivero quiere saber si cada foto que suben los clientes muestra una planta sana o enferma
+  - id: '2'
+    texto: Un aparcamiento quiere contar los coches de cada imagen de la cámara y saber dónde está cada uno
+  - id: '3'
+    texto: Un servicio de radiología quiere delimitar el contorno exacto de cada órgano en una resonancia
+  - id: '4'
+    texto: Una aseguradora quiere digitalizar partes de siniestro escaneados, extraer sus datos y validarlos
+  opciones:
+  - id: a
+    texto: Detección de objetos
+  - id: b
+    texto: Procesamiento inteligente de documentos
+  - id: c
+    texto: Clasificación de imágenes
+  - id: d
+    texto: Segmentación
+  - id: e
+    texto: Previsión de series temporales
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - a
+  - - '3'
+    - d
+  - - '4'
+    - b
+  explicacion: 'Una etiqueta para toda la imagen es clasificación; localizar cada objeto con un recuadro es detección; asignar una clase a cada píxel es segmentación; y extraer y validar datos de documentos escaneados es procesamiento inteligente de documentos (OCR y visión más NLP).'
+  distractores:
+    e: La previsión de series temporales anticipa valores futuros a partir de datos ordenados en el tiempo; ninguna de estas necesidades lo pide.
+  referencia: https://aws.amazon.com/what-is/computer-vision/
+- id: D1-099
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un clasificador asigna cada correo de soporte a una de cinco categorías. Su F1 global es aceptable, pero los responsables sospechan que las incidencias de facturación acaban a menudo en la cola de pagos y quieren ver exactamente entre qué pares de categorías se equivoca el modelo. ¿Qué deben revisar?
+  opciones:
+  - id: a
+    texto: La puntuación F1 media de las cinco categorías
+  - id: b
+    texto: El AUC del modelo
+  - id: c
+    texto: La matriz de confusión
+  - id: d
+    texto: La exactitud global
+  correctas:
+  - c
+  explicacion: 'La matriz de confusión cruza la clase real con la predicha; con cinco categorías tiene una fila y una columna por categoría y muestra cuántos correos de facturación se clasificaron como pagos, y así con cada par.'
+  distractores:
+    a: Una F1 media resume el rendimiento en un solo número; no dice con qué otra categoría se confunde cada una.
+    b: El AUC resume cómo separa el clasificador las clases en todos los umbrales; tampoco indica qué pares se confunden.
+    d: La exactitud global es un único porcentaje de aciertos; además, oculta los errores de las categorías poco frecuentes.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-advanced-metrics.html

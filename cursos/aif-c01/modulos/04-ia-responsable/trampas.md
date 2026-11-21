@@ -12,7 +12,7 @@
 - **Guardrails solo funciona con modelos de Bedrock.** La API `ApplyGuardrail` evalúa texto sin invocar un modelo, así que las mismas políticas se aplican a modelos externos o propios.
 - **Guardrails sustituye a IAM o al cifrado.** Filtra contenido; no controla quién accede a qué ni protege los datos almacenados (módulo 05).
 - **Descartar Clarify, Model Monitor, A2I o Ground Truth por sistema.** Ya no admiten clientes nuevos, pero la guía del examen los mantiene en alcance. Si la pregunta pide detectar sesgo o explicar predicciones de un modelo de ML clásico, vigilar su deriva o añadir revisión humana, y no dice que el cliente sea nuevo, siguen siendo la respuesta esperada. Si el enunciado deja claro que es un cliente nuevo, o habla de evaluar o proteger un **modelo fundacional**, piensa en Bedrock Evaluations y Guardrails.
-- **Automated Reasoning checks bloquea respuestas.** Solo detecta: devuelve hallazgos y explicaciones, y la aplicación decide si entrega, reescribe o pide aclaraciones.
+- **Automated Reasoning checks bloquea respuestas.** Solo detecta: devuelve hallazgos y explicaciones, y la aplicación decide si entrega, reescribe o pide aclaraciones. Además, solo admite inglés de EE. UU.
 
 ## Modelos, datos y riesgos
 
@@ -33,3 +33,11 @@
 - **Elegir siempre el modelo de mayor rendimiento.** Si un regulador exige explicar cada decisión y el modelo interpretable cumple el mínimo de rendimiento, suele ser la opción adecuada.
 - **SHAP da la verdad sobre el modelo.** Es una explicación a posteriori y aproximada; AWS recomienda validarla con expertos del negocio.
 - **Diseño centrado en las personas = interfaz bonita.** Se trata de *feedback* de los usuarios, transparencia de las decisiones (factores, confianza, fuentes), supervisión humana donde hay consecuencias y explicaciones adaptadas a cada usuario.
+
+## Herramientas que se confunden
+
+- **Clarify frente a Model Monitor.** Clarify mide el sesgo (antes y después de entrenar) y explica las predicciones (SHAP); Model Monitor vigila en producción la calidad de los datos y del modelo y la deriva del sesgo y de la atribución de características (estas dos, apoyándose en Clarify). Ambos están cerrados a clientes nuevos: para proyectos nuevos, AWS remite a sus soluciones abiertas de monitorización con CloudWatch y a bibliotecas abiertas de métricas de sesgo y SHAP (o a Bedrock Evaluations si el modelo es fundacional).
+- **A2I frente a Ground Truth.** A2I lleva a revisión humana **predicciones** en producción (por baja confianza o por muestreo); Ground Truth **etiqueta datos** para entrenar. Ambos están cerrados a clientes nuevos y la documentación de AWS no indica un sustituto.
+- **Model Cards frente a Model Registry.** Model Cards **documenta** el modelo (uso previsto, riesgos, evaluación); Model Registry **versiona y aprueba** modelos para desplegarlos.
+- **Reequilibrar no es recoger datos.** Sobremuestreo, submuestreo o SMOTE corrigen el desequilibrio de clases, pero no hacen representativo un conjunto que no lo es.
+- **Parada temprana frente a más épocas.** Contra el sobreajuste se para antes; entrenar más épocas lo agrava.

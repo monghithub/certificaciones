@@ -1178,3 +1178,174 @@
     c: "BERTScore mide la similitud semántica con una referencia; es una métrica técnica."
     e: "La fidelidad es una métrica de calidad de la generación en una evaluación de RAG, no de negocio."
   referencia: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+- id: R3-045
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué operación de una Knowledge Base de Amazon Bedrock devuelve solo los fragmentos relevantes, sin redactar una respuesta?
+  opciones:
+  - id: a
+    texto: Retrieve
+  - id: b
+    texto: RetrieveAndGenerate
+  - id: c
+    texto: InvokeModel
+  - id: d
+    texto: Converse
+  correctas:
+  - a
+  explicacion: 'Retrieve devuelve los fragmentos de las fuentes; RetrieveAndGenerate además pide al modelo una respuesta redactada con citas. Pista: Retrieve solo recupera; «AndGenerate» también genera.'
+  distractores:
+    b: RetrieveAndGenerate recupera los fragmentos y además genera la respuesta con citas.
+    c: InvokeModel invoca un modelo directamente; no consulta ninguna Knowledge Base.
+    d: Converse envía una conversación a un modelo; no recupera fragmentos de una Knowledge Base.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve.html
+- id: R3-046
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: En una Knowledge Base customer-managed de Amazon Bedrock, ¿qué hace el analizador por defecto?
+  opciones:
+  - id: a
+    texto: Extrae tablas, gráficos e imágenes de los PDF y los guarda en S3
+  - id: b
+    texto: Extrae solo el texto de los ficheros de texto
+  - id: c
+    texto: Traduce los documentos al idioma del modelo
+  - id: d
+    texto: Resume cada documento antes de indexarlo
+  correctas:
+  - b
+  explicacion: 'El analizador por defecto solo extrae el texto, sin coste adicional. Para documentos con tablas, gráficos o imágenes, AWS recomienda Bedrock Data Automation o un modelo fundacional como analizador. Pista: por defecto = solo texto.'
+  distractores:
+    a: Eso lo hacen Bedrock Data Automation o un modelo fundacional como analizador, no el analizador por defecto. Una Managed Knowledge Base usa además su propio análisis inteligente automático.
+    c: Ningún analizador de Knowledge Bases traduce los documentos.
+    d: El analizador extrae el contenido; no resume los documentos.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-advanced-parsing.html
+- id: R3-047
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: En Amazon Bedrock Agents, ¿qué pieza define las operaciones que el agente puede ejecutar en otros sistemas?
+  opciones:
+  - id: a
+    texto: La Knowledge Base asociada
+  - id: b
+    texto: El alias del agente
+  - id: c
+    texto: Los grupos de acciones
+  - id: d
+    texto: La traza
+  correctas:
+  - c
+  explicacion: 'Los grupos de acciones describen, con un esquema OpenAPI o con definiciones de funciones, lo que el agente puede hacer, y se ejecutan con Lambda o devolviendo el control a la aplicación. Pista: acciones = lo que hace; Knowledge Base = lo que sabe.'
+  distractores:
+    a: La Knowledge Base aporta información que consultar (RAG), no operaciones que ejecutar.
+    b: El alias es el punto de invocación que apunta a una versión publicada del agente.
+    d: La traza muestra el razonamiento paso a paso para depurar; no define acciones.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html
+- id: R3-048
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: En la colaboración multiagente de Amazon Bedrock Agents, ¿qué papel recibe la petición y la reparte entre agentes especializados?
+  opciones:
+  - id: a
+    texto: El colaborador
+  - id: b
+    texto: El grupo de acciones
+  - id: c
+    texto: La Knowledge Base
+  - id: d
+    texto: El supervisor
+  correctas:
+  - d
+  explicacion: 'Se designa un agente supervisor y se le asocian uno o varios agentes colaboradores: el supervisor recibe la petición y la reparte. Pista: el supervisor coordina; los colaboradores ejecutan su especialidad.'
+  distractores:
+    a: Los colaboradores reciben las subtareas del supervisor; no reparten el trabajo.
+    b: Un grupo de acciones define lo que puede hacer un agente, no coordina a otros agentes.
+    c: La Knowledge Base aporta información; no coordina agentes.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html
+- id: R3-049
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: En un modelo de generación de imágenes, ¿para qué sirve fijar la semilla (seed)?
+  opciones:
+  - id: a
+    texto: Para obtener un resultado reproducible con el mismo prompt
+  - id: b
+    texto: Para mejorar la calidad de la imagen
+  - id: c
+    texto: Para excluir elementos de la imagen
+  - id: d
+    texto: Para reducir el coste por imagen
+  correctas:
+  - a
+  explicacion: 'La semilla controla la aleatoriedad de la generación: con la misma semilla y el mismo prompt se repite el resultado; con 0 o sin indicarla, cada generación es distinta. Pista: semilla = repetir, no mejorar.'
+  distractores:
+    b: La semilla no mejora la calidad; solo hace repetible el resultado.
+    c: Excluir elementos es la función del prompt negativo.
+    d: El precio no depende de la semilla.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-diffusion-3-5-large.html
+- id: R3-050
+  dominio: 3
+  tarea: '3.2'
+  objetivo: 3.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué limitación tiene la modalidad Classic de Amazon Bedrock Guardrails en sus filtros de contenido y de temas denegados?
+  opciones:
+  - id: a
+    texto: Solo funciona con modelos de Amazon
+  - id: b
+    texto: Solo admite inglés, francés y español
+  - id: c
+    texto: Solo filtra las respuestas, no los prompts
+  - id: d
+    texto: Solo funciona con inferencia por lotes
+  correctas:
+  - b
+  explicacion: 'En la modalidad Classic, los filtros de contenido, los temas denegados y el anclaje contextual admiten inglés, francés y español; la modalidad Standard admite muchos más idiomas. Con un idioma no admitido, Guardrails no es eficaz. Pista: Classic = tres idiomas.'
+  distractores:
+    a: Guardrails funciona con modelos de distintos proveedores, no solo con los de Amazon.
+    c: Guardrails puede evaluar tanto las entradas como las respuestas.
+    d: Guardrails se aplica a las invocaciones normales; no está limitado a lotes.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported-languages.html
+- id: R3-051
+  dominio: 3
+  tarea: '3.2'
+  objetivo: 3.2.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: ¿Qué DOS situaciones son casos de exposición en una aplicación con un modelo fundacional?
+  opciones:
+  - id: a
+    texto: El asistente revela sus instrucciones del sistema cuando un usuario se lo pide
+  - id: b
+    texto: Alguien introduce datos falsos en el conjunto de entrenamiento
+  - id: c
+    texto: El asistente muestra a un usuario el historial de la conversación de otro
+  - id: d
+    texto: Un usuario consigue que el modelo se salte sus protecciones de seguridad
+  - id: e
+    texto: Un documento que lee el modelo le ordena ignorar sus instrucciones
+  correctas:
+  - a
+  - c
+  explicacion: 'La exposición es conseguir que el modelo revele información que no debía, como la plantilla del prompt con sus instrucciones o el historial de la conversación. Pista: exposición = algo sale a la luz.'
+  distractores:
+    b: Introducir datos falsos en el entrenamiento es envenenamiento.
+    d: Saltarse las protecciones del modelo es jailbreaking.
+    e: "Que un contenido externo dé órdenes al modelo es inyección de prompts indirecta: el modelo obedece, no revela."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/common-attacks.html

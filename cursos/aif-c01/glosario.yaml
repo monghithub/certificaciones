@@ -405,14 +405,14 @@
 
 - id: sobreajuste
   termino: sobreajuste
-  alias: [overfitting]
+  alias: [overfitting, alta varianza]
   categoria: concepto
   definicion: "El modelo acierta con los datos de entrenamiento pero no con datos reales porque se ajusta demasiado a ellos y no generaliza. Es un modelo de alta varianza."
   referencia: https://aws.amazon.com/what-is/overfitting/
 
 - id: subajuste
   termino: subajuste
-  alias: [underfitting]
+  alias: [underfitting, alto sesgo]
   categoria: concepto
   definicion: "El modelo no encuentra una relación significativa entre las entradas y las salidas y falla incluso con los datos de entrenamiento. Es un modelo de alto sesgo."
   referencia: https://aws.amazon.com/what-is/overfitting/
@@ -796,10 +796,10 @@
 
 - id: deriva
   termino: deriva
-  alias: [deriva del modelo, deriva de datos, drift]
+  alias: [deriva del modelo, deriva de datos, data drift, drift]
   categoria: concepto
-  definicion: "Cambio con el tiempo de los datos de producción (o de la relación entre entradas y resultados) respecto a los de entrenamiento, que degrada la calidad del modelo. Se detecta monitorizando y se corrige reentrenando."
-  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html
+  definicion: "Cambio con el tiempo de los datos de producción respecto a los de entrenamiento, que degrada la calidad del modelo. La deriva de datos es un cambio en las propiedades estadísticas de las entradas; si lo que cambia es la relación entre entradas y resultado, es deriva de concepto. Se detecta monitorizando y se corrige reentrenando."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html
 
 - id: matriz-de-confusion
   termino: matriz de confusión
@@ -2012,4 +2012,383 @@
   usar_cuando: "Para servir con baja latencia la interfaz web de una aplicación que usa IA."
   no_usar_cuando: "Para invocar o alojar el modelo (Bedrock, SageMaker AI)."
   referencia: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html
+
+
+# Revisión del módulo 01 con las guías de estudio (issue #32)
+
+- id: hiperparametro
+  termino: hiperparámetro
+  alias: [hiperparámetros, hyperparameter, hyperparameters, ajuste de hiperparámetros, hyperparameter tuning]
+  categoria: concepto
+  definicion: "Variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo: tasa de aprendizaje, número de epochs o tamaño de lote. Se distingue de los parámetros (por ejemplo, los pesos), que el modelo aprende durante el entrenamiento. Buscar sus mejores valores es el ajuste de hiperparámetros, que SageMaker AI automatiza."
+  referencia: https://aws.amazon.com/what-is/hyperparameter-tuning/
+  enlaces:
+    - {texto: "Ajuste automático de modelos en SageMaker AI", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html"}
+
+- id: ingenieria-de-caracteristicas
+  termino: ingeniería de características
+  alias: [feature engineering]
+  categoria: tecnica
+  definicion: "Seleccionar y transformar las variables de entrada (características) con las que se entrena un modelo predictivo; por ejemplo, obtener el día de la semana a partir de una fecha. Es un paso del procesamiento de datos del ciclo de vida de ML."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html
+
+- id: analisis-exploratorio-de-datos
+  termino: análisis exploratorio de datos
+  alias: [EDA, exploratory data analysis]
+  categoria: tecnica
+  definicion: "Paso del procesamiento de datos en el que se estudian con estadísticas y gráficos (distribuciones, correlaciones, valores atípicos, clases desequilibradas) para entenderlos antes de prepararlos o crear características. En SageMaker AI lo facilitan los análisis e informes de calidad de Data Wrangler."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html
+
+- id: aprendizaje-semisupervisado
+  termino: aprendizaje semisupervisado
+  alias: [semi-supervised learning, semisupervisado]
+  categoria: concepto
+  definicion: "Combinación de técnicas supervisadas y no supervisadas para un mismo problema cuando hay pocos datos etiquetados y muchos sin etiquetar. Evita tener que etiquetar a mano todo el conjunto."
+  referencia: https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/
+
+- id: red-neuronal-convolucional
+  termino: red neuronal convolucional
+  alias: [CNN, convolutional neural network, redes neuronales convolucionales]
+  categoria: concepto
+  definicion: "Tipo de red neuronal de aprendizaje profundo especialmente útil con imágenes, porque extrae de ellas las características relevantes: clasificación de imágenes, detección de objetos."
+  referencia: https://aws.amazon.com/what-is/neural-network/
+
+- id: red-neuronal-recurrente
+  termino: red neuronal recurrente
+  alias: [RNN, recurrent neural network, redes neuronales recurrentes]
+  categoria: concepto
+  definicion: "Modelo de aprendizaje profundo para datos secuenciales, como palabras, frases o series temporales. En muchas aplicaciones, sobre todo de lenguaje, lo han sustituido los modelos basados en transformers."
+  referencia: https://aws.amazon.com/what-is/recurrent-neural-network/
+
+- id: k-means
+  termino: k-means
+  alias: [k-medias]
+  categoria: tecnica
+  definicion: "Algoritmo no supervisado de agrupamiento (clustering): reparte los datos sin etiquetas en k grupos de elementos parecidos. Es un algoritmo integrado de SageMaker AI. No confundir con k-NN, que es supervisado."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+
+- id: k-nn
+  termino: k-NN
+  alias: [KNN, k-nearest neighbors, k vecinos más cercanos]
+  categoria: tecnica
+  definicion: "Algoritmo supervisado de clasificación o regresión: predice a partir de los k ejemplos etiquetados más parecidos. Es un algoritmo integrado de SageMaker AI. Pese a la «k», no agrupa datos sin etiquetas (eso es k-means)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+
+- id: regresion-logistica
+  termino: regresión logística
+  alias: [logistic regression]
+  categoria: tecnica
+  definicion: "Técnica de aprendizaje supervisado que, pese a su nombre, se usa para clasificar: estima la probabilidad de un resultado binario (sí o no, fraude o legítima)."
+  referencia: https://aws.amazon.com/what-is/logistic-regression/
+
+- id: procesamiento-inteligente-de-documentos
+  termino: procesamiento inteligente de documentos
+  alias: [IDP, intelligent document processing]
+  categoria: tecnica
+  definicion: "Automatizar la captura, extracción y validación de datos de documentos (facturas, formularios, expedientes) combinando OCR, visión por computador, NLP y ML. En AWS se apoya en Amazon Textract para extraer y Amazon Comprehend para entender el texto."
+  referencia: https://aws.amazon.com/what-is/intelligent-document-processing/
+
+- id: rpa
+  termino: automatización robótica de procesos
+  alias: [RPA, robotic process automation]
+  categoria: tecnica
+  definicion: "Software que automatiza tareas repetitivas basadas en reglas, normalmente sobre datos estructurados. No aprende de los datos: si la tarea tiene reglas fijas, basta RPA o un script; la IA se añade (automatización inteligente) cuando hay datos no estructurados o reglas que no se pueden escribir."
+  referencia: https://aws.amazon.com/what-is/intelligent-automation/
+
+- id: deriva-de-concepto
+  termino: deriva de concepto
+  alias: [concept drift]
+  categoria: concepto
+  definicion: "Cambio en la relación entre las entradas y el resultado: los mismos datos ya no predicen lo mismo (por ejemplo, los defraudadores cambian de táctica). Las entradas pueden no cambiar, así que se detecta comparando las predicciones con el resultado real (ground truth). Se corrige reentrenando con datos recientes."
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/monitoring.html
+
+- id: prueba-en-sombra
+  termino: prueba en sombra
+  alias: [shadow test, shadow testing, pruebas en sombra]
+  categoria: tecnica
+  definicion: "Forma de probar un modelo nuevo en SageMaker AI enviándole una copia de las peticiones reales de producción: solo las respuestas del modelo en producción llegan al cliente, y las del nuevo se comparan sin afectar a nadie."
+  usar_cuando: "Para comparar un modelo, contenedor o tipo de instancia nuevo con tráfico real antes de que ningún usuario reciba sus respuestas."
+  no_usar_cuando: "Cuando ya se quiere servir el modelo nuevo a los usuarios con vuelta atrás: despliegue azul/verde (canario o lineal) con deployment guardrails."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
+
+- id: deployment-guardrails
+  termino: deployment guardrails
+  alias: [despliegue azul/verde, blue/green, despliegue canario]
+  categoria: tecnica
+  definicion: "Opciones gestionadas de SageMaker AI para sustituir un modelo en producción en endpoints en tiempo real o asíncronos: azul/verde con desplazamiento del tráfico todo a la vez, canario o lineal, o gradual (rolling), con periodo de observación y vuelta atrás automática si salta una alarma de CloudWatch."
+  usar_cuando: "Para pasar el tráfico a un modelo nuevo limitando el riesgo y con vuelta atrás automática."
+  no_usar_cuando: "Para comparar un modelo nuevo sin que ningún usuario reciba sus respuestas: prueba en sombra."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html
+
+- id: mse
+  termino: MSE
+  alias: [error cuadrático medio, mean squared error]
+  categoria: metrica
+  definicion: "Métrica de regresión: media de los errores al cuadrado entre la predicción y el valor real. Cuanto más baja, mejor; castiga más los errores grandes. Su raíz es el RMSE, en las mismas unidades que el valor predicho."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+
+- id: r-cuadrado
+  termino: R²
+  alias: [R2, coeficiente de determinación, R squared]
+  categoria: metrica
+  definicion: "Métrica de regresión que indica qué parte de la variación del valor real explica el modelo. Cuanto más cerca de 1, mejor; un valor negativo significa que el modelo lo hace peor que predecir siempre la media."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+
+- id: amazon-sagemaker-studio
+  termino: Amazon SageMaker Studio
+  alias: [SageMaker Studio]
+  categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
+  definicion: "Entorno de desarrollo web de SageMaker AI para todo el ciclo de vida de ML: cuadernos, preparación de datos, entrenamiento, despliegue y seguimiento. La experiencia anterior se mantiene como Studio Classic."
+  usar_cuando: "Cuando científicos de datos o ingenieros de ML necesitan un entorno integrado para construir, entrenar y desplegar modelos propios."
+  no_usar_cuando: "Cuando analistas sin experiencia en programación necesitan predicciones: SageMaker Canvas."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-updated.html
+
+- id: amazon-sagemaker-data-wrangler
+  termino: Amazon SageMaker Data Wrangler
+  alias: [SageMaker Data Wrangler, Data Wrangler]
+  categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
+  definicion: "Funcionalidad de SageMaker AI, hoy dentro de SageMaker Canvas, para importar, analizar y preparar datos para ML con transformaciones integradas y poco o ningún código, con informes de calidad de los datos."
+  usar_cuando: "Para explorar y preparar datos con destino a un modelo de ML sin escribir apenas código."
+  no_usar_cuando: "Para un ETL genérico de datos que no van a un modelo (AWS Glue) o para orquestar todo el flujo de ML (SageMaker Pipelines)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html
+
+- id: amazon-sagemaker-feature-store
+  termino: Amazon SageMaker Feature Store
+  alias: [SageMaker Feature Store, Feature Store]
+  categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
+  definicion: "Repositorio centralizado de SageMaker AI para crear, guardar, compartir y reutilizar características de ML. El almacén online guarda el último valor para inferencia en tiempo real (milisegundos); el offline guarda el histórico en Amazon S3 para entrenar e inferir por lotes."
+  usar_cuando: "Para que varios equipos reutilicen las mismas características y el modelo reciba al inferir las mismas que vio al entrenar."
+  no_usar_cuando: "Como almacén de datos de negocio o de informes (Amazon Redshift) o como base de datos operativa de una aplicación (Amazon RDS)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html
+
+- id: amazon-sagemaker-studio-lab
+  termino: Amazon SageMaker Studio Lab
+  alias: [SageMaker Studio Lab, Studio Lab]
+  categoria: servicio
+  definicion: "Servicio gratuito para aprender y experimentar con cuadernos de ML sin cuenta de AWS. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo."
+  no_usar_cuando: "Para un proyecto nuevo o de producción: SageMaker Studio, que puede empezarse dentro de la capa gratuita de AWS."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-lab.html
+
+- id: amazon-forecast
+  termino: Amazon Forecast
+  categoria: servicio
+  definicion: "Servicio de previsión de series temporales. Ya no está disponible para clientes nuevos (desde el 29 de julio de 2024); los existentes pueden seguir usándolo."
+  no_usar_cuando: "Para un proyecto nuevo de previsión: la previsión de series temporales de SageMaker Canvas, que es la alternativa que indica AWS."
+  referencia: https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html
+
+- id: amazon-fraud-detector
+  termino: Amazon Fraud Detector
+  categoria: servicio
+  definicion: "Servicio gestionado de detección de fraude en línea. Ya no admite clientes nuevos (desde el 7 de noviembre de 2025); los existentes conservan el acceso."
+  no_usar_cuando: "Para un proyecto nuevo: AWS propone Amazon SageMaker AI o AutoGluon para modelos propios y AWS WAF Fraud Control para el fraude en la creación de cuentas."
+  referencia: https://docs.aws.amazon.com/frauddetector/latest/ug/frauddetector-availability-change.html
+
+- id: amazon-kendra
+  termino: Amazon Kendra
+  alias: [Kendra]
+  categoria: servicio
+  definicion: "Servicio gestionado de recuperación de información y búsqueda inteligente en los documentos de una empresa; puede actuar como recuperador en un RAG, pero no redacta la respuesta. Ya no está abierto a clientes nuevos, y no figura entre los servicios dentro del alcance del examen."
+  no_usar_cuando: "Para un proyecto nuevo de búsqueda o RAG sobre documentos propios: Amazon Bedrock Knowledge Bases, que es la alternativa que indica AWS."
+  referencia: https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html
+
+# Revisión del módulo 02 con las guías de estudio (issue #33)
+
+- id: gan
+  termino: GAN
+  alias: [red generativa antagónica, generative adversarial network, redes generativas antagónicas]
+  categoria: concepto
+  definicion: "Familia de modelos generativos en la que dos redes neuronales se entrenan compitiendo: una genera ejemplos y la otra intenta distinguirlos de los reales. Se usa, por ejemplo, para crear imágenes sintéticas."
+  referencia: https://aws.amazon.com/what-is/gan/
+
+- id: vae
+  termino: VAE
+  alias: [autocodificador variacional, variational autoencoder]
+  categoria: concepto
+  definicion: "Familia de modelos generativos que aprende una representación compacta de los datos, llamada espacio latente, y genera variaciones a partir de ella."
+  referencia: https://aws.amazon.com/what-is/generative-ai/
+
+- id: ciclo-de-vida-de-modelos-bedrock
+  termino: ciclo de vida de los modelos de Bedrock
+  alias: [modelo legacy, fin de vida del modelo]
+  categoria: concepto
+  definicion: "Estados de una versión de modelo en Amazon Bedrock: activo; legacy, con fecha de retirada anunciada, sin clientes nuevos ni capacidad aprovisionada nueva (en los modelos anteriores a septiembre de 2026, con un posible acceso ampliado a precio más alto); y fin de vida (EOL), cuando las peticiones fallan. La migración no es automática."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+
+- id: tiempo-hasta-el-primer-token
+  termino: tiempo hasta el primer token
+  alias: [TimeToFirstToken, time to first token, TTFT]
+  categoria: metrica
+  definicion: "Tiempo desde que se envía una petición hasta que llega el primer token de la respuesta en streaming (por ejemplo, con ConverseStream). Es la latencia que percibe el usuario de un chat; el tiempo total hasta el último token es la latencia de la invocación."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+
+- id: amazon-bedrock-marketplace
+  termino: Amazon Bedrock Marketplace
+  alias: [Bedrock Marketplace]
+  categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
+  definicion: "Catálogo de Amazon Bedrock con más de 100 modelos fundacionales populares, emergentes y especializados que se despliegan en un endpoint gestionado por SageMaker AI y se invocan con las API de Bedrock. Se paga la instancia del endpoint más el cargo de software que fije el proveedor."
+  usar_cuando: "Para usar desde Bedrock un modelo especializado que no está en el catálogo serverless."
+  no_usar_cuando: "Cuando el modelo ya está en el catálogo serverless: bajo demanda se paga por token y no hay instancia que mantener."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/amazon-bedrock-marketplace.html
+
+- id: custom-model-import
+  termino: Custom Model Import
+  alias: [importación de modelos personalizados]
+  categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
+  definicion: "Funcionalidad de Amazon Bedrock para importar los pesos de un modelo personalizado fuera de Bedrock (por ejemplo, en SageMaker AI), de arquitecturas compatibles como Llama, Mistral o Qwen, e invocarlo bajo demanda sin gestionar servidores. Solo está en algunas Regiones y no admite inferencia por lotes."
+  usar_cuando: "Para servir de forma serverless en Bedrock un modelo propio ya ajustado."
+  no_usar_cuando: "Si la arquitectura no es compatible (desplegarlo en SageMaker AI) o si el modelo se personaliza dentro de Bedrock."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html
+
+- id: amazon-bedrock-data-automation
+  termino: Amazon Bedrock Data Automation
+  alias: [Bedrock Data Automation, BDA]
+  categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
+  definicion: "Funcionalidad de Amazon Bedrock que extrae información útil y estructurada de contenido no estructurado: documentos, imágenes, audio y vídeo."
+  usar_cuando: "Para procesar contenido variado (documentos, imágenes, audio, vídeo) con IA generativa sin construir el flujo a mano."
+  no_usar_cuando: "Para una tarea acotada que ya resuelve un servicio especializado: formularios con Amazon Textract o transcripción con Amazon Transcribe."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/bda.html
+
+# Revisión del módulo 03 con las guías de estudio (issue #34)
+
+- id: grupos-de-acciones
+  termino: grupos de acciones
+  alias: [action groups, grupo de acciones, action group]
+  categoria: concepto
+  definicion: "En Amazon Bedrock Agents, las acciones que puede ejecutar un agente: se describen con un esquema OpenAPI o con definiciones de funciones y se ejecutan con una función de AWS Lambda o devolviendo el control a la aplicación (return of control). Bedrock Agents (Classic) ya no admite clientes nuevos; para agentes nuevos, Amazon Bedrock AgentCore y Strands Agents."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html
+
+- id: retrieve-y-retrieveandgenerate
+  termino: Retrieve y RetrieveAndGenerate
+  alias: [API Retrieve, RetrieveAndGenerate]
+  categoria: concepto
+  definicion: "Operaciones para consultar una Knowledge Base de Amazon Bedrock: Retrieve devuelve solo los fragmentos relevantes de las fuentes; RetrieveAndGenerate los recupera y además pide al modelo una respuesta redactada con citas. Ambas admiten filtros por metadatos."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve.html
+
+- id: analizador-de-documentos-kb
+  termino: analizador de documentos
+  alias: [parsing, análisis de documentos, parser]
+  categoria: concepto
+  definicion: "Forma en que una Knowledge Base de Amazon Bedrock lee los documentos al ingerirlos. La Managed Knowledge Base usa un análisis inteligente automático; en una customer-managed se elige: el analizador por defecto solo extrae texto, y Bedrock Data Automation o un modelo fundacional procesan también tablas, gráficos e imágenes."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-advanced-parsing.html
+
+- id: smote
+  termino: SMOTE
+  alias: [Synthetic Minority Oversampling Technique]
+  categoria: tecnica
+  definicion: "Técnica para reequilibrar un conjunto de datos de clasificación binaria generando ejemplos sintéticos de la clase minoritaria. Es una de las opciones de la transformación Balance data de SageMaker Canvas, junto con el sobremuestreo aleatorio (repetir ejemplos de la clase minoritaria) y el submuestreo aleatorio (quitar ejemplos de la mayoritaria)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html
+
+- id: parada-temprana
+  termino: parada temprana
+  alias: [early stopping]
+  categoria: tecnica
+  definicion: "Técnica contra el sobreajuste que detiene el entrenamiento antes de que el modelo empiece a aprender el ruido de los datos de entrenamiento."
+  referencia: https://aws.amazon.com/what-is/overfitting/
+
+- id: deriva-de-la-atribucion
+  termino: deriva de la atribución de características
+  alias: [feature attribution drift]
+  categoria: concepto
+  definicion: "Cambio, respecto a una línea base, en cuánto pesa cada variable en las predicciones de un modelo en producción. Es uno de los cuatro tipos de monitorización de SageMaker Model Monitor (junto con la calidad de los datos, la calidad del modelo y la deriva del sesgo) y se apoya en SageMaker Clarify."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+
+- id: hipaa
+  termino: HIPAA
+  alias: [Health Insurance Portability and Accountability Act]
+  categoria: concepto
+  definicion: "Ley de EE. UU. que protege la privacidad y la seguridad de la información sanitaria protegida (PHI). Para tratar PHI en AWS, el cliente acepta el acuerdo BAA en AWS Artifact y usa solo servicios aptos para HIPAA; no existe una certificación HIPAA para un proveedor de nube."
+  referencia: https://aws.amazon.com/compliance/hipaa-compliance/
+
+- id: pci-dss
+  termino: PCI DSS
+  alias: [Payment Card Industry Data Security Standard]
+  categoria: concepto
+  definicion: "Norma de seguridad que se aplica a quien almacena, procesa o transmite datos de titulares de tarjetas de pago. AWS es proveedor de servicios de nivel 1 y su informe está en AWS Artifact; el cliente certifica su propia aplicación."
+  referencia: https://aws.amazon.com/compliance/pci-dss-level-1-faqs/
+
+- id: rgpd
+  termino: RGPD
+  alias: [GDPR, Reglamento General de Protección de Datos]
+  categoria: concepto
+  definicion: "Reglamento de la UE que protege los datos personales de las personas en la UE. AWS permite elegir en qué Región se guardan los datos; el cliente aplica los principios y derechos de la norma, como el derecho de supresión."
+  referencia: https://aws.amazon.com/compliance/gdpr-center/
+
+- id: soberania-de-datos
+  termino: soberanía de datos
+  alias: [data sovereignty]
+  categoria: concepto
+  definicion: "Principio por el que los datos quedan sujetos a las leyes del lugar donde están físicamente. Se distingue de la residencia, que es dónde están almacenados."
+  referencia: https://aws.amazon.com/what-is/data-sovereignty/
+
+- id: defensa-en-profundidad
+  termino: defensa en profundidad
+  alias: [defense in depth]
+  categoria: concepto
+  definicion: "Enfoque por capas del pilar de seguridad de AWS Well-Architected: aplicar controles en cada capa (organización y cuentas, red, cómputo, aplicación y datos) para evitar que una debilidad en una capa ponga en riesgo toda la carga de trabajo."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
+
+- id: gobierno-de-la-ia
+  termino: gobierno de la IA
+  alias: [AI governance]
+  categoria: concepto
+  definicion: "Conjunto de reglas, políticas y mecanismos de supervisión que guían el desarrollo y el uso de la IA para que sea responsable, auditable y cumpla la normativa."
+  referencia: https://aws.amazon.com/what-is/ai-governance/
+
+- id: endpoints-fips
+  termino: endpoints FIPS
+  alias: [FIPS, FIPS 140]
+  categoria: concepto
+  definicion: "Variantes de los endpoints de un servicio de AWS (por ejemplo, bedrock-runtime-fips) que usan módulos criptográficos validados según la norma FIPS 140 de EE. UU. Solo existen en algunas Regiones y se usan en cargas que exigen esa validación."
+  referencia: https://aws.amazon.com/compliance/fips/
+
+- id: gobierno-de-datos
+  termino: gobierno de datos
+  alias: [data governance]
+  categoria: concepto
+  definicion: "Procesos y políticas que garantizan que los datos estén en las condiciones adecuadas (calidad, acceso, linaje, ciclo de vida) para usarlos de forma segura y conforme a la normativa."
+  referencia: https://aws.amazon.com/what-is/data-governance/
+
+- id: regularizacion
+  termino: regularización
+  alias: [regularization, L1, L2]
+  categoria: tecnica
+  definicion: "Técnica contra el sobreajuste que penaliza los pesos grandes del modelo para limitar su complejidad: L1 (Lasso) penaliza su valor absoluto y L2 (Ridge), su cuadrado. El dropout es una forma de regularización en redes neuronales."
+  referencia: https://aws.amazon.com/what-is/overfitting/
+
+- id: codificador-decodificador
+  termino: codificador, decodificador y codificación posicional
+  alias: [encoder, decoder, codificación posicional, positional encoding]
+  categoria: concepto
+  definicion: "Partes de la arquitectura transformer: el codificador lee y procesa toda la secuencia de entrada y el decodificador genera la salida paso a paso. La codificación posicional añade a cada token información sobre su posición, porque la autoatención no conoce el orden."
+  referencia: https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/
+
+- id: pca
+  termino: PCA
+  alias: [principal component analysis, análisis de componentes principales]
+  categoria: tecnica
+  definicion: "Algoritmo no supervisado, integrado en SageMaker AI, que reduce el número de características de un conjunto de datos conservando la mayor parte de la información."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/pca.html
+
+- id: preprocesamiento-de-texto
+  termino: preprocesamiento de texto
+  alias: [lematización, lemmatization, palabras vacías, stop words, stemming]
+  categoria: tecnica
+  definicion: "Pasos que preparan el texto para el NLP: tokenizar, reducir las palabras a su raíz (stemming) o a su forma base (lematización) y eliminar las palabras vacías, que apenas aportan significado (artículos, preposiciones)."
+  referencia: https://aws.amazon.com/what-is/nlp/
+
+- id: amazon-sagemaker-model-dashboard
+  termino: Amazon SageMaker Model Dashboard
+  alias: [SageMaker Model Dashboard, Model Dashboard]
+  categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
+  definicion: "Portal centralizado de la consola de SageMaker AI para ver, buscar y explorar todos los modelos de la cuenta, con su estado de monitorización y sus Model Cards."
+  usar_cuando: "Para tener una visión de conjunto de los modelos de la cuenta y de su estado."
+  no_usar_cuando: "Para documentar un modelo concreto (SageMaker Model Cards) o versionarlo y aprobarlo (SageMaker Model Registry)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-dashboard.html
 
