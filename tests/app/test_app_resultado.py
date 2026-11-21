@@ -1,5 +1,8 @@
 """Resultado por dominio y por tarea en la página de resultado de un intento."""
 import re
+from pathlib import Path
+from types import SimpleNamespace
+from urllib.parse import unquote, urlsplit
 
 import pytest
 from conftest import banco_simulacro, crear_usuario, entrar, escribir, post, sustituir
@@ -8,6 +11,8 @@ from test_app_quiz import iniciar, preguntas, responder
 from test_app_repaso import app_repaso  # noqa: F401 (fixture)
 
 from app import stats
+from curso import simulacro
+from curso.manifiesto import cargar_manifiesto
 from app.models import Intento, IntentoRespuesta
 
 RESP = {"D3-001": {"r": "b"}, "D3-002": {"r": ["b", "c"]}, "D3-003": {"o1": "a", "o2": "b", "o3": "c", "o4": "d"},
@@ -21,7 +26,7 @@ def tabla(html):
     """Filas (texto de la celda de nombre, aciertos) de la tabla por dominio y el pie."""
     bloque = re.search(r'<div class="card" id="por-dominio">(.*?)</table>', html, re.S).group(1)
     filas = re.findall(r"<tr><td>(.*?)</td><td>(\d+/\d+)</td>", bloque, re.S)
-    pie = re.search(r"<tfoot><tr><th>Total</th><th>(\d+/\d+)</th>", bloque).group(1)
+    pie = re.search(r'<tfoot><tr><th scope="row">Total</th><td>(\d+/\d+)</td>', bloque).group(1)
     return [(re.sub(r"<[^>]+>", "", n).strip(), a) for n, a in filas], pie
 
 
@@ -32,6 +37,8 @@ def cuadra(app, iid, marcar_debiles=False):
         d = stats.desglose_intento(i, app.state.catalogo.get("aif-c01"), marcar_debiles)
         assert sum(g["n"] for g in d["dominios"]) == d["total"] == len(i.preguntas)
         assert sum(g["ok"] for g in d["dominios"]) == d["ok"] == sum(1 for r in i.respuestas if r.correcta)
+        if d["tareas"]:  # cuando se muestra, el desglose por tarea también suma el total
+            assert sum(t["n"] for t in d["tareas"]) == d["total"] and sum(t["ok"] for t in d["tareas"]) == d["ok"]
         return d
 
 
@@ -130,18 +137,21 @@ def test_preguntas_retiradas_y_sin_responder(app_sim):
         db.add(i)
         db.flush()
         db.add_all([IntentoRespuesta(intento_id=i.id, pregunta_id=pid, dominio=2, tarea="2.1", tipo="multiple_choice",
-                                     respuesta=["b"], correcta=True) for pid in ("S-099", "S-003")])
+                                     respuesta=["b"], correcta=ok) for pid, ok in (("S-099", False), ("S-003", True))])
         db.commit()
         iid = i.id
     post(c, f"/c/aif-c01/tests/{iid}/finalizar")
     html = c.get(f"/c/aif-c01/tests/{iid}/resultado").text
     filas, pie = tabla(html)
-    assert [(n.split(" ·")[0].replace(" por debajo de tu media", ""), a) for n, a in filas] == [
-        ("Dominio 2", "1/1"), ("Dominio 3", "0/1"), ("Preguntas retiradas del contenido", "1/2")] and pie == "2/4"
-    assert "2 sin responder" in html
+    assert filas == [("Dominio 2 · Fundamentos de IA generativa", "1/1"),
+                     ("Dominio 3 · Aplicaciones de modelos fundacionales · por debajo de tu media", "0/1"),
+                     ("Preguntas retiradas del contenido", "0/2")] and pie == "1/4"
+    assert "1 sin responder: cuentan como falladas" in html  # S-005; la retirada sin responder se cuenta aparte
+    assert "2 preguntas retiradas del contenido (1 sin responder): cuentan en su propia fila" in html
     d = cuadra(app_sim, iid, marcar_debiles=True)
-    assert [t["tarea"] for t in d["tareas"]] == ["2.1", "3.1"]  # las retiradas no entran en el desglose por tarea
-    assert [g["clave"] for g in d["dominios"] if g["debil"]] == [3]  # nunca se marcan las retiradas
+    assert [t["tarea"] for t in d["tareas"]] == ["2.1", "3.1", "retiradas"]
+    # Las retiradas (0 % frente al 25 % global) nunca se marcan; el Dominio 3 (0 %), sí.
+    assert [g["clave"] for g in d["dominios"] if g["debil"]] == [3]
 
 
 def test_repaso_con_conocimientos_previos(app_repaso):  # noqa: F811
@@ -194,10 +204,82 @@ def test_resultado_con_el_contenido_real_de_aif_c01(tmp_path):
     post(c, f"/c/aif-c01/tests/{iid}/finalizar")
     html = c.get(f"/c/aif-c01/tests/{iid}/resultado").text
     filas, pie = tabla(html)
-    assert [n.split(" ·")[0] for n, _ in filas] == [f"Dominio {d}" for d in range(1, 6)]
-    assert [int(a.split("/")[1]) for _, a in filas] == [13, 16, 18, 9, 9] and pie == "8/65"
+    cuotas = simulacro.cuotas_dominio(app.state.catalogo.get("aif-c01").manifiesto)
+    assert [n.split(" ·")[0] for n, _ in filas] == [f"Dominio {d}" for d in sorted(cuotas)]
+    assert [int(a.split("/")[1]) for _, a in filas] == [cuotas[d] for d in sorted(cuotas)] and pie == "8/65"
     assert "53 sin responder" in html
-    for modulo in ("01-fundamentos-ia-ml", "02-fundamentos-genai", "03-modelos-fundacionales", "04-ia-responsable", "05-seguridad-gobierno"):
-        assert f'href="/c/aif-c01/modulo/{modulo}/teoria">Dominio' in html
-    assert len(re.findall(r'<a href="/c/aif-c01/modulo/[^"]+/teoria#[^"]+">Tarea \d\.\d</a>', html)) == 14
+    enlaces = re.findall(r'<a href="(/c/aif-c01/modulo/[^"]+)">((?:Dominio|Tarea) [^<]+)</a>', html)
+    tareas = re.findall(r"<tr><td>(?:<a [^>]*>)?Tarea \d+\.\d+", html)
+    assert len([e for e in enlaces if e[1].startswith("Tarea")]) == len(tareas) > 0  # todas las tareas enlazadas
+    assert len({e for e in enlaces if e[1].startswith("Dominio")}) == len(cuotas)
+    for url, _ in set(enlaces):  # cada destino existe y su ancla es un id del HTML
+        partes = urlsplit(url)
+        r = c.get(partes.path)
+        assert r.status_code == 200, url
+        if partes.fragment:
+            assert f'id="{unquote(partes.fragment)}"' in r.text, url
     cuadra(app, iid, marcar_debiles=True)
+
+
+
+# ---------------------------------------------------------------- casos límite del desglose
+AIF = cargar_manifiesto(Path(__file__).resolve().parent.parent.parent / "cursos" / "aif-c01")
+
+
+def _desglose(preguntas, respuestas, marcar_debiles=False, ids=None):
+    """Desglose con un contenido mínimo: `preguntas` = {id: dict}, `respuestas` = {id: acierto}."""
+    contenido = SimpleNamespace(manifiesto=AIF, preguntas=preguntas, url_dominio=lambda d: None, url_tarea=lambda t: None)
+    i = SimpleNamespace(preguntas=ids or list(preguntas),
+                        respuestas=[SimpleNamespace(pregunta_id=k, correcta=v) for k, v in respuestas.items()])
+    return stats.desglose_intento(i, contenido, marcar_debiles)
+
+
+def test_no_se_marca_un_dominio_con_el_mismo_porcentaje_redondeado():
+    # Dominio 1: 11/16 (68,75 % → 69 %); Dominio 2: 7/10 (70 %). Global: 18/26 (69,2 % → 69 %).
+    preguntas = {f"A{k}": {"dominio": 1, "tarea": "1.1"} for k in range(16)} | {f"B{k}": {"dominio": 2, "tarea": "2.1"} for k in range(10)}
+    respuestas = {f"A{k}": k < 11 for k in range(16)} | {f"B{k}": k < 7 for k in range(10)}
+    d = _desglose(preguntas, respuestas, marcar_debiles=True)
+    assert d["pct"] == 69 and [(g["clave"], g["pct"], g["debil"]) for g in d["dominios"]] == [(1, 69, False), (2, 70, False)]
+    respuestas["A10"] = False  # 10/16 → 63 %, global 17/26 → 65 %
+    assert [g["debil"] for g in _desglose(preguntas, respuestas, marcar_debiles=True)["dominios"]] == [True, False]
+
+
+def test_tipos_inesperados_no_rompen_el_desglose():
+    preguntas = {"L1": {"dominio": [1], "tarea": "libros"}, "L2": {"dominio": True, "tarea": 7}, "L3": {"dominio": 1.0, "tarea": "1.1"},
+                 "L4": {"dominio": 0, "tarea": "libros"}, "L5": {"dominio": 9, "tarea": "9.1"}}
+    d = _desglose(preguntas, {"L1": True, "L3": True})
+    assert [g["clave"] for g in d["dominios"]] == ["otros"] and d["dominios"][0]["n"] == 5 and d["ok"] == 2
+    assert [t["tarea"] for t in d["tareas"]] == ["1.1", "otras"]  # 1.1 es una tarea oficial aunque el dominio no lo sea
+
+
+def test_tarea_de_otro_dominio_y_orden_numerico():
+    preguntas = {"P1": {"dominio": 3, "tarea": "2.1"}, "P2": {"dominio": 1, "tarea": "1.10"}, "P3": {"dominio": 1, "tarea": "1.2"},
+                 "P4": {"dominio": 1, "tarea": "libros"}}
+    d = _desglose(preguntas, {"P1": True})
+    assert [t["tarea"] for t in d["tareas"]] == ["1.2", "1.10", "2.1", "otras"]
+    assert sum(t["n"] for t in d["tareas"]) == d["total"] == 4
+
+
+def test_url_tarea_toma_el_primer_objetivo_en_orden_numerico(app):
+    c = app.state.catalogo.get("aif-c01")
+    c.teoria = {"1.2.10": ("x", "a"), "1.2.2": ("x", "b"), "1.20.1": ("x", "c")}
+    c.url_teoria = lambda o: o
+    assert c.url_tarea("1.2") == "1.2.2" and c.url_tarea("1.20") == "1.20.1" and c.url_tarea("1.3") is None
+
+
+def test_libros_con_dominio_o_tarea_de_tipo_raro(app_libros, curso, caplog):  # noqa: F811
+    raros = [libro("F-1", dominio=1.0), libro("L-1", dominio=[1]), libro("B-1", dominio=True), libro("T-1"), libro("X-1", dominio=1.5)]
+    raros[3]["tarea"] = 5
+    escribir_libros(curso, "03-modelos-fundacionales", raros)
+    app_libros.state.catalogo.cargar()
+    c = app_libros.state.catalogo.get("aif-c01")
+    assert c.preguntas["F-1"]["dominio"] == 1 and type(c.preguntas["F-1"]["dominio"]) is int
+    for pid in ("L-1", "B-1", "T-1", "X-1"):
+        assert pid not in c.preguntas
+        assert any(f"libros.yaml:{pid}: dominio o tarea no válidos" in a for a in c.avisos), c.avisos
+    crear_usuario(app_libros)
+    cl = entrar(app_libros)
+    iid = iniciar(cl, modo="libros", filtro="03-modelos-fundacionales", n="5")
+    post(cl, f"/c/aif-c01/tests/{iid}/finalizar")
+    filas, pie = tabla(cl.get(f"/c/aif-c01/tests/{iid}/resultado").text)
+    assert filas == [("Dominio 1 · Fundamentos de IA y ML", "0/1")] and pie == "0/1"

@@ -251,7 +251,14 @@ class Contenido:
             if p["id"] in self.preguntas:
                 self.avisos.append(f"{mod.id}/libros.yaml:{p['id']}: id duplicado, ignorada")
                 continue
-            p.setdefault("dominio", 0)
+            dominio = p.get("dominio", 0)
+            if isinstance(dominio, float) and dominio.is_integer():
+                dominio = int(dominio)  # «1.0» en el YAML
+            if type(dominio) is not int or not isinstance(p.get("tarea", "libros"), str):
+                self.avisos.append(f"{mod.id}/libros.yaml:{p['id']}: dominio o tarea no válidos "
+                                   f"({p.get('dominio')!r}, {p.get('tarea')!r}), ignorada")
+                continue
+            p["dominio"] = dominio
             p.setdefault("tarea", "libros")
             p.setdefault("explicacion", "")
             p["modulo"] = mod.id
