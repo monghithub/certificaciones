@@ -400,3 +400,34 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - Algunas tablas de un libro presentan k-NN como agrupamiento: es supervisado. Se aprovecha como trampa.
 - **Revisión independiente:** 3 hallazgos críticos (tres preguntas de examen demasiado próximas a preguntas de los libros: se reescribieron con otro escenario, otra restricción y otros distractores), 11 importantes (otras preguntas y tres trampas derivadas de distractores de los libros, fuentes que no respaldaban la deriva de concepto, la cifra de transformaciones de Data Wrangler o los errores de tipo I y II, repaso que adelantaba escenarios del examen, una pista en un enunciado, dificultades mal calibradas y matices sobre Kendra y el sobreajuste) y 4 menores. Todos aplicados; la deriva de concepto se cita ahora en AWS Prescriptive Guidance, la matriz de confusión en SageMaker Canvas, y se añaden AnalyzeExpense y AnalyzeID de Textract.
 - **Verificación:** validador sin avisos, cobertura (1.1: 25 preguntas y 20 de repaso; 1.2: 38 y 18; 1.3: 36 y 20), 274 pruebas de pytest, 47/47 diagramas Mermaid válidos y glosario regenerado (271 términos, 23 nuevos).
+
+### Revisión con las guías de estudio: módulo 02 (#33)
+
+- Petición: «cuando termine abre el PR y sigue con la 33». PR #41 abierto para el módulo 01. Rama `aif-c01/revision-libros-02`, creada a partir de la del 01 para no chocar en el glosario, el journal y el CHANGELOG mientras #41 no se fusione.
+- Material: Elango, capítulos 2, 3 y 4 (parte de IA generativa), 5 (selección de modelos) y 8 (ciclo de vida del modelo fundacional); Taulli, capítulos 4 y 6; y sus preguntas ELA-C2, ELA-C4 (IA generativa), TAU-C4, TAU-C6 y las de ELA-AT y TAU-PE del dominio 2 (estas están en el banco local del simulacro).
+- El módulo ya cubría casi todo y estaba más al día que los libros (niveles Priority, Flex y Reserved, AgentCore, Quick, Kiro, MCP y A2A). **Hallazgos por objetivo:**
+
+  | Objetivo | Tema | Estado antes | Qué se hizo |
+  |---|---|---|---|
+  | 2.1.1 | Familias generativas: GAN y VAE, además de *transformer* y difusión | Faltaba | Tabla y trampa (texto a imagen hoy es difusión) |
+  | 2.1.3 | Ciclo de vida de los modelos de Bedrock (activo, *legacy*, fin de vida) | Solo el caso Nova | Párrafo y trampa |
+  | 2.1.4 | Razonamiento (más *tokens* de salida), imagen por imagen y vídeo por segundo, «abierto no es gratis» | Faltaba | Tres viñetas |
+  | 2.2.2 | Causa de las alucinaciones; riesgo de reputación | Parcial | Frase y fila nueva |
+  | 2.2.3 | Tiempo hasta el primer *token* frente a tiempo total; ficha del modelo; *benchmarks* frente a datos propios | Faltaba | Párrafo y reglas |
+  | 2.2.4 | Eficiencia de negocio frente a técnica; satisfacción del cliente | Parcial | Aclaración |
+  | 2.3.1 | Bedrock Marketplace, Custom Model Import, Bedrock Data Automation; JumpStart sin coste adicional y con evaluación | Faltaba | Filas en la tabla y en `servicios.md` |
+  | 2.3.3 | Sostenibilidad: silicio eficiente (Trainium) | Faltaba | Frase con la referencia del Machine Learning Lens |
+  | 2.3.4 | Modelos personalizados e importados bajo demanda; Marketplace por instancia; Guardrails y Knowledge Bases aparte; «producción no implica *Provisioned Throughput*» | Faltaba | Viñetas y nota |
+  | 2.1.2, 2.1.5, 2.1.6, 2.2.1, 2.3.2 | Casos de uso, ingeniería de contexto, IA agéntica, ventajas | Ya cubierto | Sin cambios |
+
+- **Preguntas de los libros:** de 42 revisadas, 18 ya estaban cubiertas, 11 tenían el concepto pero no la trampa, 3 no estaban cubiertas y 10 son del dominio 3 (cubiertas en el módulo 03). Se añaden 10 preguntas de repaso (R2-037 a R2-046) y 10 de examen (D2-082 a D2-091), propias. Se descartan, por no encontrar fuente oficial de AWS que las respalde, la codificación posicional y el codificador y decodificador del *transformer*.
+- **Discrepancias de los libros con la documentación vigente** (prevalece la documentación):
+  - Uno de los libros define *chunking* como agrupar *tokens* en frases; en AWS es partir documentos antes de generar sus *embeddings*.
+  - Generar imágenes a partir de texto: un libro da GAN; la familia que se usa hoy es la difusión.
+  - Un libro dice que los modelos fundacionales se preentrenan de forma «semisupervisada»; AWS dice autosupervisada.
+  - Ambos libros asocian modelo personalizado con *Provisioned Throughput* obligatorio y producción con *Provisioned Throughput*; hoy hay inferencia bajo demanda en modelos compatibles y Custom Model Import, y los niveles Priority, Flex y Reserved.
+  - Precios por cada 1 000 *tokens*: AWS publica hoy por millón.
+  - Amazon Q Business y Q Developer, Agents for Amazon Bedrock y QuickSight aparecen como vigentes (el curso ya lo trataba). El acceso a modelos ya no requiere solicitarlo modelo a modelo.
+  - Un libro propone ajuste fino o bajar la temperatura contra las alucinaciones; el curso mantiene RAG, anclaje con Guardrails y verificación.
+- **Revisión independiente:** 2 hallazgos críticos (una pregunta de examen cuya respuesta no respaldaba la fuente citada y una de repaso demasiado próxima a una de los libros: se reescribieron), 10 importantes (el ciclo de vida de Bedrock tiene dos políticas según la fecha de lanzamiento del modelo, con acceso ampliado más caro en los anteriores; el 25 % de Trainium es un ejemplo concreto de AWS; Marketplace cobra además el software del proveedor; la facturación de vídeo por segundo no se pudo verificar y se retiró; ejemplos y escenarios demasiado próximos a los libros; repaso que adelantaba el examen; distractores débiles y respuestas que destacaban por su forma) y 4 menores. Todos aplicados.
+- **Verificación:** validador sin avisos, cobertura (2.1: 36 preguntas y 20 de repaso; 2.2: 25 y 12; 2.3: 30 y 14), 274 pruebas, 47/47 diagramas, markdownlint sin errores y glosario regenerado (278 términos, 7 nuevos).
