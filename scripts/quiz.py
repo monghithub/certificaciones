@@ -10,6 +10,7 @@ import yaml
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ))
 
+from curso import simulacro  # noqa: E402
 from curso.correccion import corregir  # noqa: E402
 from curso.manifiesto import descubrir  # noqa: E402
 
@@ -75,6 +76,8 @@ def main(argv=None, entrada=input):
     ap.add_argument("--repaso", action="store_true", help="preguntas de repaso de conocimientos en lugar de las de examen")
     ap.add_argument("--n", type=int, default=10)
     ap.add_argument("--semilla", type=int)
+    ap.add_argument("--simulacro", action="store_true",
+                    help="simulacro con la misma composición que la consola (ignora --modulo, --dominio, --tipo y --n)")
     a = ap.parse_args(argv)
     cursos, _ = descubrir(a.raiz / "cursos", a.raiz / "schemas")
     curso = a.curso
@@ -86,12 +89,26 @@ def main(argv=None, entrada=input):
     elif curso not in cursos:
         print(f"Curso '{curso}' no encontrado. Disponibles: " + (", ".join(cursos) or "ninguno"), file=sys.stderr)
         return 2
-    pool = cargar(a.raiz, curso, a.modulo, a.dominio, a.tipo, a.repaso)
-    if not pool:
-        print("No hay preguntas que cumplan el filtro.", file=sys.stderr)
-        return 1
     rnd = random.Random(a.semilla)
-    sel = rnd.sample(pool, min(a.n, len(pool)))
+    if a.simulacro:
+        m = cursos[curso]
+        if not m.tiene_simulacro:
+            print(f"El curso {curso} no tiene simulacro.", file=sys.stderr)
+            return 1
+        banco = simulacro.cargar_banco(m, a.raiz / "schemas")  # misma carga y filtrado que la consola
+        try:
+            ids = simulacro.extraer(m, banco, rnd)
+        except ValueError as e:
+            print(e, file=sys.stderr)
+            return 1
+        por_id = {p["id"]: p for p in banco}
+        sel = [por_id[i] for i in ids]
+    else:
+        pool = cargar(a.raiz, curso, a.modulo, a.dominio, a.tipo, a.repaso)
+        if not pool:
+            print("No hay preguntas que cumplan el filtro.", file=sys.stderr)
+            return 1
+        sel = rnd.sample(pool, min(a.n, len(pool)))
     aciertos = 0
     for i, p in enumerate(sel, 1):
         mostrar(p, i, len(sel))

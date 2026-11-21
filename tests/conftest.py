@@ -1,3 +1,4 @@
+import copy
 import re
 import shutil
 from pathlib import Path
@@ -23,6 +24,14 @@ def repo(tmp_path):
     (curso / "modulos" / "06-simulacro").mkdir(parents=True)
     escribir(tmp_path, yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8")))
     return tmp_path
+
+
+def sustituir(texto: str, *cambios: tuple[str, str]) -> str:
+    """Aplica cada (patrón, reemplazo) a `texto` exigiendo exactamente una sustitución (falla si el manifiesto cambia)."""
+    for patron, reemplazo in cambios:
+        texto, n = re.subn(patron, reemplazo, texto, flags=re.M)
+        assert n == 1, f"se esperaba 1 sustitución de {patron!r} y hubo {n}"
+    return texto
 
 
 def escribir(raiz, preguntas, modulo="03-modelos-fundacionales", curso="aif-c01", fichero="preguntas.yaml"):
@@ -83,8 +92,8 @@ def curso(repo):
         sim.append(q)
     escribir(repo, sim, "06-simulacro")
     f = base_curso / "curso.yaml"
-    f.write_text(f.read_text(encoding="utf8").replace("preguntas: 65", "preguntas: 3").replace("minutos: 90", "minutos: 1")
-                 .replace("minimo_simulacro: 65", "minimo_simulacro: 3"), encoding="utf8")
+    f.write_text(sustituir(f.read_text(encoding="utf8"), (r"^  preguntas: 65$", "  preguntas: 3"), (r"^  minutos: 90$", "  minutos: 1"),
+                           (r"^  minimo_simulacro: \d+$", "  minimo_simulacro: 3")), encoding="utf8")
     return repo
 
 
@@ -143,3 +152,20 @@ def app_dos(curso, tmp_path):
     s = Settings(secret_key="k" * 40, database_url=f"sqlite:///{tmp_path}/dos.db", courses_dir=curso / "cursos",
                  schemas_dir=curso / "schemas", login_max_intentos=3)
     return create_app(s)
+
+
+def banco_simulacro(por_dominio: dict[int, tuple[int, int]], objetivos: dict[int, int] | None = None) -> list[dict]:
+    """Banco ficticio del simulacro, válido para el esquema: `por_dominio` = {dominio: (opción múltiple, respuesta múltiple)};
+    `objetivos` = {dominio: nº de objetivos distintos, asignados rotando} (sin él, un objetivo distinto por pregunta)."""
+    base = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))
+    mc, mr = base[0], base[1]
+    banco = []
+    for d, (n_mc, n_mr) in sorted(por_dominio.items()):
+        for k in range(n_mc + n_mr):
+            p = copy.deepcopy(mc if k < n_mc else mr)
+            n_obj = (objetivos or {}).get(d) or (n_mc + n_mr)
+            sid = f"S-{len(banco) + 1:03d}"
+            p.update(id=sid, dominio=d, tarea=f"{d}.1", objetivo=f"{d}.1.{k % n_obj + 1}",
+                     enunciado=f"Escenario ficticio {sid} del simulacro, con una empresa y una restricción que decide la respuesta.")
+            banco.append(p)
+    return banco

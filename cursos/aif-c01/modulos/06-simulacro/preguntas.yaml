@@ -1704,3 +1704,456 @@
     b: Antes de consultar el pedido no hay ningún importe que revisar.
     d: Una instrucción depende de que el modelo la siga; no es una revisión humana ni un control independiente.
   referencia: https://aws.amazon.com/what-is/ai-agents/
+- id: S-070
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una bodega envía unos 30 pedidos al día y asigna cada uno a una de sus tres rutas de reparto con una regla por código postal que funciona sin errores desde hace años. Un proveedor le ofrece un modelo de ML que optimizaría esa asignación por 40 000 € más el mantenimiento anual. ¿Qué debería hacer la bodega?
+  opciones:
+  - id: a
+    texto: Entrenar un modelo de clasificación con el histórico de asignaciones
+  - id: b
+    texto: Mantener la regla actual, porque el beneficio no compensa el coste
+  - id: c
+    texto: Contratar el modelo y medir después si mejora los resultados
+  - id: d
+    texto: Usar un modelo fundacional de Amazon Bedrock para asignar cada pedido
+  correctas:
+  - b
+  explicacion: El Machine Learning Lens pide decidir primero si ML es el enfoque adecuado, comparando las alternativas por su exactitud, su coste y su escalabilidad. Aquí una regla determinista ya da el resultado correcto con 30 pedidos al día, así que un modelo añadiría coste y complejidad sin un beneficio que lo compense.
+  distractores:
+    a: Un clasificador aprendería a imitar una regla que ya es exacta; añadiría coste de entrenamiento y mantenimiento sin mejorar el resultado.
+    c: Medir después invierte el orden; el análisis de coste y beneficio se hace antes de invertir, y aquí ya indica que no compensa.
+    d: Un modelo fundacional es aún más caro por petición y menos predecible que una regla para una asignación que ya funciona.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/business-goal-identification.html
+- id: S-071
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una plataforma de cursos en línea guarda tres años de registros de uso de sus alumnos (horas de conexión, vídeos vistos, ejercicios entregados), sin ninguna etiqueta. Quiere descubrir perfiles de alumnos con hábitos parecidos para adaptar sus campañas y, además, localizar las sesiones que se salen mucho de lo habitual porque podrían ser cuentas compartidas. ¿Qué DOS técnicas encajan? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Clasificación multiclase de los alumnos
+  - id: b
+    texto: Regresión sobre las horas de conexión
+  - id: c
+    texto: Agrupamiento (clustering)
+  - id: d
+    texto: Detección de anomalías
+  - id: e
+    texto: Previsión de series temporales
+  correctas:
+  - c
+  - d
+  explicacion: 'Sin etiquetas, el problema es no supervisado. El agrupamiento forma grupos de elementos lo más parecidos entre sí, que aquí son los perfiles de alumnos, y la detección de anomalías identifica las observaciones que se desvían mucho del resto, como las sesiones sospechosas.'
+  distractores:
+    a: La clasificación es supervisada y necesita ejemplos etiquetados con la clase correcta, que la plataforma no tiene.
+    b: La regresión predice un valor numérico a partir de ejemplos con ese valor conocido; no forma grupos ni señala casos raros.
+    e: La previsión estima valores futuros de una serie; el objetivo aquí no es anticipar la evolución, sino agrupar y detectar casos atípicos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: S-072
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una correduría de seguros quiere un piloto de asistente de redacción en dos semanas. No tiene equipo de infraestructura, no sabe cuánto tráfico tendrá y no necesita modificar los pesos del modelo; le basta con buenas instrucciones. ¿De dónde debe obtener el modelo?
+  opciones:
+  - id: a
+    texto: De un proveedor de modelos fundacionales a través de la API de Amazon Bedrock
+  - id: b
+    texto: De SageMaker JumpStart, desplegando un modelo abierto en un endpoint propio
+  - id: c
+    texto: De un entrenamiento propio en SageMaker AI con sus pólizas históricas
+  - id: d
+    texto: De un modelo abierto autoalojado en instancias de Amazon EC2 con GPU
+  correctas:
+  - a
+  explicacion: Amazon Bedrock es un servicio totalmente gestionado y serverless que da acceso por API a modelos fundacionales de varios proveedores, así que no hay infraestructura que gestionar y se paga por uso. Con plazo corto, tráfico desconocido y sin necesidad de tocar los pesos, es la fuente con menos esfuerzo.
+  distractores:
+    b: JumpStart ofrece modelos preentrenados, sobre todo abiertos, que se pueden ajustar, pero desplegarlos supone elegir y mantener un endpoint, justo lo que la correduría no puede gestionar.
+    c: Entrenar un modelo propio exige datos, tiempo y experiencia que no caben en dos semanas, y no hace falta si basta con instrucciones.
+    d: Autoalojar el modelo da el máximo control, pero obliga a gestionar instancias, escalado y parches sin equipo de infraestructura.
+  referencia: https://aws.amazon.com/bedrock/faqs/
+- id: S-073
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una aseguradora reentrena a mano su modelo de tarificación cada trimestre, con scripts que solo entiende una persona, y nadie sabe qué versión aprobó el comité de riesgos ni cuál está en producción. Quiere que el preprocesamiento, el entrenamiento y la evaluación se ejecuten siempre igual y llevar un catálogo de versiones con su estado de aprobación. ¿Qué DOS funcionalidades de Amazon SageMaker AI usa? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: SageMaker Pipelines
+  - id: b
+    texto: SageMaker Feature Store
+  - id: c
+    texto: SageMaker Canvas
+  - id: d
+    texto: SageMaker Data Wrangler
+  - id: e
+    texto: SageMaker Model Registry
+  correctas:
+  - a
+  - e
+  explicacion: SageMaker Pipelines orquesta y automatiza el flujo de ML (procesamiento, entrenamiento, evaluación y despliegue) para que cada ejecución sea repetible. SageMaker Model Registry cataloga los modelos, gestiona sus versiones y su estado de aprobación, y se integra con Pipelines para registrar una versión en cada ejecución.
+  distractores:
+    b: Feature Store guarda y comparte características para entrenar e inferir; no automatiza el flujo ni gestiona aprobaciones de modelos.
+    c: Canvas permite crear modelos sin código; no resuelve la repetibilidad del reentrenamiento ni el catálogo de versiones aprobadas.
+    d: Data Wrangler sirve para analizar y preparar datos para ML; cubre una etapa, no la automatización completa ni el registro de versiones.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+- id: S-074
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una cadena de televisión regional quiere mostrar subtítulos generados automáticamente en sus retransmisiones deportivas en directo, con apenas unos segundos de retraso, sin entrenar modelos propios. ¿Qué opción usa?
+  opciones:
+  - id: a
+    texto: Trabajos por lotes de Amazon Transcribe sobre las grabaciones de cada partido
+  - id: b
+    texto: Amazon Polly con voces neuronales
+  - id: c
+    texto: Transcripción en streaming de Amazon Transcribe
+  - id: d
+    texto: Amazon Comprehend para detectar las entidades de cada frase
+  correctas:
+  - c
+  explicacion: La transcripción en streaming de Amazon Transcribe recibe el audio en tiempo real y devuelve la transcripción también en tiempo real; la documentación cita los subtítulos en directo de eventos deportivos como caso de uso habitual.
+  distractores:
+    a: Los trabajos por lotes procesan archivos ya grabados, así que los subtítulos llegarían después del partido y no durante la retransmisión.
+    b: Polly convierte texto en voz, que es la dirección contraria a la que se necesita.
+    d: Comprehend analiza texto que ya existe; no convierte el audio de la retransmisión en texto.
+  referencia: https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html
+- id: S-075
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.2
+  tipo: multiple_response
+  dificultad: media
+  enunciado: 'Una gestoría prueba un asistente generativo para dudas fiscales y detecta dos problemas: al repetir exactamente la misma consulta, unas veces recibe una respuesta y otras una distinta, y en una de ellas el asistente cita con total seguridad un artículo de una ley que no existe. ¿Qué DOS desventajas de la IA generativa explican esos problemas? (Elige DOS.)'
+  opciones:
+  - id: a
+    texto: La consulta supera la ventana de contexto y el modelo pierde parte de la ley
+  - id: b
+    texto: La generación es probabilística, así que una misma petición puede dar salidas distintas
+  - id: c
+    texto: Alguien ha introducido instrucciones ocultas en la consulta para manipular el asistente
+  - id: d
+    texto: El modelo trata peor las consultas de un tipo concreto de contribuyente
+  - id: e
+    texto: El modelo puede producir contenido verosímil pero falso cuando le falta el dato
+  correctas:
+  - b
+  - e
+  explicacion: 'Que la misma entrada produzca salidas distintas es el no determinismo de los modelos generativos, y citar con aplomo un artículo inexistente es una alucinación: contenido verosímil pero falso. Ambas son desventajas que la guía del examen cita para las soluciones de IA generativa.'
+  distractores:
+    a: Una consulta fiscal breve no llena la ventana de contexto, y perder texto no explica que la misma pregunta dé respuestas distintas.
+    c: Las respuestas cambian con la misma consulta repetida por la propia gestoría; no hay ningún indicio de una inyección de prompt.
+    d: Eso sería un sesgo, un trato desigual entre grupos, y nada en los síntomas lo indica.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+- id: S-076
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una aplicación de viajes quiere que el turista haga una foto a la carta de un restaurante y reciba la explicación de cada plato. Sus usuarios vienen de Japón, Egipto, Brasil y otros nueve países, y cada uno debe leerla en su lengua. La empresa no va a adaptar el modelo con datos propios. ¿Qué DOS factores deciden la elección del modelo fundacional? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Que acepte imágenes como entrada
+  - id: b
+    texto: Que admita la inferencia por lotes con descuento
+  - id: c
+    texto: Que admita el ajuste fino en Amazon Bedrock
+  - id: d
+    texto: Su soporte multilingüe
+  - id: e
+    texto: La mayor ventana de contexto disponible
+  correctas:
+  - a
+  - d
+  explicacion: 'La modalidad decide: el modelo tiene que entender una foto, así que debe admitir imágenes como entrada. Y como cada usuario lee la explicación en un idioma distinto, también decide que el modelo sea multilingüe. La modalidad y el soporte multilingüe figuran entre los criterios de selección de modelos fundacionales que cita la guía.'
+  distractores:
+    b: La inferencia por lotes sirve para cargas que no necesitan respuesta inmediata; el turista espera la explicación al momento.
+    c: La empresa no va a ajustar el modelo, así que el soporte de ajuste fino no influye.
+    e: La foto de una carta y su explicación ocupan poco; una ventana enorme no aporta nada al caso.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+- id: S-077
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.1
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una ingeniería carga en Amazon Bedrock Knowledge Bases sus normas técnicas, con apartados largos. Con fragmentos pequeños, la búsqueda encuentra el párrafo exacto, pero el modelo responde sin el contexto del apartado; con fragmentos grandes, la búsqueda pierde precisión. ¿Qué estrategia de fragmentación resuelve las dos cosas?
+  opciones:
+  - id: a
+    texto: Fragmentación por defecto, de unos 300 tokens
+  - id: b
+    texto: Fragmentación de tamaño fijo con más solapamiento
+  - id: c
+    texto: Sin fragmentación, con cada norma como un único fragmento
+  - id: d
+    texto: Fragmentación jerárquica
+  correctas:
+  - d
+  explicacion: 'La fragmentación jerárquica crea fragmentos hijos pequeños dentro de fragmentos padres más amplios. La búsqueda se hace sobre los hijos, que son más precisos, y en la recuperación se sustituyen por su padre para dar al modelo el contexto completo. Es justo el equilibrio que describe la documentación: embeddings pequeños para precisión y contexto amplio para la respuesta.'
+  distractores:
+    a: La fragmentación por defecto produce fragmentos pequeños de tamaño parecido; mantendría el problema de responder sin el contexto del apartado.
+    b: El solapamiento evita cortar ideas entre fragmentos consecutivos, pero cada fragmento sigue teniendo un solo tamaño, así que no combina precisión y contexto amplio.
+    c: Un fragmento por norma empeora aún más la precisión de la búsqueda y, con documentos largos, mete mucho texto irrelevante en el contexto.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html
+- id: S-078
+  dominio: 3
+  tarea: '3.4'
+  objetivo: 3.4.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: 'Una compañía de telefonía lanzó un asistente con un objetivo aprobado por la dirección: que los clientes cambien de tarifa o den de alta una línea sin pasar por un agente. Tras tres meses, las encuestas dan un 4,6 sobre 5, pero las llamadas al centro de atención por esos trámites apenas han bajado. ¿Qué métrica muestra si el asistente cumple su objetivo?'
+  opciones:
+  - id: a
+    texto: La satisfacción media de las encuestas
+  - id: b
+    texto: El número de conversaciones iniciadas al mes
+  - id: c
+    texto: La puntuación BERTScore frente a respuestas de referencia
+  - id: d
+    texto: El porcentaje de trámites que terminan sin intervención humana
+  correctas:
+  - d
+  explicacion: El objetivo es que los clientes completen el trámite solos, así que la métrica alineada es la tasa de tareas completadas. Una satisfacción alta puede convivir con trámites que se abandonan y acaban en una llamada, como indica que estas apenas bajen.
+  distractores:
+    a: La satisfacción es una métrica de alineamiento útil, pero aquí es alta y no refleja el objetivo; los trámites siguen llegando al centro de atención.
+    b: Contar conversaciones mide el uso, no si el trámite se completa.
+    c: BERTScore es una métrica técnica de similitud semántica del texto; no mide el resultado de negocio.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+- id: S-079
+  dominio: 3
+  tarea: '3.2'
+  objetivo: 3.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una consultora usa Amazon Nova Premier para analizar memorias anuales de unas 400 páginas. Su prompt empieza con las instrucciones y la pregunta, y debajo incluye la memoria completa entre marcadores de inicio y fin. Las respuestas ignoran parte de las instrucciones. Según la guía de prompts de Amazon Nova para contextos largos, ¿qué cambio debe hacer?
+  opciones:
+  - id: a
+    texto: Copiar las instrucciones dos veces al principio del prompt
+  - id: b
+    texto: Poner la memoria al principio y las instrucciones y la pregunta al final
+  - id: c
+    texto: Bajar la temperatura a cero para que siga mejor las instrucciones
+  - id: d
+    texto: Añadir antes de la memoria varios ejemplos completos de análisis de otras memorias
+  correctas:
+  - b
+  explicacion: 'La guía de Amazon Nova para contextos largos recomienda colocar los documentos largos al principio del prompt, antes de la pregunta, las instrucciones y los ejemplos, y dejar las instrucciones al final: el modelo rinde mejor cuando recibe primero el contexto y después lo que debe hacer. Los marcadores de inicio y fin, que la consultora ya usa, son otra de sus recomendaciones; lo que falla aquí es el orden.'
+  distractores:
+    a: Repetir las instrucciones al principio mantiene el orden que la guía desaconseja; el documento largo sigue quedando entre las instrucciones y la respuesta.
+    c: La temperatura controla la variabilidad de la respuesta; no hace que el modelo atienda mejor a instrucciones mal colocadas.
+    d: Añadir ejemplos completos alarga aún más un prompt ya muy largo y no cambia el orden, que es lo que la guía señala.
+  referencia: https://docs.aws.amazon.com/nova/latest/userguide/prompting-long-context.html
+- id: S-080
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una distribuidora quiere que sus comerciales pregunten en lenguaje natural, sin escribir consultas, por las ventas de cada cliente, que están en tablas de Amazon Redshift, y por las condiciones de sus contratos marco, que son PDF en Amazon S3. Quiere aprovechar los datos donde ya están, sin transformarlos. ¿Qué DOS piezas de Amazon Bedrock Knowledge Bases usa? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Exportar las tablas de ventas a PDF y añadirlas a la base de los contratos
+  - id: b
+    texto: Una base de conocimiento conectada a un almacén de datos estructurados
+  - id: c
+    texto: Ajustar un modelo con las tablas de ventas del último año
+  - id: d
+    texto: Una base de conocimiento con los contratos como fuente de documentos
+  - id: e
+    texto: Un grafo en Amazon Neptune Analytics (GraphRAG) con las ventas
+  correctas:
+  - b
+  - d
+  explicacion: Una base de conocimiento conectada a un almacén de datos estructurados convierte cada pregunta en una consulta SQL sobre los datos (usa Amazon Redshift como motor de consulta) y genera la respuesta, sin convertir las tablas ni escribir SQL a mano. Para los contratos en PDF, una base de conocimiento de documentos sobre Amazon S3 recupera los fragmentos relevantes y responde con citas.
+  distractores:
+    a: Convertir las tablas a PDF obliga a transformar los datos y pierde su estructura; la búsqueda por similitud no calcula totales ni filtros como una consulta.
+    c: Un modelo ajustado no consulta los datos vigentes y habría que reentrenarlo con cada cambio en las ventas.
+    e: GraphRAG combina vectores con un grafo de relaciones; no consulta tablas de ventas en Redshift.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-build-structured.html
+- id: S-081
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un archivo histórico quiere búsqueda semántica sobre los embeddings de 300 millones de fragmentos de sus documentos digitalizados. Los investigadores consultan unas pocas veces al día y aceptan respuestas en menos de un segundo. La prioridad es el menor coste de almacenamiento, sin aprovisionar infraestructura. ¿Qué almacén vectorial encaja?
+  opciones:
+  - id: a
+    texto: Amazon ElastiCache con búsqueda vectorial en memoria
+  - id: b
+    texto: Amazon Aurora PostgreSQL con pgvector
+  - id: c
+    texto: Amazon S3 Vectors
+  - id: d
+    texto: Amazon OpenSearch Serverless
+  correctas:
+  - c
+  explicacion: Amazon S3 Vectors ofrece almacenamiento vectorial optimizado en coste, sin aprovisionar infraestructura y pagando por uso. Está pensado para cargas con consultas poco frecuentes, con respuesta por debajo del segundo, y escala a miles de millones de vectores.
+  distractores:
+    a: La búsqueda vectorial en memoria busca latencias mínimas en tiempo real; mantener en memoria un archivo enorme que se consulta poco va en contra del objetivo de coste.
+    b: pgvector encaja cuando los datos ya viven en PostgreSQL y se quieren combinar con SQL; exige gestionar una base de datos y no es la opción más barata para este volumen.
+    d: OpenSearch Serverless está pensado para búsquedas frecuentes con baja latencia; la propia documentación de S3 Vectors lo propone cuando se necesita un alto número de consultas por segundo, que aquí no hay.
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html
+- id: S-082
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Una cooperativa de crédito va a entrenar un modelo de concesión de microcréditos con diez años de decisiones históricas, tomadas por los gestores de 40 oficinas, cada una con sus propios criterios. Antes de usarlo quiere detectar si el modelo puede heredar sesgos de esas decisiones y tener una valoración de su fiabilidad en la que no influya el equipo que lo construye. ¿Qué DOS prácticas aplica? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Medir el acuerdo entre gestores en una muestra común y ver quién decide distinto por grupo
+  - id: b
+    texto: Comprobar que la edad, el sexo y la nacionalidad no figuran entre las variables del modelo
+  - id: c
+    texto: Encargar la evaluación a un equipo ajeno al proyecto, con su propio conjunto de prueba
+  - id: d
+    texto: Reentrenar con más años de decisiones históricas y volver a medir la exactitud global
+  - id: e
+    texto: Subir el umbral de aprobación para que el modelo conceda menos créditos dudosos en las oficinas
+  correctas:
+  - a
+  - c
+  explicacion: 'Las decisiones históricas son las etiquetas del modelo. El Responsible AI Lens recomienda validar su calidad: medir el acuerdo entre quienes etiquetan y comprobar si algunos tratan de forma distinta a ciertos grupos. Para las evaluaciones críticas, como el sesgo, recomienda además una corroboración independiente, por un equipo sin interés en el resultado y con sus propios datos de evaluación.'
+  distractores:
+    b: Quitar atributos protegidos no impide heredar el sesgo de las etiquetas, porque otras variables pueden actuar como sustitutas.
+    d: Más datos con las mismas etiquetas reproducen sus sesgos, y la exactitud global no los separa por grupos.
+    e: Cambiar el umbral modifica cuántos créditos se conceden, pero no detecta si el modelo trata distinto a unos grupos que a otros.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp03.html
+- id: S-083
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.2
+  tipo: multiple_response
+  dificultad: media
+  enunciado: 'Un banco usa un modelo de Amazon Bedrock para resumir expedientes de hipotecas y un modelo de riesgo de crédito que ha entrenado en SageMaker AI. El supervisor le pide dos cosas: pruebas, hechas con expedientes del propio banco, de que el modelo de Bedrock elegido resume mejor que las alternativas, y un documento interno del modelo de riesgo que conserve cada versión revisada de su uso y de su nivel de riesgo. ¿Qué DOS recursos usa? (Elige DOS.)'
+  opciones:
+  - id: a
+    texto: Las AI Service Cards de AWS
+  - id: b
+    texto: Los informes de AWS Artifact
+  - id: c
+    texto: Los registros de AWS CloudTrail
+  - id: d
+    texto: Las evaluaciones de Amazon Bedrock con un conjunto de prompts propio
+  - id: e
+    texto: Amazon SageMaker Model Cards
+  correctas:
+  - d
+  - e
+  explicacion: Las evaluaciones de Amazon Bedrock permiten comparar modelos con un conjunto de prompts propio, adaptado al caso de uso, y obtener métricas de cada uno. SageMaker Model Cards documenta un modelo propio (uso previsto, calificación de riesgo, entrenamiento y evaluación) y cada edición, salvo un cambio del estado de aprobación, crea una versión nueva, de modo que queda un registro inmutable de los cambios.
+  distractores:
+    a: Las AI Service Cards las publica AWS sobre sus propios servicios y modelos; no son pruebas con los expedientes del banco ni documentan un modelo propio.
+    b: Artifact da acceso a los informes de cumplimiento de AWS, no a pruebas ni a documentación de los modelos del banco.
+    c: CloudTrail registra quién llamó a qué API; no compara la calidad de los modelos ni documenta su uso y su riesgo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
+- id: S-084
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El asistente interno de un fabricante, en Amazon Bedrock, no debe mencionar los nombres en clave de 40 proyectos que aún no se han anunciado. Cada nombre es un término inventado que se escribe siempre igual. La empresa quiere bloquearlos en las preguntas y en las respuestas con el MENOR coste. ¿Qué configuración de Amazon Bedrock Guardrails usa?
+  opciones:
+  - id: a
+    texto: Un tema denegado que describa los proyectos no anunciados
+  - id: b
+    texto: Los filtros de contenido con la categoría de conducta indebida en intensidad alta
+  - id: c
+    texto: Un filtro de información sensible con los tipos de datos personales predefinidos
+  - id: d
+    texto: Un filtro de palabras con la lista de los nombres en clave
+  correctas:
+  - d
+  explicacion: El filtro de palabras personalizado bloquea palabras y frases exactas (de hasta tres palabras) en las entradas y en las respuestas, y en la página de precios de Bedrock figura como gratuito. Para una lista cerrada de términos que se escriben siempre igual es la opción más precisa y la más barata.
+  distractores:
+    a: Un tema denegado detecta un asunto descrito en lenguaje natural y se cobra por unidad de texto; para términos exactos sale más caro sin aportar nada.
+    b: Los filtros de contenido detectan categorías de contenido dañino, como el odio o la conducta indebida; un nombre de proyecto no pertenece a ninguna.
+    c: Los tipos predefinidos del filtro de información sensible detectan datos personales, como teléfonos o correos, no nombres de proyectos, y se cobran por unidad de texto.
+  referencia: https://aws.amazon.com/bedrock/pricing/
+- id: S-085
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El comité de IA de una aseguradora revisa su asistente de atención una vez al trimestre. Un fallo por el que el asistente daba plazos de pago erróneos pasó siete semanas sin que nadie actuara, aunque los datos de monitorización lo reflejaban desde el primer día. Según el Responsible AI Lens, ¿qué cadencia de revisión debe adoptar?
+  opciones:
+  - id: a
+    texto: Mantener la revisión trimestral con un informe de monitorización más detallado
+  - id: b
+    texto: Revisiones a varios plazos, diarias, semanales y mensuales
+  - id: c
+    texto: Pasar a una revisión mensual completa en lugar de la trimestral
+  - id: d
+    texto: Añadir una auditoría externa anual a la revisión trimestral
+  correctas:
+  - b
+  explicacion: 'El Responsible AI Lens recomienda ciclos regulares de revisión de la monitorización en varios horizontes: comprobaciones diarias para los problemas inmediatos, análisis semanal de tendencias y revisión mensual de patrones. Así, un fallo como el de los plazos se detecta en días, y las revisiones más espaciadas se dedican a las tendencias.'
+  distractores:
+    a: Un informe más detallado cada tres meses sigue dejando semanas entre el fallo y su detección.
+    c: Una revisión mensual acorta la espera, pero un fallo podría seguir semanas sin tratarse; faltan las comprobaciones frecuentes.
+    d: Una auditoría externa anual aporta independencia, pero no acelera la detección de fallos en el día a día.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon02-bp01.html
+- id: S-086
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.1
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una tienda despliega en Amazon Bedrock AgentCore Runtime un agente de atención que solo debe consultar el estado de los pedidos en una tabla de Amazon DynamoDB. Para ir rápido, su rol de ejecución tiene permisos de lectura y escritura sobre toda la tabla. En una prueba, un mensaje manipulado consigue que el agente marque pedidos como cancelados. ¿Qué medida limita MÁS el daño que puede causar el agente?
+  opciones:
+  - id: a
+    texto: Limitar el rol de ejecución del agente a leer la tabla de pedidos
+  - id: b
+    texto: Activar el filtro de ataques de prompt de Amazon Bedrock Guardrails en intensidad alta
+  - id: c
+    texto: Añadir a las instrucciones del agente la prohibición de cancelar pedidos
+  - id: d
+    texto: Registrar con AWS CloudTrail cada llamada del agente para revisarla después
+  correctas:
+  - a
+  explicacion: AgentCore Runtime asume un rol de ejecución de IAM para ejecutar el agente, y cualquier código dentro de su microVM puede usar las credenciales de ese rol. Por eso su documentación de seguridad recomienda un rol de mínimo privilegio, limitado a lo que el agente necesita. Sin permiso de escritura, ningún mensaje manipulado puede llevar al agente a cancelar pedidos.
+  distractores:
+    b: El filtro de ataques de prompt reduce la probabilidad de que la manipulación funcione, pero si alguna la supera, el agente sigue teniendo permiso para escribir en la tabla.
+    c: Las instrucciones guían al modelo, pero un mensaje manipulado puede saltárselas; el permiso de escritura seguiría ahí.
+    d: CloudTrail permite saber después qué ocurrió, pero no impide que el agente cancele pedidos.
+  referencia: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-security-best-practices.html
+- id: S-087
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: El equipo de operaciones de un asistente en Amazon Bedrock quiere recibir un aviso cuando aumenten las peticiones limitadas (throttling) o el tiempo de respuesta del modelo, sin guardar el texto de las conversaciones. ¿Qué usa?
+  opciones:
+  - id: a
+    texto: El registro de invocaciones de modelos en Amazon S3
+  - id: b
+    texto: AWS CloudTrail con los eventos de administración de Bedrock
+  - id: c
+    texto: Reglas de AWS Config sobre los recursos de Bedrock
+  - id: d
+    texto: Las métricas de Bedrock en Amazon CloudWatch con alarmas
+  correctas:
+  - d
+  explicacion: Amazon Bedrock publica en CloudWatch métricas de ejecución como InvocationThrottles e InvocationLatency, entre otras. Sobre ellas se crean alarmas que avisan cuando superan un umbral, sin necesidad de guardar el contenido de las peticiones.
+  distractores:
+    a: El registro de invocaciones guarda las peticiones y las respuestas completas, justo lo que el equipo no quiere almacenar, y no genera avisos por sí mismo.
+    b: CloudTrail registra quién llamó a qué API; no es la herramienta para seguir la latencia ni avisar de los límites de capacidad.
+    c: AWS Config evalúa si la configuración de los recursos cumple unas reglas; no mide el tráfico ni la latencia del modelo.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html

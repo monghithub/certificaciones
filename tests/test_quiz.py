@@ -1,4 +1,5 @@
 import sys
+from collections import Counter
 from pathlib import Path
 
 import yaml
@@ -97,3 +98,41 @@ def test_cargar_repaso(repo):
     escribir(repo, [pregunta_repaso()], fichero="repaso.yaml")
     assert [p["id"] for p in cargar(repo, "aif-c01", repaso=True)] == ["R3-001"]
     assert all(not p["id"].startswith("R") for p in cargar(repo, "aif-c01"))
+
+
+def test_simulacro_reproducible_con_la_composicion_de_la_consola(repo, capsys):
+    from conftest import banco_simulacro, escribir
+    escribir(repo, banco_simulacro({1: (15, 3), 2: (15, 4), 3: (17, 5), 4: (9, 3), 5: (8, 3)}), "06-simulacro")
+    salidas = []
+    for _ in range(2):
+        assert main(["--raiz", str(repo), "--simulacro", "--semilla", "3", "--dominio", "2", "--n", "4"], entrada=lambda: "a") == 0
+        salidas.append(capsys.readouterr().out)
+    assert salidas[0] == salidas[1]
+    assert "[65/65]" in salidas[0] and "/65 (" in salidas[0]
+    assert sum("· Tarea 2.1 ·" in linea for linea in salidas[0].splitlines()) == 16  # ignora --dominio: cuota del Dominio 2
+
+
+def test_simulacro_que_no_se_puede_formar(repo, capsys):
+    from conftest import banco_simulacro, escribir
+    escribir(repo, banco_simulacro({1: (80, 0)}), "06-simulacro")
+    assert main(["--raiz", str(repo), "--simulacro"]) == 1
+    assert "no permite formar el examen" in capsys.readouterr().err
+
+
+def test_simulacro_carga_solo_su_modulo_y_sin_ids_repetidos(repo, capsys, monkeypatch):
+    import copy
+
+    import quiz
+    from conftest import banco_simulacro, escribir
+    banco = banco_simulacro({1: (15, 3), 2: (15, 4), 3: (17, 5), 4: (9, 3), 5: (8, 3)})
+    otra = copy.deepcopy(banco[0])
+    otra.update(dominio=5, tarea="5.1", objetivo="5.1.99")  # id repetido S-001: se ignora, como en la consola
+    escribir(repo, banco + [otra], "06-simulacro")
+    escribir(repo, banco_simulacro({1: (90, 0)}), "06-simulacro-viejo")  # mismo prefijo: no debe cargarse
+    vistas = []
+    mostrar = quiz.mostrar
+    monkeypatch.setattr(quiz, "mostrar", lambda p, n, t: (vistas.append(p), mostrar(p, n, t)))
+    assert main(["--raiz", str(repo), "--simulacro", "--semilla", "1"], entrada=lambda: "a") == 0
+    assert len(vistas) == 65 and len({p["id"] for p in vistas}) == 65
+    assert all(p["objetivo"] != "5.1.99" for p in vistas)
+    assert Counter(p["dominio"] for p in vistas) == Counter({1: 13, 2: 16, 3: 18, 4: 9, 5: 9})

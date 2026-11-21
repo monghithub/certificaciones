@@ -1,10 +1,13 @@
 import random
+import threading
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import RedirectResponse
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from curso import simulacro
 from curso.correccion import corregir
 
 from .. import stats
@@ -15,6 +18,18 @@ from ..preguntas import leer_respuesta, vista_pregunta
 from ..web import flash, render
 
 router = APIRouter(prefix="/c/{curso}/tests", dependencies=[Depends(verificar_csrf)])
+DOBLE_ENVIO = timedelta(seconds=10)  # un simulacro sin terminar más reciente que esto se reutiliza
+
+# Cerrojo por (usuario, curso) para iniciar el simulacro: `iniciar` es síncrono y corre en el pool de hilos, así que dos
+# envíos simultáneos podrían crear dos intentos. Basta un cerrojo en memoria porque la consola corre en un solo proceso
+# (Dockerfile: uvicorn sin --workers; compose no lo cambia). Con varios procesos haría falta comprobarlo en la base de datos.
+_CERROJOS: dict[tuple[int, str], threading.Lock] = {}
+_GUARDA_CERROJOS = threading.Lock()
+
+
+def _cerrojo(uid: int, curso: str) -> threading.Lock:
+    with _GUARDA_CERROJOS:
+        return _CERROJOS.setdefault((uid, curso), threading.Lock())
 
 
 def _intento(db: Session, iid: int, usuario: Usuario, c: Contenido) -> Intento:
@@ -22,6 +37,12 @@ def _intento(db: Session, iid: int, usuario: Usuario, c: Contenido) -> Intento:
     if not i or i.usuario_id != usuario.id or i.curso != c.manifiesto.slug:
         raise HTTPException(404, "Intento no encontrado")
     return i
+
+
+def _banco_simulacro(c: Contenido) -> list[dict]:
+    """Preguntas del banco del simulacro del curso, en el orden del fichero (vacío si no tiene)."""
+    mod = c.modulos.get(c.manifiesto.simulacro) if c.manifiesto.tiene_simulacro else None
+    return [c.preguntas[p] for p in mod.preguntas] if mod else []
 
 
 def _caducado(i: Intento) -> bool:
@@ -46,13 +67,15 @@ def inicio(request: Request, c: Contenido = Depends(requiere_curso), usuario: Us
     m = c.manifiesto
     modulos = [x for x in c.modulos.values() if x.preguntas and not x.es_simulacro]
     repaso = [x for x in c.modulos.values() if x.repaso]
-    banco_sim = c.modulos.get(m.simulacro) if m.tiene_simulacro else None
-    n_sim = len(banco_sim.preguntas) if banco_sim else 0
+    banco_sim = _banco_simulacro(c)
+    n_sim = len(banco_sim)
+    sim_error = (simulacro.factible(m, banco_sim) or [None])[0] if m.tiene_simulacro else None
     dominios = sorted({c.preguntas[p]["dominio"] for x in modulos for p in x.preguntas})
     libros = [x for x in c.modulos.values() if x.libros]
     return render(request, "tests_inicio.html", modulos=modulos, repaso=repaso, n_repaso=sum(len(x.repaso) for x in repaso),
                   n_falladas=len(stats.falladas(db, usuario.id, c)), dominios=dominios, n_sim=n_sim, nombres=m.dominios,
-                  hay_simulacro=m.tiene_simulacro, sim_ok=m.tiene_simulacro and n_sim >= m.examen_preguntas,
+                  hay_simulacro=m.tiene_simulacro, sim_ok=m.tiene_simulacro and n_sim >= m.examen_preguntas and not sim_error,
+                  sim_error=sim_error, sim_rotatorio=m.tiene_simulacro and simulacro.rotatorio(m, banco_sim),
                   sim_n=m.examen_preguntas, sim_min=m.examen_minutos, libros=libros, n_libros=sum(len(x.libros) for x in libros))
 
 
@@ -76,13 +99,7 @@ def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: 
     elif modo == "simulacro":
         if not m.tiene_simulacro:
             raise HTTPException(400, "Este curso no tiene simulacro")
-        banco = c.modulos.get(m.simulacro)
-        ids = sorted(banco.preguntas) if banco else []
-        if len(ids) < m.examen_preguntas:
-            flash(request, f"El simulacro necesita {m.examen_preguntas} preguntas y hay {len(ids)}.", "error")
-            return RedirectResponse(f"{base}/tests", 303)
-        # Modo estudio: corrección y explicación tras cada respuesta; se guarda en `filtro` (no hay otro filtro en el simulacro).
-        ids, limite, filtro = ids[: m.examen_preguntas], m.examen_minutos * 60, "estudio" if estudio else ""
+        return _iniciar_simulacro(request, c, usuario, db, estudio=bool(estudio))
     else:
         fuente = [p for x in c.modulos.values() if not x.es_simulacro for p in x.preguntas]
         if modo == "repaso":
@@ -111,6 +128,32 @@ def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: 
     db.add(i)
     db.commit()
     return RedirectResponse(f"{base}/tests/{i.id}", 303)
+
+
+def _iniciar_simulacro(request: Request, c: Contenido, usuario: Usuario, db: Session, estudio: bool):
+    m = c.manifiesto
+    base = f"/c/{m.slug}"
+    # Modo estudio: corrección y explicación tras cada respuesta; se guarda en `filtro` (no hay otro filtro en el simulacro).
+    filtro = "estudio" if estudio else ""
+    with _cerrojo(usuario.id, m.slug):
+        anterior = db.execute(select(Intento).where(Intento.usuario_id == usuario.id, Intento.curso == m.slug,
+                                                    Intento.modo == "simulacro")
+                              .order_by(Intento.inicio.desc(), Intento.id.desc()).limit(1)).scalar()
+        # Doble envío de «Empezar simulacro» (mismo modo estudio): se reutiliza el intento recién creado.
+        if (anterior and anterior.fin is None and anterior.filtro == filtro and not _caducado(anterior)
+                and ahora() - anterior.inicio < DOBLE_ENVIO):
+            return RedirectResponse(f"{base}/tests/{anterior.id}", 303)
+        # Rotación: se prefieren las preguntas que no estaban en el intento de simulacro anterior (aunque se abandonara).
+        try:
+            ids = simulacro.extraer(m, _banco_simulacro(c), random.Random(), set(anterior.preguntas if anterior else ()))
+        except ValueError as e:
+            flash(request, str(e), "error")
+            return RedirectResponse(f"{base}/tests", 303)
+        i = Intento(usuario_id=usuario.id, curso=m.slug, modo="simulacro", filtro=filtro, limite_segundos=m.examen_minutos * 60,
+                    preguntas=ids)
+        db.add(i)
+        db.commit()
+        return RedirectResponse(f"{base}/tests/{i.id}", 303)
 
 
 @router.get("/{iid}")
