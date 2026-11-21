@@ -2297,3 +2297,46 @@
   categoria: concepto
   definicion: "Cambio, respecto a una línea base, en cuánto pesa cada variable en las predicciones de un modelo en producción. Es uno de los cuatro tipos de monitorización de SageMaker Model Monitor (junto con la calidad de los datos, la calidad del modelo y la deriva del sesgo) y se apoya en SageMaker Clarify."
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+
+- id: hipaa
+  termino: HIPAA
+  alias: [Health Insurance Portability and Accountability Act]
+  categoria: concepto
+  definicion: "Ley de EE. UU. que protege la privacidad y la seguridad de la información sanitaria protegida (PHI). Para tratar PHI en AWS, el cliente acepta el acuerdo BAA en AWS Artifact y usa solo servicios aptos para HIPAA; no existe una certificación HIPAA para un proveedor de nube."
+  referencia: https://aws.amazon.com/compliance/hipaa-compliance/
+
+- id: pci-dss
+  termino: PCI DSS
+  alias: [Payment Card Industry Data Security Standard]
+  categoria: concepto
+  definicion: "Norma de seguridad que se aplica a quien almacena, procesa o transmite datos de titulares de tarjetas de pago. AWS es proveedor de servicios de nivel 1 y su informe está en AWS Artifact; el cliente certifica su propia aplicación."
+  referencia: https://aws.amazon.com/compliance/pci-dss-level-1-faqs/
+
+- id: rgpd
+  termino: RGPD
+  alias: [GDPR, Reglamento General de Protección de Datos]
+  categoria: concepto
+  definicion: "Reglamento de la UE que protege los datos personales de las personas en la UE. AWS permite elegir en qué Región se guardan los datos; el cliente aplica los principios y derechos de la norma, como el derecho de supresión."
+  referencia: https://aws.amazon.com/compliance/gdpr-center/
+
+- id: soberania-de-datos
+  termino: soberanía de datos
+  alias: [data sovereignty]
+  categoria: concepto
+  definicion: "Principio por el que los datos quedan sujetos a las leyes del lugar donde están físicamente. Se distingue de la residencia, que es dónde están almacenados."
+  referencia: https://aws.amazon.com/what-is/data-sovereignty/
+
+- id: defensa-en-profundidad
+  termino: defensa en profundidad
+  alias: [defense in depth]
+  categoria: concepto
+  definicion: "Aplicar controles de seguridad independientes en cada capa (organización y cuentas, red, identidad, aplicación y datos) para que, si uno falla, los demás sigan limitando el daño."
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
+
+- id: gobierno-de-la-ia
+  termino: gobierno de la IA
+  alias: [AI governance]
+  categoria: concepto
+  definicion: "Conjunto de reglas, políticas y mecanismos de supervisión que guían el desarrollo y el uso de la IA para que sea responsable, auditable y cumpla la normativa."
+  referencia: https://aws.amazon.com/what-is/ai-governance/
+

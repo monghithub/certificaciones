@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 284 términos.
+Total: 290 términos.
 
 ## A
 
@@ -211,6 +211,8 @@ Total: 284 términos.
   - Usar cuando: Para reutilizar licencias ligadas al hardware o cuando se exige hardware dedicado.
   - No usar cuando: Si solo se busca ahorrar: Savings Plans, Reserved Instances o Spot Instances.
   - Referencia: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html>
+- **defensa en profundidad** (defense in depth). *Concepto.* Aplicar controles de seguridad independientes en cada capa (organización y cuentas, red, identidad, aplicación y datos) para que, si uno falla, los demás sigan limitando el daño.
+  - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html>
 - **deployment guardrails** (despliegue azul/verde, blue/green, despliegue canario). *Técnica.* Opciones gestionadas de SageMaker AI para sustituir un modelo en producción en endpoints en tiempo real o asíncronos: azul/verde con desplazamiento del tráfico todo a la vez, canario o lineal, o gradual (rolling), con periodo de observación y vuelta atrás automática si salta una alarma de CloudWatch.
   - Usar cuando: Para pasar el tráfico a un modelo nuevo limitando el riesgo y con vuelta atrás automática.
   - No usar cuando: Para comparar un modelo nuevo sin que ningún usuario reciba sus respuestas: prueba en sombra.
@@ -330,6 +332,8 @@ Total: 284 términos.
   - Usar cuando: Cuando analistas sin experiencia en programación deben limpiar datos para analítica o ML.
   - No usar cuando: Cuando se necesita un pipeline ETL programado a medida (AWS Glue) o entrenar un modelo.
   - Referencia: <https://docs.aws.amazon.com/databrew/latest/dg/what-is.html>
+- **gobierno de la IA** (AI governance). *Concepto.* Conjunto de reglas, políticas y mecanismos de supervisión que guían el desarrollo y el uso de la IA para que sea responsable, auditable y cumpla la normativa.
+  - Referencia: <https://aws.amazon.com/what-is/ai-governance/>
 - **GraphRAG**. *Técnica.* Variante de RAG que combina la búsqueda vectorial con un grafo de conocimiento, para recuperar también las relaciones entre entidades. En AWS, con Amazon Neptune Analytics y Bedrock Knowledge Bases.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html>
 - **grupos de acciones** (action groups, grupo de acciones, action group). *Concepto.* En Amazon Bedrock Agents, las acciones que puede ejecutar un agente: se describen con un esquema OpenAPI o con definiciones de funciones y se ejecutan con una función de AWS Lambda o devolviendo el control a la aplicación (return of control). Bedrock Agents (Classic) ya no admite clientes nuevos; para agentes nuevos, Amazon Bedrock AgentCore y Strands Agents.
@@ -339,6 +343,8 @@ Total: 284 términos.
 
 ## H
 
+- **HIPAA** (Health Insurance Portability and Accountability Act). *Concepto.* Ley de EE. UU. que protege la privacidad y la seguridad de la información sanitaria protegida (PHI). Para tratar PHI en AWS, el cliente acepta el acuerdo BAA en AWS Artifact y usa solo servicios aptos para HIPAA; no existe una certificación HIPAA para un proveedor de nube.
+  - Referencia: <https://aws.amazon.com/compliance/hipaa-compliance/>
 - **hiperparámetro** (hiperparámetros, hyperparameter, hyperparameters). *Concepto.* Variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo: tasa de aprendizaje, número de epochs o tamaño de lote. Se distingue de los parámetros (por ejemplo, los pesos), que el modelo aprende durante el entrenamiento. Buscar sus mejores valores es el ajuste de hiperparámetros, que SageMaker AI automatiza.
   - Referencia: <https://aws.amazon.com/what-is/hyperparameter-tuning/>
 
@@ -532,6 +538,8 @@ Total: 284 términos.
   - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **parámetros de inferencia** (inference parameters, temperatura de muestreo, top-p, Top-p, top-k, Top-k). *Concepto.* Ajustes de cada petición que cambian la generación. La temperatura baja favorece los tokens más probables (respuestas más deterministas) y la alta da más variedad; top-k limita a los k candidatos más probables; top-p, a los que suman una proporción de la probabilidad acumulada; la longitud máxima limita la respuesta.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html>
+- **PCI DSS** (Payment Card Industry Data Security Standard). *Concepto.* Norma de seguridad que se aplica a quien almacena, procesa o transmite datos de titulares de tarjetas de pago. AWS es proveedor de servicios de nivel 1 y su informe está en AWS Artifact; el cliente certifica su propia aplicación.
+  - Referencia: <https://aws.amazon.com/compliance/pci-dss-level-1-faqs/>
 - **Amazon Personalize** (Personalize). *Servicio.* Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad.
   - Usar cuando: Para personalizar recomendaciones (por ejemplo, en una aplicación de vídeo).
   - No usar cuando: Cuando no se dispone de datos propios de usuarios y elementos con los que generar recomendaciones: hasta reunirlos, una regla sencilla (por ejemplo, los más vendidos).
@@ -647,6 +655,8 @@ Total: 284 términos.
 - **retorno de la inversión** (ROI, return on investment). *Métrica.* Métrica de negocio que compara el beneficio económico obtenido con lo invertido. Mide el valor que aporta una solución, no la calidad técnica del modelo.
 - **Retrieve y RetrieveAndGenerate** (API Retrieve, RetrieveAndGenerate). *Concepto.* Operaciones para consultar una Knowledge Base de Amazon Bedrock: Retrieve devuelve solo los fragmentos relevantes de las fuentes; RetrieveAndGenerate los recupera y además pide al modelo una respuesta redactada con citas. Ambas admiten filtros por metadatos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve.html>
+- **RGPD** (GDPR, Reglamento General de Protección de Datos). *Concepto.* Reglamento de la UE que protege los datos personales de las personas en la UE. AWS permite elegir en qué Región se guardan los datos; el cliente aplica los principios y derechos de la norma, como el derecho de supresión.
+  - Referencia: <https://aws.amazon.com/compliance/gdpr-center/>
 - **RLHF** (Reinforcement Learning from Human Feedback, aprendizaje por refuerzo con retroalimentación humana). *Técnica.* Técnica en la que personas comparan o puntúan respuestas del modelo; con esas preferencias se entrena un modelo de recompensa y se ajusta el modelo para producir las respuestas que prefieren las personas (más útiles, seguras o alineadas).
   - Referencia: <https://aws.amazon.com/what-is/reinforcement-learning-from-human-feedback/>
 - **robustez** (robustness). *Concepto.* Capacidad de un sistema de IA de dar salidas correctas ante entradas esperadas e inesperadas: erratas, sinónimos, otro idioma o ataques. Bedrock Evaluations la mide perturbando ligeramente los prompts y comparando las respuestas.
@@ -743,6 +753,8 @@ Total: 284 términos.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/multi-agent-collaboration.html>
 - **SMOTE** (Synthetic Minority Oversampling Technique). *Técnica.* Técnica para reequilibrar un conjunto de datos de clasificación binaria generando ejemplos sintéticos de la clase minoritaria. Es una de las opciones de la transformación Balance data de SageMaker Canvas, junto con el sobremuestreo aleatorio (repetir ejemplos de la clase minoritaria) y el submuestreo aleatorio (quitar ejemplos de la mayoritaria).
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html>
+- **soberanía de datos** (data sovereignty). *Concepto.* Principio por el que los datos quedan sujetos a las leyes del lugar donde están físicamente. Se distingue de la residencia, que es dónde están almacenados.
+  - Referencia: <https://aws.amazon.com/what-is/data-sovereignty/>
 - **sobreajuste** (overfitting). *Concepto.* El modelo acierta con los datos de entrenamiento pero no con datos reales porque se ajusta demasiado a ellos y no generaliza. Es un modelo de alta varianza.
   - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **sostenibilidad de la IA** (sostenibilidad). *Concepto.* Reducir el impacto ambiental de una carga de IA: comprobar si la IA generativa hace falta, elegir el modelo del tamaño justo, personalizar de forma eficiente y usar recursos que se ajustan a la demanda (serverless, autoescalado, chips eficientes).

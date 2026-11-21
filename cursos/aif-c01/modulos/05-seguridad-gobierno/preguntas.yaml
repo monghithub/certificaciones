@@ -1974,3 +1974,136 @@
     b: Es un portal de informes de cumplimiento de AWS, no un marco de clasificación.
     c: Reparte la seguridad entre AWS y el cliente, pero no clasifica los casos de IA generativa por ámbito.
   referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
+- id: D5-070
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.4
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: Una aseguradora protege su asistente de Amazon Bedrock con Guardrails. La auditoría interna señala que, si un ataque de prompt esquivara los filtros, nada más limitaría el daño. ¿Qué DOS medidas añaden capas independientes de protección?
+  opciones:
+  - id: a
+    texto: Dar al rol del asistente solo los permisos de IAM que necesita para sus herramientas
+  - id: b
+    texto: Añadir más temas denegados a la misma barrera de Guardrails
+  - id: c
+    texto: Llegar a Bedrock desde la VPC con AWS PrivateLink, sin pasar por Internet
+  - id: d
+    texto: Subir al máximo la intensidad de los filtros de contenido
+  - id: e
+    texto: Repetir en las instrucciones del sistema que no obedezca órdenes externas
+  correctas:
+  - a
+  - c
+  explicacion: 'La defensa en profundidad combina controles independientes en cada capa. El mínimo privilegio de IAM limita lo que puede hacer el asistente aunque lo engañen, y PrivateLink protege la red. Ambos siguen actuando si Guardrails falla.'
+  distractores:
+    b: Más temas denegados refuerzan la misma capa (Guardrails); si el ataque la esquiva, no añaden protección.
+    d: Subir los filtros también refuerza la misma capa y puede bloquear peticiones legítimas.
+    e: Las instrucciones del sistema son la parte que el ataque de prompt intenta saltarse; no son una capa independiente.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
+- id: D5-071
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.1
+  tipo: matching
+  dificultad: media
+  enunciado: Un hospital quiere controlar los datos personales en tres puntos de su solución de IA generativa. Empareja cada necesidad con el servicio adecuado.
+  prompts:
+  - id: '1'
+    texto: Saber si los buckets de S3 con los que se ajustará un modelo contienen datos personales
+  - id: '2'
+    texto: Ocultar los datos personales de las transcripciones de llamadas antes de guardarlas
+  - id: '3'
+    texto: Impedir que el asistente de Bedrock devuelva números de historia clínica en sus respuestas
+  opciones:
+  - id: a
+    texto: Amazon Comprehend
+  - id: b
+    texto: Filtro de información sensible de Amazon Bedrock Guardrails
+  - id: c
+    texto: Amazon Macie
+  - id: d
+    texto: AWS Artifact
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - a
+  - - '3'
+    - b
+  explicacion: 'Macie descubre datos sensibles en objetos de S3; Comprehend detecta y oculta datos personales en un texto que procesa la aplicación; el filtro de información sensible de Guardrails actúa sobre las entradas y salidas del modelo.'
+  distractores:
+    d: Artifact da informes de cumplimiento y acuerdos de AWS; no detecta datos personales.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
+- id: D5-072
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.1
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una clínica de EE. UU. quiere un asistente con Amazon Bedrock que resuma historias clínicas. Su responsable de cumplimiento pregunta qué debe hacer la clínica para tratar esa información en AWS conforme a HIPAA. ¿Qué respuesta es correcta?
+  opciones:
+  - id: a
+    texto: Nada, porque AWS está certificado para HIPAA y eso cubre a sus clientes
+  - id: b
+    texto: Descargar de AWS Artifact el informe SOC 2 y entregarlo como prueba de cumplimiento
+  - id: c
+    texto: Aceptar el BAA en AWS Artifact y tratar la información solo en servicios aptos para HIPAA
+  - id: d
+    texto: Activar Amazon Macie en la cuenta, lo que la hace conforme a HIPAA
+  correctas:
+  - c
+  explicacion: 'HIPAA exige un acuerdo BAA con el proveedor, que se acepta en AWS Artifact, y la información sanitaria solo debe tratarse en servicios aptos para HIPAA, como Bedrock. El cumplimiento de la aplicación sigue siendo de la clínica.'
+  distractores:
+    a: No existe una certificación HIPAA para un proveedor de nube; la responsabilidad se comparte.
+    b: Un informe SOC 2 describe los controles de AWS, pero no sustituye al BAA ni demuestra que la aplicación de la clínica cumple.
+    d: Macie ayuda a encontrar datos sensibles en S3, pero no hace conforme a nadie con HIPAA.
+  referencia: https://aws.amazon.com/compliance/hipaa-compliance/
+- id: D5-073
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.2
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un banco europeo exige que los datos de sus clientes queden sujetos solo a la legislación de la UE. Su asistente de Amazon Bedrock usa una Región de la UE, pero para soportar picos el equipo propone activar la inferencia entre Regiones. ¿Qué opción respeta el requisito?
+  opciones:
+  - id: a
+    texto: Un perfil de inferencia global, porque abarata la inferencia
+  - id: b
+    texto: Un perfil de inferencia geográfico de la UE
+  - id: c
+    texto: Da igual el perfil, porque el cifrado con AWS KMS hace irrelevante dónde se procesan
+  - id: d
+    texto: Copiar los datos a una Región de EE. UU. con más capacidad
+  correctas:
+  - b
+  explicacion: 'La soberanía depende de dónde se procesan los datos. Un perfil geográfico de la UE reparte la carga solo entre Regiones de la UE, así que los datos siguen sujetos a su legislación.'
+  distractores:
+    a: El perfil global puede procesar en cualquier Región comercial, también fuera de la UE.
+    c: El cifrado protege la confidencialidad, pero no cambia la jurisdicción del lugar donde se procesan los datos.
+    d: Llevar los datos a EE. UU. los sujetaría a otra jurisdicción, justo lo que el banco quiere evitar.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+- id: D5-074
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una empresa ajusta un modelo fundacional de terceros en Amazon Bedrock con sus contratos para que redacte con su estilo. Según la AI Security Scoping Matrix, ¿en qué ámbito está y qué datos aporta la empresa?
+  opciones:
+  - id: a
+    texto: Ámbito 4; aporta sus propios datos para ajustar el modelo
+  - id: b
+    texto: Ámbito 2; no aporta datos, solo usa una aplicación empresarial
+  - id: c
+    texto: Ámbito 5; aporta los datos para entrenar el modelo desde cero
+  - id: d
+    texto: Ámbito 1; no ve el modelo ni puede modificarlo
+  correctas:
+  - a
+  explicacion: 'Ajustar un modelo fundacional de terceros con datos propios es el ámbito 4: el proveedor entrenó el modelo base y la empresa aporta los datos del ajuste, que debe proteger y gobernar.'
+  distractores:
+    b: El ámbito 2 es una aplicación empresarial de terceros con IA integrada; aquí la empresa modifica el modelo.
+    c: El ámbito 5 es entrenar un modelo desde cero; aquí se parte de uno existente.
+    d: En el ámbito 1 no se puede modificar el modelo; aquí se ajusta.
+  referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
