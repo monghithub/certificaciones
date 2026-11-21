@@ -1,0 +1,22 @@
+# Servicio de usuario de systemd para el trabajador de «Preguntar a Claude» (scripts/consultas_trabajador.py).
+# Instalación en titan (ver docs/consola.md):
+#   cp scripts/consultas-claude.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload && systemctl --user enable --now consultas-claude
+#   journalctl --user -u consultas-claude -f
+[Unit]
+Description=Trabajador de «Preguntar a Claude» de la consola de certificaciones
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/home/monghit/Sistema/aplicaciones/certificaciones/.env
+Environment=CONSULTAS_URL=http://127.0.0.1:8097
+Environment=CONSULTAS_CLAUDE=/home/monghit/.local/bin/claude
+Environment=CONSULTAS_CURSOS=/home/monghit/Sistema/aplicaciones/certificaciones/src/cursos
+Environment=CONSULTAS_LIBROS=/home/monghit/Sistema/aplicaciones/certificaciones/libros-md
+ExecStart=/usr/bin/python3 /home/monghit/Sistema/aplicaciones/certificaciones/src/scripts/consultas_trabajador.py
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target
