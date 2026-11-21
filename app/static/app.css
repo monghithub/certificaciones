@@ -231,3 +231,23 @@ main:has(.btn-prueba) { padding-bottom: 88px; }
 .mapa-mods { white-space: nowrap; }
 .mapa-mods a { display: inline-block; margin-right: 4px; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--acento-borde); background: var(--acento-bg); text-decoration: none; font-weight: 600; }
 .mapa-aviso { margin-top: 16px; font-size: .82rem; }
+/* «Preguntar a Claude» (panel de consultas de los tests) */
+.consulta h2 { margin-top: 0; }
+.consulta-aviso { margin-top: -4px; }
+.consulta-mensajes { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+.consulta-msg { border: 1px solid var(--borde); border-radius: 12px; padding: 8px 14px; max-width: 92%; }
+.consulta-msg.usuario { align-self: flex-end; background: var(--acento-bg); border-color: var(--acento-borde); }
+.consulta-msg.claude { align-self: flex-start; background: var(--panel); }
+.consulta-quien { margin: 0 0 4px; font-size: .82rem; font-weight: 600; color: var(--suave); }
+.consulta-texto { white-space: pre-wrap; overflow-wrap: anywhere; }
+.consulta-msg.claude .consulta-texto { white-space: normal; }
+.consulta-texto > :first-child { margin-top: 0; } .consulta-texto > :last-child { margin-bottom: 0; }
+.consulta-texto pre { background: var(--codigo); padding: 8px 10px; border-radius: 8px; overflow-x: auto; }
+.consulta-texto table { margin: 8px 0; }
+.consulta-estado.pendiente, .consulta-estado.procesando { color: var(--acento-fuerte); border-color: var(--acento-borde); background: var(--acento-bg); }
+.consulta-estado.respondido { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, transparent); background: var(--ok-bg); }
+.consulta-estado.error { color: var(--mal); border-color: color-mix(in srgb, var(--mal) 40%, transparent); background: var(--mal-bg); }
+.consulta-form textarea { width: 100%; padding: 9px 10px; border: 1px solid var(--borde); border-radius: 10px; background: var(--panel); color: var(--texto); font: inherit; resize: vertical; }
+.consulta-acciones { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.consulta-plegable > summary { cursor: pointer; color: var(--acento-fuerte); font-weight: 600; margin-top: 8px; }
+.consulta-plegable .consulta { box-shadow: none; }
