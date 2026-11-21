@@ -3,7 +3,7 @@ from collections import Counter
 from datetime import timedelta
 
 import pytest
-from conftest import banco_simulacro, crear_usuario, entrar, escribir, post
+from conftest import banco_simulacro, crear_usuario, entrar, escribir, post, sustituir
 from test_app_quiz import iniciar, preguntas, responder
 
 from app.models import Intento, ahora
@@ -22,7 +22,7 @@ def envejecer(app, segundos=20):
 
 def con_banco(curso, por_dominio=BANCO):
     f = curso / "cursos" / "aif-c01" / "curso.yaml"
-    f.write_text(f.read_text(encoding="utf8").replace("preguntas: 3", "preguntas: 5"), encoding="utf8")
+    f.write_text(sustituir(f.read_text(encoding="utf8"), (r"^  preguntas: 3$", "  preguntas: 5")), encoding="utf8")
     banco = banco_simulacro(por_dominio)
     escribir(curso, banco, "06-simulacro")
     return {p["id"]: p for p in banco}

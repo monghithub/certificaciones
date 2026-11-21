@@ -8,7 +8,7 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 from comprobar_cobertura import ancla, anclas_de, comprobar, main  # noqa: E402
-from conftest import FIX, con_repaso, escribir, pregunta_repaso  # noqa: E402
+from conftest import FIX, con_repaso, escribir, pregunta_repaso, sustituir  # noqa: E402
 
 MOD = "03-modelos-fundacionales"
 
@@ -177,11 +177,10 @@ def test_cobertura_del_repaso(repo):
 # ------------------------------------------------------------- simulacro
 def _simulacro(repo, objetivos, minimo=1):
     f = repo / "cursos" / "aif-c01" / "curso.yaml"
-    # El manifiesto real puede declarar ya el mínimo: se quita y se pone el de la prueba.
-    texto = re.sub(r"^  minimo_simulacro_por_objetivo: .*\n", "", f.read_text(encoding="utf8"), flags=re.M)
+    # El manifiesto real ya declara el mínimo: se quita y se pone el de la prueba.
+    texto = sustituir(f.read_text(encoding="utf8"), (r"^  minimo_simulacro_por_objetivo: .*\n", ""))
     if minimo is not None:
-        texto = re.sub(r"^(  minimo_simulacro: \d+\n)", rf"\g<1>  minimo_simulacro_por_objetivo: {minimo}\n",
-                       texto, flags=re.M)
+        texto = sustituir(texto, (r"^(  minimo_simulacro: \d+\n)", rf"\g<1>  minimo_simulacro_por_objetivo: {minimo}\n"))
     f.write_text(texto, encoding="utf8")
     base = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))[0]
     banco = []

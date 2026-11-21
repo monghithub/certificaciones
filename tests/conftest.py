@@ -26,6 +26,14 @@ def repo(tmp_path):
     return tmp_path
 
 
+def sustituir(texto: str, *cambios: tuple[str, str]) -> str:
+    """Aplica cada (patrón, reemplazo) a `texto` exigiendo exactamente una sustitución (falla si el manifiesto cambia)."""
+    for patron, reemplazo in cambios:
+        texto, n = re.subn(patron, reemplazo, texto, flags=re.M)
+        assert n == 1, f"se esperaba 1 sustitución de {patron!r} y hubo {n}"
+    return texto
+
+
 def escribir(raiz, preguntas, modulo="03-modelos-fundacionales", curso="aif-c01", fichero="preguntas.yaml"):
     d = raiz / "cursos" / curso / "modulos" / modulo
     d.mkdir(parents=True, exist_ok=True)
@@ -84,8 +92,8 @@ def curso(repo):
         sim.append(q)
     escribir(repo, sim, "06-simulacro")
     f = base_curso / "curso.yaml"
-    texto = f.read_text(encoding="utf8").replace("preguntas: 65", "preguntas: 3").replace("minutos: 90", "minutos: 1")
-    f.write_text(re.sub(r"minimo_simulacro: \d+", "minimo_simulacro: 3", texto), encoding="utf8")
+    f.write_text(sustituir(f.read_text(encoding="utf8"), (r"^  preguntas: 65$", "  preguntas: 3"), (r"^  minutos: 90$", "  minutos: 1"),
+                           (r"^  minimo_simulacro: \d+$", "  minimo_simulacro: 3")), encoding="utf8")
     return repo
 
 

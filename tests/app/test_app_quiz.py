@@ -3,7 +3,7 @@ from datetime import timedelta
 
 import pytest
 import yaml
-from conftest import crear_usuario, entrar, post
+from conftest import crear_usuario, entrar, post, sustituir
 
 from app.models import Intento, IntentoRespuesta
 
@@ -139,7 +139,7 @@ def test_pregunta_retirada_en_el_historial(app, curso):
 # ------------------------------------------------------------------ simulacro
 def test_simulacro_sin_preguntas_suficientes(app, curso):
     f = curso / "cursos" / "aif-c01" / "curso.yaml"
-    f.write_text(f.read_text(encoding="utf8").replace("preguntas: 3", "preguntas: 65"), encoding="utf8")
+    f.write_text(sustituir(f.read_text(encoding="utf8"), (r"^  preguntas: 3$", "  preguntas: 65")), encoding="utf8")
     app.state.catalogo.cargar()
     crear_usuario(app)
     c = entrar(app)
