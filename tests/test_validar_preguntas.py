@@ -6,7 +6,7 @@ import pytest
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from conftest import FIX, con_repaso, escribir, pregunta_repaso, segundo_curso  # noqa: E402
+from conftest import FIX, con_repaso, escribir, pregunta_repaso, segundo_curso, sustituir  # noqa: E402
 from validar_preguntas import main, validar  # noqa: E402
 
 BASE = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))
@@ -370,7 +370,7 @@ def test_simulacro_sin_banco_de_repaso(repo):
 def _simulacro_rotatorio(repo, banco):
     """Examen de 5 preguntas (1 por dominio; 1 de respuesta múltiple, en el Dominio 1) y el banco dado en el simulacro."""
     f = repo / "cursos" / "aif-c01" / "curso.yaml"
-    f.write_text(f.read_text(encoding="utf8").replace("preguntas: 65", "preguntas: 5"), encoding="utf8")
+    f.write_text(sustituir(f.read_text(encoding="utf8"), (r"^  preguntas: 65$", "  preguntas: 5")), encoding="utf8")
     escribir(repo, banco, "06-simulacro")
 
 
@@ -406,3 +406,20 @@ def test_ids_del_simulacro(repo):
     errs = errores(repo, p)
     assert any("06-simulacro/preguntas.yaml:D3-099: las preguntas del simulacro llevan id S-NNN" in e for e in errs), errs
     assert any("03-modelos-fundacionales/preguntas.yaml:S-001: los ids S-NNN son exclusivos del simulacro" in e for e in errs), errs
+
+
+def test_simulacro_rotatorio_avisa_de_preguntas_que_no_salen_nunca(repo):
+    from conftest import banco_simulacro
+    f = repo / "cursos" / "aif-c01" / "curso.yaml"
+    f.write_text(sustituir(f.read_text(encoding="utf8"), (r"^  preguntas: 65$", "  preguntas: 10")), encoding="utf8")
+    # Examen de 10: D3 con 2 de opción múltiple (3.1.1, 3.1.2) y 1 de respuesta múltiple; S-008 (3.1.1) no sale nunca
+    # porque S-009 (3.1.4) cubre un objetivo más.
+    banco = banco_simulacro({1: (2, 0), 2: (2, 1), 3: (2, 2), 4: (1, 0), 5: (1, 0)})
+    banco[7]["objetivo"] = "3.1.1"
+    escribir(repo, banco, "06-simulacro")
+    info = []
+    errs, avisos, _ = validar(repo, minimos=False, info=info)
+    assert not any("el simulacro necesita" in e for e in errs), errs
+    assert ("cursos/aif-c01/modulos/06-simulacro/preguntas.yaml:S-008: no puede salir nunca: con ella, el dominio 3 cubriría "
+            "menos objetivos distintos (tipo multiple_response, objetivo 3.1.1); cambia su objetivo o su tipo") in avisos, avisos
+    assert any("preguntas que salen en todos los intentos:" in i and "S-009" in i for i in info), info

@@ -151,15 +151,18 @@ class _Flujo:
                 self.aristas[self.aristas[e][3]][1] += delta
 
 
-def _optimo_dominio(celdas: list[tuple[list[dict], int]], evitar, rnd: random.Random) -> tuple[list[dict], int]:
+def _optimo_dominio(celdas: list[tuple[list[dict], int]], evitar, rnd: random.Random,
+                    forzar: str | None = None, excluir: str | None = None) -> tuple[list[dict], int]:
     """Selección exacta de un dominio: (preguntas elegidas, objetivos distintos).
 
     Flujo de coste mínimo: origen → celda (capacidad = cuota) → pregunta (1; coste 1 si está en `evitar`) → objetivo →
     destino por dos aristas: la primera unidad con coste −GRANDE (objetivo nuevo) y el resto con coste 0 (repetición).
     Con GRANDE mayor que el nº de preguntas, el coste mínimo maximiza primero los objetivos distintos y, entre esas
     soluciones, minimiza las preguntas de `evitar`. Las preguntas y los objetivos se añaden en un orden barajado con `rnd`,
-    así que los empates entre soluciones óptimas se resuelven al azar."""
-    preguntas = [(c, p) for c, (cands, _) in enumerate(celdas) for p in cands]
+    así que los empates entre soluciones óptimas se resuelven al azar, sin garantía de uniformidad (Bellman-Ford se queda
+    con el primer camino más corto que encuentra). Para el análisis del banco, `forzar` incluye una pregunta (coste −ENORME)
+    y `excluir` la quita."""
+    preguntas = [(c, p) for c, (cands, _) in enumerate(celdas) for p in cands if p["id"] != excluir]
     rnd.shuffle(preguntas)
     objetivos = list(dict.fromkeys(_objetivo(p) for _, p in preguntas))
     n_celdas = len(celdas)
@@ -167,11 +170,13 @@ def _optimo_dominio(celdas: list[tuple[list[dict], int]], evitar, rnd: random.Ra
     nodo_obj = {o: 2 + n_celdas + len(preguntas) + i for i, o in enumerate(objetivos)}
     f = _Flujo(2 + n_celdas + len(preguntas) + len(objetivos))
     grande = len(preguntas) + 1
+    enorme = grande * (len(preguntas) + 1)
     for c, (_, cuota) in enumerate(celdas):
         f.arista(origen, 2 + c, cuota, 0)
     elegida = []
     for i, (c, p) in enumerate(preguntas):
-        elegida.append(f.arista(2 + c, 2 + n_celdas + i, 1, 1 if p["id"] in evitar else 0))
+        coste = -enorme if p["id"] == forzar else 1 if p["id"] in evitar else 0
+        elegida.append(f.arista(2 + c, 2 + n_celdas + i, 1, coste))
         f.arista(2 + n_celdas + i, nodo_obj[_objetivo(p)], 1, 0)
     nuevo = []
     for o in objetivos:
@@ -188,28 +193,84 @@ def repeticiones_inevitables(m: Manifiesto, banco: list[dict]) -> dict[int, int]
     return {d: n - _optimo_dominio(celdas.get(d, []), (), random.Random(0))[1] for d, n in cuotas_dominio(m).items()}
 
 
-def comprobar_banco(m: Manifiesto, banco: list[dict]) -> tuple[list[str], list[str]]:
-    """(errores, líneas de resumen) de un banco del simulacro. Sin errores ni resumen si el banco no es rotatorio."""
+def factible(m: Manifiesto, banco: list[dict]) -> list[str]:
+    """Errores si un banco rotatorio no tiene preguntas suficientes para alguna cuota (dominio, tipo). Solo un recuento:
+    es lo que comprueban la consola y `extraer`; el análisis completo está en `comprobar_banco`."""
     if not m.tiene_simulacro or not rotatorio(m, banco):
-        return [], []
-    q = cuotas(m)
+        return []
     con_tipo = bool(cuotas_tipo(m))
     hay = Counter(_celda(p, con_tipo) for p in banco)
     errores = []
-    for (d, t), n in q.items():
+    for (d, t), n in cuotas(m).items():
         if hay[(d, t)] < n:
             de_tipo = f"de tipo {t} " if t else ""
             errores.append(f"el simulacro necesita {n} preguntas {de_tipo}del dominio {d} por intento y el banco tiene {hay[(d, t)]}")
+    return errores
+
+
+def fuera_de_cuota(m: Manifiesto, banco: list[dict]) -> list[tuple[dict, str]]:
+    """Preguntas que la extracción ignora porque su dominio o su tipo no tienen cuota, con el motivo."""
+    q = cuotas(m)
+    con_tipo = bool(cuotas_tipo(m))
+    dominios = {d for d, _ in q}
+    fuera = []
+    for p in banco:
+        if _celda(p, con_tipo) in q:
+            continue
+        if p.get("dominio") not in dominios:
+            fuera.append((p, f"su dominio {p.get('dominio')} no tiene cuota en el examen"))
+        else:
+            fuera.append((p, f"su tipo {p.get('tipo')} no está en examen.distribucion"))
+    return fuera
+
+
+def analizar(m: Manifiesto, banco: list[dict]) -> tuple[list[dict], list[dict]]:
+    """(preguntas que no pueden salir nunca, preguntas que salen en todos los intentos) de un banco factible.
+
+    Una pregunta no sale nunca si ninguna selección con el máximo de objetivos distintos de su dominio la incluye (se
+    fuerza y el máximo baja); sale siempre si todas la incluyen (se excluye y el máximo baja o las cuotas no se llenan).
+    Como `extraer` solo devuelve selecciones con ese máximo, el resultado no depende del intento anterior."""
+    nunca, siempre = [], []
+    rnd = random.Random(0)
+    for _, celdas in sorted(_celdas_por_dominio(m, banco).items()):
+        total = sum(n for _, n in celdas)
+        _, mejor = _optimo_dominio(celdas, (), rnd)
+        for cands, _ in celdas:
+            for p in cands:
+                elegidas, distintos = _optimo_dominio(celdas, (), rnd, forzar=p["id"])
+                if p not in elegidas or distintos < mejor:
+                    nunca.append(p)
+                    continue
+                elegidas, distintos = _optimo_dominio(celdas, (), rnd, excluir=p["id"])
+                if len(elegidas) < total or distintos < mejor:
+                    siempre.append(p)
+    return sorted(nunca, key=lambda p: p["id"]), sorted(siempre, key=lambda p: p["id"])
+
+
+def comprobar_banco(m: Manifiesto, banco: list[dict]) -> tuple[list[str], list[tuple[str | None, str]], list[str]]:
+    """Análisis completo de un banco del simulacro para el validador: (errores, avisos, líneas de resumen).
+    Cada aviso es (id de la pregunta o None, mensaje). Vacío si el banco no es rotatorio."""
+    if not m.tiene_simulacro or not rotatorio(m, banco):
+        return [], [], []
+    errores = factible(m, banco)
+    avisos = [(p.get("id"), f"no sale nunca: {motivo}") for p, motivo in fuera_de_cuota(m, banco)]
+    q = cuotas(m)
     partes = []
     for d, n in cuotas_dominio(m).items():
         detalle = " + ".join(f"{q[(d, t)]} {t}" for (dd, t) in q if dd == d and t)
         partes.append(f"D{d} {n}" + (f" ({detalle})" if detalle else ""))
     resumen = [f"cada intento: {m.examen_preguntas} de {len(banco)} preguntas: " + ", ".join(partes)]
-    rep = {d: n for d, n in repeticiones_inevitables(m, banco).items() if n}
-    resumen.append("objetivos repetidos inevitables por intento: " + (", ".join(f"D{d} {n}" for d, n in rep.items()) or "ninguno"))
+    if not errores:
+        rep = {d: n for d, n in repeticiones_inevitables(m, banco).items() if n}
+        resumen.append("objetivos repetidos inevitables por intento: " + (", ".join(f"D{d} {n}" for d, n in rep.items()) or "ninguno"))
+        nunca, siempre = analizar(m, banco)
+        avisos += [(p["id"], f"no puede salir nunca: con ella, el dominio {p['dominio']} cubriría menos objetivos distintos "
+                             f"(tipo {p['tipo']}, objetivo {p.get('objetivo')}); cambia su objetivo o su tipo") for p in nunca]
+        resumen.append(f"preguntas que salen en todos los intentos: {len(siempre)}"
+                       + (f" ({', '.join(p['id'] for p in siempre)})" if siempre else ""))
     dificultad = Counter(p.get("dificultad") or "sin indicar" for p in banco)
     resumen.append("dificultad del banco: " + ", ".join(f"{k} {v}" for k, v in sorted(dificultad.items())))
-    return errores, resumen
+    return errores, avisos, resumen
 
 
 def extraer(m: Manifiesto, banco: list[dict], rnd: random.Random, evitar=frozenset()) -> list[str]:
@@ -219,7 +280,7 @@ def extraer(m: Manifiesto, banco: list[dict], rnd: random.Random, evitar=frozens
         raise ValueError(f"El simulacro necesita {n} preguntas y hay {len(banco)}.")
     if not rotatorio(m, banco):
         return sorted(p["id"] for p in banco)
-    errores, _ = comprobar_banco(m, banco)
+    errores = factible(m, banco)
     if errores:
         raise ValueError(f"El banco del simulacro no permite formar el examen: {errores[0]}.")
     evitar = set(evitar)

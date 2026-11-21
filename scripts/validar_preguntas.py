@@ -260,9 +260,10 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool, info
                 if abs(real - obj) > TOLERANCIA:
                     avisos.append(f"{rel}: {t} es el {real:.0f} % (objetivo ~{obj:g} %)")
     if curso.tiene_simulacro and banco_simulacro:
-        e, r = composicion.comprobar_banco(curso, banco_simulacro)
+        e, a, r = composicion.comprobar_banco(curso, banco_simulacro)
         rel = f"cursos/{curso.slug}/modulos/{curso.simulacro}/preguntas.yaml"
         errores += [f"{rel}: {m}" for m in e]
+        avisos += [f"{rel}:{pid}: {m}" if pid else f"{rel}: {m}" for pid, m in a]
         if info is not None:
             info += [f"{rel}: {m}" for m in r]
     vistos_repaso: dict[str, str] = {}

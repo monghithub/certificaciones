@@ -133,20 +133,22 @@ def test_curso_sin_distribucion_solo_respeta_dominios():
 def test_banco_del_tamano_del_examen_se_comporta_como_antes():
     banco = banco_simulacro({1: (12, 1), 2: (14, 2), 3: (13, 5), 4: (8, 1), 5: (5, 4)})  # 65, con un reparto que no cumple las cuotas
     assert not s.rotatorio(AIF, banco)
-    assert s.comprobar_banco(AIF, banco) == ([], [])
+    assert s.comprobar_banco(AIF, banco) == ([], [], [])
+    assert s.factible(AIF, banco) == []
     for semilla in range(5):
         assert s.extraer(AIF, list(reversed(banco)), random.Random(semilla)) == [f"S-{k:03d}" for k in range(1, 66)]
 
 
 def test_banco_real_de_aif_c01():
-    """Hoy el banco de AIF-C01 tiene el tamaño del examen: mismas preguntas y orden que antes del cambio."""
-    banco = yaml.safe_load((RAIZ / "cursos" / "aif-c01" / "modulos" / "06-simulacro" / "preguntas.yaml").read_text(encoding="utf8"))
+    """El banco real, cargado como la consola: cuotas y repeticiones mínimas si es rotatorio; si no, el banco entero."""
+    banco = s.cargar_banco(AIF, RAIZ / "schemas")
+    assert banco
     ids = s.extraer(AIF, banco, random.Random())
     if s.rotatorio(AIF, banco):
         assert celdas(banco, ids) == Counter(s.cuotas(AIF))
-        assert repetidos(banco, ids) == Counter(s.repeticiones_inevitables(AIF, banco))
+        assert repetidos(banco, ids) == Counter({d: n for d, n in s.repeticiones_inevitables(AIF, banco).items() if n})
     else:
-        assert ids == sorted(p["id"] for p in banco)[: AIF.examen_preguntas]
+        assert ids == sorted(p["id"] for p in banco)
 
 
 def test_banco_menor_que_el_examen():
@@ -156,23 +158,23 @@ def test_banco_menor_que_el_examen():
 
 def test_banco_que_no_permite_formar_el_examen():
     banco = banco_simulacro({**PREVISTO, 4: (11, 1)})  # 82, pero solo 1 de respuesta múltiple en el Dominio 4 (cuota 2)
-    errores, _ = s.comprobar_banco(AIF, banco)
-    assert errores == ["el simulacro necesita 2 preguntas de tipo multiple_response del dominio 4 por intento y el banco tiene 1"]
+    assert s.factible(AIF, banco) == s.comprobar_banco(AIF, banco)[0] == ["el simulacro necesita 2 preguntas de tipo multiple_response del dominio 4 por intento y el banco tiene 1"]
     with pytest.raises(ValueError, match="no permite formar el examen"):
         s.extraer(AIF, banco, random.Random())
 
 
 def test_resumen_del_banco():
     banco = banco_simulacro(PREVISTO, OBJETIVOS)
-    errores, resumen = s.comprobar_banco(AIF, banco)
-    assert errores == []
+    errores, avisos, resumen = s.comprobar_banco(AIF, banco)
+    assert errores == [] and avisos == []
     assert resumen[0].startswith("cada intento: 65 de 82 preguntas: D1 13 (11 multiple_choice + 2 multiple_response)")
     assert resumen[1] == "objetivos repetidos inevitables por intento: D2 2, D5 1"
-    assert resumen[2].startswith("dificultad del banco:")
+    assert resumen[2].startswith("preguntas que salen en todos los intentos: ")
+    assert resumen[3].startswith("dificultad del banco:")
 
 
 def test_sin_simulacro_no_hay_comprobacion():
-    assert s.comprobar_banco(replace(AIF, simulacro=None), banco_simulacro(PREVISTO)) == ([], [])
+    assert s.comprobar_banco(replace(AIF, simulacro=None), banco_simulacro(PREVISTO)) == ([], [], [])
 
 
 # ---------------------------------------------------------------- óptimo exacto (revisión independiente)
@@ -205,7 +207,7 @@ def test_contraejemplo_repeticiones_inevitables_por_celda():
     assert s.cuotas(m) == {(1, "multiple_choice"): 2, (1, "multiple_response"): 1}
     assert s.repeticiones_inevitables(m, banco) == {1: 1}
     assert repetidos(banco, s.extraer(m, banco, random.Random(1))) == Counter({1: 1})
-    assert "objetivos repetidos inevitables por intento: D1 1" in s.comprobar_banco(m, banco)[1]
+    assert "objetivos repetidos inevitables por intento: D1 1" in s.comprobar_banco(m, banco)[2]
 
 
 def _maximo_distintos(celdas):
@@ -273,3 +275,76 @@ def test_fuzz_optimo_lexicografico_por_fuerza_bruta(semilla):
     mejor = min(_seleccion(banco, list(a) + list(b), evitar) for a, b in product(combinations(mc, 3), combinations(mr, 2)))
     for k in range(3):
         assert _seleccion(banco, s.extraer(m, banco, random.Random(k), evitar), evitar) == mejor
+
+
+# ---------------------------------------------------------------- análisis del banco y óptimo frente a fuerza bruta
+def test_pregunta_que_no_puede_salir_nunca_y_preguntas_que_salen_siempre():
+    # Respuesta múltiple (cuota 2): X, Y, A. Opción múltiple (cuota 3): A, B, C. Para cubrir 5 objetivos distintos,
+    # la respuesta múltiple tiene que ser X e Y: la de A no sale nunca y las cinco restantes salen siempre.
+    m = manifiesto(n=5, pesos=(100,), distribucion={"multiple_choice": 60, "multiple_response": 40})
+    banco = _con_objetivos(banco_simulacro({1: (3, 3)}), ["A", "B", "C", "X", "Y", "A"])
+    nunca, siempre = s.analizar(m, banco)
+    assert [p["id"] for p in nunca] == ["S-006"]
+    assert [p["id"] for p in siempre] == ["S-001", "S-002", "S-003", "S-004", "S-005"]
+    errores, avisos, resumen = s.comprobar_banco(m, banco)
+    assert errores == []
+    assert avisos == [("S-006", "no puede salir nunca: con ella, el dominio 1 cubriría menos objetivos distintos "
+                                "(tipo multiple_response, objetivo A); cambia su objetivo o su tipo")]
+    assert "preguntas que salen en todos los intentos: 5 (S-001, S-002, S-003, S-004, S-005)" in resumen
+    for semilla in range(50):  # coherente con la extracción, también con evitar
+        ids = set(s.extraer(m, banco, random.Random(semilla), evitar={"S-004"}))
+        assert "S-006" not in ids and {"S-001", "S-002", "S-003", "S-004", "S-005"} <= ids
+
+
+def test_analisis_coherente_con_la_extraccion_en_bancos_aleatorios():
+    for semilla in range(20):
+        rnd = random.Random(semilla)
+        banco = _banco_aif_aleatorio(rnd)
+        nunca, siempre = ({p["id"] for p in x} for x in s.analizar(AIF, banco))
+        vistas = Counter()
+        for k in range(60):
+            evitar = set(rnd.sample([p["id"] for p in banco], 40)) if k % 2 else set()
+            vistas.update(s.extraer(AIF, banco, rnd, evitar))
+        assert not nunca & set(vistas)
+        assert all(vistas[i] == 60 for i in siempre)
+
+
+def test_preguntas_fuera_de_cuota():
+    m = manifiesto(n=5, pesos=(100,), distribucion={"multiple_choice": 100})
+    banco = banco_simulacro({1: (6, 1)})  # S-007 es de respuesta múltiple, que no está en examen.distribucion
+    banco += _con_objetivos(banco_simulacro({1: (1, 0)}), ["9.1.1"])
+    banco[-1].update(id="S-900", dominio=9)  # dominio sin cuota
+    errores, avisos, _ = s.comprobar_banco(m, banco)
+    assert errores == []
+    assert ("S-007", "no sale nunca: su tipo multiple_response no está en examen.distribucion") in avisos
+    assert ("S-900", "no sale nunca: su dominio 9 no tiene cuota en el examen") in avisos
+    assert not {"S-007", "S-900"} & set(s.extraer(m, banco, random.Random(1)))
+
+
+def _optimo_fuerza_bruta(banco, evitar):
+    """Referencia independiente: (repeticiones, preguntas de evitar) mínimas por dominio, probando todas las
+    combinaciones de cada celda (los bancos de AIF-C01 son poco mayores que las cuotas, así que son pocas)."""
+    from itertools import combinations, product
+
+    total = [0, 0]
+    for d in range(1, 6):
+        grupos = [list(combinations([p for p in banco if (p["dominio"], p["tipo"]) == (d, t)], n))
+                  for (dd, t), n in s.cuotas(AIF).items() if dd == d]
+        mejor = None
+        for partes in product(*grupos):
+            elegidas = [p for parte in partes for p in parte]
+            objs = [p["objetivo"] for p in elegidas]
+            puntos = (len(objs) - len(set(objs)), sum(p["id"] in evitar for p in elegidas))
+            mejor = puntos if mejor is None or puntos < mejor else mejor
+        total[0] += mejor[0]
+        total[1] += mejor[1]
+    return tuple(total)
+
+
+@pytest.mark.parametrize("semilla", range(200))
+def test_fuzz_evitar_minimo_en_bancos_con_la_forma_de_aif_c01(semilla):
+    rnd = random.Random(1000 + semilla)
+    banco = _banco_aif_aleatorio(rnd)
+    for evitar in (set(s.extraer(AIF, banco, rnd)), set(rnd.sample([p["id"] for p in banco], 50))):
+        ids = s.extraer(AIF, banco, rnd, evitar)
+        assert _seleccion(banco, ids, evitar) == _optimo_fuerza_bruta(banco, evitar)

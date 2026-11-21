@@ -57,7 +57,7 @@ def inicio(request: Request, c: Contenido = Depends(requiere_curso), usuario: Us
     repaso = [x for x in c.modulos.values() if x.repaso]
     banco_sim = _banco_simulacro(c)
     n_sim = len(banco_sim)
-    sim_error = (simulacro.comprobar_banco(m, banco_sim)[0] or [None])[0] if m.tiene_simulacro else None
+    sim_error = (simulacro.factible(m, banco_sim) or [None])[0] if m.tiene_simulacro else None
     dominios = sorted({c.preguntas[p]["dominio"] for x in modulos for p in x.preguntas})
     libros = [x for x in c.modulos.values() if x.libros]
     return render(request, "tests_inicio.html", modulos=modulos, repaso=repaso, n_repaso=sum(len(x.repaso) for x in repaso),
