@@ -67,6 +67,64 @@ def falladas(db: Session, uid: int, contenido: Contenido) -> list[str]:
                   if not ok and pid in contenido.preguntas and contenido.preguntas[pid]["modulo"] != simulacro)
 
 
+def _orden_tarea(t: str) -> tuple:
+    return tuple(int(x) if x.isdigit() else -1 for x in t.split("."))
+
+
+def desglose_intento(i: Intento, contenido: Contenido, marcar_debiles: bool = False) -> dict:
+    """Aciertos de un intento por dominio y por tarea, calculados con `i.preguntas` (las sin responder cuentan como
+    falladas), así que los dominios suman el total del intento. Grupos especiales: `otros` (preguntas sin dominio oficial,
+    como las de los libros) y `retiradas` (ids que ya no existen en el contenido). Con `marcar_debiles`, se marcan los
+    dominios oficiales cuyo porcentaje queda por debajo del global del intento (criterio relativo: AWS no publica cortes
+    por dominio)."""
+    m = contenido.manifiesto
+    nombres = m.nombres_dominio
+    acierto = {r.pregunta_id: r.correcta for r in i.respuestas}
+    grupos: dict = {}
+    tareas: dict = {}
+    for pid in i.preguntas:
+        p = contenido.preguntas.get(pid)
+        ok = int(bool(acierto.get(pid)))
+        if p is None:
+            clave = "retiradas"
+        elif p.get("dominio") in m.dominios or (p.get("dominio") == 0 and p.get("tarea") == "CP" and 0 in nombres):
+            clave = p["dominio"]
+        else:
+            clave = "otros"
+        g = grupos.setdefault(clave, {"clave": clave, "n": 0, "ok": 0})
+        g["n"] += 1
+        g["ok"] += ok
+        tarea = p.get("tarea") if p else None
+        if isinstance(clave, int) and isinstance(tarea, str) and (tarea == "CP" or tarea.startswith(f"{clave}.")):
+            t = tareas.setdefault(tarea, {"tarea": tarea, "dominio": clave, "n": 0, "ok": 0})
+            t["n"] += 1
+            t["ok"] += ok
+    total = len(i.preguntas)
+    ok_total = sum(g["ok"] for g in grupos.values())
+    filas = []
+    for clave in sorted((k for k in grupos if isinstance(k, int))) + [k for k in ("otros", "retiradas") if k in grupos]:
+        g = grupos[clave]
+        if clave == 0:
+            nombre = nombres[0]["nombre"]
+        elif isinstance(clave, int):
+            nombre = f"Dominio {clave} · {nombres[clave]['nombre']}"
+        else:
+            nombre = "Sin dominio oficial" if clave == "otros" else "Preguntas retiradas del contenido"
+        g.update(nombre=nombre, pct=round(100 * g["ok"] / g["n"]),
+                 url=contenido.url_dominio(clave) if isinstance(clave, int) else None,
+                 debil=marcar_debiles and isinstance(clave, int) and g["ok"] * total < ok_total * g["n"])
+        filas.append(g)
+    filas_tarea = []
+    for tarea in sorted(tareas, key=_orden_tarea):
+        t = tareas[tarea]
+        t.update(pct=round(100 * t["ok"] / t["n"]), url=contenido.url_tarea(tarea),
+                 nombre="Conocimientos previos" if tarea == "CP" else f"Tarea {tarea}")
+        filas_tarea.append(t)
+    return {"dominios": filas, "tareas": filas_tarea, "total": total, "ok": ok_total,
+            "sin_responder": sum(1 for pid in i.preguntas if pid not in acierto),
+            "debiles": [g for g in filas if g["debil"]]}
+
+
 def puntos_debiles(tareas: list[dict]) -> list[dict]:
     debiles = [t for t in tareas if t["n"] >= MIN_RESPUESTAS_DEBIL and t["pct"] < UMBRAL_DEBIL]
     return sorted(debiles, key=lambda t: t["pct"])[:5]
