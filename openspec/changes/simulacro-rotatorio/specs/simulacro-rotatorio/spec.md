@@ -25,7 +25,7 @@ La cuota de cada dominio SHALL calcularse con el método de restos mayores sobre
 
 ### Requirement: Objetivos sin repetir en un intento
 
-Dentro de un intento, un objetivo SHALL repetirse solo cuando el banco no permita evitarlo. El número de repeticiones de cada dominio SHALL ser `max(0, cuota del dominio − objetivos distintos del dominio en el banco)`.
+Dentro de un intento, un objetivo SHALL repetirse solo cuando el banco no permita evitarlo. El número de repeticiones de cada dominio SHALL ser la cuota del dominio menos el máximo de objetivos distintos que permiten las cuotas por dominio y tipo (emparejamiento máximo entre los huecos de cada celda y los objetivos presentes en ella), y la preferencia por las preguntas no vistas no SHALL aumentarlo.
 
 #### Scenario: Dominio con más objetivos que cuota
 
@@ -36,6 +36,16 @@ Dentro de un intento, un objetivo SHALL repetirse solo cuando el banco no permit
 
 - **WHEN** el Dominio 5 tiene cuota 9 y 8 objetivos
 - **THEN** el intento repite un solo objetivo del Dominio 5
+
+#### Scenario: Objetivos compartidos entre tipos
+
+- **WHEN** la opción múltiple del dominio (cuota 2) solo tiene preguntas del objetivo A y la respuesta múltiple (cuota 1) tiene B y C
+- **THEN** el mínimo de repeticiones del dominio es 1 y el intento repite A una sola vez
+
+#### Scenario: Preferir las no vistas sin repetir objetivo
+
+- **WHEN** la respuesta múltiple (cuota 2) tiene o5, o4 y o1, solo o4 sin ver, y la opción múltiple (cuota 3) tiene o6, o4, o4, o6 y o2
+- **THEN** el intento no repite ningún objetivo
 
 ### Requirement: Rotación entre intentos
 

@@ -49,6 +49,9 @@ El banco actual tiene 51 de opción múltiple y 14 de respuesta múltiple, y el 
 
 - `comprobar_banco` y `extraer` reciben las preguntas como diccionarios (`id`, `dominio`, `tipo`, `objetivo`, `dificultad`); la consola los toma de `Contenido.preguntas` y el validador y la CLI, del YAML.
 - La regla «sin repetir objetivo» trata una pregunta sin `objetivo` como de un objetivo propio.
+- `scripts/quiz.py --simulacro` carga el banco con `curso.simulacro.cargar_banco`, con el mismo filtrado que la consola: solo el módulo exacto del simulacro, preguntas válidas para el esquema, de dominios declarados y sin ids repetidos.
+- Doble envío de «Empezar simulacro»: si el último simulacro del usuario en el curso está sin terminar, no ha caducado y empezó hace menos de 10 segundos, `iniciar` redirige a él en vez de crear otro (si no, el segundo intento evitaría las preguntas del primero y la rotación se degradaría).
+- `comprobar_cobertura.py` da error si falta `fuentes/dominio-N.md` de algún dominio, si una pregunta del simulacro no declara `objetivo` o si declara uno que no está en las fuentes.
 - El validador imprime la composición del intento en líneas informativas (no son avisos); `validar()` las devuelve si se le pasa `info`.
 - En AIF-C01 no se declaran todavía `minimo_simulacro: 80` ni `minimo_simulacro_por_objetivo: 1`: entran con el contenido (tarea 5), porque con el banco de 65 la CI fallaría.
 
@@ -88,13 +91,17 @@ def extraer(m: Manifiesto, banco: list[dict], rnd: random.Random, evitar: set[st
 
 1. Si el banco no es rotatorio (`len(banco) == examen.preguntas`): devolver `sorted(ids)`, como hoy (D7).
 2. Si `comprobar_banco` da errores: `ValueError` con el primero.
-3. Por cada dominio, rellenar sus celdas (dominio, tipo) empezando por la más escasa (menor holgura `candidatos − cuota`). En cada celda se elige una pregunta cada vez, la mínima según la clave `(objetivo ya usado en el dominio, id en evitar, rnd.random())`. Así, por prioridad: (a) las cuotas se cumplen siempre; (b) no se repite objetivo si hay alternativa; (c) se prefieren preguntas no vistas en el intento anterior; (d) el resto, al azar.
-4. Se repite el paso 3 hasta 20 veces con el mismo `rnd` y se queda la selección con menos objetivos repetidos y, a igualdad, menos preguntas de `evitar` (corta antes si alcanza el mínimo inevitable).
-5. `rnd.shuffle` de los 65 ids: los dominios quedan intercalados, como en el examen.
+3. Por cada dominio, **selección óptima exacta con un flujo de coste mínimo** (`_optimo_dominio`, sin dependencias nuevas; caminos más cortos sucesivos con Bellman-Ford):
+   - Red: origen → celda (dominio, tipo) con capacidad = cuota → pregunta (capacidad 1; coste 1 si está en `evitar`, 0 si no) → objetivo → destino por dos aristas: una de capacidad 1 y coste −G (objetivo nuevo) y otra sin límite y coste 0 (repetición), con G = nº de preguntas del dominio + 1.
+   - El flujo máximo llena exactamente las cuotas. Como G supera cualquier suma de costes de `evitar`, el coste mínimo da el orden lexicográfico pedido: (a) las cuotas se cumplen; (b) máximo de objetivos distintos, que es un emparejamiento máximo entre los huecos de cada celda y los objetivos presentes en ella, y lo no emparejado se rellena con cualquier pregunta de la celda; (c) entre esas soluciones, mínimo de preguntas del intento anterior; (d) el resto, al azar.
+   - El azar viene de barajar con `rnd` el orden en que se añaden las preguntas y los objetivos: los empates entre soluciones óptimas se resuelven según ese orden, y la solución sigue siendo óptima.
+4. `rnd.shuffle` de los 65 ids: los dominios quedan intercalados, como en el examen.
 
-Mínimo inevitable de repeticiones por dominio: `max(0, cuota_d − objetivos distintos del dominio en el banco)`; en AIF-C01, 2 en el Dominio 2 (16 preguntas, 14 objetivos) y 1 en el 5 (9 preguntas, 8 objetivos). Las pruebas comprueban que el voraz lo alcanza con el banco real en todas las semillas probadas.
+Mínimo inevitable de repeticiones por dominio: `cuota_d − máximo de objetivos distintos` calculado con la misma red sin `evitar` (`repeticiones_inevitables`). No basta con `cuota_d − objetivos distintos del dominio`: si la opción múltiple tiene {A, A} con cuota 2 y la respuesta múltiple {B, C} con cuota 1, hay 3 objetivos pero A se repite siempre. En el banco previsto de AIF-C01 el mínimo es 2 en el Dominio 2 y 1 en el 5.
 
-*Descartado:* programación lineal entera o flujo de coste mínimo (exacto, pero desproporcionado para 5 dominios y unas 20 preguntas por dominio, y añade una dependencia). *Descartado:* muestreo simple con rechazo hasta cumplir las cuotas (sin garantía de terminar y lento con objetivos sin repetir). *Descartado:* conservar el orden del fichero en la selección (con muestreo, el orden del fichero ya no aporta un intercalado pensado).
+**Por qué se cambió el voraz (revisión independiente, 2026-11-21).** La primera implementación era voraz por celda, con la clave `(objetivo ya usado, en evitar, azar)` y 20 reintentos. Tenía dos fallos: (1) la preferencia por las no vistas es determinista, así que los reintentos empezaban igual y el voraz repetía objetivos evitables; por ejemplo, con respuesta múltiple de cuota 2 sobre {o5, o4, o1}, donde solo o4 está sin ver, y opción múltiple de cuota 3 sobre {o6, o4, o4, o6, o2}, devolvía una repetición, cuando (o5, o1) + (o6, o4, o2) no repite ninguna. (2) El mínimo inevitable ignoraba las celdas por tipo. Con las pruebas nuevas, la versión voraz falla en 117 de 300 bancos aleatorios con la forma de AIF-C01 y en 17 de 300 bancos pequeños comprobados por fuerza bruta; la del flujo, en ninguno. El flujo resuelve 5 dominios de unas 20 preguntas en milisegundos.
+
+*Descartado:* el voraz con reintentos (ver arriba). *Descartado:* programación lineal entera con una biblioteca (exacta, pero añade una dependencia para un problema que el flujo resuelve en unas 80 líneas). *Descartado:* muestreo simple con rechazo hasta cumplir las cuotas (sin garantía de terminar). *Descartado:* conservar el orden del fichero en la selección (con muestreo, el orden del fichero ya no aporta un intercalado pensado).
 
 ### D5. Rotación: preferir las no vistas en el intento anterior (recomendado)
 
@@ -138,7 +145,7 @@ Al iniciar un simulacro, `iniciar` lee el último `Intento` del mismo usuario y 
 
 ### D11. Pruebas
 
-- `tests/test_simulacro.py` (nuevo): cuotas de AIF-C01 (13/16/18/9/9; 52/13; 2/3/4/2/2 y 11/13/14/7/7); propiedades de `cuotas` con pesos y tamaños aleatorios (sumas por fila y columna, sin negativos); `extraer` sobre un banco sintético de 82 y sobre el banco real (cuando exista), con 500 semillas: 65 ids distintos del banco, cuotas por celda exactas, repeticiones de objetivo iguales al mínimo inevitable; con `evitar` = intento anterior en un banco sin objetivos repetidos, entran todas las no vistas; banco del tamaño del examen → `sorted(ids)`; banco infactible → `ValueError`; misma semilla → mismo resultado.
+- `tests/test_simulacro.py` (nuevo): los dos contraejemplos de la revisión; 300 bancos aleatorios con la forma de AIF-C01 (objetivos repartidos al azar entre tipos) comparados con un emparejamiento de referencia (Kuhn) con y sin `evitar`; 300 bancos pequeños comparados por fuerza bruta con el óptimo lexicográfico (objetivos distintos, después no vistas); cuotas de AIF-C01 (13/16/18/9/9; 52/13; 2/3/4/2/2 y 11/13/14/7/7); propiedades de `cuotas` con pesos y tamaños aleatorios (sumas por fila y columna, sin negativos); `extraer` sobre un banco sintético de 82 y sobre el banco real (cuando exista), con 500 semillas: 65 ids distintos del banco, cuotas por celda exactas, repeticiones de objetivo iguales al mínimo inevitable; con `evitar` = intento anterior en un banco sin objetivos repetidos, entran todas las no vistas; banco del tamaño del examen → `sorted(ids)`; banco infactible → `ValueError`; misma semilla → mismo resultado.
 - `tests/test_validar_preguntas.py`: celda insuficiente → error; banco del tamaño del examen con el reparto desviado → solo aviso; id que no es `S-NNN` → error.
 - `tests/test_cobertura.py`: objetivo sin pregunta en el simulacro → error; sin `minimo_simulacro_por_objetivo` → sin comprobación.
 - `tests/app/test_app_quiz.py`: banco rotatorio → intento de N preguntas con las cuotas; el segundo intento incluye las no vistas; reanudar y resultado de un intento creado con la lista antigua; banco infactible → no se ofrece y `iniciar` avisa. El simulacro de 3 preguntas de `tests/conftest.py` cubre el camino compatible (las pruebas actuales no cambian).
@@ -149,7 +156,7 @@ Al iniciar un simulacro, `iniciar` lee el último `Intento` del mismo usuario y 
 - [Intentos de dificultad desigual] → la dificultad no entra en el muestreo; el validador informa del reparto de dificultad del banco. Si se ve necesario, se añadiría como criterio de desempate.
 - [Solapamiento alto entre intentos seguidos, 48 de 65 como mínimo] → límite del tamaño del banco; el README sigue recomendando repetir el simulacro solo después de repasar. Un banco mayor lo reduce.
 - [Renumerar ids rompe la revisión de intentos antiguos] → regla en `AGENTS.md` y revisión; el resultado ya tolera ids retirados.
-- [El voraz no alcanza el mínimo de repeticiones en algún banco] → reinicios (D4, paso 4) y pruebas con el banco real; nunca incumple las cuotas, solo repetiría un objetivo de más.
+- [La selección exacta es más código que un muestreo] → el flujo está aislado en `_optimo_dominio`, sin dependencias, y lo cubren pruebas de referencia independientes (emparejamiento de Kuhn y fuerza bruta).
 - [Dependencia de la rama `aif-c01/simulacro-cobertura`] → el código no depende de ella; el contenido (tarea 5) espera a su integración y recalcula qué objetivos faltan.
 - [El banco crece y no todas las preguntas tienen la misma calidad] → las nuevas pasan la misma revisión independiente que el resto.
 
