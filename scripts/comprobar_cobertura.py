@@ -115,16 +115,23 @@ def comprobar_simulacro(curso: Manifiesto) -> tuple[list[str], list[str]]:
     """Cobertura del banco del simulacro: cada objetivo oficial de los dominios del manifiesto con al menos
     `banco.minimo_simulacro_por_objetivo` preguntas. Devuelve (errores, lineas_resumen)."""
     pref = f"{curso.slug}/{curso.simulacro}"
-    objetivos = []
+    objetivos, errores = [], []
     for d in curso.dominios:
         fuente = curso.carpeta / "fuentes" / f"dominio-{d}.md"
         if fuente.is_file():
             objetivos += [o for o in objetivos_de(fuente) if o[0].isdigit()]
+        else:
+            errores.append(f"{pref}: falta la fuente fuentes/dominio-{d}.md")
     banco = leer_banco(curso.carpeta / "modulos" / curso.simulacro / "preguntas.yaml")
     por_objetivo = Counter(p.get("objetivo") for p in banco)
     minimo = curso.minimo_simulacro_por_objetivo
-    errores = [f"{pref}: el objetivo {o} tiene {por_objetivo.get(o, 0)} preguntas en el simulacro, mínimo {minimo}"
-               for o in objetivos if por_objetivo.get(o, 0) < minimo]
+    errores += [f"{pref}: el objetivo {o} tiene {por_objetivo.get(o, 0)} preguntas en el simulacro, mínimo {minimo}"
+                for o in objetivos if por_objetivo.get(o, 0) < minimo]
+    for p in banco:
+        if not p.get("objetivo"):
+            errores.append(f"{pref}: {p.get('id')} no declara `objetivo`; no se puede comprobar la cobertura del simulacro")
+        elif p["objetivo"] not in objetivos:
+            errores.append(f"{pref}: {p.get('id')} declara el objetivo {p['objetivo']}, que no está en las fuentes de los dominios")
     cubiertos = sum(1 for o in objetivos if por_objetivo.get(o, 0) >= max(minimo, 1))
     return errores, [f"{pref}: {cubiertos}/{len(objetivos)} objetivos en el simulacro, {len(banco)} preguntas"]
 

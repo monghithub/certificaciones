@@ -219,3 +219,23 @@ def test_simulacro_sin_minimo_declarado_no_se_comprueba(repo):
     _simulacro(repo, ["1.1.1"], minimo=None)
     errores, resumen = comprobar(repo, con_preguntas=True)
     assert not any("simulacro" in x for x in errores + resumen)
+
+
+def test_simulacro_con_objetivo_inexistente_o_sin_objetivo(repo):
+    objetivos = todos_los_objetivos(repo)
+    _simulacro(repo, objetivos + ["1.1.1"])
+    f = repo / "cursos" / "aif-c01" / "modulos" / "06-simulacro" / "preguntas.yaml"
+    banco = yaml.safe_load(f.read_text(encoding="utf8"))
+    banco[-1]["objetivo"] = "1.1.99"
+    banco[0].pop("objetivo")
+    f.write_text(yaml.safe_dump(banco, allow_unicode=True), encoding="utf8")
+    errores, _ = comprobar(repo, con_preguntas=True)
+    assert "aif-c01/06-simulacro: S-070 declara el objetivo 1.1.99, que no está en las fuentes de los dominios" in errores
+    assert any("S-001 no declara `objetivo`" in e for e in errores), errores
+
+
+def test_simulacro_sin_fuente_de_un_dominio(repo):
+    _simulacro(repo, todos_los_objetivos(repo))
+    (repo / "cursos" / "aif-c01" / "fuentes" / "dominio-4.md").unlink()
+    errores, _ = comprobar(repo, con_preguntas=True)
+    assert "aif-c01/06-simulacro: falta la fuente fuentes/dominio-4.md" in errores
