@@ -1198,3 +1198,438 @@
     c: El coste por usuario es una métrica de negocio, no de rendimiento del clasificador.
     e: Esa es la definición de exactitud, justo la métrica que engaña con clases desequilibradas.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: R1-043
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Cuál de estos valores es un hiperparámetro de un modelo?
+  opciones:
+  - id: a
+    texto: Los pesos de las conexiones de una red neuronal
+  - id: b
+    texto: La tasa de aprendizaje (learning rate)
+  - id: c
+    texto: La etiqueta que se quiere predecir
+  - id: d
+    texto: El importe de la compra, usado como entrada del modelo
+  correctas:
+  - b
+  explicacion: 'Un hiperparámetro es una variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo, como la tasa de aprendizaje, el número de epochs o el tamaño de lote. Pista: hiper = «por encima» del aprendizaje; lo decides tú, no el modelo.'
+  distractores:
+    a: Los pesos son parámetros que el modelo aprende durante el entrenamiento; no se fijan antes.
+    c: La etiqueta es el valor objetivo que el modelo aprende a predecir, no una configuración del entrenamiento.
+    d: El importe es una característica (feature), un dato de entrada del modelo.
+  referencia: https://aws.amazon.com/what-is/hyperparameter-tuning/
+- id: R1-044
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué técnica contra el sobreajuste consiste en detener el entrenamiento antes de que el modelo empiece a aprender el ruido de los datos?
+  opciones:
+  - id: a
+    texto: Combinar varios modelos (ensembling)
+  - id: b
+    texto: Parada temprana (early stopping)
+  - id: c
+    texto: Ampliar los datos con variaciones (data augmentation)
+  - id: d
+    texto: Ajuste de hiperparámetros
+  correctas:
+  - b
+  explicacion: 'La parada temprana detiene el entrenamiento antes de que el modelo memorice el ruido de los datos de entrenamiento. Pista: «parar a tiempo» antes de memorizar.'
+  distractores:
+    a: El ensembling también combate el sobreajuste, pero combinando las predicciones de varios modelos, no deteniendo el entrenamiento.
+    c: La ampliación de datos genera variaciones de los ejemplos existentes; no decide cuándo parar.
+    d: El ajuste de hiperparámetros busca la mejor configuración del entrenamiento; no es en sí una técnica contra el sobreajuste.
+  referencia: https://aws.amazon.com/what-is/overfitting/
+- id: R1-045
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué tipo de aprendizaje combina técnicas supervisadas y no supervisadas para un mismo problema?
+  opciones:
+  - id: a
+    texto: Aprendizaje no supervisado
+  - id: b
+    texto: Aprendizaje por refuerzo
+  - id: c
+    texto: Aprendizaje semisupervisado
+  - id: d
+    texto: Aprendizaje autosupervisado
+  correctas:
+  - c
+  explicacion: 'El aprendizaje semisupervisado combina ambas técnicas y es útil cuando hay pocos datos etiquetados y muchos sin etiquetar. Pista: «semi» = algunas etiquetas, no todas ni ninguna.'
+  distractores:
+    a: El no supervisado trabaja sin ninguna etiqueta y solo busca estructura en los datos.
+    b: El refuerzo aprende de recompensas interactuando con un entorno, no de un conjunto de datos.
+    d: El autosupervisado genera las etiquetas a partir de los propios datos (como ocultar una palabra y predecirla); es como se preentrenan los modelos fundacionales.
+  referencia: https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/
+- id: R1-046
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.5
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada algoritmo integrado de SageMaker AI con el problema que resuelve.
+  prompts:
+  - id: '1'
+    texto: k-means
+  - id: '2'
+    texto: k-NN
+  - id: '3'
+    texto: Random Cut Forest
+  - id: '4'
+    texto: PCA
+  opciones:
+  - id: a
+    texto: Detectar observaciones que se desvían de lo normal, sin etiquetas
+  - id: b
+    texto: Reducir el número de dimensiones conservando la información importante
+  - id: c
+    texto: Clasificar o predecir un valor a partir de los ejemplos etiquetados más parecidos
+  - id: d
+    texto: Agrupar datos sin etiquetas en grupos de elementos parecidos
+  - id: e
+    texto: Generar texto nuevo a partir de una instrucción
+  correctas:
+  - - '1'
+    - d
+  - - '2'
+    - c
+  - - '3'
+    - a
+  - - '4'
+    - b
+  explicacion: 'k-means agrupa (no supervisado); k-NN clasifica o predice con etiquetas (supervisado); Random Cut Forest detecta anomalías; PCA reduce dimensiones. Pista: la «k» de k-means y de k-NN engaña; solo k-NN usa etiquetas.'
+  distractores:
+    e: Generar texto es tarea de un modelo fundacional (IA generativa), no de ninguno de estos algoritmos de ML clásico.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+- id: R1-047
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Qué arquitectura de red neuronal se asocia sobre todo con el análisis de imágenes?
+  opciones:
+  - id: a
+    texto: Red neuronal recurrente (RNN)
+  - id: b
+    texto: Transformer
+  - id: c
+    texto: k-means
+  - id: d
+    texto: Red neuronal convolucional (CNN)
+  correctas:
+  - d
+  explicacion: 'Las redes convolucionales extraen de las imágenes las características relevantes y son la arquitectura típica para clasificar imágenes o detectar objetos. Pista: la R de RNN es de «recurrente» (secuencias); la imagen es cosa de la CNN.'
+  distractores:
+    a: Las RNN procesan secuencias (palabras, series temporales), no imágenes.
+    b: El transformer procesa secuencias con autoatención y es la base de los LLM; su caso típico es el lenguaje.
+    c: k-means es un algoritmo de agrupamiento de ML clásico, no una red neuronal.
+  referencia: https://aws.amazon.com/what-is/neural-network/
+- id: R1-048
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo tiene una tabla de 3.000 clientes con 12 columnas, poco presupuesto de cómputo y la obligación de explicar cada predicción. ¿Qué enfoque encaja mejor?
+  opciones:
+  - id: a
+    texto: ML clásico
+  - id: b
+    texto: Aprendizaje profundo con una red de muchas capas
+  - id: c
+    texto: Una red neuronal convolucional
+  - id: d
+    texto: Preentrenar un modelo fundacional propio
+  correctas:
+  - a
+  explicacion: 'El ML clásico maneja bien datos estructurados, necesita menos datos y cómputo y es más fácil de interpretar. El aprendizaje profundo destaca con datos no estructurados y grandes volúmenes, a cambio de más cómputo y menos interpretabilidad. Pista: tabla pequeña + explicar = ML clásico.'
+  distractores:
+    b: El aprendizaje profundo necesita muchos más datos y cómputo y es más difícil de explicar; con 3.000 filas tabulares no compensa.
+    c: Las CNN están pensadas para imágenes, no para una tabla de clientes.
+    d: Preentrenar un modelo fundacional exige volúmenes enormes de datos y cómputo; es lo opuesto a la restricción del enunciado.
+  referencia: https://aws.amazon.com/compare/the-difference-between-machine-learning-and-deep-learning/
+- id: R1-049
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.1
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada actividad con el paso del procesamiento de datos al que pertenece.
+  prompts:
+  - id: '1'
+    texto: Reunir en un lago de datos los pedidos del ERP y las visitas de la web
+  - id: '2'
+    texto: Corregir fechas mal escritas y rellenar los valores ausentes
+  - id: '3'
+    texto: Dibujar histogramas y buscar valores atípicos para entender los datos
+  - id: '4'
+    texto: Crear la variable «días desde la última compra» a partir de las fechas
+  opciones:
+  - id: a
+    texto: Análisis exploratorio de datos (EDA)
+  - id: b
+    texto: Recogida e integración
+  - id: c
+    texto: Ingeniería de características
+  - id: d
+    texto: Preprocesado o preparación
+  - id: e
+    texto: Ajuste de hiperparámetros
+  correctas:
+  - - '1'
+    - b
+  - - '2'
+    - d
+  - - '3'
+    - a
+  - - '4'
+    - c
+  explicacion: 'Recoger reúne los datos de sus fuentes; preparar los limpia y corrige; el EDA los estudia para entenderlos; y la ingeniería de características crea o transforma las variables que usará el modelo. Pista: reunir, limpiar, mirar, transformar.'
+  distractores:
+    e: El ajuste de hiperparámetros pertenece al desarrollo del modelo (configura el entrenamiento), no al procesamiento de datos.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html
+- id: R1-050
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué capacidad de SageMaker AI guarda las características para reutilizarlas y servir las mismas al entrenar y al inferir?
+  opciones:
+  - id: a
+    texto: SageMaker Pipelines
+  - id: b
+    texto: SageMaker Feature Store
+  - id: c
+    texto: SageMaker Data Wrangler
+  - id: d
+    texto: SageMaker Model Registry
+  correctas:
+  - b
+  explicacion: 'Feature Store es el repositorio centralizado de características: el almacén offline guarda el histórico para entrenar y el online, el último valor para inferir en milisegundos. Pista: Feature Store = «almacén de features».'
+  distractores:
+    a: Pipelines automatiza el flujo de ML (datos, entrenamiento, evaluación), pero no guarda ni sirve características.
+    c: Data Wrangler prepara y analiza los datos; no los sirve al modelo durante la inferencia.
+    d: Model Registry versiona y aprueba modelos, no características.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html
+- id: R1-051
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Las operaciones que recibe un modelo de fraude se parecen a las de entrenamiento, pero acierta menos porque los defraudadores han cambiado de táctica. ¿Qué ocurre?
+  opciones:
+  - id: a
+    texto: Deriva de datos
+  - id: b
+    texto: Sobreajuste
+  - id: c
+    texto: Subajuste
+  - id: d
+    texto: Deriva de concepto
+  correctas:
+  - d
+  explicacion: 'En la deriva de concepto cambia la relación entre las entradas y el resultado: datos parecidos ya no significan lo mismo. Para verla hace falta comparar con el resultado real. Pista: datos iguales, significado distinto = concepto.'
+  distractores:
+    a: En la deriva de datos cambian las propiedades de las entradas; aquí las entradas se parecen a las de entrenamiento.
+    b: El sobreajuste se reconoce por la diferencia entre entrenamiento y validación; no explica que el mismo modelo empeore tras un cambio en el mundo real.
+    c: El subajuste es un modelo que falla incluso con los datos de entrenamiento; aquí funcionaba bien hasta que cambió el comportamiento.
+  referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/monitoring.html
+- id: R1-052
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Cómo se llama la técnica de SageMaker AI en la que un modelo nuevo recibe una copia de las peticiones reales, pero al cliente solo le llegan las respuestas del modelo en producción?
+  opciones:
+  - id: a
+    texto: Prueba en sombra
+  - id: b
+    texto: Despliegue canario
+  - id: c
+    texto: Prueba A/B
+  - id: d
+    texto: Despliegue azul/verde todo a la vez
+  correctas:
+  - a
+  explicacion: 'En una prueba en sombra el modelo nuevo trabaja con tráfico real, pero nadie recibe sus respuestas: se comparan sin afectar a los usuarios. Pista: la sombra acompaña, pero no habla.'
+  distractores:
+    b: En un despliegue canario una parte pequeña del tráfico sí recibe las respuestas del modelo nuevo.
+    c: En una prueba A/B parte de los usuarios recibe las respuestas del modelo nuevo.
+    d: Todo a la vez pasa todo el tráfico al modelo nuevo, que responde a todos los usuarios.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
+- id: R1-053
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.6
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Al comparar dos modelos de regresión, ¿qué resultado indica el mejor modelo?
+  opciones:
+  - id: a
+    texto: El MSE más alto
+  - id: b
+    texto: El R² más cercano a 1
+  - id: c
+    texto: La mayor exactitud (accuracy)
+  - id: d
+    texto: Un AUC de 0,5
+  correctas:
+  - b
+  explicacion: 'R² indica qué parte de la variación del valor real explica el modelo: cuanto más cerca de 1, mejor. Las métricas de error (MSE, RMSE, MAE) son mejores cuanto más bajas. Pista: errores, abajo; R², arriba.'
+  distractores:
+    a: El MSE es un error; cuanto más alto, peor predice el modelo.
+    c: La exactitud es una métrica de clasificación (aciertos y fallos); en regresión se miden distancias al valor real.
+    d: El AUC es de clasificación, y 0,5 equivale a acertar al azar.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: R1-054
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: matching
+  dificultad: media
+  enunciado: Empareja cada funcionalidad con el servicio de IA de AWS que la ofrece.
+  prompts:
+  - id: '1'
+    texto: Separar en la transcripción lo que dice cada hablante (diarización)
+  - id: '2'
+    texto: Terminología personalizada para que los nombres de marca no se traduzcan
+  - id: '3'
+    texto: Comprobar que hay una persona real ante la cámara (Face Liveness)
+  - id: '4'
+    texto: Intenciones y ranuras de un chatbot
+  opciones:
+  - id: a
+    texto: Amazon Lex
+  - id: b
+    texto: Amazon Translate
+  - id: c
+    texto: Amazon Transcribe
+  - id: d
+    texto: Amazon Rekognition
+  - id: e
+    texto: Amazon Polly
+  - id: f
+    texto: Amazon Comprehend
+  correctas:
+  - - '1'
+    - c
+  - - '2'
+    - b
+  - - '3'
+    - d
+  - - '4'
+    - a
+  explicacion: 'Diarización: Transcribe (voz a texto). Terminología personalizada: Translate. Face Liveness: Rekognition (visión). Intenciones y ranuras: Lex (conversación). Pista: primero el tipo de dato (voz, texto en otro idioma, imagen, diálogo) y luego el servicio.'
+  distractores:
+    e: Polly convierte texto en voz; no transcribe, traduce, analiza imágenes ni gestiona diálogos.
+    f: Comprehend analiza texto ya escrito (entidades, opiniones, datos personales); no ofrece ninguna de estas funcionalidades.
+  referencia: https://docs.aws.amazon.com/transcribe/latest/dg/diarization.html
+- id: R1-055
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Amazon Forecast ya no admite clientes nuevos. ¿A qué servicio remite AWS a un cliente nuevo que quiere prever la demanda de las próximas semanas?
+  opciones:
+  - id: a
+    texto: Amazon Personalize
+  - id: b
+    texto: Amazon Kendra
+  - id: c
+    texto: Amazon SageMaker Canvas
+  - id: d
+    texto: Amazon Comprehend
+  correctas:
+  - c
+  explicacion: 'AWS cerró Amazon Forecast a clientes nuevos y remite a SageMaker Canvas, que hace previsiones de series temporales sin código. Pista: Forecast cerró; Canvas prevé.'
+  distractores:
+    a: Personalize genera recomendaciones para usuarios, no previsiones de demanda.
+    b: Kendra es un servicio de búsqueda, también cerrado a clientes nuevos; no hace previsiones.
+    d: Comprehend analiza texto; no predice valores futuros.
+  referencia: https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html
+- id: R1-056
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: ¿Qué distingue a la automatización robótica de procesos (RPA) de una solución de ML?
+  opciones:
+  - id: a
+    texto: Aprende de los datos históricos para mejorar con el tiempo
+  - id: b
+    texto: Genera contenido nuevo a partir de una instrucción
+  - id: c
+    texto: Da un resultado probabilístico con un grado de confianza
+  - id: d
+    texto: Ejecuta tareas repetitivas siguiendo reglas fijas, sin aprender de los datos
+  correctas:
+  - d
+  explicacion: 'La RPA automatiza tareas repetitivas basadas en reglas, normalmente sobre datos estructurados, y no aprende. Si las reglas se pueden escribir, basta RPA o un script; la IA aporta con datos no estructurados o reglas que no se pueden escribir. Pista: RPA repite; ML aprende.'
+  distractores:
+    a: Aprender de los datos históricos es lo propio del ML, no de la RPA.
+    b: Generar contenido es lo propio de la IA generativa.
+    c: El resultado probabilístico es característico de un modelo de ML; la RPA hace siempre lo mismo con la misma entrada.
+  referencia: https://aws.amazon.com/what-is/intelligent-automation/
+- id: R1-057
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un hospital quiere que el sistema marque exactamente qué píxeles de una resonancia pertenecen a un tumor. ¿Qué tarea de visión por computador es?
+  opciones:
+  - id: a
+    texto: Clasificación de imágenes
+  - id: b
+    texto: Segmentación
+  - id: c
+    texto: Detección de objetos
+  - id: d
+    texto: Reconocimiento óptico de caracteres (OCR)
+  correctas:
+  - b
+  explicacion: 'La segmentación asigna una clase a cada píxel, así que delimita el contorno exacto. Pista: clasificación = una etiqueta; detección = un recuadro; segmentación = píxel a píxel.'
+  distractores:
+    a: La clasificación da una etiqueta a la imagen completa («hay tumor»), sin decir dónde.
+    c: La detección localiza el objeto con un recuadro, no con su contorno exacto.
+    d: El OCR extrae texto de imágenes o documentos; no delimita objetos.
+  referencia: https://aws.amazon.com/what-is/computer-vision/
+- id: R1-058
+  dominio: 1
+  tarea: '1.1'
+  objetivo: 1.1.4
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: ¿Cómo se clasifica un fichero JSON con campos con nombre y anidados, pero sin un esquema tabular fijo?
+  opciones:
+  - id: a
+    texto: Datos semiestructurados
+  - id: b
+    texto: Datos estructurados
+  - id: c
+    texto: Datos no estructurados
+  - id: d
+    texto: Serie temporal
+  correctas:
+  - a
+  explicacion: 'Los datos semiestructurados no siguen un esquema tabular rígido, pero tienen elementos que se describen a sí mismos (etiquetas, metadatos, anidamiento), como JSON, XML o HTML. Pista: «semi» = tiene etiquetas, pero no tabla.'
+  distractores:
+    b: Los estructurados siguen un formato predefinido de filas y columnas, como una tabla.
+    c: Los no estructurados no siguen ninguna regla predeterminada, como el audio, el vídeo o el texto libre.
+    d: Una serie temporal es un conjunto de datos ordenados en el tiempo; el formato JSON no lo convierte en una.
+  referencia: https://aws.amazon.com/what-is/structured-data/
