@@ -42,8 +42,9 @@
   <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="simulacro">
     <h2 style="margin-top:0">Simulacro</h2>
     <p>{{ sim_n }} preguntas en {{ sim_min }} minutos, con el tiempo medido en el servidor. Sin explicaciones hasta terminar, salvo en modo estudio.</p>
+    {% if sim_rotatorio %}<p class="suave">Cada intento saca {{ sim_n }} preguntas al azar de un banco de {{ n_sim }}, con el reparto oficial por dominio y tipo, y da prioridad a las que no te salieron en el intento anterior.</p>{% endif %}
     {% if sim_ok %}<label class="opcion"><input type="checkbox" name="estudio" value="1"><span>Modo estudio: ver la corrección y la explicación al responder cada pregunta</span></label>
-    <button>Empezar simulacro</button>{% else %}<p class="suave">No disponible: hay {{ n_sim }} de {{ sim_n }} preguntas.</p>{% endif %}</form>
+    <button>Empezar simulacro</button>{% elif sim_error %}<p class="suave">No disponible: {{ sim_error }}.</p>{% else %}<p class="suave">No disponible: hay {{ n_sim }} de {{ sim_n }} preguntas.</p>{% endif %}</form>
 </div>
 {% endif %}
 {% if libros %}
