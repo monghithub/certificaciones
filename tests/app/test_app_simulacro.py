@@ -3,7 +3,7 @@ from collections import Counter
 from datetime import timedelta
 
 import pytest
-from conftest import banco_simulacro, crear_usuario, entrar, escribir, post, sustituir
+from conftest import banco_simulacro, crear_usuario, entrar, escribir, post, sustituir, token
 from test_app_quiz import iniciar, preguntas, responder
 
 from app.models import Intento, ahora
@@ -153,3 +153,45 @@ def test_un_simulacro_terminado_no_se_reutiliza(app_rot):
     a = iniciar(c, modo="simulacro")
     post(c, f"/c/aif-c01/tests/{a}/finalizar")
     assert iniciar(c, modo="simulacro") != a
+
+
+def test_doble_envio_con_otro_modo_estudio_crea_otro_intento(app_rot):
+    crear_usuario(app_rot)
+    c = entrar(app_rot)
+    a = iniciar(c, modo="simulacro")
+    b = iniciar(c, modo="simulacro", estudio="1")
+    assert b != a and iniciar(c, modo="simulacro", estudio="1") == b
+    with app_rot.state.sesiones() as db:
+        assert [i.filtro for i in db.query(Intento).order_by(Intento.id)] == ["", "estudio"]
+
+
+def test_dos_envios_simultaneos_crean_un_solo_intento(app_rot, monkeypatch):
+    import threading
+    import time
+
+    from app.routes import quiz
+
+    crear_usuario(app_rot)
+    clientes = [entrar(app_rot), entrar(app_rot)]
+    extraer = quiz.simulacro.extraer
+
+    def lento(*args, **kwargs):  # ensancha la ventana de carrera
+        time.sleep(0.3)
+        return extraer(*args, **kwargs)
+
+    monkeypatch.setattr(quiz.simulacro, "extraer", lento)
+    salida, barrera = [], threading.Barrier(2)
+
+    def enviar(c):
+        datos = {"modo": "simulacro", "csrf": token(c, "/c/aif-c01/tests")}
+        barrera.wait()
+        salida.append(c.post("/c/aif-c01/tests/iniciar", data=datos, follow_redirects=False).headers["location"])
+
+    hilos = [threading.Thread(target=enviar, args=(c,)) for c in clientes]
+    for h in hilos:
+        h.start()
+    for h in hilos:
+        h.join()
+    with app_rot.state.sesiones() as db:
+        assert db.query(Intento).count() == 1
+    assert len(set(salida)) == 1
