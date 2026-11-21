@@ -1704,3 +1704,456 @@
     b: Antes de consultar el pedido no hay ningún importe que revisar.
     d: Una instrucción depende de que el modelo la siga; no es una revisión humana ni un control independiente.
   referencia: https://aws.amazon.com/what-is/ai-agents/
+- id: S-070
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El comité de dirección de una cadena de supermercados aprueba un presupuesto para «aplicar machine learning y mejorar las tiendas». Nadie ha concretado qué problema se quiere resolver ni con qué indicador se medirá el resultado, pero el equipo técnico ya tiene acceso a diez años de tiques de venta. ¿Qué debe hacer antes de nada?
+  opciones:
+  - id: a
+    texto: Entrenar un modelo de agrupamiento con el histórico de tiques para descubrir oportunidades
+  - id: b
+    texto: Concretar la pregunta de negocio y un criterio de éxito medible, y valorar si ML es la mejor vía
+  - id: c
+    texto: Probar varios modelos fundacionales de Amazon Bedrock con una muestra de los tiques
+  - id: d
+    texto: Etiquetar una parte del histórico para disponer de datos supervisados
+  correctas:
+  - b
+  explicacion: Según el Machine Learning Lens, identificar el objetivo de negocio es la fase más importante del ciclo de vida de ML. Sin un problema concreto y unos criterios de éxito medibles no se puede saber si el modelo aporta valor, y parte de esa fase es decidir si ML es la opción adecuada o si basta con otra solución. Tener muchos datos no convierte el proyecto en un buen caso de ML.
+  distractores:
+    a: Lanzar un modelo sin pregunta de negocio produce resultados que nadie sabe valorar; primero hay que decidir qué se quiere conseguir.
+    c: Elegir tecnología antes de definir el problema invierte el orden; puede que el objetivo ni siquiera necesite ML.
+    d: Etiquetar datos tiene sentido cuando ya se sabe qué se quiere predecir; aquí todavía no hay una variable objetivo.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/business-goal-identification.html
+- id: S-071
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una plataforma de cursos en línea guarda tres años de registros de uso de sus alumnos (horas de conexión, vídeos vistos, ejercicios entregados), sin ninguna etiqueta. Quiere descubrir perfiles de alumnos con hábitos parecidos para adaptar sus campañas y, además, localizar las sesiones que se salen mucho de lo habitual porque podrían ser cuentas compartidas. ¿Qué DOS técnicas encajan? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Clasificación multiclase de los alumnos
+  - id: b
+    texto: Regresión sobre las horas de conexión
+  - id: c
+    texto: Agrupamiento (clustering)
+  - id: d
+    texto: Detección de anomalías
+  - id: e
+    texto: Previsión de series temporales
+  correctas:
+  - c
+  - d
+  explicacion: 'Sin etiquetas, el problema es no supervisado. El agrupamiento forma grupos de elementos lo más parecidos entre sí, que aquí son los perfiles de alumnos, y la detección de anomalías identifica las observaciones que se desvían mucho del resto, como las sesiones sospechosas.'
+  distractores:
+    a: La clasificación es supervisada y necesita ejemplos etiquetados con la clase correcta, que la plataforma no tiene.
+    b: La regresión predice un valor numérico a partir de ejemplos con ese valor conocido; no forma grupos ni señala casos raros.
+    e: La previsión estima valores futuros de una serie; el objetivo aquí no es anticipar la evolución, sino agrupar y detectar casos atípicos.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+- id: S-072
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una correduría de seguros quiere un piloto de asistente de redacción en dos semanas. No tiene equipo de infraestructura, no sabe cuánto tráfico tendrá y no necesita modificar los pesos del modelo; le basta con buenas instrucciones. ¿De dónde debe obtener el modelo?
+  opciones:
+  - id: a
+    texto: De un proveedor de modelos fundacionales a través de la API de Amazon Bedrock
+  - id: b
+    texto: De SageMaker JumpStart, desplegando un modelo abierto en un endpoint propio
+  - id: c
+    texto: De un entrenamiento propio en SageMaker AI con sus pólizas históricas
+  - id: d
+    texto: De un modelo abierto autoalojado en instancias de Amazon EC2 con GPU
+  correctas:
+  - a
+  explicacion: Amazon Bedrock es un servicio totalmente gestionado y serverless que da acceso por API a modelos fundacionales de varios proveedores, así que no hay infraestructura que gestionar y se paga por uso. Con plazo corto, tráfico desconocido y sin necesidad de tocar los pesos, es la fuente con menos esfuerzo.
+  distractores:
+    b: JumpStart ofrece modelos preentrenados de código abierto que se pueden ajustar, pero desplegarlos supone elegir y mantener un endpoint, justo lo que la correduría no puede gestionar.
+    c: Entrenar un modelo propio exige datos, tiempo y experiencia que no caben en dos semanas, y no hace falta si basta con instrucciones.
+    d: Autoalojar el modelo da el máximo control, pero obliga a gestionar instancias, escalado y parches sin equipo de infraestructura.
+  referencia: https://aws.amazon.com/bedrock/faqs/
+- id: S-073
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una aseguradora reentrena a mano su modelo de tarificación cada trimestre, con scripts que solo entiende una persona, y nadie sabe qué versión aprobó el comité de riesgos ni cuál está en producción. Quiere que el preprocesamiento, el entrenamiento y la evaluación se ejecuten siempre igual y llevar un catálogo de versiones con su estado de aprobación. ¿Qué DOS funcionalidades de Amazon SageMaker AI usa? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: SageMaker Pipelines
+  - id: b
+    texto: SageMaker Feature Store
+  - id: c
+    texto: SageMaker Canvas
+  - id: d
+    texto: SageMaker Data Wrangler
+  - id: e
+    texto: SageMaker Model Registry
+  correctas:
+  - a
+  - e
+  explicacion: SageMaker Pipelines orquesta y automatiza el flujo de ML (procesamiento, entrenamiento, evaluación y despliegue) para que cada ejecución sea repetible. SageMaker Model Registry cataloga los modelos, gestiona sus versiones y su estado de aprobación, y se integra con Pipelines para registrar una versión en cada ejecución.
+  distractores:
+    b: Feature Store guarda y comparte características para entrenar e inferir; no automatiza el flujo ni gestiona aprobaciones de modelos.
+    c: Canvas permite crear modelos sin código; no resuelve la repetibilidad del reentrenamiento ni el catálogo de versiones aprobadas.
+    d: Data Wrangler sirve para analizar y preparar datos para ML; cubre una etapa, no la automatización completa ni el registro de versiones.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+- id: S-074
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.5
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Una cadena de televisión regional quiere mostrar subtítulos generados automáticamente en sus retransmisiones deportivas en directo, con apenas unos segundos de retraso, sin entrenar modelos propios. ¿Qué opción usa?
+  opciones:
+  - id: a
+    texto: Trabajos por lotes de Amazon Transcribe sobre las grabaciones de cada partido
+  - id: b
+    texto: Amazon Polly con voces neuronales
+  - id: c
+    texto: Transcripción en streaming de Amazon Transcribe
+  - id: d
+    texto: Amazon Comprehend para detectar las entidades de cada frase
+  correctas:
+  - c
+  explicacion: La transcripción en streaming de Amazon Transcribe recibe el audio en tiempo real y devuelve la transcripción también en tiempo real; la documentación cita los subtítulos en directo de eventos deportivos como caso de uso habitual.
+  distractores:
+    a: Los trabajos por lotes procesan archivos ya grabados, así que los subtítulos llegarían después del partido y no durante la retransmisión.
+    b: Polly convierte texto en voz, que es la dirección contraria a la que se necesita.
+    d: Comprehend analiza texto que ya existe; no convierte el audio de la retransmisión en texto.
+  referencia: https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html
+- id: S-075
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.2
+  tipo: multiple_response
+  dificultad: media
+  enunciado: 'Una gestoría prueba un asistente generativo para dudas fiscales y detecta dos problemas: al repetir exactamente la misma consulta, unas veces recibe una respuesta y otras una distinta, y en una de ellas el asistente cita con total seguridad un artículo de una ley que no existe. ¿Qué DOS desventajas de la IA generativa describen esos problemas? (Elige DOS.)'
+  opciones:
+  - id: a
+    texto: Falta de interpretabilidad
+  - id: b
+    texto: No determinismo
+  - id: c
+    texto: Sesgo en los datos de entrenamiento
+  - id: d
+    texto: Latencia elevada
+  - id: e
+    texto: Alucinación
+  correctas:
+  - b
+  - e
+  explicacion: 'Que la misma entrada produzca salidas distintas es el no determinismo de los modelos generativos. Inventar con aplomo un dato falso, como un artículo inexistente, es una alucinación. Ambas son desventajas que la guía del examen cita expresamente.'
+  distractores:
+    a: La interpretabilidad se refiere a no poder explicar por qué el modelo produce una salida; el problema descrito no es de explicación, sino de variación y de datos inventados.
+    c: El sesgo trata de forma distinta a grupos o temas; nada en los síntomas indica un trato desigual.
+    d: La latencia es el tiempo de respuesta, y la gestoría no se queja de tiempos sino del contenido.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+- id: S-076
+  dominio: 2
+  tarea: '2.2'
+  objetivo: 2.2.4
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una tienda online de deportes añade un asistente generativo que recomienda productos según lo que cuenta cada cliente. Las ventas ya se cierran bien, así que al consejo no le interesa cuántas visitas acaban en compra, sino si cada cliente gasta más, tanto en el periodo actual como a lo largo de toda su relación con la tienda. ¿Qué DOS métricas debe comparar entre quienes usan el asistente y quienes no? (Elige DOS.)
+  opciones:
+  - id: a
+    texto: Ingreso medio por usuario
+  - id: b
+    texto: Tasa de conversión
+  - id: c
+    texto: Tokens de salida por respuesta
+  - id: d
+    texto: Valor del ciclo de vida del cliente
+  - id: e
+    texto: Latencia hasta el primer token
+  correctas:
+  - a
+  - d
+  explicacion: El ingreso medio por usuario (ARPU) mide cuánto deja cada cliente en un periodo, y el valor del ciclo de vida del cliente (CLV) estima cuánto aportará a lo largo de toda la relación. Comparadas entre quienes usan el asistente y quienes no, responden a lo que pregunta el consejo. Ambas son métricas de negocio que la guía cita para las aplicaciones de IA generativa.
+  distractores:
+    b: La tasa de conversión mide qué parte de las visitas termina en compra, justo lo que el consejo dice que no le interesa; no indica cuánto gasta cada cliente.
+    c: Los tokens de salida influyen en el coste por respuesta, pero no dicen nada de lo que gastan los clientes.
+    e: La latencia afecta a la experiencia, pero es una métrica técnica y no mide el gasto de los clientes.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+- id: S-077
+  dominio: 2
+  tarea: '2.1'
+  objetivo: 2.1.1
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una ingeniería carga en Amazon Bedrock Knowledge Bases sus normas técnicas, con apartados largos. Con fragmentos pequeños, la búsqueda encuentra el párrafo exacto, pero el modelo responde sin el contexto del apartado; con fragmentos grandes, la búsqueda pierde precisión. ¿Qué estrategia de fragmentación resuelve las dos cosas?
+  opciones:
+  - id: a
+    texto: Fragmentación por defecto, de unos 300 tokens
+  - id: b
+    texto: Fragmentación de tamaño fijo con más solapamiento
+  - id: c
+    texto: Sin fragmentación, con cada norma como un único fragmento
+  - id: d
+    texto: Fragmentación jerárquica
+  correctas:
+  - d
+  explicacion: 'La fragmentación jerárquica crea fragmentos hijos pequeños dentro de fragmentos padres más amplios. La búsqueda se hace sobre los hijos, que son más precisos, y en la recuperación se sustituyen por su padre para dar al modelo el contexto completo. Es justo el equilibrio que describe la documentación: embeddings pequeños para precisión y contexto amplio para la respuesta.'
+  distractores:
+    a: La fragmentación por defecto produce fragmentos pequeños de tamaño parecido; mantendría el problema de responder sin el contexto del apartado.
+    b: El solapamiento evita cortar ideas entre fragmentos consecutivos, pero cada fragmento sigue teniendo un solo tamaño, así que no combina precisión y contexto amplio.
+    c: Un fragmento por norma empeora aún más la precisión de la búsqueda y, con documentos largos, mete mucho texto irrelevante en el contexto.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html
+- id: S-078
+  dominio: 3
+  tarea: '3.4'
+  objetivo: 3.4.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una compañía de telefonía lanzó un asistente con un objetivo aprobado por la dirección, que los clientes cambien de tarifa o den de alta una línea sin pasar por un agente. Tras tres meses, las encuestas dan un 4,6 sobre 5, pero las llamadas al centro de atención por esos trámites apenas han bajado. ¿Qué métrica muestra si el asistente cumple su objetivo?
+  opciones:
+  - id: a
+    texto: La satisfacción media de las encuestas
+  - id: b
+    texto: El número de conversaciones iniciadas al mes
+  - id: c
+    texto: La puntuación BERTScore frente a respuestas de referencia
+  - id: d
+    texto: El porcentaje de trámites que terminan sin intervención humana
+  correctas:
+  - d
+  explicacion: El objetivo es que los clientes completen el trámite solos, así que la métrica alineada es la tasa de tareas completadas. Una satisfacción alta puede convivir con trámites que se abandonan y acaban en una llamada, como indica que estas apenas bajen.
+  distractores:
+    a: La satisfacción es una métrica de alineamiento útil, pero aquí es alta y no refleja el objetivo; los trámites siguen llegando al centro de atención.
+    b: Contar conversaciones mide el uso, no si el trámite se completa.
+    c: BERTScore es una métrica técnica de similitud semántica del texto; no mide el resultado de negocio.
+  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+- id: S-079
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una aseguradora eligió en Amazon Bedrock el modelo que mejor resumía sus partes en las pruebas y lo usa en producción. Seis meses después decide ajustarlo con 5 000 resúmenes revisados por su equipo y descubre que ese modelo no admite el ajuste fino en Bedrock. ¿Qué criterio de selección no tuvo en cuenta?
+  opciones:
+  - id: a
+    texto: El tamaño de la ventana de contexto
+  - id: b
+    texto: Las opciones de personalización del modelo
+  - id: c
+    texto: El soporte de caché de prompts
+  - id: d
+    texto: La latencia de la primera respuesta
+  correctas:
+  - b
+  explicacion: La personalización es un criterio de selección de modelos fundacionales. En Bedrock solo algunos modelos, y en algunas Regiones, admiten el ajuste fino, así que si se prevé adaptarlo con datos propios hay que comprobarlo antes de elegir.
+  distractores:
+    a: La ventana de contexto limita cuánto texto cabe en una petición; no determina si el modelo se puede ajustar.
+    c: La caché de prompts reduce coste y latencia con prefijos repetidos; no tiene relación con el ajuste fino.
+    d: La latencia importa en aplicaciones interactivas, pero no explica que el modelo no se pueda ajustar.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-supported.html
+- id: S-080
+  dominio: 3
+  tarea: '3.4'
+  objetivo: 3.4.1
+  tipo: multiple_response
+  dificultad: media
+  enunciado: 'Antes de elegir entre tres modelos de Amazon Bedrock para responder consultas sobre pólizas, una aseguradora quiere dos cosas: medir de forma repetible la exactitud con 500 preguntas propias que ya tienen respuesta de referencia, y que sus tramitadores valoren si el tono es adecuado para clientes enfadados. ¿Qué DOS enfoques de evaluación usa? (Elige DOS.)'
+  opciones:
+  - id: a
+    texto: Una evaluación programática solo con un conjunto integrado de preguntas generales
+  - id: b
+    texto: Una evaluación automática con su propio conjunto de preguntas y respuestas de referencia
+  - id: c
+    texto: La comprobación de grounding contextual de Amazon Bedrock Guardrails
+  - id: d
+    texto: Una evaluación en la que su propio equipo humano puntúa las respuestas
+  - id: e
+    texto: Las métricas de latencia de cada modelo en Amazon CloudWatch
+  correctas:
+  - b
+  - d
+  explicacion: Las evaluaciones automáticas de Amazon Bedrock admiten un conjunto de prompts propio adaptado al caso de uso, lo que da una medida repetible de la exactitud frente a las respuestas de referencia. Para un criterio subjetivo como el tono, Bedrock permite evaluaciones con trabajadores humanos, que pueden ser empleados de la empresa o expertos del sector.
+  distractores:
+    a: Los conjuntos integrados sirven para tareas generales; no contienen preguntas sobre las pólizas de la aseguradora.
+    c: La comprobación de grounding filtra respuestas en producción que no se basan en una fuente; no compara modelos ni valora el tono.
+    e: La latencia es una métrica de rendimiento técnico; no dice nada de la exactitud ni del tono.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html
+- id: S-081
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un archivo histórico quiere búsqueda semántica sobre los embeddings de sus 2 000 millones de documentos digitalizados. Los investigadores consultan unas pocas veces al día y aceptan respuestas en menos de un segundo. La prioridad es el menor coste de almacenamiento, sin aprovisionar infraestructura. ¿Qué almacén vectorial encaja?
+  opciones:
+  - id: a
+    texto: Amazon ElastiCache con búsqueda vectorial en memoria
+  - id: b
+    texto: Amazon Aurora PostgreSQL con pgvector
+  - id: c
+    texto: Amazon S3 Vectors
+  - id: d
+    texto: Amazon OpenSearch Serverless
+  correctas:
+  - c
+  explicacion: Amazon S3 Vectors ofrece almacenamiento vectorial optimizado en coste, sin aprovisionar infraestructura y pagando por uso. Está pensado para cargas con consultas poco frecuentes, con respuesta por debajo del segundo, y escala a miles de millones de vectores.
+  distractores:
+    a: La búsqueda vectorial en memoria busca latencias mínimas en tiempo real; mantener en memoria un archivo enorme que se consulta poco va en contra del objetivo de coste.
+    b: pgvector encaja cuando los datos ya viven en PostgreSQL y se quieren combinar con SQL; exige gestionar una base de datos y no es la opción más barata para este volumen.
+    d: OpenSearch Serverless está pensado para búsquedas frecuentes con baja latencia; la propia documentación de S3 Vectors lo propone cuando se necesita un alto número de consultas por segundo, que aquí no hay.
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html
+- id: S-082
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_response
+  dificultad: alta
+  enunciado: 'Un servicio público usa un modelo que puntúa las solicitudes de ayudas al alquiler. Su exactitud global es del 92 %, pero varias asociaciones denuncian que perjudica a los solicitantes mayores de 65 años. El equipo responde que el modelo no usa la edad. ¿Qué DOS comprobaciones ayudan a detectar si hay sesgo? (Elige DOS.)'
+  opciones:
+  - id: a
+    texto: Comparar la exactitud, la precisión y el recall del modelo en cada grupo de edad
+  - id: b
+    texto: Dar el caso por cerrado, porque la edad no es una variable del modelo
+  - id: c
+    texto: Puntuar pares de solicitudes iguales salvo en datos ligados a la edad y comparar los resultados
+  - id: d
+    texto: Repetir la medición de la exactitud global con un conjunto de prueba mayor
+  - id: e
+    texto: Sustituir el modelo por otro con más parámetros
+  correctas:
+  - a
+  - c
+  explicacion: 'Una exactitud global alta puede ocultar diferencias entre grupos. El Responsible AI Lens recomienda medir el rendimiento por grupos demográficos con métricas como la exactitud, la precisión y el recall, y probar pares de entradas que solo difieren en atributos demográficos para ver si la salida cambia. Que el modelo no use la edad no basta: otras variables pueden actuar como sustitutas.'
+  distractores:
+    b: Quitar o no usar un atributo no elimina el sesgo si otras variables relacionadas con él (como la antigüedad o el tipo de ingresos) siguen en el modelo.
+    d: Una medición global más precisa sigue sin separar por grupos, que es donde está la queja.
+    e: Un modelo más grande no detecta ni corrige por sí mismo un trato desigual entre grupos.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html
+- id: S-083
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.2
+  tipo: multiple_response
+  dificultad: media
+  enunciado: 'Un banco usa dos modelos: uno de riesgo de crédito que ha entrenado en SageMaker AI y Amazon Nova 2 Lite en Bedrock para resumir expedientes. El supervisor le pide, para el primero, un documento con su uso previsto, su calificación de riesgo, los detalles del entrenamiento y los resultados de evaluación; para el segundo, conocer los usos previstos y las limitaciones que declara AWS. ¿Qué DOS recursos usa? (Elige DOS.)'
+  opciones:
+  - id: a
+    texto: Los registros de AWS CloudTrail de las llamadas a cada modelo
+  - id: b
+    texto: Un guardrail de Amazon Bedrock con temas denegados
+  - id: c
+    texto: Las métricas de rendimiento de cada modelo en Amazon CloudWatch
+  - id: d
+    texto: Amazon SageMaker Model Cards
+  - id: e
+    texto: Las AI Service Cards de AWS
+  correctas:
+  - d
+  - e
+  explicacion: SageMaker Model Cards documenta en un solo sitio el uso previsto y la calificación de riesgo de un modelo propio, sus detalles de entrenamiento y sus resultados de evaluación, y se puede exportar para compartirla. Las AI Service Cards de AWS reúnen, para servicios y modelos de AWS como Amazon Nova 2 Lite, los usos previstos y las limitaciones, las decisiones de diseño de IA responsable y las buenas prácticas de rendimiento.
+  distractores:
+    a: CloudTrail registra quién llamó a qué API y cuándo; sirve para auditar el uso, no para documentar el modelo.
+    b: Un guardrail filtra entradas y respuestas; no aporta información sobre el uso previsto ni las limitaciones de un modelo.
+    c: CloudWatch muestra métricas operativas como la latencia; no documenta el entrenamiento ni los usos previstos.
+  referencia: https://aws.amazon.com/ai/responsible-ai/resources/
+- id: S-084
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: El asistente interno de un fabricante, en Amazon Bedrock, no debe mencionar los nombres en clave de 40 proyectos que aún no se han anunciado. Cada nombre es una sola palabra que se escribe siempre igual. La empresa quiere bloquearlos en las preguntas y en las respuestas con el MENOR coste. ¿Qué configuración de Amazon Bedrock Guardrails usa?
+  opciones:
+  - id: a
+    texto: Un tema denegado que describa los proyectos no anunciados
+  - id: b
+    texto: Los filtros de contenido con la categoría de conducta indebida en intensidad alta
+  - id: c
+    texto: Un filtro de información sensible con los tipos de datos personales predefinidos
+  - id: d
+    texto: Un filtro de palabras con la lista de los nombres en clave
+  correctas:
+  - d
+  explicacion: El filtro de palabras personalizado bloquea palabras y frases exactas (de hasta tres palabras) en las entradas y en las respuestas, y en la página de precios de Bedrock figura como gratuito. Para una lista cerrada de términos que se escriben siempre igual es la opción más precisa y la más barata.
+  distractores:
+    a: Un tema denegado detecta un asunto descrito en lenguaje natural y se cobra por unidad de texto; para términos exactos sale más caro sin aportar nada.
+    b: Los filtros de contenido detectan categorías de contenido dañino, como el odio o la conducta indebida; un nombre de proyecto no pertenece a ninguna.
+    c: Los tipos predefinidos del filtro de información sensible detectan datos personales, como teléfonos o correos, no nombres de proyectos, y se cobran por unidad de texto.
+  referencia: https://aws.amazon.com/bedrock/pricing/
+- id: S-085
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una mutua construye su propio chatbot de atención con un modelo fundacional de terceros que invoca por la API de Amazon Bedrock, sin ajustarlo, y le aporta sus condiciones de póliza mediante RAG. Un miembro del comité de IA sostiene que, al añadir datos propios, el caso ya es de «modelo ajustado». Según la Generative AI Security Scoping Matrix, ¿en qué ámbito está?
+  opciones:
+  - id: a
+    texto: Ámbito 2, aplicación empresarial
+  - id: b
+    texto: Ámbito 3, modelo preentrenado
+  - id: c
+    texto: Ámbito 4, modelo ajustado
+  - id: d
+    texto: Ámbito 5, modelo entrenado por la propia empresa
+  correctas:
+  - b
+  explicacion: El ámbito 3 corresponde a una aplicación propia construida sobre un modelo fundacional existente de terceros integrado por API. La propia matriz pone como ejemplo un chatbot de atención que incorpora datos propios con RAG y usa un modelo de Claude a través de Amazon Bedrock. Aportar contexto con RAG no cambia los pesos del modelo, así que no lo convierte en un modelo ajustado.
+  distractores:
+    a: El ámbito 2 es una aplicación empresarial de un tercero con funciones de IA generativa integradas; aquí la aplicación la construye la mutua.
+    c: El ámbito 4 exige ajustar un modelo existente con datos propios para crear un modelo nuevo; RAG aporta datos en la inferencia sin modificar el modelo.
+    d: El ámbito 5 es entrenar un modelo desde cero con datos propios, algo que la mutua no hace.
+  referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
+- id: S-086
+  dominio: 5
+  tarea: '5.1'
+  objetivo: 5.1.1
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un agente de soporte en Amazon Bedrock solo debe consultar el estado de los pedidos. Por comodidad, su rol de ejecución tiene permisos de lectura y escritura sobre toda la base de datos de pedidos. En una prueba, un mensaje manipulado consigue que el agente cancele pedidos. ¿Qué medida limita MÁS el daño que puede causar el agente?
+  opciones:
+  - id: a
+    texto: Un rol de mínimo privilegio y confirmación del usuario antes de cada acción con efectos
+  - id: b
+    texto: Añadir a las instrucciones del agente que tiene prohibido cancelar pedidos
+  - id: c
+    texto: Registrar todas sus llamadas con AWS CloudTrail para revisarlas después
+  - id: d
+    texto: Cambiar a un modelo fundacional más grande, que se deje manipular menos
+  correctas:
+  - a
+  explicacion: 'El Generative AI Lens trata este riesgo como agencia excesiva y recomienda roles de mínimo privilegio para los agentes, limitados a las acciones y los ARN de recursos que necesitan, límites de permisos y la confirmación del usuario antes de actuar. Así, aunque una manipulación engañe al modelo, el agente no tiene permiso para cancelar.'
+  distractores:
+    b: Las instrucciones guían al modelo, pero un mensaje manipulado puede saltárselas; el permiso de escritura seguiría ahí.
+    c: CloudTrail permite saber después qué pasó, pero no impide que el agente cancele pedidos.
+    d: Ningún tamaño de modelo elimina la manipulación; el control efectivo está en los permisos del agente.
+  referencia: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensec05-bp01.html
+- id: S-087
+  dominio: 5
+  tarea: '5.2'
+  objetivo: 5.2.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: El equipo de operaciones de un asistente en Amazon Bedrock quiere recibir un aviso cuando aumenten las peticiones limitadas (throttling) o el tiempo de respuesta del modelo, sin guardar el texto de las conversaciones. ¿Qué usa?
+  opciones:
+  - id: a
+    texto: El registro de invocaciones de modelos en Amazon S3
+  - id: b
+    texto: AWS CloudTrail con los eventos de administración de Bedrock
+  - id: c
+    texto: Reglas de AWS Config sobre los recursos de Bedrock
+  - id: d
+    texto: Las métricas de Bedrock en Amazon CloudWatch con alarmas
+  correctas:
+  - d
+  explicacion: Amazon Bedrock publica en CloudWatch métricas de ejecución como InvocationThrottles e InvocationLatency, entre otras. Sobre ellas se crean alarmas que avisan cuando superan un umbral, sin necesidad de guardar el contenido de las peticiones.
+  distractores:
+    a: El registro de invocaciones guarda las peticiones y las respuestas completas, justo lo que el equipo no quiere almacenar, y no genera avisos por sí mismo.
+    b: CloudTrail registra quién llamó a qué API; no es la herramienta para seguir la latencia ni avisar de los límites de capacidad.
+    c: AWS Config evalúa si la configuración de los recursos cumple unas reglas; no mide el tráfico ni la latencia del modelo.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html

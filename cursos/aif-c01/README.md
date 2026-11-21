@@ -2,7 +2,7 @@
 
 Curso en español de España para preparar el examen **AWS Certified AI Practitioner (AIF-C01)**. Está pensado para perfiles junior con conocimientos básicos de programación y poca experiencia en AWS, y lo revisa un arquitecto de software sénior.
 
-> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro de 65 preguntas inéditas; [chuleta](chuleta.md) y [glosario](glosario.md)), más 355 preguntas de repaso de conocimientos en los módulos 00 a 05, con al menos 4 por objetivo. Queda un marcador `PENDIENTE DE VERIFICAR` (preentrenamiento continuado en Bedrock, [issue #11](https://github.com/monghithub/certificaciones/issues/11)) por una contradicción en las propias fuentes de AWS; ninguna pregunta depende de él y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
+> Estado: **Iteración 6** completada: curso completo (módulos 00 a 05 con 401 preguntas: 82 del Dominio 1, 81 del Dominio 2, 94 del Dominio 3, 75 del Dominio 4 y 69 del Dominio 5; simulacro con un banco rotatorio de 83 preguntas inéditas que cubre los 69 objetivos, del que cada intento extrae 65; [chuleta](chuleta.md) y [glosario](glosario.md)), más 355 preguntas de repaso de conocimientos en los módulos 00 a 05, con al menos 4 por objetivo. Queda un marcador `PENDIENTE DE VERIFICAR` (preentrenamiento continuado en Bedrock, [issue #11](https://github.com/monghithub/certificaciones/issues/11)) por una contradicción en las propias fuentes de AWS; ninguna pregunta depende de él y la versión 1.0.0 se sigue en la [issue #16](https://github.com/monghithub/certificaciones/issues/16). Consulta [CHANGELOG.md](../../CHANGELOG.md).
 
 Manifiesto del curso: [curso.yaml](curso.yaml).
 
@@ -40,7 +40,7 @@ Servicios dentro y fuera de alcance: [fuentes/servicios-alcance.md](fuentes/serv
 | [03 Modelos fundacionales](modulos/03-modelos-fundacionales/) | Diseño, prompts, personalización y evaluación | D3 |
 | [04 IA responsable](modulos/04-ia-responsable/) | Sesgo, equidad, transparencia y explicabilidad | D4 |
 | [05 Seguridad y gobierno](modulos/05-seguridad-gobierno/) | Seguridad, cumplimiento y gobierno | D5 |
-| [06 Simulacro](modulos/06-simulacro/) | 65 preguntas según los pesos oficiales | Todos |
+| [06 Simulacro](modulos/06-simulacro/) | Intentos de 65 preguntas según los pesos oficiales, extraídas de un banco rotatorio de 83 | Todos |
 
 Cada módulo contiene `README.md` (teoría), `servicios.md`, `trampas.md`, `preguntas.yaml` y, si aplica, `laboratorio.md`. Además:
 

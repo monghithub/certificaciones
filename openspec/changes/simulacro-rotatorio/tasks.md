@@ -30,10 +30,10 @@
 
 ## 5. Contenido del banco (tras integrar `aif-c01/simulacro-cobertura`)
 
-- [ ] 5.1 Recalcular sobre el banco resultante los objetivos sin cubrir y las preguntas que faltan por dominio y tipo (objetivo: 18/19/22/12/11 por dominio, con al menos 3/4/5/3/3 de respuesta múltiple; unas 17 nuevas)
-- [ ] 5.2 Redactar las preguntas nuevas `S-070` a `S-086`: primero una por cada objetivo sin cubrir y después las de holgura por dominio; inéditas respecto a los bancos de los módulos, con escenario de negocio, distractores explicados y referencia oficial
-- [ ] 5.3 `cursos/aif-c01/curso.yaml`: `banco.minimo_simulacro: 80` y `banco.minimo_simulacro_por_objetivo: 1`
-- [ ] 5.4 `06-simulacro/README.md` (banco, reparto por intento, rotación, cómo repetirlo; deja de decir que el banco es fijo) y `cursos/aif-c01/README.md` y `README.md` (cifras)
+- [x] 5.1 Recalcular sobre el banco resultante los objetivos sin cubrir y las preguntas que faltan por dominio y tipo (objetivo: 18/19/22/12/11 por dominio, con al menos 3/4/5/3/3 de respuesta múltiple; unas 17 nuevas)
+- [x] 5.2 Redactar las preguntas nuevas `S-070` a `S-087` (18; ver journal): primero una por cada objetivo sin cubrir y después las de holgura por dominio; inéditas respecto a los bancos de los módulos, con escenario de negocio, distractores explicados y referencia oficial
+- [x] 5.3 `cursos/aif-c01/curso.yaml`: `banco.minimo_simulacro: 80` y `banco.minimo_simulacro_por_objetivo: 1`
+- [x] 5.4 `06-simulacro/README.md` (banco, reparto por intento, rotación, cómo repetirlo; deja de decir que el banco es fijo) y `cursos/aif-c01/README.md` y `README.md` (cifras)
 - [ ] 5.5 Revisión independiente del contenido nuevo
 
 ## 6. Cierre
