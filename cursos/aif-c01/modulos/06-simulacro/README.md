@@ -23,7 +23,7 @@ Sin la consola, puedes hacerlo en la terminal: `python scripts/quiz.py --curso a
 | D5. Seguridad, cumplimiento y gobierno | 14 % | 9 | [05](../05-seguridad-gobierno/README.md) |
 | **Total** | 100 % | **65** | |
 
-Tipos de pregunta: 51 de opción múltiple y 14 de respuesta múltiple, los dos que enumera la guía del examen. Las preguntas de ordenación y emparejamiento se practican en los bancos de los módulos. Dificultad: 14 baja, 38 media y 13 alta. Cubren las 14 tareas del examen. Los dominios aparecen intercalados, como en el examen.
+Tipos de pregunta: 51 de opción múltiple y 14 de respuesta múltiple, los dos que enumera la guía del examen. Las preguntas de ordenación y emparejamiento se practican en los bancos de los módulos. Dificultad: 12 baja, 39 media y 14 alta. Cubren las 14 tareas del examen y 62 de sus 69 objetivos; los 7 restantes (1.2.2, 1.2.3, 1.3.2, 1.3.4, 3.4.5, 4.1.7 y 4.2.2) se practican en los bancos de los módulos. Los dominios aparecen intercalados, como en el examen.
 
 ## Cómo interpretar el resultado
 
