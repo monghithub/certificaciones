@@ -79,6 +79,7 @@ Reglas surgidas de la revisión técnica de la iteración 1 de AIF-C01. Se aplic
 ## Banco de preguntas
 
 - Mínimos y distribución por tipos en `banco` de `curso.yaml`, comprobados por la CI (`minimo_por_modulo`, `minimo_por_tarea`, `minimo_por_objetivo`, `distribucion`). Como orientación, de 4 a 5 preguntas por objetivo; más en los objetivos de productos y de criterios de decisión.
+- **Simulacro:** si la guía oficial enumera los tipos de pregunta del examen, se declaran en `examen.tipos` de `curso.yaml` (y, opcionalmente, su reparto en `examen.distribucion`). El validador falla si el simulacro usa otro tipo; los bancos de los módulos pueden seguir usando los cuatro tipos como práctica.
 - `id`: `D<dominio>-NNN`; en el simulacro, `S-NNN`. `objetivo` (recomendado: `N.M.K`) enlaza la pregunta con un objetivo oficial de su tarea. `tarea` debe existir en `cursos/<curso>/fuentes/dominio-N.md` y `dominio` en el manifiesto. `referencia`: URL https de una de las `fuentes_oficiales` del curso.
 - Formato por tipo:
 

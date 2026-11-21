@@ -85,6 +85,43 @@
         "minutos": {
           "type": "integer",
           "minimum": 1
+        },
+        "tipos": {
+          "description": "Tipos de pregunta que enumera la guía oficial del examen. Si se declara, el simulacro solo puede usar estos tipos.",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "multiple_choice",
+              "multiple_response",
+              "ordering",
+              "matching"
+            ]
+          }
+        },
+        "distribucion": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "multiple_choice": {
+              "type": "number",
+              "minimum": 0
+            },
+            "multiple_response": {
+              "type": "number",
+              "minimum": 0
+            },
+            "ordering": {
+              "type": "number",
+              "minimum": 0
+            },
+            "matching": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "description": "Reparto orientativo de tipos del simulacro (%). Si no se declara, se usa banco.distribucion."
         }
       }
     },

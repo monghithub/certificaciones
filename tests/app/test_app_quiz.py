@@ -2,6 +2,7 @@ import re
 from datetime import timedelta
 
 import pytest
+import yaml
 from conftest import crear_usuario, entrar, post
 
 from app.models import Intento, IntentoRespuesta
@@ -192,9 +193,9 @@ def test_simulacro_del_curso_aif_c01_es_de_65_preguntas_y_90_minutos():
 
 def test_curso_sin_simulacro_no_lo_ofrece(app, curso):
     f = curso / "cursos" / "aif-c01" / "curso.yaml"
-    t = f.read_text(encoding="utf8")
-    t = t.replace("simulacro: 06-simulacro\nexamen:\n  preguntas: 3\n  minutos: 1\n", "")
-    f.write_text(t, encoding="utf8")
+    datos = yaml.safe_load(f.read_text(encoding="utf8"))
+    datos.pop("simulacro"); datos.pop("examen")
+    f.write_text(yaml.safe_dump(datos, allow_unicode=True, sort_keys=False), encoding="utf8")
     app.state.catalogo.cargar()
     crear_usuario(app)
     c = entrar(app)

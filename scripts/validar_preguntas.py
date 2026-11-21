@@ -237,8 +237,16 @@ def _validar_curso(raiz: Path, curso: Manifiesto, validador, minimos: bool):
         exigido = curso.repaso_minimo_por_modulo if es_repaso else curso.minimo_simulacro if es_simulacro else curso.minimo_por_modulo
         if minimos and n and exigido and n < exigido:
             errores.append(f"{rel}: {n} preguntas, mínimo {exigido}")
+        if es_simulacro and curso.examen_tipos and set(curso.examen_distribucion) - set(curso.examen_tipos):
+            errores.append(f"{curso.slug}: examen.distribucion usa tipos que no están en examen.tipos: "
+                           f"{', '.join(sorted(set(curso.examen_distribucion) - set(curso.examen_tipos)))}")
+        if es_simulacro and curso.examen_tipos:
+            for t in sorted(set(tipos) - set(curso.examen_tipos) - {None}):
+                errores.append(f"{rel}: el simulacro tiene {tipos[t]} preguntas de tipo {t}, que la guía oficial no enumera "
+                               f"(tipos del examen: {', '.join(curso.examen_tipos)})")
         if n and exigido and n >= exigido and not es_repaso:
-            for t, obj in curso.distribucion.items():
+            reparto = curso.examen_distribucion if es_simulacro and curso.examen_distribucion else curso.distribucion
+            for t, obj in reparto.items():
                 real = 100 * tipos.get(t, 0) / n
                 if abs(real - obj) > TOLERANCIA:
                     avisos.append(f"{rel}: {t} es el {real:.0f} % (objetivo ~{obj:g} %)")
