@@ -359,3 +359,44 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Diseño:** `cursos/<curso>/modulos/<NN>/libros.yaml`, opcional e ignorado por git. Banco aparte (`banco: libros`), con validación mínima (no pasa por el esquema de las preguntas propias, que exige referencia oficial y explicación de cada distractor) y fuera del repaso, el examen, el mixto, el dominio y el simulacro. Sí entra en «Repetir falladas». En «Tests», apartado «Preguntas de los libros»: por módulo, con un número de preguntas o todas, y un test final con todas, sin el tope de 100.
 - Los ficheros los genera un script que vive junto a los libros, fuera del repositorio. El preparado de las preguntas, su reparto por módulo y la clasificación por dominio del test inicial y del examen de práctica están en su propio journal.
 - **Verificación:** 274 pruebas de pytest (4 nuevas), validador, cobertura y glosario sin cambios.
+
+## 2026-11-21
+
+### Revisión con las guías de estudio: módulo 01 (#32)
+
+- Petición: «comienza con las revisiones». Segunda issue de la serie #31 a #37, con el mismo método que el módulo 00. Rama `aif-c01/revision-libros-01`, sin cambio de OpenSpec.
+- Material: Elango, capítulos 1, 3, 4 (parte de IA y ML), 7 (métricas) y 8 (MLOps); Taulli, capítulos 3 y 5; y sus preguntas ELA-C1, C3, C4, C8, TAU-C3, C5 y las de ELA-AT y TAU-PE del dominio 1. No se copia nada; cada dato se comprueba y se cita en `docs.aws.amazon.com` o `aws.amazon.com`.
+- **Hallazgos por objetivo** (teoría):
+
+  | Objetivo | Tema | Estado antes | Qué se hizo |
+  |---|---|---|---|
+  | 1.1.1 | Característica y etiqueta; parámetro frente a hiperparámetro | Faltaba | Definiciones y ajuste automático de modelos |
+  | 1.1.1 | Cómo se corrige el sobreajuste o el subajuste; generalización | Solo se detectaba | Técnicas (más datos, *early stopping*, regularización, *pruning*, *ensembling*) |
+  | 1.1.1 | No toda la IA es ML | Implícito | Una frase (sistemas de reglas) |
+  | 1.1.2 | ML clásico frente a aprendizaje profundo (datos, características, cómputo, interpretabilidad) | Faltaba | Tabla |
+  | 1.1.2 | CNN, RNN y *transformer* | Faltaba | Tabla para reconocerlas |
+  | 1.1.4 | Datos semiestructurados; entrenamiento, validación y prueba; alta dimensionalidad | Faltaba | Añadidos |
+  | 1.1.5 | Semisupervisado y aprendizaje por transferencia | Faltaba | Añadidos, con trampa frente a no supervisado |
+  | 1.1.5 / 1.2.3 | Algoritmos integrados (k-means, k-NN, XGBoost, Linear Learner, Random Cut Forest, PCA) | Faltaba | Tabla y trampa «la k engaña» |
+  | 1.2.2 | Objetivo no medible, datos malos o sin derecho de uso, explicabilidad obligatoria; RPA frente a IA | Parcial | Tres viñetas y nota sobre RPA |
+  | 1.2.4 | IDP; clasificación, detección y segmentación de imágenes | Faltaba | Fila de IDP y tabla de tareas de visión |
+  | 1.2.5 | Funcionalidades que deciden (diarización, vocabulario y PII de Transcribe, terminología de Translate, análisis de documentos de Textract, Face Liveness, motores de Polly, intenciones y ranuras de Lex) | Faltaba | Tabla |
+  | 1.2.5 | SageMaker Studio, Data Wrangler, Feature Store, ajuste automático | Faltaba | Filas en capacidades de SageMaker AI |
+  | 1.3.1 | KPI; pasos del procesamiento de datos (recogida, preparación, EDA, ingeniería de características) | Parcial | Desglose |
+  | 1.3.1 / 1.3.5 | Deriva de datos frente a deriva de concepto | Solo «deriva» | Tabla con ejemplo y cómo se detecta |
+  | 1.3.4 | Feature Store, Data Wrangler, Cost Explorer, Budgets y Quick por etapa | Faltaba | Filas nuevas |
+  | 1.3.5 | Despliegue seguro: azul/verde (todo a la vez, canario, lineal), *rolling*, prueba en sombra; CI/CD e IaC; MLflow y Model Registry | Faltaba | Tabla, diagrama nuevo y trampa «sombra no es A/B» |
+  | 1.3.6 | Errores de tipo I y II; matriz de confusión multiclase; MSE, RMSE, MAE y R² con ejemplo; implicación de usuarios y desglose del ROI | Parcial | Añadidos |
+  | 1.1.3, 1.2.1, 1.2.6, 1.3.2, 1.3.3 | Inferencia, valor de la IA, ML frente a FM, origen de los modelos, API gestionada o autoalojada | Ya cubierto | Sin cambios |
+
+- **Preguntas de los libros:** de 68 revisadas, 30 ya estaban cubiertas en concepto y trampa, 18 tenían el concepto pero no la trampa y 20 no estaban cubiertas (4 de ellas son de los dominios 2 o 3 y se dejan para su módulo). Los huecos se cubren con 16 preguntas de repaso (R1-043 a R1-058) y 17 de examen (D1-083 a D1-099), todas propias. Quedan fuera, por prioridad baja o fuera del alcance: lematización y *stopwords*, *endpoints* multimodelo y MLOps frente a LLMOps.
+- **Discrepancias de los libros con la documentación vigente** (prevalece la documentación):
+  - Presentan como vigentes servicios que ya no admiten clientes nuevos: Amazon Forecast (desde el 29 de julio de 2024; AWS remite a SageMaker Canvas), Amazon Fraud Detector (desde el 7 de noviembre de 2025), Amazon Kendra (AWS remite a Bedrock Knowledge Bases), SageMaker Studio Lab y el modelado de temas y la detección de eventos de Comprehend. También Model Monitor, Clarify, Ground Truth y Experiments, ya avisados en el curso. Clarify y Ground Truth constan además como servicios en mantenimiento desde el 30 de junio de 2026.
+  - Data Wrangler está hoy dentro de SageMaker Canvas, y QuickSight forma parte de Amazon Quick.
+  - Uno de los libros asocia la inferencia asíncrona a las series temporales: la asíncrona se define por el tamaño de la carga y la duración, no por el tipo de dato.
+  - Uno de los libros dice que Model Monitor detecta la deriva «en tiempo real»: funciona con trabajos programados.
+  - Un ejemplo de MSE de un libro tiene un error aritmético; el curso usa un ejemplo propio.
+  - Para el fraude, un libro prioriza la precisión y el otro F1; el curso mantiene su criterio (F1 si pesan los dos errores, la métrica según el error más caro).
+  - Algunas tablas de un libro presentan k-NN como agrupamiento: es supervisado. Se aprovecha como trampa.
+- **Revisión independiente:** 3 hallazgos críticos (tres preguntas de examen demasiado próximas a preguntas de los libros: se reescribieron con otro escenario, otra restricción y otros distractores), 11 importantes (otras preguntas y tres trampas derivadas de distractores de los libros, fuentes que no respaldaban la deriva de concepto, la cifra de transformaciones de Data Wrangler o los errores de tipo I y II, repaso que adelantaba escenarios del examen, una pista en un enunciado, dificultades mal calibradas y matices sobre Kendra y el sobreajuste) y 4 menores. Todos aplicados; la deriva de concepto se cita ahora en AWS Prescriptive Guidance, la matriz de confusión en SageMaker Canvas, y se añaden AnalyzeExpense y AnalyzeID de Textract.
+- **Verificación:** validador sin avisos, cobertura (1.1: 25 preguntas y 20 de repaso; 1.2: 38 y 18; 1.3: 36 y 20), 274 pruebas de pytest, 47/47 diagramas Mermaid válidos y glosario regenerado (271 términos, 23 nuevos).

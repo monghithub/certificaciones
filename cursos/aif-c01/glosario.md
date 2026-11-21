@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 248 términos.
+Total: 271 términos.
 
 ## A
 
@@ -28,6 +28,8 @@ Total: 248 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html>
 - **alucinación** (alucinaciones, hallucination, hallucinations). *Concepto.* Respuesta incorrecta o engañosa que genera un modelo fundacional. Causas habituales: datos de entrenamiento insuficientes o sesgados, sobreajuste y falta de contexto. Se mitiga con RAG, prompts precisos y verificación.
   - Referencia: <https://aws.amazon.com/what-is/ai-hallucinations/>
+- **análisis exploratorio de datos** (EDA, exploratory data analysis). *Técnica.* Paso del procesamiento de datos en el que se estudian con estadísticas y gráficos (distribuciones, correlaciones, valores atípicos, clases desequilibradas) para entenderlos antes de prepararlos o crear características. En SageMaker AI lo facilitan los análisis e informes de calidad de Data Wrangler.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html>
 - **análisis por subgrupos** (subgroup analysis). *Técnica.* Calcular las mismas métricas (exactitud, precisión, recall, tasa de aprobación) para cada grupo de personas, incluidos los interseccionales, y compararlas con un umbral aceptable para detectar sesgo que la media oculta.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html>
 - **API Converse** (Converse API, Converse). *Concepto.* API unificada de Amazon Bedrock para conversar con los modelos: abstrae sus diferencias, de modo que se puede cambiar de modelo modificando un solo parámetro.
@@ -42,6 +44,8 @@ Total: 248 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html>
 - **aprendizaje profundo** (deep learning). *Concepto.* Método de IA inspirado en el cerebro humano que procesa datos con redes neuronales de muchas capas. Reconoce patrones complejos en imágenes, texto, sonido y otros datos.
   - Referencia: <https://aws.amazon.com/what-is/deep-learning/>
+- **aprendizaje semisupervisado** (semi-supervised learning, semisupervisado). *Concepto.* Combinación de técnicas supervisadas y no supervisadas para un mismo problema cuando hay pocos datos etiquetados y muchos sin etiquetar. Evita tener que etiquetar a mano todo el conjunto.
+  - Referencia: <https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/>
 - **aprendizaje supervisado** (supervisado, supervised learning). *Técnica.* Los datos incluyen entradas y los valores objetivo (salidas) correctos. Si el objetivo es categórico es un problema de clasificación; si es continuo, de regresión.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html>
 - **ARPU** (ingreso medio por usuario, average revenue per user). *Métrica.* Ingreso medio por usuario: ingresos totales divididos entre el número de usuarios en un periodo.
@@ -69,6 +73,8 @@ Total: 248 términos.
   - Usar cuando: Sectores regulados o reglas complejas (elegibilidad, prestaciones, normativa interna) donde hay que demostrar que la respuesta cumple las reglas.
   - No usar cuando: Para detectar contenido dañino, temas fuera de alcance o ataques de prompt: filtros de contenido y temas denegados.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html>
+- **automatización robótica de procesos** (RPA, robotic process automation). *Técnica.* Software que automatiza tareas repetitivas basadas en reglas, normalmente sobre datos estructurados. No aprende de los datos: si la tarea tiene reglas fijas, basta RPA o un script; la IA se añade (automatización inteligente) cuando hay datos no estructurados o reglas que no se pueden escribir.
+  - Referencia: <https://aws.amazon.com/what-is/intelligent-automation/>
 
 ## B
 
@@ -189,8 +195,14 @@ Total: 248 términos.
   - Usar cuando: Para reutilizar licencias ligadas al hardware o cuando se exige hardware dedicado.
   - No usar cuando: Si solo se busca ahorrar: Savings Plans, Reserved Instances o Spot Instances.
   - Referencia: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html>
-- **deriva** (deriva del modelo, deriva de datos, drift). *Concepto.* Cambio con el tiempo de los datos de producción (o de la relación entre entradas y resultados) respecto a los de entrenamiento, que degrada la calidad del modelo. Se detecta monitorizando y se corrige reentrenando.
-  - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html>
+- **deployment guardrails** (despliegue azul/verde, blue/green, despliegue canario). *Técnica.* Opciones gestionadas de SageMaker AI para sustituir un modelo en producción en endpoints en tiempo real o asíncronos: azul/verde con desplazamiento del tráfico todo a la vez, canario o lineal, o gradual (rolling), con periodo de observación y vuelta atrás automática si salta una alarma de CloudWatch.
+  - Usar cuando: Para pasar el tráfico a un modelo nuevo limitando el riesgo y con vuelta atrás automática.
+  - No usar cuando: Para comparar un modelo nuevo sin que ningún usuario reciba sus respuestas: prueba en sombra.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html>
+- **deriva** (deriva del modelo, deriva de datos, data drift, drift). *Concepto.* Cambio con el tiempo de los datos de producción respecto a los de entrenamiento, que degrada la calidad del modelo. La deriva de datos es un cambio en las propiedades estadísticas de las entradas; si lo que cambia es la relación entre entradas y resultado, es deriva de concepto. Se detecta monitorizando y se corrige reentrenando.
+  - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html>
+- **deriva de concepto** (concept drift). *Concepto.* Cambio en la relación entre las entradas y el resultado: los mismos datos ya no predicen lo mismo (por ejemplo, los defraudadores cambian de táctica). Las entradas pueden no cambiar, así que se detecta comparando las predicciones con el resultado real (ground truth). Se corrige reentrenando con datos recientes.
+  - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/monitoring.html>
 - **desequilibrio de clases** (class imbalance). *Métrica.* Métrica de sesgo previa al entrenamiento: CI = (na − nd) / (na + nd), con na y nd el número de miembros de cada grupo. Va de −1 a 1; cerca de 0 indica grupos equilibrados.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html>
 - **destilación** (model distillation, distillation, Amazon Bedrock Model Distillation). *Técnica.* Transferir el conocimiento de un modelo grande (maestro) a uno más pequeño, rápido y barato (alumno) para un caso de uso. Bedrock genera respuestas del maestro con los prompts del cliente (o las toma de los registros de invocación) y ajusta al alumno.
@@ -269,6 +281,12 @@ Total: 248 términos.
   - Usar cuando: Para evaluar con control total, en código, modelos de lenguaje alojados dentro o fuera de AWS.
   - No usar cuando: Cuando basta una evaluación gestionada de modelos de Bedrock (Bedrock Evaluations).
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-foundation-model-evaluate.html>
+- **Amazon Forecast**. *Servicio.* Servicio de previsión de series temporales. Ya no está disponible para clientes nuevos (desde el 29 de julio de 2024); los existentes pueden seguir usándolo.
+  - No usar cuando: Para un proyecto nuevo de previsión: la previsión de series temporales de SageMaker Canvas, que es la alternativa que indica AWS.
+  - Referencia: <https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html>
+- **Amazon Fraud Detector**. *Servicio.* Servicio gestionado de detección de fraude en línea. Ya no admite clientes nuevos (desde el 7 de noviembre de 2025); los existentes conservan el acceso.
+  - No usar cuando: Para un proyecto nuevo: AWS propone Amazon SageMaker AI o AutoGluon para modelos propios y AWS WAF Fraud Control para el fraude en la creación de cuentas.
+  - Referencia: <https://docs.aws.amazon.com/frauddetector/latest/ug/frauddetector-availability-change.html>
 - **fuga de prompt** (prompt leakage). *Concepto.* Riesgo de exposición: el usuario consigue que el modelo revele las instrucciones del sistema, la configuración o el historial de la conversación. Guardrails lo detecta en su modalidad Standard (no en la Classic).
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html>
 
@@ -296,6 +314,11 @@ Total: 248 términos.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html>
 - **Amazon GuardDuty** (GuardDuty). *Servicio.* Servicio de detección de amenazas que analiza de forma continua registros y datos de la cuenta con inteligencia de amenazas y ML para encontrar actividad sospechosa, como credenciales comprometidas o exfiltración de datos. Está fuera del alcance del examen AIF-C01: basta reconocerlo.
   - Referencia: <https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html>
+
+## H
+
+- **hiperparámetro** (hiperparámetros, hyperparameter, hyperparameters). *Concepto.* Variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo: tasa de aprendizaje, número de epochs o tamaño de lote. Se distingue de los parámetros (por ejemplo, los pesos), que el modelo aprende durante el entrenamiento. Buscar sus mejores valores es el ajuste de hiperparámetros, que SageMaker AI automatiza.
+  - Referencia: <https://aws.amazon.com/what-is/hyperparameter-tuning/>
 
 ## I
 
@@ -342,6 +365,8 @@ Total: 248 términos.
   - Usar cuando: Para servir en EC2 un modelo ya entrenado al menor coste por inferencia.
   - No usar cuando: Para entrenar modelos: para eso está AWS Trainium.
   - Referencia: <https://aws.amazon.com/ai/machine-learning/inferentia/>
+- **ingeniería de características** (feature engineering). *Técnica.* Seleccionar y transformar las variables de entrada (características) con las que se entrena un modelo predictivo; por ejemplo, obtener el día de la semana a partir de una fecha. Es un paso del procesamiento de datos del ciclo de vida de ML.
+  - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html>
 - **ingeniería de contexto** (context engineering). *Técnica.* Decidir qué información llega al modelo en cada llamada, en qué orden y con qué tamaño: instrucciones del sistema, historial y memoria, conocimiento recuperado (RAG), herramientas y ejemplos. Busca respuestas correctas sin desperdiciar tokens.
   - Referencia: <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html>
 - **ingeniería de prompts** (prompt engineering). *Técnica.* Redactar y refinar el prompt (instrucciones, contexto, ejemplos y pregunta) para que el modelo dé la respuesta deseada sin modificar el modelo. Es la forma más barata de adaptar un modelo fundacional.
@@ -370,6 +395,13 @@ Total: 248 términos.
 
 ## K
 
+- **k-means** (k-medias). *Técnica.* Algoritmo no supervisado de agrupamiento (clustering): reparte los datos sin etiquetas en k grupos de elementos parecidos. Es un algoritmo integrado de SageMaker AI. No confundir con k-NN, que es supervisado.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html>
+- **k-NN** (KNN, k-nearest neighbors, k vecinos más cercanos). *Técnica.* Algoritmo supervisado de clasificación o regresión: predice a partir de los k ejemplos etiquetados más parecidos. Es un algoritmo integrado de SageMaker AI. Pese a la «k», no agrupa datos sin etiquetas (eso es k-means).
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html>
+- **Amazon Kendra** (Kendra). *Servicio.* Servicio gestionado de recuperación de información y búsqueda inteligente en los documentos de una empresa; puede actuar como recuperador en un RAG, pero no redacta la respuesta. Ya no está abierto a clientes nuevos, y no figura entre los servicios dentro del alcance del examen.
+  - No usar cuando: Para un proyecto nuevo de búsqueda o RAG sobre documentos propios: Amazon Bedrock Knowledge Bases, que es la alternativa que indica AWS.
+  - Referencia: <https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html>
 - **Kiro**. *Servicio.* Plataforma de desarrollo con IA de AWS, basada en especificaciones (spec-driven development), con un IDE y una CLI en los que agentes de IA ayudan a planificar, escribir y probar código.
   - Usar cuando: Para acelerar el desarrollo de software (incluidas aplicaciones de IA) con un asistente agéntico.
   - No usar cuando: Cuando la pregunta trata de entrenar o desplegar un modelo de ML: Amazon SageMaker AI.
@@ -435,6 +467,8 @@ Total: 248 términos.
   - Referencia: <https://docs.aws.amazon.com/decision-guides/latest/generative-ai-on-aws-how-to-choose/guide.html>
 - **modelo multimodal** (modelos multimodales, multimodal). *Concepto.* Modelo que procesa y entiende varios tipos de entrada a la vez (texto, imágenes, vídeo, documentos, audio) en una misma petición, y puede generar uno o varios tipos de salida.
   - Referencia: <https://docs.aws.amazon.com/nova/latest/nova2-userguide/what-is-nova-2.html>
+- **MSE** (error cuadrático medio, mean squared error). *Métrica.* Métrica de regresión: media de los errores al cuadrado entre la predicción y el valor real. Cuanto más baja, mejor; castiga más los errores grandes. Su raíz es el RMSE, en las mismas unidades que el valor predicho.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html>
 
 ## N
 
@@ -510,6 +544,8 @@ Total: 248 términos.
   - Referencia: <https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html>
 - **procesamiento del lenguaje natural** (NLP, PLN). *Concepto.* Tecnología que permite a los ordenadores interpretar, manipular y comprender el lenguaje humano, en texto y en voz.
   - Referencia: <https://aws.amazon.com/what-is/nlp/>
+- **procesamiento inteligente de documentos** (IDP, intelligent document processing). *Técnica.* Automatizar la captura, extracción y validación de datos de documentos (facturas, formularios, expedientes) combinando OCR, visión por computador, NLP y ML. En AWS se apoya en Amazon Textract para extraer y Amazon Comprehend para entender el texto.
+  - Referencia: <https://aws.amazon.com/what-is/intelligent-document-processing/>
 - **prompt caching** (caché de prompts). *Técnica.* Funcionalidad de Amazon Bedrock que reutiliza prefijos de prompt repetidos (por ejemplo, un documento largo) para reducir la latencia y el coste de los tokens de entrada. Disponible en modelos compatibles.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html>
 - **prompt injection** (inyección de prompts, hijacking, secuestro de objetivo). *Concepto.* Ataque con instrucciones (del usuario o escondidas en un documento o web que lee el modelo) que intentan ignorar y sustituir las del desarrollador para cambiar el objetivo del modelo. Prevenirlo en la aplicación es responsabilidad del cliente; Guardrails ayuda a detectarlo.
@@ -520,6 +556,10 @@ Total: 248 términos.
   - Usar cuando: Para un rendimiento alto y constante de un modelo concreto, o para servir un modelo personalizado con capacidad dedicada.
   - No usar cuando: Con tráfico bajo, variable o de prueba: bajo demanda es más barato porque solo se paga por uso.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html>
+- **prueba en sombra** (shadow test, shadow testing, pruebas en sombra). *Técnica.* Forma de probar un modelo nuevo en SageMaker AI enviándole una copia de las peticiones reales de producción: solo las respuestas del modelo en producción llegan al cliente, y las del nuevo se comparan sin afectar a nadie.
+  - Usar cuando: Para comparar un modelo, contenedor o tipo de instancia nuevo con tráfico real antes de que ningún usuario reciba sus respuestas.
+  - No usar cuando: Cuando ya se quiere servir el modelo nuevo a los usuarios con vuelta atrás: despliegue azul/verde (canario o lineal) con deployment guardrails.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html>
 - **puntuación de confianza** (confidence scoring, confidence score). *Técnica.* Valor que indica cuánto se puede fiar de una salida. Se usa con un umbral para entregar, avisar, derivar a una persona o no responder. Guardrails da puntuaciones de grounding y relevancia; servicios como Textract o Comprehend devuelven una confianza por predicción.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html>
 - **puntuación F1** (F1, F1 score). *Métrica.* Media armónica de la precisión y la exhaustividad: F1 = 2 × (precisión × exhaustividad) / (precisión + exhaustividad). Va de 0 a 1.
@@ -537,6 +577,8 @@ Total: 248 términos.
 
 ## R
 
+- **R²** (R2, coeficiente de determinación, R squared). *Métrica.* Métrica de regresión que indica qué parte de la variación del valor real explica el modelo. Cuanto más cerca de 1, mejor; un valor negativo significa que el modelo lo hace peor que predecir siempre la media.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html>
 - **RAG** (Retrieval Augmented Generation, generación aumentada por recuperación). *Técnica.* Retrieval Augmented Generation: técnica que usa información de fuentes de datos para mejorar la relevancia y la exactitud de las respuestas generadas por un modelo fundacional.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html>
 - **Amazon RDS** (RDS for PostgreSQL, Amazon RDS for PostgreSQL, Amazon Relational Database Service). *Servicio.* Servicio de bases de datos relacionales gestionadas. Amazon RDS for PostgreSQL con la extensión pgvector puede almacenar y consultar embeddings sin otra base de datos.
@@ -545,6 +587,10 @@ Total: 248 términos.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html>
 - **red neuronal** (redes neuronales, neural network). *Concepto.* Método de IA que procesa datos con nodos (neuronas artificiales) interconectados y organizados en capas, de forma inspirada en el cerebro humano. Es la base del aprendizaje profundo.
   - Referencia: <https://aws.amazon.com/what-is/neural-network/>
+- **red neuronal convolucional** (CNN, convolutional neural network, redes neuronales convolucionales). *Concepto.* Tipo de red neuronal de aprendizaje profundo especialmente útil con imágenes, porque extrae de ellas las características relevantes: clasificación de imágenes, detección de objetos.
+  - Referencia: <https://aws.amazon.com/what-is/neural-network/>
+- **red neuronal recurrente** (RNN, recurrent neural network, redes neuronales recurrentes). *Concepto.* Modelo de aprendizaje profundo para datos secuenciales, como palabras, frases o series temporales. En muchas aplicaciones, sobre todo de lenguaje, lo han sustituido los modelos basados en transformers.
+  - Referencia: <https://aws.amazon.com/what-is/recurrent-neural-network/>
 - **Amazon Redshift** (Redshift). *Servicio.* Almacén de datos (data warehouse) totalmente gestionado a escala de petabytes; con Redshift Serverless se analizan datos sin configurar un almacén aprovisionado.
   - Usar cuando: Para analizar con SQL grandes volúmenes de datos estructurados que alimentan modelos o informes.
   - No usar cuando: Para guardar objetos y ficheros de entrenamiento sin estructura (Amazon S3).
@@ -555,6 +601,8 @@ Total: 248 términos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html>
 - **regresión** (regression). *Técnica.* Problema supervisado cuyo valor objetivo es continuo: estima una variable dependiente a partir de otras, por ejemplo el precio de una vivienda.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html>
+- **regresión logística** (logistic regression). *Técnica.* Técnica de aprendizaje supervisado que, pese a su nombre, se usa para clasificar: estima la probabilidad de un resultado binario (sí o no, fraude o legítima).
+  - Referencia: <https://aws.amazon.com/what-is/logistic-regression/>
 - **reinforcement fine-tuning** (ajuste fino por refuerzo). *Técnica.* Método de personalización de Amazon Bedrock en el que el modelo genera respuestas, una función de recompensa (código en Lambda o un modelo juez) las puntúa y el modelo aprende a maximizar la recompensa, sin pares etiquetados.
   - Usar cuando: Cuando el éxito se puede medir (código que pasa pruebas, respuestas verificables) pero es caro conseguir ejemplos etiquetados.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/reinforcement-fine-tuning.html>
@@ -613,6 +661,14 @@ Total: 248 términos.
   - Usar cuando: Clientes actuales que necesitan métricas de sesgo y explicaciones de modelos de ML clásico.
   - No usar cuando: Como opción para un proyecto nuevo: métricas de sesgo y SHAP con bibliotecas abiertas (pandas, scikit-learn, SHAP) en ML clásico; Amazon Bedrock Evaluations solo para modelos fundacionales. En las preguntas del examen sigue siendo la respuesta clásica para sesgo y SHAP.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html>
+- **Amazon SageMaker Data Wrangler** (SageMaker Data Wrangler, Data Wrangler). *Servicio.* Funcionalidad de SageMaker AI, hoy dentro de SageMaker Canvas, para importar, analizar y preparar datos para ML con transformaciones integradas y poco o ningún código, con informes de calidad de los datos.
+  - Usar cuando: Para explorar y preparar datos con destino a un modelo de ML sin escribir apenas código.
+  - No usar cuando: Para un ETL genérico de datos que no van a un modelo (AWS Glue) o para orquestar todo el flujo de ML (SageMaker Pipelines).
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html>
+- **Amazon SageMaker Feature Store** (SageMaker Feature Store, Feature Store). *Servicio.* Repositorio centralizado de SageMaker AI para crear, guardar, compartir y reutilizar características de ML. El almacén online guarda el último valor para inferencia en tiempo real (milisegundos); el offline guarda el histórico en Amazon S3 para entrenar e inferir por lotes.
+  - Usar cuando: Para que varios equipos reutilicen las mismas características y el modelo reciba al inferir las mismas que vio al entrenar.
+  - No usar cuando: Como almacén de datos de negocio o de informes (Amazon Redshift) o como base de datos operativa de una aplicación (Amazon RDS).
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html>
 - **Amazon SageMaker Ground Truth** (SageMaker Ground Truth, Ground Truth). *Servicio.* Servicio para crear conjuntos de datos de entrenamiento etiquetados con trabajadores humanos (propios, de un proveedor o de Amazon Mechanical Turk) y etiquetado automático. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo.
   - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos, y su documentación no indica sustituto.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html>
@@ -634,6 +690,13 @@ Total: 248 términos.
   - Usar cuando: Para que el entrenamiento y el despliegue sean repetibles y automatizados (MLOps).
   - No usar cuando: Para un experimento puntual que no se va a repetir: basta un trabajo de entrenamiento suelto o un cuaderno.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html>
+- **Amazon SageMaker Studio** (SageMaker Studio). *Servicio.* Entorno de desarrollo web de SageMaker AI para todo el ciclo de vida de ML: cuadernos, preparación de datos, entrenamiento, despliegue y seguimiento. La experiencia anterior se mantiene como Studio Classic.
+  - Usar cuando: Cuando científicos de datos o ingenieros de ML necesitan un entorno integrado para construir, entrenar y desplegar modelos propios.
+  - No usar cuando: Cuando analistas sin experiencia en programación necesitan predicciones: SageMaker Canvas.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/studio-updated.html>
+- **Amazon SageMaker Studio Lab** (SageMaker Studio Lab, Studio Lab). *Servicio.* Servicio gratuito para aprender y experimentar con cuadernos de ML sin cuenta de AWS. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo.
+  - No usar cuando: Para un proyecto nuevo o de producción: SageMaker Studio, que puede empezarse dentro de la capa gratuita de AWS.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/studio-lab.html>
 - **satisfacción del usuario** (user satisfaction, CSAT). *Métrica.* Valoración de los usuarios de una aplicación de IA: encuestas (CSAT), votos positivos o negativos y quejas.
   - Referencia: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html>
 - **Savings Plans** (Savings Plan). *Concepto.* Modelo de precios que reduce el coste a cambio de comprometerse a un uso constante, en dólares por hora, durante 1 o 3 años. Hay varios tipos, entre ellos de cómputo, de instancias de EC2 y de Amazon SageMaker AI. El compromiso no se puede cambiar después de comprarlo.

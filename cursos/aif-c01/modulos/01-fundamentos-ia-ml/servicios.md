@@ -35,6 +35,8 @@ Se integran por API **sin experiencia en ML**. Ofrecen una personalización limi
 |---|---|---|
 | AWS Glue | Integrar, transformar y catalogar datos (ETL *serverless*) antes de entrenar o analizar | Para entrenar o desplegar modelos (es Amazon SageMaker AI) |
 | AWS Glue DataBrew | Limpiar y normalizar datos de forma visual, sin código | Cuando se necesita un ETL programado a medida (AWS Glue) |
+| Amazon SageMaker Data Wrangler | Importar, analizar (EDA) y preparar datos **para ML** con transformaciones integradas y poco código; hoy está dentro de SageMaker Canvas | Para un ETL genérico de datos que no van a un modelo (AWS Glue) o para orquestar todo el flujo de ML (SageMaker Pipelines) |
+| Amazon SageMaker Feature Store | Guardar, compartir y reutilizar características, y servir las mismas al entrenar (almacén *offline*) y al inferir en milisegundos (almacén *online*) | Como almacén de datos de negocio o de informes: Amazon Redshift (análisis) o una base de datos operativa como Amazon RDS |
 | Amazon SageMaker Pipelines | Automatizar y hacer repetibles los flujos de entrenamiento y despliegue (MLOps) | Para un experimento puntual que no se va a repetir: basta un trabajo de entrenamiento suelto o un cuaderno |
 | SageMaker Model Registry | Versionar modelos, aprobarlos antes de producción y desplegarlos | Para registrar experimentos de entrenamiento (MLflow) |
 | MLflow en SageMaker AI | Registrar y comparar experimentos para que sean reproducibles | Para orquestar el flujo completo (SageMaker Pipelines) |
@@ -56,5 +58,7 @@ Amazon S3 (almacenamiento de datos y artefactos), AWS Lambda (cómputo *serverle
 - **Amazon SageMaker Model Monitor**, **Amazon SageMaker Clarify** y **Amazon SageMaker Ground Truth** ya no están abiertos a clientes nuevos; los existentes pueden seguir usándolos.
 - **SageMaker Experiments** es ahora *Experiments Classic* (solo en Studio Classic); AWS recomienda MLflow en SageMaker AI.
 - **Amazon Bedrock Agents** (ahora *Classic*) tampoco está abierto a clientes nuevos; AWS remite a Amazon Bedrock AgentCore para capacidades similares.
+- **Amazon Forecast** (desde el 29 de julio de 2024), **Amazon Fraud Detector** (desde el 7 de noviembre de 2025), **Amazon Kendra** y **SageMaker Studio Lab** ya no admiten clientes nuevos. Alternativas que indica AWS: la previsión de series temporales de SageMaker Canvas; SageMaker AI, AutoGluon o AWS WAF Fraud Control; Amazon Bedrock Knowledge Bases; y SageMaker Studio. Ninguno figura en la lista de servicios dentro de alcance.
+- **Amazon Comprehend:** el modelado de temas (*topic modeling*), la detección de eventos y la clasificación de seguridad de *prompts* ya no admiten clientes nuevos (AWS remite a modelos de Amazon Bedrock y a Amazon Bedrock Guardrails). El resto de funciones de Comprehend no cambia.
 - **Amazon Q** figura como añadido en la página de revisiones de la guía, pero no está en la lista vigente de servicios dentro de alcance: no se trata como materia evaluable (ver [servicios-alcance](../../fuentes/servicios-alcance.md)).
 - Los servicios fuera de alcance de la guía (por ejemplo, Amazon Cognito o Amazon GuardDuty) no son materia evaluable.
