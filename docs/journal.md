@@ -431,3 +431,33 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
   - Un libro propone ajuste fino o bajar la temperatura contra las alucinaciones; el curso mantiene RAG, anclaje con Guardrails y verificación.
 - **Revisión independiente:** 2 hallazgos críticos (una pregunta de examen cuya respuesta no respaldaba la fuente citada y una de repaso demasiado próxima a una de los libros: se reescribieron), 10 importantes (el ciclo de vida de Bedrock tiene dos políticas según la fecha de lanzamiento del modelo, con acceso ampliado más caro en los anteriores; el 25 % de Trainium es un ejemplo concreto de AWS; Marketplace cobra además el software del proveedor; la facturación de vídeo por segundo no se pudo verificar y se retiró; ejemplos y escenarios demasiado próximos a los libros; repaso que adelantaba el examen; distractores débiles y respuestas que destacaban por su forma) y 4 menores. Todos aplicados.
 - **Verificación:** validador sin avisos, cobertura (2.1: 36 preguntas y 20 de repaso; 2.2: 25 y 12; 2.3: 30 y 14), 274 pruebas, 47/47 diagramas, markdownlint sin errores y glosario regenerado (278 términos, 7 nuevos).
+
+### Revisión con las guías de estudio: módulo 03 (#34)
+
+- Petición: «continúa tú solo de forma autónoma todo lo que puedas hacer sin preguntar nada». Se siguen las issues #34 a #37 con el mismo método, un PR por issue. Rama `aif-c01/revision-libros-03`, creada a partir de la del 02.
+- Material: Elango, capítulos 5, 6 y 7; Taulli, capítulos 6 y 7; y sus preguntas ELA-C5, ELA-C6, ELA-C7, TAU-C6, TAU-C7 y las de ELA-AT y TAU-PE del dominio 3.
+- El módulo ya cubría los 19 objetivos con más detalle y más al día que los libros. **Hallazgos:**
+
+  | Objetivo | Tema | Estado antes | Qué se hizo |
+  |---|---|---|---|
+  | 3.1.2 | Semilla (*seed*) de los modelos de imagen | Faltaba | Párrafo |
+  | 3.1.3 | `Retrieve` frente a `RetrieveAndGenerate`; filtros por metadatos | Solo la idea | Párrafo con las dos operaciones |
+  | 3.1.3 | Análisis de documentos: inteligente y automático en la Managed Knowledge Base; por defecto, Bedrock Data Automation o modelo fundacional en la *customer-managed* | Faltaba | Párrafo, tabla y diagnóstico típico (tablas ignoradas) |
+  | 3.1.6 | Piezas de Bedrock Agents *Classic* (grupos de acciones, Knowledge Base, versión y alias, traza) y colaboración multiagente con supervisor | Faltaba | Tabla y trampa de papeles (la Knowledge Base guarda, el agente actúa) |
+  | 3.2.3 | Modalidades de Guardrails: Classic (inglés, francés y español) frente a Standard (más idiomas, inferencia entre Regiones) | Faltaba | Párrafo, trampa y preguntas |
+  | 3.2.4 | Exposición frente a inyección | Parcial | Trampa |
+  | 3.4.5 | Medir la satisfacción con el análisis de sentimiento de Amazon Comprehend | Faltaba | Párrafo |
+  | 3.3.1 | Preentrenamiento continuado en Bedrock (#11) | Marcador | Nueva consulta sin cambios; comentario en #11 |
+  | Resto | Selección, parámetros, RAG, bases vectoriales, *prompts*, ajuste fino, evaluación | Ya cubierto | Sin cambios |
+
+- **Preguntas de los libros:** de 50 revisadas, 24 ya estaban cubiertas, 18 tenían el concepto pero no la trampa y 8 no estaban cubiertas. Se añaden 7 preguntas de repaso (R3-045 a R3-051) y 7 de examen (D3-095 a D3-101), propias. Se descartan, por no encontrar fuente oficial de AWS: el coste total de propiedad como criterio de selección, el olvido catastrófico, el *red teaming*, las preguntas tendenciosas como mala práctica y la recomendación de no ajustar a la vez temperatura y top-p.
+- **Discrepancias de los libros con la documentación vigente** (prevalece la documentación):
+  - Presentan el preentrenamiento continuado como disponible en Bedrock (ver #11) y Agents for Amazon Bedrock como opción para proyectos nuevos (hoy *Classic*, sin clientes nuevos).
+  - Un libro llama «máximo de *tokens*» a la ventana de contexto.
+  - Un libro sitúa la temperatura hasta 2,0 y da rangos «recomendados» de top-p; los rangos dependen del modelo.
+  - Un libro recomienda bajar la temperatura contra las alucinaciones y SageMaker Clarify y Model Monitor para evaluar (cerrados a clientes nuevos).
+  - Un libro presenta el modelo destilado como apto para dispositivos en el borde; el de Bedrock se sirve en Bedrock.
+  - Una pregunta de un libro tiene la clave contradictoria con su explicación (parámetros de muestreo y tamaño del modelo); otra da preentrenamiento continuado donde el enunciado describe aprendizaje por transferencia.
+  - El acceso a los modelos ya no se solicita modelo a modelo.
+- **Revisión independiente:** 1 hallazgo crítico (la tabla de analizadores solo vale para la *customer-managed* Knowledge Base; la gestionada usa siempre su análisis inteligente: corregidos teoría, glosario y dos preguntas), 7 importantes (la ampliación de «exposición» a los datos de entrenamiento no tenía fuente oficial y se retiró; una pregunta de modos de inferencia en un objetivo de coste de personalización, sustituida por una de destilación; las modalidades de Guardrails no estaban en la teoría; pistas de forma en dos preguntas; un alias del glosario que chocaba con la evaluación de RAG; y una mención a los libros en la nota de #11, retirada) y 6 menores. Aplicados todos salvo el de no titular secciones «Revisión con las guías de estudio» en las referencias de los módulos 01 y 02, que se deja como en el módulo 00 (el journal ya documenta la revisión).
+- **Verificación:** validador sin avisos, cobertura (3.1: 37 preguntas y 21 de repaso; 3.2: 24 y 12; 3.3: 16 y 7; 3.4: 24 y 11), 274 pruebas, 47/47 diagramas, markdownlint sin errores y glosario regenerado (281 términos, 3 nuevos).

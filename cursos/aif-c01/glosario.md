@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 278 términos.
+Total: 281 términos.
 
 ## A
 
@@ -32,6 +32,8 @@ Total: 278 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html>
 - **análisis por subgrupos** (subgroup analysis). *Técnica.* Calcular las mismas métricas (exactitud, precisión, recall, tasa de aprobación) para cada grupo de personas, incluidos los interseccionales, y compararlas con un umbral aceptable para detectar sesgo que la media oculta.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html>
+- **analizador de documentos** (parsing, análisis de documentos, parser). *Concepto.* Forma en que una Knowledge Base de Amazon Bedrock lee los documentos al ingerirlos. La Managed Knowledge Base usa un análisis inteligente automático; en una customer-managed se elige: el analizador por defecto solo extrae texto, y Bedrock Data Automation o un modelo fundacional procesan también tablas, gráficos e imágenes.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-advanced-parsing.html>
 - **API Converse** (Converse API, Converse). *Concepto.* API unificada de Amazon Bedrock para conversar con los modelos: abstrae sus diferencias, de modo que se puede cambiar de modelo modificando un solo parámetro.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html>
 - **aprendizaje automático** (ML, machine learning). *Concepto.* Subconjunto de la IA que usa grandes cantidades de datos para crear y validar una lógica de decisión, llamada modelo. Casi todos los sistemas de IA actuales se crean con ML.
@@ -328,6 +330,8 @@ Total: 278 términos.
   - Referencia: <https://docs.aws.amazon.com/databrew/latest/dg/what-is.html>
 - **GraphRAG**. *Técnica.* Variante de RAG que combina la búsqueda vectorial con un grafo de conocimiento, para recuperar también las relaciones entre entidades. En AWS, con Amazon Neptune Analytics y Bedrock Knowledge Bases.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html>
+- **grupos de acciones** (action groups, grupo de acciones, action group). *Concepto.* En Amazon Bedrock Agents, las acciones que puede ejecutar un agente: se describen con un esquema OpenAPI o con definiciones de funciones y se ejecutan con una función de AWS Lambda o devolviendo el control a la aplicación (return of control). Bedrock Agents (Classic) ya no admite clientes nuevos; para agentes nuevos, Amazon Bedrock AgentCore y Strands Agents.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html>
 - **Amazon GuardDuty** (GuardDuty). *Servicio.* Servicio de detección de amenazas que analiza de forma continua registros y datos de la cuenta con inteligencia de amenazas y ML para encontrar actividad sospechosa, como credenciales comprometidas o exfiltración de datos. Está fuera del alcance del examen AIF-C01: basta reconocerlo.
   - Referencia: <https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html>
 
@@ -637,6 +641,8 @@ Total: 278 términos.
 - **retención de datos** (data retention). *Concepto.* Cuánto tiempo se conservan los datos y los registros antes de borrarlos. En AWS se fija con la retención de los grupos de CloudWatch Logs (indefinida por defecto), la expiración de S3 Lifecycle y los modos de retención de datos de Bedrock.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html>
 - **retorno de la inversión** (ROI, return on investment). *Métrica.* Métrica de negocio que compara el beneficio económico obtenido con lo invertido. Mide el valor que aporta una solución, no la calidad técnica del modelo.
+- **Retrieve y RetrieveAndGenerate** (API Retrieve, RetrieveAndGenerate). *Concepto.* Operaciones para consultar una Knowledge Base de Amazon Bedrock: Retrieve devuelve solo los fragmentos relevantes de las fuentes; RetrieveAndGenerate los recupera y además pide al modelo una respuesta redactada con citas. Ambas admiten filtros por metadatos.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve.html>
 - **RLHF** (Reinforcement Learning from Human Feedback, aprendizaje por refuerzo con retroalimentación humana). *Técnica.* Técnica en la que personas comparan o puntúan respuestas del modelo; con esas preferencias se entrena un modelo de recompensa y se ajusta el modelo para producir las respuestas que prefieren las personas (más útiles, seguras o alineadas).
   - Referencia: <https://aws.amazon.com/what-is/reinforcement-learning-from-human-feedback/>
 - **robustez** (robustness). *Concepto.* Capacidad de un sistema de IA de dar salidas correctas ante entradas esperadas e inesperadas: erratas, sinónimos, otro idioma o ataques. Bedrock Evaluations la mide perturbando ligeramente los prompts y comparando las respuestas.

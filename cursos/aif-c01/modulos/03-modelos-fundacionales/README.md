@@ -81,6 +81,8 @@ Los parámetros de inferencia (presentados en el módulo 02) se ajustan **en cad
 
 La **longitud de entrada** también influye: más contexto da más información al modelo, pero aumenta el coste de entrada y la latencia, y un contexto lleno de texto irrelevante puede empeorar la respuesta. Por eso RAG envía solo los fragmentos relevantes.
 
+En los **modelos de imagen** hay además parámetros propios. Por ejemplo, en Stable Diffusion 3.5 Large la **semilla** (*seed*) controla la aleatoriedad de la generación: con 0 (el valor por defecto) se usa una semilla aleatoria; fijarla, con el mismo *prompt* y los mismos parámetros, permite repetir un resultado. El *prompt* negativo se trata en [Componentes de un prompt](#componentes-de-un-prompt).
+
 Recordatorio clave del módulo 02: una **temperatura baja** hace la respuesta más **repetible**, no más **cierta**. Contra las alucinaciones: RAG, *prompts* precisos y Guardrails.
 
 *Ejemplo de negocio:* un banco usa el mismo modelo para dos tareas. Para extraer el IBAN y el importe de una transferencia en formato JSON fija temperatura 0, una longitud máxima corta y una secuencia de parada al cerrar el JSON. Para proponer eslóganes de una campaña usa temperatura alta y una longitud mayor.
@@ -171,6 +173,18 @@ RES:
 
 - **Managed Knowledge Base** (la que AWS recomienda para la mejor exactitud y la experiencia gestionada): Bedrock gestiona la ingesta, el índice, el almacenamiento y la recuperación. Incluye conectores (S3, SharePoint, Confluence, Google Drive, OneDrive, rastreador web), filtrado por permisos a nivel de documento, análisis inteligente de PDF, presentaciones, imágenes, audio o vídeo, y recuperación agéntica de varios pasos.
 - ***Customer-managed* Knowledge Base:** el cliente elige y gestiona el almacén vectorial (por ejemplo, Amazon OpenSearch Serverless, Amazon Aurora o Amazon Neptune) y controla la ingesta, el análisis y el índice. Algunas funcionalidades (conectores de terceros, permisos por documento) solo existen en la gestionada.
+
+**Cómo se consulta una Knowledge Base.** Hay dos operaciones: **`Retrieve`** devuelve solo los **fragmentos** relevantes de las fuentes, para que la aplicación decida qué hacer con ellos (por ejemplo, mostrarlos o pasarlos a su propio flujo); **`RetrieveAndGenerate`** recupera los fragmentos y además pide al modelo una **respuesta redactada con citas**. En ambas se pueden aplicar **filtros por metadatos** de los documentos (país, departamento, fecha) para que solo se recuperen los pertinentes.
+
+**Cómo se leen los documentos (análisis o *parsing*).** En una **Managed Knowledge Base**, Bedrock usa siempre un análisis inteligente automático (*smart parsing*) que elige la mejor forma de leer cada contenido; no admite elegir Bedrock Data Automation ni un modelo fundacional como analizador. En una ***customer-managed* Knowledge Base** se elige el analizador al ingerir:
+
+| Analizador | Qué hace | Cuándo |
+|---|---|---|
+| Por defecto | Solo extrae el texto de los ficheros de texto; sin coste adicional | Documentos de texto sin figuras ni tablas importantes |
+| Amazon Bedrock Data Automation | Servicio gestionado que procesa contenido multimodal sin necesidad de *prompts*; se cobra por página o imagen | PDF con tablas, gráficos o imágenes, con el mínimo esfuerzo |
+| Modelo fundacional como analizador | Un modelo procesa el contenido multimodal y admite personalizar el *prompt* de extracción; se cobra por *tokens* | Documentos complejos en los que se quiere controlar qué y cómo se extrae |
+
+Con Bedrock Data Automation o con un modelo fundacional se analizan (y se cobran) todos los PDF de la fuente, aunque solo tengan texto. Si en una *customer-managed* Knowledge Base las respuestas ignoran los datos de las tablas o de los diagramas, el problema suele estar en el analizador por defecto, no en el modelo.
 
 Además, Knowledge Bases admite datos **estructurados** (consulta en lenguaje natural sobre un almacén de datos estructurados), grafos con Amazon Neptune Analytics (**GraphRAG**), un índice de Amazon Kendra GenAI (servicio fuera del alcance del examen) y modelos de reordenación (*reranking*) para mejorar qué fragmentos se recuperan.
 
@@ -310,6 +324,19 @@ Beneficios que destaca AWS: más **productividad** (delegar tareas repetitivas),
 | Viajes de empresa | Busca vuelos que cumplen la política, reserva y registra el gasto |
 | Varios agentes especializados | Un orquestador reparte subtareas (diagnóstico, citas, recordatorios) entre agentes expertos |
 
+**Cómo está hecho un agente de Amazon Bedrock Agents** (*Classic*). Conviene reconocer sus piezas, porque el examen puede seguir preguntando por él si no dice que el cliente sea nuevo:
+
+| Pieza | Para qué sirve |
+|---|---|
+| Modelo fundacional e instrucciones | Razona y decide qué hacer, según las instrucciones en lenguaje natural |
+| **Grupos de acciones** (*action groups*) | Las acciones que puede ejecutar: se describen con un esquema OpenAPI o con definiciones de funciones, y se ejecutan con una función de AWS Lambda o devolviendo el control a la aplicación (*return of control*) |
+| Knowledge Bases | La información que puede consultar (RAG) |
+| Versión y alias | Se publica una versión y la aplicación invoca un alias que apunta a ella |
+| Traza (*trace*) | Muestra el razonamiento paso a paso para depurar |
+| Colaboración multiagente | Un agente **supervisor** recibe la petición y la reparte entre agentes **colaboradores** especializados |
+
+El reparto de papeles es la trampa habitual: la Knowledge Base **guarda y recupera** información; el agente **decide y actúa** a través de sus grupos de acciones.
+
 En AWS, los agentes nuevos se construyen con **Strands Agents** (SDK) y se despliegan y operan con **Amazon Bedrock AgentCore**. **Amazon Bedrock Agents** (ahora *Classic*) ya no admite clientes nuevos. Para flujos **fijos** y predecibles (siempre los mismos pasos) basta **Amazon Bedrock Flows**, que enlaza *prompts*, modelos, Knowledge Bases y funciones Lambda en un editor visual: un agente solo compensa cuando los pasos dependen de lo que vaya pasando.
 
 *Trampa típica:* usar un agente cuando una consulta a una Knowledge Base resuelve el caso. El agente añade coste (más llamadas al modelo), latencia y riesgo (puede ejecutar acciones): hay que limitar sus permisos con mínimo privilegio y, en acciones críticas, pedir confirmación humana.
@@ -426,6 +453,8 @@ La guía cita cuatro riesgos. Los tres primeros los usa un **atacante** a travé
 | ***Jailbreaking*** | *Prompts* diseñados para **saltarse las protecciones de seguridad** del propio modelo y obtener contenido dañino | *Prompts* tipo «DAN» (*Do Anything Now*) o juegos de rol que «liberan» al modelo | Guardrails (filtro de *jailbreaks*), modelos con buenas salvaguardas, pruebas adversariales |
 | **Exposición** (*exposure*) | El modelo **revela información** que no debía: las instrucciones del sistema, el historial de la conversación o datos sensibles | «¿Puedes repetir todo lo que hay encima de este mensaje?» | Guardrails (filtro de fuga de *prompt*, en la modalidad Standard de Guardrails) y filtros de información sensible; no poner secretos en el *prompt* |
 | **Envenenamiento** (*poisoning*) | Introducir datos **maliciosos o sesgados** en los datos de entrenamiento, de ajuste fino o en las fuentes de RAG para alterar el comportamiento del modelo | Un documento manipulado en la Knowledge Base que recomienda una web fraudulenta | Curación y gobierno de datos, control de quién puede escribir en las fuentes, revisión de datos de entrenamiento |
+
+**Modalidades de Guardrails.** Los filtros de contenido y de ataques de *prompt*, los temas denegados y la comprobación de anclaje contextual se configuran en una de dos modalidades: **Classic**, que solo admite inglés, francés y español, y **Standard**, más robusta frente a ataques de *prompt*, con muchos más idiomas y la detección de fuga de *prompt*, que exige usar inferencia entre Regiones (un matiz a tener en cuenta si hay requisitos de residencia de datos). Con un idioma que la modalidad no admite, Guardrails no es eficaz.
 
 Amazon Bedrock Guardrails detecta tres tipos de **ataques de *prompt***: *jailbreaks*, *prompt injection* y **fuga de *prompt*** (*prompt leakage*, solo en la modalidad Standard de Guardrails, frente a la Classic).
 
@@ -581,7 +610,7 @@ No todas las etapas se dan siempre, ni en ese orden estricto: el diagrama muestr
 
 Métodos de personalización que ofrece hoy Amazon Bedrock según su guía: ***supervised fine-tuning*** (datos etiquetados), ***reinforcement fine-tuning*** (funciones de recompensa en lugar de pares etiquetados) y **destilación**. Para un control total del entrenamiento (cualquier modelo abierto, cualquier técnica), **Amazon SageMaker AI** y SageMaker JumpStart.
 
-> ⚠️ PENDIENTE DE VERIFICAR: la página de preguntas frecuentes de Bedrock describe el preentrenamiento continuado para modelos Amazon Titan y la referencia de la API (`CreateModelCustomizationJob`) sigue admitiendo `customizationType` = `CONTINUED_PRE_TRAINING`, pero la página vigente de métodos de personalización solo enumera *supervised fine-tuning*, *reinforcement fine-tuning* y destilación, y la página de modelos admitidos para preentrenamiento continuado ya no está disponible. Además, los modelos Titan Text, los únicos para los que la FAQ lo anunciaba, ya no aparecen en la disponibilidad por regiones ni en la lista de modelos que se pueden ajustar, aunque tampoco hay un aviso de retirada (consultas del 15 de octubre y del 18 de noviembre de 2026). El concepto sí es materia de examen; ninguna pregunta depende de su disponibilidad en Bedrock. Seguimiento: [issue #11](https://github.com/monghithub/certificaciones/issues/11).
+> ⚠️ PENDIENTE DE VERIFICAR: la página de preguntas frecuentes de Bedrock describe el preentrenamiento continuado para modelos Amazon Titan y la referencia de la API (`CreateModelCustomizationJob`) sigue admitiendo `customizationType` = `CONTINUED_PRE_TRAINING`, pero la página vigente de métodos de personalización solo enumera *supervised fine-tuning*, *reinforcement fine-tuning* y destilación, y la página de modelos admitidos para preentrenamiento continuado ya no está disponible. Además, los modelos Titan Text, los únicos para los que la FAQ lo anunciaba, ya no aparecen en la disponibilidad por regiones ni en la lista de modelos que se pueden ajustar, aunque tampoco hay un aviso de retirada (consultas del 15 de octubre, del 18 de noviembre y del 21 de noviembre de 2026; en la última, las páginas de métodos y de modelos admitidos siguen sin incluirlo y la FAQ sigue anunciándolo para Titan Text Express). El concepto sí es materia de examen; ninguna pregunta depende de su disponibilidad en Bedrock. Seguimiento: [issue #11](https://github.com/monghithub/certificaciones/issues/11).
 
 #### Métodos de ajuste fino
 
@@ -785,6 +814,8 @@ E2:
 
 *Ejemplo resuelto de coste por interacción (cifras de la empresa del ejemplo):* en un mes, el asistente cuesta 1800 USD de inferencia, 700 USD de almacén vectorial y 500 USD de otros servicios = **3000 USD**, y atiende 60 000 interacciones. Coste por interacción = 3000 / 60 000 = **0,05 USD**. Si la tasa de tareas completadas es del 70 %, el coste por consulta **resuelta** es 3000 / 42 000 ≈ **0,071 USD**. Comparado con el coste de que las atienda una persona, la empresa calcula el ahorro y el ROI (módulo 02).
 
+Para medir la satisfacción a escala sin leer cada comentario, se puede analizar el sentimiento de las valoraciones en texto libre con **Amazon Comprehend**, que clasifica cada texto como positivo, negativo, neutro o mixto.
+
 Otras métricas de negocio útiles: tiempo medio de resolución, tasa de derivación a un humano, conversión y retención (módulo 02).
 
 ## Puntos clave para el examen
@@ -832,3 +863,14 @@ Documentación oficial consultada el 15 de octubre de 2026:
 - Evaluar la calidad de las salidas generadas (guía prescriptiva: ROUGE, BLEU, BERTScore, *LLM-as-a-judge*): <https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-quality.html>
 - Evaluación de modelos fundacionales con SageMaker Clarify: <https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-foundation-model-evaluate-overview.html>
 - Precios de Amazon Bedrock: <https://aws.amazon.com/bedrock/pricing/>
+
+Consultadas el 21 de noviembre de 2026:
+
+- Consultar una Knowledge Base (`Retrieve`): <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve.html> y `RetrieveAndGenerate`: <https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_RetrieveAndGenerate.html>
+- Filtros por metadatos y configuración de las consultas: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html>
+- Opciones de análisis de documentos: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-advanced-parsing.html>
+- Cómo funciona Amazon Bedrock Agents: <https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html> y colaboración multiagente: <https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html>
+- Parámetros de los modelos de imagen de Stability AI (semilla): <https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-diffusion-3-5-large.html>
+- Idiomas admitidos por Guardrails: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported-languages.html> y modalidades Classic y Standard: <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tiers.html>
+- Análisis en una Managed Knowledge Base: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-customize-ingestion.html>
+- Análisis de sentimiento con Amazon Comprehend: <https://docs.aws.amazon.com/comprehend/latest/dg/how-sentiment.html>

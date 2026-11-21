@@ -56,3 +56,15 @@
 - **Coste por interacción = coste por consulta resuelta.** Si la tasa de tareas completadas es baja, el coste por consulta **resuelta** es mucho mayor que el coste por interacción.
 - **Evaluar un RAG solo por la respuesta final.** Hay que separar **recuperación** (¿trae los fragmentos correctos?) y **generación** (¿es fiel al contexto?) para saber qué falla.
 - **SageMaker Clarify para evaluar un modelo fundacional en un proyecto nuevo.** Ya no admite clientes nuevos: Amazon Bedrock Model Evaluation.
+
+## Knowledge Bases, agentes y Guardrails
+
+- **`Retrieve` frente a `RetrieveAndGenerate`.** Si la aplicación solo quiere los fragmentos (para mostrarlos o tratarlos ella), `Retrieve`; si quiere la respuesta redactada con citas, `RetrieveAndGenerate`.
+- **Si el RAG ignora tablas y diagramas, mira el analizador.** En una *customer-managed* Knowledge Base, el analizador por defecto solo extrae texto; para documentos con tablas, gráficos o imágenes, Bedrock Data Automation o un modelo fundacional como analizador. La Managed Knowledge Base usa siempre su análisis inteligente automático.
+- **Respuestas que mezclan documentos que no tocan** (otro país, otra versión): filtros por metadatos en la consulta, no un modelo más grande.
+- **Knowledge Base frente a agente.** La base de conocimiento guarda y recupera; el agente decide y actúa con sus grupos de acciones. Ninguno de los dos «responde» por sí solo: la respuesta la genera el modelo.
+- **Grupo de acciones.** En Bedrock Agents, lo que el agente puede hacer se define con un esquema OpenAPI o con definiciones de funciones y se ejecuta con Lambda (o devolviendo el control a la aplicación). No es una Knowledge Base ni una plantilla de *prompt*.
+- **Supervisor y colaboradores.** En la colaboración multiagente de Bedrock Agents, un supervisor reparte el trabajo entre agentes colaboradores especializados.
+- **Guardrails no protege igual en todos los idiomas.** La modalidad Classic solo admite inglés, francés y español en sus filtros principales; la Standard admite muchos más, pero usa inferencia entre Regiones. Con un idioma no admitido, Guardrails no es eficaz.
+- **Exposición no es inyección.** En la exposición el atacante consigue que el modelo **revele** sus instrucciones o el historial; en la inyección, que **obedezca** instrucciones nuevas.
+- **La semilla da reproducibilidad, no calidad.** En un modelo de imagen, repetir semilla, *prompt* y parámetros permite repetir el resultado; no lo mejora.
