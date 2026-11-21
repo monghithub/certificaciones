@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 290 términos.
+Total: 291 términos.
 
 ## A
 
@@ -211,7 +211,7 @@ Total: 290 términos.
   - Usar cuando: Para reutilizar licencias ligadas al hardware o cuando se exige hardware dedicado.
   - No usar cuando: Si solo se busca ahorrar: Savings Plans, Reserved Instances o Spot Instances.
   - Referencia: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html>
-- **defensa en profundidad** (defense in depth). *Concepto.* Aplicar controles de seguridad independientes en cada capa (organización y cuentas, red, identidad, aplicación y datos) para que, si uno falla, los demás sigan limitando el daño.
+- **defensa en profundidad** (defense in depth). *Concepto.* Enfoque por capas del pilar de seguridad de AWS Well-Architected: aplicar controles en cada capa (organización y cuentas, red, cómputo, aplicación y datos) para evitar que una debilidad en una capa ponga en riesgo toda la carga de trabajo.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html>
 - **deployment guardrails** (despliegue azul/verde, blue/green, despliegue canario). *Técnica.* Opciones gestionadas de SageMaker AI para sustituir un modelo en producción en endpoints en tiempo real o asíncronos: azul/verde con desplazamiento del tráfico todo a la vez, canario o lineal, o gradual (rolling), con periodo de observación y vuelta atrás automática si salta una alarma de CloudWatch.
   - Usar cuando: Para pasar el tráfico a un modelo nuevo limitando el riesgo y con vuelta atrás automática.
@@ -268,6 +268,8 @@ Total: 290 términos.
   - Usar cuando: Para preparar con Spark o Hadoop volúmenes de datos muy grandes antes de entrenar un modelo.
   - No usar cuando: Para una preparación visual y sin código (AWS Glue DataBrew).
   - Referencia: <https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html>
+- **endpoints FIPS** (FIPS, FIPS 140). *Concepto.* Variantes de los endpoints de un servicio de AWS (por ejemplo, bedrock-runtime-fips) que usan módulos criptográficos validados según la norma FIPS 140 de EE. UU. Solo existen en algunas Regiones y se usan en cargas que exigen esa validación.
+  - Referencia: <https://aws.amazon.com/compliance/fips/>
 - **envenenamiento de datos** (poisoning, data poisoning). *Concepto.* Introducción intencionada de datos maliciosos o sesgados en los datos de entrenamiento, de ajuste fino o en las fuentes de RAG para alterar el comportamiento del modelo. Se mitiga con curación, gobierno y control de acceso a los datos.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/common-attacks.html>
 - **evaluación humana** (human-in-the-loop, human evaluation). *Técnica.* Evaluación en la que personas (empleados o expertos) puntúan o comparan respuestas del modelo. Capta criterios subjetivos y es la referencia final, pero es lenta y cara.

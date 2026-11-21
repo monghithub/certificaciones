@@ -2330,7 +2330,7 @@
   termino: defensa en profundidad
   alias: [defense in depth]
   categoria: concepto
-  definicion: "Aplicar controles de seguridad independientes en cada capa (organización y cuentas, red, identidad, aplicación y datos) para que, si uno falla, los demás sigan limitando el daño."
+  definicion: "Enfoque por capas del pilar de seguridad de AWS Well-Architected: aplicar controles en cada capa (organización y cuentas, red, cómputo, aplicación y datos) para evitar que una debilidad en una capa ponga en riesgo toda la carga de trabajo."
   referencia: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
 
 - id: gobierno-de-la-ia
@@ -2339,4 +2339,11 @@
   categoria: concepto
   definicion: "Conjunto de reglas, políticas y mecanismos de supervisión que guían el desarrollo y el uso de la IA para que sea responsable, auditable y cumpla la normativa."
   referencia: https://aws.amazon.com/what-is/ai-governance/
+
+- id: endpoints-fips
+  termino: endpoints FIPS
+  alias: [FIPS, FIPS 140]
+  categoria: concepto
+  definicion: "Variantes de los endpoints de un servicio de AWS (por ejemplo, bedrock-runtime-fips) que usan módulos criptográficos validados según la norma FIPS 140 de EE. UU. Solo existen en algunas Regiones y se usan en cargas que exigen esa validación."
+  referencia: https://aws.amazon.com/compliance/fips/
 

@@ -53,7 +53,7 @@ Servicios y funcionalidades que cita la guía:
 | **Cifrado** | En tránsito con TLS (Bedrock exige TLS 1.2 y recomienda 1.3). En reposo con **AWS KMS** y claves del cliente para modelos personalizados, trabajos de ajuste, agentes, ingesta de Knowledge Bases y evaluaciones |
 | **Amazon Macie** | Descubre datos sensibles (PII, credenciales) en los *buckets* de S3 con ML y patrones, y avisa de *buckets* expuestos. Útil antes de usar un *bucket* para ajustar un modelo o como fuente de una Knowledge Base |
 | **AWS PrivateLink** | *Endpoints* de interfaz de VPC para llegar a Bedrock (`bedrock`, `bedrock-runtime`, `bedrock-mantle`, `bedrock-agent`, `bedrock-agent-runtime`) **sin pasar por Internet**, sin pasarela de Internet ni NAT, con políticas de *endpoint* para limitar el acceso |
-| ***Endpoints* FIPS** | Variantes de los *endpoints* de Bedrock (por ejemplo, `bedrock-runtime-fips`) que usan módulos criptográficos validados según FIPS, para cargas reguladas que lo exigen |
+| ***Endpoints* FIPS** | Variantes de los *endpoints* de Bedrock (por ejemplo, `bedrock-runtime-fips`) que usan módulos criptográficos validados según la norma FIPS 140 de EE. UU., para cargas que lo exigen. Solo existen en algunas Regiones (de EE. UU., Canadá y AWS GovCloud) |
 | **Modelo de responsabilidad compartida** | Delimita qué protege AWS y qué protege el cliente |
 | **Amazon Bedrock AgentCore Identity** | Gestión de identidades y credenciales **para agentes**: los agentes y sus herramientas acceden a recursos de AWS y de terceros **en nombre de los usuarios**, con autenticación, autorización y trazas de auditoría |
 | **Policy in AgentCore** | Políticas **deterministas** (en lenguaje Cedar o redactadas en lenguaje natural) que se evalúan en el AgentCore Gateway **antes** de permitir que un agente use una herramienta: qué puede hacer cada agente y con qué límites |
@@ -290,7 +290,7 @@ La guía enumera las consideraciones que hay que reconocer. Las de la columna iz
 | **Registro y auditoría de las interacciones** (IA) | Saber qué se preguntó, qué se respondió y quién lo hizo | **CloudTrail** (llamadas a la API) y **registro de invocaciones de Bedrock** (*prompts* y respuestas) en CloudWatch Logs o S3 |
 | **Toxicidad** (IA) | Contenido ofensivo o dañino | Filtros de contenido de Guardrails, evaluaciones de toxicidad |
 
-**Defensa en profundidad.** Ningún control basta por sí solo: el pilar de seguridad del AWS Well-Architected Framework pide aplicar controles **en cada capa**, de la organización y las cuentas a la red, la aplicación y los datos. En un asistente con IA generativa eso significa, a la vez: red privada (PrivateLink), identidad y mínimo privilegio (IAM), cifrado (KMS), filtros sobre la entrada y la salida (Guardrails) y registro y auditoría (CloudTrail y el registro de invocaciones). Si una capa falla (por ejemplo, un *prompt* esquiva un filtro), las demás siguen limitando el daño.
+**Defensa en profundidad.** El pilar de seguridad del AWS Well-Architected Framework pide un enfoque por capas: aplicar controles **en cada capa**, de la organización y las cuentas a la red, el cómputo, la aplicación y los datos, para evitar que una debilidad en una capa ponga en riesgo toda la carga de trabajo. En un asistente con IA generativa se combinan, por ejemplo, red privada (PrivateLink), mínimo privilegio (IAM), cifrado (KMS), filtros sobre la entrada y la salida (Guardrails), aprobación humana de las acciones sensibles y registro y auditoría (CloudTrail y el registro de invocaciones).
 
 Los controles específicos de la IA sobre el recorrido de una petición:
 
@@ -489,7 +489,7 @@ TA:
 | **RGPD** (UE) | Datos personales de personas de la UE | AWS permite elegir en qué Región se guardan los datos; el cliente aplica los principios de la norma (por ejemplo, el derecho de supresión, ver [estrategias de gobierno de datos](#estrategias-de-gobierno-de-datos)) |
 | **SOC, ISO** | Controles de seguridad del proveedor auditados por terceros | Los informes se descargan en **AWS Artifact** para entregarlos al auditor |
 
-Una **carga de trabajo regulada** es la que está sujeta a una de estas normas o a otras sectoriales. Que AWS tenga un informe o un servicio apto no hace que la aplicación del cliente cumpla: es el modelo de responsabilidad compartida aplicado al cumplimiento.
+Que AWS tenga un informe o un servicio apto no hace que la aplicación del cliente cumpla: es el modelo de responsabilidad compartida aplicado al cumplimiento.
 
 #### Estrategias de gobierno de datos
 
@@ -498,7 +498,7 @@ Una **carga de trabajo regulada** es la que está sujeta a una de estas normas o
 | **Ciclo de vida** (*data lifecycle*) | Qué pasa con los datos desde que se crean hasta que se borran | **S3 Lifecycle**: mover a una clase más barata (por ejemplo, las clases de archivo S3 Glacier) y borrar al vencer el plazo |
 | **Registro** (*logging*) | Qué se registra de cada acceso y cada interacción | CloudTrail, registro de invocaciones de Bedrock |
 | **Residencia** (*residency*) | En qué Región o geografía se almacenan y procesan los datos | Elegir la Región; con inferencia entre Regiones, los perfiles **geográficos** mantienen el procesamiento dentro de una geografía (EE. UU., UE…), mientras que el **global** puede usar cualquier Región comercial admitida |
-| **Soberanía** (*data sovereignty*) | A qué **leyes** quedan sujetos los datos, que son las del lugar donde están físicamente | La residencia es **dónde** están los datos; la soberanía, **qué jurisdicción** se les aplica. Elegir la Región decide ambas |
+| **Soberanía** (*data sovereignty*) | A qué **leyes** quedan sujetos los datos, que son las del lugar donde están físicamente | La residencia es **dónde** están los datos; la soberanía, **qué jurisdicción** se les aplica. Elegir la Región es una decisión clave para ambas |
 | **Monitorización** (*monitoring*) | Qué métricas se vigilan y con qué alarmas | CloudWatch |
 | **Observación** (*observation*) | Ver qué hace el sistema por dentro: trazas de agentes, pasos y herramientas | Observabilidad de AgentCore, trazas de agentes |
 | **Retención** (*retention*) | Cuánto tiempo se guardan los datos y los registros | Retención de los grupos de CloudWatch Logs (**indefinida por defecto**), expiración de S3, modos de retención de datos de Bedrock |
@@ -595,7 +595,7 @@ S5:
 
 La matriz cruza esos ámbitos con cinco disciplinas de seguridad: **gobierno y cumplimiento**, **aspectos legales y privacidad**, **gestión de riesgos**, **controles** y **resiliencia**. Por ejemplo: en los ámbitos 1 y 2 hay que revisar los términos de servicio y evitar datos propietarios; en los 3 a 5, hacer modelado de amenazas centrado en la inyección de *prompts*; en el 4 y el 5, evitar datos personales en el entrenamiento.
 
-**Qué controla el cliente en cada ámbito** (según las descripciones de la matriz): en el **ámbito 1** no ve ni posee los datos de entrenamiento ni el modelo y no puede modificarlo; en el **2** debe asegurarse de que sus datos no se usan para entrenar o mejorar el modelo del proveedor; en el **3** construye su aplicación sobre un modelo fundacional de terceros; en el **4** ajusta ese modelo con **sus propios datos**; y en el **5** entrena un modelo desde cero con datos que posee o adquiere. En todos, el cliente decide qué datos introduce.
+**Qué controla el cliente en cada ámbito** (según las descripciones de la matriz): en el **ámbito 1** no ve ni posee los datos de entrenamiento ni el modelo y no puede modificarlo; en el **2** cuenta con protecciones contractuales y de exclusión (*opt-out*) para que sus datos no se usen para entrenar o mejorar el modelo del proveedor; en el **3** construye su aplicación sobre un modelo fundacional de terceros; en el **4** ajusta ese modelo con **sus propios datos**; y en el **5** entrena un modelo desde cero con datos que posee o adquiere.
 
 *Ejemplo de negocio:* un hospital clasifica sus casos: los médicos que usan un asistente público para redactar textos generales están en el ámbito 1 (política: nunca datos de pacientes); el asistente de citas con RAG sobre Amazon Bedrock está en el 3 (modelado de amenazas, Guardrails, permisos); un modelo ajustado con informes clínicos estaría en el 4 (clasificado como datos de salud, acceso muy limitado). Cada ámbito tiene sus controles y su revisión.
 
@@ -654,7 +654,7 @@ La matriz cruza esos ámbitos con cinco disciplinas de seguridad: **gobierno y c
 Consultadas el 21 de noviembre de 2026:
 
 - Defensa en profundidad (pilar de seguridad de AWS Well-Architected): <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html>
-- *Endpoints* de Amazon Bedrock, incluidos los FIPS: <https://docs.aws.amazon.com/general/latest/gr/bedrock.html>
+- *Endpoints* de Amazon Bedrock, incluidos los FIPS: <https://docs.aws.amazon.com/general/latest/gr/bedrock.html> y FIPS en AWS: <https://aws.amazon.com/compliance/fips/>
 - Soberanía y residencia de datos: <https://aws.amazon.com/what-is/data-sovereignty/>
 - HIPAA en AWS (BAA, servicios aptos): <https://aws.amazon.com/compliance/hipaa-compliance/>; PCI DSS: <https://aws.amazon.com/compliance/pci-dss-level-1-faqs/>; RGPD: <https://aws.amazon.com/compliance/gdpr-center/>
 - AWS Artifact: <https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html>

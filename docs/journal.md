@@ -481,3 +481,23 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Discrepancias de los libros con la documentación vigente:** presentan Clarify, Model Monitor, A2I y Ground Truth como vigentes para cualquier cliente; uno atribuye a Clarify la deriva de la calidad de los datos (es Model Monitor); uno da a entender que Automated Reasoning checks evita errores (solo detecta y solo admite inglés de EE. UU.); y una pregunta tiene opciones que no encajan con el enunciado.
 - **Revisión independiente:** 0 críticos, 12 importantes (una pregunta de examen casi igual a otra existente y otra de repaso que repetía una anterior, rehechas; pistas en enunciados y respuestas que destacaban por su forma; repaso que adelantaba el examen; la lista de integraciones de A2I exageraba lo que dice AWS; RLHF colocado como principio de la guía; trampas sin el sustituto de los servicios cerrados) y 5 menores. Todos aplicados.
 - **Verificación:** validador sin avisos, cobertura (4.1: 53 preguntas y 29 de repaso; 4.2: 27 y 10), 274 pruebas, markdownlint sin errores y glosario regenerado (284 términos, 3 nuevos).
+
+### Revisión con las guías de estudio: módulo 05 (#36)
+
+- Rama `aif-c01/revision-libros-05`, a partir de la del 04. Material: Elango, capítulo 10; Taulli, capítulo 9; preguntas ELA-C10, TAU-C9, ELA-AT-18 y TAU-PE-47 a 54.
+- El módulo ya cubría los 8 objetivos con más detalle que los libros. **Hallazgos:**
+
+  | Objetivo | Tema | Estado antes | Qué se hizo |
+  |---|---|---|---|
+  | 5.1.1 | *Endpoints* FIPS de Bedrock | Faltaba | Fila y entrada de glosario |
+  | 5.1.1 / 5.1.3 | Dónde detectar datos personales: Macie (S3), Comprehend (texto de la aplicación), Guardrails (entradas y salidas del modelo) | Parcial | Filas en la tabla de decisión y trampa |
+  | 5.1.4 | Defensa en profundidad (enfoque por capas del pilar de seguridad) | Faltaba | Párrafo |
+  | 5.2.1 | Normativas (HIPAA, PCI DSS, RGPD, SOC e ISO) y qué hace el cliente en cada una; BAA y documentos de ISV en Artifact | Faltaba | Tabla y trampas |
+  | 5.2.2 | Soberanía frente a residencia de los datos | Faltaba | Fila en la tabla de gobierno de datos |
+  | 5.2.3 | Qué controla el cliente en cada ámbito de la AI Security Scoping Matrix | Parcial | Párrafo con las descripciones de la matriz |
+  | Resto | Servicios de protección, citación, ingeniería de datos segura, alucinaciones, servicios de gobierno, procesos | Ya cubierto | Sin cambios |
+
+- **Preguntas de los libros:** de 21 revisadas, 8 ya estaban cubiertas, 4 tenían el concepto pero no la trampa y 9 no estaban cubiertas (4 de ellas sobre servicios fuera de alcance o con un enunciado ambiguo). Se añaden 5 preguntas de repaso (R5-031 a R5-035) y 5 de examen (D5-070 a D5-074). Se descartan, sin fuente oficial de AWS: MITRE ATLAS, los ataques adversarios de evasión o de extracción del modelo y la definición de «carga de trabajo regulada».
+- **Discrepancias de los libros con la documentación vigente:** presentan Audit Manager como vigente; uno da Shield, WAF, Cognito, GuardDuty y Security Hub como herramientas centrales (fuera de alcance); uno atribuye a Cognito los límites de peticiones; uno afirma que Bedrock no guarda nada de los *prompts* (depende del registro de invocaciones que active el cliente y de la detección de abusos de cada modelo); y una pregunta tiene dos opciones casi equivalentes.
+- **Revisión independiente:** 2 críticos (una pregunta de repaso demasiado próxima a una de un libro y una de examen que duplicaba otra y afirmaba algo sobre soberanía que su referencia no respalda: reescritas, la segunda sobre *endpoints* FIPS), 9 importantes (otra pregunta de repaso con las opciones de un libro, afirmaciones sobre la matriz y sobre la soberanía sin respaldo, una definición de «carga regulada» retirada, una respuesta discutible, pistas y repaso que adelantaba el examen, y la entrada de glosario de FIPS que faltaba) y 4 menores. Todos aplicados.
+- **Verificación:** validador sin avisos, cobertura (5.1: 45 preguntas y 21 de repaso; 5.2: 29 y 14), 274 pruebas, markdownlint sin errores y glosario regenerado (291 términos, 7 nuevos).

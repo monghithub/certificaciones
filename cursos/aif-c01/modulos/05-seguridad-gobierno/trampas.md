@@ -37,7 +37,7 @@
 
 - **Un informe de AWS no certifica tu aplicación.** Artifact da los informes de AWS (SOC, ISO, PCI) y acuerdos como el BAA; el cumplimiento de la aplicación sigue siendo del cliente.
 - **No existe «AWS certificado HIPAA».** Para tratar PHI se acepta el BAA en Artifact y se usan solo servicios aptos para HIPAA.
-- **HIPAA, PCI DSS y RGPD protegen cosas distintas.** Información sanitaria (EE. UU.), datos de tarjetas de pago y datos personales de la UE.
+- **Qué hace el cliente en cada norma.** HIPAA: aceptar el BAA en Artifact y usar servicios aptos. PCI DSS: AWS aporta su informe de nivel 1, pero el cliente certifica su aplicación. RGPD: elegir la Región y aplicar los derechos, como la supresión.
 - **Residencia frente a soberanía.** Dónde están los datos frente a qué leyes se les aplican.
-- **Un solo control no es defensa en profundidad.** Guardrails no sustituye a IAM, al cifrado ni a la red privada: se combinan capas independientes.
+- **Reforzar una capa no es añadir otra.** Más temas denegados en Guardrails siguen siendo la misma capa; la defensa en profundidad pone controles en la organización, la red, el cómputo, la aplicación y los datos.
 - **Detectar datos personales: ¿dónde están?** En objetos de S3, Amazon Macie; en un texto que procesa la aplicación, Amazon Comprehend; en las entradas y salidas de un modelo de Bedrock, el filtro de información sensible de Guardrails.

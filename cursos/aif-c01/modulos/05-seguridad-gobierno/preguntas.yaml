@@ -1980,14 +1980,14 @@
   objetivo: 5.1.4
   tipo: multiple_response
   dificultad: alta
-  enunciado: Una aseguradora protege su asistente de Amazon Bedrock con Guardrails. La auditoría interna señala que, si un ataque de prompt esquivara los filtros, nada más limitaría el daño. ¿Qué DOS medidas añaden capas independientes de protección?
+  enunciado: Una aseguradora protege con Guardrails su asistente de Amazon Bedrock, que puede consultar pólizas y emitir reembolsos. La auditoría interna señala que, si un ataque de prompt esquivara los filtros, nada más limitaría el daño. ¿Qué DOS medidas añaden capas independientes de protección?
   opciones:
   - id: a
     texto: Dar al rol del asistente solo los permisos de IAM que necesita para sus herramientas
   - id: b
     texto: Añadir más temas denegados a la misma barrera de Guardrails
   - id: c
-    texto: Llegar a Bedrock desde la VPC con AWS PrivateLink, sin pasar por Internet
+    texto: Exigir la aprobación de una persona antes de emitir cualquier reembolso
   - id: d
     texto: Subir al máximo la intensidad de los filtros de contenido
   - id: e
@@ -1995,7 +1995,7 @@
   correctas:
   - a
   - c
-  explicacion: 'La defensa en profundidad combina controles independientes en cada capa. El mínimo privilegio de IAM limita lo que puede hacer el asistente aunque lo engañen, y PrivateLink protege la red. Ambos siguen actuando si Guardrails falla.'
+  explicacion: 'Un enfoque por capas combina controles independientes. El mínimo privilegio de IAM limita lo que puede hacer el asistente aunque lo engañen, y la aprobación humana detiene las acciones con consecuencias. Ambos siguen actuando si Guardrails falla.'
   distractores:
     b: Más temas denegados refuerzan la misma capa (Guardrails); si el ataque la esquiva, no añaden protección.
     d: Subir los filtros también refuerza la misma capa y puede bloquear peticiones legítimas.
@@ -2031,7 +2031,7 @@
     - a
   - - '3'
     - b
-  explicacion: 'Macie descubre datos sensibles en objetos de S3; Comprehend detecta y oculta datos personales en un texto que procesa la aplicación; el filtro de información sensible de Guardrails actúa sobre las entradas y salidas del modelo.'
+  explicacion: 'Macie descubre datos sensibles en objetos de S3; Comprehend detecta y oculta datos personales en un texto que procesa la aplicación; el filtro de información sensible de Guardrails actúa sobre las entradas y salidas del modelo (para un formato propio, como el número de historia clínica, con una expresión regular).'
   distractores:
     d: Artifact da informes de cumplimiento y acuerdos de AWS; no detecta datos personales.
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
@@ -2046,64 +2046,64 @@
   - id: a
     texto: Nada, porque AWS está certificado para HIPAA y eso cubre a sus clientes
   - id: b
-    texto: Descargar de AWS Artifact el informe SOC 2 y entregarlo como prueba de cumplimiento
+    texto: Aceptar el BAA en AWS Artifact y tratar la información en los servicios de AWS que ya usa
   - id: c
     texto: Aceptar el BAA en AWS Artifact y tratar la información solo en servicios aptos para HIPAA
   - id: d
-    texto: Activar Amazon Macie en la cuenta, lo que la hace conforme a HIPAA
+    texto: Descargar de AWS Artifact el informe SOC 2 y entregarlo como prueba de cumplimiento
   correctas:
   - c
   explicacion: 'HIPAA exige un acuerdo BAA con el proveedor, que se acepta en AWS Artifact, y la información sanitaria solo debe tratarse en servicios aptos para HIPAA, como Bedrock. El cumplimiento de la aplicación sigue siendo de la clínica.'
   distractores:
     a: No existe una certificación HIPAA para un proveedor de nube; la responsabilidad se comparte.
-    b: Un informe SOC 2 describe los controles de AWS, pero no sustituye al BAA ni demuestra que la aplicación de la clínica cumple.
-    d: Macie ayuda a encontrar datos sensibles en S3, pero no hace conforme a nadie con HIPAA.
+    b: El BAA no basta si la información pasa por servicios que no son aptos para HIPAA.
+    d: Un informe SOC 2 describe los controles de AWS, pero no sustituye al BAA ni demuestra que la aplicación de la clínica cumple.
   referencia: https://aws.amazon.com/compliance/hipaa-compliance/
 - id: D5-073
   dominio: 5
-  tarea: '5.2'
-  objetivo: 5.2.2
+  tarea: '5.1'
+  objetivo: 5.1.1
   tipo: multiple_choice
-  dificultad: alta
-  enunciado: Un banco europeo exige que los datos de sus clientes queden sujetos solo a la legislación de la UE. Su asistente de Amazon Bedrock usa una Región de la UE, pero para soportar picos el equipo propone activar la inferencia entre Regiones. ¿Qué opción respeta el requisito?
+  dificultad: media
+  enunciado: Un contratista de una agencia federal de EE. UU. va a llamar a Amazon Bedrock desde su aplicación en us-east-1. Su contrato exige que el tráfico con el servicio use módulos criptográficos validados según FIPS 140. ¿Qué debe hacer?
   opciones:
   - id: a
-    texto: Un perfil de inferencia global, porque abarata la inferencia
+    texto: Invocar el modelo a través del endpoint FIPS de Bedrock (bedrock-runtime-fips)
   - id: b
-    texto: Un perfil de inferencia geográfico de la UE
+    texto: Cifrar los prompts con una clave propia de AWS KMS antes de enviarlos
   - id: c
-    texto: Da igual el perfil, porque el cifrado con AWS KMS hace irrelevante dónde se procesan
+    texto: Activar el registro de invocaciones de Bedrock en CloudWatch Logs
   - id: d
-    texto: Copiar los datos a una Región de EE. UU. con más capacidad
+    texto: Usar un perfil de inferencia entre Regiones geográfico de EE. UU.
   correctas:
-  - b
-  explicacion: 'La soberanía depende de dónde se procesan los datos. Un perfil geográfico de la UE reparte la carga solo entre Regiones de la UE, así que los datos siguen sujetos a su legislación.'
+  - a
+  explicacion: 'Los endpoints FIPS de Bedrock usan módulos criptográficos validados según FIPS 140; están disponibles en algunas Regiones de EE. UU., Canadá y GovCloud, como us-east-1.'
   distractores:
-    a: El perfil global puede procesar en cualquier Región comercial, también fuera de la UE.
-    c: El cifrado protege la confidencialidad, pero no cambia la jurisdicción del lugar donde se procesan los datos.
-    d: Llevar los datos a EE. UU. los sujetaría a otra jurisdicción, justo lo que el banco quiere evitar.
-  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+    b: Cifrar con KMS protege el contenido, pero no hace que la conexión con el servicio use un endpoint validado FIPS.
+    c: El registro de invocaciones sirve para auditar, no para cumplir un requisito criptográfico.
+    d: Un perfil geográfico controla dónde se procesa la inferencia, no la validación FIPS de la conexión.
+  referencia: https://docs.aws.amazon.com/general/latest/gr/bedrock.html
 - id: D5-074
   dominio: 5
   tarea: '5.2'
   objetivo: 5.2.3
   tipo: multiple_choice
   dificultad: media
-  enunciado: Una empresa ajusta un modelo fundacional de terceros en Amazon Bedrock con sus contratos para que redacte con su estilo. Según la AI Security Scoping Matrix, ¿en qué ámbito está y qué datos aporta la empresa?
+  enunciado: Una empresa entrena con sus contratos un modelo fundacional de terceros ya existente en Amazon Bedrock, para que redacte con su estilo. Según la AI Security Scoping Matrix, ¿en qué ámbito está?
   opciones:
   - id: a
-    texto: Ámbito 4; aporta sus propios datos para ajustar el modelo
+    texto: Ámbito 4, modelo ajustado
   - id: b
-    texto: Ámbito 2; no aporta datos, solo usa una aplicación empresarial
+    texto: Ámbito 2, aplicación empresarial
   - id: c
-    texto: Ámbito 5; aporta los datos para entrenar el modelo desde cero
+    texto: Ámbito 5, modelo propio
   - id: d
-    texto: Ámbito 1; no ve el modelo ni puede modificarlo
+    texto: Ámbito 3, modelo preentrenado
   correctas:
   - a
-  explicacion: 'Ajustar un modelo fundacional de terceros con datos propios es el ámbito 4: el proveedor entrenó el modelo base y la empresa aporta los datos del ajuste, que debe proteger y gobernar.'
+  explicacion: 'Partir de un modelo fundacional de terceros y entrenarlo con datos propios es ajustarlo: ámbito 4. El proveedor entrenó el modelo base y la empresa aporta los datos del ajuste, que debe proteger y gobernar.'
   distractores:
     b: El ámbito 2 es una aplicación empresarial de terceros con IA integrada; aquí la empresa modifica el modelo.
     c: El ámbito 5 es entrenar un modelo desde cero; aquí se parte de uno existente.
-    d: En el ámbito 1 no se puede modificar el modelo; aquí se ajusta.
+    d: En el ámbito 3 se usa el modelo preentrenado tal cual, sin entrenarlo con datos propios.
   referencia: https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/
