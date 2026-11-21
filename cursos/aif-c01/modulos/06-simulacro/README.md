@@ -10,7 +10,7 @@ Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 
 4. Como en el examen (guía v1.2), hay dos tipos de pregunta: **opción múltiple** (una correcta de cuatro) y **respuesta múltiple** (dos o más correctas de cinco o más; el enunciado dice cuántas y hay que acertarlas **todas**).
 5. Al terminar, revisa la explicación de cada pregunta, también de las que aciertes.
 
-Sin la consola, puedes hacerlo en la terminal: `python scripts/quiz.py --curso aif-c01 --modulo 06 --n 65`. No reproduce las condiciones del examen: no tiene cronómetro, el orden es aleatorio y corrige cada pregunta al responderla.
+Sin la consola, puedes hacerlo en la terminal: `python scripts/quiz.py --curso aif-c01 --simulacro`. No reproduce las condiciones del examen: no tiene cronómetro y corrige cada pregunta al responderla.
 
 ## Qué contiene
 

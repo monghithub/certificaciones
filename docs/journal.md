@@ -566,3 +566,14 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Decisiones:** cada pregunta se apoya en una afirmación de la teoría del módulo y cita una fuente ya usada para ese objetivo; ninguna depende de los marcadores pendientes (preentrenamiento continuado en Bedrock, *task engineering*). Se mezclan los cuatro tipos y se reparten las letras correctas. `repaso.minimo_por_objetivo` pasa de 2 a 4 para que la CI mantenga el mínimo.
 - El trabajo se pausó a petición del usuario tras el módulo 03 (2026-11-19) y se retomó el 2026-11-20.
 - **Verificación:** validador sin errores ni avisos, cobertura con `--preguntas` y pytest.
+
+### Simulacro rotatorio (OpenSpec `simulacro-rotatorio`)
+
+- **Problema:** el simulacro de AIF-C01 eran 65 preguntas fijas que cubrían 58 de los 69 objetivos. Con 13/16/18/9/9 por dominio el máximo posible es 62 (el Dominio 1 tiene 17 objetivos para 13 preguntas, el 3 tiene 19 para 18 y el 4 tiene 11 para 9), y repetir el simulacro medía la memoria.
+- **Propuesta** (rama `feat/simulacro-rotatorio`): un banco de 82 preguntas que cubra los 69 objetivos, del que cada intento extrae 65. **Aprobada por el responsable el 2026-11-21** con las recomendaciones: reparto por dominio calculado con restos mayores, respuesta múltiple 2/3/4/2/2, banco de 82, el intento abandonado cuenta para la rotación y la dificultad solo se informa.
+- **Respuesta múltiple: 13 por intento.** El banco tiene 51/14, pero `examen.distribucion` es 80/20 y el 20 % de 65 son exactamente 13; 2/3/4/2/2 suma 13, así que se mantiene. Los 51/14 son la composición del banco fijo, no la de un intento.
+- **Algoritmo:** voraz por dominio, empezando por la combinación de dominio y tipo con menos holgura, con la clave (objetivo ya usado, vista en el intento anterior, azar) y hasta 20 reintentos. Se descartaron la programación lineal entera (desproporcionada) y el muestreo con rechazo (puede no terminar). Con el banco previsto, en 500 semillas se cumplen siempre las cuotas y las únicas repeticiones de objetivo son las inevitables (2 en el Dominio 2 y 1 en el 5); dos intentos seguidos recorren el banco entero.
+- **Sin migración:** `Intento.preguntas` ya guardaba los ids en orden. Los intentos antiguos, reanudar, el resultado, el historial y las estadísticas no cambian.
+- **Compatibilidad:** un banco del tamaño del examen funciona como antes (todas, ordenadas por id). Por eso el código puede fusionarse antes que el contenido. `minimo_simulacro: 80` y `minimo_simulacro_por_objetivo: 1` se declararán en `curso.yaml` junto con el banco.
+- **Pendiente:** redactar `S-070` a `S-086` cuando se fusione el PR #52 (que deja 62/69 objetivos con `S-066` a `S-069`).
+- **Verificación:** 608 pruebas de pytest (278 nuevas), validador, cobertura con `--preguntas`, glosario, markdownlint, Mermaid e imagen Docker.
