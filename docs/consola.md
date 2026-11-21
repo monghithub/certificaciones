@@ -84,58 +84,74 @@ Se responde en el propio modal (los cuatro tipos), se ve al momento si es correc
 Panel de conversación en cada pregunta de los tests para resolver dudas con Claude Code en segundo plano ([issue #40](https://github.com/monghithub/certificaciones/issues/40)). **Desactivado por defecto:** solo existe si se define `CONSULTAS_TOKEN`, y solo lo ven los usuarios `admin` (usa la cuenta de Claude del responsable). Los estudiantes no ven el panel y las rutas les responden 403.
 
 - **Dónde:** en todos los modos (repaso, examen, mixto, dominio, falladas, libros y simulacro, también el cronometrado), antes y después de responder, y plegado en cada pregunta de la página de resultado. Antes de responder, Claude orienta sin dar la solución salvo que se le pida expresamente.
-- **Cómo:** la duda se guarda «En cola» y se puede seguir con el test; el panel consulta cada 5 s mientras hay una duda en curso y muestra la respuesta cuando llega, sin recargar. Hay una conversación por pregunta y usuario, con una sola duda en curso cada vez; se puede seguir preguntando en la misma conversación (Claude conserva el contexto). Si una duda acaba en error, el botón «Reintentar» la devuelve a la cola.
+- **Cómo:** la duda se guarda «En cola» y se puede seguir con el test; el panel consulta cada 5 s mientras hay una duda en curso y muestra la respuesta cuando llega, sin recargar. Hay una conversación por pregunta y usuario, con una sola duda en curso cada vez; para no agotar la cuota, cada usuario puede tener como mucho 3 dudas esperando respuesta entre todas sus conversaciones y enviar 30 cada 24 horas. Se puede seguir preguntando en la misma conversación (Claude conserva el contexto). Si una duda acaba en error, el botón «Reintentar» la devuelve a la cola.
 - **Mis dudas** (`/c/<curso>/dudas`, en el menú): todas las conversaciones del curso con su estado y enlace a la conversación completa, que muestra el enunciado, la solución y la explicación.
-- Las respuestas se muestran como Markdown sin HTML y con los enlaces en otra pestaña. El panel recuerda que Claude puede equivocarse y que prevalece la documentación oficial de AWS.
+- Las respuestas se muestran como Markdown sin HTML, sin imágenes (`![…](url)` queda como texto y enlace, para que una imagen externa no pueda filtrar datos al cargarse; además, la CSP de la consola solo admite imágenes propias) y con los enlaces en otra pestaña. El panel recuerda que Claude puede equivocarse y que prevalece la documentación oficial de AWS.
 
 ### El trabajador
 
-`scripts/consultas_trabajador.py` (solo biblioteca estándar) corre **en el anfitrión**, no en el contenedor, con la sesión de Claude Code de la cuenta del responsable. Recoge las dudas de la API interna de la consola (`POST /api/consultas/siguiente`, `…/mensajes/<id>/respuesta`, `…/reintentar` y `…/error`, con `Authorization: Bearer <CONSULTAS_TOKEN>`; sin el token correcto responden 404) y las resuelve **de una en una** con:
+`scripts/consultas_trabajador.py` (solo biblioteca estándar) corre **en el anfitrión**, no en el contenedor, con la sesión de Claude Code de la cuenta del responsable. Recoge las dudas de la API interna de la consola (`POST /api/consultas/siguiente`, `…/mensajes/<id>/respuesta`, `…/reintentar` y `…/error`, con `Authorization: Bearer <CONSULTAS_TOKEN>`; sin el token correcto, o si la petición llega por el proxy con `X-Forwarded-For`, responden 404). El reparto es atómico y cada entrega lleva un número de reparto: la consola solo acepta la respuesta del reparto en curso y las resuelve **de una en una** con:
 
 ```text
-cd $CONSULTAS_DIR && claude -p <prompt> --model sonnet --output-format json \
-  --tools Read,Grep,Glob,WebFetch,WebSearch --allowedTools Read,Grep,Glob,WebFetch,WebSearch \
+cd $CONSULTAS_DIR && env -i HOME=… PATH=… LANG=… USER=… XDG_RUNTIME_DIR=… \
+  claude -p <prompt> --model sonnet --output-format json \
+  --restricted --strict-mcp-config --permission-mode dontAsk \
+  --tools Read,Grep,Glob,WebFetch,WebSearch \
+  --allowedTools "Read(//<cursos>/<curso>/**),Grep(…),Glob(…),Read(//<libros>/**),…,WebFetch(domain:docs.aws.amazon.com),WebFetch(domain:aws.amazon.com),WebSearch" \
+  --disallowedTools "Read(//~/.ssh/**),Read(//~/.claude/**),Read(//~/.config/**),Read(//**/.env),Read(//**/data/**),…" \
   --add-dir $CONSULTAS_CURSOS/<curso> [$CONSULTAS_LIBROS/<curso>] --append-system-prompt <instrucciones> [--resume <sesión>]
 ```
 
-- Solo herramientas de lectura y búsqueda (sin terminal ni edición) y sin `--dangerously-skip-permissions`. Fuentes: la teoría del curso, la documentación oficial de AWS en la web y, si se configuran, los libros de estudio en Markdown (que no se copian al repositorio).
+- **Aislamiento:** solo herramientas de lectura y búsqueda (sin terminal ni edición), nunca `--dangerously-skip-permissions`. `--restricted` ignora los ajustes, permisos y *plugins* del usuario y confina las herramientas de ficheros a los directorios de trabajo; `--strict-mcp-config` deja fuera sus servidores MCP; `--permission-mode dontAsk` deniega todo lo que no esté permitido. Lectura solo de la carpeta del curso y de los libros; `WebFetch` solo a `docs.aws.amazon.com` y `aws.amazon.com`. `~/.ssh`, `~/.claude`, `~/.config`, cualquier `.env` y cualquier `data/` están denegados expresamente. `claude` recibe un entorno mínimo, sin `CONSULTAS_TOKEN`. Comprobado en titan con una llamada real: lee el curso y la lectura de `~/.ssh/known_hosts` queda en `permission_denials`.
+- Fuentes: la teoría del curso, la documentación oficial de AWS en la web y, si se configuran, los libros de estudio en Markdown (que no se copian al repositorio).
 - El primer mensaje lleva el contexto de la pregunta (enunciado, opciones, la respuesta del estudiante si ya respondió y, solo entonces o si la pide, la solución, la explicación, los distractores y la referencia) y la ruta de la teoría. Los siguientes continúan la sesión con `--resume`; si la sesión ya no existe, se abre otra con el contexto.
 - Las sesiones de Claude Code se guardan por directorio de trabajo: `CONSULTAS_DIR` debe ser siempre el mismo.
-- **Cuota agotada** (o servicio saturado): la duda vuelve a la cola sin gastar intentos y el trabajador espera `CONSULTAS_ESPERA_CUOTA`. Otros fallos (tiempo agotado, salida inesperada) se reintentan hasta 3 veces y después la duda queda en error. Una duda que lleva más de 15 minutos «procesando» (el trabajador murió) se vuelve a repartir. Con `SIGTERM` termina limpio y devuelve a la cola la duda en curso.
+- **Cuota agotada** (el error dice *usage limit*, *rate limit*, *limit reached*, *overloaded*, 429 o 529): la duda vuelve a la cola sin gastar intentos y el trabajador espera `CONSULTAS_ESPERA_CUOTA`; tras `CONSULTAS_MAX_CUOTA` repartos queda en error. Otros fallos (tiempo agotado, salida inesperada) se reintentan tras `CONSULTAS_ESPERA`, hasta 3 veces, y después la duda queda en error.
+- **Tope de gasto diario:** suma el `total_cost_usd` de cada llamada (en `CONSULTAS_DIR/gasto.json`); al llegar a `CONSULTAS_COSTE_DIARIO` deja de tomar dudas, que siguen en cola, hasta el día siguiente. Una duda que lleva más de 15 minutos «procesando» (el trabajador murió) se vuelve a repartir. Con `SIGTERM` termina limpio y devuelve a la cola la duda en curso.
 - Registra en la salida estándar (journald) una línea por duda: id, resultado, duración y coste.
 
 | Variable | Por defecto | Uso |
 |---|---|---|
 | `CONSULTAS_URL` | `http://127.0.0.1:8097` | Base de la consola |
-| `CONSULTAS_TOKEN` | — (obligatoria) | El mismo que en el `.env` de la consola |
+| `CONSULTAS_TOKEN` | — (obligatoria) | El mismo que en el `.env` de la consola (en el servicio, desde `~/.config/consultas-claude.env`) |
 | `CONSULTAS_CLAUDE` | `claude` | Ejecutable de Claude Code |
 | `CONSULTAS_MODELO` | `sonnet` | Modelo |
 | `CONSULTAS_DIR` | `~/.local/share/consultas-claude` | Directorio de trabajo fijo |
 | `CONSULTAS_CURSOS` | — | Carpeta `cursos/` desplegada |
 | `CONSULTAS_LIBROS` | — (opcional) | Libros de estudio en Markdown |
 | `CONSULTAS_ESPERA` | `10` | Segundos entre sondeos sin trabajo |
-| `CONSULTAS_ESPERA_CUOTA` | `900` | Espera tras cuota agotada o error transitorio |
+| `CONSULTAS_ESPERA_CUOTA` | `900` | Espera tras cuota agotada |
 | `CONSULTAS_TIMEOUT` | `300` | Tiempo máximo de cada llamada a Claude |
+| `CONSULTAS_COSTE_DIARIO` | `5` | Tope de gasto diario en USD; `0` = sin tope |
+| `CONSULTAS_MAX_CUOTA` | `24` | Repartos máximos de una duda que choca con la cuota |
 
 ### Activarlo
 
-1. Genera el token (`openssl rand -hex 32`), ponlo como `CONSULTAS_TOKEN` en el `.env` de la consola y comprueba que `compose.yaml` lo pasa al contenedor (`CONSULTAS_TOKEN: ${CONSULTAS_TOKEN:-}`). Reconstruye y arranca: la migración `0003` crea las tablas de consultas.
-2. Instala el servicio de usuario de systemd del trabajador, `scripts/consultas-claude.service` (rutas de titan; ajústalas si cambian):
+1. Genera el token (`openssl rand -hex 32`) y ponlo como `CONSULTAS_TOKEN` en el `.env` de la consola. Con el `compose.yaml` de este repositorio hay que pasarlo además al contenedor (`CONSULTAS_TOKEN: ${CONSULTAS_TOKEN:-}`, ya incluido). **En titan basta con añadirlo al `.env` de `~/Sistema/aplicaciones/certificaciones/`**, porque su `compose.yaml` carga ese fichero entero con `env_file`. Reconstruye y arranca: la migración `0003` crea las tablas de consultas.
+2. Crea el fichero de entorno propio del trabajador, solo con el token (nunca le pases el `.env` de la consola, que lleva `SECRET_KEY`):
 
    ```bash
-   cp scripts/consultas-claude.service ~/.config/systemd/user/
+   install -m 600 /dev/null ~/.config/consultas-claude.env
+   grep '^CONSULTAS_TOKEN=' ~/Sistema/aplicaciones/certificaciones/.env > ~/.config/consultas-claude.env
+   ```
+
+3. Instala el servicio de usuario de systemd del trabajador, `scripts/consultas-claude.service` (rutas relativas al `HOME`, `%h`, de titan; ajústalas si cambian):
+
+   ```bash
+   cp ~/Sistema/aplicaciones/certificaciones/src/scripts/consultas-claude.service ~/.config/systemd/user/
    systemctl --user daemon-reload && systemctl --user enable --now consultas-claude
    journalctl --user -u consultas-claude -f
    ```
 
-   El servicio necesita el `HOME` del usuario para que `claude` encuentre su sesión (`~/.claude`) y *linger* activo para correr sin sesión abierta.
+   El servicio necesita el `HOME` del usuario para que `claude` encuentre su sesión (`~/.claude`) y *linger* activo para correr sin sesión abierta. Lleva `NoNewPrivileges=yes` y `TimeoutStopSec=30`; no usa `InaccessiblePaths=` porque en un servicio de usuario necesita espacios de nombres de usuario, que titan restringe con AppArmor.
+4. **Tras cada despliegue**, el trabajador ejecuta el código nuevo de `src/` al reiniciarse (`systemctl --user restart consultas-claude`). Si cambió `scripts/consultas-claude.service`, vuelve a copiarlo y haz `systemctl --user daemon-reload` antes del reinicio.
 
 ### Riesgos
 
-- **Cuota:** cada duda consume la cuota de la cuenta de Claude, compartida con las sesiones interactivas. Por eso solo `admin`, una duda cada vez y modelo Sonnet, con el coste en el log.
+- **Cuota:** cada duda consume la cuota de la cuenta de Claude, compartida con las sesiones interactivas. Por eso solo `admin`, una duda cada vez, modelo Sonnet, 3 dudas en espera y 30 al día por usuario y un tope de gasto diario en el trabajador, con el coste en el log.
 - **Acceso libre:** con `ACCESO_LIBRE_USUARIO` apuntando a un `admin`, cualquiera que llegue a la consola en la red local puede preguntar y gastar esa cuota.
-- **Contenido que lee Claude:** podría contener instrucciones (por ejemplo, en los libros). Se mitiga con herramientas solo de lectura sobre carpetas sin secretos y con la respuesta mostrada como Markdown sin HTML.
-- **El token:** se trata como `SECRET_KEY` (solo en el `.env`, nunca en Git).
+- **Contenido que lee Claude:** podría contener instrucciones (por ejemplo, en los libros). Se mitiga con herramientas solo de lectura limitadas a las carpetas del curso y de los libros, web solo de la documentación de AWS, rutas sensibles denegadas, entorno mínimo y la respuesta mostrada como Markdown sin HTML ni imágenes.
+- **El token:** se trata como `SECRET_KEY` (en el `.env` de la consola y en `~/.config/consultas-claude.env` con permisos 600, nunca en Git). La API no acepta peticiones que lleguen por el proxy.
 - **Respuestas incorrectas:** se pide la URL oficial que respalda la respuesta y el panel recuerda que prevalece la documentación.
 
 ## Mapa de servicios

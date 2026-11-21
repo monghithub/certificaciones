@@ -211,6 +211,7 @@ manteniendo en inglés los nombres de servicios y términos del examen.
 - El trabajador pasa `--allowedTools` con las mismas herramientas que `--tools`; comprobado en titan con una llamada real: `permission_denials` vacío.
 - En los mensajes con `--resume`, si el estudiante ya ha respondido, se antepone una nota con su respuesta y la solución.
 - Unidad de systemd versionada en `scripts/consultas-claude.service`.
+- Tras la revisión de seguridad del PR #49: `claude` con `--restricted --strict-mcp-config --permission-mode dontAsk`, reglas de permisos con rutas absolutas y dominios (`Read(//…/**)`, `WebFetch(domain:…)`), `--disallowedTools` para rutas sensibles y entorno mínimo; unidad con `~/.config/consultas-claude.env` propio; `consulta_mensaje.repartos` y número de reparto en la API; topes por usuario (3 en espera, 30 al día) y de gasto diario en el trabajador; sin imágenes en el Markdown; API cerrada a peticiones con `X-Forwarded-For`. Detalle en `docs/consola.md` y en el journal.
 
 ## Risks / Trade-offs
 
