@@ -27,8 +27,8 @@ Cada intento tiene siempre el mismo reparto, el del examen: por dominio según l
 
 - **Tipos de pregunta:** opción múltiple y respuesta múltiple, los dos que enumera la guía del examen. Las preguntas de ordenación y emparejamiento se practican en los bancos de los módulos.
 - **Cobertura:** el banco cubre las 14 tareas y los **69 objetivos oficiales**, cada uno con al menos una pregunta. Dentro de cada dominio, un intento no repite objetivo salvo cuando no hay más remedio: el Dominio 2 tiene 14 objetivos para 16 preguntas y el Dominio 5, 8 para 9, así que en cada intento se repiten 2 objetivos del D2 y 1 del D5.
-- **Rotación:** entre las combinaciones válidas, la consola prefiere las preguntas que no salieron en tu intento de simulacro anterior; el resto se elige al azar y el orden también es aleatorio. La rotación se aplica después del reparto y de la variedad de objetivos, y el banco solo tiene 18 preguntas más que un intento: un segundo intento seguido trae unas 15 preguntas que no viste y repite el resto.
-- **Dificultad del banco:** 14 baja, 52 media y 17 alta.
+- **Rotación:** entre las combinaciones válidas, la consola prefiere las preguntas que no salieron en tu intento de simulacro anterior; el resto se elige al azar y el orden también es aleatorio. La rotación se aplica después del reparto y de la variedad de objetivos, y el banco solo tiene 18 preguntas más que un intento: un segundo intento seguido trae unas 16 preguntas que no viste y repite el resto.
+- **Dificultad del banco:** 15 baja, 51 media y 17 alta.
 
 ## Cómo interpretar el resultado
 
