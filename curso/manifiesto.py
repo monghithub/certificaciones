@@ -29,6 +29,7 @@ class Manifiesto:
     examen_distribucion: dict[str, float] = field(default_factory=dict)  # reparto del simulacro; vacío: el del banco
     minimo_por_modulo: int | None = None
     minimo_simulacro: int | None = None
+    minimo_simulacro_por_objetivo: int | None = None  # preguntas del banco del simulacro por objetivo oficial; None: sin comprobar
     minimo_por_tarea: int | None = None
     minimo_por_objetivo: int | None = None
     cobertura: dict[str, str] = field(default_factory=dict)  # módulo -> fichero de fuentes que debe cubrir
@@ -90,6 +91,7 @@ def cargar_manifiesto(carpeta: Path, esquemas: Path | None = None) -> Manifiesto
         simulacro=datos.get("simulacro"), examen_preguntas=examen.get("preguntas"), examen_minutos=examen.get("minutos"),
         examen_tipos=tuple(examen.get("tipos") or ()), examen_distribucion=dict(examen.get("distribucion") or {}),
         minimo_por_modulo=banco.get("minimo_por_modulo"), minimo_simulacro=banco.get("minimo_simulacro"),
+        minimo_simulacro_por_objetivo=banco.get("minimo_simulacro_por_objetivo"),
         minimo_por_tarea=banco.get("minimo_por_tarea"), minimo_por_objetivo=banco.get("minimo_por_objetivo"),
         cobertura=dict(datos.get("cobertura") or {}),
         distribucion=dict(banco.get("distribucion") or {}),

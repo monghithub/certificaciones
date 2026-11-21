@@ -137,6 +137,11 @@
           "type": "integer",
           "minimum": 0
         },
+        "minimo_simulacro_por_objetivo": {
+          "description": "Mínimo de preguntas del banco del simulacro por objetivo oficial (lo comprueba comprobar_cobertura.py --preguntas). Si no se declara, no se comprueba.",
+          "type": "integer",
+          "minimum": 0
+        },
         "distribucion": {
           "type": "object",
           "additionalProperties": false,

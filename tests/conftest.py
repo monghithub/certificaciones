@@ -1,3 +1,4 @@
+import copy
 import re
 import shutil
 from pathlib import Path
@@ -143,3 +144,20 @@ def app_dos(curso, tmp_path):
     s = Settings(secret_key="k" * 40, database_url=f"sqlite:///{tmp_path}/dos.db", courses_dir=curso / "cursos",
                  schemas_dir=curso / "schemas", login_max_intentos=3)
     return create_app(s)
+
+
+def banco_simulacro(por_dominio: dict[int, tuple[int, int]], objetivos: dict[int, int] | None = None) -> list[dict]:
+    """Banco ficticio del simulacro, válido para el esquema: `por_dominio` = {dominio: (opción múltiple, respuesta múltiple)};
+    `objetivos` = {dominio: nº de objetivos distintos, asignados rotando} (sin él, un objetivo distinto por pregunta)."""
+    base = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))
+    mc, mr = base[0], base[1]
+    banco = []
+    for d, (n_mc, n_mr) in sorted(por_dominio.items()):
+        for k in range(n_mc + n_mr):
+            p = copy.deepcopy(mc if k < n_mc else mr)
+            n_obj = (objetivos or {}).get(d) or (n_mc + n_mr)
+            sid = f"S-{len(banco) + 1:03d}"
+            p.update(id=sid, dominio=d, tarea=f"{d}.1", objetivo=f"{d}.1.{k % n_obj + 1}",
+                     enunciado=f"Escenario ficticio {sid} del simulacro, con una empresa y una restricción que decide la respuesta.")
+            banco.append(p)
+    return banco
