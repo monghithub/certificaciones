@@ -1,3 +1,5 @@
+> Seguimiento: [issue #40](https://github.com/monghithub/certificaciones/issues/40). Guía de implementación en `design.md`.
+
 ## Why
 
 Durante los tests surgen dudas que la explicación de la pregunta no resuelve. El usuario quiere «hacer preguntas a la IA que resolviera en background o cuando pudiera usando una sesión en segundo plano de Claude Code con esta cuenta […] poder irlas resolviendo en el propio navegador en modo conversación».
