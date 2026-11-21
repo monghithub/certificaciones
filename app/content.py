@@ -251,7 +251,14 @@ class Contenido:
             if p["id"] in self.preguntas:
                 self.avisos.append(f"{mod.id}/libros.yaml:{p['id']}: id duplicado, ignorada")
                 continue
-            p.setdefault("dominio", 0)
+            dominio = p.get("dominio", 0)
+            if isinstance(dominio, float) and dominio.is_integer():
+                dominio = int(dominio)  # «1.0» en el YAML
+            if type(dominio) is not int or not isinstance(p.get("tarea", "libros"), str):
+                self.avisos.append(f"{mod.id}/libros.yaml:{p['id']}: dominio o tarea no válidos "
+                                   f"({p.get('dominio')!r}, {p.get('tarea')!r}), ignorada")
+                continue
+            p["dominio"] = dominio
             p.setdefault("tarea", "libros")
             p.setdefault("explicacion", "")
             p["modulo"] = mod.id
@@ -263,6 +270,20 @@ class Contenido:
         """Sección de teoría que cubre un objetivo, según el mapa de cobertura de los README."""
         destino = self.teoria.get(objetivo or "")
         return self._url_seccion(f"{destino[0]}/teoria#{destino[1]}") if destino else None
+
+    def url_dominio(self, dominio: int) -> str | None:
+        """Teoría del módulo que cubre un dominio: el bloque `cobertura` del manifiesto asocia cada módulo a su fuente
+        (`dominio-N.md`, o la de conocimientos previos para el dominio 0)."""
+        fuente = self.manifiesto.previos if dominio == 0 else f"dominio-{dominio}.md"
+        modulo = next((mod for mod, f in self.manifiesto.cobertura.items() if fuente and f == fuente), None)
+        return self._url_seccion(f"{modulo}/teoria") if modulo else None
+
+    def url_tarea(self, tarea: str | None) -> str | None:
+        """Sección de teoría del primer objetivo de la tarea (`1.2` -> `1.2.1`) que tiene sitio en el mapa de cobertura."""
+        def orden(o: str) -> tuple:
+            return tuple(int(x) if x.isdigit() else -1 for x in o.split("."))
+        objetivos = sorted((o for o in self.teoria if tarea and o.startswith(f"{tarea}.")), key=orden)
+        return self.url_teoria(objetivos[0]) if objetivos else None
 
     def _url_seccion(self, destino: str) -> str | None:
         """`modulo/seccion#ancla` -> URL interna del curso, o None si el módulo o la sección no existen."""

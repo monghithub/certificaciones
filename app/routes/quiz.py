@@ -244,7 +244,7 @@ def resultado(iid: int, request: Request, c: Contenido = Depends(requiere_curso)
     for k, pid in enumerate(i.preguntas, 1):
         p, r = c.preguntas.get(pid), por_pregunta.get(pid)
         filas.append({"n": k, "id": pid, "p": p, "r": r, "retirada": p is None, "teoria": c.url_teoria(p.get("objetivo")) if p else None})
-    ok = sum(1 for r in i.respuestas if r.correcta)
-    total = len(i.preguntas)
-    return render(request, "resultado.html", i=i, filas=filas, ok=ok, total=total, pct=round(100 * ok / total) if total else 0,
+    desglose = stats.desglose_intento(i, c, marcar_debiles=i.modo == "simulacro")
+    return render(request, "resultado.html", i=i, filas=filas, ok=desglose["ok"], total=desglose["total"], pct=desglose["pct"],
+                  desglose=desglose, proveedor=c.manifiesto.proveedor,
                   n_falladas=len(stats.falladas(db, usuario.id, c)))
