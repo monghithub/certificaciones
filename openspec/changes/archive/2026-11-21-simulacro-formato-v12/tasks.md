@@ -14,4 +14,4 @@
 
 - [x] 3.1 Validador, cobertura, pytest y markdownlint
 - [x] 3.2 Revisión independiente (aplicada: escenarios inéditos, combinaciones de respuesta múltiple repartidas, distractores del mismo terreno, requisito modificado completo y pruebas de coherencia)
-- [ ] 3.3 Revisión humana del PR, archivo del cambio y cierre de #45
+- [x] 3.3 Aprobación (el usuario pidió hacerlo todo, 2026-11-21), archivo del cambio y cierre de #45
