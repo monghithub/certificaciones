@@ -31,4 +31,4 @@
 #### Scenario: Estudiante que quiere repetirlo
 
 - **WHEN** el estudiante lee el README antes de un segundo intento
-- **THEN** sabe que le saldrán sobre todo preguntas que no vio y que conviene repasar antes de repetirlo
+- **THEN** sabe que el segundo intento cambia parte de las preguntas (unas 15 de 65), que la mayoría se repiten y que conviene repasar antes de repetirlo

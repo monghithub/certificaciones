@@ -107,7 +107,7 @@ Mínimo inevitable de repeticiones por dominio: `cuota_d − máximo de objetivo
 
 Al iniciar un simulacro, `iniciar` lee el último `Intento` del mismo usuario y curso con `modo == "simulacro"` (terminado o no, en modo estudio o no) y pasa sus `preguntas` como `evitar`. Es una preferencia, no una exclusión.
 
-- Con 82 preguntas y 65 por intento, dos intentos seguidos comparten al menos 48 preguntas haga lo que haga el algoritmo; la preferencia garantiza que las 17 que no salieron entran en el siguiente (salvo que lo impidan las cuotas por celda o la regla de no repetir objetivo, que tienen prioridad), de modo que **dos intentos consecutivos recorren el banco entero y todos los objetivos**.
+- Con 83 preguntas y 65 por intento, dos intentos seguidos comparten al menos 47 preguntas haga lo que haga el algoritmo. La preferencia mete en el siguiente intento las que no salieron siempre que lo permitan las cuotas por celda y la regla de no repetir objetivo, que tienen prioridad. Medido con el banco final (300 pares de intentos): comparten 49 o 50, el segundo trae unas 15 nuevas y entre los dos se ven unas 81 de 83. La rotación es una mejora sobre el banco fijo, no una garantía de recorrer el banco entero; para más variedad hay que ampliar el banco.
 - Coste: una consulta, sin columnas nuevas.
 
 *Descartado:* exclusión estricta (imposible: 82 < 2 × 65). *Descartado:* ponderar por todo el historial o por «menos vistas» (más consultas y poca ganancia frente al último intento). *Descartado:* no hacer nada (el azar puro deja fuera las mismas preguntas varias veces seguidas con probabilidad apreciable).
