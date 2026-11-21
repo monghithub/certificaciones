@@ -51,6 +51,10 @@
   </form>
   {% endif %}
 </div>
+{% if consultas %}
+<div id="consulta-{{ pid }}" hx-get="{{ base }}/consultas/{{ pid }}/panel?intento={{ i.id }}" hx-trigger="load" hx-swap="outerHTML">
+  <p class="suave">Cargando «Preguntar a Claude»…</p></div>
+{% endif %}
 {% endif %}
 <div style="display:flex;gap:10px;flex-wrap:wrap">
   {% if n > 1 %}<a class="btn sec" href="{{ base }}/tests/{{ i.id }}/p/{{ n - 1 }}">Anterior</a>{% endif %}

@@ -37,6 +37,7 @@ class Settings:
     password_min_length: int = 10
     ejecutar_migraciones: bool = True
     acceso_libre_usuario: str | None = None  # solo para despliegues en red local: entra sin login como este usuario
+    consultas_token: str | None = None  # activa «Preguntar a Claude» y protege la API interna del trabajador
 
     @classmethod
     def desde_entorno(cls, env=None) -> "Settings":
@@ -44,6 +45,9 @@ class Settings:
         clave = env.get("SECRET_KEY", "")
         if len(clave) < 32:
             raise ConfiguracionError("SECRET_KEY es obligatoria y debe tener al menos 32 caracteres")
+        consultas = (env.get("CONSULTAS_TOKEN") or "").strip() or None
+        if consultas and len(consultas) < 32:
+            raise ConfiguracionError("CONSULTAS_TOKEN debe tener al menos 32 caracteres (o quedar vacío para desactivar las consultas)")
         return cls(
             secret_key=clave,
             database_url=env.get("DATABASE_URL", cls.database_url),
@@ -53,4 +57,5 @@ class Settings:
             admin_username=env.get("ADMIN_USERNAME") or None,
             admin_password=env.get("ADMIN_PASSWORD") or None,
             acceso_libre_usuario=(env.get("ACCESO_LIBRE_USUARIO") or "").strip().lower() or None,
+            consultas_token=consultas,
         )

@@ -454,5 +454,11 @@
 
   function iniciar() { registrarEventos(); leerDatos(); diagramas(); cronometro(); pintarEtiquetaTema(); }
   document.addEventListener("DOMContentLoaded", iniciar);
-  document.addEventListener("htmx:load", iniciar);
+  document.addEventListener("htmx:load", function (ev) {
+    // Los fragmentos del panel «Preguntar a Claude» (y su sondeo cada 5 s) no son una página nueva: no se reinicia nada
+    // (por ejemplo, el cronómetro del simulacro volvería a su valor inicial).
+    var elt = ev.detail && ev.detail.elt;
+    if (elt && elt.closest && elt.closest(".consulta, .consulta-mensajes, .consulta-plegable")) return;
+    iniciar();
+  });
 })();

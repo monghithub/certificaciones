@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block titulo %}Mis dudas{% endblock %}
+{% block contenido %}
+<h1>Mis dudas</h1>
+<p class="suave">Tus conversaciones con Claude sobre las preguntas de los tests de este curso. Se abren desde el panel «Preguntar a Claude» de cada pregunta.</p>
+{% if not filas %}
+  <div class="card"><p>Todavía no has preguntado nada. En cualquier pregunta de un test encontrarás el panel «Preguntar a Claude».</p>
+  <a class="btn" href="{{ base }}/tests">Ir a los tests</a></div>
+{% else %}
+<div class="tablawrap"><table>
+  <thead><tr><th>Pregunta</th><th>Último mensaje</th><th>Estado</th><th>Actualizada</th></tr></thead>
+  <tbody>
+  {% for f in filas %}
+    <tr>
+      <td><a href="{{ base }}/dudas/{{ f.id }}"><strong>{{ f.pid }}</strong></a>
+        <br><span class="suave">{{ (f.enunciado|truncate(140)) if f.enunciado else 'Pregunta retirada del contenido' }}</span></td>
+      <td>{% if f.ultimo %}{{ 'Claude' if f.ultimo.rol == 'claude' else 'Tú' }}: {{ f.ultimo.texto|truncate(120) }}{% endif %}
+        <br><span class="suave">{{ f.n }} mensaje{{ '' if f.n == 1 else 's' }}</span></td>
+      <td><span class="etiqueta consulta-estado {{ f.estado }}">{{ f.etiqueta }}</span></td>
+      <td>{{ f.actualizada|fecha }} UTC</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endif %}
+{% endblock %}

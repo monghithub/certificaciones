@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block titulo %}Duda sobre {{ pid }}{% endblock %}
+{% block contenido %}
+<p><a href="{{ base }}/dudas">← Mis dudas</a></p>
+<h1>Duda sobre {{ pid }}</h1>
+{% if not p %}
+  <div class="card"><p>Esta pregunta ({{ pid }}) ya no forma parte del contenido (pregunta retirada). La conversación se conserva, pero no se pueden enviar más dudas.</p></div>
+  <div class="card">{% include "_consulta_mensajes.html" %}</div>
+{% else %}
+<div class="card">
+  <p class="suave">{{ p.id }} · {% if p.banco == 'libros' %}Pregunta de los libros{% elif p.banco == 'repaso' %}Repaso de conocimientos{% else %}Pregunta de examen · Tarea {{ p.tarea }}{% endif %}</p>
+  <p>{{ p.enunciado }}</p>
+  {% if p.tipo == 'matching' %}<p><strong>Elementos:</strong></p><ul>{% for x in p.prompts %}<li>{{ x.id }}. {{ x.texto }}</li>{% endfor %}</ul>{% endif %}
+  <ul>{% for o in p.opciones %}<li><strong>{{ o.id }})</strong> {{ o.texto }}</li>{% endfor %}</ul>
+  <details class="explicacion"><summary>Ver solución y explicación</summary>
+    <p><strong>Solución:</strong></p><ul class="solucion">{% for l in legible(p, p.correctas) %}<li>{{ l }}</li>{% endfor %}</ul>
+    {% if p.explicacion %}<p>{{ p.explicacion }}</p>{% endif %}
+    {% if p.distractores %}<ul>{% for k, v in p.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
+    {% if teoria %}<p><a class="btn sec" href="{{ teoria }}">Repasar en la teoría</a></p>{% endif %}
+    {% if p.referencia %}<p class="suave">Referencia oficial: <a href="{{ p.referencia }}" rel="noopener noreferrer">{{ p.referencia }}</a></p>{% endif %}
+  </details>
+</div>
+{% include "_consulta.html" %}
+{% endif %}
+{% endblock %}

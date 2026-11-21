@@ -1,0 +1,17 @@
+{# Panel «Preguntar a Claude» de una pregunta (fragmento htmx). Contexto: base, pid, intento, mensajes, esperando, error, csrf. #}
+<section class="consulta card" id="consulta-{{ pid }}" aria-labelledby="consulta-{{ pid }}-titulo">
+  <h2 id="consulta-{{ pid }}-titulo">Preguntar a Claude</h2>
+  <p class="suave consulta-aviso">Responde Claude con la cuenta del responsable; puede equivocarse: prevalece la documentación oficial de AWS.</p>
+  {% include "_consulta_mensajes.html" %}
+  {% if error %}<div class="msg error" role="alert">{{ error }}</div>{% endif %}
+  <form class="consulta-form" method="post" action="{{ base }}/consultas/{{ pid }}"
+        hx-post="{{ base }}/consultas/{{ pid }}" hx-target="#consulta-{{ pid }}" hx-swap="outerHTML">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    {% if intento %}<input type="hidden" name="intento" value="{{ intento }}">{% endif %}
+    <label for="consulta-{{ pid }}-texto">{{ 'Sigue preguntando' if mensajes else 'Tu duda sobre esta pregunta' }}</label>
+    <textarea id="consulta-{{ pid }}-texto" name="texto" rows="3" maxlength="{{ max_texto }}" required
+              placeholder="Por ejemplo: ¿por qué no sirve Amazon Textract aquí?"></textarea>
+    <p class="consulta-acciones"><button type="submit">Enviar</button>
+      <span class="suave">Puedes seguir con el test: la respuesta aparecerá aquí cuando llegue.</span></p>
+  </form>
+</section>

@@ -20,6 +20,12 @@
   {% if f.p.distractores %}<ul>{% for k, v in f.p.distractores.items() %}<li><strong>{{ k }})</strong> {{ v }}</li>{% endfor %}</ul>{% endif %}
   {% if f.teoria %}<p><a class="btn sec" href="{{ f.teoria }}">Repasar en la teoría</a></p>{% endif %}
   {% if f.p.referencia %}<p class="suave">Referencia: <a href="{{ f.p.referencia }}" rel="noopener noreferrer">{{ f.p.referencia }}</a></p>{% endif %}
+  {% if consultas %}
+  <details class="consulta-plegable"><summary>Preguntar a Claude</summary>
+    <div id="consulta-{{ f.id }}" hx-get="{{ base }}/consultas/{{ f.id }}/panel?intento={{ i.id }}" hx-trigger="toggle once from:closest details" hx-swap="outerHTML">
+      <p class="suave">Cargando…</p></div>
+  </details>
+  {% endif %}
   {% endif %}
 </div>
 {% endfor %}

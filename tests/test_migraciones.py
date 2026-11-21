@@ -42,7 +42,7 @@ def test_migracion_0002_conserva_datos_y_matricula(tmp_path):
     motor = _base_0001(url)
     migrar(motor)
     with sqlite3.connect(tmp_path / "v1.db") as db:
-        assert db.execute("SELECT version_num FROM alembic_version").fetchone() == ("0002",)
+        assert db.execute("SELECT version_num FROM alembic_version").fetchone() == ("0003",)
         assert db.execute("SELECT COUNT(*), COUNT(DISTINCT curso) FROM progreso_lectura WHERE curso='aif-c01'").fetchone() == (3, 1)
         assert db.execute("SELECT COUNT(*) FROM intento WHERE curso='aif-c01'").fetchone() == (2,)
         assert db.execute("SELECT usuario_id, curso FROM matricula ORDER BY usuario_id").fetchall() == [(2, "aif-c01"), (3, "aif-c01")]
@@ -62,7 +62,7 @@ def test_migracion_idempotente_y_bd_nueva(tmp_path):
     migrar(motor)
     migrar(motor)  # segunda vez: no hace nada
     with sqlite3.connect(tmp_path / "nueva.db") as db:
-        assert db.execute("SELECT version_num FROM alembic_version").fetchone() == ("0002",)
+        assert db.execute("SELECT version_num FROM alembic_version").fetchone() == ("0003",)
 
 
 def test_downgrade_a_0001(tmp_path):
@@ -75,3 +75,32 @@ def test_downgrade_a_0001(tmp_path):
         assert db.execute("SELECT COUNT(*) FROM progreso_lectura").fetchone() == (3,)
         assert "curso" not in [c[1] for c in db.execute("PRAGMA table_info(intento)")]
         assert db.execute("SELECT name FROM sqlite_master WHERE name='matricula'").fetchone() is None
+
+
+def test_migracion_0003_consultas_y_downgrade(tmp_path):
+    url = f"sqlite:///{tmp_path}/c.db"
+    motor = _base_0001(url)
+    migrar(motor)
+    with sqlite3.connect(tmp_path / "c.db") as db:
+        db.execute("PRAGMA foreign_keys=ON")
+        db.execute("INSERT INTO consulta (usuario_id, curso, pregunta_id, intento_id, creada, actualizada) "
+                   "VALUES (1,'aif-c01','D3-001',1,'2026-11-21 10:00:00','2026-11-21 10:00:00')")
+        db.execute("INSERT INTO consulta_mensaje (consulta_id, rol, texto, estado, creado, actualizado) "
+                   "VALUES (1,'usuario','¿Por qué?','pendiente','2026-11-21 10:00:00','2026-11-21 10:00:00')")
+        assert db.execute("SELECT intentos FROM consulta_mensaje").fetchone() == (0,)
+        try:
+            db.execute("INSERT INTO consulta (usuario_id, curso, pregunta_id, creada, actualizada) "
+                       "VALUES (1,'aif-c01','D3-001','2026-11-21 10:00:00','2026-11-21 10:00:00')")
+            assert False, "debería violar la restricción única (una conversación por pregunta y usuario)"
+        except sqlite3.IntegrityError:
+            pass
+        db.execute("DELETE FROM intento WHERE id=1")  # el intento se borra: la consulta se conserva sin él
+        assert db.execute("SELECT intento_id FROM consulta").fetchone() == (None,)
+        db.execute("DELETE FROM consulta")
+        assert db.execute("SELECT COUNT(*) FROM consulta_mensaje").fetchone() == (0,)
+        db.commit()
+    with motor.begin() as conn:
+        command.downgrade(_cfg(conn), "0002")
+    with sqlite3.connect(tmp_path / "c.db") as db:
+        assert db.execute("SELECT name FROM sqlite_master WHERE name LIKE 'consulta%'").fetchall() == []
+        assert db.execute("SELECT version_num FROM alembic_version").fetchone() == ("0002",)

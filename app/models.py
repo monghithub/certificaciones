@@ -1,7 +1,7 @@
-"""Modelo de datos: usuarios, progreso de lectura e intentos de cuestionario."""
+"""Modelo de datos: usuarios, progreso de lectura, intentos de cuestionario y consultas a Claude."""
 from datetime import datetime, timezone
 
-from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .db import Base
@@ -76,3 +76,39 @@ class IntentoRespuesta(Base):
     respuesta: Mapped[list] = mapped_column(JSON)
     correcta: Mapped[bool] = mapped_column(Boolean)
     intento: Mapped[Intento] = relationship(back_populates="respuestas")
+
+
+ESTADOS_MENSAJE = ("pendiente", "procesando", "respondido", "error")
+
+
+class Consulta(Base):
+    """Conversación de un usuario con Claude sobre una pregunta de un curso (una por pregunta y usuario)."""
+    __tablename__ = "consulta"
+    __table_args__ = (UniqueConstraint("usuario_id", "curso", "pregunta_id"),)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuario.id", ondelete="CASCADE"), index=True)
+    curso: Mapped[str] = mapped_column(String(64))
+    pregunta_id: Mapped[str] = mapped_column(String(64))
+    intento_id: Mapped[int | None] = mapped_column(ForeignKey("intento.id", ondelete="SET NULL"), nullable=True)
+    sesion_claude: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    creada: Mapped[datetime] = mapped_column(DateTime, default=ahora)
+    actualizada: Mapped[datetime] = mapped_column(DateTime, default=ahora)
+    mensajes: Mapped[list["ConsultaMensaje"]] = relationship(
+        back_populates="consulta", cascade="all, delete-orphan", order_by="ConsultaMensaje.id"
+    )
+
+
+class ConsultaMensaje(Base):
+    """Mensaje de una consulta. `estado` solo tiene sentido en los del usuario (pendiente → procesando → respondido | error)."""
+    __tablename__ = "consulta_mensaje"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    consulta_id: Mapped[int] = mapped_column(ForeignKey("consulta.id", ondelete="CASCADE"), index=True)
+    rol: Mapped[str] = mapped_column(String(16))  # usuario | claude
+    texto: Mapped[str] = mapped_column(Text)
+    estado: Mapped[str] = mapped_column(String(16), default="pendiente", index=True)
+    intentos: Mapped[int] = mapped_column(Integer, default=0)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    respondida_por: Mapped[int | None] = mapped_column(ForeignKey("consulta_mensaje.id"), nullable=True)
+    creado: Mapped[datetime] = mapped_column(DateTime, default=ahora)
+    actualizado: Mapped[datetime] = mapped_column(DateTime, default=ahora)  # último cambio de estado (recuperación de «procesando»)
+    consulta: Mapped[Consulta] = relationship(back_populates="mensajes")
