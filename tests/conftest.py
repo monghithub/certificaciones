@@ -84,8 +84,8 @@ def curso(repo):
         sim.append(q)
     escribir(repo, sim, "06-simulacro")
     f = base_curso / "curso.yaml"
-    f.write_text(f.read_text(encoding="utf8").replace("preguntas: 65", "preguntas: 3").replace("minutos: 90", "minutos: 1")
-                 .replace("minimo_simulacro: 65", "minimo_simulacro: 3"), encoding="utf8")
+    texto = f.read_text(encoding="utf8").replace("preguntas: 65", "preguntas: 3").replace("minutos: 90", "minutos: 1")
+    f.write_text(re.sub(r"minimo_simulacro: \d+", "minimo_simulacro: 3", texto), encoding="utf8")
     return repo
 
 

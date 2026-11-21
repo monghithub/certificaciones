@@ -177,9 +177,12 @@ def test_cobertura_del_repaso(repo):
 # ------------------------------------------------------------- simulacro
 def _simulacro(repo, objetivos, minimo=1):
     f = repo / "cursos" / "aif-c01" / "curso.yaml"
+    # El manifiesto real puede declarar ya el mínimo: se quita y se pone el de la prueba.
+    texto = re.sub(r"^  minimo_simulacro_por_objetivo: .*\n", "", f.read_text(encoding="utf8"), flags=re.M)
     if minimo is not None:
-        f.write_text(f.read_text(encoding="utf8").replace("  minimo_simulacro: 65\n",
-                     f"  minimo_simulacro: 65\n  minimo_simulacro_por_objetivo: {minimo}\n"), encoding="utf8")
+        texto = re.sub(r"^(  minimo_simulacro: \d+\n)", rf"\g<1>  minimo_simulacro_por_objetivo: {minimo}\n",
+                       texto, flags=re.M)
+    f.write_text(texto, encoding="utf8")
     base = yaml.safe_load((FIX / "valido.yaml").read_text(encoding="utf8"))[0]
     banco = []
     for k, o in enumerate(objetivos, 1):
