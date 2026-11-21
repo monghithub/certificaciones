@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 291 términos.
+Total: 297 términos.
 
 ## A
 
@@ -164,6 +164,8 @@ Total: 291 términos.
   - Referencia: <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html>
 - **CLV** (valor del ciclo de vida del cliente, customer lifetime value). *Métrica.* Valor del ciclo de vida del cliente: ingresos que se esperan de un cliente durante toda su relación con la empresa. Sube cuando mejora la retención.
   - Referencia: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html>
+- **codificador, decodificador y codificación posicional** (encoder, decoder, codificación posicional, positional encoding). *Concepto.* Partes de la arquitectura transformer: el codificador lee y procesa toda la secuencia de entrada y el decodificador genera la salida paso a paso. La codificación posicional añade a cada token información sobre su posición, porque la autoatención no conoce el orden.
+  - Referencia: <https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/>
 - **Amazon Comprehend** (Comprehend). *Servicio.* Usa procesamiento del lenguaje natural (NLP) para extraer información del contenido de los documentos: reconoce entidades, frases clave, idioma, opiniones y otros elementos.
   - Usar cuando: Para analizar texto: opiniones de clientes, entidades o temas de un conjunto de documentos.
   - No usar cuando: Cuando el problema no es de lenguaje natural: imágenes (Amazon Rekognition) o datos tabulares (Amazon SageMaker AI).
@@ -334,6 +336,8 @@ Total: 291 términos.
   - Usar cuando: Cuando analistas sin experiencia en programación deben limpiar datos para analítica o ML.
   - No usar cuando: Cuando se necesita un pipeline ETL programado a medida (AWS Glue) o entrenar un modelo.
   - Referencia: <https://docs.aws.amazon.com/databrew/latest/dg/what-is.html>
+- **gobierno de datos** (data governance). *Concepto.* Procesos y políticas que garantizan que los datos estén en las condiciones adecuadas (calidad, acceso, linaje, ciclo de vida) para usarlos de forma segura y conforme a la normativa.
+  - Referencia: <https://aws.amazon.com/what-is/data-governance/>
 - **gobierno de la IA** (AI governance). *Concepto.* Conjunto de reglas, políticas y mecanismos de supervisión que guían el desarrollo y el uso de la IA para que sea responsable, auditable y cumpla la normativa.
   - Referencia: <https://aws.amazon.com/what-is/ai-governance/>
 - **GraphRAG**. *Técnica.* Variante de RAG que combina la búsqueda vectorial con un grafo de conocimiento, para recuperar también las relaciones entre entidades. En AWS, con Amazon Neptune Analytics y Bedrock Knowledge Bases.
@@ -347,7 +351,7 @@ Total: 291 términos.
 
 - **HIPAA** (Health Insurance Portability and Accountability Act). *Concepto.* Ley de EE. UU. que protege la privacidad y la seguridad de la información sanitaria protegida (PHI). Para tratar PHI en AWS, el cliente acepta el acuerdo BAA en AWS Artifact y usa solo servicios aptos para HIPAA; no existe una certificación HIPAA para un proveedor de nube.
   - Referencia: <https://aws.amazon.com/compliance/hipaa-compliance/>
-- **hiperparámetro** (hiperparámetros, hyperparameter, hyperparameters). *Concepto.* Variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo: tasa de aprendizaje, número de epochs o tamaño de lote. Se distingue de los parámetros (por ejemplo, los pesos), que el modelo aprende durante el entrenamiento. Buscar sus mejores valores es el ajuste de hiperparámetros, que SageMaker AI automatiza.
+- **hiperparámetro** (hiperparámetros, hyperparameter, hyperparameters, ajuste de hiperparámetros, hyperparameter tuning). *Concepto.* Variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo: tasa de aprendizaje, número de epochs o tamaño de lote. Se distingue de los parámetros (por ejemplo, los pesos), que el modelo aprende durante el entrenamiento. Buscar sus mejores valores es el ajuste de hiperparámetros, que SageMaker AI automatiza.
   - Referencia: <https://aws.amazon.com/what-is/hyperparameter-tuning/>
 
 ## I
@@ -540,6 +544,8 @@ Total: 291 términos.
   - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **parámetros de inferencia** (inference parameters, temperatura de muestreo, top-p, Top-p, top-k, Top-k). *Concepto.* Ajustes de cada petición que cambian la generación. La temperatura baja favorece los tokens más probables (respuestas más deterministas) y la alta da más variedad; top-k limita a los k candidatos más probables; top-p, a los que suman una proporción de la probabilidad acumulada; la longitud máxima limita la respuesta.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html>
+- **PCA** (principal component analysis, análisis de componentes principales). *Técnica.* Algoritmo no supervisado, integrado en SageMaker AI, que reduce el número de características de un conjunto de datos conservando la mayor parte de la información.
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/pca.html>
 - **PCI DSS** (Payment Card Industry Data Security Standard). *Concepto.* Norma de seguridad que se aplica a quien almacena, procesa o transmite datos de titulares de tarjetas de pago. AWS es proveedor de servicios de nivel 1 y su informe está en AWS Artifact; el cliente certifica su propia aplicación.
   - Referencia: <https://aws.amazon.com/compliance/pci-dss-level-1-faqs/>
 - **Amazon Personalize** (Personalize). *Servicio.* Servicio de aprendizaje automático totalmente gestionado que usa tus datos para generar recomendaciones de elementos para los usuarios y segmentos de usuarios por afinidad.
@@ -568,6 +574,8 @@ Total: 291 términos.
   - Usar cuando: Cuando el modelo no conoce la jerga de un dominio y hay mucho texto propio sin etiquetar.
   - No usar cuando: Cuando el problema es la información actualizada (RAG) o una tarea concreta con ejemplos etiquetados (fine-tuning).
   - Referencia: <https://aws.amazon.com/bedrock/faqs/>
+- **preprocesamiento de texto** (lematización, lemmatization, palabras vacías, stop words, stemming). *Técnica.* Pasos que preparan el texto para el NLP: tokenizar, reducir las palabras a su raíz (stemming) o a su forma base (lematización) y eliminar las palabras vacías, que apenas aportan significado (artículos, preposiciones).
+  - Referencia: <https://aws.amazon.com/what-is/nlp/>
 - **AWS Pricing Calculator** (Pricing Calculator, calculadora de precios de AWS). *Servicio.* Herramienta web gratuita para estimar el coste de usar servicios de AWS antes de desplegarlos, según la Región y el uso previsto. Es una estimación y no incluye impuestos.
   - Usar cuando: Para presupuestar una arquitectura antes de crearla.
   - No usar cuando: Para recibir avisos cuando el gasto real supera un umbral (AWS Budgets) o para analizar el gasto ya hecho (AWS Cost Explorer).
@@ -637,6 +645,8 @@ Total: 291 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html>
 - **regresión logística** (logistic regression). *Técnica.* Técnica de aprendizaje supervisado que, pese a su nombre, se usa para clasificar: estima la probabilidad de un resultado binario (sí o no, fraude o legítima).
   - Referencia: <https://aws.amazon.com/what-is/logistic-regression/>
+- **regularización** (regularization, L1, L2). *Técnica.* Técnica contra el sobreajuste que penaliza los pesos grandes del modelo para limitar su complejidad: L1 (Lasso) penaliza su valor absoluto y L2 (Ridge), su cuadrado. El dropout es una forma de regularización en redes neuronales.
+  - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **reinforcement fine-tuning** (ajuste fino por refuerzo). *Técnica.* Método de personalización de Amazon Bedrock en el que el modelo genera respuestas, una función de recompensa (código en Lambda o un modelo juez) las puntúa y el modelo aprende a maximizar la recompensa, sin pares etiquetados.
   - Usar cuando: Cuando el éxito se puede medir (código que pasa pruebas, respuestas verificables) pero es caro conseguir ejemplos etiquetados.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/reinforcement-fine-tuning.html>
@@ -718,6 +728,10 @@ Total: 291 términos.
   - Usar cuando: Para gobierno y auditoría: comunicar a riesgos, cumplimiento o reguladores para qué sirve un modelo y cómo se evaluó.
   - No usar cuando: Para detectar sesgo o explicar predicciones: documenta, no mide. Para medir, métricas de sesgo y SHAP con bibliotecas abiertas o, en el examen, SageMaker Clarify (ya no admite clientes nuevos); para modelos fundacionales, Amazon Bedrock Evaluations.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html>
+- **Amazon SageMaker Model Dashboard** (SageMaker Model Dashboard, Model Dashboard). *Servicio.* Portal centralizado de la consola de SageMaker AI para ver, buscar y explorar todos los modelos de la cuenta, con su estado de monitorización y sus Model Cards.
+  - Usar cuando: Para tener una visión de conjunto de los modelos de la cuenta y de su estado.
+  - No usar cuando: Para documentar un modelo concreto (SageMaker Model Cards) o versionarlo y aprobarlo (SageMaker Model Registry).
+  - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-dashboard.html>
 - **SageMaker Model Monitor** (Model Monitor, Amazon SageMaker Model Monitor). *Servicio.* Vigila modelos de SageMaker AI en producción: deriva de la calidad de los datos y del modelo, deriva del sesgo y de la atribución de características, con alertas. Ya no está abierto a clientes nuevos; los existentes pueden seguir usándolo. AWS indica como sustituto sus soluciones abiertas de monitorización con CloudWatch.
   - No usar cuando: Como opción para un proyecto nuevo: ya no admite clientes nuevos; AWS remite a sus soluciones abiertas de monitorización con Amazon CloudWatch.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html>
@@ -757,7 +771,7 @@ Total: 291 términos.
   - Referencia: <https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html>
 - **soberanía de datos** (data sovereignty). *Concepto.* Principio por el que los datos quedan sujetos a las leyes del lugar donde están físicamente. Se distingue de la residencia, que es dónde están almacenados.
   - Referencia: <https://aws.amazon.com/what-is/data-sovereignty/>
-- **sobreajuste** (overfitting). *Concepto.* El modelo acierta con los datos de entrenamiento pero no con datos reales porque se ajusta demasiado a ellos y no generaliza. Es un modelo de alta varianza.
+- **sobreajuste** (overfitting, alta varianza). *Concepto.* El modelo acierta con los datos de entrenamiento pero no con datos reales porque se ajusta demasiado a ellos y no generaliza. Es un modelo de alta varianza.
   - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **sostenibilidad de la IA** (sostenibilidad). *Concepto.* Reducir el impacto ambiental de una carga de IA: comprobar si la IA generativa hace falta, elegir el modelo del tamaño justo, personalizar de forma eficiente y usar recursos que se ajustan a la demanda (serverless, autoescalado, chips eficientes).
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html>
@@ -767,7 +781,7 @@ Total: 291 términos.
   - Usar cuando: Para programar agentes en código con herramientas y MCP, sobre Bedrock u otros proveedores.
   - No usar cuando: Cuando no se quiere programar: para un asistente listo para empleados, Amazon Quick.
   - Referencia: <https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/strands-agents.html>
-- **subajuste** (underfitting). *Concepto.* El modelo no encuentra una relación significativa entre las entradas y las salidas y falla incluso con los datos de entrenamiento. Es un modelo de alto sesgo.
+- **subajuste** (underfitting, alto sesgo). *Concepto.* El modelo no encuentra una relación significativa entre las entradas y las salidas y falla incluso con los datos de entrenamiento. Es un modelo de alto sesgo.
   - Referencia: <https://aws.amazon.com/what-is/overfitting/>
 - **supervisión humana** (human oversight). *Técnica.* Revisión o decisión de una persona en los puntos donde un error tiene consecuencias graves o donde su experiencia aporta más. La política de IA responsable de AWS la exige en las decisiones con consecuencias para las personas.
   - Referencia: <https://aws.amazon.com/ai/responsible-ai/policy/>
