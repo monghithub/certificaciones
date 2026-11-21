@@ -24,6 +24,6 @@
 - [x] 3.1 `docs/consola.md` (cómo activarlo, el trabajador, riesgos), `.env.example`, `CHANGELOG.md` y `docs/journal.md`
 - [x] 3.2 Validadores y pruebas: `python scripts/validar_preguntas.py && python scripts/comprobar_cobertura.py --preguntas && python -m pytest`; markdownlint
 - [x] 3.3 PR, CI en verde y fusión; archivar este cambio de OpenSpec (`openspec/changes/archive/<fecha>-consultas-claude`) y crear `openspec/specs/consultas-claude/spec.md`
-- [ ] 3.4 titan: `CONSULTAS_TOKEN` en el `.env` del despliegue y en su `compose.yaml`, `./desplegar.sh`, servicio de usuario `consultas-claude` (unidad en `design.md`), prueba de extremo a extremo de `design.md`
-- [ ] 3.5 Inventario de `~/Sistema` según su `CLAUDE.md`: `registro.md`, `aplicaciones.md` si procede, commit con rutas propias
-- [ ] 3.6 Cerrar la issue de seguimiento con el resumen
+- [x] 3.4 titan: `CONSULTAS_TOKEN` en el `.env` del despliegue y en su `compose.yaml`, `./desplegar.sh`, servicio de usuario `consultas-claude` (unidad en `design.md`), prueba de extremo a extremo de `design.md`
+- [x] 3.5 Inventario de `~/Sistema` según su `CLAUDE.md`: `registro.md`, `aplicaciones.md` si procede, commit con rutas propias
+- [x] 3.6 Cerrar la issue de seguimiento con el resumen
