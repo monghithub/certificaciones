@@ -368,4 +368,3 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Decisiones del usuario:** en todos los tests y siempre (también antes de responder y en el simulacro cronometrado); modelo Sonnet; solo `admin`; fuentes: teoría del curso, documentación oficial de AWS y libros en Markdown.
 - **Diseño:** cola en la base de datos de la consola, API interna con token y un trabajador en el anfitrión que llama a `claude -p` (con `--resume` para seguir la conversación) y solo usa herramientas de lectura y búsqueda. Comprobado en titan: la salida JSON trae `result` y `session_id`, y `--resume` solo encuentra la sesión si se lanza desde el mismo directorio de trabajo.
 - No se implementa en esta sesión: el usuario pidió dejarlo «perfectamente indicado» para que lo desarrolle otra IA. Todo está en `openspec/changes/consultas-claude/` (guía de implementación en `design.md`, tareas en `tasks.md`) y en la issue de seguimiento.
-
