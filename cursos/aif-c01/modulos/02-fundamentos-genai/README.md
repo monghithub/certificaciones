@@ -53,6 +53,17 @@ Los términos que el examen da por sabidos:
 - **Modelo de difusión.** Familia de modelos generativos de **imagen** (y de vídeo) que aprenden a quitar ruido: durante el entrenamiento se añade ruido gaussiano a las imágenes y el modelo aprende el proceso inverso; al generar, parte de ruido y lo va «limpiando» guiado por el texto del *prompt* hasta obtener una imagen. Stable Diffusion es el ejemplo clásico.
 - **Ventana de contexto.** La cantidad máxima de *tokens* que el modelo puede manejar en una petición: la entrada (instrucciones, historial, documentos) y, en muchos modelos, también la salida que genera. Es un límite técnico **y** un factor de coste: cuanto más contexto se envía, más *tokens* se pagan.
 
+**No todo modelo generativo es un *transformer*.** AWS describe cuatro familias de modelos generativos; basta con reconocer la idea de cada una:
+
+| Familia | Idea clave | Uso típico |
+|---|---|---|
+| *Transformer* | Autoatención sobre toda la secuencia | Texto y código (LLM), también multimodal |
+| Modelo de difusión | Añade ruido a los datos y aprende a quitarlo; al generar, parte de ruido | Generar y editar imágenes y vídeo a partir de texto |
+| Red generativa antagónica (*generative adversarial network*, GAN) | **Dos redes compiten**: una genera ejemplos y otra intenta distinguirlos de los reales | Imágenes sintéticas, aumentar datos |
+| Autocodificador variacional (*variational autoencoder*, VAE) | Aprende una representación compacta de los datos (**espacio latente**) y genera variaciones a partir de ella | Crear variaciones nuevas de distintos tipos de datos |
+
+> Para reconocerlas en un enunciado, fíjate en el mecanismo: «dos redes que compiten», GAN; «quitar ruido paso a paso», difusión; «espacio latente», VAE; «autoatención», *transformer*.
+
 El recorrido de una petición, de principio a fin:
 
 ```mermaid
@@ -230,6 +241,8 @@ FB:
 
 *Ejemplo de principio a fin:* una aseguradora quiere un asistente que redacte cartas de respuesta a reclamaciones. **No preentrena** nada: selecciona en Amazon Bedrock un modelo de texto (selección del modelo), prepara 2 000 cartas buenas revisadas por su equipo (selección de datos), las usa para un **ajuste fino** supervisado porque con el *prompt* no consigue el tono legal exigido, **evalúa** el modelo ajustado con 200 casos que no ha visto, lo **despliega** para el equipo de reclamaciones y recoge las correcciones de los tramitadores (**retroalimentación**) para la siguiente ronda.
 
+**Los modelos también se retiran.** En Amazon Bedrock cada versión de modelo pasa por tres estados: **activo**; **legacy**, cuando ya tiene fecha de retirada, los clientes nuevos no pueden adoptarlo, no se puede crear capacidad aprovisionada nueva y quien deje de usarlo 15 días puede perder el acceso; y **fin de vida** (*end of life*, EOL), cuando las peticiones fallan. Los plazos dependen de cuándo se lanzó el modelo: para los lanzados desde el 7 de septiembre de 2026, el periodo *legacy* suele ser de seis meses (en algunos, 45 días); para los anteriores, dura al menos seis meses y, pasados al menos tres, el modelo puede entrar en un acceso ampliado con **precios más altos**. La migración a otro modelo no es automática: forma parte de la etapa de despliegue y retroalimentación revisar la ficha del modelo (*model card*), que indica su política de retirada, y planificar el cambio. La API Converse facilita cambiar de modelo.
+
 > El preentrenamiento es la etapa más cara con diferencia. En el examen, «crear un modelo fundacional desde cero» casi nunca es la respuesta para una empresa: lo habitual es partir de uno existente y adaptarlo (*prompt*, RAG, ajuste fino). El orden de coste y esfuerzo de esas técnicas se estudia en el módulo 03.
 
 #### Precios por tokens
@@ -250,6 +263,9 @@ Conclusiones que el examen explota:
 - **La longitud de la salida importa.** Limitar la longitud máxima de la respuesta reduce coste y latencia, porque el modelo genera *token* a token.
 - **El modelo elegido es la palanca principal.** Un modelo más pequeño y barato puede bastar para tareas sencillas; uno más grande cuesta más por *token* y suele responder más despacio.
 - **Hay opciones más baratas** para cargas que no necesitan respuesta inmediata (inferencia por lotes, nivel Flex) y para contextos repetidos (*prompt caching*). Se detallan en [Compromisos de coste](#compromisos-de-coste).
+- **Razonar cuesta *tokens*.** Los modelos con razonamiento (*reasoning*) piensan paso a paso antes de responder: mejoran en tareas complejas, pero generan más *tokens* de salida y tardan más.
+- **No todo se factura por *token*.** Los modelos de imagen se cobran por imagen generada. Los modelos de SageMaker JumpStart se pagan por las horas de la instancia donde se despliegan, y los de Amazon Bedrock Marketplace, por la instancia del *endpoint* más el cargo de software que fije el proveedor (que puede ser cero).
+- **La licencia no cambia la factura.** En Bedrock, todos los modelos del catálogo *serverless* se facturan por uso, sea cual sea su licencia.
 
 De qué depende la factura y qué palancas la reducen:
 
@@ -454,13 +470,14 @@ Otros beneficios que cita AWS: acelera la investigación (resumir, explorar alte
 
 | Limitación | Qué es | Cómo se mitiga (se estudia en los módulos 03 a 05) |
 |---|---|---|
-| Alucinaciones | Respuestas incorrectas o engañosas presentadas con seguridad. Causas: datos de entrenamiento insuficientes o sesgados, sobreajuste, falta de contexto | RAG con datos fiables, *prompts* más precisos, verificación humana en decisiones críticas, Amazon Bedrock Guardrails |
+| Alucinaciones | Respuestas incorrectas o engañosas presentadas con seguridad. El modelo genera a partir de los patrones de sus datos de entrenamiento y no consulta por sí mismo una fuente de verdad. Causas: datos de entrenamiento insuficientes o sesgados, sobreajuste, falta de contexto | RAG con datos fiables, *prompts* más precisos, verificación humana en decisiones críticas, Amazon Bedrock Guardrails |
 | Inexactitud | El modelo puede dar datos desactualizados o erróneos: su conocimiento se detiene en los datos de entrenamiento | RAG con información actualizada; citar fuentes |
 | Interpretabilidad | Los modelos son «cajas negras»: es difícil explicar por qué dan una respuesta concreta | Elegir modelos más simples cuando la explicación es un requisito; documentar; revisión humana |
 | No determinismo | La misma pregunta puede dar respuestas distintas, porque el modelo **muestrea** el siguiente *token* | Temperatura baja, formato de salida estructurado, validación de la respuesta |
 | Sesgo y toxicidad | Puede reproducir sesgos o contenido inapropiado de los datos de entrenamiento | Filtrado de datos, evaluación, Guardrails (Dominio 4) |
 | Coste y latencia | Modelos grandes, contextos largos y respuestas largas cuestan más y tardan más | Elegir el modelo adecuado, recortar el contexto, lotes, caché |
 | Privacidad y propiedad intelectual | Riesgo si se usan datos propios o sensibles sin controles | Controles de acceso y cifrado (Dominio 5) |
+| Riesgo de reputación | Un asistente de cara al público puede comprometer a la marca: revelar información interna o dar consejo legal o médico que la empresa no ofrece | Temas denegados y filtros de Amazon Bedrock Guardrails, instrucciones del sistema acotadas, revisión humana de las acciones con consecuencias |
 
 **Parámetros de inferencia y no determinismo.** Para cada posición, el modelo calcula una distribución de probabilidad sobre el siguiente *token* y toma una muestra. Algunos parámetros cambian esa distribución:
 
@@ -536,8 +553,12 @@ R:
   texto: 'Un modelo más grande no siempre da más valor si la tarea es sencilla: es más caro y suele responder más despacio.'
 ```
 
+**Latencia con y sin *streaming*.** Amazon CloudWatch ofrece dos métricas para Bedrock: `TimeToFirstToken`, el tiempo desde que se envía la petición hasta que llega el primer *token* en las operaciones con respuesta en *streaming* (como ConverseStream), e `InvocationLatency`, el tiempo hasta la respuesta completa. Con *streaming*, la aplicación puede mostrar el texto según se genera en lugar de esperar al final.
+
 Reglas prácticas:
 
+- Antes de elegir, revisa la **ficha del modelo** (*model card*) en Bedrock, que incluye su política de retirada: un modelo en estado *legacy* no es buena elección para un proyecto nuevo.
+- Las puntuaciones de *benchmarks* públicos orientan, pero no sustituyen a una evaluación con **datos propios** (módulo 03).
 - Empieza por el modelo **más pequeño que cumpla** la calidad requerida, evaluándolo con casos reales (Amazon Bedrock permite comparar modelos con evaluaciones).
 - En Amazon Bedrock, la API Converse unifica la forma de llamar a los modelos y permite cambiar de modelo modificando un solo parámetro, lo que reduce el riesgo de elegir mal al principio.
 - La familia Amazon Nova ilustra la gama: Nova Micro (solo texto, la latencia más baja a muy bajo coste), Nova Lite (multimodal de muy bajo coste), Nova Pro (equilibrio entre exactitud, velocidad y coste) y Nova Premier (la más capaz, para tareas complejas). Amazon Nova 2 añade, entre otros, Nova 2 Lite y Nova Multimodal Embeddings.
@@ -557,6 +578,8 @@ Una solución de IA generativa se justifica por su impacto en el negocio, no por
 | Valor del ciclo de vida del cliente (CLV) | Ingresos esperados de un cliente durante toda su relación con la empresa | Sube si mejora la retención gracias a una mejor atención |
 
 *Ejemplo resuelto de ROI:* un asistente para el equipo de soporte cuesta 3 000 USD al mes (modelo, infraestructura y mantenimiento). Reduce 4 minutos el tiempo medio de 20 000 casos mensuales: 80 000 minutos, unas 1 333 horas. Con un coste de 25 USD por hora de agente, el ahorro es de unos 33 300 USD al mes. ROI = (33 300 − 3 000) / 3 000 ≈ **10,1**, es decir, un 1 010 %. Si además la exactitud baja del umbral acordado y hay que revisar cada respuesta, el ahorro desaparece: por eso se miden a la vez métricas de negocio y de calidad.
+
+«Eficiencia» tiene dos sentidos según el contexto: de **negocio** (tiempo o recursos ahorrados por tarea, como en la tabla) o **técnica** (latencia, *throughput*, cómputo por petición). La satisfacción del cliente (encuestas, valoraciones) no figura en la lista del objetivo 2.2.4, pero es una métrica de negocio válida (módulo 01); si aparece como opción, no la descartes solo por eso.
 
 > Elige la métrica según el objetivo del enunciado: «vender más» → conversión, ARPU; «fidelizar» → CLV; «reducir costes» → eficiencia y ROI; «respuestas fiables» → exactitud.
 
@@ -628,7 +651,10 @@ JS:
 |---|---|---|
 | Usar modelos fundacionales de varios proveedores por API, sin gestionar infraestructura, pagando por uso | **Amazon Bedrock** | Servicio totalmente gestionado y *serverless*; añade Knowledge Bases (RAG), Guardrails, evaluaciones, personalización de modelos y AgentCore |
 | Entrenar o ajustar a fondo modelos propios, abiertos o personalizados, con control sobre infraestructura, coste, rendimiento y latencia | **Amazon SageMaker AI** | Plataforma de ML para construir, entrenar y desplegar modelos a escala |
-| Partir de un modelo fundacional preentrenado (público o propietario), probarlo, ajustarlo y desplegarlo en SageMaker AI | **SageMaker JumpStart** | Catálogo de modelos, plantillas y cuadernos de ejemplo dentro de SageMaker AI |
+| Partir de un modelo fundacional preentrenado (público o propietario), evaluarlo y compararlo, ajustarlo y desplegarlo en SageMaker AI | **SageMaker JumpStart** | Catálogo de modelos, plantillas y cuadernos de ejemplo dentro de SageMaker AI; no tiene coste adicional: se pagan las instancias de entrenamiento e inferencia |
+| Usar en Bedrock un modelo especializado o emergente que no está en el catálogo *serverless* | **Amazon Bedrock Marketplace** | Más de 100 modelos que se despliegan en un *endpoint* gestionado por SageMaker AI y se invocan con las API de Bedrock |
+| Llevar a Bedrock un modelo propio ajustado fuera (por ejemplo, en SageMaker AI) para invocarlo sin gestionar servidores | **Custom Model Import** de Amazon Bedrock | Importa los pesos de arquitecturas compatibles (por ejemplo, Llama, Mistral o Qwen) y se usa con inferencia bajo demanda |
+| Extraer información de contenido no estructurado (documentos, imágenes, audio y vídeo) sin construir el flujo a mano | **Amazon Bedrock Data Automation** | Funcionalidad de Bedrock que genera resultados estructurados a partir de ese contenido |
 | Dar a los empleados un asistente con agentes que consulte los datos de la empresa, automatice tareas, analice datos e investigue, sin desarrollar | **Amazon Quick** | Servicio gestionado con chat en lenguaje natural; incluye Quick Sight (antes Amazon QuickSight), Flows, Automate, Index, Research y Apps |
 | Acelerar el desarrollo de software con un agente que pase de *prompts* a especificaciones, código, documentación y pruebas | **Kiro** | Servicio de programación agéntica, construido sobre Amazon Bedrock, con desarrollo guiado por especificaciones (*specs*), *hooks* de agente y ficheros de *steering* |
 | Programar agentes en código con un enfoque centrado en el modelo, con herramientas y MCP | **Strands Agents** | SDK de código abierto publicado inicialmente por AWS; incluye patrones multiagente; funciona con Bedrock y con otros proveedores |
@@ -662,7 +688,7 @@ Disponibilidad y nombres vigentes (a 14 de octubre de 2026):
 - **Cumplimiento.** Bedrock está dentro del alcance de estándares de cumplimiento como SOC e ISO, es apto para HIPAA (*HIPAA eligible*), tiene la certificación CSA STAR de nivel 2 y se puede usar conforme al RGPD. El contenido procesado se cifra y se almacena en reposo en la Región en la que se usa el servicio.
 - **Responsabilidad (modelo de responsabilidad compartida).** AWS protege la infraestructura global; el cliente es responsable de controlar su contenido, configurar los permisos (IAM) y la seguridad de los servicios que usa.
 - **Seguridad de uso (*safety*).** Controles para un uso responsable, como Amazon Bedrock Guardrails (filtros de contenido, temas denegados, datos sensibles), y detección automática de abusos.
-- **Infraestructura global y hardware especializado.** Regiones y zonas de disponibilidad en todo el mundo, y chips diseñados por AWS: **AWS Trainium**, para entrenar **y** servir (inferencia) modelos de IA a escala con la mejor relación coste-rendimiento, y **AWS Inferentia**, específico para la inferencia de aprendizaje profundo e IA generativa al menor coste en Amazon EC2.
+- **Infraestructura global y hardware especializado.** Regiones y zonas de disponibilidad en todo el mundo, y chips diseñados por AWS: **AWS Trainium**, para entrenar **y** servir (inferencia) modelos de IA a escala con la mejor relación coste-rendimiento, y **AWS Inferentia**, específico para la inferencia de aprendizaje profundo e IA generativa al menor coste en Amazon EC2. Estos chips también son la respuesta cuando el enunciado pide **eficiencia energética o sostenibilidad**: el pilar de sostenibilidad del Machine Learning Lens recomienda usar el silicio más eficiente para cada tarea, y da como ejemplos que entrenar BERT Large en un clúster de Trainium consumió aproximadamente un 25 % menos de energía que clústeres comparables de otras instancias aceleradas, y que Inferentia (Inf2) ofrece hasta un 50 % más de rendimiento por vatio.
 
 *Ejemplo:* un hospital que construye un asistente clínico con Bedrock no se preocupa de servidores ni de chips (eficiencia); conecta desde su VPC con PrivateLink (privacidad); sabe que sus consultas no entrenan los modelos ni llegan al proveedor (seguridad de los datos); configura con IAM quién puede invocar cada modelo y activa Guardrails para enmascarar datos de pacientes (responsabilidad compartida y *safety*); y comprueba que el servicio es apto para HIPAA (cumplimiento).
 
@@ -689,6 +715,10 @@ Otros factores de coste que cita la guía:
 - **Capacidad de respuesta y rendimiento.** Más velocidad cuesta más: modelos grandes, nivel Priority, inferencia optimizada para latencia (en vista previa para algunos modelos).
 - **Disponibilidad y redundancia.** Garantizar capacidad (Reserved, *Provisioned Throughput*) o repartir la carga entre Regiones mejora la disponibilidad, a cambio de compromiso o de condiciones sobre la ubicación de los datos.
 - **Cobertura regional.** No todos los modelos ni todas las funcionalidades están en todas las Regiones, y el precio puede variar por Región. Un requisito de residencia de datos puede limitar los modelos disponibles.
+- **Modelos personalizados e importados.** Tras ajustar un modelo, servirlo bajo demanda (cuando el modelo y la Región lo admiten, y con Custom Model Import, disponible solo en algunas Regiones y sin inferencia por lotes) evita pagar capacidad aprovisionada que no se usa; *Provisioned Throughput* compensa con tráfico alto y constante. Los modelos de Bedrock Marketplace se pagan por la instancia del *endpoint* más el cargo de software del proveedor.
+- **Lo que no es el modelo.** Guardrails, Knowledge Bases y su almacén vectorial tienen precio propio, aparte de los *tokens* del modelo.
+
+> **«Producción» no significa *Provisioned Throughput*.** Una aplicación en producción con tráfico variable puede seguir bajo demanda (o en el nivel Priority si necesita la respuesta más rápida); la capacidad aprovisionada o Reserved se justifica por un volumen alto y estable o por necesitar capacidad garantizada.
 
 *Ejemplo de decisión:* una empresa resume cada noche 200 000 reseñas para un informe que se lee por la mañana → **inferencia por lotes**: la mitad de precio y no necesita respuesta inmediata. Su asistente web, con tráfico irregular, sigue **bajo demanda**. Si el asistente se convierte en crítico y con volumen alto y estable, puede estudiar el nivel Reserved o *Provisioned Throughput*.
 
@@ -696,8 +726,8 @@ Otros factores de coste que cita la guía:
 
 - Los modelos fundacionales trabajan con ***tokens***; se paga por *tokens* de **entrada y de salida**, con precios distintos por modelo y Región. Más contexto o respuestas más largas, más coste y más latencia.
 - ***Chunking*** parte documentos; los ***embeddings*** son vectores que representan el significado; una **base de datos vectorial** busca por similitud. Juntos son la base de RAG.
-- *Transformer* = autoatención sobre toda la secuencia; **multimodal** = varias modalidades en una petición; **difusión** = generar imágenes quitando ruido.
-- Ciclo de vida del FM: datos → selección del modelo → preentrenamiento → ajuste fino → evaluación → despliegue → retroalimentación. Las empresas casi nunca preentrenan: parten de un modelo existente.
+- *Transformer* = autoatención sobre toda la secuencia; **multimodal** = varias modalidades en una petición; **difusión** = generar imágenes quitando ruido; **GAN** = dos redes que compiten; **VAE** = espacio latente.
+- Ciclo de vida del FM: datos → selección del modelo → preentrenamiento → ajuste fino → evaluación → despliegue → retroalimentación. Las empresas casi nunca preentrenan: parten de un modelo existente. Los modelos de Bedrock pasan de activo a *legacy* y a fin de vida: hay que planificar la migración.
 - **Ingeniería de contexto**: decidir qué información (instrucciones, memoria, RAG, herramientas, ejemplos) llega al modelo en cada llamada.
 - **Agente** = modelo que razona y **actúa** con herramientas; **MCP** = protocolo abierto que conecta agentes con herramientas y datos externos; **A2A** = protocolo para que los agentes se comuniquen entre sí; memoria a corto y largo plazo; coordinador frente a colaboración entre iguales.
 - Ventajas: adaptabilidad, rapidez, conversación, generación de contenido. Inconvenientes: alucinaciones, inexactitud, poca interpretabilidad, no determinismo. La **temperatura baja** reduce la variabilidad, no las alucinaciones.
@@ -747,3 +777,16 @@ Documentación oficial consultada el 14 de octubre de 2026:
 - Amazon Bedrock AgentCore: <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html>, Memory: <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html> y Gateway: <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html>
 - Amazon Q Business (aviso de cierre a clientes nuevos): <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/what-is.html> y Amazon Q Developer (fin de soporte de los *plugins* de IDE): <https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html>
 - AWS Trainium: <https://aws.amazon.com/ai/machine-learning/trainium/> y AWS Inferentia: <https://aws.amazon.com/ai/machine-learning/inferentia/>
+
+Añadidas en la revisión con las guías de estudio (consultadas el 21 de noviembre de 2026):
+
+- Tipos de modelos generativos (difusión, GAN, VAE, *transformer*): <https://aws.amazon.com/what-is/generative-ai/> y GAN: <https://aws.amazon.com/what-is/gan/>
+- Ciclo de vida de los modelos en Amazon Bedrock: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html> (modelos lanzados desde el 7 de septiembre de 2026) y <https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle-legacy.html> (anteriores)
+- Razonamiento en Amazon Bedrock: <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-reasoning.html>
+- Métricas de CloudWatch de Bedrock (`TimeToFirstToken`, `InvocationLatency`): <https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html>
+- Fichas de modelo en Bedrock: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html>
+- Amazon Bedrock Marketplace: <https://docs.aws.amazon.com/bedrock/latest/userguide/amazon-bedrock-marketplace.html> y su lanzamiento (precio de la instancia y del software): <https://aws.amazon.com/blogs/aws/amazon-bedrock-marketplace-access-over-100-foundation-models-in-one-place/>
+- Custom Model Import: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html>
+- Amazon Bedrock Data Automation: <https://docs.aws.amazon.com/bedrock/latest/userguide/bda.html>
+- Evaluar y comparar modelos en SageMaker JumpStart: <https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-evaluate.html> y precios de SageMaker AI (JumpStart sin coste adicional): <https://aws.amazon.com/sagemaker/ai/pricing/>
+- Silicio eficiente y sostenibilidad (Machine Learning Lens): <https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus05-bp02.html>

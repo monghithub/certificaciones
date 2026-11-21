@@ -2193,3 +2193,63 @@
   definicion: "Servicio gestionado de recuperación de información y búsqueda inteligente en los documentos de una empresa; puede actuar como recuperador en un RAG, pero no redacta la respuesta. Ya no está abierto a clientes nuevos, y no figura entre los servicios dentro del alcance del examen."
   no_usar_cuando: "Para un proyecto nuevo de búsqueda o RAG sobre documentos propios: Amazon Bedrock Knowledge Bases, que es la alternativa que indica AWS."
   referencia: https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html
+
+# Revisión del módulo 02 con las guías de estudio (issue #33)
+
+- id: gan
+  termino: GAN
+  alias: [red generativa antagónica, generative adversarial network, redes generativas antagónicas]
+  categoria: concepto
+  definicion: "Familia de modelos generativos en la que dos redes neuronales se entrenan compitiendo: una genera ejemplos y la otra intenta distinguirlos de los reales. Se usa, por ejemplo, para crear imágenes sintéticas."
+  referencia: https://aws.amazon.com/what-is/gan/
+
+- id: vae
+  termino: VAE
+  alias: [autocodificador variacional, variational autoencoder]
+  categoria: concepto
+  definicion: "Familia de modelos generativos que aprende una representación compacta de los datos, llamada espacio latente, y genera variaciones a partir de ella."
+  referencia: https://aws.amazon.com/what-is/generative-ai/
+
+- id: ciclo-de-vida-de-modelos-bedrock
+  termino: ciclo de vida de los modelos de Bedrock
+  alias: [modelo legacy, fin de vida del modelo]
+  categoria: concepto
+  definicion: "Estados de una versión de modelo en Amazon Bedrock: activo; legacy, con fecha de retirada anunciada, sin clientes nuevos ni capacidad aprovisionada nueva (en los modelos anteriores a septiembre de 2026, con un posible acceso ampliado a precio más alto); y fin de vida (EOL), cuando las peticiones fallan. La migración no es automática."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+
+- id: tiempo-hasta-el-primer-token
+  termino: tiempo hasta el primer token
+  alias: [TimeToFirstToken, time to first token, TTFT]
+  categoria: metrica
+  definicion: "Tiempo desde que se envía una petición hasta que llega el primer token de la respuesta en streaming (por ejemplo, con ConverseStream). Es la latencia que percibe el usuario de un chat; el tiempo total hasta el último token es la latencia de la invocación."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+
+- id: amazon-bedrock-marketplace
+  termino: Amazon Bedrock Marketplace
+  alias: [Bedrock Marketplace]
+  categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
+  definicion: "Catálogo de Amazon Bedrock con más de 100 modelos fundacionales populares, emergentes y especializados que se despliegan en un endpoint gestionado por SageMaker AI y se invocan con las API de Bedrock. Se paga la instancia del endpoint más el cargo de software que fije el proveedor."
+  usar_cuando: "Para usar desde Bedrock un modelo especializado que no está en el catálogo serverless."
+  no_usar_cuando: "Cuando el modelo ya está en el catálogo serverless: bajo demanda se paga por token y no hay instancia que mantener."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/amazon-bedrock-marketplace.html
+
+- id: custom-model-import
+  termino: Custom Model Import
+  alias: [importación de modelos personalizados]
+  categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
+  definicion: "Funcionalidad de Amazon Bedrock para importar los pesos de un modelo personalizado fuera de Bedrock (por ejemplo, en SageMaker AI), de arquitecturas compatibles como Llama, Mistral o Qwen, e invocarlo bajo demanda sin gestionar servidores. Solo está en algunas Regiones y no admite inferencia por lotes."
+  usar_cuando: "Para servir de forma serverless en Bedrock un modelo propio ya ajustado."
+  no_usar_cuando: "Si la arquitectura no es compatible (desplegarlo en SageMaker AI) o si el modelo se personaliza dentro de Bedrock."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html
+
+- id: amazon-bedrock-data-automation
+  termino: Amazon Bedrock Data Automation
+  alias: [Bedrock Data Automation, BDA]
+  categoria: servicio
+  icono: aws/Arch_Amazon-Bedrock_48.svg
+  definicion: "Funcionalidad de Amazon Bedrock que extrae información útil y estructurada de contenido no estructurado: documentos, imágenes, audio y vídeo."
+  usar_cuando: "Para procesar contenido variado (documentos, imágenes, audio, vídeo) con IA generativa sin construir el flujo a mano."
+  no_usar_cuando: "Para una tarea acotada que ya resuelve un servicio especializado: formularios con Amazon Textract o transcripción con Amazon Transcribe."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/bda.html

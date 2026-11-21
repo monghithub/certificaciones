@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 271 términos.
+Total: 278 términos.
 
 ## A
 
@@ -91,6 +91,10 @@ Total: 271 términos.
 - **Amazon Bedrock Agents** (Bedrock Agents, Amazon Bedrock Agents Classic). *Servicio.* Permite crear y configurar agentes autónomos en una aplicación: orquestan las interacciones entre modelos fundacionales, fuentes de datos, aplicaciones y usuarios, y llaman a APIs para ejecutar acciones. Ahora se llama Agents Classic y ya no está abierto a clientes nuevos.
   - No usar cuando: En proyectos nuevos: AWS remite a Amazon Bedrock AgentCore para capacidades similares.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html>
+- **Amazon Bedrock Data Automation** (Bedrock Data Automation, BDA). *Servicio.* Funcionalidad de Amazon Bedrock que extrae información útil y estructurada de contenido no estructurado: documentos, imágenes, audio y vídeo.
+  - Usar cuando: Para procesar contenido variado (documentos, imágenes, audio, vídeo) con IA generativa sin construir el flujo a mano.
+  - No usar cuando: Para una tarea acotada que ya resuelve un servicio especializado: formularios con Amazon Textract o transcripción con Amazon Transcribe.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/bda.html>
 - **Amazon Bedrock Flows** (Bedrock Flows). *Servicio.* Constructor visual de flujos de trabajo de IA generativa que enlaza prompts, modelos fundacionales, Knowledge Bases y otros servicios como AWS Lambda, y despliega flujos inmutables. Se paga por los recursos que usa.
   - Usar cuando: Procesos con pasos fijos y predecibles.
   - No usar cuando: Cuando los pasos dependen de lo que vaya pasando y el sistema debe decidir por sí mismo: eso es un agente (AgentCore).
@@ -103,6 +107,10 @@ Total: 271 términos.
   - Usar cuando: Cuando el modelo debe responder con información propia, específica o actualizada.
   - No usar cuando: Cuando el modelo no necesita datos propios ni actualizados: basta invocar el modelo con un buen prompt.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html>
+- **Amazon Bedrock Marketplace** (Bedrock Marketplace). *Servicio.* Catálogo de Amazon Bedrock con más de 100 modelos fundacionales populares, emergentes y especializados que se despliegan en un endpoint gestionado por SageMaker AI y se invocan con las API de Bedrock. Se paga la instancia del endpoint más el cargo de software que fije el proveedor.
+  - Usar cuando: Para usar desde Bedrock un modelo especializado que no está en el catálogo serverless.
+  - No usar cuando: Cuando el modelo ya está en el catálogo serverless: bajo demanda se paga por token y no hay instancia que mantener.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/amazon-bedrock-marketplace.html>
 - **Amazon Bedrock Model Evaluation** (Bedrock Model Evaluation, Amazon Bedrock Evaluations, Bedrock Evaluations). *Servicio.* Evaluaciones de Amazon Bedrock: programáticas (conjuntos integrados o propios con métricas de exactitud, robustez y toxicidad), con trabajadores humanos, con un modelo juez (LLM-as-a-judge) y de fuentes RAG o Knowledge Bases.
   - Usar cuando: Para comparar modelos, prompts o Knowledge Bases con datos del caso antes de elegir o de pasar a producción.
   - No usar cuando: Para evaluar agentes a partir de sus trazas: AgentCore Evaluations.
@@ -134,6 +142,8 @@ Total: 271 términos.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html>
 - **ciclo de vida de los datos** (data lifecycle). *Concepto.* Qué ocurre con los datos desde que se crean hasta que se borran: almacenamiento, uso, archivo y eliminación según políticas. En S3 se automatiza con S3 Lifecycle.
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
+- **ciclo de vida de los modelos de Bedrock** (modelo legacy, fin de vida del modelo). *Concepto.* Estados de una versión de modelo en Amazon Bedrock: activo; legacy, con fecha de retirada anunciada, sin clientes nuevos ni capacidad aprovisionada nueva (en los modelos anteriores a septiembre de 2026, con un posible acceso ampliado a precio más alto); y fin de vida (EOL), cuando las peticiones fallan. La migración no es automática.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html>
 - **citación de fuentes** (source citation). *Técnica.* Indicar de qué documentos sale cada respuesta. Amazon Bedrock Knowledge Bases devuelve citas con los fragmentos y documentos de origen, lo que permite comprobar la respuesta.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve-generate.html>
 - **clasificación** (classification, clasificación binaria, clasificación multiclase). *Técnica.* Problema supervisado cuyo valor objetivo es categórico: asignar un elemento a una clase. Es binaria si hay dos clases (spam o no spam) y multiclase si hay varias (el tema de un documento).
@@ -178,6 +188,10 @@ Total: 271 términos.
   - Referencia: <https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html>
 - **curación de datos** (data curation). *Concepto.* Seleccionar, limpiar, deduplicar y revisar los datos antes de entrenar o ajustar un modelo: quitar errores, contenido tóxico y datos personales innecesarios.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html>
+- **Custom Model Import** (importación de modelos personalizados). *Servicio.* Funcionalidad de Amazon Bedrock para importar los pesos de un modelo personalizado fuera de Bedrock (por ejemplo, en SageMaker AI), de arquitecturas compatibles como Llama, Mistral o Qwen, e invocarlo bajo demanda sin gestionar servidores. Solo está en algunas Regiones y no admite inferencia por lotes.
+  - Usar cuando: Para servir de forma serverless en Bedrock un modelo propio ya ajustado.
+  - No usar cuando: Si la arquitectura no es compatible (desplegarlo en SageMaker AI) o si el modelo se personaliza dentro de Bedrock.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html>
 
 ## D
 
@@ -292,6 +306,8 @@ Total: 271 términos.
 
 ## G
 
+- **GAN** (red generativa antagónica, generative adversarial network, redes generativas antagónicas). *Concepto.* Familia de modelos generativos en la que dos redes neuronales se entrenan compitiendo: una genera ejemplos y la otra intenta distinguirlos de los reales. Se usa, por ejemplo, para crear imágenes sintéticas.
+  - Referencia: <https://aws.amazon.com/what-is/gan/>
 - **Generative AI Security Scoping Matrix** (AI Security Scoping Matrix, Security Scoping Matrix). *Concepto.* Marco de AWS que clasifica los casos de IA generativa en cinco ámbitos según cuánto controla la organización el modelo y sus datos (aplicación de consumo, aplicación empresarial, modelo preentrenado, modelo ajustado, modelo propio) y los cruza con cinco disciplinas: gobierno y cumplimiento, legal y privacidad, gestión de riesgos, controles y resiliencia.
   - Referencia: <https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/>
 - **AWS Glue** (Glue). *Servicio.* Servicio serverless de integración de datos para descubrir, preparar, mover e integrar datos de varias fuentes (ETL), con un catálogo de datos centralizado (AWS Glue Data Catalog).
@@ -744,6 +760,8 @@ Total: 271 términos.
   - Usar cuando: Para digitalizar formularios, facturas y documentos escaneados.
   - No usar cuando: Cuando se trata de reconocer objetos o rostros en fotografías (Amazon Rekognition).
   - Referencia: <https://docs.aws.amazon.com/textract/latest/dg/what-is.html>
+- **tiempo hasta el primer token** (TimeToFirstToken, time to first token, TTFT). *Métrica.* Tiempo desde que se envía una petición hasta que llega el primer token de la respuesta en streaming (por ejemplo, con ConverseStream). Es la latencia que percibe el usuario de un chat; el tiempo total hasta el último token es la latencia de la invocación.
+  - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html>
 - **token** (tokens). *Concepto.* Unidad mínima de texto (u otro dato) que procesa un modelo: una palabra, parte de una palabra o un signo. El modelo recibe tokens de entrada y genera tokens de salida uno a uno. Cada modelo tokeniza a su manera. Es la unidad de facturación y de las cuotas de los modelos fundacionales.
   - Referencia: <https://docs.aws.amazon.com/bedrock/latest/userguide/count-tokens.html>
 - **AWS Trainium** (Trainium). *Servicio.* Chips diseñados por AWS para entrenar y servir (inferencia) modelos de IA a escala con la mejor relación coste-rendimiento, disponibles en instancias de Amazon EC2.
@@ -785,6 +803,8 @@ Total: 271 términos.
 
 ## V
 
+- **VAE** (autocodificador variacional, variational autoencoder). *Concepto.* Familia de modelos generativos que aprende una representación compacta de los datos, llamada espacio latente, y genera variaciones a partir de ella.
+  - Referencia: <https://aws.amazon.com/what-is/generative-ai/>
 - **validación de la salida** (output validation). *Técnica.* Comprobar la respuesta de un modelo antes de usarla: contra la fuente (grounding), contra reglas lógicas (Automated Reasoning), contra un formato o esquema esperado, o con revisión humana.
   - Referencia: <https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/security.html>
 - **vector** (vectores). *Concepto.* Lista de valores numéricos que representa información en un espacio de muchas dimensiones. Es la forma de un embedding; la distancia entre vectores mide la similitud.
