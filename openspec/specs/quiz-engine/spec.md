@@ -18,11 +18,18 @@ El sistema SHALL corregir con las mismas reglas que `scripts/quiz.py` (respuesta
 - **THEN** se marca incorrecta
 
 ### Requirement: Simulacro cronometrado
-El sistema SHALL ofrecer el simulacro del módulo 06 con 65 preguntas y límite de 90 minutos medido en servidor, sin mostrar explicaciones hasta finalizar.
+
+El sistema SHALL ofrecer el simulacro del módulo que declara el manifiesto con `examen.preguntas` preguntas compuestas según la capacidad `simulacro-rotatorio` (65 en AIF-C01) y límite de `examen.minutos` medido en servidor (90 en AIF-C01), sin mostrar explicaciones hasta finalizar.
 
 #### Scenario: Tiempo agotado
+
 - **WHEN** transcurren 90 minutos desde el inicio
 - **THEN** el intento se cierra y las preguntas sin responder cuentan como incorrectas
+
+#### Scenario: Composición del intento
+
+- **WHEN** el estudiante inicia el simulacro de AIF-C01 con un banco de 83 preguntas
+- **THEN** el intento tiene 65 preguntas con el reparto oficial por dominio y tipo
 
 ### Requirement: Registro de intentos
 Cada respuesta SHALL guardarse con el id de pregunta, dominio, tarea, respuesta dada y acierto, asociada a su intento y usuario.
@@ -58,4 +65,3 @@ Al iniciar el simulacro, el estudiante SHALL poder marcar «Modo estudio»: con 
 #### Scenario: Simulacro normal
 - **WHEN** el estudiante inicia el simulacro sin modo estudio y responde una pregunta
 - **THEN** no ve la corrección hasta el resultado final
-

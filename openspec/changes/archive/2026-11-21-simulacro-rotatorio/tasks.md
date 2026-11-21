@@ -34,10 +34,10 @@
 - [x] 5.2 Redactar las preguntas nuevas `S-070` a `S-087` (18; ver journal): primero una por cada objetivo sin cubrir y después las de holgura por dominio; inéditas respecto a los bancos de los módulos, con escenario de negocio, distractores explicados y referencia oficial
 - [x] 5.3 `cursos/aif-c01/curso.yaml`: `banco.minimo_simulacro: 80` y `banco.minimo_simulacro_por_objetivo: 1`
 - [x] 5.4 `06-simulacro/README.md` (banco, reparto por intento, rotación, cómo repetirlo; deja de decir que el banco es fijo) y `cursos/aif-c01/README.md` y `README.md` (cifras)
-- [ ] 5.5 Revisión independiente del contenido nuevo
+- [x] 5.5 Revisión independiente del contenido nuevo
 
 ## 6. Cierre
 
-- [ ] 6.1 Validador, cobertura con `--preguntas`, pytest, markdownlint y Mermaid
-- [ ] 6.2 Prueba manual en la consola: dos simulacros seguidos con el mismo usuario (reparto, rotación, resultado e historial)
-- [ ] 6.3 Archivo del cambio, `CHANGELOG.md` y `docs/journal.md`, PR a `main`
+- [x] 6.1 Validador, cobertura con `--preguntas`, pytest, markdownlint y Mermaid
+- [x] 6.2 Prueba manual en la consola: dos simulacros seguidos con el mismo usuario (reparto, rotación, resultado e historial)
+- [x] 6.3 Archivo del cambio, `CHANGELOG.md` y `docs/journal.md`, PR a `main`

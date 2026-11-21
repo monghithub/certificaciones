@@ -15,19 +15,28 @@ Cada curso SHALL residir en `cursos/<slug>/` con un manifiesto `curso.yaml`, un 
 - **THEN** el validador informa de error y la consola omite el curso con un aviso
 
 ### Requirement: Manifiesto del curso
-El manifiesto SHALL declarar `slug`, `titulo`, `idioma` y `dominios` (cada uno con `id`, `nombre` y `peso`, sumando los pesos 100), y MAY declarar `proveedor` (nombre del proveedor de la certificación), `fuentes_oficiales` (lista de hosts de su documentación oficial), `examen` (preguntas y minutos del simulacro), `simulacro` (módulo del simulacro) y `banco` (mínimos y distribución por tipos). SHALL validarse con `schemas/curso.schema.json`.
+
+El manifiesto SHALL declarar `slug`, `titulo`, `idioma` y `dominios` (cada uno con `id`, `nombre` y `peso`, sumando los pesos 100), y MAY declarar `proveedor` (nombre del proveedor de la certificación), `fuentes_oficiales` (lista de hosts de su documentación oficial), `examen` (preguntas y minutos del simulacro, y opcionalmente `tipos` y `distribucion`, que fija el reparto de tipos de cada intento), `simulacro` (módulo del simulacro) y `banco` (mínimos y distribución por tipos, incluido `minimo_simulacro_por_objetivo`, el mínimo de preguntas del banco del simulacro por objetivo oficial). SHALL validarse con `schemas/curso.schema.json`.
 
 #### Scenario: Pesos que no suman 100
+
 - **WHEN** los pesos de los dominios suman 95
 - **THEN** la validación del manifiesto falla
 
 #### Scenario: Curso sin simulacro
+
 - **WHEN** el manifiesto no declara `examen` ni `simulacro`
 - **THEN** el curso es válido y no ofrece simulacro
 
 #### Scenario: Curso de otro proveedor
+
 - **WHEN** un curso declara `proveedor: Microsoft` y `fuentes_oficiales: [learn.microsoft.com]`
 - **THEN** el manifiesto es válido sin cambios de código
+
+#### Scenario: Mínimo por objetivo en el simulacro
+
+- **WHEN** un curso declara `banco: {minimo_simulacro_por_objetivo: 1}`
+- **THEN** el manifiesto es válido y `Manifiesto.minimo_simulacro_por_objetivo` vale 1
 
 ### Requirement: Esquema de pregunta independiente del curso
 `schemas/pregunta.schema.json` SHALL admitir cualquier dominio entero ≥ 1 y ids con formato `D<n>-NNN` o `S-NNN`. El validador SHALL comprobar que el `dominio` de cada pregunta exista en el manifiesto de su curso y que la `tarea` exista en `fuentes/dominio-N.md` de ese curso.
@@ -68,4 +77,3 @@ El esquema de pregunta SHALL exigir que `referencia` sea una URL https, y cuando
 #### Scenario: Curso sin fuentes declaradas
 - **WHEN** un curso no declara `fuentes_oficiales`
 - **THEN** se acepta cualquier referencia https
-
