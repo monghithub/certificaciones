@@ -405,14 +405,14 @@
 
 - id: sobreajuste
   termino: sobreajuste
-  alias: [overfitting]
+  alias: [overfitting, alta varianza]
   categoria: concepto
   definicion: "El modelo acierta con los datos de entrenamiento pero no con datos reales porque se ajusta demasiado a ellos y no generaliza. Es un modelo de alta varianza."
   referencia: https://aws.amazon.com/what-is/overfitting/
 
 - id: subajuste
   termino: subajuste
-  alias: [underfitting]
+  alias: [underfitting, alto sesgo]
   categoria: concepto
   definicion: "El modelo no encuentra una relación significativa entre las entradas y las salidas y falla incluso con los datos de entrenamiento. Es un modelo de alto sesgo."
   referencia: https://aws.amazon.com/what-is/overfitting/
@@ -2018,7 +2018,7 @@
 
 - id: hiperparametro
   termino: hiperparámetro
-  alias: [hiperparámetros, hyperparameter, hyperparameters]
+  alias: [hiperparámetros, hyperparameter, hyperparameters, ajuste de hiperparámetros, hyperparameter tuning]
   categoria: concepto
   definicion: "Variable de configuración que se fija antes de entrenar y controla cómo aprende el modelo: tasa de aprendizaje, número de epochs o tamaño de lote. Se distingue de los parámetros (por ejemplo, los pesos), que el modelo aprende durante el entrenamiento. Buscar sus mejores valores es el ajuste de hiperparámetros, que SageMaker AI automatiza."
   referencia: https://aws.amazon.com/what-is/hyperparameter-tuning/
@@ -2346,4 +2346,49 @@
   categoria: concepto
   definicion: "Variantes de los endpoints de un servicio de AWS (por ejemplo, bedrock-runtime-fips) que usan módulos criptográficos validados según la norma FIPS 140 de EE. UU. Solo existen en algunas Regiones y se usan en cargas que exigen esa validación."
   referencia: https://aws.amazon.com/compliance/fips/
+
+- id: gobierno-de-datos
+  termino: gobierno de datos
+  alias: [data governance]
+  categoria: concepto
+  definicion: "Procesos y políticas que garantizan que los datos estén en las condiciones adecuadas (calidad, acceso, linaje, ciclo de vida) para usarlos de forma segura y conforme a la normativa."
+  referencia: https://aws.amazon.com/what-is/data-governance/
+
+- id: regularizacion
+  termino: regularización
+  alias: [regularization, L1, L2]
+  categoria: tecnica
+  definicion: "Técnica contra el sobreajuste que penaliza los pesos grandes del modelo para limitar su complejidad: L1 (Lasso) penaliza su valor absoluto y L2 (Ridge), su cuadrado. El dropout es una forma de regularización en redes neuronales."
+  referencia: https://aws.amazon.com/what-is/overfitting/
+
+- id: codificador-decodificador
+  termino: codificador, decodificador y codificación posicional
+  alias: [encoder, decoder, codificación posicional, positional encoding]
+  categoria: concepto
+  definicion: "Partes de la arquitectura transformer: el codificador lee y procesa toda la secuencia de entrada y el decodificador genera la salida paso a paso. La codificación posicional añade a cada token información sobre su posición, porque la autoatención no conoce el orden."
+  referencia: https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/
+
+- id: pca
+  termino: PCA
+  alias: [principal component analysis, análisis de componentes principales]
+  categoria: tecnica
+  definicion: "Algoritmo no supervisado, integrado en SageMaker AI, que reduce el número de características de un conjunto de datos conservando la mayor parte de la información."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/pca.html
+
+- id: preprocesamiento-de-texto
+  termino: preprocesamiento de texto
+  alias: [lematización, lemmatization, palabras vacías, stop words, stemming]
+  categoria: tecnica
+  definicion: "Pasos que preparan el texto para el NLP: tokenizar, reducir las palabras a su raíz (stemming) o a su forma base (lematización) y eliminar las palabras vacías, que apenas aportan significado (artículos, preposiciones)."
+  referencia: https://aws.amazon.com/what-is/nlp/
+
+- id: amazon-sagemaker-model-dashboard
+  termino: Amazon SageMaker Model Dashboard
+  alias: [SageMaker Model Dashboard, Model Dashboard]
+  categoria: servicio
+  icono: aws/Arch_Amazon-SageMaker-AI_48.svg
+  definicion: "Portal centralizado de la consola de SageMaker AI para ver, buscar y explorar todos los modelos de la cuenta, con su estado de monitorización y sus Model Cards."
+  usar_cuando: "Para tener una visión de conjunto de los modelos de la cuenta y de su estado."
+  no_usar_cuando: "Para documentar un modelo concreto (SageMaker Model Cards) o versionarlo y aprobarlo (SageMaker Model Registry)."
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-dashboard.html
 

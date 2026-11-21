@@ -7,7 +7,7 @@ Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 
 1. En la consola, entra en **Tests** y elige **Empezar simulacro**. El cronómetro marca 90 minutos.
 2. Responde todas las preguntas: en el examen real las preguntas sin responder cuentan como incorrectas y no hay penalización por fallar, así que **no dejes ninguna en blanco**.
 3. Lee cada enunciado buscando la **restricción que decide** («con el MENOR esfuerzo operativo», «de la forma MÁS rentable», «sin que el tráfico salga a Internet»): suele ser lo que descarta las opciones plausibles.
-4. En las preguntas de respuesta múltiple hay que acertar **todas** las correctas; en las de ordenación, el orden completo; en las de emparejamiento, todos los pares.
+4. En las preguntas de respuesta múltiple hay que acertar **todas** las correctas; en las de ordenación, el orden completo; en las de emparejamiento, todos los pares. La guía vigente del examen (v1.2) solo enumera opción múltiple y respuesta múltiple: las de ordenación y emparejamiento del simulacro son práctica del curso, pendiente de confirmar ([issue #45](https://github.com/monghithub/certificaciones/issues/45)).
 5. Al terminar, revisa la explicación de cada pregunta, también de las que aciertes.
 
 Sin la consola, puedes hacerlo en la terminal: `python scripts/quiz.py --curso aif-c01 --modulo 06 --n 65`. No reproduce las condiciones del examen: no tiene cronómetro, el orden es aleatorio y corrige cada pregunta al responderla.
