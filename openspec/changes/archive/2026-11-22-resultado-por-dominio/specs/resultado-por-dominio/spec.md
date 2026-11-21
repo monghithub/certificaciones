@@ -26,7 +26,7 @@ La página de resultado de cualquier intento SHALL mostrar, antes de la lista de
 
 ### Requirement: Desglose por tarea
 
-Debajo de la tabla por dominio, la página SHALL ofrecer plegado el desglose por tarea oficial (aciertos, total y porcentaje), en orden numérico.
+Debajo de la tabla por dominio, la página SHALL ofrecer plegado el desglose por tarea oficial (aciertos, total y porcentaje), en orden numérico, si el intento tiene alguna tarea oficial. Las preguntas sin tarea oficial y las retiradas SHALL ir en filas propias, de modo que el desglose por tarea también sume el total.
 
 #### Scenario: Tareas de un simulacro
 
@@ -44,12 +44,17 @@ Cada dominio SHALL enlazar con la teoría del módulo que lo cubre según el blo
 
 ### Requirement: Dominios por debajo de la media en el simulacro
 
-En el resultado de un simulacro, la página SHALL marcar los dominios oficiales cuyo porcentaje quede por debajo del porcentaje global del intento y SHALL explicar que es un criterio relativo y orientativo, porque AWS no publica cortes por sección (solo «Meets competencies» o «Needs improvement»). No SHALL usar umbrales presentados como oficiales. En los demás modos no SHALL marcar dominios.
+En el resultado de un simulacro, la página SHALL marcar los dominios oficiales cuyo porcentaje mostrado quede por debajo del porcentaje global mostrado del intento (con el mismo porcentaje redondeado no se marcan) y SHALL explicar que es un criterio relativo y orientativo, porque AWS no publica cortes por sección (solo «Meets competencies» o «Needs improvement»). No SHALL usar umbrales presentados como oficiales. En los demás modos no SHALL marcar dominios.
 
 #### Scenario: Simulacro con dominios débiles
 
 - **WHEN** el estudiante acierta 3 de 5 preguntas y falla las de los dominios 1 y 5
 - **THEN** los dominios 1 y 5 aparecen marcados «por debajo de tu media» y en «Para repasar primero»
+
+#### Scenario: Mismo porcentaje redondeado
+
+- **WHEN** un dominio tiene 11/16 (69 %) y el intento 18/26 (69 %)
+- **THEN** el dominio no se marca
 
 #### Scenario: Todo acertado
 

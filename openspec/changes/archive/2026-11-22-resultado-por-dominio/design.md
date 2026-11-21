@@ -24,11 +24,13 @@
 - Cualquier otra (libros sin dominio oficial): «Sin dominio oficial». Las de los libros con un dominio oficial cuentan en ese dominio; su tarea `libros` no entra en el desglose por tarea.
 - Ids que ya no existen: «Preguntas retiradas del contenido», con su acierto si se respondieron. Nunca se marcan como débiles ni tienen enlace.
 
-El desglose por tarea solo incluye tareas oficiales (`N.M` del dominio o `CP`); es un detalle y no tiene que sumar el total.
+El desglose por tarea se muestra si hay al menos una tarea oficial (`N.M` de un dominio del manifiesto, o `CP`) y **también suma el total**: las preguntas sin tarea oficial van en «Sin tarea oficial» y las retiradas, en su fila. Una tarea cuenta en su propia fila aunque la pregunta declare otro dominio: `validar_preguntas.py` ya da error si la tarea no pertenece al dominio en los bancos de examen, repaso y simulacro, así que solo puede pasar con los libros, y la tarea pertenece a su dominio en las fuentes.
+
+Tipos: `desglose_intento` solo acepta como dominio un entero (no un bool ni una lista) y como tarea una cadena; lo demás va a «Sin dominio oficial» o «Sin tarea oficial». Además, `_cargar_libros` convierte un dominio `1.0` en `1` y descarta, con aviso en el registro, las preguntas con un dominio o una tarea de otro tipo.
 
 ### D3. Dominios débiles: criterio relativo, solo en el simulacro
 
-AWS no publica el corte por sección: el examen se puntúa de 100 a 1000 con aprobado en 700, y el informe solo dice «Meets competencies» o «Needs improvement» por sección. No se inventa un umbral. Se marcan los dominios oficiales cuyo porcentaje queda **por debajo del porcentaje global del intento** (comparación exacta con enteros: `ok_d · total < ok · n_d`), y la página lo explica. Si todos los dominios están en la media o por encima, no se marca ninguno.
+AWS no publica el corte por sección: el examen se puntúa de 100 a 1000 con aprobado en 700, y el informe solo dice «Meets competencies» o «Needs improvement» por sección. No se inventa un umbral. Se marcan los dominios oficiales cuyo porcentaje **mostrado** (redondeado) queda por debajo del porcentaje global mostrado, y la página lo explica. Se compara lo que se ve para no marcar «69 % frente a 69 %» (la primera versión comparaba fracciones exactas; corregido tras la revisión). El texto calcula el rango de preguntas por dominio del intento y usa `proveedor` del manifiesto (genérico si no lo hay); la frase de «Meets competencies» solo sale con AWS. Si todos los dominios están en la media o por encima, no se marca ninguno.
 
 - Solo en el simulacro: en los tests cortos (10 preguntas de un dominio o mixtos) la marca sería ruido.
 - Las tareas no se marcan: con 2 a 7 preguntas por tarea en un simulacro, la diferencia con la media no significa nada.
@@ -41,14 +43,22 @@ AWS no publica el corte por sección: el examen se puntúa de 100 a 1000 con apr
 - Tarea: `Contenido.url_tarea(t)` toma el primer objetivo de la tarea (orden numérico: `1.2.2` antes que `1.2.10`) que tenga sección en el mapa de cobertura y usa `url_teoria`.
 - Se muestran en todos los modos (no estorban y sirven igual), aunque el texto que invita a usarlos solo aparece en el simulacro.
 
-### D5. Presentación
+### D5. Una sola fuente para el total
 
-Tarjeta «Resultado por dominio» antes de la lista de preguntas, con las clases de `_estadisticas.html` (`tablawrap`, `barra`) y `details.explicacion` para el plegable, así que funciona en móvil (tabla con desplazamiento) y en los dos temas sin CSS nuevo. Pie de tabla con el total. Si hay preguntas sin responder, una línea lo recuerda.
+El total de la cabecera, el pie de la tabla y el texto salen del desglose (`desglose.ok`, `desglose.total`, `desglose.pct`), no de `i.respuestas`.
+
+### D6. Presentación
+
+Tarjeta «Resultado por dominio» antes de la lista de preguntas, con las clases de `_estadisticas.html` (`tablawrap`, `barra`) y `details.explicacion` para el plegable, así que funciona en móvil (tabla con desplazamiento) y en los dos temas sin CSS nuevo. Pie de tabla con el total (`th scope="row"` y celdas `td`), `caption` y cabecera de la barra solo para lectores de pantalla (`sr-only`) y barra con `aria-hidden`. Si hay preguntas sin responder, una línea lo recuerda; las retiradas se mencionan aparte y no cuentan como «sin responder».
 
 ## Risks / Trade-offs
 
 - [Pocas preguntas por dominio] → el texto lo dice; el criterio es relativo y solo informativo.
 - [Una tarea sin objetivo en el mapa de cobertura] → la fila sale sin enlace.
+
+## Revisión independiente (2026-11-22)
+
+Nada crítico; las 21 URLs de dominio y tarea dan 200 con anclas existentes. Correcciones menores aplicadas: tipos de `dominio` y `tarea` en los libros, marca con el porcentaje mostrado, texto con el rango real y el proveedor, retiradas fuera de «sin responder», tareas que suman, una sola fuente para el total, accesibilidad de las tablas y pruebas más estrictas (enlaces y anclas reales, reparto calculado con `simulacro.cuotas_dominio`, redondeo, tipos raros, tarea de otro dominio y orden «1.10» frente a «1.2»).
 
 ## Open Questions
 
