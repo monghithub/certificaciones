@@ -640,6 +640,16 @@ La revisión confirma que el flujo es correcto (3000 casos frente a fuerza bruta
 
 ## 2026-11-22
 
+### Resultado por dominio (OpenSpec `resultado-por-dominio`)
+
+- **Petición:** la página de resultado solo daba el total y la lista; el informe del examen real da el rendimiento por sección, que es lo que dice qué repasar. Aprobado de antemano por el responsable («haz lo que creas que va a mejorar»).
+- **Cálculo:** `stats.desglose_intento` recorre `i.preguntas` (no las respuestas), así que las sin responder cuentan como falladas y la tabla cuadra con el total. Filas aparte para las preguntas retiradas y para las de los libros sin dominio oficial; el dominio 0 del repaso sale como «Conocimientos previos».
+- **Umbral:** AWS no publica cortes por sección (escala de 100 a 1000 con aprobado en 700 y, por sección, solo «Meets competencies» o «Needs improvement»). En el simulacro se marcan los dominios por debajo del porcentaje global del intento, explicado en la página; no se marca nada en los demás modos ni en las tareas (muestras demasiado pequeñas). Se descartó el 70 % fijo porque parecería oficial.
+- **Enlaces:** dominio → teoría del módulo según `cobertura`; tarea → sección del primer objetivo de la tarea en el mapa de cobertura (`Contenido.url_dominio` y `url_tarea`).
+- **Prueba real:** simulacro con el contenido de AIF-C01, 12 respuestas (8 bien): 13/16/18/9/9 por dominio, 8/65 en total, 53 sin responder, los cinco dominios y las 14 tareas enlazadas.
+- **Verificación:** pytest, validadores, markdownlint, Mermaid e imagen Docker. Cambio archivado en `openspec/changes/archive/2026-11-22-resultado-por-dominio`.
+- **Revisión independiente** (nada crítico; las 21 URLs de dominio y tarea dan 200 con anclas existentes). Correcciones menores: los libros con `dominio: 1.0` se normalizan y los de dominio o tarea de otro tipo se descartan con aviso (antes, una fila desaparecía o la página daba 500); la marca compara los porcentajes mostrados (no «69 % frente a 69 %»); el texto usa el rango real de preguntas por dominio y el proveedor del manifiesto; las retiradas no cuentan como «sin responder»; el desglose por tarea suma el total (filas «Sin tarea oficial» y retiradas; una tarea de otro dominio cuenta en la suya, cosa que el validador ya impide fuera de los libros); el total sale de una sola fuente; tablas con `caption`, cabeceras y pie accesibles. Pruebas: enlaces y anclas reales, reparto calculado y casos de redondeo, tipos, dominios cruzados y orden «1.10» frente a «1.2».
+
 ### Simulacro: segunda pregunta para los objetivos fijos
 
 - Petición: que ninguna pregunta del simulacro salga en todos los intentos. Rama `aif-c01/simulacro-fijas`, en el *worktree* `~/Cursos/wt-simulacro-fijas`, a partir de `main` con el PR #53; solo contenido.
@@ -660,7 +670,7 @@ La revisión confirma que el flujo es correcto (3000 casos frente a fuerza bruta
   | Vistas entre los dos intentos | 81,9 de 83 | 95,9 de 96 |
 
 - Reparto final: 96 preguntas, 74 de opción múltiple y 22 de respuesta múltiple; letras de opción múltiple a 18, b 19, c 19 y d 18; dificultad 18 baja, 59 media y 19 alta. `banco.minimo_simulacro` pasa de 80 a 96 para que el banco no pueda encoger sin que lo note la CI.
-- Quedan con cifras antiguas las especificaciones de `openspec/specs/` (simulacro-aif-c01: «unas 16 de 65»; quiz-engine y simulacro-rotatorio: escenarios con 83 preguntas; question-validation: ejemplo con mínimo 80): no se tocan en esta rama de contenido.
+- Las cifras de las especificaciones de `openspec/specs/` (simulacro-aif-c01, quiz-engine y simulacro-rotatorio) se actualizaron al banco de 96 en un commit aparte de la misma rama.
 
 ### Simulacro: correcciones de la revisión de S-088 a S-100
 

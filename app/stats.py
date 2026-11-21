@@ -67,6 +67,98 @@ def falladas(db: Session, uid: int, contenido: Contenido) -> list[str]:
                   if not ok and pid in contenido.preguntas and contenido.preguntas[pid]["modulo"] != simulacro)
 
 
+def _orden_tarea(t: str) -> tuple:
+    return tuple(int(x) if x.isdigit() else -1 for x in t.split("."))
+
+
+def _dominio_oficial(p: dict, m) -> int | None:
+    """Dominio oficial de una pregunta (del manifiesto, o 0 con tarea CP en cursos con conocimientos previos), o None.
+    Robusto ante tipos inesperados: solo vale un entero (no un bool, ni una lista)."""
+    d, t = p.get("dominio"), p.get("tarea")
+    if type(d) is not int:
+        return None
+    if d in m.dominios:
+        return d
+    return 0 if d == 0 and t == "CP" and 0 in m.nombres_dominio else None
+
+
+def _tarea_oficial(p: dict, m) -> str | None:
+    """Tarea oficial de una pregunta: `N.M` de un dominio del manifiesto (aunque no sea el de la pregunta: la tarea
+    pertenece a su propio dominio en las fuentes) o `CP`; None si no la tiene (p. ej., la tarea `libros`)."""
+    t = p.get("tarea")
+    if not isinstance(t, str):
+        return None
+    if t == "CP":
+        return t if 0 in m.nombres_dominio else None
+    prefijo, punto, resto = t.partition(".")
+    return t if punto and prefijo.isdigit() and resto.isdigit() and int(prefijo) in m.dominios else None
+
+
+def _pct(ok: int, n: int) -> int:
+    return round(100 * ok / n) if n else 0
+
+
+def desglose_intento(i: Intento, contenido: Contenido, marcar_debiles: bool = False) -> dict:
+    """Aciertos de un intento por dominio y por tarea, calculados con `i.preguntas` (las sin responder cuentan como
+    falladas), así que los dominios suman el total del intento, y las tareas también cuando se muestran (filas «Sin tarea
+    oficial» y «Preguntas retiradas»). Grupos especiales de dominio: `otros` (sin dominio oficial, como algunas de los
+    libros) y `retiradas` (ids que ya no existen en el contenido). Con `marcar_debiles`, se marcan los dominios oficiales
+    cuyo porcentaje mostrado queda por debajo del global mostrado (criterio relativo: no hay cortes oficiales por dominio)."""
+    m = contenido.manifiesto
+    nombres = m.nombres_dominio
+    acierto = {r.pregunta_id: r.correcta for r in i.respuestas}
+    grupos: dict = {}
+    tareas: dict = {}
+    sin_responder = retiradas_sin_responder = 0
+    for pid in i.preguntas:
+        p = contenido.preguntas.get(pid)
+        ok = int(bool(acierto.get(pid)))
+        if pid not in acierto:
+            if p is None:
+                retiradas_sin_responder += 1
+            else:
+                sin_responder += 1
+        if p is None:
+            clave, tarea = "retiradas", "retiradas"
+        else:
+            d = _dominio_oficial(p, m)
+            clave = "otros" if d is None else d
+            tarea = _tarea_oficial(p, m) or "otras"
+        for destino, k in ((grupos, clave), (tareas, tarea)):
+            g = destino.setdefault(k, {"clave": k, "n": 0, "ok": 0})
+            g["n"] += 1
+            g["ok"] += ok
+    total = len(i.preguntas)
+    ok_total = sum(g["ok"] for g in grupos.values())
+    pct_total = _pct(ok_total, total)
+    filas = []
+    for clave in sorted(k for k in grupos if isinstance(k, int)) + [k for k in ("otros", "retiradas") if k in grupos]:
+        g = grupos[clave]
+        if clave == 0:
+            nombre = nombres[0]["nombre"]
+        elif isinstance(clave, int):
+            nombre = f"Dominio {clave} · {nombres[clave]['nombre']}"
+        else:
+            nombre = "Sin dominio oficial" if clave == "otros" else "Preguntas retiradas del contenido"
+        g.update(nombre=nombre, pct=_pct(g["ok"], g["n"]), url=contenido.url_dominio(clave) if isinstance(clave, int) else None)
+        g["debil"] = marcar_debiles and isinstance(clave, int) and g["pct"] < pct_total
+        filas.append(g)
+    oficiales = sorted((k for k in tareas if k not in ("otras", "retiradas")), key=_orden_tarea)
+    filas_tarea = []
+    for k in oficiales + [k for k in ("otras", "retiradas") if k in tareas] if oficiales else []:
+        t = tareas[k]
+        nombre = {"CP": "Conocimientos previos", "otras": "Sin tarea oficial", "retiradas": "Preguntas retiradas del contenido"}
+        t.update(tarea=k, nombre=nombre.get(k, f"Tarea {k}"), pct=_pct(t["ok"], t["n"]),
+                 url=contenido.url_tarea(k) if k in oficiales else None)
+        filas_tarea.append(t)
+    por_dominio = [g["n"] for g in filas if isinstance(g["clave"], int)]
+    return {"dominios": filas, "tareas": filas_tarea, "total": total, "ok": ok_total, "pct": pct_total,
+            "sin_responder": sin_responder, "retiradas": grupos.get("retiradas", {}).get("n", 0),
+            "retiradas_sin_responder": retiradas_sin_responder,
+            "min_por_dominio": min(por_dominio, default=0), "max_por_dominio": max(por_dominio, default=0),
+            "debiles": [g for g in filas if g["debil"]]}
+
+
 def puntos_debiles(tareas: list[dict]) -> list[dict]:
     debiles = [t for t in tareas if t["n"] >= MIN_RESPUESTAS_DEBIL and t["pct"] < UMBRAL_DEBIL]
     return sorted(debiles, key=lambda t: t["pct"])[:5]

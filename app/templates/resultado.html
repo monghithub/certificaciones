@@ -6,6 +6,28 @@
   {% if n_falladas %}<p>Te quedan {{ n_falladas }} preguntas falladas por repasar: puedes repetirlas desde <a href="{{ base }}/tests">Tests</a>, en «Repetir falladas».</p>{% endif %}
   {% if i.modo == 'simulacro' %}<div class="msg aviso">El examen real usa una puntuación escalada de 100–1.000 (aprobado con 700). Este porcentaje es solo orientativo y no equivale a esa escala.</div>{% endif %}
   <a class="btn" href="{{ base }}/tests">Nuevo test</a> <a class="btn sec" href="{{ base }}/estadisticas">Mis estadísticas</a></div>
+{% if desglose.dominios %}
+<div class="card" id="por-dominio">
+  <h2 style="margin-top:0">Resultado por dominio</h2>
+  {% if i.modo == 'simulacro' %}<p class="suave">{{ proveedor or 'El proveedor del examen' }} no publica un corte por dominio{% if proveedor == 'AWS' %}: el informe del examen solo indica, por sección, «Meets competencies» o «Needs improvement»{% endif %}. Aquí se marcan los dominios por debajo de tu porcentaje global en este intento ({{ pct }} %). Con {% if desglose.min_por_dominio == desglose.max_por_dominio %}{{ desglose.min_por_dominio }}{% else %}{{ desglose.min_por_dominio }} a {{ desglose.max_por_dominio }}{% endif %} preguntas por dominio, tómalo como orientación. Cada dominio y cada tarea enlazan con su teoría.</p>{% endif %}
+  {% if desglose.sin_responder %}<p class="suave">{{ desglose.sin_responder }} sin responder: cuentan como falladas, como en el examen.</p>{% endif %}
+  {% if desglose.retiradas %}<p class="suave">{{ desglose.retiradas }} {{ 'pregunta retirada' if desglose.retiradas == 1 else 'preguntas retiradas' }} del contenido{% if desglose.retiradas_sin_responder %} ({{ desglose.retiradas_sin_responder }} sin responder){% endif %}: cuentan en su propia fila.</p>{% endif %}
+  <div class="tablawrap"><table><caption class="sr-only">Aciertos por dominio</caption>
+  <thead><tr><th scope="col">Dominio</th><th scope="col">Aciertos</th><th scope="col">%</th><th scope="col"><span class="sr-only">Gráfico</span></th></tr></thead><tbody>
+  {% for d in desglose.dominios %}<tr><td>{% if d.url %}<a href="{{ d.url }}">{{ d.nombre }}</a>{% else %}{{ d.nombre }}{% endif %}{% if d.debil %} <span class="mal-t">· por debajo de tu media</span>{% endif %}</td><td>{{ d.ok }}/{{ d.n }}</td><td>{{ d.pct }} %</td><td><div class="barra" aria-hidden="true"><span style="width: {{ d.pct }}%"></span></div></td></tr>
+  {% endfor %}</tbody>
+  <tfoot><tr><th scope="row">Total</th><td>{{ desglose.ok }}/{{ desglose.total }}</td><td>{{ desglose.pct }} %</td><td></td></tr></tfoot></table></div>
+  {% if desglose.debiles %}<p>Para repasar primero: {% for d in desglose.debiles %}{% if d.url %}<a href="{{ d.url }}">{{ d.nombre }}</a>{% else %}{{ d.nombre }}{% endif %}{{ ', ' if not loop.last }}{% endfor %}.</p>{% endif %}
+  {% if desglose.tareas %}
+  <details class="explicacion"><summary>Desglose por tarea</summary>
+    <div class="tablawrap"><table><caption class="sr-only">Aciertos por tarea</caption>
+    <thead><tr><th scope="col">Tarea</th><th scope="col">Aciertos</th><th scope="col">%</th></tr></thead><tbody>
+    {% for t in desglose.tareas %}<tr><td>{% if t.url %}<a href="{{ t.url }}">{{ t.nombre }}</a>{% else %}{{ t.nombre }}{% endif %}</td><td>{{ t.ok }}/{{ t.n }}</td><td>{{ t.pct }} %</td></tr>
+    {% endfor %}</tbody></table></div>
+  </details>
+  {% endif %}
+</div>
+{% endif %}
 {% for f in filas %}
 <div class="card">
   {% if f.retirada %}<p><strong>{{ f.n }}. {{ f.id }}</strong> — pregunta retirada del contenido.
