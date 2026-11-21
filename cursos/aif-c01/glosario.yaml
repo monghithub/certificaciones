@@ -2253,3 +2253,26 @@
   usar_cuando: "Para procesar contenido variado (documentos, imágenes, audio, vídeo) con IA generativa sin construir el flujo a mano."
   no_usar_cuando: "Para una tarea acotada que ya resuelve un servicio especializado: formularios con Amazon Textract o transcripción con Amazon Transcribe."
   referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/bda.html
+
+# Revisión del módulo 03 con las guías de estudio (issue #34)
+
+- id: grupos-de-acciones
+  termino: grupos de acciones
+  alias: [action groups, grupo de acciones, action group]
+  categoria: concepto
+  definicion: "En Amazon Bedrock Agents, las acciones que puede ejecutar un agente: se describen con un esquema OpenAPI o con definiciones de funciones y se ejecutan con una función de AWS Lambda o devolviendo el control a la aplicación (return of control). Bedrock Agents (Classic) ya no admite clientes nuevos; para agentes nuevos, Amazon Bedrock AgentCore y Strands Agents."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html
+
+- id: retrieve-y-retrieveandgenerate
+  termino: Retrieve y RetrieveAndGenerate
+  alias: [API Retrieve, RetrieveAndGenerate]
+  categoria: concepto
+  definicion: "Operaciones para consultar una Knowledge Base de Amazon Bedrock: Retrieve devuelve solo los fragmentos relevantes de las fuentes; RetrieveAndGenerate los recupera y además pide al modelo una respuesta redactada con citas. Ambas admiten filtros por metadatos."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve.html
+
+- id: analizador-de-documentos-kb
+  termino: analizador de documentos
+  alias: [parsing, análisis de documentos, parser]
+  categoria: concepto
+  definicion: "Forma en que una Knowledge Base de Amazon Bedrock lee los documentos al ingerirlos. La Managed Knowledge Base usa un análisis inteligente automático; en una customer-managed se elige: el analizador por defecto solo extrae texto, y Bedrock Data Automation o un modelo fundacional procesan también tablas, gráficos e imágenes."
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-advanced-parsing.html

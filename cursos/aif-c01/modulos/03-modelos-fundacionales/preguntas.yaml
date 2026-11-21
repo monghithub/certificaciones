@@ -2702,3 +2702,174 @@
       token no hace falta.
     d: El coste por interacción no tiene en cuenta cuántas consultas se resuelven.
   referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+- id: D3-095
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una empresa clasifica millones de correos al mes con un modelo grande de Amazon Bedrock que da la calidad que necesita, pero es caro y lento. Quiere un modelo más pequeño, más barato y más rápido con una calidad parecida en esa tarea, y no tiene correos etiquetados a mano. ¿Qué forma de personalización encaja MEJOR?
+  opciones:
+  - id: a
+    texto: Destilación, usando el modelo grande como maestro de uno más pequeño
+  - id: b
+    texto: Ajuste fino supervisado del modelo pequeño
+  - id: c
+    texto: RAG con una Knowledge Base de correos ya clasificados
+  - id: d
+    texto: Preentrenar un modelo propio desde cero
+  correctas:
+  - a
+  explicacion: 'En la destilación, el modelo grande (maestro) genera las respuestas a partir de los prompts del caso de uso y con ellas se ajusta uno más pequeño (alumno), más rápido y barato, sin necesidad de etiquetar ejemplos a mano.'
+  distractores:
+    b: El ajuste fino supervisado necesita ejemplos etiquetados, y la empresa no los tiene.
+    c: RAG aporta información al contexto, pero no hace más pequeño ni más barato el modelo; además añade tokens de entrada.
+    d: Preentrenar desde cero es la opción de mayor coste y esfuerzo.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html
+- id: D3-096
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un fabricante ha creado una Knowledge Base customer-managed con sus manuales técnicos en PDF, llenos de tablas de especificaciones y diagramas, usando el analizador por defecto. Las respuestas aciertan con el texto corrido, pero ignoran los datos que solo están en las tablas. ¿Qué cambio resuelve MEJOR el problema?
+  opciones:
+  - id: a
+    texto: Cambiar a un modelo fundacional más grande para generar las respuestas
+  - id: b
+    texto: Usar Bedrock Data Automation o un modelo fundacional como analizador de los documentos
+  - id: c
+    texto: Subir la temperatura del modelo que genera las respuestas
+  - id: d
+    texto: Reducir el tamaño de los fragmentos a la mitad
+  correctas:
+  - b
+  explicacion: 'En una Knowledge Base customer-managed, el analizador por defecto solo extrae el texto, así que las tablas no llegan al índice. Bedrock Data Automation o un modelo fundacional como analizador procesan tablas, gráficos e imágenes, que es lo que falta (a cambio, se analizan y cobran todos los PDF).'
+  distractores:
+    a: Si los datos de las tablas no están en el índice, ningún modelo puede usarlos en la respuesta.
+    c: La temperatura cambia la variabilidad de la respuesta, no lo que se ha indexado.
+    d: Fragmentos más pequeños no hacen que se extraiga el contenido de las tablas.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-advanced-parsing.html
+- id: D3-097
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una multinacional tiene en una misma Knowledge Base las políticas de vacaciones de seis países, cada documento con un atributo «país». Los empleados de Portugal reciben a veces respuestas basadas en la política de España. ¿Qué medida lo evita con el MENOR esfuerzo?
+  opciones:
+  - id: a
+    texto: Crear una Knowledge Base distinta para cada país
+  - id: b
+    texto: Ajustar el modelo con las políticas de Portugal
+  - id: c
+    texto: Aplicar en la consulta un filtro por el metadato «país» del empleado
+  - id: d
+    texto: Aumentar el número de fragmentos recuperados
+  correctas:
+  - c
+  explicacion: 'Los filtros por metadatos restringen la recuperación a los documentos cuyos atributos cumplen la condición, así que solo se usan los de su país, sin rehacer la base.'
+  distractores:
+    a: Seis bases distintas también separarían los datos, pero duplican la ingesta y el mantenimiento; el filtro consigue lo mismo con menos esfuerzo.
+    b: Ajustar el modelo no impide que se recuperen documentos de otro país, y las políticas cambian.
+    d: Más fragmentos aumentan la probabilidad de mezclar políticas de otros países.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html
+- id: D3-098
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un buscador interno de jurisprudencia usa una Knowledge Base de Amazon Bedrock. El equipo legal exige que se muestren los párrafos literales de las sentencias, con la ordenación que aplica la propia aplicación según la fecha y el tribunal. ¿Qué enfoque cumple el requisito?
+  opciones:
+  - id: a
+    texto: RetrieveAndGenerate con temperatura 0, mostrando su respuesta
+  - id: b
+    texto: InvokeModel con las sentencias completas en el prompt
+  - id: c
+    texto: RetrieveAndGenerate, pidiendo en el prompt que copie los párrafos
+  - id: d
+    texto: Retrieve, ordenando en la aplicación los fragmentos devueltos
+  correctas:
+  - d
+  explicacion: 'Retrieve devuelve los fragmentos relevantes de las fuentes tal cual, y la aplicación puede ordenarlos y mostrarlos como quiera. RetrieveAndGenerate añade una respuesta redactada por el modelo.'
+  distractores:
+    a: RetrieveAndGenerate devuelve una respuesta generada por el modelo; la temperatura 0 la hace repetible, pero no literal.
+    b: Meter las sentencias completas en el prompt no busca nada, cuesta muchos tokens y la respuesta la sigue redactando el modelo.
+    c: Pedir que copie los párrafos no garantiza que no los reformule, y la ordenación la decidiría el modelo, no la aplicación.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve.html
+- id: D3-099
+  dominio: 3
+  tarea: '3.1'
+  objetivo: 3.1.6
+  tipo: multiple_response
+  dificultad: media
+  enunciado: Una empresa de logística que ya usa Amazon Bedrock Agents quiere que su agente responda con las condiciones de sus contratos de transporte y, cuando el cliente lo confirme, registre un envío en su sistema de reservas. ¿Qué DOS piezas debe configurar en el agente?
+  opciones:
+  - id: a
+    texto: Un grupo de acciones
+  - id: b
+    texto: Un flujo de Amazon Bedrock Flows
+  - id: c
+    texto: Una Knowledge Base
+  - id: d
+    texto: Una barrera de Amazon Bedrock Guardrails
+  - id: e
+    texto: Una plantilla de Prompt Management
+  correctas:
+  - a
+  - c
+  explicacion: 'El grupo de acciones define y ejecuta lo que el agente puede hacer (registrar el envío llamando al sistema de reservas, por ejemplo con Lambda) y la Knowledge Base le da la información que consultar (las condiciones de los contratos).'
+  distractores:
+    b: Bedrock Flows encadena pasos fijos en un flujo visual; no es una pieza que se añada a un agente para consultar documentos o ejecutar acciones.
+    d: Una barrera de Guardrails filtra contenido y temas; no da acceso a los contratos ni ejecuta reservas.
+    e: Una plantilla de Prompt Management guarda instrucciones reutilizables; no consulta documentos ni llama a sistemas.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html
+- id: D3-100
+  dominio: 3
+  tarea: '3.2'
+  objetivo: 3.2.3
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Una empresa alemana protege su asistente de Amazon Bedrock con temas denegados y filtros de contenido de Guardrails en la modalidad Classic. Las pruebas en inglés funcionan, pero los usuarios que escriben en alemán consiguen hablar de los temas prohibidos. ¿Qué debe hacer?
+  opciones:
+  - id: a
+    texto: Bajar la temperatura del modelo
+  - id: b
+    texto: Traducir las instrucciones del sistema al alemán
+  - id: c
+    texto: Pasar la barrera de protección a la modalidad Standard, que admite muchos más idiomas
+  - id: d
+    texto: Añadir más ejemplos de temas prohibidos en inglés
+  correctas:
+  - c
+  explicacion: 'En la modalidad Classic, los filtros de contenido y los temas denegados solo admiten inglés, francés y español; con otros idiomas Guardrails no es eficaz. La modalidad Standard admite muchos más, incluido el alemán; a cambio usa inferencia entre Regiones, algo que la empresa debe comprobar frente a sus requisitos de residencia de datos.'
+  distractores:
+    a: La temperatura no influye en lo que Guardrails detecta o bloquea.
+    b: Las instrucciones del sistema orientan al modelo, pero no sustituyen a un filtro que no entiende el idioma del usuario.
+    d: Más ejemplos en inglés no hacen que la modalidad Classic entienda el alemán.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported-languages.html
+- id: D3-101
+  dominio: 3
+  tarea: '3.4'
+  objetivo: 3.4.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un asistente de una operadora recibe cada día miles de comentarios en texto libre al final de la conversación. La dirección quiere seguir la satisfacción de los usuarios a diario sin leerlos uno a uno y con el MENOR esfuerzo de desarrollo. ¿Qué debe usar?
+  opciones:
+  - id: a
+    texto: ROUGE comparando cada comentario con una respuesta de referencia
+  - id: b
+    texto: La tasa de tareas completadas
+  - id: c
+    texto: Una evaluación humana semanal de una muestra de conversaciones
+  - id: d
+    texto: El análisis de sentimiento de Amazon Comprehend sobre los comentarios
+  correctas:
+  - d
+  explicacion: 'Comprehend clasifica cada texto como positivo, negativo, neutro o mixto, así que convierte miles de comentarios en un indicador diario de satisfacción sin entrenar nada.'
+  distractores:
+    a: ROUGE mide el solapamiento entre un texto generado y uno de referencia; no mide la opinión de los usuarios.
+    b: La tasa de tareas completadas es otra métrica de negocio útil, pero no recoge lo que opinan los usuarios en sus comentarios.
+    c: Una evaluación humana semanal de una muestra no da un seguimiento diario de todos los comentarios.
+  referencia: https://docs.aws.amazon.com/comprehend/latest/dg/how-sentiment.html
