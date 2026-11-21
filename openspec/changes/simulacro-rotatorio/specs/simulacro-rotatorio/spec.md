@@ -47,6 +47,20 @@ Dentro de un intento, un objetivo SHALL repetirse solo cuando el banco no permit
 - **WHEN** la respuesta múltiple (cuota 2) tiene o5, o4 y o1, solo o4 sin ver, y la opción múltiple (cuota 3) tiene o6, o4, o4, o6 y o2
 - **THEN** el intento no repite ningún objetivo
 
+### Requirement: Doble envío al iniciar
+
+Si el estudiante envía dos veces «Empezar simulacro» (también a la vez), la consola SHALL crear un solo intento: reutiliza el último simulacro del usuario en el curso si está sin terminar, no ha caducado, tiene el mismo modo estudio y empezó hace menos de 10 segundos.
+
+#### Scenario: Dos envíos simultáneos
+
+- **WHEN** llegan a la vez dos peticiones de iniciar el simulacro del mismo usuario y curso
+- **THEN** solo se crea un intento y ambas redirigen a él
+
+#### Scenario: Otro modo estudio
+
+- **WHEN** el estudiante inicia un simulacro y, en seguida, otro en modo estudio
+- **THEN** se crean dos intentos
+
 ### Requirement: Rotación entre intentos
 
 Al iniciar un simulacro rotatorio, la consola SHALL preferir las preguntas que no estaban en el intento de simulacro anterior del mismo usuario y curso, sin incumplir las cuotas ni la regla de objetivos sin repetir.
@@ -90,7 +104,7 @@ Si un banco rotatorio no tiene suficientes preguntas para alguna cuota de domini
 
 ### Requirement: Reproducibilidad
 
-La extracción SHALL recibir el generador aleatorio, de modo que con la misma semilla y el mismo banco el resultado sea idéntico. La consola SHALL usar un generador sin semilla fija y no SHALL guardar la semilla.
+La extracción SHALL recibir el generador aleatorio, de modo que con la misma semilla y el mismo banco el resultado sea idéntico. Los empates entre selecciones igual de buenas (mismas cuotas, mismos objetivos distintos y mismas preguntas del intento anterior) SHALL resolverse al azar, sin garantía de uniformidad: basta para un simulacro de estudio, porque todo lo que importa es exacto y el sesgo solo cambia la frecuencia de las preguntas empatadas. La consola SHALL usar un generador sin semilla fija y no SHALL guardar la semilla.
 
 #### Scenario: Misma semilla
 

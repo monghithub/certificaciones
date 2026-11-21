@@ -40,6 +40,20 @@ Si el banco del simulacro tiene más preguntas que `examen.preguntas`, el valida
 - **WHEN** el simulacro tiene 65 preguntas, `examen.preguntas` es 65 y 14 son de respuesta múltiple
 - **THEN** el validador no informa de error por las cuotas
 
+### Requirement: Preguntas del simulacro que no salen nunca
+
+Si el banco del simulacro es rotatorio y permite formar el examen, el validador SHALL forzar y excluir cada pregunta y repetir la selección óptima: SHALL emitir un aviso (no un error) por cada pregunta que no puede salir nunca (incluirla reduce el máximo de objetivos distintos de su dominio) y por cada pregunta fuera de cuota (dominio sin cuota o tipo ausente de `examen.distribucion`), y SHALL imprimir como línea informativa el número y los ids de las preguntas que salen en todos los intentos.
+
+#### Scenario: Pregunta que no puede salir
+
+- **WHEN** la única cuota de respuesta múltiple de un dominio puede cubrir un objetivo nuevo con otra pregunta y una pregunta de respuesta múltiple repite un objetivo de la opción múltiple
+- **THEN** el validador avisa de que esa pregunta no puede salir nunca y termina con código 0
+
+#### Scenario: Pregunta de un tipo sin cuota
+
+- **WHEN** `examen.distribucion` solo tiene opción múltiple y el banco tiene una pregunta de respuesta múltiple
+- **THEN** el validador avisa de que esa pregunta no sale nunca
+
 ### Requirement: Ids del simulacro
 
 El validador SHALL dar un error si una pregunta del módulo de simulacro no tiene un id con formato `S-NNN` o si una pregunta de otro banco usa ese formato.

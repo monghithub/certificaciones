@@ -614,3 +614,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Simulación de la extracción** (300 pares de intentos seguidos con `extraer` y `evitar`): todos con las cuotas y las repeticiones inevitables mínimas; dos intentos seguidos comparten 49 o 50 preguntas, porque la rotación va detrás del reparto y de la variedad de objetivos. La propuesta decía que con 82 preguntas «dos intentos seguidos ven el banco completo» y la especificación del README, que el segundo intento trae «sobre todo preguntas que no vio»; con 83 preguntas ninguna de las dos cosas se cumple (se ven 81 de 83 y el segundo intento trae unas 15 nuevas). El README del simulacro lo explica así; queda para la revisión decidir si se corrige la especificación o se amplía el banco.
 - `quiz.py --curso aif-c01 --simulacro` con las semillas 1 y 2: 65 preguntas cada una, con las cuotas 11+2, 13+3, 14+4, 7+2 y 7+2.
 - **Pendiente:** revisión independiente del contenido (5.5) y cierre (bloque 6).
+
+### Simulacro rotatorio: segunda revisión del código
+
+La revisión confirma que el flujo es correcto (3000 casos frente a fuerza bruta, 2,5 ms por extracción con el banco real). Cambios aplicados:
+
+- Empates: se resuelven al azar **sin garantía de uniformidad** (sesgo medido de hasta unos 9 puntos). Decisión: no implementar el muestreo uniforme; documentado en `design.md` y en la especificación.
+- `comprobar_banco` (solo el validador) analiza el banco forzando o excluyendo cada pregunta: las que **no pueden salir nunca** y las que quedan fuera de cuota son AVISO; las que **salen siempre**, línea informativa. Con el banco real: AVISO de S-080 (Dominio 3, respuesta múltiple, objetivo 3.4.1) y 25 preguntas que salen siempre. S-080 lo corregirá el contenido. `extraer` y la consola solo comprueban la factibilidad por recuento.
+- Doble envío: un `threading.Lock` por (usuario, curso), porque la consola corre en un solo proceso (uvicorn sin `--workers`, también en el `compose.yaml` del despliegue), y la reutilización exige el mismo modo estudio. Test con dos envíos simultáneos en dos hilos, que falla sin el cerrojo.
+- `comprobar_cobertura.py` carga el banco con `cargar_banco`, como la consola y la CLI.
+- Pruebas: el mínimo de `evitar` frente a fuerza bruta en 200 bancos con la forma de AIF-C01; el banco real cargado como la consola; análisis «nunca», «siempre» y fuera de cuota; los fixtures exigen exactamente una sustitución en el manifiesto.
