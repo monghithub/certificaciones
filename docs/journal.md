@@ -359,3 +359,13 @@ Diario de trabajo del curso AIF-C01 y de su consola. Recoge **qué se hizo, qué
 - **Diseño:** `cursos/<curso>/modulos/<NN>/libros.yaml`, opcional e ignorado por git. Banco aparte (`banco: libros`), con validación mínima (no pasa por el esquema de las preguntas propias, que exige referencia oficial y explicación de cada distractor) y fuera del repaso, el examen, el mixto, el dominio y el simulacro. Sí entra en «Repetir falladas». En «Tests», apartado «Preguntas de los libros»: por módulo, con un número de preguntas o todas, y un test final con todas, sin el tope de 100.
 - Los ficheros los genera un script que vive junto a los libros, fuera del repositorio. El preparado de las preguntas, su reparto por módulo y la clasificación por dominio del test inicial y del examen de práctica están en su propio journal.
 - **Verificación:** 274 pruebas de pytest (4 nuevas), validador, cobertura y glosario sin cambios.
+
+## 2026-11-21
+
+### Propuesta: «Preguntar a Claude» en los tests (OpenSpec `consultas-claude`)
+
+- Petición: «que en los exámenes se pudieran hacer preguntas a la IA que resolviera en background o cuando pudiera usando una sesión en segundo plano de Claude Code con esta cuenta […] en el propio navegador en modo conversación».
+- **Decisiones del usuario:** en todos los tests y siempre (también antes de responder y en el simulacro cronometrado); modelo Sonnet; solo `admin`; fuentes: teoría del curso, documentación oficial de AWS y libros en Markdown.
+- **Diseño:** cola en la base de datos de la consola, API interna con token y un trabajador en el anfitrión que llama a `claude -p` (con `--resume` para seguir la conversación) y solo usa herramientas de lectura y búsqueda. Comprobado en titan: la salida JSON trae `result` y `session_id`, y `--resume` solo encuentra la sesión si se lanza desde el mismo directorio de trabajo.
+- No se implementa en esta sesión: el usuario pidió dejarlo «perfectamente indicado» para que lo desarrolle otra IA. Todo está en `openspec/changes/consultas-claude/` (guía de implementación en `design.md`, tareas en `tasks.md`) y en la issue de seguimiento.
+
