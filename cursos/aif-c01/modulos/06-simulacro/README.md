@@ -1,6 +1,6 @@
 # Simulacro del examen
 
-Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 preguntas para hacer en 90 minutos, repartidas según los pesos oficiales de los cinco dominios. Las preguntas salen de un **banco rotatorio de 83**: cada intento extrae 65, así que dos intentos seguidos no son iguales. Todas las preguntas son de elaboración propia e **inéditas**: se redactaron con escenarios y decisiones distintos de los de los bancos de los módulos. El validador del repositorio comprueba que no se repite ningún enunciado y avisa de las preguntas muy parecidas a las de los bancos. Hazlo cuando hayas terminado los módulos 00 a 05.
+Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 preguntas para hacer en 90 minutos, repartidas según los pesos oficiales de los cinco dominios. Las preguntas salen de un **banco rotatorio de 96**: cada intento extrae 65, así que dos intentos seguidos no son iguales. Todas las preguntas son de elaboración propia e **inéditas**: se redactaron con escenarios y decisiones distintos de los de los bancos de los módulos. El validador del repositorio comprueba que no se repite ningún enunciado y avisa de las preguntas muy parecidas a las de los bancos. Hazlo cuando hayas terminado los módulos 00 a 05.
 
 ## Cómo hacerlo
 
@@ -19,23 +19,23 @@ Cada intento tiene siempre el mismo reparto, el del examen: por dominio según l
 | Dominio | Peso oficial | Por intento (opción múltiple + respuesta múltiple) | En el banco | Módulo para repasar |
 |---|---|---|---|---|
 | D1. Fundamentos de IA y ML | 20 % | 13 (11 + 2) | 18 (14 + 4) | [01](../01-fundamentos-ia-ml/README.md) |
-| D2. Fundamentos de IA generativa | 24 % | 16 (13 + 3) | 19 (15 + 4) | [02](../02-fundamentos-genai/README.md) |
+| D2. Fundamentos de IA generativa | 24 % | 16 (13 + 3) | 28 (23 + 5) | [02](../02-fundamentos-genai/README.md) |
 | D3. Aplicaciones de modelos fundacionales | 28 % | 18 (14 + 4) | 22 (16 + 6) | [03](../03-modelos-fundacionales/README.md) |
 | D4. Directrices para una IA responsable | 14 % | 9 (7 + 2) | 12 (9 + 3) | [04](../04-ia-responsable/README.md) |
-| D5. Seguridad, cumplimiento y gobierno | 14 % | 9 (7 + 2) | 12 (8 + 4) | [05](../05-seguridad-gobierno/README.md) |
-| **Total** | 100 % | **65 (52 + 13)** | **83 (62 + 21)** | |
+| D5. Seguridad, cumplimiento y gobierno | 14 % | 9 (7 + 2) | 16 (12 + 4) | [05](../05-seguridad-gobierno/README.md) |
+| **Total** | 100 % | **65 (52 + 13)** | **96 (74 + 22)** | |
 
 - **Tipos de pregunta:** opción múltiple y respuesta múltiple, los dos que enumera la guía del examen. Las preguntas de ordenación y emparejamiento se practican en los bancos de los módulos.
-- **Cobertura:** el banco cubre las 14 tareas y los **69 objetivos oficiales**, cada uno con al menos una pregunta. Dentro de cada dominio, un intento no repite objetivo salvo cuando no hay más remedio: el Dominio 2 tiene 14 objetivos para 16 preguntas y el Dominio 5, 8 para 9, así que en cada intento se repiten 2 objetivos del D2 y 1 del D5.
-- **Rotación:** entre las combinaciones válidas, la consola prefiere las preguntas que no salieron en tu intento de simulacro anterior; el resto se elige al azar y el orden también es aleatorio. La rotación se aplica después del reparto y de la variedad de objetivos, y el banco solo tiene 18 preguntas más que un intento: un segundo intento seguido trae unas 16 preguntas que no viste y repite el resto.
-- **Dificultad del banco:** 15 baja, 51 media y 17 alta.
+- **Cobertura:** el banco cubre las 14 tareas y los **69 objetivos oficiales**, cada uno con al menos una pregunta (todos los del Dominio 2 y del Dominio 5 tienen dos, así que ninguna pregunta sale en todos los intentos). Dentro de cada dominio, un intento no repite objetivo salvo cuando no hay más remedio: el Dominio 2 tiene 14 objetivos para 16 preguntas y el Dominio 5, 8 para 9, así que en cada intento se repiten 2 objetivos del D2 y 1 del D5.
+- **Rotación:** entre las combinaciones válidas, la consola prefiere las preguntas que no salieron en tu intento de simulacro anterior; el resto se elige al azar y el orden también es aleatorio. La rotación se aplica después del reparto y de la variedad de objetivos, y el banco tiene 31 preguntas más que un intento: un segundo intento seguido trae unas 31 preguntas que no viste y repite unas 34.
+- **Dificultad del banco:** 18 baja, 59 media y 19 alta.
 
 ## Cómo interpretar el resultado
 
 - **El porcentaje es orientativo.** El examen real puntúa en una escala de 100 a 1.000 y se aprueba con 700; además, 15 de sus 65 preguntas no puntúan y no se sabe cuáles son. Un porcentaje alto en el simulacro no garantiza el aprobado, pero uno bajo indica que hace falta repasar.
 - **Analiza los fallos por dominio.** En **Mis estadísticas** de la consola verás el acierto por dominio y por tarea. Vuelve al módulo del dominio con peor resultado (tabla de arriba), relee sus **trampas** y repite sus preguntas en modo «dominio».
 - **Busca el patrón de tus errores.** Si fallas por confundir servicios vecinos (por ejemplo, Config frente a CloudTrail, o RAG frente a *fine-tuning*), repasa las tablas «escenario → servicio» y la [chuleta](../../chuleta.md). Si fallas por no ver la restricción del enunciado, practica subrayándola antes de mirar las opciones.
-- **Repite el simulacro** solo después de repasar. Cada intento cambia parte de las preguntas, pero el banco es limitado (83 preguntas para intentos de 65): si lo repites enseguida, reconocerás muchas y medirás tu memoria más que tu preparación.
+- **Repite el simulacro** solo después de repasar. Cada intento cambia parte de las preguntas, pero el banco es limitado (96 preguntas para intentos de 65): si lo repites enseguida, reconocerás muchas y medirás tu memoria más que tu preparación.
 
 ## Antes de reservar el examen
 

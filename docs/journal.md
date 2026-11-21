@@ -637,3 +637,27 @@ La revisión confirma que el flujo es correcto (3000 casos frente a fuerza bruta
 - Se comprobó a mano cada reescrita contra las preguntas de su objetivo en los bancos de los módulos. Quedan parecidos parciales que se aceptan por ser decisiones distintas: S-086 con D5-070 (mínimo privilegio frente a los filtros, en un asistente de Bedrock y en respuesta múltiple) y S-082 con D4-043 (acuerdo entre anotadores, aquí combinado con la evaluación independiente). La cadencia de revisión de S-085 es distinta de la de D5-064 (que pregunta si hay que revisar periódicamente, no a qué plazos).
 - Dificultad del banco: 15 baja, 51 media y 17 alta.
 - Rotación medida con el banco corregido (300 pares de intentos seguidos con `evitar`): comparten 48 o 49 preguntas (antes, 49 o 50), así que el segundo intento trae unas 16 nuevas; README del simulacro actualizado. Las cifras de `openspec/changes/simulacro-rotatorio/` (design, proposal y spec) siguen diciendo 49 o 50 y unas 15: se dejan para quien mantiene ese cambio.
+
+## 2026-11-22
+
+### Simulacro: segunda pregunta para los objetivos fijos
+
+- Petición: que ninguna pregunta del simulacro salga en todos los intentos. Rama `aif-c01/simulacro-fijas`, en el *worktree* `~/Cursos/wt-simulacro-fijas`, a partir de `main` con el PR #53; solo contenido.
+- **Causa:** en el D2 (14 objetivos, 16 huecos) y el D5 (8 objetivos, 9 huecos) cada intento tiene que incluir todos los objetivos, así que una pregunta que es la única de su objetivo sale siempre. Eran 13: S-003, S-010, S-021, S-024, S-033, S-043, S-048, S-067 y S-068 (D2) y S-008, S-030, S-044 y S-055 (D5).
+- **Criterio de tipos:** se simuló el banco con las 13 preguntas nuevas en varias combinaciones de tipo. Con todas de opción múltiple ya no queda ninguna fija; se hace de respuesta múltiple la de 2.3.4 (S-090) para dar al D2 dos preguntas de holgura en esa celda (5 para 3 huecos). Resultado por celda: D2 23+5 (cuotas 13+3) y D5 12+4 (7+2). Ninguna celda pierde factibilidad y las repeticiones inevitables no cambian (D2 2, D5 1).
+- **Preguntas nuevas**, cada una sobre un aspecto distinto del que ya trataba la otra pregunta de su objetivo, para que no se den pistas si coinciden en un intento: S-088 (2.1.4, la entrada domina la factura), S-089 (2.1.5, filtrar los resultados de las herramientas), S-090 (2.3.4, coste de la inferencia entre Regiones: sin cargo por enrutar, precio de la Región de origen, perfil global un 10 % más barato), S-091 (2.3.2, playground de Bedrock para un equipo sin desarrolladores), S-092 (2.2.1, capacidad de respuesta ante picos), S-093 (2.1.2, generación de código), S-094 (2.2.4, exactitud como métrica de negocio), S-095 (2.1.3, despliegue de un modelo personalizado), S-096 (2.3.3, el contenido se almacena en la Región de uso), S-097 (5.1.2, sin fragmentación las citas no muestran la página), S-098 (5.1.3, S3 Object Lock en modo de cumplimiento), S-099 (5.2.1, trail de CloudTrail para conservar más de 90 días) y S-100 (5.1.5, citar pasajes numerados en documentos largos, según la guía de Amazon Nova).
+- **Inéditas:** comparadas a mano con las preguntas de su objetivo en los bancos de examen y de repaso. Se descartaron por repetir planteamientos: Amazon Inspector para vulnerabilidades (D5-028 y D5-046), personalización de contenido (cercana a S-033), RAG con fidelidad en Bedrock Evaluations (D4-045) y permisos por documento en Knowledge Bases (D3-013). Similitud de Jaccard máxima con los bancos: 0,29 (S-088 frente a R2-009).
+- **Datos verificados** en la documentación de AWS: facturación por tokens de entrada y de salida; ingeniería de contexto (Prescriptive Guidance); inferencia entre Regiones (sin coste de enrutamiento, precio según la Región de origen, perfil global con un ahorro aproximado del 10 %, Regiones de destino sin habilitar a mano); playground de Bedrock (FAQ); inferencia de modelos personalizados (despliegue bajo demanda o Provisioned Throughput); almacenamiento en reposo en la Región de uso (FAQ); citas sin número de página cuando no se fragmenta; modo de cumplimiento de S3 Object Lock (ni el usuario raíz puede borrar); historial de eventos de CloudTrail de 90 días y trails; guía de Amazon Nova para contextos largos (citas de pasajes numerados).
+- **Medidas** (2 000 extracciones sin `evitar`; 500 pares de intentos seguidos con `evitar`):
+
+  | | Antes (83) | Después (96) |
+  |---|---|---|
+  | Preguntas al 0 % | 0 | 0 |
+  | Preguntas al 100 % | 13 | 0 |
+  | Frecuencia mínima y máxima | 33 % (S-025) y 100 % | 45 % (S-056) y 96 % (S-065) |
+  | Comunes entre dos intentos seguidos | 48,1 de media | 34,1 de media |
+  | Nuevas en el segundo intento | 16,9 | 30,9 |
+  | Vistas entre los dos intentos | 81,9 de 83 | 95,9 de 96 |
+
+- Reparto final: 96 preguntas, 74 de opción múltiple y 22 de respuesta múltiple; letras de opción múltiple a 18, b 19, c 19 y d 18; dificultad 18 baja, 59 media y 19 alta. `banco.minimo_simulacro` pasa de 80 a 96 para que el banco no pueda encoger sin que lo note la CI.
+- Quedan con cifras antiguas las especificaciones de `openspec/specs/` (simulacro-aif-c01: «unas 16 de 65»; quiz-engine y simulacro-rotatorio: escenarios con 83 preguntas; question-validation: ejemplo con mínimo 80): no se tocan en esta rama de contenido.
