@@ -88,17 +88,17 @@
   - id: a
     texto: Una versión del prompt por cada novela, con el título y el género escritos en el texto
   - id: b
-    texto: Variables para el título y el género, cuyos valores se pasan en cada invocación
+    texto: Marcadores en el texto del prompt cuyos valores se pasan en cada invocación
   - id: c
     texto: Cambios directos sobre la versión que usa la aplicación cada vez que mejore la redacción
   - id: d
     texto: Un reparto del tráfico de producción entre las dos redacciones para elegir la mejor sobre la marcha
   - id: e
-    texto: Variantes del prompt, cada una con su texto y su modelo, comparadas al probarlas
+    texto: Variantes del prompt comparadas en el generador de prompts antes de guardar la elegida
   correctas:
   - b
   - e
-  explicacion: Las variables convierten el prompt en una plantilla cuyos valores se rellenan al probarlo o en cada invocación, así que la aplicación solo envía el título y el género. Las variantes son configuraciones alternativas del mismo prompt (otro mensaje, otro modelo u otros parámetros de inferencia) que se comparan durante las pruebas para guardar la que mejor funciona; después se crea una versión para producción.
+  explicacion: Las variables son marcadores del prompt (por ejemplo, {{titulo}} y {{genero}}) que convierten el prompt en una plantilla cuyos valores se rellenan al probarlo o en cada invocación, así que la aplicación solo envía el título y el género. Las variantes son configuraciones alternativas del mismo prompt (otro mensaje, otro modelo u otros parámetros de inferencia) que se comparan en el generador de prompts (prompt builder) para guardar la que mejor funciona. Después se crea una versión, una instantánea del borrador, para usarla en producción y poder volver a una anterior.
   distractores:
     a: Las versiones son instantáneas del prompt para desplegarlo y poder volver atrás; crear una por novela con los datos escritos a mano es justo lo que evitan las variables.
     c: Una versión es una instantánea del borrador; las mejoras se hacen en el borrador y se publican como una versión nueva, de modo que se puede volver a la anterior.
@@ -420,23 +420,23 @@
   objetivo: 2.3.3
   tipo: multiple_choice
   dificultad: media
-  enunciado: Un despacho de abogados quiere ajustar en Amazon Bedrock el modelo de un proveedor externo con miles de escritos confidenciales. Un socio teme que otros clientes del mismo modelo base se beneficien de ese ajuste y que el proveedor del modelo pueda leer los escritos. ¿Qué indica AWS sobre esos dos riesgos?
+  enunciado: Dos cadenas hoteleras competidoras usan el mismo modelo base en Amazon Bedrock. Una de ellas va a ajustarlo con 20 000 respuestas a reseñas escritas por su equipo, y su director comercial teme que la otra cadena, al invocar ese mismo modelo base, reciba respuestas con el estilo y los datos de su empresa. ¿Qué ocurre al personalizar el modelo en Bedrock?
   opciones:
   - id: a
-    texto: El ajuste mejora el modelo base para todos sus clientes, aunque los escritos se anonimizan antes de entrenar
+    texto: El ajuste se aplica al modelo base compartido, pero solo la cuenta de la cadena puede invocar la versión ajustada
   - id: b
-    texto: El proveedor recibe los escritos para hacer el ajuste, bajo un acuerdo de confidencialidad con AWS
+    texto: El proveedor incorpora el ajuste a la siguiente versión del modelo base, sin conservar las reseñas originales
   - id: c
-    texto: Para evitar ambos riesgos hay que entrenar un modelo propio desde cero en instancias con AWS Trainium
+    texto: El ajuste queda aislado de los demás clientes solo si se contrata Provisioned Throughput para el modelo base
   - id: d
-    texto: Se entrena una copia privada del modelo base y el contenido no llega al proveedor ni mejora el modelo base
+    texto: Bedrock entrena una copia aparte del modelo base, y el modelo base que invocan los demás clientes no cambia
   correctas:
   - d
-  explicacion: Amazon Bedrock hace una copia aparte del modelo base y entrena esa copia privada. Según AWS, el contenido del cliente no se usa para mejorar los modelos base ni se comparte con los proveedores de modelos, que tampoco tienen acceso a las cuentas en las que Bedrock despliega sus modelos. Es uno de los beneficios de seguridad y privacidad de la infraestructura de AWS para la IA generativa.
+  explicacion: 'Al personalizar un modelo, Amazon Bedrock hace una copia aparte del modelo base y entrena esa copia privada. El modelo base compartido no cambia, así que la otra cadena sigue recibiendo las respuestas del modelo original. Además, según AWS, el contenido del cliente no se usa para mejorar los modelos base ni se comparte con los proveedores de modelos: es uno de los beneficios de seguridad y privacidad de la infraestructura de AWS para la IA generativa.'
   distractores:
-    a: El ajuste no modifica el modelo base que usan los demás clientes; se entrena una copia privada para quien lo encarga.
-    b: Los proveedores no tienen acceso a las cuentas de despliegue de Bedrock ni reciben el contenido de los clientes.
-    c: Entrenar desde cero es la opción más cara y lenta, y no hace falta para proteger los escritos, porque el ajuste en Bedrock ya trabaja sobre una copia privada.
+    a: 'El ajuste no se aplica al modelo base compartido: se entrena una copia privada, y el modelo base queda como estaba.'
+    b: Según AWS, el contenido del cliente no se usa para mejorar los modelos base ni se comparte con los proveedores de modelos.
+    c: Provisioned Throughput reserva capacidad de inferencia; no decide si el ajuste afecta a otros clientes, porque la copia privada se crea al personalizar el modelo, se contrate o no esa capacidad.
   referencia: https://aws.amazon.com/bedrock/faqs/
 - id: S-066
   dominio: 1
@@ -456,10 +456,10 @@
     texto: Transformación por lotes una vez al día con los informes acumulados
   correctas:
   - c
-  explicacion: La inferencia asíncrona encola las peticiones, admite tiempos de procesamiento de hasta una hora y puede escalar las instancias a cero cuando no hay nada que procesar, así que con pocas peticiones al día solo se paga mientras se procesan. Es un endpoint basado en instancias, de modo que admite la configuración de VPC del modelo, y cada resultado se deja en Amazon S3 en cuanto termina.
+  explicacion: La inferencia asíncrona encola las peticiones, admite tiempos de procesamiento de hasta una hora y puede escalar las instancias a cero cuando no hay nada que procesar, así que con pocas peticiones al día solo se paga mientras se procesan. Es un endpoint basado en instancias, de modo que admite la configuración de VPC del modelo (la inferencia serverless excluye la configuración de VPC y las GPU), y cada resultado se deja en Amazon S3 en cuanto termina.
   distractores:
-    a: Cumple la latencia y admite VPC, pero sus instancias se facturan mientras están en marcha aunque pasen horas sin informes; con este tráfico es la opción más cara.
-    b: Escala a cero y se paga por uso, pero no admite configuración de VPC, que aquí es obligatoria.
+    a: Admite VPC, pero cada invocación debe responder en 60 segundos y aquí cada informe tarda varios minutos; además, sus instancias se facturan mientras están en marcha aunque pasen horas sin informes.
+    b: Escala a cero y se paga por uso, pero no admite configuración de VPC, que aquí es obligatoria, y cada invocación debe responder en 60 segundos, cuando cada informe tarda varios minutos.
     d: No necesita un endpoint persistente, pero los resultados llegarían una vez al día y no en cuanto cada informe estuviera listo.
   referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
 - id: S-019
@@ -970,7 +970,7 @@
   objetivo: 2.1.3
   tipo: multiple_choice
   dificultad: media
-  enunciado: Una inmobiliaria ajustó un modelo de Amazon Bedrock con 1 500 contratos de alquiler para que redacte con el formato y el estilo de la casa. Tras cuatro meses en producción, los gestores marcan como incorrectos casi todos los borradores de un tipo de contrato nuevo, el de alquiler de temporada, que no aparecía en los datos de ajuste. Mejorar el prompt no ha bastado. ¿Por qué etapa del ciclo de vida del modelo fundacional debe empezar la siguiente iteración?
+  enunciado: 'Una inmobiliaria ajustó un modelo de Amazon Bedrock con 1 500 contratos de alquiler para que redacte con el formato y el estilo de la casa. Tras cuatro meses en producción, los gestores marcan como incorrectos casi todos los borradores de alquiler de temporada, un contrato que la inmobiliaria empezó a ofrecer después del ajuste: no siguen las cláusulas ni el formato que exige. Mejorar el prompt no ha bastado. ¿Por qué etapa del ciclo de vida del modelo fundacional debe empezar la siguiente iteración?'
   opciones:
   - id: a
     texto: Preentrenamiento, con un corpus masivo que incluya los contratos de temporada
@@ -982,12 +982,12 @@
     texto: Selección de datos, reuniendo y revisando ejemplos de contratos de temporada para otra ronda de ajuste
   correctas:
   - d
-  explicacion: 'La retroalimentación cierra el ciclo: las correcciones de los usuarios muestran qué le falta al modelo. El fallo es de formato y estilo en un tipo de documento que no estaba en los datos de ajuste, y el prompt no basta, así que la siguiente iteración empieza por seleccionar y depurar ejemplos etiquetados de ese tipo; después vienen el ajuste fino, la evaluación y el despliegue de la nueva versión.'
+  explicacion: 'La retroalimentación cierra el ciclo: las correcciones de los usuarios muestran qué le falta al modelo. El fallo está en las cláusulas y el formato de un tipo de contrato posterior al ajuste, y el prompt no basta, así que la siguiente iteración empieza por seleccionar y depurar ejemplos etiquetados de ese contrato; después vienen el ajuste fino, la evaluación y el despliegue de la nueva versión.'
   distractores:
     a: El preentrenamiento es la etapa más cara, con meses de trabajo y datos masivos, y la hace el proveedor del modelo; para un tipo de contrato nuevo basta con ajustar el modelo que ya se usa.
     b: Ampliar la evaluación mide mejor el fallo, pero no lo corrige, porque el modelo desplegado seguiría siendo el mismo.
     c: Un modelo base, aunque sea más grande, no conoce el formato propio de la inmobiliaria, y se perdería el ajuste que ya funciona con los demás contratos.
-  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html
+  referencia: https://aws.amazon.com/what-is/foundation-models/
 - id: S-039
   dominio: 3
   tarea: '3.1'
