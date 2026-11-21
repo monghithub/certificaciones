@@ -2252,7 +2252,7 @@
   - d
   explicacion: Amazon Bedrock es serverless, así que no hay infraestructura que gestionar, y en la inferencia bajo demanda se paga por los tokens de entrada y de salida que se procesan. Con 200 peticiones al día, la editorial deja de pagar una GPU encendida las 24 horas para un uso de pocas horas, que es la rentabilidad que aportan los servicios gestionados con pago por uso.
   distractores:
-    a: La accesibilidad permite que equipos sin especialistas usen la IA generativa; el problema de la editorial es lo que paga por una capacidad ociosa.
+    a: La accesibilidad es poder usar modelos de muchos proveedores tras una misma API; el problema de la editorial es lo que paga por una capacidad ociosa.
     b: La velocidad de comercialización ayuda a lanzar antes un producto nuevo; aquí el asistente ya funciona.
     c: Repartir la carga entre Regiones mejora la disponibilidad ante picos; con 200 peticiones al día no es lo que está en juego.
   referencia: https://aws.amazon.com/bedrock/pricing/
@@ -2394,12 +2394,12 @@
     texto: Pedir en el prompt que el modelo añada la página de cada cita
   correctas:
   - a
-  explicacion: 'Con documentos PDF y OpenSearch Serverless o Aurora como almacén vectorial, Knowledge Bases genera el número de página y lo guarda en el metadato x-amz-bedrock-kb-document-page-number, pero no si se elige no fragmentar los documentos. Y la estrategia de fragmentación no se puede cambiar después de conectar el origen de datos: hay que crear uno nuevo con fragmentación y volver a ingerir los documentos.'
+  explicacion: 'Con documentos PDF y OpenSearch Serverless o Aurora como almacén vectorial, Knowledge Bases genera el número de página y lo guarda en el metadato x-amz-bedrock-kb-document-page-number, pero no si se elige no fragmentar los documentos. Y la estrategia de fragmentación no se puede cambiar después de conectar el origen de datos: hay que crear uno nuevo con fragmentación y volver a ingerir los documentos, y eliminar el origen anterior para no duplicar fragmentos sin página.'
   distractores:
     b: La documentación de Bedrock indica que la estrategia de fragmentación no se puede cambiar después de conectar el origen de datos.
     c: El tamaño de la ventana no cambia cómo se indexan los documentos ni qué metadatos de origen llevan las citas.
     d: El modelo no recibe el número de página entre los datos de origen; pedírselo invita a que lo invente.
-  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-data-source-customize-ingestion.html
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html
 - id: S-098
   dominio: 5
   tarea: '5.1'
@@ -2442,9 +2442,9 @@
     texto: El cifrado de los ficheros de registro con una clave propia de AWS KMS
   correctas:
   - b
-  explicacion: La validación de integridad de los ficheros de registro de CloudTrail usa algoritmos estándar (SHA-256 para el hash y SHA-256 con RSA para la firma digital) y permite determinar si un fichero se modificó, se borró o sigue intacto desde que CloudTrail lo entregó. Es la prueba que necesita el auditor.
+  explicacion: La validación de integridad de los ficheros de registro de CloudTrail usa algoritmos estándar (SHA-256 para el hash y SHA-256 con RSA para la firma digital) y permite determinar si un fichero se modificó, se borró o sigue intacto desde que CloudTrail lo entregó. Es la prueba que necesita el auditor. Cubre los ficheros entregados desde que se activa; la comprobación se hace después, por ejemplo con la AWS CLI.
   distractores:
-    a: El versionado conserva las versiones anteriores de cada objeto, pero no demuestra por sí mismo que un fichero no se haya alterado ni avisa de los borrados.
+    a: El versionado conserva versiones anteriores, pero quien tenga permisos puede borrar versiones concretas sin dejar rastro en el bucket; no aporta una prueba verificable de que cada fichero entregado sigue intacto.
     c: Una regla de Config comprueba la configuración del bucket, como el cifrado; no verifica el contenido de cada fichero de registro.
     d: El cifrado protege la confidencialidad de los registros, pero no prueba que no se hayan modificado o borrado.
   referencia: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
@@ -2454,21 +2454,21 @@
   objetivo: 5.1.5
   tipo: multiple_choice
   dificultad: media
-  enunciado: Una consultora pega en un mismo prompt las actas de seis reuniones del consejo de un cliente, de unas 40 páginas cada una, y pide un resumen de los acuerdos con sus importes. El resumen mezcla acuerdos de reuniones distintas y añade importes que no aparecen en ninguna acta. Sin crear una base de conocimiento ni cambiar de modelo, ¿qué cambio en el prompt ayuda a fundamentar cada dato?
+  enunciado: La secretaría del consejo de una cooperativa pega en un mismo prompt de un modelo Amazon Nova en Amazon Bedrock las actas de seis reuniones, de unas 40 páginas cada una, y pide un resumen de los acuerdos con sus importes. El resumen mezcla acuerdos de reuniones distintas y añade importes que no aparecen en ninguna acta. Sin crear una base de conocimiento ni cambiar de modelo, ¿qué cambio en el prompt ayuda a fundamentar el resumen en las actas?
   opciones:
   - id: a
     texto: Pedir al modelo que indique su nivel de confianza en cada cifra
   - id: b
-    texto: Bajar la temperatura a cero para que sea más preciso
+    texto: Pedir un resumen más breve, de una página como máximo
   - id: c
     texto: Añadir al prompt ejemplos de buenos resúmenes de actas
   - id: d
-    texto: Numerar los pasajes y pedir que cite el que respalda cada dato
+    texto: Numerar los pasajes y pedir que los cite al resumir
   correctas:
   - d
-  explicacion: Con documentos largos en el prompt, la guía de prompts de Amazon Nova recomienda numerar los pasajes que se pueden citar y pedir al modelo que fundamente su respuesta citándolos antes de completar la tarea. Así se centra en la información pertinente, cada dato queda ligado a su acta y los que no tienen respaldo se detectan.
+  explicacion: Con documentos largos en el prompt, la guía de prompts de Amazon Nova recomienda numerar los pasajes que se pueden citar y pedir al modelo que fundamente su respuesta citándolos antes de completar la tarea. Así se centra en la información pertinente y cada dato queda ligado a su acta, lo que permite comprobarlo.
   distractores:
     a: Una confianza que declara el propio modelo no está ligada a ningún pasaje; puede ser alta para una cifra inventada.
-    b: Bajar la temperatura reduce la variabilidad, pero no hace que el modelo compruebe cada dato en las actas.
+    b: Un resumen más corto tiene menos datos, pero no hace que el modelo los tome de las actas ni que se puedan comprobar.
     c: Los ejemplos enseñan el formato del resumen, pero no ligan cada dato a su fuente.
   referencia: https://docs.aws.amazon.com/nova/latest/userguide/prompting-long-context.html
