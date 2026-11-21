@@ -13,6 +13,10 @@ simulacro: 06-simulacro
 examen:
   preguntas: 65
   minutos: 90
+  # Guía oficial v1.2 (29-10-2026), «Response types»: solo opción múltiple y respuesta múltiple (issue #45).
+  # Los bancos de los módulos mantienen ordenación y emparejamiento como práctica (banco.distribucion).
+  tipos: [multiple_choice, multiple_response]
+  distribucion: {multiple_choice: 80, multiple_response: 20}
 banco:
   minimo_por_modulo: 60
   minimo_simulacro: 65

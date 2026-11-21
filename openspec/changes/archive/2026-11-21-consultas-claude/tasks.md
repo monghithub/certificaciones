@@ -1,7 +1,7 @@
 ## 0. Antes de empezar
 
 - [x] 0.1 Leer `proposal.md`, `design.md` y `specs/consultas-claude/spec.md` de este cambio, y `AGENTS.md` raíz (flujo y reglas del repositorio)
-- [ ] 0.2 El usuario aprobó la propuesta (revisión humana obligatoria antes de implementar; si no consta en la issue de seguimiento, preguntarle)
+- [x] 0.2 El usuario aprobó la propuesta (2026-11-21: «hazlo todo», que incluía la issue #40)
 - [x] 0.3 Rama propia desde `main` (esta propuesta vive en `feat/consultas-claude`)
 
 ## 1. Consola
@@ -23,7 +23,7 @@
 
 - [x] 3.1 `docs/consola.md` (cómo activarlo, el trabajador, riesgos), `.env.example`, `CHANGELOG.md` y `docs/journal.md`
 - [x] 3.2 Validadores y pruebas: `python scripts/validar_preguntas.py && python scripts/comprobar_cobertura.py --preguntas && python -m pytest`; markdownlint
-- [ ] 3.3 PR, CI en verde y fusión; archivar este cambio de OpenSpec (`openspec/changes/archive/<fecha>-consultas-claude`) y crear `openspec/specs/consultas-claude/spec.md`
+- [x] 3.3 PR, CI en verde y fusión; archivar este cambio de OpenSpec (`openspec/changes/archive/<fecha>-consultas-claude`) y crear `openspec/specs/consultas-claude/spec.md`
 - [ ] 3.4 titan: `CONSULTAS_TOKEN` en el `.env` del despliegue y en su `compose.yaml`, `./desplegar.sh`, servicio de usuario `consultas-claude` (unidad en `design.md`), prueba de extremo a extremo de `design.md`
 - [ ] 3.5 Inventario de `~/Sistema` según su `CLAUDE.md`: `registro.md`, `aplicaciones.md` si procede, commit con rutas propias
 - [ ] 3.6 Cerrar la issue de seguimiento con el resumen

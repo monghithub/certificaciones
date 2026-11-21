@@ -25,6 +25,8 @@ class Manifiesto:
     simulacro: str | None = None
     examen_preguntas: int | None = None
     examen_minutos: int | None = None
+    examen_tipos: tuple[str, ...] = ()  # tipos que enumera la guía oficial; vacío: sin restricción en el simulacro
+    examen_distribucion: dict[str, float] = field(default_factory=dict)  # reparto del simulacro; vacío: el del banco
     minimo_por_modulo: int | None = None
     minimo_simulacro: int | None = None
     minimo_por_tarea: int | None = None
@@ -86,6 +88,7 @@ def cargar_manifiesto(carpeta: Path, esquemas: Path | None = None) -> Manifiesto
         proveedor=datos.get("proveedor"), fuentes_oficiales=tuple(datos.get("fuentes_oficiales") or ()),
         dominios={d["id"]: {"nombre": d["nombre"], "peso": d["peso"]} for d in datos["dominios"]},
         simulacro=datos.get("simulacro"), examen_preguntas=examen.get("preguntas"), examen_minutos=examen.get("minutos"),
+        examen_tipos=tuple(examen.get("tipos") or ()), examen_distribucion=dict(examen.get("distribucion") or {}),
         minimo_por_modulo=banco.get("minimo_por_modulo"), minimo_simulacro=banco.get("minimo_simulacro"),
         minimo_por_tarea=banco.get("minimo_por_tarea"), minimo_por_objetivo=banco.get("minimo_por_objetivo"),
         cobertura=dict(datos.get("cobertura") or {}),
