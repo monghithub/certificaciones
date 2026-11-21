@@ -1160,6 +1160,15 @@
   no_usar_cuando: "Cuando el caso no usa documentos JSON ni la API de MongoDB: para búsqueda vectorial, Aurora PostgreSQL con pgvector u OpenSearch Service."
   referencia: https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
 
+- id: s3-object-lock
+  termino: S3 Object Lock
+  alias: [Object Lock]
+  categoria: tecnica
+  definicion: "Funcionalidad de Amazon S3 que guarda objetos con el modelo WORM (escribir una vez, leer muchas): durante un periodo de retención no se pueden sobrescribir ni borrar. En el modo de cumplimiento nadie puede hacerlo, ni el usuario raíz de la cuenta, y la retención no se puede acortar; en el modo de gobierno, solo los usuarios con permisos especiales."
+  usar_cuando: "Cuando una norma exige conservar sin cambios durante años un conjunto de datos, por ejemplo el que se usó para entrenar un modelo, o unos registros de auditoría."
+  no_usar_cuando: "Para protegerse solo de borrados accidentales, basta el versionado de S3; para archivar al menor coste, las clases de almacenamiento S3 Glacier, que no impiden borrar."
+  referencia: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html
+
 - id: amazon-s3-vectors
   termino: Amazon S3 Vectors
   alias: [S3 Vectors]

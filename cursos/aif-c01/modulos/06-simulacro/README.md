@@ -1,6 +1,6 @@
 # Simulacro del examen
 
-Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 preguntas para hacer en 90 minutos, repartidas según los pesos oficiales de los cinco dominios. Las preguntas salen de un **banco rotatorio de 96**: cada intento extrae 65, así que dos intentos seguidos no son iguales. Todas las preguntas son de elaboración propia e **inéditas**: se redactaron con escenarios y decisiones distintos de los de los bancos de los módulos. El validador del repositorio comprueba que no se repite ningún enunciado y avisa de las preguntas muy parecidas a las de los bancos. Hazlo cuando hayas terminado los módulos 00 a 05.
+Este módulo es un **examen de prueba completo** con el formato del AIF-C01: 65 preguntas para hacer en 90 minutos, repartidas según los pesos oficiales de los cinco dominios. Las preguntas salen de un **banco rotatorio de 96**: cada intento extrae 65, así que dos intentos seguidos no son iguales. Todas las preguntas son de elaboración propia e **inéditas**: se redactaron con escenarios y decisiones distintos de los de los bancos de los módulos, aunque algunas tratan el mismo concepto que una pregunta de esos bancos desde otro planteamiento. El validador del repositorio comprueba que no se repite ningún enunciado y avisa de las preguntas muy parecidas a las de los bancos. Hazlo cuando hayas terminado los módulos 00 a 05.
 
 ## Cómo hacerlo
 
@@ -28,7 +28,7 @@ Cada intento tiene siempre el mismo reparto, el del examen: por dominio según l
 - **Tipos de pregunta:** opción múltiple y respuesta múltiple, los dos que enumera la guía del examen. Las preguntas de ordenación y emparejamiento se practican en los bancos de los módulos.
 - **Cobertura:** el banco cubre las 14 tareas y los **69 objetivos oficiales**, cada uno con al menos una pregunta (todos los del Dominio 2 y del Dominio 5 tienen dos, así que ninguna pregunta sale en todos los intentos). Dentro de cada dominio, un intento no repite objetivo salvo cuando no hay más remedio: el Dominio 2 tiene 14 objetivos para 16 preguntas y el Dominio 5, 8 para 9, así que en cada intento se repiten 2 objetivos del D2 y 1 del D5.
 - **Rotación:** entre las combinaciones válidas, la consola prefiere las preguntas que no salieron en tu intento de simulacro anterior; el resto se elige al azar y el orden también es aleatorio. La rotación se aplica después del reparto y de la variedad de objetivos, y el banco tiene 31 preguntas más que un intento: un segundo intento seguido trae unas 31 preguntas que no viste y repite unas 34.
-- **Dificultad del banco:** 18 baja, 59 media y 19 alta.
+- **Dificultad del banco:** 19 baja, 58 media y 19 alta.
 
 ## Cómo interpretar el resultado
 

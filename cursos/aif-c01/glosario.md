@@ -2,7 +2,7 @@
 
 Términos del curso en orden alfabético, con sus variantes en inglés y en español. **Fichero generado** con `python scripts/generar_glosario.py` a partir de `glosario.yaml`: no lo edites a mano; edita el YAML y vuelve a generarlo. Los servicios se ordenan sin los prefijos «Amazon» y «AWS» (Amazon S3 aparece en la S).
 
-Total: 297 términos.
+Total: 298 términos.
 
 ## A
 
@@ -689,6 +689,10 @@ Total: 297 términos.
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
 - **S3 Lifecycle** (ciclo de vida de S3). *Técnica.* Reglas de Amazon S3 que mueven automáticamente los objetos a clases de almacenamiento más baratas (transición) o los borran al cumplirse un plazo (expiración).
   - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html>
+- **S3 Object Lock** (Object Lock). *Técnica.* Funcionalidad de Amazon S3 que guarda objetos con el modelo WORM (escribir una vez, leer muchas): durante un periodo de retención no se pueden sobrescribir ni borrar. En el modo de cumplimiento nadie puede hacerlo, ni el usuario raíz de la cuenta, y la retención no se puede acortar; en el modo de gobierno, solo los usuarios con permisos especiales.
+  - Usar cuando: Cuando una norma exige conservar sin cambios durante años un conjunto de datos, por ejemplo el que se usó para entrenar un modelo, o unos registros de auditoría.
+  - No usar cuando: Para protegerse solo de borrados accidentales, basta el versionado de S3; para archivar al menor coste, las clases de almacenamiento S3 Glacier, que no impiden borrar.
+  - Referencia: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html>
 - **Amazon S3 Vectors** (S3 Vectors). *Servicio.* Almacenamiento vectorial de Amazon S3 (buckets e índices vectoriales) optimizado en coste para volúmenes enormes, con latencias por debajo del segundo en consultas poco frecuentes y de unos 100 ms en las frecuentes. Se integra con Bedrock Knowledge Bases.
   - Usar cuando: Miles de millones de vectores al menor coste, con consultas poco frecuentes.
   - No usar cuando: Aplicaciones que necesitan latencias de pocos milisegundos o búsqueda de texto completo: Amazon OpenSearch Service.
