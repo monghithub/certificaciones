@@ -1,14 +1,23 @@
 """Simulacro rotatorio en la consola: composición, rotación, reanudar e intentos antiguos."""
 from collections import Counter
+from datetime import timedelta
 
 import pytest
 from conftest import banco_simulacro, crear_usuario, entrar, escribir, post
 from test_app_quiz import iniciar, preguntas, responder
 
-from app.models import Intento
+from app.models import Intento, ahora
 
 # Examen de 5: 1 pregunta por dominio; 4 de opción múltiple y 1 de respuesta múltiple (en el Dominio 1).
 BANCO = {1: (0, 2), 2: (2, 0), 3: (2, 0), 4: (2, 0), 5: (1, 0)}
+
+
+def envejecer(app, segundos=20):
+    """Retrasa el inicio de todos los intentos (fuera de la ventana de doble envío, dentro del minuto de la fixture)."""
+    with app.state.sesiones() as db:
+        for i in db.query(Intento):
+            i.inicio -= timedelta(seconds=segundos)
+        db.commit()
 
 
 def con_banco(curso, por_dominio=BANCO):
@@ -53,9 +62,11 @@ def test_el_segundo_intento_prioriza_las_no_vistas_aunque_el_primero_se_abandone
     crear_usuario(app_rot)
     c = entrar(app_rot)
     primero = preguntas(app_rot, iniciar(c, modo="simulacro"))  # abandonado sin responder
+    envejecer(app_rot)
     segundo = preguntas(app_rot, iniciar(c, modo="simulacro", estudio="1"))
     assert set(primero) & set(segundo) == {"S-009"}  # la única del Dominio 5
     assert set(primero) | set(segundo) == set(app_rot.state.banco)
+    envejecer(app_rot)
     tercero = preguntas(app_rot, iniciar(c, modo="simulacro"))
     assert set(tercero) & set(segundo) == {"S-009"}
 
@@ -65,6 +76,7 @@ def test_la_rotacion_es_por_usuario(app_rot):
     crear_usuario(app_rot, "luis")
     primero = preguntas(app_rot, iniciar(entrar(app_rot, "ana"), modo="simulacro"))
     otro = preguntas(app_rot, iniciar(entrar(app_rot, "luis"), modo="simulacro"))
+    envejecer(app_rot)
     segundo = preguntas(app_rot, iniciar(entrar(app_rot, "ana"), modo="simulacro"))
     assert len(otro) == 5 and set(primero) & set(segundo) == {"S-009"}  # el intento de luis no cuenta para la rotación de ana
 
@@ -92,7 +104,7 @@ def test_intento_antiguo_y_pregunta_retirada(app_rot):
     c = entrar(app_rot)
     with app_rot.state.sesiones() as db:  # intento hecho antes del cambio, con una pregunta que ya no existe
         i = Intento(usuario_id=uid, curso="aif-c01", modo="simulacro", limite_segundos=60,
-                    preguntas=["S-001", "S-003", "S-005", "S-007", "S-099"])
+                    preguntas=["S-001", "S-003", "S-005", "S-007", "S-099"], inicio=ahora() - timedelta(seconds=20))
         db.add(i)
         db.commit()
         iid = i.id
@@ -120,3 +132,24 @@ def test_banco_que_no_permite_formar_el_examen(curso, tmp_path):
     r = post(c, "/c/aif-c01/tests/iniciar", "/c/aif-c01/tests", modo="simulacro")
     assert r.status_code == 303 and r.headers["location"] == "/c/aif-c01/tests"
     assert "no permite formar el examen" in c.get("/c/aif-c01/tests").text
+
+
+def test_doble_envio_reutiliza_el_intento(app_rot, monkeypatch):
+    crear_usuario(app_rot)
+    c = entrar(app_rot)
+    a = iniciar(c, modo="simulacro")
+    assert iniciar(c, modo="simulacro") == a  # doble clic en «Empezar simulacro»
+    with app_rot.state.sesiones() as db:
+        assert db.query(Intento).count() == 1
+    from app.routes import quiz
+    monkeypatch.setattr(quiz, "ahora", lambda: ahora() + timedelta(seconds=11))
+    b = iniciar(c, modo="simulacro")
+    assert b != a and set(preguntas(app_rot, a)) & set(preguntas(app_rot, b)) == {"S-009"}
+
+
+def test_un_simulacro_terminado_no_se_reutiliza(app_rot):
+    crear_usuario(app_rot)
+    c = entrar(app_rot)
+    a = iniciar(c, modo="simulacro")
+    post(c, f"/c/aif-c01/tests/{a}/finalizar")
+    assert iniciar(c, modo="simulacro") != a

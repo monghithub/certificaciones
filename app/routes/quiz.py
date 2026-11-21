@@ -17,6 +17,7 @@ from ..preguntas import leer_respuesta, vista_pregunta
 from ..web import flash, render
 
 router = APIRouter(prefix="/c/{curso}/tests", dependencies=[Depends(verificar_csrf)])
+DOBLE_ENVIO = timedelta(seconds=10)  # un simulacro sin terminar más reciente que esto se reutiliza
 
 
 def _intento(db: Session, iid: int, usuario: Usuario, c: Contenido) -> Intento:
@@ -86,12 +87,15 @@ def iniciar(request: Request, modo: str = Form(...), filtro: str = Form(""), n: 
     elif modo == "simulacro":
         if not m.tiene_simulacro:
             raise HTTPException(400, "Este curso no tiene simulacro")
-        # Rotación: se prefieren las preguntas que no estaban en el intento de simulacro anterior (aunque se abandonara).
-        anterior = db.execute(select(Intento.preguntas).where(Intento.usuario_id == usuario.id, Intento.curso == m.slug,
-                                                              Intento.modo == "simulacro")
+        anterior = db.execute(select(Intento).where(Intento.usuario_id == usuario.id, Intento.curso == m.slug,
+                                                    Intento.modo == "simulacro")
                               .order_by(Intento.inicio.desc(), Intento.id.desc()).limit(1)).scalar()
+        # Doble envío de «Empezar simulacro»: se reutiliza el intento recién creado en vez de abrir otro.
+        if anterior and anterior.fin is None and not _caducado(anterior) and ahora() - anterior.inicio < DOBLE_ENVIO:
+            return RedirectResponse(f"{base}/tests/{anterior.id}", 303)
+        # Rotación: se prefieren las preguntas que no estaban en el intento de simulacro anterior (aunque se abandonara).
         try:
-            ids = simulacro.extraer(m, _banco_simulacro(c), random.Random(), set(anterior or ()))
+            ids = simulacro.extraer(m, _banco_simulacro(c), random.Random(), set(anterior.preguntas if anterior else ()))
         except ValueError as e:
             flash(request, str(e), "error")
             return RedirectResponse(f"{base}/tests", 303)
