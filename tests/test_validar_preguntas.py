@@ -259,6 +259,64 @@ def test_simulacro_con_enunciado_repetido_dentro_del_simulacro(repo):
     assert any("del propio simulacro" in e for e in validar(repo, minimos=False)[0])
 
 
+
+def _examen_con_tipos(repo, tipos, distribucion=None, minimo_simulacro=None):
+    f = repo / "cursos" / "aif-c01" / "curso.yaml"
+    datos = yaml.safe_load(f.read_text(encoding="utf8"))
+    datos.setdefault("examen", {"preguntas": 65, "minutos": 90})["tipos"] = tipos
+    if distribucion:
+        datos["examen"]["distribucion"] = distribucion
+    if minimo_simulacro:
+        datos.setdefault("banco", {})["minimo_simulacro"] = minimo_simulacro
+    f.write_text(yaml.safe_dump(datos, allow_unicode=True, sort_keys=False), encoding="utf8")
+
+
+def test_simulacro_con_tipo_que_la_guia_no_enumera(repo):
+    _examen_con_tipos(repo, ["multiple_choice", "multiple_response"])
+    o = next(copy.deepcopy(p) for p in BASE if p["tipo"] == "ordering")
+    o.update(id="S-001", enunciado="Ordena los pasos de un escenario nuevo que no aparece en los bancos de los módulos.")
+    escribir(repo, [o], "06-simulacro")
+    errs = validar(repo, minimos=False)[0]
+    assert any("tipo ordering, que la guía oficial no enumera" in e for e in errs), errs
+
+
+
+def test_simulacro_sin_tipos_declarados_admite_los_cuatro(repo):
+    f = repo / "cursos" / "aif-c01" / "curso.yaml"
+    datos = yaml.safe_load(f.read_text(encoding="utf8"))
+    datos.get("examen", {}).pop("tipos", None); datos.get("examen", {}).pop("distribucion", None)
+    f.write_text(yaml.safe_dump(datos, allow_unicode=True, sort_keys=False), encoding="utf8")
+    o = next(copy.deepcopy(p) for p in BASE if p["tipo"] == "ordering")
+    o.update(id="S-001", enunciado="Ordena los pasos de un escenario nuevo que no aparece en los bancos de los módulos.")
+    escribir(repo, [o], "06-simulacro")
+    assert not any("guía oficial no enumera" in e for e in validar(repo, minimos=False)[0])
+
+
+def test_distribucion_del_examen_con_tipo_no_declarado(repo):
+    _examen_con_tipos(repo, ["multiple_choice"], {"multiple_choice": 80, "ordering": 20})
+    q = mc_en_posicion(0, "a"); q.update(id="S-001", enunciado="Escenario inédito para el simulacro, distinto de los módulos del curso.")
+    escribir(repo, [q], "06-simulacro")
+    assert any("examen.distribucion usa tipos que no están en examen.tipos: ordering" in e for e in validar(repo, minimos=False)[0])
+
+
+def test_esquema_rechaza_tipo_de_examen_desconocido(repo):
+    _examen_con_tipos(repo, ["multiple_choice", "verdadero_falso"])
+    assert validar(repo, minimos=False)[0]
+
+
+def test_simulacro_usa_la_distribucion_del_examen(repo):
+    _examen_con_tipos(repo, ["multiple_choice", "multiple_response"], {"multiple_choice": 100}, minimo_simulacro=4)
+    sim = []
+    for i in range(4):
+        q = mc_en_posicion(i, "abcd"[i])
+        q.update(id=f"S-{i + 1:03d}", enunciado=f"Escenario inédito número {i} para el simulacro, distinto de los módulos.")
+        sim.append(q)
+    escribir(repo, sim, "06-simulacro")
+    errs, avisos, _ = validar(repo, minimos=False)
+    assert not any("06-simulacro" in e for e in errs), errs
+    assert not any("06-simulacro" in a and "es el" in a for a in avisos), avisos
+
+
 # ------------------------------------------------------------- bancos de repaso
 def repaso(repo, preguntas, modulo="03-modelos-fundacionales"):
     escribir(repo, preguntas, modulo, fichero="repaso.yaml")

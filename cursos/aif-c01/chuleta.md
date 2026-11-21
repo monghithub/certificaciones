@@ -4,7 +4,7 @@ Resumen para repasar la víspera del examen. Cada línea remite a un módulo don
 
 ## Examen
 
-65 preguntas (50 puntúan, 15 no y no se sabe cuáles), 90 minutos, escala 100–1.000, aprobado con 700. La guía vigente (v1.2) enumera dos tipos: **opción múltiple** (1 correcta de 4) y **respuesta múltiple** (2 o más correctas de 5 o más; hay que acertarlas todas). El curso mantiene la ordenación y el emparejamiento como práctica, pendiente de confirmar si siguen en el examen. Una pregunta sin responder cuenta como fallo y fallar no resta: **no dejes nada en blanco**. La puntuación es **compensatoria**: no hace falta aprobar cada dominio por separado. Pesos: D1 20 %, D2 24 %, D3 28 %, D4 14 %, D5 14 %.
+65 preguntas (50 puntúan, 15 no y no se sabe cuáles), 90 minutos, escala 100–1.000, aprobado con 700. La guía vigente (v1.2) enumera dos tipos: **opción múltiple** (1 correcta de 4) y **respuesta múltiple** (2 o más correctas de 5 o más; hay que acertarlas todas). El simulacro usa solo estos dos tipos; la ordenación y el emparejamiento de los bancos de los módulos son práctica del curso. Una pregunta sin responder cuenta como fallo y fallar no resta: **no dejes nada en blanco**. La puntuación es **compensatoria**: no hace falta aprobar cada dominio por separado. Pesos: D1 20 %, D2 24 %, D3 28 %, D4 14 %, D5 14 %.
 
 **Estrategia:** 90 minutos para 65 preguntas son unos 83 segundos por pregunta. En cada una, localiza la restricción que decide (MENOR esfuerzo, MÁS rentable, sin código, en milisegundos) y, en las de respuesta múltiple, cuántas correctas pide el enunciado.
 

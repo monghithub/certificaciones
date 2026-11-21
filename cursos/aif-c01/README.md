@@ -15,7 +15,7 @@ Revalidados el 18 de noviembre de 2026 contra la guía oficial (versión 1.2, pu
 | Duración | 90 minutos |
 | Preguntas | 65 (50 puntuables y 15 no puntuables, sin identificar) |
 | Puntuación | Escala 100–1.000; aprobado con 700; modelo compensatorio |
-| Tipos de pregunta | Opción múltiple (1 correcta de 4) y respuesta múltiple (2 o más correctas de 5 o más), según la guía v1.2. El curso añade ordenación (3–5 elementos) y emparejamiento (3–7 elementos) como práctica, pendiente de confirmar si siguen en el examen ([issue #45](https://github.com/monghithub/certificaciones/issues/45)) |
+| Tipos de pregunta | Opción múltiple (1 correcta de 4) y respuesta múltiple (2 o más correctas de 5 o más), según la guía v1.2; el simulacro usa solo estos dos. Los bancos de los módulos añaden ordenación (3–5 elementos) y emparejamiento (3–7 elementos) como práctica |
 | Penalización | Ninguna por adivinar; las preguntas sin responder cuentan como incorrectas |
 | Coste | 100 USD |
 | Validez | 3 años |
