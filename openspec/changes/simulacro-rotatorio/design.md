@@ -37,7 +37,7 @@ Guía de implementación autocontenida. **Aprobada por el responsable el 2026-11
 
 1. Reparto por dominio **calculado** a partir de los pesos con restos mayores (D2).
 2. Respuesta múltiple por dominio **2/3/4/2/2** (D3).
-3. Banco de **82** preguntas.
+3. Banco de **82** preguntas (finalmente 83: una más para dar holgura a la opción múltiple del Dominio 5).
 4. Un intento **abandonado cuenta** para la rotación (D5).
 5. La dificultad **solo se informa** (resumen del validador), no se estratifica.
 
@@ -109,7 +109,7 @@ Mínimo inevitable de repeticiones por dominio: `cuota_d − máximo de objetivo
 
 Al iniciar un simulacro, `iniciar` lee el último `Intento` del mismo usuario y curso con `modo == "simulacro"` (terminado o no, en modo estudio o no) y pasa sus `preguntas` como `evitar`. Es una preferencia, no una exclusión.
 
-- Con 83 preguntas y 65 por intento, dos intentos seguidos comparten al menos 47 preguntas haga lo que haga el algoritmo. La preferencia mete en el siguiente intento las que no salieron siempre que lo permitan las cuotas por celda y la regla de no repetir objetivo, que tienen prioridad. Medido con el banco final (300 pares de intentos): comparten 49 o 50, el segundo trae unas 15 nuevas y entre los dos se ven unas 81 de 83. La rotación es una mejora sobre el banco fijo, no una garantía de recorrer el banco entero; para más variedad hay que ampliar el banco.
+- Con 83 preguntas y 65 por intento, dos intentos seguidos comparten al menos 47 preguntas haga lo que haga el algoritmo. La preferencia mete en el siguiente intento las que no salieron siempre que lo permitan las cuotas por celda y la regla de no repetir objetivo, que tienen prioridad. Medido con el banco final (300 pares de intentos): comparten 48 o 49, el segundo trae unas 16 nuevas y entre los dos se ven unas 81 de 83. La rotación es una mejora sobre el banco fijo, no una garantía de recorrer el banco entero; para más variedad hay que ampliar el banco.
 - Coste: una consulta, sin columnas nuevas.
 
 *Descartado:* exclusión estricta (imposible: 82 < 2 × 65). *Descartado:* ponderar por todo el historial o por «menos vistas» (más consultas y poca ganancia frente al último intento). *Descartado:* no hacer nada (el azar puro deja fuera las mismas preguntas varias veces seguidas con probabilidad apreciable).
@@ -174,7 +174,7 @@ Resueltas el 2026-11-21:
 
 1. Reparto por dominio: calculado.
 2. Respuesta múltiple: 2/3/4/2/2 (13 por intento, coherente con `examen.distribucion`; ver la decisión de implementación).
-3. Tamaño del banco: 82.
+3. Tamaño del banco: 82 (finalmente 83).
 4. Rotación: sí, y el intento anterior cuenta aunque se abandonara.
 5. Dificultad: solo se informa.
 6. Rama paralela (PR #52, sin fusionar): deja 62/69 objetivos, con `S-066` a `S-069` nuevas (quita `S-004`, `S-017`, `S-018` y `S-038`) y 51/14 por tipo. El banco rotatorio partirá de ahí: faltan 7 objetivos y, como los ids no se reutilizan, las preguntas nuevas empiezan en `S-070`. Para llegar a 82 harán falta 17 (`S-070` a `S-086`).

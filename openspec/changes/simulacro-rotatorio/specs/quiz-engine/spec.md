@@ -11,5 +11,5 @@ El sistema SHALL ofrecer el simulacro del módulo que declara el manifiesto con 
 
 #### Scenario: Composición del intento
 
-- **WHEN** el estudiante inicia el simulacro de AIF-C01 con un banco de 82 preguntas
+- **WHEN** el estudiante inicia el simulacro de AIF-C01 con un banco de 83 preguntas
 - **THEN** el intento tiene 65 preguntas con el reparto oficial por dominio y tipo

@@ -9,9 +9,9 @@ El simulacro de AIF-C01 son 65 preguntas fijas (`cursos/aif-c01/modulos/06-simul
 
 ## What Changes
 
-- **Banco rotatorio.** El simulacro pasa a ser un banco mayor que el examen (82 preguntas previstas para AIF-C01) que cubre **todos** los objetivos oficiales. Cada intento extrae `examen.preguntas` (65) al azar.
+- **Banco rotatorio.** El simulacro pasa a ser un banco mayor que el examen (83 preguntas en AIF-C01) que cubre **todos** los objetivos oficiales. Cada intento extrae `examen.preguntas` (65) al azar.
 - **Reparto en cada intento:** por dominio según los pesos de `dominios` (restos mayores: 13/16/18/9/9, calculado, no declarado) y por tipo según `examen.distribucion` (80/20: 52 de opción múltiple y 13 de respuesta múltiple), con un reparto por dominio y tipo determinista. Dentro de cada dominio, sin repetir objetivo salvo cuando el banco lo haga inevitable. Orden aleatorio.
-- **Rotación entre intentos:** a igualdad de lo anterior, se prefieren las preguntas que no salieron en el intento de simulacro anterior del mismo usuario. Con 83 preguntas y 65 por intento, dos intentos seguidos comparten al menos 47 preguntas por aritmética; en la práctica comparten 49 o 50, porque las cuotas por celda y la variedad de objetivos tienen prioridad, y el segundo intento trae unas 15 preguntas nuevas.
+- **Rotación entre intentos:** a igualdad de lo anterior, se prefieren las preguntas que no salieron en el intento de simulacro anterior del mismo usuario. Con 83 preguntas y 65 por intento, dos intentos seguidos comparten al menos 47 preguntas por aritmética; en la práctica comparten 48 o 49, porque las cuotas por celda y la variedad de objetivos tienen prioridad, y el segundo intento trae unas 16 preguntas nuevas.
 - **Sin migración.** `Intento.preguntas` ya guarda los ids en orden; reanudar, resultado, historial, estadísticas, falladas y consultas siguen igual. Los intentos antiguos no cambian.
 - **Compatibilidad:** si el banco tiene exactamente `examen.preguntas` preguntas, el simulacro se comporta como hoy (todas, en el orden de los ids, sin comprobar el reparto). Lo mismo vale para AIF-C01 hasta que se amplíe el banco.
 - **Módulo compartido `curso/simulacro.py`** (cuotas, comprobación del banco y extracción), usado por la consola, el validador y `scripts/quiz.py --simulacro`.
@@ -19,7 +19,7 @@ El simulacro de AIF-C01 son 65 preguntas fijas (`cursos/aif-c01/modulos/06-simul
   - `validar_preguntas.py`: error si un banco mayor que el examen no permite formar un examen válido (preguntas insuficientes en algún dominio y tipo); error si un id del simulacro no es `S-NNN` o un `S-NNN` aparece fuera del simulacro; resumen con el reparto por intento y las repeticiones de objetivo inevitables.
   - `comprobar_cobertura.py --preguntas`: cobertura de los objetivos oficiales en el banco del simulacro con el mínimo `banco.minimo_simulacro_por_objetivo` (nuevo, opcional; AIF-C01 declara 1).
 - **Manifiesto:** `banco.minimo_simulacro_por_objetivo` en `schemas/curso.schema.json` y `curso/manifiesto.py`. AIF-C01 sube `banco.minimo_simulacro` de 65 a 80.
-- **Contenido (tarea posterior, tras integrar la rama `aif-c01/simulacro-cobertura`):** redactar unas 17 preguntas nuevas `S-070`… para llegar a 82 (18/19/22/12/11 por dominio, con al menos 3/4/5/3/3 de respuesta múltiple) y cubrir los objetivos que falten.
+- **Contenido (tarea posterior, tras integrar la rama `aif-c01/simulacro-cobertura`):** redactar unas 17 preguntas nuevas `S-070`… para llegar a unas 82 (al final fueron 18, S-070 a S-087, y el banco quedó en 83) (18/19/22/12/11 por dominio, con al menos 3/4/5/3/3 de respuesta múltiple) y cubrir los objetivos que falten.
 - **Documentación:** README del simulacro y del curso, `docs/consola.md`, `AGENTS.md`, página de tests de la consola, CHANGELOG y journal.
 
 ## Capabilities
