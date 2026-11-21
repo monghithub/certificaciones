@@ -77,33 +77,33 @@
     c: Es el coste total de la salida antes del cambio (800 millones de tokens × 3 USD), no el ahorro.
     d: Aplica la mitad del precio; el ahorro son 400 millones de tokens al precio completo.
   referencia: https://aws.amazon.com/bedrock/pricing/
-- id: S-004
+- id: S-069
   dominio: 3
-  tarea: '3.1'
-  objetivo: 3.1.5
+  tarea: '3.2'
+  objetivo: 3.2.5
   tipo: multiple_response
   dificultad: media
-  enunciado: Una cadena de ópticas quiere que su asistente responda con el catálogo de monturas, que cambia cada semana, y está comparando formas de adaptar un modelo fundacional en Amazon Bedrock. ¿Qué DOS afirmaciones describen bien el coste de cada opción?
+  enunciado: Una editorial genera con Amazon Bedrock la contraportada de cada novela a partir de su título y su género. Antes de llevar el prompt a producción con Prompt Management, quiere probar dos redacciones distintas, cada una con un modelo diferente, y quedarse con la mejor. Después, cada llamada de la aplicación debe enviar solo el título y el género de la novela. ¿Qué DOS elementos de Prompt Management usa? (Elige DOS.)
   opciones:
   - id: a
-    texto: Con RAG, el modelo se vuelve a entrenar cada vez que cambia el catálogo
+    texto: Una versión del prompt por cada novela, con el título y el género escritos en el texto
   - id: b
-    texto: RAG añade tokens de entrada en cada consulta y el coste del almacén vectorial
+    texto: Variables para el título y el género, cuyos valores se pasan en cada invocación
   - id: c
-    texto: El ajuste fino solo se paga una vez, porque el modelo personalizado no tiene coste de almacenamiento
+    texto: Cambios directos sobre la versión que usa la aplicación cada vez que mejore la redacción
   - id: d
-    texto: La ingeniería de prompts cuesta lo mismo por consulta que RAG, porque ambas recuperan documentos
+    texto: Un reparto del tráfico de producción entre las dos redacciones para elegir la mejor sobre la marcha
   - id: e
-    texto: Un modelo ajustado tiene coste de entrenamiento y de almacenamiento mensual, además de la inferencia
+    texto: Variantes del prompt, cada una con su texto y su modelo, comparadas al probarlas
   correctas:
   - b
   - e
-  explicacion: 'RAG no modifica el modelo: paga tokens extra por los fragmentos recuperados y el almacén vectorial. El ajuste fino paga el entrenamiento, el almacenamiento mensual del modelo personalizado y su inferencia. Para un catálogo que cambia cada semana, RAG es la opción natural.'
+  explicacion: Las variables convierten el prompt en una plantilla cuyos valores se rellenan al probarlo o en cada invocación, así que la aplicación solo envía el título y el género. Las variantes son configuraciones alternativas del mismo prompt (otro mensaje, otro modelo u otros parámetros de inferencia) que se comparan durante las pruebas para guardar la que mejor funciona; después se crea una versión para producción.
   distractores:
-    a: RAG no reentrena el modelo; recupera la información vigente en cada consulta.
-    c: Un modelo personalizado en Bedrock tiene un coste mensual de almacenamiento además del entrenamiento.
-    d: La ingeniería de prompts no recupera documentos ni usa un almacén vectorial; solo cambia las instrucciones.
-  referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
+    a: Las versiones son instantáneas del prompt para desplegarlo y poder volver atrás; crear una por novela con los datos escritos a mano es justo lo que evitan las variables.
+    c: Una versión es una instantánea del borrador; las mejoras se hacen en el borrador y se publican como una versión nueva, de modo que se puede volver a la anterior.
+    d: Prompt Management compara las variantes durante las pruebas y se guarda la elegida; no reparte el tráfico de producción entre ellas.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html
 - id: S-005
   dominio: 2
   tarea: '2.1'
@@ -414,59 +414,54 @@
     c: Estima valores futuros, como la demanda; no evalúa cada operación.
     d: Convierte audio en texto; no analiza transacciones.
   referencia: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html
-- id: S-017
+- id: S-068
   dominio: 2
   tarea: '2.3'
-  objetivo: 2.3.4
+  objetivo: 2.3.3
   tipo: multiple_choice
   dificultad: media
-  enunciado: Una empresa contrata Provisioned Throughput para un modelo a un precio supuesto de 20 USD por hora
-    y lo usa solo 8 horas los días laborables, pero lo mantiene contratado todo el mes. ¿Cuánto paga en un mes de
-    730 horas?
+  enunciado: Un despacho de abogados quiere ajustar en Amazon Bedrock el modelo de un proveedor externo con miles de escritos confidenciales. Un socio teme que otros clientes del mismo modelo base se beneficien de ese ajuste y que el proveedor del modelo pueda leer los escritos. ¿Qué indica AWS sobre esos dos riesgos?
   opciones:
   - id: a
-    texto: 160 USD
+    texto: El ajuste mejora el modelo base para todos sus clientes, aunque los escritos se anonimizan antes de entrenar
   - id: b
-    texto: 3 520 USD
+    texto: El proveedor recibe los escritos para hacer el ajuste, bajo un acuerdo de confidencialidad con AWS
   - id: c
-    texto: 4 867 USD
+    texto: Para evitar ambos riesgos hay que entrenar un modelo propio desde cero en instancias con AWS Trainium
   - id: d
-    texto: 14 600 USD
+    texto: Se entrena una copia privada del modelo base y el contenido no llega al proveedor ni mejora el modelo base
   correctas:
   - d
-  explicacion: 'Provisioned Throughput se factura por hora mientras está contratado, haya o no tráfico: 20 × 730
-    = 14 600 USD. Para un uso así, bajo demanda puede ser más barato.'
+  explicacion: Amazon Bedrock hace una copia aparte del modelo base y entrena esa copia privada. Según AWS, el contenido del cliente no se usa para mejorar los modelos base ni se comparte con los proveedores de modelos, que tampoco tienen acceso a las cuentas en las que Bedrock despliega sus modelos. Es uno de los beneficios de seguridad y privacidad de la infraestructura de AWS para la IA generativa.
   distractores:
-    a: Es el coste de un solo día de uso.
-    b: Supone pagar solo las horas de uso (8 × 22 días); mientras está contratada, la capacidad se paga aunque no
-      se use.
-    c: Divide el coste mensual entre tres sin motivo.
-  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html
-- id: S-018
+    a: El ajuste no modifica el modelo base que usan los demás clientes; se entrena una copia privada para quien lo encarga.
+    b: Los proveedores no tienen acceso a las cuentas de despliegue de Bedrock ni reciben el contenido de los clientes.
+    c: Entrenar desde cero es la opción más cara y lenta, y no hace falta para proteger los escritos, porque el ajuste en Bedrock ya trabaja sobre una copia privada.
+  referencia: https://aws.amazon.com/bedrock/faqs/
+- id: S-066
   dominio: 1
-  tarea: '1.2'
-  objetivo: 1.2.5
+  tarea: '1.1'
+  objetivo: 1.1.3
   tipo: multiple_choice
-  dificultad: baja
-  enunciado: Una ONG tiene miles de fichas informativas en inglés y necesita publicarlas en cinco idiomas con un
-    servicio gestionado, sin entrenar modelos. ¿Qué servicio usa?
+  dificultad: alta
+  enunciado: Una mutua sanitaria despliega en Amazon SageMaker AI un modelo propio que extrae datos de informes médicos escaneados. Los informes llegan unas pocas veces al día, sin horario fijo, y cada uno tarda varios minutos en procesarse; otro sistema recoge cada resultado en cuanto está listo. Por su política de seguridad, el modelo debe ejecutarse con configuración de VPC. ¿Qué opción de inferencia es la MÁS rentable?
   opciones:
   - id: a
-    texto: Amazon Transcribe
+    texto: Inferencia en tiempo real con un endpoint permanente
   - id: b
-    texto: Amazon Polly
+    texto: Inferencia serverless, que escala a cero cuando no hay peticiones
   - id: c
-    texto: Amazon Comprehend
+    texto: Inferencia asíncrona con escalado automático a cero
   - id: d
-    texto: Amazon Translate
+    texto: Transformación por lotes una vez al día con los informes acumulados
   correctas:
-  - d
-  explicacion: Amazon Translate es un servicio de traducción automática neuronal gestionado.
+  - c
+  explicacion: La inferencia asíncrona encola las peticiones, admite tiempos de procesamiento de hasta una hora y puede escalar las instancias a cero cuando no hay nada que procesar, así que con pocas peticiones al día solo se paga mientras se procesan. Es un endpoint basado en instancias, de modo que admite la configuración de VPC del modelo, y cada resultado se deja en Amazon S3 en cuanto termina.
   distractores:
-    a: Convierte voz en texto.
-    b: Convierte texto en voz, no lo traduce.
-    c: Analiza el texto (entidades, sentimiento, idioma), pero no lo traduce.
-  referencia: https://docs.aws.amazon.com/translate/latest/dg/what-is.html
+    a: Cumple la latencia y admite VPC, pero sus instancias se facturan mientras están en marcha aunque pasen horas sin informes; con este tráfico es la opción más cara.
+    b: Escala a cero y se paga por uso, pero no admite configuración de VPC, que aquí es obligatoria.
+    d: No necesita un endpoint persistente, pero los resultados llegarían una vez al día y no en cuanto cada informe estuviera listo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
 - id: S-019
   dominio: 2
   tarea: '2.1'
@@ -969,32 +964,30 @@
     b: Trata del trato a los distintos grupos de personas, no de variaciones en la forma de escribir.
     d: Trata de poder supervisar y dirigir el sistema.
   referencia: https://aws.amazon.com/ai/responsible-ai/
-- id: S-038
+- id: S-067
   dominio: 2
   tarea: '2.1'
-  objetivo: 2.1.1
+  objetivo: 2.1.3
   tipo: multiple_choice
-  dificultad: baja
-  enunciado: Un analista pregunta qué arquitectura permite a los grandes modelos de lenguaje relacionar cada palabra
-    de un texto con todas las demás para entender el contexto. ¿Cuál es?
+  dificultad: media
+  enunciado: Una inmobiliaria ajustó un modelo de Amazon Bedrock con 1 500 contratos de alquiler para que redacte con el formato y el estilo de la casa. Tras cuatro meses en producción, los gestores marcan como incorrectos casi todos los borradores de un tipo de contrato nuevo, el de alquiler de temporada, que no aparecía en los datos de ajuste. Mejorar el prompt no ha bastado. ¿Por qué etapa del ciclo de vida del modelo fundacional debe empezar la siguiente iteración?
   opciones:
   - id: a
-    texto: La regresión lineal
+    texto: Preentrenamiento, con un corpus masivo que incluya los contratos de temporada
   - id: b
-    texto: El modelo de difusión
+    texto: Evaluación, añadiendo contratos de temporada al conjunto de prueba antes de volver a desplegar el mismo modelo
   - id: c
-    texto: El árbol de decisión
+    texto: Selección del modelo, cambiando a un modelo base más grande que se use sin ajuste
   - id: d
-    texto: La arquitectura transformer
+    texto: Selección de datos, reuniendo y revisando ejemplos de contratos de temporada para otra ronda de ajuste
   correctas:
   - d
-  explicacion: Los LLM se basan en transformers, cuyo mecanismo de atención relaciona cada token con los demás del
-    contexto.
+  explicacion: 'La retroalimentación cierra el ciclo: las correcciones de los usuarios muestran qué le falta al modelo. El fallo es de formato y estilo en un tipo de documento que no estaba en los datos de ajuste, y el prompt no basta, así que la siguiente iteración empieza por seleccionar y depurar ejemplos etiquetados de ese tipo; después vienen el ajuste fino, la evaluación y el despliegue de la nueva versión.'
   distractores:
-    a: Es un modelo sencillo para predecir valores numéricos.
-    b: Se usa sobre todo para generar imágenes eliminando ruido paso a paso.
-    c: Es un modelo de ML clásico e interpretable, no la base de los LLM.
-  referencia: https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/
+    a: El preentrenamiento es la etapa más cara, con meses de trabajo y datos masivos, y la hace el proveedor del modelo; para un tipo de contrato nuevo basta con ajustar el modelo que ya se usa.
+    b: Ampliar la evaluación mide mejor el fallo, pero no lo corrige, porque el modelo desplegado seguiría siendo el mismo.
+    c: Un modelo base, aunque sea más grande, no conoce el formato propio de la inmobiliaria, y se perdería el ajuste que ya funciona con los demás contratos.
+  referencia: https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html
 - id: S-039
   dominio: 3
   tarea: '3.1'
