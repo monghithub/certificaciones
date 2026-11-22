@@ -698,3 +698,29 @@ La revisión confirma que el flujo es correcto (3000 casos frente a fuerza bruta
   - S-100 (5.1.5): D5-035 a D5-042, R5-017 a R5-020, S-055; vecinos S-079 (3.2.3) y D4-045 (4.1.7).
 - Frecuencias tras las correcciones (2 000 extracciones): ninguna al 0 % ni al 100 %, mínima 45 % (S-056) y máxima 96 % (S-065); dos intentos seguidos comparten 34,1 preguntas de media. Dificultad del banco: 19 baja, 58 media y 19 alta.
 - Ajustes finales de la revisión (2026-11-22): S-091 (la accesibilidad, según el módulo 02, es usar modelos de muchos proveedores tras una misma API), S-097 (referencia kb-test-config y retirar el origen de datos anterior), S-099 (versionado e integridad: cubre los ficheros entregados desde la activación y se comprueba con la AWS CLI), S-100 (cooperativa con un modelo Amazon Nova en Bedrock; sin el distractor de temperatura de S-079; la correcta ya no es la más larga); módulo 05 con los detalles de la validación de integridad de CloudTrail (fichero resumen cada hora, activada por defecto en los trails nuevos de la consola) y nueva entrada del glosario para ella; S3 Object Lock requiere el versionado.
+
+### Estado del proyecto al cerrar la sesión del 2026-11-22
+
+Resumen de la sesión del 2026-11-21 y 2026-11-22 (Claude Code lanzado desde otro equipo por SSH) y punto de partida para la siguiente.
+
+- **Integrado y desplegado en titan** (todo con la CI en verde; copia de la base de datos en `backups/` antes de cada despliegue con cambios de código o del simulacro):
+
+  | PR | Qué | Despliegue |
+  |---|---|---|
+  | #28 | 93 preguntas de repaso nuevas (mínimo 4 por objetivo); conflicto con las revisiones #31–#37 resuelto renumerando ids | `--solo-cursos` |
+  | #51 | `CLAUDE.md` con el resumen operativo | — |
+  | #52 | Simulacro: 4 preguntas de objetivos sin cubrir (58 → 62 de 69) | `--solo-cursos` |
+  | #53 | Simulacro rotatorio (OpenSpec `simulacro-rotatorio`, archivado): banco de 83 con los 69 objetivos, selección exacta por flujo de coste mínimo y rotación entre intentos | imagen nueva |
+  | #54 | Resultado por dominio y por tarea (OpenSpec `resultado-por-dominio`, archivado) | imagen nueva |
+  | #55 | Segunda pregunta para los 13 objetivos fijos: banco de 96, ninguna pregunta en todos los intentos | `--solo-cursos` |
+
+- **Estado del curso AIF-C01:** repaso con al menos 4 preguntas por objetivo (355); simulacro de 96 preguntas que cubre los 69 objetivos, 65 por intento con el reparto oficial (13/16/18/9/9 por dominio, 52 + 13 por tipo), repeticiones de objetivo solo inevitables (D2 2, D5 1) y unas 31 preguntas nuevas en el segundo intento seguido.
+- **Método seguido en cada etapa:** rama propia por cambio, agentes en paralelo en *worktrees* separados, revisión independiente de código y de contenido (contra la documentación de AWS y contra los bancos de los módulos), correcciones, PR, fusión con la CI en verde y despliegue verificado (contenedor sano, sin errores en los registros y `consultas-claude` reiniciado).
+- **Lecciones:**
+  - La similitud Jaccard no detecta preguntas que repiten el planteamiento de otra con otras palabras: hay que comparar a mano con las del mismo objetivo en los bancos de examen y de repaso.
+  - En modo estudio la explicación se ve en el momento: una explicación puede dar pistas a otra pregunta del mismo intento, sobre todo si son del mismo objetivo.
+  - Sesgo de longitud comprobado: la correcta es estrictamente la opción más larga en el 18 % de las preguntas de opción múltiple del simulacro (por debajo del 25 % del azar).
+  - `~/Sistema` no tiene remoto propio: el remoto `ffapp` es otro repositorio y no se le hace push.
+- **Pendiente:**
+  - #11 (preentrenamiento continuado en Bedrock) y, por dependencia, #16 (versión `aif-c01-v1.0.0`): aparcadas; se retoman solo a petición del responsable.
+  - Ideas propuestas, sin empezar: gráfica de la evolución de los simulacros en Estadísticas, y un aviso del validador cuando dos preguntas del mismo dominio se dan pistas entre sí.
