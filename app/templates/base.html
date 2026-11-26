@@ -1,50 +1,142 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-tema="auto">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="htmx-config" content='{"allowEval": false, "includeIndicatorStyles": false}'>
-<title>{% block titulo %}Consola{% endblock %} · Certificaciones</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230b5cad%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2717%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27sans-serif%27 font-weight=%27700%27%3EAI%3C/text%3E%3C/svg%3E">
+<title>{% block titulo %}Consola{% endblock %} · Certificaciones AWS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%234a78c2%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2717%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27sans-serif%27 font-weight=%27700%27%3EAI%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/outline/style.css">
 <script src="{{ static('tema.js') }}"></script>
 <link rel="stylesheet" href="{{ static('app.css') }}">
 <script src="{{ static('htmx.min.js') }}" defer></script>
 <script src="{{ static('mermaid.min.js') }}" defer></script>
 <script src="{{ static('app.js') }}" defer></script>
 </head>
-<body hx-boost="true" hx-headers='{"X-CSRF-Token": "{{ csrf }}"}'>
-<header class="top"><div class="in">
-  <a class="marca" href="/">Certificaciones</a>
+<body hx-boost="true" hx-headers='{"X-CSRF-Token": "{{ csrf }}"}' class="bg-base-100 text-base-content">
+<!-- Navbar mejorado con DaisyUI -->
+<header class="navbar bg-base-100 shadow-lg sticky top-0 z-50 border-b border-base-300">
+  <div class="flex-1">
+    <a href="/" class="btn btn-ghost text-xl font-bold">
+      <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="7" fill="currentColor"/>
+        <text x="16" y="22" font-size="17" text-anchor="middle" fill="white" font-family="sans-serif" font-weight="700">AI</text>
+      </svg>
+      Certificaciones
+    </a>
+  </div>
+
   {% if user %}
-  <nav aria-label="Principal">
-    <a href="/">Mis cursos</a>
-    {% if curso %}<a href="{{ base }}/"><strong>{{ curso.manifiesto.titulo }}</strong></a><a href="{{ base }}/tests">Tests</a><a href="{{ base }}/estadisticas">Mis estadísticas</a>{% if consultas %}<a href="{{ base }}/dudas">Mis dudas</a>{% endif %}{% if curso.glosario %}<a href="{{ base }}/mapa">Mapa de servicios</a><a href="{{ base }}/glosario">Glosario</a>{% endif %}{% endif %}
-    {% if user.rol == 'admin' %}<a href="/admin/usuarios">Usuarios</a><a href="/admin/cursos">Cursos</a>{% endif %}
-  </nav>
-  <button type="button" class="tema-btn" data-alternar-tema aria-label="Cambiar el tema de color" title="Cambiar el tema de color"><span aria-hidden="true">◐</span> <span data-tema-etiqueta>Claro</span></button>
-  <span class="suave">{{ user.nombre }} ({{ user.rol }})</span>
-  {% if acceso_libre %}<span class="etiqueta en" title="Entrada sin login (ACCESO_LIBRE_USUARIO)">Acceso libre (red local)</span>
-  {% else %}<a href="/cuenta/password">Contraseña</a>
-  <form method="post" action="/logout" hx-boost="false"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="link" type="submit">Salir</button></form>{% endif %}
+  <!-- Menú principal -->
+  <div class="hidden md:flex gap-2">
+    <a href="/" class="btn btn-ghost btn-sm">Mis cursos</a>
+    {% if curso %}
+      <a href="{{ base }}/" class="btn btn-ghost btn-sm">{{ curso.manifiesto.titulo }}</a>
+      <a href="{{ base }}/tests" class="btn btn-ghost btn-sm">Tests</a>
+      <a href="{{ base }}/estadisticas" class="btn btn-ghost btn-sm">Estadísticas</a>
+      {% if consultas %}<a href="{{ base }}/dudas" class="btn btn-ghost btn-sm">Mis dudas</a>{% endif %}
+      {% if curso.glosario %}
+        <a href="{{ base }}/mapa" class="btn btn-ghost btn-sm">Mapa</a>
+        <a href="{{ base }}/glosario" class="btn btn-ghost btn-sm">Glosario</a>
+      {% endif %}
+    {% endif %}
+    {% if user.rol == 'admin' %}
+      <div class="divider divider-horizontal mx-1"></div>
+      <a href="/admin/usuarios" class="btn btn-ghost btn-sm">👥 Usuarios</a>
+      <a href="/admin/cursos" class="btn btn-ghost btn-sm">📚 Cursos</a>
+    {% endif %}
+  </div>
+
+  <!-- Controles de usuario -->
+  <div class="flex-none gap-2">
+    <button type="button" class="btn btn-ghost btn-circle" data-alternar-tema aria-label="Cambiar tema" title="Cambiar tema">
+      <svg class="w-5 h-5" aria-hidden="true">◐</svg>
+    </button>
+
+    <div class="dropdown dropdown-end">
+      <button tabindex="0" class="btn btn-ghost btn-circle avatar">
+        <div class="w-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+          {{ user.nombre[0:1].upper() }}
+        </div>
+      </button>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 border border-base-300">
+        <li><a href="#" disabled>{{ user.nombre }} ({{ user.rol }})</a></li>
+        {% if acceso_libre %}
+          <li><a disabled class="text-warning">Acceso libre (red local)</a></li>
+        {% else %}
+          <li><a href="/cuenta/password">🔐 Cambiar contraseña</a></li>
+        {% endif %}
+        <li><a href="/logout" hx-boost="false" hx-post hx-headers='{"X-CSRF-Token": "{{ csrf }}"}'>🚪 Salir</a></li>
+      </ul>
+    </div>
+
+    <!-- Menú móvil -->
+    <div class="md:hidden">
+      <details class="dropdown dropdown-end">
+        <summary class="btn btn-ghost btn-circle">☰</summary>
+        <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 border border-base-300">
+          <li><a href="/">Mis cursos</a></li>
+          {% if curso %}
+            <li><a href="{{ base }}/">{{ curso.manifiesto.titulo }}</a></li>
+            <li><a href="{{ base }}/tests">Tests</a></li>
+            <li><a href="{{ base }}/estadisticas">Estadísticas</a></li>
+            {% if consultas %}<li><a href="{{ base }}/dudas">Mis dudas</a></li>{% endif %}
+            {% if curso.glosario %}
+              <li><a href="{{ base }}/mapa">Mapa</a></li>
+              <li><a href="{{ base }}/glosario">Glosario</a></li>
+            {% endif %}
+          {% endif %}
+          {% if user.rol == 'admin' %}
+            <li><a href="/admin/usuarios">Usuarios</a></li>
+            <li><a href="/admin/cursos">Cursos</a></li>
+          {% endif %}
+        </ul>
+      </details>
+    </div>
+  </div>
   {% endif %}
-</div></header>
-<main>
-  {% for nivel, texto in flash %}<div class="msg {{ nivel }}" role="status">{{ texto }}</div>{% endfor %}
+</header>
+
+<!-- Alertas flash -->
+{% for nivel, texto in flash %}
+  <div class="alert alert-{{ 'success' if nivel == 'ok' else 'error' if nivel == 'mal' else 'warning' if nivel == 'aviso' else 'info' }} shadow-lg mx-4 mt-4" role="status">
+    <svg class="stroke-current shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <span>{{ texto }}</span>
+  </div>
+{% endfor %}
+
+<!-- Contenido principal -->
+<main class="container mx-auto px-4 py-6"
   {% block contenido %}{% endblock %}
 </main>
-<dialog id="modal-concepto" aria-labelledby="mc-titulo" class="modal-concepto">
-  <div class="mc-cuerpo">
-    <header class="mc-cab">
-      <div><span class="mc-cat" id="mc-cat"></span><h2 id="mc-titulo" tabindex="-1"></h2></div>
-      <button type="button" class="mc-cerrar" aria-label="Cerrar">✕</button>
-    </header>
-    <p class="mc-def" id="mc-def"></p>
-    <dl class="mc-extra" id="mc-extra"></dl>
-    <section class="mc-enlaces-caja" id="mc-enlaces-caja" aria-labelledby="mc-enlaces-titulo">
-      <h3 id="mc-enlaces-titulo">Enlaces</h3>
-      <ul class="mc-enlaces" id="mc-enlaces"></ul>
+
+<!-- Modal de conceptos (mejorado con DaisyUI) -->
+<dialog id="modal-concepto" class="modal">
+  <div class="modal-box w-11/12 max-w-2xl">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="badge badge-primary mb-2" id="mc-cat"></span>
+        <h2 id="mc-titulo" class="font-bold text-2xl" tabindex="-1"></h2>
+      </div>
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost" aria-label="Cerrar">✕</button>
+      </form>
+    </div>
+
+    <p class="py-4" id="mc-def"></p>
+
+    <dl class="py-4 space-y-2" id="mc-extra"></dl>
+
+    <section class="py-4" id="mc-enlaces-caja" aria-labelledby="mc-enlaces-titulo">
+      <h3 id="mc-enlaces-titulo" class="font-semibold mb-2">🔗 Enlaces</h3>
+      <ul class="list-none space-y-1" id="mc-enlaces"></ul>
     </section>
   </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
 </dialog>
+
 </body>
 </html>
