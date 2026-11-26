@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-base-100 text-base-content;
+  }
+
+  h1 {
+    @apply text-3xl font-bold my-4;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold my-3;
+  }
+
+  h3 {
+    @apply text-lg font-semibold my-2;
+  }
+
+  a {
+    @apply link link-primary;
+  }
+
+  label {
+    @apply block font-semibold mb-2;
+  }
+
+  input[type=text],
+  input[type=password],
+  input[type=number],
+  select,
+  textarea {
+    @apply input input-bordered w-full max-w-md;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply btn btn-primary;
+  }
+
+  .btn-secondary {
+    @apply btn btn-secondary;
+  }
+
+  .card-custom {
+    @apply card bg-base-100 shadow-lg border border-base-300;
+  }
+
+  .alert-success {
+    @apply alert alert-success;
+  }
+
+  .alert-error {
+    @apply alert alert-error;
+  }
+
+  .alert-warning {
+    @apply alert alert-warning;
+  }
+
+  .alert-info {
+    @apply alert alert-info;
+  }
+}
+
+/* Compatibilidad con HTMX indicators */
+.htmx-indicator {
+  @apply loading loading-spinner loading-sm;
+}
+
+.htmx-request.htmx-indicator {
+  @apply block;
+}
+
+/* Modal de conceptos personalizado */
+.modal-concepto {
+  @apply rounded-lg;
+}
+
+.mc-cuerpo {
+  @apply p-6;
+}
+
+.mc-cab {
+  @apply flex justify-between items-center mb-4;
+}
+
+.mc-titulo {
+  @apply text-2xl font-bold;
+}
+
+.mc-cerrar {
+  @apply btn btn-sm btn-circle btn-ghost;
+}

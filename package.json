@@ -1,0 +1,15 @@
+{
+  "name": "certificaciones-consola",
+  "version": "1.0.0",
+  "description": "Consola web para cursos de certificaciones",
+  "type": "module",
+  "scripts": {
+    "build:css": "tailwindcss -i ./app/static/input.css -o ./app/static/app.css",
+    "watch:css": "tailwindcss -i ./app/static/input.css -o ./app/static/app.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.32",
+    "daisyui": "^4.4.19"
+  }
+}
