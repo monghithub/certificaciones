@@ -2,7 +2,13 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
-## [Sin publicar]
+## [1.0.0] - 2026-11-22
+
+Versión estable: curso **completo AIF-C01**, todas las iteraciones implementadas, contenido y consola verificados contra documentación oficial de AWS. Simulacro rotatorio operativo, revisiones con libros de estudio integradas, «Preguntar a Claude» implementado y desplegado en producción.
+
+**Véase:** [Issue #16](https://github.com/monghithub/certificaciones/issues/16) cierre de v1.0.0.
+
+**Pendiente:** [Issue #11](https://github.com/monghithub/certificaciones/issues/11) preentrenamiento continuado en Bedrock (abierta, esperando AWS; no bloquea funcionalidad).
 
 ### Añadido
 
