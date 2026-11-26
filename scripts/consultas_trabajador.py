@@ -356,11 +356,11 @@ class Trabajador:
 
         # NUEVA: Validación de scope (solo primera pregunta de la conversación)
         if not sesion:
-            pregunta_text = trabajo["pregunta_original"] if "pregunta_original" in trabajo else ""
+            pregunta_text = trabajo.get("texto", "")
             es_valida, motivo = validar_scope(pregunta_text)
             if not es_valida:
                 log(f"mensaje {mid}: RECHAZADO — {motivo}")
-                self.api.error(mid, reparto, f"Pregunta fuera de scope de AWS AIF-C01: {motivo}")
+                self.api.error(mid, reparto, motivo)
                 return "error"
 
             # NUEVA: Buscar en journal (caché)
