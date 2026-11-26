@@ -2472,3 +2472,171 @@
     b: Un resumen más corto tiene menos datos, pero no hace que el modelo los tome de las actas ni que se puedan comprobar.
     c: Los ejemplos enseñan el formato del resumen, pero no ligan cada dato a su fuente.
   referencia: https://docs.aws.amazon.com/nova/latest/userguide/prompting-long-context.html
+- id: S-101
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Una empresa de logística procesa cada entrega con una secuencia fija de reglas (cliente nuevo → verificar crédito, cliente existente → hacer envío). Tiene un 99 % de precisión desde hace años. ¿Es un buen caso para sustituir esta lógica por Machine Learning?
+  opciones:
+  - id: a
+    texto: Sí, porque un modelo aprendería las reglas automáticamente
+  - id: b
+    texto: 'No: una lógica de reglas determinista sin incertidumbre y casi 100 % exacta es más mantenible'
+  - id: c
+    texto: Sí, porque el modelo se reentenaría cada mes con nuevos datos
+  - id: d
+    texto: No, solo porque la empresa no tiene datos históricos etiquetados
+  correctas:
+  - b
+  explicacion: ML resuelve problemas donde los patrones son complejos, no deterministas o cambian con el tiempo. Una regla fija que funciona con precisión casi perfecta debe seguir siendo una regla; sustituirla por ML añadiría latencia, coste de mantenimiento y riesgo sin beneficio. No todo debe ser un modelo.
+  distractores:
+    a: Un modelo no es mejor solo porque aprenda; la fórmula existente es más eficiente y segura.
+    c: Reetrenamiento frecuente añade carga operativa sin resolver un problema que ya está resuelto.
+    d: La falta de datos es una barrera, pero el motivo principal es que el problema no necesita ML.
+  referencia: https://docs.aws.amazon.com/whitepapers/latest/ml-best-practices/decide-mlops.html
+- id: S-102
+  dominio: 1
+  tarea: '1.2'
+  objetivo: 1.2.3
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un banco quiere que su asistente responda a preguntas sobre saldos en menos de 100 milisegundos. La inferencia del modelo lleva 50 ms, pero la búsqueda en la base de datos de clientes tarda 200 ms. Para cumplir el requisito, ¿qué debe hacer?
+  opciones:
+  - id: a
+    texto: Reducir la complejidad del modelo
+  - id: b
+    texto: Usar un modelo más grande para ganar precisión
+  - id: c
+    texto: 'Priorizar la optimización de la consulta a la base de datos, que domina la latencia'
+  - id: d
+    texto: Cambiar al modelo más rápido disponible
+  correctas:
+  - c
+  explicacion: Los requisitos no funcionales como la latencia están distribuidos entre componentes. El cuello de botella está en la consulta a BD (200 ms), no en la inferencia (50 ms). Optimizar el modelo sin resolver la BD seguiría sin cumplir el objetivo.
+  distractores:
+    a: Reducir el modelo ayuda poco si la BD tarda 200 ms.
+    b: Modelos más grandes son más lentos, no más rápidos.
+    d: Cambiar modelo no resuelve la latencia de la BD.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-latency.html
+- id: S-103
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.2
+  tipo: multiple_choice
+  dificultad: baja
+  enunciado: Un equipo entrena un modelo para predecir si una máquina falla en la próxima semana. Los fallos son raros (1 de cada 1 000 máquinas). El modelo predice «sin fallo» para todas ellas. Su exactitud es del 99,9 %, pero no detecta ningún fallo. ¿Qué métrica muestra mejor el rendimiento?
+  opciones:
+  - id: a
+    texto: Precisión (proporción de predicciones de fallo que son reales)
+  - id: b
+    texto: 'Exhaustividad (recall): de todos los fallos, cuántos se detectan'
+  - id: c
+    texto: AUC-ROC (curva de característica operativa)
+  - id: d
+    texto: Exactitud (accuracy)
+  correctas:
+  - b
+  explicacion: Con clases desequilibradas, la exactitud engaña. La exhaustividad mide qué fracción de los fallos reales se detectan (aquí cero), que es lo importante en mantenimiento predictivo. F1 también sería válida.
+  distractores:
+    a: La precisión mide los positivos correctos sobre los predichos; sin detectar ninguno es indefinida.
+    c: AUC-ROC es mejor que exactitud, pero la exhaustividad es más interpretable para el negocio.
+    d: La exactitud es alta solo porque los negativos dominan; no sirve aquí.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+- id: S-104
+  dominio: 1
+  tarea: '1.3'
+  objetivo: 1.3.4
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo entrena un modelo de previsión con SageMaker AI, lo integra con A/B testing en la aplicación durante dos meses y ve que mejora las ventas. ¿Cuál es el siguiente paso en el ciclo de vida del modelo?
+  opciones:
+  - id: a
+    texto: Incrementar el tráfico de prueba gradualmente con despliegue canario
+  - id: b
+    texto: Desplegar el modelo en producción con 100 % del tráfico
+  - id: c
+    texto: Reentrenarlo cada semana con datos frescos
+  - id: d
+    texto: Configurar monitoreo de deriva de datos y de concepto
+  correctas:
+  - d
+  explicacion: Tras desplegar en producción (que sucede tras el A/B testing validado), el ciclo entra en monitoreo y mantenimiento. Detectar cambios en datos o predicciones (deriva) es crítico para decidir si reentrena o ajusta el modelo.
+  distractores:
+    a: El canario es parte del despliegue, que ya completó su prueba.
+    b: Pasar a 100 % es el despliegue, pero la pregunta es qué sigue.
+    c: El reentrenamiento es una acción posterior a detectar problema; primero monitorea.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+- id: S-105
+  dominio: 3
+  tarea: '3.4'
+  objetivo: 3.4.5
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo despliega un asistente de ventas y quiere medir cada mes si el 80 % de los clientes le dan una puntuación de 4 o más en una escala de 1 a 5. ¿Qué herramienta de AWS ejecuta automáticamente esta métrica de negocio?
+  opciones:
+  - id: a
+    texto: Amazon Bedrock Evaluations
+  - id: b
+    texto: Amazon Comprehend con análisis de sentimiento
+  - id: c
+    texto: AWS CloudWatch con métricas personalizadas
+  - id: d
+    texto: Amazon SageMaker Model Monitor
+  correctas:
+  - b
+  explicacion: Aunque el scoring manual es más exacto, Amazon Comprehend ofrece análisis de sentimiento que correlaciona bien con satisfacción. Para automatización a escala, se alimenta con las reseñas del mes y se calcula la proporción de sentimientos positivos. Las puntuaciones numéricas se pueden procesar también con CloudWatch.
+  distractores:
+    a: Bedrock Evaluations mide exactitud de respuestas frente a referencias (BLEU, ROUGE), no satisfacción.
+    c: CloudWatch almacena métricas, pero no analiza sentimiento de forma nativa.
+    d: Model Monitor detecta deriva de datos y predicciones, no sentimiento de clientes.
+  referencia: https://docs.aws.amazon.com/comprehend/latest/dg/how-sentiment.html
+- id: S-106
+  dominio: 4
+  tarea: '4.1'
+  objetivo: 4.1.7
+  tipo: multiple_choice
+  dificultad: alta
+  enunciado: Un equipo monitorea un modelo de clasificación de imágenes médicas que se refresca cada dos semanas. Ve que la exactitud baja de 94 % a 92 % en la última semana de cada ciclo. ¿Qué tipo de monitoreo de Model Monitor ayuda a diagnosticar?
+  opciones:
+  - id: a
+    texto: Monitoreo de calidad de datos (detecta cambios en la distribución de entrada)
+  - id: b
+    texto: 'Monitoreo de sesgo (mide si las predicciones favorecen subgrupos de la población)'
+  - id: c
+    texto: 'Monitoreo de atribución (rastrea cambios en las características más importantes)'
+  - id: d
+    texto: 'Monitoreo de deriva de datos (compara entrada con entrenamiento) y del modelo (predición frente a supervición real)'
+  correctas:
+  - d
+  explicacion: El patrón de caída sugiere que los datos nuevos cada semana se desvían de los de entrenamiento, o que el modelo pierde precisión con ellos (deriva). Monitoreo de deriva de datos detecta cambios en la distribución de entrada; monitoreo del modelo compara predicción con la verdad (si la hay) y detecta rendimiento nuevo.
+  distractores:
+    a: Calidad de datos es un componente, pero no captura el rendimiento del modelo mismo.
+    b: Sesgo es persistente, no fluctúa semanal; aquí hay un patrón temporal.
+    c: Atribución explica qué características influyen; no detecta cambios de rendimiento.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality.html
+- id: S-107
+  dominio: 4
+  tarea: '4.2'
+  objetivo: 4.2.2
+  tipo: multiple_choice
+  dificultad: media
+  enunciado: Un equipo despliega un modelo de ML para decisiones de crédito que pueden negar préstamos. La regulación exige que explique por qué. ¿Qué herramienta de AWS documenta esta información de forma estándar?
+  opciones:
+  - id: a
+    texto: Model Registry de SageMaker
+  - id: b
+    texto: Amazon SageMaker Clarify
+  - id: c
+    texto: AI Service Cards o Model Cards
+  - id: d
+    texto: Bedrock Knowledge Bases
+  correctas:
+  - c
+  explicacion: Las Model Cards de SageMaker (y las AI Service Cards de los modelos fundacionales) documentan el propósito, limitaciones, métricas de rendimiento y consideraciones de equidad del modelo. Son el estándar de transparencia para decisiones de alto riesgo.
+  distractores:
+    a: Model Registry almacena versiones del modelo, no documentación de transparencia.
+    b: Clarify detecta sesgo e importancia de características, pero no es un documento de transparencia.
+    d: Knowledge Bases almacenan documentos para RAG, no documentación del modelo.
+  referencia: https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
