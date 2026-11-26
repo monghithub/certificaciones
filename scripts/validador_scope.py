@@ -78,6 +78,10 @@ def validar_scope(pregunta: str) -> Tuple[bool, str]:
     """
     pregunta_lower = pregunta.lower().strip()
 
+    # Validación básica: pregunta muy corta o vacía
+    if len(pregunta_lower) < 5:
+        return False, "❌ Pregunta muy corta. Debes hacer una pregunta sobre AWS AIF-C01."
+
     # 1. Detectar prompt injection
     for patron in PATRONES_INJECTION:
         if re.search(patron, pregunta_lower):
@@ -91,17 +95,17 @@ def validar_scope(pregunta: str) -> Tuple[bool, str]:
     # 3. Validar que trata sobre AWS AIF-C01
     palabras_encontradas = sum(1 for palabra in PALABRAS_CLAVE_AWS if palabra in pregunta_lower)
 
-    # Permite si:
-    # - Contiene 2+ palabras clave AWS, O
-    # - Contiene "aif", "certificación", "aws", "modelo", "pregunta" (muy genérico)
+    # REGLA ESTRICTA: Requiere al menos 2 palabras clave AWS
     if palabras_encontradas >= 2:
         return True, ""
 
-    if any(term in pregunta_lower for term in ['aif', 'certificaci', 'aws', 'exam', 'test', 'simulacro']):
+    # Permitir términos muy específicos de la certificación (pero no genéricos)
+    terminos_certificacion = ['aif-c01', 'ai practitioner', 'certificaci']
+    if any(term in pregunta_lower for term in terminos_certificacion):
         return True, ""
 
-    # Si no tiene contexto AWS, rechaza
-    return False, "❌ Pregunta fuera de scope. Solo respondo sobre AWS Certified AI Practitioner (AIF-C01)."
+    # Si no cumple requisitos, rechaza
+    return False, "❌ Pregunta fuera de scope. Respondo sobre AWS Certified AI Practitioner (AIF-C01).\n\nEjemplos válidos:\n- ¿Qué es RAG en Bedrock?\n- ¿Diferencia entre Model Monitor y Clarify?\n- ¿Cuándo usar SageMaker?"
 
 def sanitizar_pregunta(pregunta: str) -> str:
     """
