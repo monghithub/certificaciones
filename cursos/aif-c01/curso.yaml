@@ -19,7 +19,7 @@ examen:
   distribucion: {multiple_choice: 80, multiple_response: 20}
 banco:
   minimo_por_modulo: 60
-  minimo_simulacro: 96
+  minimo_simulacro: 103
   minimo_simulacro_por_objetivo: 1
   minimo_por_tarea: 15
   minimo_por_objetivo: 3
