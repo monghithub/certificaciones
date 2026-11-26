@@ -41,6 +41,10 @@ import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 
+# Módulos nuevos de seguridad y caché
+from validador_scope import validar_scope, sanitizar_pregunta
+from journal_consultas import JournalConsultas
+
 HERRAMIENTAS = "Read,Grep,Glob,WebFetch,WebSearch"  # solo lectura y búsqueda: sin terminal ni edición
 DOMINIOS_WEB = ("docs.aws.amazon.com", "aws.amazon.com")
 ENTORNO_CLAUDE = ("HOME", "PATH", "LANG", "USER", "XDG_RUNTIME_DIR")  # lo único que hereda `claude`
@@ -349,6 +353,29 @@ class Trabajador:
         mid, curso, sesion = trabajo["mensaje_id"], trabajo["curso"], trabajo.get("sesion_claude")
         reparto = trabajo.get("reparto")
         inicio = time.monotonic()
+
+        # NUEVA: Validación de scope (solo primera pregunta de la conversación)
+        if not sesion:
+            pregunta_text = trabajo["pregunta_original"] if "pregunta_original" in trabajo else ""
+            es_valida, motivo = validar_scope(pregunta_text)
+            if not es_valida:
+                log(f"mensaje {mid}: RECHAZADO — {motivo}")
+                self.api.error(mid, reparto, f"Pregunta fuera de scope de AWS AIF-C01: {motivo}")
+                return "error"
+
+            # NUEVA: Buscar en journal (caché)
+            try:
+                journal = JournalConsultas()
+                pregunta_limpia = sanitizar_pregunta(pregunta_text)
+                similar = journal.buscar_similar(pregunta_limpia, umbral=0.70)
+                if similar:
+                    log(f"mensaje {mid}: CACHÉ ENCONTRADO (similitud alta)")
+                    self.api.respuesta(mid, reparto, similar['respuesta'], sesion, source="cache")
+                    journal.reutilizar(similar['id'])
+                    return "respondido"
+            except Exception as e:
+                log(f"mensaje {id}: error en journal (continúa): {e}")
+
         prompt = prompt_seguimiento(trabajo) if sesion else prompt_inicial(trabajo, self.cfg)
         r = self._llamar(prompt, curso, sesion)
         if not r.ok and r.sesion_perdida:  # la sesión ya no existe (directorio cambiado o borrada): se empieza otra con contexto
@@ -357,6 +384,24 @@ class Trabajador:
         duracion = time.monotonic() - inicio
         coste = f"{r.coste:.4f} USD" if isinstance(r.coste, (int, float)) else "—"
         if r.ok:
+            # NUEVA: Guardar en journal si es primera pregunta (sin sesión previa)
+            if not sesion:
+                try:
+                    journal = JournalConsultas()
+                    pregunta_original = trabajo.get("pregunta_original", "")
+                    usuario = trabajo.get("usuario", "unknown")
+                    objetivo = trabajo.get("pregunta", {}).get("objetivo")
+                    if pregunta_original:
+                        journal.agregar(
+                            pregunta=sanitizar_pregunta(pregunta_original),
+                            respuesta=r.texto,
+                            usuario=usuario,
+                            curso=curso,
+                            objetivo=objetivo
+                        )
+                except Exception as e:
+                    log(f"mensaje {mid}: error guardando en journal (continúa): {e}")
+
             self.api.respuesta(mid, reparto, r.texto, r.sesion)
             resultado = "respondido"
         elif self.parar.is_set():  # parada del servicio a mitad: vuelve a la cola sin gastar un intento
