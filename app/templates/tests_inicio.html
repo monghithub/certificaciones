@@ -1,65 +1,219 @@
 {% extends "base.html" %}{% block titulo %}Tests{% endblock %}
 {% block contenido %}
-<h1>Tests</h1>
-<p class="suave">Ruta de estudio recomendada: lee la teoría de un módulo, haz su <strong>repaso de conocimientos</strong> hasta acertar casi todo, pasa a las <strong>preguntas de examen</strong>, repite las que falles y deja el <strong>simulacro</strong> para el final. En todos los tests, al responder cada pregunta puedes abrir «Ver explicación».</p>
 
-<div class="ruta-paso"><h2>1. Repaso de conocimientos</h2><p class="suave">Preguntas directas para fijar conceptos, servicios y criterios de cada módulo, incluido el 00 (base de AWS).</p></div>
-<div class="grid">
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="repaso">
-    <h2 style="margin-top:0">Repaso</h2>
-    {% if repaso %}<label for="r-filtro">Módulo</label><select id="r-filtro" name="filtro">{% for m in repaso %}<option value="{{ m.id }}">{{ m.numero }} · {{ m.titulo }} ({{ m.repaso|length }})</option>{% endfor %}<option value="">Todos los módulos ({{ n_repaso }})</option></select>
-    <label for="r-n">Número de preguntas</label><input id="r-n" type="number" name="n" value="10" min="1" max="100"><p><button>Empezar repaso</button></p>
-    {% else %}<p class="suave">Aún no hay preguntas de repaso.</p>{% endif %}</form>
+<!-- Header Section -->
+<div class="mb-8">
+  <h1 class="text-4xl font-bold mb-4">📋 Tests & Simulacro</h1>
+  <div class="alert alert-info">
+    <svg class="stroke-current shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <span><strong>Ruta recomendada:</strong> Lee la teoría → <strong>Repaso</strong> (conceptos) → <strong>Examen</strong> (escenarios) → <strong>Falladas</strong> (repetir errores) → <strong>Simulacro</strong> (final)</span>
+  </div>
 </div>
 
-<div class="ruta-paso"><h2>2. Preguntas de examen</h2><p class="suave">Escenarios al estilo del examen, con una restricción que decide la respuesta.</p></div>
-<div class="grid">
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="modulo">
-    <h2 style="margin-top:0">Por módulo</h2>
-    {% if modulos %}<label for="m-filtro">Módulo</label><select id="m-filtro" name="filtro">{% for m in modulos %}<option value="{{ m.id }}">{{ m.numero }} · {{ m.titulo }} ({{ m.preguntas|length }})</option>{% endfor %}</select>
-    <label for="m-n">Número de preguntas</label><input id="m-n" type="number" name="n" value="10" min="1" max="100"><p><button>Empezar</button></p>
-    {% else %}<p class="suave">Aún no hay preguntas.</p>{% endif %}</form>
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="dominio">
-    <h2 style="margin-top:0">Por dominio</h2>
-    {% if dominios %}<label for="d-filtro">Dominio</label><select id="d-filtro" name="filtro">{% for d in dominios %}<option value="{{ d }}">Dominio {{ d }}{% if nombres.get(d) %} · {{ nombres[d].nombre }}{% endif %}</option>{% endfor %}</select>
-    <label for="d-n">Número de preguntas</label><input id="d-n" type="number" name="n" value="10" min="1" max="100"><p><button>Empezar</button></p>
-    {% else %}<p class="suave">Aún no hay preguntas.</p>{% endif %}</form>
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="mixto">
-    <h2 style="margin-top:0">Mixto</h2>
-    <label for="x-n">Número de preguntas</label><input id="x-n" type="number" name="n" value="20" min="1" max="100"><p><button>Empezar</button></p></form>
-</div>
+<!-- 1. REPASO DE CONOCIMIENTOS -->
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-3xl">📚</span>
+    <div>
+      <h2 class="text-2xl font-bold">Paso 1: Repaso de Conocimientos</h2>
+      <p class="text-gray-600">Preguntas directas para fijar conceptos, servicios y criterios de cada módulo</p>
+    </div>
+  </div>
 
-<div class="ruta-paso"><h2>3. Repetir falladas</h2><p class="suave">Las preguntas de repaso y de examen cuya última respuesta fue incorrecta. Salen de la lista cuando las aciertas.</p></div>
-<div class="grid">
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="falladas">
-    <h2 style="margin-top:0">Falladas ({{ n_falladas }})</h2>
-    {% if n_falladas %}<label for="f-n">Número de preguntas</label><input id="f-n" type="number" name="n" value="{{ [n_falladas, 20]|min }}" min="1" max="100"><p><button>Repetir falladas</button></p>
-    {% else %}<p class="suave">No tienes preguntas falladas pendientes.</p>{% endif %}</form>
-</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form class="card bg-base-100 shadow-lg border border-base-300" method="post" action="{{ base }}/tests/iniciar">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="modo" value="repaso">
+      <div class="card-body">
+        <h3 class="card-title">Repaso por módulo</h3>
+        {% if repaso %}
+          <div class="form-control w-full">
+            <label class="label" for="r-filtro"><span class="label-text">Elige un módulo</span></label>
+            <select id="r-filtro" name="filtro" class="select select-bordered w-full">
+              {% for m in repaso %}<option value="{{ m.id }}">{{ m.numero }} · {{ m.titulo }} ({{ m.repaso|length }})</option>{% endfor %}
+              <option value="">Todos los módulos ({{ n_repaso }})</option>
+            </select>
+          </div>
+
+          <div class="form-control w-full">
+            <label class="label" for="r-n"><span class="label-text">Preguntas a hacer</span></label>
+            <input id="r-n" type="number" name="n" value="10" min="1" max="100" class="input input-bordered w-full">
+          </div>
+
+          <div class="card-actions justify-end mt-6">
+            <button class="btn btn-primary">Empezar Repaso</button>
+          </div>
+        {% else %}
+          <p class="text-warning">No hay preguntas de repaso disponibles</p>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- 2. PREGUNTAS DE EXAMEN -->
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-3xl">✍️</span>
+    <div>
+      <h2 class="text-2xl font-bold">Paso 2: Preguntas de Examen</h2>
+      <p class="text-gray-600">Escenarios al estilo del examen, con una restricción que decide la respuesta</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Por Módulo -->
+    <form class="card bg-base-100 shadow-lg border border-base-300" method="post" action="{{ base }}/tests/iniciar">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="modo" value="modulo">
+      <div class="card-body">
+        <h3 class="card-title text-lg">Por Módulo</h3>
+        {% if modulos %}
+          <div class="form-control w-full">
+            <label class="label" for="m-filtro"><span class="label-text">Módulo</span></label>
+            <select id="m-filtro" name="filtro" class="select select-bordered w-full">
+              {% for m in modulos %}<option value="{{ m.id }}">{{ m.numero }} · {{ m.titulo }} ({{ m.preguntas|length }})</option>{% endfor %}
+            </select>
+          </div>
+          <div class="form-control w-full">
+            <label class="label" for="m-n"><span class="label-text">Preguntas</span></label>
+            <input id="m-n" type="number" name="n" value="10" min="1" max="100" class="input input-bordered w-full">
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-secondary btn-sm">Empezar</button>
+          </div>
+        {% else %}
+          <p class="text-warning text-sm">No hay preguntas disponibles</p>
+        {% endif %}
+      </div>
+    </form>
+
+    <!-- Por Dominio -->
+    <form class="card bg-base-100 shadow-lg border border-base-300" method="post" action="{{ base }}/tests/iniciar">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="modo" value="dominio">
+      <div class="card-body">
+        <h3 class="card-title text-lg">Por Dominio</h3>
+        {% if dominios %}
+          <div class="form-control w-full">
+            <label class="label" for="d-filtro"><span class="label-text">Dominio</span></label>
+            <select id="d-filtro" name="filtro" class="select select-bordered w-full">
+              {% for d in dominios %}<option value="{{ d }}">Dominio {{ d }}{% if nombres.get(d) %} · {{ nombres[d].nombre }}{% endif %}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="form-control w-full">
+            <label class="label" for="d-n"><span class="label-text">Preguntas</span></label>
+            <input id="d-n" type="number" name="n" value="10" min="1" max="100" class="input input-bordered w-full">
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-secondary btn-sm">Empezar</button>
+          </div>
+        {% else %}
+          <p class="text-warning text-sm">No hay preguntas disponibles</p>
+        {% endif %}
+      </div>
+    </form>
+
+    <!-- Mixto -->
+    <form class="card bg-base-100 shadow-lg border border-base-300" method="post" action="{{ base }}/tests/iniciar">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="modo" value="mixto">
+      <div class="card-body">
+        <h3 class="card-title text-lg">Mixto</h3>
+        <p class="text-sm text-gray-600 mb-4">Preguntas de todos los módulos y dominios</p>
+        <div class="form-control w-full">
+          <label class="label" for="x-n"><span class="label-text">Preguntas</span></label>
+          <input id="x-n" type="number" name="n" value="20" min="1" max="100" class="input input-bordered w-full">
+        </div>
+        <div class="card-actions justify-end mt-4">
+          <button class="btn btn-secondary btn-sm">Empezar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- 3. REPETIR FALLADAS -->
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-3xl">🔄</span>
+    <div>
+      <h2 class="text-2xl font-bold">Paso 3: Repetir Falladas</h2>
+      <p class="text-gray-600">Las preguntas que respondiste incorrectamente. Salen de la lista cuando las aciertas</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form class="card bg-base-100 shadow-lg border border-base-300" method="post" action="{{ base }}/tests/iniciar">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="modo" value="falladas">
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="card-title">Falladas</h3>
+          <span class="badge badge-primary">{{ n_falladas }}</span>
+        </div>
+        {% if n_falladas %}
+          <div class="form-control w-full">
+            <label class="label" for="f-n"><span class="label-text">Preguntas a repetir</span></label>
+            <input id="f-n" type="number" name="n" value="{{ [n_falladas, 20]|min }}" min="1" max="100" class="input input-bordered w-full">
+          </div>
+          <div class="card-actions justify-end mt-6">
+            <button class="btn btn-warning">Repetir Falladas</button>
+          </div>
+        {% else %}
+          <p class="text-success">✓ ¡No tienes preguntas falladas pendientes!</p>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- 4. SIMULACRO -->
 {% if hay_simulacro %}
-<div class="ruta-paso"><h2>4. Simulacro</h2><p class="suave">Cuando hayas terminado los módulos.</p></div>
-<div class="grid">
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="simulacro">
-    <h2 style="margin-top:0">Simulacro</h2>
-    <p>{{ sim_n }} preguntas en {{ sim_min }} minutos, con el tiempo medido en el servidor. Sin explicaciones hasta terminar, salvo en modo estudio.</p>
-    {% if sim_rotatorio %}<p class="suave">Cada intento saca {{ sim_n }} preguntas al azar de un banco de {{ n_sim }}, con el reparto oficial por dominio y tipo, y da prioridad a las que no te salieron en el intento anterior.</p>{% endif %}
-    {% if sim_ok %}<label class="opcion"><input type="checkbox" name="estudio" value="1"><span>Modo estudio: ver la corrección y la explicación al responder cada pregunta</span></label>
-    <button>Empezar simulacro</button>{% elif sim_error %}<p class="suave">No disponible: {{ sim_error }}.</p>{% else %}<p class="suave">No disponible: hay {{ n_sim }} de {{ sim_n }} preguntas.</p>{% endif %}</form>
-</div>
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-3xl">🎯</span>
+    <div>
+      <h2 class="text-2xl font-bold">Paso 4: Simulacro</h2>
+      <p class="text-gray-600">Cuando hayas completado todos los módulos: examen cronometrado real</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form class="card bg-base-100 shadow-lg border border-base-300" method="post" action="{{ base }}/tests/iniciar">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="modo" value="simulacro">
+      <div class="card-body">
+        <h3 class="card-title">Simulacro Oficial</h3>
+        <div class="stats stats-vertical w-full mb-4">
+          <div class="stat">
+            <div class="stat-title">Preguntas</div>
+            <div class="stat-value text-2xl">{{ sim_n }}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Tiempo</div>
+            <div class="stat-value text-2xl">{{ sim_min }}min</div>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">Sin explicaciones hasta terminar. {% if sim_rotatorio %}Cada intento extrae {{ sim_n }} preguntas al azar del banco de {{ n_sim }}.{% endif %}</p>
+
+        {% if sim_ok %}
+          <label class="label cursor-pointer justify-start gap-2">
+            <input type="checkbox" name="estudio" value="1" class="checkbox checkbox-sm">
+            <span class="label-text text-sm">Modo estudio: ver corrección al responder</span>
+          </label>
+          <div class="card-actions justify-end mt-6">
+            <button class="btn btn-error">Empezar Simulacro</button>
+          </div>
+        {% elif sim_error %}
+          <div class="alert alert-error">{{ sim_error }}</div>
+        {% else %}
+          <div class="alert alert-warning">Faltan preguntas ({{ n_sim }}/{{ sim_n }})</div>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</section>
 {% endif %}
-{% if libros %}
-<div class="ruta-paso"><h2>{{ '5' if hay_simulacro else '4' }}. Preguntas de los libros</h2><p class="suave">Preguntas de las guías de estudio, solo en esta instalación (material de terceros, no se publica). Son de 2025: si una respuesta choca con la documentación vigente de AWS, prevalece la documentación.</p></div>
-<div class="grid">
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="libros">
-    <h2 style="margin-top:0">Por módulo</h2>
-    <label for="l-filtro">Módulo</label><select id="l-filtro" name="filtro">{% for m in libros %}<option value="{{ m.id }}">{{ m.numero }} · {{ 'Test inicial y examen de práctica' if m.es_simulacro else m.titulo }} ({{ m.libros|length }})</option>{% endfor %}</select>
-    <label for="l-n">Número de preguntas</label><input id="l-n" type="number" name="n" value="10" min="1" max="100">
-    <label class="opcion"><input type="checkbox" name="todas" value="1"><span>Todas las del módulo</span></label>
-    <p><button>Empezar</button></p></form>
-  <form class="card" method="post" action="{{ base }}/tests/iniciar"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="modo" value="libros"><input type="hidden" name="filtro" value=""><input type="hidden" name="todas" value="1">
-    <h2 style="margin-top:0">Test final de los libros</h2>
-    <p>Las {{ n_libros }} preguntas de los libros, en orden aleatorio, con corrección y explicación al responder cada una.</p>
-    <p><button>Empezar test final</button></p></form>
-</div>
-{% endif %}
+
 {% endblock %}
