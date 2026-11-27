@@ -8,7 +8,7 @@
   }
 
   h1 {
-    @apply text-3xl font-bold my-4;
+    @apply text-4xl font-bold my-4;
   }
 
   h2 {
@@ -37,32 +37,8 @@
 }
 
 @layer components {
-  .btn-primary {
-    @apply btn btn-primary;
-  }
-
-  .btn-secondary {
-    @apply btn btn-secondary;
-  }
-
   .card-custom {
     @apply card bg-base-100 shadow-lg border border-base-300;
-  }
-
-  .alert-success {
-    @apply alert alert-success;
-  }
-
-  .alert-error {
-    @apply alert alert-error;
-  }
-
-  .alert-warning {
-    @apply alert alert-warning;
-  }
-
-  .alert-info {
-    @apply alert alert-info;
   }
 }
 
@@ -73,25 +49,4 @@
 
 .htmx-request.htmx-indicator {
   @apply block;
-}
-
-/* Modal de conceptos personalizado */
-.modal-concepto {
-  @apply rounded-lg;
-}
-
-.mc-cuerpo {
-  @apply p-6;
-}
-
-.mc-cab {
-  @apply flex justify-between items-center mb-4;
-}
-
-.mc-titulo {
-  @apply text-2xl font-bold;
-}
-
-.mc-cerrar {
-  @apply btn btn-sm btn-circle btn-ghost;
 }
