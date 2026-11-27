@@ -1,0 +1,834 @@
+- id: L01-001
+  tipo: matching
+  dificultad: baja
+  objetivo: '1.1'
+  enunciado: Empareja cada necesidad con la familia NoSQL que mejor encaja.
+  prompts:
+  - id: '1'
+    texto: Caché de sesiones con latencia de microsegundos
+  - id: '2'
+    texto: Recomendar amigos de amigos que compraron lo mismo
+  - id: '3'
+    texto: Catálogo de productos con atributos distintos según la categoría
+  - id: '4'
+    texto: Millones de lecturas de sensores por minuto, consultadas por sensor y fecha
+  opciones:
+  - id: a
+    texto: Clave-valor
+  - id: b
+    texto: Grafos
+  - id: c
+    texto: Documentos
+  - id: d
+    texto: Columna ancha
+  - id: e
+    texto: Hoja de cálculo
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Cada familia está pensada para un patrón de acceso distinto.
+  distractores:
+    e: No es una base de datos.
+  referencia: https://martinfowler.com/bliki/PolyglotPersistence.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: Una aplicación de gestión tiene informes que cambian cada mes, con joins
+    entre muchas tablas y transacciones. ¿Qué base elegirías?
+  opciones:
+  - id: a
+    texto: Una relacional, como PostgreSQL
+  - id: b
+    texto: Redis
+  - id: c
+    texto: Cassandra
+  - id: d
+    texto: Un grafo
+  correctas:
+  - a
+  explicacion: Consultas imprevistas, joins y transacciones son el punto fuerte del
+    modelo relacional.
+  distractores:
+    b: Solo accede por clave.
+    c: Exige conocer las consultas al diseñar las tablas.
+    d: Encaja con relaciones profundas, no con informes generales.
+  referencia: https://martinfowler.com/bliki/PolyglotPersistence.html
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: ¿Cuál es la pregunta correcta para elegir entre relacional y NoSQL?
+  opciones:
+  - id: a
+    texto: ¿Cuál está de moda?
+  - id: b
+    texto: ¿Cuál es más rápida en general?
+  - id: c
+    texto: ¿Qué patrones de acceso a los datos tendrá la aplicación?
+  - id: d
+    texto: ¿Cuál es gratuita?
+  correctas:
+  - c
+  explicacion: Cada modelo es rápido para unos accesos y torpe para otros.
+  distractores:
+    a: No es un criterio técnico.
+    b: Depende del acceso.
+    d: Hay opciones libres de todos los tipos.
+  referencia: https://martinfowler.com/bliki/PolyglotPersistence.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: Un equipo elige MongoDB «porque escala» para una aplicación con 50 000
+    registros y muchos joins. ¿Qué problema hay?
+  opciones:
+  - id: a
+    texto: Ninguno
+  - id: b
+    texto: Que MongoDB no admite 50 000 documentos
+  - id: c
+    texto: Que MongoDB no tiene índices
+  - id: d
+    texto: Que no necesita esa escala y pierde la comodidad de los joins y las transacciones
+      relacionales
+  correctas:
+  - d
+  explicacion: Se elige una ventaja que no se necesita a cambio de perder otra que
+    sí.
+  distractores:
+    a: El modelo no encaja con sus accesos.
+    b: Admite muchísimos más.
+    c: Tiene índices.
+  referencia: https://martinfowler.com/bliki/PolyglotPersistence.html
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '1.3'
+  enunciado: ¿Qué es la persistencia políglota?
+  opciones:
+  - id: a
+    texto: Guardar los datos en varios idiomas
+  - id: b
+    texto: Usar en un mismo sistema varios tipos de base de datos, cada uno para lo
+      que mejor encaja
+  - id: c
+    texto: Una base de datos que admite SQL y JavaScript
+  - id: d
+    texto: Replicar los datos en varios países
+  correctas:
+  - b
+  explicacion: Por ejemplo, PostgreSQL para pedidos, Redis para sesiones y un motor
+    de búsqueda para el catálogo.
+  distractores:
+    a: No tiene relación con los idiomas.
+    c: Es una característica de algunos productos, no el concepto.
+    d: Es replicación geográfica.
+  referencia: https://martinfowler.com/bliki/PolyglotPersistence.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: ¿Qué coste tiene añadir una base de datos más al sistema?
+  opciones:
+  - id: a
+    texto: Ninguno si es de código abierto
+  - id: b
+    texto: Solo el del servidor
+  - id: c
+    texto: Operarla, vigilarla, hacer copias, actualizarla y mantener sus datos coherentes
+      con el resto
+  - id: d
+    texto: Que hay que usar el mismo lenguaje
+  correctas:
+  - c
+  explicacion: Por eso cada base de la persistencia políglota debe justificarse.
+  distractores:
+    a: La licencia es solo una parte.
+    b: El mayor coste suele ser la operación.
+    d: No tiene relación.
+  referencia: https://martinfowler.com/bliki/PolyglotPersistence.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: Necesitas guardar algo de JSON variable junto a tablas relacionales en
+    PostgreSQL. ¿Hace falta una base de documentos?
+  opciones:
+  - id: a
+    texto: Sí, PostgreSQL no admite JSON
+  - id: b
+    texto: No necesariamente; PostgreSQL tiene el tipo jsonb, con operadores e índices
+  - id: c
+    texto: Sí, por ley
+  - id: d
+    texto: Solo con Oracle
+  correctas:
+  - b
+  explicacion: Para un uso moderado de JSON, jsonb evita añadir otra base al sistema.
+  distractores:
+    a: Lo admite desde hace años.
+    c: No hay tal obligación.
+    d: PostgreSQL lo resuelve.
+  referencia: https://martinfowler.com/bliki/PolyglotPersistence.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '1.1'
+  enunciado: ¿Qué familia usa Redis?
+  opciones:
+  - id: a
+    texto: Grafos
+  - id: b
+    texto: Columna ancha
+  - id: c
+    texto: Relacional
+  - id: d
+    texto: Clave-valor, con estructuras de datos en memoria
+  correctas:
+  - d
+  explicacion: Redis guarda claves con valores que pueden ser cadenas, listas, hashes,
+    conjuntos o conjuntos ordenados.
+  distractores:
+    a: Neo4j es un ejemplo de grafos.
+    b: Cassandra es un ejemplo de columna ancha.
+    c: No tiene tablas ni SQL.
+  referencia: https://redis.io/docs/latest/develop/data-types/
+- id: L02-001
+  tipo: matching
+  dificultad: media
+  objetivo: '2.2'
+  enunciado: En una tienda con MongoDB, ¿embeber o referenciar?
+  prompts:
+  - id: '1'
+    texto: Las líneas de un pedido
+  - id: '2'
+    texto: Los datos del cliente que hace el pedido
+  - id: '3'
+    texto: Los comentarios de un producto muy popular, que crecen sin límite
+  opciones:
+  - id: a
+    texto: Embeber
+  - id: b
+    texto: 'Referenciar: es una entidad con vida propia'
+  - id: c
+    texto: 'Referenciar: crece sin límite y rompería el límite de 16 MiB'
+  - id: d
+    texto: Guardar en un fichero de texto
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Se embebe lo contenido y acotado; se referencia lo que tiene vida propia
+    o crece sin límite.
+  distractores:
+    d: No es una opción de modelado.
+  referencia: https://www.mongodb.com/docs/manual/data-modeling/embedding/
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '2.2'
+  enunciado: ¿Cuál es el tamaño máximo de un documento en MongoDB?
+  opciones:
+  - id: a
+    texto: 1 KiB
+  - id: b
+    texto: Menos de 16 MiB
+  - id: c
+    texto: Ilimitado
+  - id: d
+    texto: 1 GiB
+  correctas:
+  - b
+  explicacion: La documentación fija el límite en 16 MiB; para ficheros grandes existe
+    GridFS.
+  distractores:
+    a: Es mucho mayor.
+    c: Tiene un límite.
+    d: Es mucho menor.
+  referencia: https://www.mongodb.com/docs/manual/data-modeling/embedding/
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.2'
+  enunciado: El pedido copia el nombre y el precio del producto en cada línea. ¿Cuándo
+    es lo correcto?
+  opciones:
+  - id: a
+    texto: Es un error de modelado; hay que referenciar
+  - id: b
+    texto: Cuando el pedido debe conservar el nombre y el precio del momento de la
+      compra
+  - id: c
+    texto: Solo si el producto no existe
+  - id: d
+    texto: Cuando el precio cambia cada segundo y debe verse el actual
+  correctas:
+  - b
+  explicacion: La desnormalización es una decisión de modelo; aquí refleja un hecho
+    histórico que no debe cambiar.
+  distractores:
+    a: A veces copiar es lo que pide el negocio.
+    c: No tiene relación.
+    d: En ese caso conviene referenciar.
+  referencia: https://www.mongodb.com/docs/manual/data-modeling/embedding/
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.1'
+  enunciado: ¿Qué ventaja da tener las líneas dentro del documento del pedido al añadir
+    una línea y sumar su importe?
+  opciones:
+  - id: a
+    texto: Que se puede hacer en una sola operación atómica, con $push e $inc
+  - id: b
+    texto: Que no hace falta índice
+  - id: c
+    texto: Que ocupa menos
+  - id: d
+    texto: Ninguna
+  correctas:
+  - a
+  explicacion: La actualización de un solo documento es atómica; en el laboratorio
+    el total pasó de 33,71 a 43,21 y las líneas de 2 a 3 en una operación.
+  distractores:
+    b: Los índices son otra cuestión.
+    c: No es la ventaja principal.
+    d: Evita una transacción entre documentos.
+  referencia: https://www.mongodb.com/docs/manual/data-modeling/embedding/
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.3'
+  enunciado: La colección clientes exige nombre y email con JSON Schema. ¿Qué pasó
+    al insertar un cliente sin email?
+  opciones:
+  - id: a
+    texto: Se insertó con email vacío
+  - id: b
+    texto: Se insertó y se registró un aviso
+  - id: c
+    texto: 'WriteError: Document failed validation'
+  - id: d
+    texto: Se ignoró sin error
+  correctas:
+  - c
+  explicacion: El validador rechaza los documentos que no cumplen el esquema.
+  distractores:
+    a: No completa campos.
+    b: El nivel de validación por defecto rechaza la escritura.
+    d: Devolvió un error.
+  referencia: https://www.mongodb.com/docs/manual/core/schema-validation/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.1'
+  enunciado: Casi todas las consultas principales de tu aplicación necesitan varios
+    $lookup. ¿Qué indica?
+  opciones:
+  - id: a
+    texto: Que todo va bien
+  - id: b
+    texto: Que hay que añadir más índices y nada más
+  - id: c
+    texto: Que MongoDB está mal instalado
+  - id: d
+    texto: Que el modelo no sigue los patrones de acceso, o que los datos son relacionales
+      y encajarían mejor en una base relacional
+  correctas:
+  - d
+  explicacion: En documentos se modela para leer junto lo que se usa junto; los joins
+    constantes son una señal de alarma.
+  distractores:
+    a: Es una señal de alarma.
+    b: Los índices ayudan, pero no arreglan el modelo.
+    c: No es un problema de instalación.
+  referencia: https://www.mongodb.com/docs/manual/data-modeling/
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '3.1'
+  enunciado: Un plan muestra SORT <- COLLSCAN con 200 000 documentos examinados para
+    devolver 7. ¿Qué significa?
+  opciones:
+  - id: a
+    texto: Que se usó un índice
+  - id: b
+    texto: Que se recorrió toda la colección y luego se ordenó en memoria
+  - id: c
+    texto: Que la consulta falló
+  - id: d
+    texto: Que la colección tiene 7 documentos
+  correctas:
+  - b
+  explicacion: COLLSCAN es un recorrido completo; SORT, una ordenación en memoria.
+  distractores:
+    a: Un índice aparecería como IXSCAN.
+    c: Devolvió resultados.
+    d: Tiene 200 000.
+  referencia: https://www.mongodb.com/docs/manual/reference/explain-results/
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: Con el índice (cliente_id, estado, fecha descendente), ¿qué cambió en
+    el plan respecto al índice solo sobre cliente_id?
+  opciones:
+  - id: a
+    texto: Nada
+  - id: b
+    texto: Pasó a COLLSCAN
+  - id: c
+    texto: Examinó exactamente los 7 documentos devueltos y desapareció la etapa SORT
+  - id: d
+    texto: Examinó 200 000 documentos
+  correctas:
+  - c
+  explicacion: El índice resuelve el filtro completo y entrega los resultados ya ordenados
+    por fecha.
+  distractores:
+    a: El plan mejoró.
+    b: Usó el índice.
+    d: Fue lo que ocurrió sin índices.
+  referencia: https://www.mongodb.com/docs/manual/tutorial/equality-sort-range-guideline/
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.3'
+  enunciado: Existe el índice (cliente_id, estado, fecha). ¿Qué plan obtuvo find estado
+    igual a pagado, ordenado por fecha?
+  opciones:
+  - id: a
+    texto: IXSCAN con el índice compuesto
+  - id: b
+    texto: SORT <- COLLSCAN sobre 200 000 documentos, porque estado no es prefijo
+      del índice
+  - id: c
+    texto: Un error
+  - id: d
+    texto: LIMIT <- IXSCAN con 7 documentos
+  correctas:
+  - b
+  explicacion: Un índice compuesto solo sirve para consultas sobre sus campos iniciales;
+    esta consulta necesitaría su propio índice.
+  distractores:
+    a: El índice empieza por cliente_id.
+    c: La consulta funciona, aunque lenta.
+    d: Fue el plan de la consulta que sí usaba el prefijo.
+  referencia: https://www.mongodb.com/docs/manual/core/indexes/index-types/index-compound/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.3'
+  enunciado: ¿Qué coste tiene crear un índice para cada campo por si acaso?
+  opciones:
+  - id: a
+    texto: Ninguno
+  - id: b
+    texto: Que las lecturas son más lentas
+  - id: c
+    texto: Que MongoDB deja de usar índices
+  - id: d
+    texto: Que cada escritura debe actualizar todos los índices y estos ocupan memoria
+  correctas:
+  - d
+  explicacion: Los índices se crean para las consultas reales; se revisan con $indexStats
+    y explain.
+  distractores:
+    a: Frenan las escrituras.
+    b: Las lecturas no empeoran.
+    c: Los sigue usando.
+  referencia: https://www.mongodb.com/docs/manual/core/indexes/index-types/index-compound/
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '3.1'
+  enunciado: ¿Qué significa FETCH <- IXSCAN en un plan?
+  opciones:
+  - id: a
+    texto: Que se recorre el índice y luego se traen los documentos encontrados
+  - id: b
+    texto: Que se descarga la colección
+  - id: c
+    texto: Que el índice se reconstruye
+  - id: d
+    texto: Que la consulta se reintenta
+  correctas:
+  - a
+  explicacion: IXSCAN localiza las claves en el índice y FETCH lee los documentos
+    completos.
+  distractores:
+    b: Solo trae los documentos que coinciden.
+    c: No se reconstruye.
+    d: No es un reintento.
+  referencia: https://www.mongodb.com/docs/manual/reference/explain-results/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: Ocho hilos hacen 1 000 incrementos cada uno con GET y luego SET. ¿Qué
+    valor quedó?
+  codigo:
+    lenguaje: python
+    fuente: 'v = int(r.get("visitas"))
+
+      r.set("visitas", v + 1)
+
+      '
+  opciones:
+  - id: a
+    texto: '8000'
+  - id: b
+    texto: '1645: se perdieron incrementos porque dos hilos leían el mismo valor'
+  - id: c
+    texto: '0'
+  - id: d
+    texto: Error de concurrencia
+  correctas:
+  - b
+  explicacion: Leer y escribir por separado deja una ventana de carrera; INCR, en
+    cambio, dio 8000.
+  distractores:
+    a: Fue el resultado con INCR.
+    c: Algunos incrementos se aplicaron.
+    d: Redis no detecta este problema; simplemente se pierden escrituras.
+  referencia: https://redis.io/docs/latest/commands/incr/
+- id: L04-002
+  tipo: matching
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: Empareja cada necesidad con la estructura de Redis adecuada.
+  prompts:
+  - id: '1'
+    texto: Ranking de jugadores por puntuación
+  - id: '2'
+    texto: Usuarios conectados, sin repetidos
+  - id: '3'
+    texto: Contador de visitas
+  - id: '4'
+    texto: Una sesión con varios campos
+  opciones:
+  - id: a
+    texto: Conjunto ordenado
+  - id: b
+    texto: Conjunto
+  - id: c
+    texto: Cadena con INCR
+  - id: d
+    texto: Hash
+  - id: e
+    texto: Tabla relacional
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Cada estructura trae operaciones específicas para su uso.
+  distractores:
+    e: Redis no tiene tablas.
+  referencia: https://redis.io/docs/latest/develop/data-types/
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '4.3'
+  enunciado: En el patrón cache-aside, ¿qué pasa cuando la clave no está en la caché?
+  opciones:
+  - id: a
+    texto: Se devuelve un error
+  - id: b
+    texto: Redis consulta la base de datos por su cuenta
+  - id: c
+    texto: La aplicación lee del origen, lo guarda en la caché con caducidad y lo
+      devuelve
+  - id: d
+    texto: Se devuelve vacío
+  correctas:
+  - c
+  explicacion: La aplicación gestiona la caché; Redis no conoce el origen.
+  distractores:
+    a: El fallo de caché es normal.
+    b: Redis no sabe de dónde vienen los datos.
+    d: Se busca en el origen.
+  referencia: https://redis.io/docs/latest/develop/use/patterns/
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: En el laboratorio, ¿cuánto tardó obtener(7) desde el origen y desde la
+    caché?
+  opciones:
+  - id: a
+    texto: Unos 53 ms desde el origen y menos de 1 ms desde la caché
+  - id: b
+    texto: Lo mismo en ambos casos
+  - id: c
+    texto: 1 ms desde el origen y 53 ms desde la caché
+  - id: d
+    texto: Unos 5 segundos
+  correctas:
+  - a
+  explicacion: El origen simulaba 50 ms; la caché respondió en 0,2 a 0,6 ms.
+  distractores:
+    b: La diferencia fue de dos órdenes de magnitud.
+    c: Es al revés.
+    d: Nada tardó tanto.
+  referencia: https://redis.io/docs/latest/develop/use/patterns/
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: Ya borras la clave al modificar el producto. ¿Por qué ponerle además
+    caducidad?
+  opciones:
+  - id: a
+    texto: No hace falta
+  - id: b
+    texto: Para limitar el daño si alguna vez se olvida invalidar, y para liberar
+      memoria de claves que ya no se piden
+  - id: c
+    texto: Porque Redis lo exige
+  - id: d
+    texto: Para que vaya más rápido
+  correctas:
+  - b
+  explicacion: Una invalidación olvidada sin caducidad deja datos antiguos para siempre.
+  distractores:
+    a: Es una red de seguridad barata.
+    c: No es obligatorio.
+    d: No acelera las lecturas.
+  referencia: https://redis.io/docs/latest/commands/expire/
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '4.4'
+  enunciado: El contenedor oficial de Redis 8.10 tenía maxmemory 0 y maxmemory-policy
+    noeviction. ¿Qué implica si lo usas como caché?
+  opciones:
+  - id: a
+    texto: Que descarta solo las claves menos usadas
+  - id: b
+    texto: Que los datos se guardan en disco al instante
+  - id: c
+    texto: Que no puede guardar más de 1 000 claves
+  - id: d
+    texto: Que no tiene límite de memoria y, si se fija uno, rechaza escrituras al
+      llenarse; para caché conviene un límite y allkeys-lru
+  correctas:
+  - d
+  explicacion: noeviction no descarta claves; una caché debe poder desalojar las menos
+    usadas.
+  distractores:
+    a: Eso hace allkeys-lru.
+    b: La persistencia es otra configuración.
+    c: No hay tal límite.
+  referencia: https://redis.io/docs/latest/develop/reference/eviction/
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.4'
+  enunciado: Con la persistencia por defecto (instantáneas RDB periódicas, appendonly
+    no), ¿qué pasa si Redis se cae?
+  opciones:
+  - id: a
+    texto: Se pueden perder las escrituras posteriores a la última instantánea
+  - id: b
+    texto: No se pierde nada
+  - id: c
+    texto: Se pierde todo
+  - id: d
+    texto: Redis no puede volver a arrancar
+  correctas:
+  - a
+  explicacion: Para más durabilidad existe AOF (appendonly yes).
+  distractores:
+    b: Las instantáneas son periódicas.
+    c: Se recupera la última instantánea.
+    d: Arranca con la instantánea.
+  referencia: https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '5.1'
+  enunciado: En un conjunto de réplicas de MongoDB, ¿quién recibe las escrituras?
+  opciones:
+  - id: a
+    texto: El miembro más cercano al cliente
+  - id: b
+    texto: El primario; los secundarios replican sus operaciones
+  - id: c
+    texto: Los secundarios, por turnos
+  - id: d
+    texto: El cliente las reparte
+  correctas:
+  - b
+  explicacion: Un único primario ordena las escrituras; los secundarios las copian
+    de forma asíncrona.
+  distractores:
+    a: Solo el primario acepta escrituras, esté donde esté.
+    c: No hay turnos.
+    d: El controlador las envía al primario.
+  referencia: https://www.mongodb.com/docs/manual/replication/
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.1'
+  enunciado: El primario deja de responder. ¿Cuándo convoca un secundario una elección,
+    con la configuración por defecto?
+  opciones:
+  - id: a
+    texto: Al instante
+  - id: b
+    texto: A los 10 minutos
+  - id: c
+    texto: Tras 10 segundos sin comunicación (electionTimeoutMillis)
+  - id: d
+    texto: Hay que hacerlo a mano
+  correctas:
+  - c
+  explicacion: La documentación indica 10 s por defecto y una mediana de elección
+    que no suele superar los 12 s.
+  distractores:
+    a: Espera para no confundir un retraso con una caída.
+    b: Es mucho menos.
+    d: La conmutación es automática.
+  referencia: https://www.mongodb.com/docs/manual/replication/
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: ¿Qué garantiza w majority frente a w 1?
+  opciones:
+  - id: a
+    texto: Que la escritura es más rápida
+  - id: b
+    texto: Que la escritura confirmada está en la mayoría de miembros y no se pierde
+      si cambia el primario
+  - id: c
+    texto: Que se escribe en cada uno de los miembros
+  - id: d
+    texto: Que las lecturas desde los secundarios están al día
+  correctas:
+  - b
+  explicacion: Con w 1, una escritura confirmada por el primario puede perderse si
+    este cae antes de replicarla.
+  distractores:
+    a: Es algo más lenta.
+    c: Basta la mayoría.
+    d: La lectura depende de la read preference y el read concern.
+  referencia: https://www.mongodb.com/docs/manual/reference/write-concern/
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: Un usuario cambia su dirección y la página siguiente, que lee de un secundario,
+    muestra la antigua. ¿Por qué?
+  opciones:
+  - id: a
+    texto: Por un error de MongoDB
+  - id: b
+    texto: Porque la escritura falló
+  - id: c
+    texto: Porque la replicación es asíncrona y el secundario aún no tenía el cambio
+  - id: d
+    texto: Porque los secundarios no replican direcciones
+  correctas:
+  - c
+  explicacion: La documentación advierte que los modos de lectura distintos de primary
+    pueden devolver datos antiguos.
+  distractores:
+    a: Es el comportamiento documentado.
+    b: Se guardó en el primario.
+    d: Replican todo.
+  referencia: https://www.mongodb.com/docs/manual/core/read-preference/
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.3'
+  enunciado: ¿Qué es la consistencia eventual?
+  opciones:
+  - id: a
+    texto: Que los datos solo son correctos a veces
+  - id: b
+    texto: Que si dejan de llegar escrituras, todas las réplicas acaban con el mismo
+      valor, aunque mientras tanto una lectura pueda ser antigua
+  - id: c
+    texto: Que las escrituras tardan un día
+  - id: d
+    texto: Que no hay réplicas
+  correctas:
+  - b
+  explicacion: Es la garantía descrita por Werner Vogels; las réplicas convergen,
+    pero no al instante.
+  distractores:
+    a: Los datos convergen al valor correcto.
+    c: El retraso suele ser de milisegundos o segundos.
+    d: Se refiere justamente a réplicas.
+  referencia: https://www.allthingsdistributed.com/2008/12/eventually_consistent.html
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '5.3'
+  enunciado: Según el teorema CAP, ¿qué hay que elegir ante una partición de red?
+  opciones:
+  - id: a
+    texto: Entre consistencia y disponibilidad
+  - id: b
+    texto: Entre SQL y NoSQL
+  - id: c
+    texto: Entre velocidad y coste
+  - id: d
+    texto: Nada; se pueden tener las tres propiedades a la vez
+  correctas:
+  - a
+  explicacion: Con la red partida, o se rechazan operaciones para no dar datos incoherentes
+    o se responde con datos posiblemente desfasados.
+  distractores:
+    b: CAP no trata del modelo de datos.
+    c: No son las propiedades de CAP.
+    d: Ante una partición no se pueden tener las tres.
+  referencia: https://www.allthingsdistributed.com/2008/12/eventually_consistent.html
+- id: L05-008
+  tipo: matching
+  dificultad: media
+  objetivo: '5.3'
+  enunciado: Empareja cada dato con la consistencia que necesita.
+  prompts:
+  - id: '1'
+    texto: Contador de «me gusta» de una foto
+  - id: '2'
+    texto: Saldo de una cuenta bancaria antes de una transferencia
+  - id: '3'
+    texto: Lista de productos recomendados
+  opciones:
+  - id: a
+    texto: Tolera datos de hace unos segundos
+  - id: b
+    texto: Necesita el valor actual y confirmado
+  - id: c
+    texto: Tolera datos algo antiguos sin problema
+  - id: d
+    texto: No necesita guardarse
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: La consistencia se elige según el coste de mostrar un dato antiguo.
+  distractores:
+    d: Todos se guardan.
+  referencia: https://www.allthingsdistributed.com/2008/12/eventually_consistent.html

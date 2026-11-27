@@ -1,0 +1,811 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '1.1'
+  enunciado: ¿Qué categoría encabeza el OWASP Top 10:2025?
+  opciones:
+  - id: a
+    texto: Inyección
+  - id: b
+    texto: Control de acceso roto
+  - id: c
+    texto: Fallos criptográficos
+  - id: d
+    texto: Configuración incorrecta
+  correctas:
+  - b
+  explicacion: A01:2025 es Broken Access Control, que además incorpora SSRF y CSRF.
+  distractores:
+    a: Es la A05 en 2025.
+    c: Es la A04.
+    d: Es la A02.
+  referencia: https://owasp.org/Top10/2025/
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: El formulario oculta el botón Borrar a quien no es administrador. ¿Protege
+    eso la operación?
+  opciones:
+  - id: a
+    texto: Sí, porque el usuario no ve el botón
+  - id: b
+    texto: Sí, si además se valida con JavaScript
+  - id: c
+    texto: No; cualquiera puede enviar la petición directamente, así que el servidor
+      debe comprobar el permiso
+  - id: d
+    texto: Solo en móviles
+  correctas:
+  - c
+  explicacion: Lo que hace el navegador es comodidad; la seguridad se comprueba en
+    el servidor.
+  distractores:
+    a: La petición se puede construir sin el botón.
+    b: El código del navegador lo controla el usuario.
+    d: Afecta a cualquier cliente.
+  referencia: https://owasp.org/Top10/2025/A01_2025-Broken_Access_Control/
+- id: L01-004
+  tipo: matching
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: Empareja cada principio con su ejemplo.
+  prompts:
+  - id: '1'
+    texto: Mínimo privilegio
+  - id: '2'
+    texto: Denegar por defecto
+  - id: '3'
+    texto: Defensa en profundidad
+  - id: '4'
+    texto: No confiar en la entrada
+  opciones:
+  - id: a
+    texto: El servicio de informes usa un usuario de base de datos de solo lectura
+  - id: b
+    texto: Si una ruta no tiene una regla de acceso, se rechaza
+  - id: c
+    texto: Escapar la salida y, además, enviar una cabecera CSP
+  - id: d
+    texto: Tratar el parámetro q como dato en una consulta parametrizada
+  - id: e
+    texto: Guardar las contraseñas en un fichero oculto
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Son los principios que sostienen casi todas las categorías del Top
+    10.
+  distractores:
+    e: Ocultar no es proteger.
+  referencia: https://owasp.org/Top10/2025/
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: La tienda acepta el precio que envía el navegador al pagar. ¿Qué tipo
+    de fallo es?
+  opciones:
+  - id: a
+    texto: Un error de rendimiento
+  - id: b
+    texto: 'Diseño inseguro: el sistema confía en un dato que el cliente controla'
+  - id: c
+    texto: Un fallo criptográfico
+  - id: d
+    texto: No es un fallo
+  correctas:
+  - b
+  explicacion: Es un fallo de diseño (A06) que ninguna revisión de código detecta
+    si nadie se pregunta qué puede manipular el cliente.
+  distractores:
+    a: Es de seguridad.
+    c: No interviene ningún cifrado.
+    d: Un atacante pagaría lo que quisiera.
+  referencia: https://owasp.org/Top10/2025/A06_2025-Insecure_Design/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '1.3'
+  enunciado: ¿Cuándo se hace el modelado de amenazas?
+  opciones:
+  - id: a
+    texto: Al diseñar, preguntando qué puede salir mal y quién querría abusar del
+      sistema
+  - id: b
+    texto: Después de un ataque
+  - id: c
+    texto: Solo en auditorías anuales
+  - id: d
+    texto: Solo en proyectos grandes
+  correctas:
+  - a
+  explicacion: Detectar un fallo de diseño antes de construir es mucho más barato
+    que después.
+  distractores:
+    b: Llega tarde.
+    c: Es demasiado esporádico.
+    d: Se adapta al tamaño del proyecto, pero conviene en cualquiera.
+  referencia: https://owasp.org/Top10/2025/A06_2025-Insecure_Design/
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.1'
+  enunciado: En el Top 10:2025, ¿dónde está la falsificación de peticiones del lado
+    del servidor (SSRF)?
+  opciones:
+  - id: a
+    texto: Es la A10
+  - id: b
+    texto: Ha desaparecido
+  - id: c
+    texto: Dentro de A01, control de acceso roto
+  - id: d
+    texto: En A05, inyección
+  correctas:
+  - c
+  explicacion: La página de A01:2025 incluye SSRF (CWE-918) y CSRF (CWE-352) entre
+    sus CWE.
+  distractores:
+    a: A10 es la mala gestión de condiciones excepcionales.
+    b: Sigue en la lista, dentro de A01.
+    d: No está en inyección.
+  referencia: https://owasp.org/Top10/2025/A01_2025-Broken_Access_Control/
+- id: L01-008
+  tipo: matching
+  dificultad: baja
+  objetivo: '1.3'
+  enunciado: Empareja cada momento del desarrollo con una práctica de seguridad.
+  prompts:
+  - id: '1'
+    texto: Diseño
+  - id: '2'
+    texto: Integración continua
+  - id: '3'
+    texto: Producción
+  opciones:
+  - id: a
+    texto: Modelado de amenazas
+  - id: b
+    texto: Análisis de dependencias vulnerables y de secretos
+  - id: c
+    texto: Registro de eventos de seguridad y alertas
+  - id: d
+    texto: Desactivar las pruebas
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: La seguridad acompaña todo el ciclo, no solo el final.
+  distractores:
+    d: No es una práctica de seguridad.
+  referencia: https://owasp.org/www-project-application-security-verification-standard/
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.1'
+  enunciado: Ana, autenticada, pide GET /v/pedidos/2, que es de Luis. ¿Qué respondió
+    la ruta vulnerable?
+  opciones:
+  - id: a
+    texto: '401'
+  - id: b
+    texto: '403'
+  - id: c
+    texto: '404'
+  - id: d
+    texto: Los datos del pedido de Luis, con un total de 350
+  correctas:
+  - d
+  explicacion: La ruta comprueba que hay sesión, pero no de quién es el pedido. Es
+    una IDOR.
+  distractores:
+    a: Ana está autenticada.
+    b: La ruta no comprueba permisos.
+    c: El pedido existe y no se filtra por propietario.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.1'
+  enunciado: ¿Basta con usar UUID aleatorios en lugar de ids consecutivos para evitar
+    una IDOR?
+  opciones:
+  - id: a
+    texto: Sí, porque nadie los puede adivinar
+  - id: b
+    texto: No; dificultan adivinarlos, pero un UUID filtrado sigue dando acceso si
+      el servidor no comprueba la propiedad
+  - id: c
+    texto: Sí, si además se cifran
+  - id: d
+    texto: Solo en APIs REST
+  correctas:
+  - b
+  explicacion: Los identificadores aparecen en enlaces, registros y capturas. La comprobación
+    de propiedad es imprescindible.
+  distractores:
+    a: Pueden filtrarse.
+    c: Cifrarlos tampoco comprueba permisos.
+    d: Afecta a cualquier interfaz.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.1'
+  enunciado: ¿Por qué la ruta segura responde 404, y no 403, cuando el pedido es de
+    otro?
+  opciones:
+  - id: a
+    texto: Para no confirmar que ese pedido existe
+  - id: b
+    texto: Porque 403 no existe en HTTP
+  - id: c
+    texto: Porque es más rápido
+  - id: d
+    texto: Por error
+  correctas:
+  - a
+  explicacion: Un 403 revela que el recurso existe y permite enumerarlos.
+  distractores:
+    b: 403 existe.
+    c: No cambia la velocidad.
+    d: Es intencionado.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.3'
+  enunciado: ¿Qué devolvió GET /v/previsualizar?url=http://127.0.0.1:18202/admin?
+  opciones:
+  - id: a
+    texto: Un error, porque es una dirección interna
+  - id: b
+    texto: El contenido del panel interno, con sus claves
+  - id: c
+    texto: Una página vacía
+  - id: d
+    texto: '400'
+  correctas:
+  - b
+  explicacion: El servidor alcanza servicios internos que el atacante no ve. Es una
+    SSRF.
+  distractores:
+    a: La ruta vulnerable no comprueba el destino.
+    c: Devolvió el texto del panel.
+    d: Eso hizo la ruta corregida.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.4'
+  enunciado: ¿Qué hace SameSite=Lax en la cookie de sesión frente a CSRF?
+  opciones:
+  - id: a
+    texto: Cifra la cookie
+  - id: b
+    texto: Impide leer la cookie desde JavaScript
+  - id: c
+    texto: Obliga a usar HTTPS
+  - id: d
+    texto: Que el navegador no la envíe en peticiones iniciadas desde otros sitios,
+      salvo navegaciones de nivel superior
+  correctas:
+  - d
+  explicacion: Según MDN, Lax solo la envía entre sitios en navegaciones de nivel
+    superior; fetch, imágenes o iframes de otro sitio no la llevan.
+  distractores:
+    a: No cifra.
+    b: Eso es HttpOnly.
+    c: Eso es Secure.
+  referencia: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.4'
+  enunciado: Una API se autentica solo con un token en la cabecera Authorization.
+    ¿Es vulnerable a CSRF?
+  opciones:
+  - id: a
+    texto: Sí, igual que una que usa cookies
+  - id: b
+    texto: No por ese mecanismo; el navegador no añade la cabecera Authorization por
+      su cuenta, como sí hace con las cookies
+  - id: c
+    texto: Solo con GET
+  - id: d
+    texto: Solo si usa HTTPS
+  correctas:
+  - b
+  explicacion: CSRF se aprovecha de credenciales que el navegador adjunta solo, como
+    las cookies.
+  distractores:
+    a: Depende de cómo se autentique.
+    c: El método no es lo que decide.
+    d: HTTPS no tiene relación con CSRF.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: ¿Qué devolvió la búsqueda vulnerable con q igual a ' or 1=1 --?
+  codigo:
+    lenguaje: python
+    fuente: 'sql = f"select nombre from productos where oculto = 0 and nombre like
+      ''%{q}%''"
+
+      '
+  opciones:
+  - id: a
+    texto: Una lista vacía
+  - id: b
+    texto: Un error de sintaxis
+  - id: c
+    texto: Todos los productos, incluido el prototipo secreto oculto
+  - id: d
+    texto: Solo el libro
+  correctas:
+  - c
+  explicacion: La comilla cierra el texto, or 1=1 hace cierta la condición y -- comenta
+    el resto. El filtro de ocultos se anula.
+  distractores:
+    a: Es lo que devolvió la versión parametrizada.
+    b: La consulta resultante es válida.
+    d: Sería con una búsqueda normal.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.2'
+  enunciado: ¿Qué permitió el ataque con UNION SELECT en el laboratorio?
+  opciones:
+  - id: a
+    texto: Borrar la tabla de productos
+  - id: b
+    texto: Leer los nombres y las claves de la tabla de usuarios desde la búsqueda
+      de productos
+  - id: c
+    texto: Nada, porque UNION no funciona en SQLite
+  - id: d
+    texto: Cambiar el precio de un producto
+  correctas:
+  - b
+  explicacion: UNION añade al resultado filas de otra consulta; la respuesta fue ana:hash-de-ana
+    y luis:hash-de-luis.
+  distractores:
+    a: Ese ataque solo leía.
+    c: Funcionó.
+    d: Fue una lectura.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: Necesitas ordenar por la columna que elija el usuario (nombre o precio).
+    Los marcadores no sirven para nombres de columna. ¿Qué haces?
+  opciones:
+  - id: a
+    texto: Concatenar el valor y escapar las comillas
+  - id: b
+    texto: Comprobar el valor contra una lista de columnas permitidas
+  - id: c
+    texto: Confiar en que la interfaz solo ofrece dos opciones
+  - id: d
+    texto: Usar una expresión regular de caracteres prohibidos
+  correctas:
+  - b
+  explicacion: Lo que no se puede parametrizar se limita a valores conocidos.
+  distractores:
+    a: Escapar a mano no es fiable.
+    c: La petición se puede manipular.
+    d: Las listas de prohibidos se esquivan.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.3'
+  enunciado: ¿Qué devolvió la ruta segura con nombre igual a <script>alert(1)</script>?
+  opciones:
+  - id: a
+    texto: <p>Hola, &lt;script&gt;alert(1)&lt;/script&gt;</p>
+  - id: b
+    texto: <p>Hola, <script>alert(1)</script></p>
+  - id: c
+    texto: Un error 400
+  - id: d
+    texto: <p>Hola, </p>
+  correctas:
+  - a
+  explicacion: html.escape convierte los caracteres especiales en entidades; el navegador
+    muestra el texto en vez de ejecutarlo.
+  distractores:
+    b: Es la salida de la ruta vulnerable.
+    c: No rechaza la entrada; la muestra de forma segura.
+    d: No borra el contenido.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.4'
+  enunciado: ¿Qué papel tiene la cabecera Content-Security-Policy default-src 'self'?
+  opciones:
+  - id: a
+    texto: Sustituye al escape de la salida
+  - id: b
+    texto: Cifra la página
+  - id: c
+    texto: 'Es una segunda capa: impide ejecutar scripts en línea o de otros orígenes
+      si algo escapa al primer control'
+  - id: d
+    texto: Evita la inyección SQL
+  correctas:
+  - c
+  explicacion: Es defensa en profundidad; el escape sigue siendo la protección principal.
+  distractores:
+    a: No lo sustituye.
+    b: No cifra nada.
+    d: Actúa en el navegador, no en la base de datos.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '3.1'
+  enunciado: ¿Qué tienen en común la inyección SQL y el XSS?
+  opciones:
+  - id: a
+    texto: Que solo afectan a PHP
+  - id: b
+    texto: Que un dato de entrada acaba interpretado como código por otro intérprete
+  - id: c
+    texto: Que se evitan con HTTPS
+  - id: d
+    texto: Que solo afectan a bases de datos
+  correctas:
+  - b
+  explicacion: La base de datos interpreta SQL y el navegador interpreta HTML y JavaScript.
+    La solución es mantener los datos separados del código.
+  distractores:
+    a: Afectan a cualquier lenguaje.
+    c: HTTPS cifra el transporte, no separa datos y código.
+    d: El XSS afecta al navegador.
+  referencia: https://owasp.org/Top10/2025/A05_2025-Injection/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: En el laboratorio, ¿cuántos intentos por segundo permitía SHA-256 frente
+    a Argon2id en esa máquina?
+  opciones:
+  - id: a
+    texto: Unos 4 millones frente a unos 27
+  - id: b
+    texto: Los mismos
+  - id: c
+    texto: 27 frente a 4 millones
+  - id: d
+    texto: Unos 100 frente a unos 50
+  correctas:
+  - a
+  explicacion: SHA-256 está hecho para ser rápido y Argon2id para ser lento y consumir
+    memoria, unas 150 000 veces más caro por intento.
+  distractores:
+    b: La diferencia es enorme.
+    c: Es al revés.
+    d: Las cifras medidas son muy distintas.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: ¿Por qué dos usuarios con la contraseña secreto tienen hashes Argon2id
+    distintos?
+  opciones:
+  - id: a
+    texto: Porque Argon2id es aleatorio y no se puede verificar
+  - id: b
+    texto: Porque se cifran con claves distintas
+  - id: c
+    texto: Por un error
+  - id: d
+    texto: Porque cada hash incluye una sal aleatoria propia, guardada en el propio
+      hash
+  correctas:
+  - d
+  explicacion: La sal evita que contraseñas iguales se delaten y anula las tablas
+    precalculadas; verify la lee del hash.
+  distractores:
+    a: verify funcionó con la contraseña correcta.
+    b: No es cifrado.
+    c: Es el comportamiento esperado.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: ¿Qué recomienda OWASP para guardar contraseñas?
+  opciones:
+  - id: a
+    texto: SHA-256 con sal
+  - id: b
+    texto: Argon2id con al menos 19 MiB de memoria, 2 iteraciones y paralelismo 1
+  - id: c
+    texto: Cifrarlas con AES
+  - id: d
+    texto: MD5 doble
+  correctas:
+  - b
+  explicacion: Es la recomendación de la hoja de trucos de OWASP; scrypt o bcrypt
+    como alternativas.
+  distractores:
+    a: Es demasiado rápido aunque lleve sal.
+    c: Lo cifrado se puede descifrar si se roba la clave.
+    d: MD5 es rápido y está roto.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: Empareja cada atributo de cookie con su efecto.
+  prompts:
+  - id: '1'
+    texto: HttpOnly
+  - id: '2'
+    texto: Secure
+  - id: '3'
+    texto: SameSite=Lax
+  opciones:
+  - id: a
+    texto: JavaScript no puede leer la cookie
+  - id: b
+    texto: Solo se envía por HTTPS
+  - id: c
+    texto: No se envía en peticiones iniciadas desde otros sitios, salvo navegaciones
+      de nivel superior
+  - id: d
+    texto: Cifra el contenido
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Son los atributos básicos de una cookie de sesión.
+  distractores:
+    d: Ningún atributo cifra la cookie.
+  referencia: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: Según NIST SP 800-63B, ¿qué política de contraseñas es la correcta?
+  opciones:
+  - id: a
+    texto: Exigir mayúsculas, números y símbolos, y cambiarla cada 90 días
+  - id: b
+    texto: Longitud mínima y rechazar contraseñas comunes o filtradas, sin reglas
+      de composición ni cambios periódicos
+  - id: c
+    texto: Cuatro dígitos
+  - id: d
+    texto: Que la elija el administrador
+  correctas:
+  - b
+  explicacion: La guía prohíbe imponer reglas de composición y cambios periódicos,
+    salvo que haya indicios de compromiso.
+  distractores:
+    a: NIST lo desaconseja; lleva a contraseñas predecibles.
+    c: Demasiado corta.
+    d: No es la recomendación.
+  referencia: https://pages.nist.gov/800-63-4/sp800-63b.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '4.3'
+  enunciado: ¿Qué mensaje debe dar un inicio de sesión fallido?
+  opciones:
+  - id: a
+    texto: El usuario no existe
+  - id: b
+    texto: La contraseña de ana es incorrecta
+  - id: c
+    texto: Usuario o contraseña incorrectos
+  - id: d
+    texto: El error de la base de datos
+  correctas:
+  - c
+  explicacion: Un mensaje neutro no revela qué usuarios existen.
+  distractores:
+    a: Permite enumerar usuarios.
+    b: Confirma que ana existe.
+    d: Revela detalles internos.
+  referencia: https://owasp.org/Top10/2025/A07_2025-Authentication_Failures/
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.4'
+  enunciado: Necesitas generar un token de recuperación de contraseña en Python. ¿Qué
+    usas?
+  opciones:
+  - id: a
+    texto: random.randint
+  - id: b
+    texto: La hora actual en milisegundos
+  - id: c
+    texto: Un hash MD5 del email
+  - id: d
+    texto: secrets.token_urlsafe
+  correctas:
+  - d
+  explicacion: El módulo secrets usa un generador criptográfico; random es predecible.
+  distractores:
+    a: Es predecible, no apto para seguridad.
+    b: Se adivina fácilmente.
+    c: Cualquiera que conozca el email lo calcula.
+  referencia: https://owasp.org/Top10/2025/A04_2025-Cryptographic_Failures/
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.3'
+  enunciado: ¿Qué problema tiene esta respuesta de error que devuelve la API?
+  codigo:
+    lenguaje: json
+    fuente: "{\"error\": \"ZeroDivisionError('division by zero')\",\n \"consulta\"\
+      : \"select * from cuentas where saldo > 0\",\n \"version\": \"sqlite 3.53.1\"\
+      }\n"
+  opciones:
+  - id: a
+    texto: Ninguno; ayuda al cliente
+  - id: b
+    texto: Que no es XML
+  - id: c
+    texto: Que el código de estado debería ser 200
+  - id: d
+    texto: Que revela detalles internos (excepción, consulta y versión) útiles para
+      un atacante
+  correctas:
+  - d
+  explicacion: Al cliente se le da un mensaje genérico; el detalle va al registro
+    del servidor.
+  distractores:
+    a: El cliente no necesita esos detalles.
+    b: El formato no es el problema.
+    c: Es un error, así que 500 es correcto.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.3'
+  enunciado: Con el servicio de permisos caído, ¿qué devolvió puede_ver_abierto?
+  codigo:
+    lenguaje: python
+    fuente: "def puede_ver_abierto(usuario, recurso):\n    try:\n        return consultar_permisos(usuario,\
+      \ recurso)\n    except Exception:\n        return True\n"
+  opciones:
+  - id: a
+    texto: 'True: concedió el acceso ante un error'
+  - id: b
+    texto: 'False'
+  - id: c
+    texto: Una excepción
+  - id: d
+    texto: None
+  correctas:
+  - a
+  explicacion: Es fallar abierto. La versión que devuelve False ante el error falla
+    cerrada, que es lo correcto en un control de seguridad.
+  distractores:
+    b: Es lo que devolvió la versión que falla cerrada.
+    c: La excepción se captura.
+    d: El except devuelve True.
+  referencia: https://owasp.org/Top10/2025/A10_2025-Mishandling_of_Exceptional_Conditions/
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: ¿Qué informó pip-audit sobre requests 2.19.0?
+  opciones:
+  - id: a
+    texto: Nada
+  - id: b
+    texto: Que el paquete no existe
+  - id: c
+    texto: Cinco avisos de seguridad, cada uno con la versión que lo corrige, hasta
+      la 2.33.0
+  - id: d
+    texto: Que hay que cambiar de lenguaje
+  correctas:
+  - c
+  explicacion: Las herramientas de análisis cruzan las versiones con bases de avisos
+    y proponen la versión corregida.
+  distractores:
+    a: Encontró cinco avisos.
+    b: Es una versión antigua, pero existe.
+    d: Basta con actualizar.
+  referencia: https://owasp.org/Top10/2025/A03_2025-Software_Supply_Chain_Failures/
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.4'
+  enunciado: ¿Qué patrón merece una alerta de seguridad?
+  opciones:
+  - id: a
+    texto: Un usuario inicia sesión por la mañana
+  - id: b
+    texto: Cientos de 404 en /s/pedidos/ desde una misma IP en un minuto
+  - id: c
+    texto: Un despliegue correcto
+  - id: d
+    texto: Un pedido creado
+  correctas:
+  - b
+  explicacion: Alguien está enumerando identificadores. A09 pide registrar y alertar
+    por estos patrones.
+  distractores:
+    a: Es normal.
+    c: Es normal.
+    d: Es normal.
+  referencia: https://owasp.org/Top10/2025/A09_2025-Security_Logging_and_Alerting_Failures/
+- id: L05-007
+  tipo: matching
+  dificultad: media
+  objetivo: '5.1'
+  enunciado: Empareja cada cabecera de seguridad con su efecto.
+  prompts:
+  - id: '1'
+    texto: Content-Security-Policy
+  - id: '2'
+    texto: Strict-Transport-Security
+  - id: '3'
+    texto: 'X-Content-Type-Options: nosniff'
+  opciones:
+  - id: a
+    texto: Limita de dónde puede cargar scripts y recursos el navegador
+  - id: b
+    texto: Obliga al navegador a usar HTTPS con el sitio
+  - id: c
+    texto: Impide que el navegador adivine el tipo de contenido
+  - id: d
+    texto: Cifra las cookies
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Son cabeceras recomendadas por la hoja de trucos de OWASP.
+  distractores:
+    d: Ninguna cabecera cifra las cookies.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.4'
+  enunciado: ¿Qué no debe aparecer en un registro de inicios de sesión fallidos?
+  opciones:
+  - id: a
+    texto: El usuario
+  - id: b
+    texto: La IP de origen
+  - id: c
+    texto: La hora
+  - id: d
+    texto: La contraseña probada
+  correctas:
+  - d
+  explicacion: Los registros los lee mucha gente y se guardan mucho tiempo; además,
+    a menudo la contraseña fallida es una variante de la real.
+  distractores:
+    a: Es necesario para detectar ataques.
+    b: Ayuda a detectar el origen.
+    c: Es imprescindible.
+  referencia: https://owasp.org/Top10/2025/A09_2025-Security_Logging_and_Alerting_Failures/

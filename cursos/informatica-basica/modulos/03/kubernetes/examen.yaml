@@ -1,0 +1,659 @@
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: Un Deployment declara 3 réplicas y borras uno de sus pods a mano. ¿Qué
+    ocurre?
+  opciones:
+  - id: a
+    texto: Quedan 2 réplicas hasta que alguien vuelva a aplicar el manifiesto
+  - id: b
+    texto: El Deployment se borra
+  - id: c
+    texto: Kubernetes lanza un error y se detiene
+  - id: d
+    texto: Un controlador detecta que hay 2 en lugar de 3 y crea un pod nuevo
+  correctas:
+  - d
+  explicacion: El bucle de control compara el estado real con el deseado y lo corrige.
+    Al preparar la lección, el pod borrado se sustituyó en segundos por otro con nombre
+    nuevo.
+  distractores:
+    a: La reconciliación es continua; no hace falta volver a aplicar nada.
+    b: Borrar un pod no afecta al Deployment que lo gestiona.
+    c: Es una situación normal que el controlador corrige.
+  referencia: https://kubernetes.io/docs/concepts/architecture/controller/
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Empareja cada componente con su función.
+  prompts:
+  - id: '1'
+    texto: kube-apiserver
+  - id: '2'
+    texto: etcd
+  - id: '3'
+    texto: kube-scheduler
+  - id: '4'
+    texto: kubelet
+  opciones:
+  - id: a
+    texto: Única puerta de entrada al clúster; expone la API
+  - id: b
+    texto: Almacén clave-valor con todo el estado del clúster
+  - id: c
+    texto: Decide en qué nodo se ejecuta cada pod
+  - id: d
+    texto: Agente de cada nodo que arranca y vigila los contenedores de sus pods
+  - id: e
+    texto: Construye las imágenes de los contenedores
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: La API recibe todas las peticiones, etcd guarda el estado, el planificador
+    asigna nodos y el kubelet ejecuta en cada nodo.
+  distractores:
+    e: Kubernetes no construye imágenes.
+  referencia: https://kubernetes.io/docs/concepts/overview/components/
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.4'
+  enunciado: Escalas un Deployment a 5 réplicas con kubectl scale, pero el manifiesto
+    en Git dice 3. Al día siguiente, alguien ejecuta kubectl apply -f con el manifiesto.
+    ¿Cuántas réplicas habrá?
+  opciones:
+  - id: a
+    texto: 3, porque el manifiesto aplicado vuelve a ser el estado deseado
+  - id: b
+    texto: 5, porque los cambios manuales tienen prioridad
+  - id: c
+    texto: 8, la suma de ambos
+  - id: d
+    texto: 0, porque hay un conflicto
+  correctas:
+  - a
+  explicacion: Al aplicar el manifiesto, el estado deseado vuelve a ser 3. Por eso
+    los cambios deben hacerse en el manifiesto versionado, no a mano.
+  distractores:
+    b: El último estado deseado aplicado es el que cuenta.
+    c: Las réplicas no se suman.
+    d: No hay conflicto; simplemente se sustituye el valor.
+  referencia: https://kubernetes.io/docs/concepts/overview/
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Kubernetes ya no usa Docker Engine como runtime en los nodos. ¿Pueden
+    ejecutarse imágenes construidas con docker build?
+  opciones:
+  - id: a
+    texto: No; hay que reconstruirlas con otra herramienta
+  - id: b
+    texto: Sí, porque las imágenes siguen el estándar OCI, que entienden runtimes
+      como containerd
+  - id: c
+    texto: Solo si se instala Docker en cada nodo
+  - id: d
+    texto: Solo en clústeres de Windows
+  correctas:
+  - b
+  explicacion: El formato de imagen es un estándar abierto (OCI). containerd y otros
+    runtimes compatibles con CRI ejecutan las mismas imágenes.
+  distractores:
+    a: Las imágenes son compatibles; no hace falta reconstruir.
+    c: No hace falta Docker en los nodos.
+    d: No depende del sistema operativo de los nodos.
+  referencia: https://kubernetes.io/docs/concepts/overview/components/
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.1'
+  enunciado: ¿Por qué no se suelen crear pods sueltos en producción?
+  opciones:
+  - id: a
+    texto: Porque Kubernetes no lo permite
+  - id: b
+    texto: Porque un pod suelto no puede tener más de un contenedor
+  - id: c
+    texto: Porque los pods son efímeros y, sin un controlador, nadie los vuelve a
+      crear si se pierden
+  - id: d
+    texto: Porque los pods sueltos no tienen IP
+  correctas:
+  - c
+  explicacion: Si el nodo cae o el pod se borra, un pod suelto desaparece. Un Deployment
+    (o otro controlador) mantiene el número deseado.
+  distractores:
+    a: Se pueden crear, pero no se recuperan solos.
+    b: Un pod suelto puede tener varios contenedores.
+    d: Todo pod recibe una IP.
+  referencia: https://kubernetes.io/docs/concepts/workloads/pods/
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.3'
+  enunciado: Un pod se llama web-56547b957b-gzxg7. ¿Qué indica la parte 56547b957b?
+  opciones:
+  - id: a
+    texto: La IP del pod
+  - id: b
+    texto: La fecha de creación
+  - id: c
+    texto: El número de réplica
+  - id: d
+    texto: El ReplicaSet que lo creó, identificado por un hash de la plantilla
+  correctas:
+  - d
+  explicacion: El Deployment crea un ReplicaSet por cada versión de la plantilla,
+    y sus pods heredan ese identificador seguido de un sufijo aleatorio.
+  distractores:
+    a: La IP no forma parte del nombre.
+    b: El nombre no codifica la fecha.
+    c: El sufijo final es aleatorio; no hay un número de réplica.
+  referencia: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.4'
+  enunciado: Actualizas un Deployment de 3 réplicas a una imagen que no existe. ¿Qué
+    observarás?
+  opciones:
+  - id: a
+    texto: Los 3 pods se paran y el servicio se corta
+  - id: b
+    texto: Kubernetes rechaza el cambio antes de aplicarlo
+  - id: c
+    texto: Un pod nuevo en ImagePullBackOff y los 3 pods de la versión anterior siguiendo
+      en marcha
+  - id: d
+    texto: Kubernetes vuelve atrás automáticamente y borra el cambio
+  correctas:
+  - c
+  explicacion: La actualización progresiva solo retira pods antiguos cuando los nuevos
+    están disponibles. Como el nuevo no arranca, la actualización se detiene y la
+    versión anterior sigue sirviendo.
+  distractores:
+    a: maxUnavailable limita cuántos pods pueden faltar; no se paran todos.
+    b: La API no comprueba que la imagen exista.
+    d: Kubernetes no hace rollback por sí solo; hay que ejecutar rollout undo o corregir
+      el manifiesto.
+  referencia: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.4'
+  enunciado: ¿Qué valores tiene por defecto la estrategia RollingUpdate de un Deployment?
+  opciones:
+  - id: a
+    texto: maxSurge 25 % y maxUnavailable 25 %
+  - id: b
+    texto: maxSurge 0 y maxUnavailable 100 %
+  - id: c
+    texto: maxSurge 100 % y maxUnavailable 0
+  - id: d
+    texto: No tiene valores por defecto
+  correctas:
+  - a
+  explicacion: Por defecto puede haber hasta un 25 % de pods de más y faltar hasta
+    un 25 % durante la actualización. Se comprobó con kubectl get deploy -o jsonpath='{.spec.strategy}'.
+  distractores:
+    b: Equivaldría a parar todo antes de arrancar lo nuevo, como la estrategia Recreate.
+    c: Es una configuración posible, pero no la de por defecto.
+    d: Los valores por defecto existen y se ven en el objeto creado.
+  referencia: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.4'
+  enunciado: Tras un kubectl rollout undo, kubectl avisa de que la anotación last-applied-configuration
+    no se actualiza. ¿Qué conviene hacer?
+  opciones:
+  - id: a
+    texto: Ignorarlo; el aviso no tiene consecuencias
+  - id: b
+    texto: Borrar el Deployment y crearlo de nuevo
+  - id: c
+    texto: Ejecutar rollout undo otra vez
+  - id: d
+    texto: Corregir el manifiesto en Git para que refleje la versión buena y volver
+      a aplicarlo
+  correctas:
+  - d
+  explicacion: El manifiesto es la fuente de verdad. Si no se corrige, el próximo
+    kubectl apply volverá a poner la versión rota.
+  distractores:
+    a: Un apply posterior con el manifiesto antiguo reintroduciría el fallo.
+    b: Borrar el Deployment corta el servicio sin necesidad.
+    c: Repetir el undo volvería a la versión rota.
+  referencia: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+- id: L03-002
+  tipo: matching
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: Empareja cada tipo de Service con su uso.
+  prompts:
+  - id: '1'
+    texto: ClusterIP
+  - id: '2'
+    texto: NodePort
+  - id: '3'
+    texto: LoadBalancer
+  - id: '4'
+    texto: ExternalName
+  opciones:
+  - id: a
+    texto: Comunicación interna entre servicios del clúster
+  - id: b
+    texto: Abrir un puerto en cada nodo, para pruebas o entornos sin balanceador
+  - id: c
+    texto: Crear un balanceador externo en la nube
+  - id: d
+    texto: Alias DNS de un servicio externo al clúster
+  - id: e
+    texto: Guardar configuración
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: ClusterIP es interno, NodePort expone un puerto en los nodos, LoadBalancer
+    pide un balanceador al proveedor y ExternalName es un alias DNS.
+  distractores:
+    e: Guardar configuración es tarea de un ConfigMap.
+  referencia: https://kubernetes.io/docs/concepts/services-networking/service/
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.1'
+  enunciado: Un Service tiene selector app=web, pero los pods del Deployment tienen
+    la etiqueta app=tienda-web. ¿Qué ocurre al llamar al Service?
+  opciones:
+  - id: a
+    texto: El Service no tiene endpoints y las conexiones fallan
+  - id: b
+    texto: Kubernetes ajusta el selector automáticamente
+  - id: c
+    texto: El Service envía tráfico a los pods del namespace, tengan la etiqueta que
+      tengan
+  - id: d
+    texto: El Deployment cambia la etiqueta de sus pods
+  correctas:
+  - a
+  explicacion: El Service solo envía tráfico a los pods que coinciden con su selector.
+    Si ninguno coincide, no hay endpoints y nadie responde.
+  distractores:
+    b: Kubernetes no corrige selectores.
+    c: El selector filtra; sin coincidencias no hay destinos.
+    d: El Deployment no conoce al Service.
+  referencia: https://kubernetes.io/docs/concepts/services-networking/service/
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.4'
+  enunciado: Creas un Ingress correcto, pero no hay ningún controlador de Ingress
+    instalado en el clúster. ¿Qué pasa?
+  opciones:
+  - id: a
+    texto: Kubernetes usa un proxy integrado
+  - id: b
+    texto: Se crea un LoadBalancer automáticamente
+  - id: c
+    texto: El objeto se crea, pero no tiene ningún efecto
+  - id: d
+    texto: La API rechaza el Ingress
+  correctas:
+  - c
+  explicacion: El Ingress solo declara reglas. Un controlador (NGINX, Traefik u otro)
+    tiene que leerlas y configurar el proxy.
+  distractores:
+    a: Kubernetes no trae un controlador de Ingress de serie.
+    b: El Ingress no crea balanceadores por sí mismo.
+    d: La API acepta el objeto aunque no haya controlador.
+  referencia: https://kubernetes.io/docs/concepts/services-networking/ingress/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.4'
+  enunciado: ¿Qué recomienda hoy el proyecto Kubernetes sobre Ingress?
+  opciones:
+  - id: a
+    texto: Usar la Gateway API en lugar de Ingress, que está congelado pero sigue
+      disponible
+  - id: b
+    texto: Usar Ingress, que es la API más moderna
+  - id: c
+    texto: Dejar de usar Ingress, porque se retirará en la próxima versión
+  - id: d
+    texto: Usar NodePort para todo
+  correctas:
+  - a
+  explicacion: La documentación indica que la API de Ingress está congelada (estable,
+    sin planes de retirarla, pero sin cambios) y recomienda la Gateway API.
+  distractores:
+    b: La Gateway API es la evolución de Ingress.
+    c: El proyecto dice expresamente que no tiene planes de retirar Ingress.
+    d: NodePort no ofrece enrutado por host y ruta.
+  referencia: https://kubernetes.io/docs/concepts/services-networking/ingress/
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.1'
+  enunciado: Un pod del Deployment está en marcha pero no pasa su sonda de disponibilidad.
+    ¿Recibe tráfico del Service?
+  opciones:
+  - id: a
+    texto: Sí, basta con tener la etiqueta para recibir tráfico
+  - id: b
+    texto: No; aparece en el EndpointSlice como no listo y el Service no le envía
+      tráfico
+  - id: c
+    texto: Sí, pero solo la mitad
+  - id: d
+    texto: No, y además Kubernetes lo borra
+  correctas:
+  - b
+  explicacion: Al preparar el tema se comprobó con un pod cuya sonda fallaba, que
+    aparecía con ready=False en el EndpointSlice mientras los demás seguían con ready=True.
+  distractores:
+    a: La disponibilidad se tiene en cuenta además de la etiqueta.
+    c: No hay reparto parcial; un pod no listo queda fuera.
+    d: La sonda de disponibilidad no reinicia ni borra; eso lo hace, en su caso, la
+      de vida.
+  referencia: https://kubernetes.io/docs/concepts/services-networking/service/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: Un compañero dice que los Secrets de Kubernetes son seguros porque sus
+    valores aparecen cifrados como bm8tbGEt... ¿Qué le respondes?
+  opciones:
+  - id: a
+    texto: Que tiene razón; base64 es un cifrado fuerte
+  - id: b
+    texto: Que el cifrado depende de la versión de kubectl
+  - id: c
+    texto: Que es base64, una codificación que cualquiera revierte sin clave, y que
+      por defecto se guardan sin cifrar en etcd
+  - id: d
+    texto: Que los Secrets solo los puede leer el administrador del clúster
+  correctas:
+  - c
+  explicacion: base64 -d devuelve el valor original. Para protegerlos hay que cifrar
+    etcd en reposo, restringir con RBAC y no guardarlos en claro en Git.
+  distractores:
+    a: base64 no usa clave; no es un cifrado.
+    b: kubectl no cifra los Secrets.
+    d: Cualquiera que pueda crear pods en el namespace puede leer sus Secrets.
+  referencia: https://kubernetes.io/docs/concepts/configuration/secret/
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: Un contenedor con limits.memory 64Mi intenta reservar 200 MiB. ¿Qué estado
+    muestra después?
+  opciones:
+  - id: a
+    texto: Running, con la memoria limitada a 64 MiB
+  - id: b
+    texto: Pending
+  - id: c
+    texto: ImagePullBackOff
+  - id: d
+    texto: Terminado con motivo OOMKilled
+  correctas:
+  - d
+  explicacion: Superar el límite de memoria hace que el núcleo mate el proceso. Se
+    comprobó con un pod de Python que reservaba 200 MiB con un límite de 64 MiB.
+  distractores:
+    a: La memoria no se puede «frenar» como la CPU; el proceso muere.
+    b: Pending indica que no se ha podido planificar; aquí sí arrancó.
+    c: Ese estado indica que no se pudo descargar la imagen.
+  referencia: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: Empareja cada situación con lo que ocurre.
+  prompts:
+  - id: '1'
+    texto: El contenedor supera su límite de CPU
+  - id: '2'
+    texto: El contenedor supera su límite de memoria
+  - id: '3'
+    texto: Ningún nodo tiene hueco para los requests del pod
+  opciones:
+  - id: a
+    texto: Se le frena (throttling)
+  - id: b
+    texto: Muere con OOMKilled
+  - id: c
+    texto: El pod se queda en Pending
+  - id: d
+    texto: Se borra el Deployment
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: La CPU es compresible y se limita frenando; la memoria no, y se mata
+    el proceso. Si los requests no caben en ningún nodo, el planificador no puede
+    colocar el pod.
+  distractores:
+    d: Ninguna de estas situaciones borra el Deployment.
+  referencia: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+- id: L04-005
+  tipo: matching
+  dificultad: media
+  objetivo: '4.4'
+  enunciado: Empareja cada sonda con lo que pasa cuando falla.
+  prompts:
+  - id: '1'
+    texto: readinessProbe
+  - id: '2'
+    texto: livenessProbe
+  - id: '3'
+    texto: startupProbe
+  opciones:
+  - id: a
+    texto: El pod sale del Service, sin reiniciarse
+  - id: b
+    texto: El contenedor se reinicia
+  - id: c
+    texto: Mientras no pase, no se evalúan las otras sondas
+  - id: d
+    texto: Se escala el Deployment
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: La de disponibilidad controla el tráfico, la de vida reinicia procesos
+    bloqueados y la de arranque da tiempo a las aplicaciones lentas.
+  distractores:
+    d: Las sondas no escalan; eso lo hace el HorizontalPodAutoscaler.
+  referencia: https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '4.4'
+  enunciado: La sonda de vida de un servicio comprueba que la base de datos responde.
+    Una noche la base de datos se cae durante 10 minutos. ¿Qué ocurre?
+  opciones:
+  - id: a
+    texto: Nada, porque las sondas de vida solo comprueban el arranque
+  - id: b
+    texto: Kubernetes reinicia en bucle todos los pods del servicio, aunque reiniciarlos
+      no arregla nada
+  - id: c
+    texto: Kubernetes arregla la base de datos
+  - id: d
+    texto: Los pods se mueven a otro nodo
+  correctas:
+  - b
+  explicacion: La sonda de vida falla por una dependencia externa y Kubernetes reinicia
+    los contenedores, que siguen fallando. La sonda de vida debe comprobar solo el
+    propio proceso; la dependencia, en todo caso, en la de disponibilidad.
+  distractores:
+    a: La de vida se evalúa durante toda la vida del contenedor.
+    c: Kubernetes no repara servicios externos.
+    d: Una sonda de vida fallida reinicia el contenedor en el mismo nodo.
+  referencia: https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/
+- id: L05-002
+  tipo: matching
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: Elige el controlador adecuado para cada carga.
+  prompts:
+  - id: '1'
+    texto: Una API REST sin estado con 4 réplicas
+  - id: '2'
+    texto: Un clúster de base de datos de 3 nodos, cada uno con sus datos
+  - id: '3'
+    texto: El frontend web de la tienda
+  opciones:
+  - id: a
+    texto: Deployment
+  - id: b
+    texto: StatefulSet
+  - id: c
+    texto: ConfigMap
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - a
+  explicacion: Las cargas sin estado van en Deployments. La base de datos necesita
+    identidad estable y un volumen por réplica, que es lo que da un StatefulSet.
+  distractores:
+    c: Un ConfigMap guarda configuración; no ejecuta pods.
+  referencia: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: ¿Cómo se llaman los pods de un StatefulSet llamado bd con 3 réplicas?
+  opciones:
+  - id: a
+    texto: bd-7d9f-x1, bd-7d9f-k2, bd-7d9f-p3, con sufijos aleatorios
+  - id: b
+    texto: bd-0, bd-1 y bd-2
+  - id: c
+    texto: bd, bd y bd
+  - id: d
+    texto: bd-a, bd-b y bd-c
+  correctas:
+  - b
+  explicacion: El StatefulSet da a cada pod una identidad estable y ordenada, que
+    mantiene aunque se recree, junto con su propio almacenamiento.
+  distractores:
+    a: Los sufijos aleatorios son propios de los pods de un Deployment.
+    c: Dos objetos no pueden tener el mismo nombre en un namespace.
+    d: Se numeran con ordinales, no con letras.
+  referencia: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+- id: L05-006
+  tipo: matching
+  dificultad: media
+  objetivo: '5.4'
+  enunciado: Empareja cada estado con su causa más probable.
+  prompts:
+  - id: '1'
+    texto: Pending
+  - id: '2'
+    texto: ImagePullBackOff
+  - id: '3'
+    texto: CrashLoopBackOff
+  - id: '4'
+    texto: OOMKilled
+  opciones:
+  - id: a
+    texto: No hay nodo con recursos suficientes o la PVC no está vinculada
+  - id: b
+    texto: La imagen no existe o faltan credenciales del registro
+  - id: c
+    texto: El contenedor arranca y termina con error una y otra vez
+  - id: d
+    texto: El contenedor superó su límite de memoria
+  - id: e
+    texto: El Service no tiene selector
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Cada estado apunta a una fase distinta, la planificación, la descarga
+    de la imagen, la ejecución y los recursos.
+  distractores:
+    e: Un Service sin pods coincidentes no cambia el estado de los pods.
+  referencia: https://kubernetes.io/docs/concepts/workloads/pods/
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.4'
+  enunciado: Un pod está en CrashLoopBackOff. ¿Qué comando muestra la salida del contenedor
+    que acaba de fallar?
+  opciones:
+  - id: a
+    texto: kubectl get pods
+  - id: b
+    texto: kubectl scale deploy/web --replicas=0
+  - id: c
+    texto: kubectl logs <pod> --previous
+  - id: d
+    texto: kubectl apply -f web.yaml
+  correctas:
+  - c
+  explicacion: --previous muestra los registros de la ejecución anterior, la que terminó
+    con error, en lugar de la que acaba de arrancar.
+  distractores:
+    a: Muestra el estado, no la causa.
+    b: Pararía el servicio sin diagnosticar nada.
+    d: Volvería a aplicar el mismo manifiesto.
+  referencia: https://kubernetes.io/docs/concepts/workloads/pods/
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '5.3'
+  enunciado: Un Deployment tiene replicas 3 en el manifiesto y un HPA que lo ha escalado
+    a 8 por la carga. Alguien ejecuta kubectl apply con el manifiesto. ¿Qué pasa y
+    cómo se evita?
+  opciones:
+  - id: a
+    texto: Nada; el HPA tiene prioridad sobre apply
+  - id: b
+    texto: Las réplicas vuelven a 3 hasta que el HPA las sube de nuevo; se evita quitando
+      replicas del manifiesto
+  - id: c
+    texto: El HPA se borra
+  - id: d
+    texto: Kubernetes rechaza el apply
+  correctas:
+  - b
+  explicacion: apply fija replicas en 3 y el HPA tiene que volver a escalar, con un
+    bajón de capacidad. Si un HPA gestiona las réplicas, el manifiesto no debe fijarlas.
+  distractores:
+    a: apply cambia el campo replicas, que el HPA también modifica.
+    c: apply sobre el Deployment no afecta al objeto HPA.
+    d: La API acepta el cambio.
+  referencia: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/

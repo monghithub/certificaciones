@@ -1,0 +1,788 @@
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.1'
+  enunciado: Un sistema antiguo usa MD5 para comprobar que los ficheros de una actualización
+    no se han manipulado. ¿Qué problema tiene?
+  opciones:
+  - id: a
+    texto: 'MD5 está roto frente a colisiones: un atacante puede preparar dos ficheros
+      distintos con el mismo resumen'
+  - id: b
+    texto: MD5 es demasiado lento
+  - id: c
+    texto: MD5 no es determinista
+  - id: d
+    texto: Ninguno, si el fichero es pequeño
+  correctas:
+  - a
+  explicacion: MD5 y SHA-1 ya no son seguros para nada en que importe la resistencia
+    a colisiones. Hay que usar SHA-256 o superior y, mejor aún, firmar la actualización.
+  distractores:
+    b: MD5 es muy rápido; el problema es su seguridad.
+    c: Es determinista, como cualquier hash.
+    d: El tamaño no evita las colisiones.
+  referencia: https://csrc.nist.gov/pubs/fips/180-4/upd1/final
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: En la prueba, SHA-256 calculó unos 2,1 millones de hashes por segundo
+    y argon2id unos 12. ¿Por qué es eso bueno para guardar contraseñas?
+  opciones:
+  - id: a
+    texto: Porque argon2id produce resúmenes más cortos
+  - id: b
+    texto: Porque el servidor ahorra CPU
+  - id: c
+    texto: Porque argon2id cifra la contraseña y se puede recuperar
+  - id: d
+    texto: Porque un atacante con la base de datos robada solo puede probar unas pocas
+      contraseñas por segundo
+  correctas:
+  - d
+  explicacion: El atacante prueba candidatas y compara hashes. Una función lenta y
+    con mucha memoria hace el ataque órdenes de magnitud más caro, mientras que al
+    usuario legítimo le cuesta solo una fracción de segundo al iniciar sesión.
+  distractores:
+    a: La longitud del resultado no es la ventaja.
+    b: Es al revés; cuesta más CPU y memoria, a propósito.
+    c: argon2id no cifra; no se puede recuperar la contraseña.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Dos usuarios eligen la misma contraseña. Con argon2id y sal, ¿qué se
+    guarda?
+  opciones:
+  - id: a
+    texto: Dos hashes distintos, porque cada uno tiene su propia sal aleatoria
+  - id: b
+    texto: El mismo hash, y así se detecta que comparten contraseña
+  - id: c
+    texto: Un único registro compartido
+  - id: d
+    texto: La contraseña cifrada con la sal
+  correctas:
+  - a
+  explicacion: La sal se mezcla antes del hash y se guarda junto a él. Dos cálculos
+    sobre «contrasena» dieron resultados distintos en la prueba, y por eso las tablas
+    precalculadas no sirven.
+  distractores:
+    b: Sin sal pasaría eso, y es justo lo que la sal evita.
+    c: Cada usuario tiene su propio hash.
+    d: La sal no es una clave de cifrado.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L01-005
+  tipo: matching
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Empareja cada parte de la cadena $argon2id$v=19$m=65536,t=3,p=4$<sal>$<hash>
+    con su significado.
+  prompts:
+  - id: '1'
+    texto: argon2id
+  - id: '2'
+    texto: m=65536
+  - id: '3'
+    texto: t=3
+  - id: '4'
+    texto: p=4
+  opciones:
+  - id: a
+    texto: El algoritmo
+  - id: b
+    texto: La memoria, en KiB (64 MiB)
+  - id: c
+    texto: El número de pasadas
+  - id: d
+    texto: El paralelismo, en hilos
+  - id: e
+    texto: La longitud de la contraseña
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: La cadena lleva todo lo necesario para verificar. Si se endurecen los
+    parámetros, se puede recalcular el hash cuando el usuario inicie sesión.
+  distractores:
+    e: La longitud de la contraseña no se guarda; revelaría información.
+  referencia: https://www.rfc-editor.org/rfc/rfc9106.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Según la OWASP, ¿cuál es la configuración mínima de argon2id?
+  opciones:
+  - id: a
+    texto: 1 MiB de memoria y 1 iteración
+  - id: b
+    texto: 19 MiB de memoria, 2 iteraciones y 1 hilo
+  - id: c
+    texto: 600 000 iteraciones
+  - id: d
+    texto: Factor de trabajo 10
+  correctas:
+  - b
+  explicacion: Es el mínimo recomendado; los valores por defecto de argon2-cffi (64
+    MiB, 3 pasadas, 4 hilos) lo superan.
+  distractores:
+    a: Es demasiado poco para frenar un ataque.
+    c: Es la recomendación para PBKDF2, no para argon2id.
+    d: Es la recomendación para bcrypt.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L01-007
+  tipo: matching
+  dificultad: media
+  objetivo: '1.4'
+  enunciado: Empareja cada situación con el algoritmo de hash de contraseñas que recomienda
+    la OWASP.
+  prompts:
+  - id: '1'
+    texto: Una aplicación nueva sin restricciones
+  - id: '2'
+    texto: Una plataforma que exige cumplir FIPS-140
+  - id: '3'
+    texto: Un sistema existente que ya usa bcrypt
+  opciones:
+  - id: a
+    texto: argon2id
+  - id: b
+    texto: PBKDF2 con HMAC-SHA-256 y 600 000 iteraciones
+  - id: c
+    texto: bcrypt con factor de trabajo 10 o más, y el límite de 72 bytes
+  - id: d
+    texto: SHA-256 con sal
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: argon2id es la primera opción. PBKDF2 se usa cuando se exige FIPS,
+    y bcrypt se mantiene en sistemas que ya lo usan.
+  distractores:
+    d: SHA-256 es demasiado rápido para contraseñas, aunque lleve sal.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '1.4'
+  enunciado: Con bcrypt 5.0, ¿qué pasa al calcular el hash de una contraseña de más
+    de 72 bytes?
+  opciones:
+  - id: a
+    texto: Se usa la contraseña completa sin problema
+  - id: b
+    texto: Se trunca en silencio a 72 bytes
+  - id: c
+    texto: Lanza un error y pide truncarla de forma explícita
+  - id: d
+    texto: Se aplica SHA-256 automáticamente antes
+  correctas:
+  - c
+  explicacion: bcrypt solo usa los primeros 72 bytes. Las versiones anteriores de
+    la biblioteca truncaban en silencio, y dos contraseñas largas con el mismo principio
+    daban el mismo hash. La 5.0 lanza ValueError.
+  distractores:
+    a: bcrypt no puede usar más de 72 bytes.
+    b: Era el comportamiento de versiones anteriores, que causaba el problema.
+    d: La biblioteca no aplica ningún paso previo por su cuenta.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '2.1'
+  enunciado: ¿Qué algoritmo es hoy la opción por defecto para cifrar datos con una
+    clave simétrica?
+  opciones:
+  - id: a
+    texto: AES en modo ECB
+  - id: b
+    texto: DES
+  - id: c
+    texto: AES-GCM o ChaCha20-Poly1305, de cifrado autenticado
+  - id: d
+    texto: Base64
+  correctas:
+  - c
+  explicacion: Los dos son de cifrado autenticado, es decir, ocultan el contenido
+    y detectan modificaciones. ChaCha20-Poly1305 se prefiere en equipos sin aceleración
+    de AES.
+  distractores:
+    a: ECB revela los bloques repetidos.
+    b: DES tiene una clave de 56 bits y está obsoleto.
+    d: Base64 es una codificación; cualquiera la revierte sin clave.
+  referencia: https://cryptography.io/en/latest/hazmat/primitives/aead/
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.1'
+  enunciado: Un texto de 27 bytes cifrado con AES-GCM ocupó 43 bytes en la prueba.
+    ¿Qué son los 16 bytes de más?
+  opciones:
+  - id: a
+    texto: La etiqueta de autenticación, que detecta cualquier modificación
+  - id: b
+    texto: La clave cifrada
+  - id: c
+    texto: Relleno hasta completar un bloque
+  - id: d
+    texto: El nonce
+  correctas:
+  - a
+  explicacion: GCM añade una etiqueta de 16 bytes. Al descifrar, si el cifrado o los
+    datos asociados han cambiado, la etiqueta no coincide y se lanza InvalidTag.
+  distractores:
+    b: La clave nunca viaja con el cifrado.
+    c: GCM no necesita relleno; el cifrado mide lo mismo que el texto, más la etiqueta.
+    d: El nonce se guarda aparte, junto al cifrado, y no forma parte de esos 43 bytes.
+  referencia: https://csrc.nist.gov/pubs/sp/800/38/d/final
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.2'
+  enunciado: Cifras el número de tarjeta de cada cliente con AES-GCM y usas el id
+    del cliente como datos asociados. Un atacante con acceso a la base de datos copia
+    el campo cifrado del cliente 42 al 43. ¿Qué pasa al descifrar el del 43?
+  opciones:
+  - id: a
+    texto: Se obtiene la tarjeta del cliente 42
+  - id: b
+    texto: Falla con InvalidTag, porque los datos asociados ya no coinciden
+  - id: c
+    texto: Se obtiene un texto sin sentido
+  - id: d
+    texto: Se obtiene la tarjeta del 43
+  correctas:
+  - b
+  explicacion: Los datos asociados no se cifran, pero entran en la etiqueta. En la
+    prueba, descifrar con cliente=43 lo que se cifró con cliente=42 dio InvalidTag.
+  distractores:
+    a: Pasaría sin datos asociados; son justo lo que lo impide.
+    c: El cifrado autenticado no devuelve texto corrupto; falla.
+    d: La tarjeta del 43 se sobrescribió con la copia.
+  referencia: https://cryptography.io/en/latest/hazmat/primitives/aead/
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.3'
+  enunciado: Un servicio cifra cada transferencia con AES-GCM, la misma clave y un
+    nonce fijo. Un atacante conoce el texto de una transferencia. ¿Qué puede hacer?
+  opciones:
+  - id: a
+    texto: Nada, porque AES es seguro
+  - id: b
+    texto: Obtener la clave
+  - id: c
+    texto: Solo saber cuántas transferencias hay
+  - id: d
+    texto: Obtener el texto de las demás transferencias, porque c1 XOR c2 = p1 XOR
+      p2
+  correctas:
+  - d
+  explicacion: Con el mismo nonce y la misma clave, los mensajes se combinan con el
+    mismo flujo. En la prueba, conocer «transferir 100 EUR a Ana» bastó para leer
+    «transferir 900 EUR a Luis».
+  distractores:
+    a: AES es seguro bien usado; repetir el nonce rompe la construcción.
+    b: No obtiene la clave, pero no la necesita para leer los mensajes.
+    c: Obtiene mucho más que eso.
+  referencia: https://csrc.nist.gov/pubs/sp/800/38/d/final
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.3'
+  enunciado: Con AES-ECB, tres bloques iguales seguidos de uno distinto dieron los
+    cifrados 19ecd638, 19ecd638, 19ecd638 y 5fc2663a. ¿Qué revela?
+  opciones:
+  - id: a
+    texto: Qué partes de los datos se repiten, aunque no se conozca la clave
+  - id: b
+    texto: La clave
+  - id: c
+    texto: Nada, porque son números aleatorios
+  - id: d
+    texto: Que el cifrado ha fallado
+  correctas:
+  - a
+  explicacion: ECB cifra cada bloque por separado, sin nonce ni encadenamiento. Los
+    patrones de los datos se ven en el cifrado.
+  distractores:
+    b: La clave no se deduce de esta repetición.
+    c: La repetición es exacta y deliberada en ECB.
+    d: Es justo el comportamiento de ECB.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+- id: L02-007
+  tipo: matching
+  dificultad: media
+  objetivo: '2.4'
+  enunciado: Empareja cada situación con la forma correcta de obtener la clave de
+    cifrado.
+  prompts:
+  - id: '1'
+    texto: Una clave nueva para cifrar ficheros
+  - id: '2'
+    texto: El usuario cifra una copia de seguridad con una contraseña que recuerda
+  - id: '3'
+    texto: Varias claves distintas a partir de un secreto aleatorio maestro
+  opciones:
+  - id: a
+    texto: Generarla al azar con AESGCM.generate_key o un generador criptográfico
+  - id: b
+    texto: Derivarla con una función lenta como argon2id o scrypt
+  - id: c
+    texto: Derivarlas con HKDF, con una etiqueta distinta para cada uso
+  - id: d
+    texto: Usar los primeros 32 bytes de la contraseña
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Una contraseña tiene poca entropía y hace falta una función lenta.
+    Un secreto que ya es aleatorio solo necesita HKDF para separar usos.
+  distractores:
+    d: Una contraseña no es una clave; tiene mucha menos entropía y se adivina.
+  referencia: https://www.rfc-editor.org/rfc/rfc5869.html
+- id: L03-001
+  tipo: matching
+  dificultad: media
+  objetivo: '3.1'
+  enunciado: Empareja cada operación con la clave que se usa.
+  prompts:
+  - id: '1'
+    texto: Firmar una actualización de software
+  - id: '2'
+    texto: Comprobar la firma de la actualización
+  - id: '3'
+    texto: Cifrar una clave simétrica para enviársela a alguien
+  - id: '4'
+    texto: Descifrar esa clave simétrica
+  opciones:
+  - id: a
+    texto: La clave privada de quien publica
+  - id: b
+    texto: La clave pública de quien publica
+  - id: c
+    texto: La clave pública del destinatario
+  - id: d
+    texto: La clave privada del destinatario
+  - id: e
+    texto: Una contraseña compartida
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: La privada firma y descifra; la pública verifica y cifra. La privada
+    nunca sale de su dueño.
+  distractores:
+    e: Las operaciones de clave pública no usan contraseñas compartidas.
+  referencia: https://www.rfc-editor.org/rfc/rfc8032.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: En la prueba, al cambiar «60» por «6» en un mensaje firmado con Ed25519,
+    ¿qué pasó al verificar?
+  opciones:
+  - id: a
+    texto: Verificó, porque la firma se refiere al remitente, no al contenido
+  - id: b
+    texto: Lanzó InvalidSignature
+  - id: c
+    texto: Devolvió el mensaje original
+  - id: d
+    texto: Verificó solo la primera parte del mensaje
+  correctas:
+  - b
+  explicacion: La firma cubre el contenido completo. Cualquier cambio la invalida,
+    y por eso sirve para detectar manipulaciones.
+  distractores:
+    a: La firma demuestra el origen y la integridad del contenido.
+    c: Una firma no guarda el mensaje ni lo restaura.
+    d: Cubre el mensaje entero.
+  referencia: https://www.rfc-editor.org/rfc/rfc8032.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.2'
+  enunciado: Tu servicio debe emitir tokens que validen varias empresas externas,
+    sin que ellas puedan emitir tokens válidos. ¿Qué usas?
+  opciones:
+  - id: a
+    texto: Una firma con clave privada, como EdDSA o RS256, y repartir la clave pública
+  - id: b
+    texto: HMAC con un secreto compartido con cada empresa
+  - id: c
+    texto: Cifrar el token con AES-GCM
+  - id: d
+    texto: Un hash SHA-256 del token
+  correctas:
+  - a
+  explicacion: Con firma, verificar solo requiere la pública, que no permite firmar.
+    Con HMAC, quien puede verificar también puede crear tokens.
+  distractores:
+    b: Cualquier empresa con el secreto podría emitir tokens válidos.
+    c: Cifrar oculta el contenido, pero no permite a terceros comprobar el origen
+      sin la clave.
+    d: Cualquiera puede calcular un hash; no demuestra quién lo emitió.
+  referencia: https://www.rfc-editor.org/rfc/rfc8725.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: ¿Por qué se compara un HMAC con hmac.compare_digest y no con ==?
+  opciones:
+  - id: a
+    texto: Porque == no funciona con cadenas hexadecimales
+  - id: b
+    texto: Porque compare_digest es más rápido
+  - id: c
+    texto: Porque compare_digest también verifica la firma digital
+  - id: d
+    texto: Porque == puede tardar distinto según cuántos caracteres coincidan, y eso
+      permite adivinar la etiqueta poco a poco
+  correctas:
+  - d
+  explicacion: compare_digest tarda lo mismo con independencia de dónde esté la primera
+    diferencia. Así no filtra información por el tiempo de respuesta.
+  distractores:
+    a: == compara cadenas sin problema; el riesgo es el tiempo que tarda.
+    b: La velocidad no es la razón; tarda lo mismo a propósito.
+    c: Solo compara dos valores; no sabe nada de firmas.
+  referencia: https://docs.python.org/3/library/hmac.html#hmac.compare_digest
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.3'
+  enunciado: En TLS 1.3 las claves del acuerdo son efímeras. ¿Qué consecuencia tiene
+    si años después se roba la clave privada del certificado del servidor?
+  opciones:
+  - id: a
+    texto: Se pueden descifrar las conexiones grabadas antes del robo
+  - id: b
+    texto: Las conexiones grabadas siguen protegidas, porque sus claves no dependían
+      de la del certificado
+  - id: c
+    texto: Se puede obtener la contraseña de los usuarios
+  - id: d
+    texto: No pasa nada, ni siquiera con conexiones futuras
+  correctas:
+  - b
+  explicacion: El certificado solo sirve para firmar el saludo. Las claves de cada
+    conexión salen de un acuerdo efímero que se descarta, y eso es el secreto hacia
+    delante (forward secrecy).
+  distractores:
+    a: Pasaría con el antiguo intercambio por RSA, no con claves efímeras.
+    c: Las contraseñas no dependen de la clave del certificado.
+    d: Con la clave robada sí se podría suplantar al servidor en conexiones nuevas,
+      hasta revocar el certificado.
+  referencia: https://www.rfc-editor.org/rfc/rfc7748.html
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.4'
+  enunciado: Un JWT firmado con HS256 lleva en la carga el número de teléfono del
+    usuario. ¿Qué problema hay?
+  opciones:
+  - id: a
+    texto: La carga se lee decodificando Base64URL, sin ninguna clave, así que el
+      teléfono queda a la vista
+  - id: b
+    texto: Ninguno, porque está firmado
+  - id: c
+    texto: El token deja de ser válido
+  - id: d
+    texto: HS256 no admite números
+  correctas:
+  - a
+  explicacion: La firma impide modificar el token, no leerlo. En la prueba, la carga
+    se leyó sin la clave.
+  distractores:
+    b: Firmar no es cifrar.
+    c: El token es válido; el problema es la privacidad.
+    d: La carga admite cualquier JSON.
+  referencia: https://www.rfc-editor.org/rfc/rfc8725.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '4.1'
+  enunciado: ¿Qué vincula un certificado X.509?
+  opciones:
+  - id: a
+    texto: Una contraseña con un usuario
+  - id: b
+    texto: Una clave privada con una dirección IP
+  - id: c
+    texto: Una clave pública con unos nombres, durante un periodo, con la firma de
+      una CA
+  - id: d
+    texto: Un dominio con su registro DNS
+  correctas:
+  - c
+  explicacion: La CA firma ese vínculo, y quien confía en la CA confía en que la clave
+    pública pertenece a esos nombres.
+  distractores:
+    a: Los certificados no tratan contraseñas.
+    b: La clave privada nunca va en el certificado.
+    d: El DNS es otro sistema; el certificado no depende de él.
+  referencia: https://www.rfc-editor.org/rfc/rfc5280.html
+- id: L04-002
+  tipo: matching
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: Empareja cada extensión del certificado de api.tienda.internal con su
+    función.
+  prompts:
+  - id: '1'
+    texto: 'Subject Alternative Name: DNS:api.tienda.internal'
+  - id: '2'
+    texto: 'Basic Constraints: CA:FALSE'
+  - id: '3'
+    texto: 'Extended Key Usage: serverAuth'
+  opciones:
+  - id: a
+    texto: Para qué nombres vale
+  - id: b
+    texto: Que no puede firmar otros certificados
+  - id: c
+    texto: Que sirve para autenticar un servidor TLS
+  - id: d
+    texto: Cuántos días dura
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Son las extensiones que se pusieron en ext.cnf al firmar la CSR.
+  distractores:
+    d: La validez va en los campos notBefore y notAfter, no en una extensión.
+  referencia: https://www.rfc-editor.org/rfc/rfc5280.html
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: ¿Qué contiene una CSR?
+  opciones:
+  - id: a
+    texto: La clave pública y los datos del certificado, firmados con la clave privada,
+      que no se incluye
+  - id: b
+    texto: La clave privada del servidor, para que la CA la guarde
+  - id: c
+    texto: El certificado ya firmado
+  - id: d
+    texto: La clave de la CA
+  correctas:
+  - a
+  explicacion: La firma de la CSR demuestra que quien la envía tiene la clave privada,
+    sin enviarla. En la prueba, la CSR solo mostraba el nombre CN=api.tienda.internal.
+  distractores:
+    b: La clave privada nunca sale del servidor.
+    c: El certificado firmado es lo que devuelve la CA.
+    d: La clave de la CA solo la tiene la CA.
+  referencia: https://docs.openssl.org/3.5/man1/openssl-req/
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '4.2'
+  enunciado: ¿Por qué la clave de una CA interna es lo más delicado del sistema?
+  opciones:
+  - id: a
+    texto: Porque caduca antes que las demás
+  - id: b
+    texto: Porque quien la tenga puede emitir certificados válidos para cualquier
+      nombre interno y suplantar servicios
+  - id: c
+    texto: Porque ocupa más espacio
+  - id: d
+    texto: Porque los clientes la necesitan para conectar
+  correctas:
+  - b
+  explicacion: Los clientes confían en todo lo que firme la CA. Su clave se guarda
+    fuera de los servidores, idealmente en un HSM o un servicio de gestión de claves.
+  distractores:
+    a: En la prueba, la CA dura 3650 días y el servidor, 90.
+    c: El tamaño no es el riesgo.
+    d: Los clientes necesitan el certificado de la CA (ca.crt), no su clave.
+  referencia: https://www.rfc-editor.org/rfc/rfc5280.html
+- id: L04-006
+  tipo: matching
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: Empareja cada resultado de openssl verify con su causa.
+  prompts:
+  - id: '1'
+    texto: 'error 20: unable to get local issuer certificate'
+  - id: '2'
+    texto: 'error 62: hostname mismatch'
+  - id: '3'
+    texto: 'error 10: certificate has expired'
+  opciones:
+  - id: a
+    texto: No se tiene la CA, o falta un intermedio en la cadena
+  - id: b
+    texto: El nombre comprobado no está en el SAN
+  - id: c
+    texto: Ha pasado la fecha notAfter
+  - id: d
+    texto: La clave es demasiado corta
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: En la prueba, verificar sin -CAfile dio el 20 y con otro nombre, el
+    62.
+  distractores:
+    d: Una clave débil daría otro error distinto, relacionado con el nivel de seguridad.
+  referencia: https://docs.openssl.org/3.5/man1/openssl-verify/
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.1'
+  enunciado: Una aplicación genera los tokens de recuperación de contraseña con random.getrandbits(64).
+    ¿Qué riesgo demostró la prueba?
+  opciones:
+  - id: a
+    texto: Que los tokens son demasiado cortos para la base de datos
+  - id: b
+    texto: Que tras observar 624 salidas se reconstruye el estado y se predicen los
+      tokens siguientes
+  - id: c
+    texto: Que random repite el mismo valor cada pocos segundos
+  - id: d
+    texto: Ninguno, porque la semilla es desconocida
+  correctas:
+  - b
+  explicacion: Mersenne Twister es predecible a partir de sus salidas. En la prueba,
+    la predicción coincidió con el token siguiente de la víctima.
+  distractores:
+    a: El tamaño no es el problema; la previsibilidad sí.
+    c: No repite valores en ese plazo; es predecible, que es peor.
+    d: No hace falta conocer la semilla; basta con observar salidas.
+  referencia: https://docs.python.org/3/library/random.html
+- id: L05-002
+  tipo: matching
+  dificultad: baja
+  objetivo: '5.1'
+  enunciado: Empareja cada uso con el generador adecuado en Python.
+  prompts:
+  - id: '1'
+    texto: Barajar las preguntas de un examen de práctica
+  - id: '2'
+    texto: Generar el token de una sesión
+  - id: '3'
+    texto: Generar una clave AES de 256 bits
+  opciones:
+  - id: a
+    texto: random
+  - id: b
+    texto: secrets.token_urlsafe
+  - id: c
+    texto: os.urandom(32)
+  - id: d
+    texto: hash(time.time())
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Si nadie gana nada adivinando el valor, random sirve. Si el valor da
+    acceso, hace falta un generador criptográfico.
+  distractores:
+    d: La hora es predecible, y hash no la hace aleatoria.
+  referencia: https://docs.python.org/3/library/secrets.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: ¿Por qué se compara un token recibido con secrets.compare_digest y no
+    con ==?
+  opciones:
+  - id: a
+    texto: Para que el tiempo de la comparación no revele cuántos caracteres coinciden
+  - id: b
+    texto: Porque == no compara bien los bytes
+  - id: c
+    texto: Porque compare_digest descifra el token
+  - id: d
+    texto: Para que sea más rápido
+  correctas:
+  - a
+  explicacion: Es el mismo motivo que con un HMAC. Una comparación que termina en
+    la primera diferencia filtra información por el tiempo de respuesta.
+  distractores:
+    b: == compara bien; el problema es el tiempo que tarda.
+    c: Solo compara; no descifra nada.
+    d: Tarda lo mismo siempre, a propósito.
+  referencia: https://docs.python.org/3/library/secrets.html
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '5.3'
+  enunciado: ¿Qué es el cifrado de sobre (envelope encryption)?
+  opciones:
+  - id: a
+    texto: Cifrar dos veces el mismo dato con la misma clave
+  - id: b
+    texto: Enviar los secretos por correo cifrado
+  - id: c
+    texto: Cifrar cada dato con su propia clave y cifrar esa clave con una clave maestra
+      que no sale de un servicio de gestión de claves
+  - id: d
+    texto: Guardar la clave en la misma tabla que los datos
+  correctas:
+  - c
+  explicacion: Así la clave maestra nunca toca los datos ni los servidores de la aplicación,
+    y rotarla no obliga a volver a cifrar todos los datos.
+  distractores:
+    a: Cifrar dos veces con la misma clave no añade seguridad.
+    b: El correo no es un mecanismo de gestión de claves.
+    d: Es justo lo que se quiere evitar; quien roba los datos se lleva la clave.
+  referencia: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.4'
+  enunciado: Alguien subió una contraseña a un repositorio privado y la borró con
+    otro commit a los cinco minutos. ¿Qué hay que hacer?
+  opciones:
+  - id: a
+    texto: Nada, porque el repositorio es privado y ya se borró
+  - id: b
+    texto: Esperar a ver si alguien la usa
+  - id: c
+    texto: Hacer el repositorio público para comprobar que no está
+  - id: d
+    texto: Darla por comprometida y cambiarla
+  correctas:
+  - d
+  explicacion: Sigue en la historia de Git, la tienen los clones y puede haber pasado
+    por la CI o por cachés. Lo seguro es rotarla.
+  distractores:
+    a: El commit sigue en la historia y en cualquier clon hecho en esos minutos.
+    c: La expondría a todo el mundo.
+    b: Si alguien la usa, ya habrá hecho el daño.
+  referencia: https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning

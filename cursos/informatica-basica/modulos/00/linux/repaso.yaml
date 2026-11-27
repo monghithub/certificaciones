@@ -1,0 +1,848 @@
+- id: L01-001
+  tipo: matching
+  dificultad: baja
+  objetivo: '1.1'
+  enunciado: Empareja cada contenido con el directorio donde debe estar según la FHS.
+  prompts:
+  - id: '1'
+    texto: La configuración de nginx
+  - id: '2'
+    texto: Los registros de los servicios
+  - id: '3'
+    texto: Un programa que compilas e instalas a mano
+  - id: '4'
+    texto: Ficheros temporales
+  opciones:
+  - id: a
+    texto: /etc
+  - id: b
+    texto: /var/log
+  - id: c
+    texto: /usr/local
+  - id: d
+    texto: /tmp
+  - id: e
+    texto: /proc
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Seguir la jerarquía estándar hace que cualquier administrador encuentre
+    las cosas donde espera, y evita mezclar lo tuyo con lo del sistema de paquetes.
+  distractores:
+    e: /proc es virtual; lo genera el núcleo con información de los procesos.
+  referencia: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '1.2'
+  enunciado: ¿Qué permisos da chmod 640 a un fichero?
+  opciones:
+  - id: a
+    texto: 'rw-r----- : el propietario lee y escribe, el grupo lee, el resto nada'
+  - id: b
+    texto: 'rwxr----- : el propietario también puede ejecutar'
+  - id: c
+    texto: 'rw-rw-r-- : todos pueden leer'
+  - id: d
+    texto: 'r--rw---- : el grupo puede escribir'
+  correctas:
+  - a
+  explicacion: Cada cifra suma 4 (r), 2 (w) y 1 (x). 6 es rw-, 4 es r-- y 0 es ---.
+  distractores:
+    b: Haría falta 740.
+    c: Sería 664.
+    d: Sería 460.
+  referencia: https://man7.org/linux/man-pages/man1/chmod.1.html
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: Al ejecutar ./s.sh aparece «Permiso denegado», aunque el fichero se puede
+    leer. ¿Qué falta?
+  opciones:
+  - id: a
+    texto: Ser root
+  - id: b
+    texto: El permiso de ejecución, que se añade con chmod u+x s.sh
+  - id: c
+    texto: Cambiar la extensión a .bin
+  - id: d
+    texto: Permiso de escritura en el fichero
+  correctas:
+  - b
+  explicacion: Para ejecutar un fichero directamente hace falta el bit x. En la prueba,
+    tras chmod u+x, el script imprimió hola.
+  distractores:
+    a: No hace falta root; basta el permiso de ejecución para el propietario.
+    c: La extensión no influye en los permisos.
+    d: Escribir no da permiso para ejecutar.
+  referencia: https://man7.org/linux/man-pages/man1/chmod.1.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '1.2'
+  enunciado: Un fichero tiene permisos r--r--r-- y es tuyo, pero el directorio que
+    lo contiene tiene rwx para ti. ¿Puedes borrarlo?
+  opciones:
+  - id: a
+    texto: No, porque el fichero no tiene permiso de escritura
+  - id: b
+    texto: Solo si eres root
+  - id: c
+    texto: Solo vaciándolo primero
+  - id: d
+    texto: Sí, porque borrar quita una entrada del directorio, y en el directorio
+      tienes escritura
+  correctas:
+  - d
+  explicacion: El nombre del fichero es una entrada del directorio. Crear, borrar
+    o renombrar dependen del permiso w del directorio, no del fichero. rm puede pedir
+    confirmación, pero lo permite.
+  distractores:
+    a: La escritura del fichero controla modificar su contenido, no borrarlo.
+    b: Basta con el permiso del directorio.
+    c: Vaciarlo requiere escritura en el fichero, que no tienes, y no hace falta para
+      borrarlo.
+  referencia: https://man7.org/linux/man-pages/man2/unlink.2.html
+- id: L01-005
+  tipo: matching
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Empareja cada umask con los permisos de un fichero nuevo creado con touch.
+  prompts:
+  - id: '1'
+    texto: umask 022
+  - id: '2'
+    texto: umask 077
+  - id: '3'
+    texto: umask 027
+  opciones:
+  - id: a
+    texto: 644 rw-r--r--
+  - id: b
+    texto: 600 rw-------
+  - id: c
+    texto: 640 rw-r-----
+  - id: d
+    texto: 777 rwxrwxrwx
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Los ficheros parten de 666 y la umask quita bits. En la prueba, 022
+    dio 644 y 077 dio 600.
+  distractores:
+    d: Ni siquiera sin umask un fichero nuevo tiene el bit de ejecución, porque se
+      parte de 666.
+  referencia: https://man7.org/linux/man-pages/man2/umask.2.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.4'
+  enunciado: /usr/bin/passwd tiene permisos -rwsr-xr-x y es de root. ¿Por qué un usuario
+    normal puede cambiar su contraseña, guardada en /etc/shadow, que solo root puede
+    escribir?
+  opciones:
+  - id: a
+    texto: Porque /etc/shadow tiene permisos especiales para passwd
+  - id: b
+    texto: Porque passwd pide la contraseña de root
+  - id: c
+    texto: Porque el bit setuid hace que passwd se ejecute con la identidad de su
+      propietario, root
+  - id: d
+    texto: Porque el sistema ignora los permisos para los programas de /usr/bin
+  correctas:
+  - c
+  explicacion: La s en lugar de la x del propietario es el bit setuid. Por eso los
+    programas setuid de root son pocos y muy revisados.
+  distractores:
+    a: /etc/shadow tiene rw-r----- y es de root; no da permisos a ningún programa.
+    b: passwd pide tu contraseña actual, no la de root.
+    d: Los permisos se aplican a cualquier programa.
+  referencia: https://man7.org/linux/man-pages/man1/chmod.1.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.4'
+  enunciado: /tmp tiene permisos drwxrwxrwt. ¿Qué hace la t final?
+  opciones:
+  - id: a
+    texto: Todos pueden crear ficheros, pero cada uno solo puede borrar los suyos
+  - id: b
+    texto: Los ficheros se borran al reiniciar
+  - id: c
+    texto: Los ficheros nuevos heredan el grupo del directorio
+  - id: d
+    texto: Solo root puede listar el contenido
+  correctas:
+  - a
+  explicacion: Es el bit pegajoso (sticky bit, 1000). Sin él, con rwx para todos,
+    cualquiera podría borrar los temporales de otros usuarios.
+  distractores:
+    b: El borrado al reiniciar depende de la configuración del sistema, no de este
+      bit.
+    c: Eso es el bit setgid en un directorio.
+    d: La r del resto permite listar a cualquiera.
+  referencia: https://man7.org/linux/man-pages/man1/chmod.1.html
+- id: L02-001
+  tipo: matching
+  dificultad: baja
+  objetivo: '2.1'
+  enunciado: Empareja cada estado de la columna STAT de ps con su significado.
+  prompts:
+  - id: '1'
+    texto: R
+  - id: '2'
+    texto: S
+  - id: '3'
+    texto: Z
+  - id: '4'
+    texto: T
+  opciones:
+  - id: a
+    texto: En ejecución o listo para ejecutarse
+  - id: b
+    texto: Dormido, esperando un evento
+  - id: c
+    texto: 'Zombi: terminado, con el código pendiente de que lo recoja su padre'
+  - id: d
+    texto: Detenido
+  - id: e
+    texto: Sin permisos
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: El sleep de la prueba aparecía como S porque espera a su temporizador.
+    Un zombi no consume CPU; solo ocupa una entrada en la tabla de procesos.
+  distractores:
+    e: Los permisos no son un estado del proceso.
+  referencia: https://man7.org/linux/man-pages/man1/ps.1.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.1'
+  enunciado: ¿Qué contiene /proc/self/status?
+  opciones:
+  - id: a
+    texto: 'El estado del proceso que lo lee: nombre, estado, PID del padre y más'
+  - id: b
+    texto: El estado de los servicios del sistema
+  - id: c
+    texto: Un fichero de configuración que hay que editar
+  - id: d
+    texto: El registro del arranque
+  correctas:
+  - a
+  explicacion: /proc es un sistema de ficheros virtual que genera el núcleo. /proc/self
+    apunta al propio proceso; en la prueba, cat mostró su nombre, su estado R y el
+    PID de su padre.
+  distractores:
+    b: Los servicios se consultan con systemctl.
+    c: /proc no se edita; lo genera el núcleo.
+    d: Los registros están en el journal o en /var/log.
+  referencia: https://man7.org/linux/man-pages/man5/proc.5.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.2'
+  enunciado: Un servicio no responde y quieres pararlo sin perder lo que tenga pendiente.
+    ¿Qué haces?
+  opciones:
+  - id: a
+    texto: kill -9 de inmediato
+  - id: b
+    texto: Reiniciar el servidor
+  - id: c
+    texto: Enviar SIGTERM, esperar unos segundos y solo si sigue vivo enviar SIGKILL
+  - id: d
+    texto: Borrar su fichero de PID
+  correctas:
+  - c
+  explicacion: SIGTERM le da la oportunidad de cerrar conexiones y guardar. SIGKILL
+    es el último recurso, porque no permite reaccionar. Es lo que hacen systemctl
+    stop y docker stop.
+  distractores:
+    a: SIGKILL no deja cerrar nada; se puede perder información.
+    b: Afecta a todo lo demás que corre en el servidor.
+    d: Borrar el fichero no para el proceso.
+  referencia: https://man7.org/linux/man-pages/man7/signal.7.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.3'
+  enunciado: Una aplicación en un contenedor tarda siempre 10 segundos en pararse
+    con docker stop y acaba con el código 137. ¿Cuál es la causa más probable?
+  opciones:
+  - id: a
+    texto: El contenedor tiene poca memoria
+  - id: b
+    texto: Como PID 1 no trata SIGTERM, no termina, y Docker la mata con SIGKILL al
+      acabar el plazo
+  - id: c
+    texto: Docker espera 10 segundos antes de enviar la primera señal
+  - id: d
+    texto: La imagen es demasiado grande
+  correctas:
+  - b
+  explicacion: Al PID 1 de un espacio de nombres solo le llegan las señales para las
+    que tiene un manejador, salvo SIGKILL y SIGSTOP. Si la aplicación no la captura,
+    sigue viva y recibe SIGKILL a los 10 segundos, de ahí el 137.
+  distractores:
+    a: Un OOM también da 137, pero no explica la espera exacta del plazo en cada parada.
+    c: Docker envía SIGTERM de inmediato y solo espera para el SIGKILL.
+    d: El tamaño de la imagen no influye en la parada.
+  referencia: https://man7.org/linux/man-pages/man7/pid_namespaces.7.html
+- id: L02-007
+  tipo: matching
+  dificultad: media
+  objetivo: '2.4'
+  enunciado: Empareja cada código de salida con su causa más probable.
+  prompts:
+  - id: '1'
+    texto: '0'
+  - id: '2'
+    texto: '143'
+  - id: '3'
+    texto: '137'
+  - id: '4'
+    texto: 1, tras ejecutar grep
+  opciones:
+  - id: a
+    texto: Terminó bien
+  - id: b
+    texto: Lo terminó SIGTERM (128 + 15) sin capturarla
+  - id: c
+    texto: Lo mató SIGKILL (128 + 9), por ejemplo por falta de memoria
+  - id: d
+    texto: grep no encontró coincidencias
+  - id: e
+    texto: El comando no existe
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Son los códigos de la prueba. La shell suma 128 al número de la señal
+    que mató al proceso.
+  distractores:
+    e: Un comando que no existe da 127.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#Exit-Status
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '2.4'
+  enunciado: ¿Dónde deja bash el código de salida del último comando?
+  opciones:
+  - id: a
+    texto: En $!
+  - id: b
+    texto: En $$
+  - id: c
+    texto: En /proc/self/exit
+  - id: d
+    texto: En $?
+  correctas:
+  - d
+  explicacion: $? se sobrescribe con cada comando, así que hay que leerlo justo después
+    o guardarlo en una variable.
+  distractores:
+    a: $! es el PID del último proceso lanzado en segundo plano.
+    b: $$ es el PID de la propia shell.
+    c: Ese fichero no existe.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#Special-Parameters
+- id: L03-001
+  tipo: matching
+  dificultad: baja
+  objetivo: '3.1'
+  enunciado: Empareja cada redirección con su efecto.
+  prompts:
+  - id: '1'
+    texto: cmd > salida.txt
+  - id: '2'
+    texto: cmd >> salida.txt
+  - id: '3'
+    texto: cmd 2> errores.log
+  - id: '4'
+    texto: cmd 2>/dev/null
+  opciones:
+  - id: a
+    texto: La salida estándar al fichero, sobrescribiéndolo
+  - id: b
+    texto: La salida estándar al final del fichero
+  - id: c
+    texto: La salida de errores a un fichero
+  - id: d
+    texto: Descarta los errores
+  - id: e
+    texto: Lee la entrada desde el fichero
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: El número delante de > indica el descriptor; sin número, es el 1. /dev/null
+    descarta lo que recibe.
+  distractores:
+    e: Leer la entrada desde un fichero es cmd < fichero.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#Redirections
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.1'
+  enunciado: Ejecutas ls /noexiste . 2>&1 > o2.txt. ¿Qué hay en o2.txt?
+  opciones:
+  - id: a
+    texto: Solo el listado; el error sale por la terminal
+  - id: b
+    texto: El listado y el error
+  - id: c
+    texto: Solo el error
+  - id: d
+    texto: Nada, porque la orden falla
+  correctas:
+  - a
+  explicacion: Las redirecciones se aplican de izquierda a derecha. Al procesar 2>&1,
+    la salida estándar aún es la terminal, y ahí se queda stderr; después stdout se
+    redirige al fichero. Para juntar los dos, > o2.txt 2>&1.
+  distractores:
+    b: Eso ocurre con el otro orden, > o2.txt 2>&1.
+    c: El listado del directorio actual sí va al fichero.
+    d: ls muestra lo que puede aunque uno de los argumentos falle.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#Redirections
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: ¿Por qué uniq -c se pone detrás de sort?
+  opciones:
+  - id: a
+    texto: Porque uniq solo funciona con números
+  - id: b
+    texto: Por rendimiento; el resultado sería el mismo sin sort
+  - id: c
+    texto: Porque uniq solo junta líneas iguales que estén seguidas
+  - id: d
+    texto: Porque uniq ordena al revés
+  correctas:
+  - c
+  explicacion: Sin ordenar antes, dos apariciones separadas del mismo valor se contarían
+    por separado.
+  distractores:
+    a: uniq trabaja con cualquier línea de texto.
+    b: El resultado cambia si las líneas iguales no están seguidas.
+    d: uniq no ordena.
+  referencia: https://man7.org/linux/man-pages/man1/uniq.1.html
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.3'
+  enunciado: ¿Qué devuelve echo $? tras ejecutar false | true sin opciones especiales?
+  opciones:
+  - id: a
+    texto: 1, porque falló el primer comando
+  - id: b
+    texto: 0, porque el código de una tubería es el del último comando
+  - id: c
+    texto: Un error de sintaxis
+  - id: d
+    texto: '2'
+  correctas:
+  - b
+  explicacion: Sin pipefail, un fallo en medio de la tubería pasa inadvertido. En
+    la prueba devolvió 0, y con set -o pipefail, 1.
+  distractores:
+    a: Eso es lo que ocurre con set -o pipefail.
+    c: La orden es válida.
+    d: Ningún comando de la tubería devuelve 2.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#Pipelines
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.4'
+  enunciado: Quieres borrar todos los .tmp de un árbol, y algunos nombres tienen espacios.
+    ¿Qué orden es segura?
+  opciones:
+  - id: a
+    texto: rm $(find . -name '*.tmp')
+  - id: b
+    texto: find . -name '*.tmp' | xargs rm
+  - id: c
+    texto: ls -R | grep .tmp | xargs rm
+  - id: d
+    texto: find . -name '*.tmp' -print0 | xargs -0 rm
+  correctas:
+  - d
+  explicacion: -print0 y -0 separan los nombres con el carácter nulo, que no puede
+    aparecer en un nombre de fichero, así que los espacios no los parten.
+  distractores:
+    a: La sustitución sin comillas parte los nombres por los espacios.
+    b: xargs separa por espacios y saltos de línea, así que también parte los nombres.
+    c: La salida de ls no es fiable para procesar nombres y pierde las rutas.
+  referencia: https://man7.org/linux/man-pages/man1/xargs.1.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: En un directorio con los ficheros mi, informe.txt y «mi informe.txt»,
+    f="mi informe.txt" y ejecutas ls -1 $f. ¿Qué mostró en la prueba?
+  opciones:
+  - id: a
+    texto: mi informe.txt
+  - id: b
+    texto: Un error, porque el fichero no existe
+  - id: c
+    texto: 'informe.txt y mi: la variable se partió en dos argumentos'
+  - id: d
+    texto: Los tres ficheros
+  correctas:
+  - c
+  explicacion: Sin comillas, la variable se parte por los espacios. ls recibió mi
+    e informe.txt, dos ficheros distintos que existían. Con «$f» entre comillas mostró
+    mi informe.txt.
+  distractores:
+    a: Es lo que muestra con comillas.
+    b: Los dos trozos existían como ficheros, por eso no hubo error, y eso lo hace
+      más peligroso.
+    d: Solo recibió dos argumentos.
+  referencia: https://www.shellcheck.net/wiki/SC2086
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: Un script se llama con dos argumentos, «mi informe.txt» y otro. ¿Cuántos
+    argumentos recibe una función llamada con "$@"?
+  opciones:
+  - id: a
+    texto: 'Dos: los reenvía tal cual llegaron'
+  - id: b
+    texto: Tres, porque se parte por los espacios
+  - id: c
+    texto: Uno, porque se juntan en una cadena
+  - id: d
+    texto: Ninguno
+  correctas:
+  - a
+  explicacion: '"$@" expande cada argumento como una palabra aparte, sin partirlo.
+    Con $* sin comillas, la prueba contó tres.'
+  distractores:
+    b: Eso ocurre con $* sin comillas.
+    c: Juntarlos en una cadena es lo que hace "$*" entre comillas.
+    d: Los argumentos se reenvían.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#Special-Parameters
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: Empareja cada opción de set con su efecto.
+  prompts:
+  - id: '1'
+    texto: -e
+  - id: '2'
+    texto: -u
+  - id: '3'
+    texto: -o pipefail
+  opciones:
+  - id: a
+    texto: Termina el script cuando un comando falla
+  - id: b
+    texto: Da error al usar una variable no definida
+  - id: c
+    texto: Una tubería falla si falla cualquiera de sus comandos
+  - id: d
+    texto: Muestra cada comando antes de ejecutarlo
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Juntas, son la cabecera habitual de un script en bash.
+  distractores:
+    d: Eso es -x, útil para depurar.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#The-Set-Builtin
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: ¿Por qué no conviene usar un nombre fijo como /tmp/datos.txt en un script?
+  opciones:
+  - id: a
+    texto: Porque /tmp se borra cada minuto
+  - id: b
+    texto: Porque /tmp no admite ficheros .txt
+  - id: c
+    texto: Porque los nombres fijos ocupan más disco
+  - id: d
+    texto: Porque otro proceso u otro usuario puede crearlo antes, leerlo o pisarlo
+  correctas:
+  - d
+  explicacion: /tmp es compartido. Un nombre fijo permite que otro proceso, o un atacante,
+    prepare el fichero antes o lea lo que escribes. mktemp crea uno nuevo con un nombre
+    impredecible.
+  distractores:
+    a: /tmp no se borra cada minuto.
+    b: La extensión no importa.
+    c: El nombre no cambia el espacio que ocupa.
+  referencia: https://tiswww.case.edu/php/chet/bash/bashref.html#Bourne-Shell-Builtins
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '4.4'
+  enunciado: ShellCheck avisa con SC2115 en la línea rm -rf $destino/*. ¿Qué riesgo
+    señala?
+  opciones:
+  - id: a
+    texto: Que rm es lento con muchos ficheros
+  - id: b
+    texto: Que si destino está vacío, la orden se convierte en rm -rf /*
+  - id: c
+    texto: Que falta la opción -v
+  - id: d
+    texto: Que los asteriscos no funcionan en bash
+  correctas:
+  - b
+  explicacion: Con "${destino:?}" bash aborta si la variable está vacía o no definida.
+    La versión corregida del script pasó ShellCheck sin avisos.
+  distractores:
+    a: SC2115 trata de seguridad, no de rendimiento.
+    c: -v solo hace que rm informe de lo que borra.
+    d: Los patrones con asterisco funcionan; el problema es lo que queda delante.
+  referencia: https://www.shellcheck.net/wiki/SC2115
+- id: L04-008
+  tipo: matching
+  dificultad: media
+  objetivo: '4.4'
+  enunciado: Empareja cada aviso de ShellCheck con su corrección.
+  prompts:
+  - id: '1'
+    texto: 'SC2086: Double quote to prevent globbing and word splitting'
+  - id: '2'
+    texto: 'SC2045: Iterating over ls output is fragile'
+  - id: '3'
+    texto: 'SC2164: Use cd ... || exit in case cd fails'
+  opciones:
+  - id: a
+    texto: 'Poner la variable entre comillas: "$f"'
+  - id: b
+    texto: 'Recorrer un patrón: for f in ./*.log'
+  - id: c
+    texto: Escribir cd /var/app || exit 1
+  - id: d
+    texto: Añadir sudo delante
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Son los tres avisos del script de ejemplo. Corregidos, ShellCheck no
+    dio ningún aviso.
+  distractores:
+    d: Ningún aviso se resuelve con más privilegios; sudo solo agravaría un rm mal
+      escrito.
+  referencia: https://www.shellcheck.net/wiki/SC2086
+- id: L05-001
+  tipo: matching
+  dificultad: media
+  objetivo: '5.1'
+  enunciado: Empareja cada directiva de una unidad .service con su función.
+  prompts:
+  - id: '1'
+    texto: User=app
+  - id: '2'
+    texto: ExecStart=/usr/bin/java -jar /opt/catalogo/catalogo.jar
+  - id: '3'
+    texto: EnvironmentFile=/etc/catalogo/entorno
+  - id: '4'
+    texto: WantedBy=multi-user.target
+  opciones:
+  - id: a
+    texto: Ejecutar el servicio con un usuario sin privilegios
+  - id: b
+    texto: El proceso principal que se arranca
+  - id: c
+    texto: Cargar variables de entorno desde un fichero aparte
+  - id: d
+    texto: Arrancarlo con el sistema al hacer enable
+  - id: e
+    texto: Limitar la memoria del servicio
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: La unidad describe cómo, con quién y cuándo se arranca el servicio.
+    systemd-analyze verify la aceptó.
+  distractores:
+    e: La memoria se limita con MemoryMax=.
+  referencia: https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: Un servicio con Restart=on-failure falla al arrancar una y otra vez,
+    y systemd acaba mostrando «Start request repeated too quickly». ¿Qué significa?
+  opciones:
+  - id: a
+    texto: Que systemd está averiado
+  - id: b
+    texto: Que ha superado el límite de arranques en el intervalo (StartLimitBurst)
+      y systemd deja de reintentar
+  - id: c
+    texto: Que el equipo va lento
+  - id: d
+    texto: Que hay que subir StartLimitBurst a 1000
+  correctas:
+  - b
+  explicacion: El límite evita un bucle de reinicios. En la prueba, tras 3 reinicios
+    en pocos segundos, la unidad quedó fallida. Hay que leer el journal y corregir
+    la causa.
+  distractores:
+    a: Es el comportamiento previsto.
+    c: El mensaje habla de la frecuencia de arranques, no del rendimiento.
+    d: Subir el límite solo oculta el problema y llena los registros.
+  referencia: https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: ¿Cuándo vuelve a arrancar systemd un servicio con Restart=on-failure?
+  opciones:
+  - id: a
+    texto: Solo cuando se reinicia el equipo
+  - id: b
+    texto: Cuando lo paras con systemctl stop
+  - id: c
+    texto: Cuando termina con un código distinto de 0, lo mata una señal o se agota
+      un plazo
+  - id: d
+    texto: Cada RestartSec segundos, aunque funcione
+  correctas:
+  - c
+  explicacion: on-failure reinicia ante fallos. Una parada con systemctl stop no cuenta
+    como fallo y no provoca un reinicio.
+  distractores:
+    a: El arranque con el equipo lo controla enable y WantedBy.
+    b: Una parada pedida no es un fallo.
+    d: RestartSec es la espera antes de reiniciar tras un fallo.
+  referencia: https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+- id: L05-005
+  tipo: matching
+  dificultad: media
+  objetivo: '5.3'
+  enunciado: Empareja cada necesidad con la orden de journalctl.
+  prompts:
+  - id: '1'
+    texto: Seguir en directo los registros del servicio catalogo
+  - id: '2'
+    texto: Ver solo los errores del servicio
+  - id: '3'
+    texto: Ver lo de la última hora
+  - id: '4'
+    texto: Ver los registros de una unidad de usuario
+  opciones:
+  - id: a
+    texto: journalctl -u catalogo -f
+  - id: b
+    texto: journalctl -u catalogo -p err
+  - id: c
+    texto: journalctl -u catalogo --since "1 hour ago"
+  - id: d
+    texto: journalctl --user -u curso-demo
+  - id: e
+    texto: journalctl --vacuum-size=1G
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Las opciones se combinan, por ejemplo -u catalogo -p err --since today.
+  distractores:
+    e: --vacuum-size borra registros antiguos para liberar espacio; no consulta nada.
+  referencia: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '5.3'
+  enunciado: Una aplicación gestionada por systemd escribe sus mensajes en la salida
+    estándar. ¿Dónde quedan?
+  opciones:
+  - id: a
+    texto: En el journal, consultable con journalctl -u
+  - id: b
+    texto: Se pierden, porque no hay terminal
+  - id: c
+    texto: En /dev/null
+  - id: d
+    texto: Solo en /var/log/syslog
+  correctas:
+  - a
+  explicacion: systemd recoge stdout y stderr de cada servicio. Escribir en la salida
+    estándar es la forma recomendada, sin gestionar ficheros de registro propios.
+  distractores:
+    b: systemd conecta la salida al journal.
+    c: Solo iría ahí si se configura StandardOutput=null.
+    d: Algunas distribuciones reenvían el journal a syslog, pero el origen es el journal.
+  referencia: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '5.4'
+  enunciado: df -h dice que el disco está al 100 %, pero du no encuentra qué ocupa
+    el espacio. Acabas de borrar un registro de 40 GB de un servicio en marcha. ¿Qué
+    pasa?
+  opciones:
+  - id: a
+    texto: du no cuenta los ficheros grandes
+  - id: b
+    texto: El disco está averiado
+  - id: c
+    texto: El servicio sigue teniendo abierto el fichero borrado, y el espacio no
+      se libera hasta que lo cierre; lsof lo muestra como (deleted)
+  - id: d
+    texto: Hay que esperar a la medianoche
+  correctas:
+  - c
+  explicacion: 'Borrar quita el nombre, pero los datos siguen mientras algún proceso
+    tenga el fichero abierto. En la prueba, lsof mostró los 52428800 bytes de grande.log
+    como (deleted) hasta que terminó tail. Se arregla reiniciando el servicio; para
+    la próxima vez, truncar con «: > fichero».'
+  distractores:
+    a: du cuenta los ficheros por tamaño; el borrado ya no tiene nombre que recorrer.
+    b: Las dos herramientas cuadrarían si fuera una avería.
+    d: El espacio se libera al cerrar el fichero, no a una hora concreta.
+  referencia: https://man7.org/linux/man-pages/man8/lsof.8.html

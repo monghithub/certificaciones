@@ -1,0 +1,707 @@
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: ¿Qué ocurre al ejecutar este INSERT si no existe ningún cliente con id
+    99?
+  codigo:
+    lenguaje: sql
+    fuente: 'INSERT INTO pedidos (cliente_id, fecha, total)
+
+      VALUES (99, ''2026-11-01'', 10);
+
+      '
+  opciones:
+  - id: a
+    texto: Se inserta el pedido y se crea el cliente 99
+  - id: b
+    texto: Se inserta el pedido con cliente_id NULL
+  - id: c
+    texto: Falla porque viola la restricción de clave foránea
+  - id: d
+    texto: Se inserta el pedido sin comprobar nada
+  correctas:
+  - c
+  explicacion: La clave foránea exige que el valor exista en la tabla referenciada.
+    PostgreSQL responde con «violates foreign key constraint».
+  distractores:
+    a: La base de datos no crea filas en otras tablas por su cuenta.
+    b: cliente_id es NOT NULL y, además, el valor indicado es 99.
+    d: La integridad referencial se comprueba en cada escritura.
+  referencia: https://www.postgresql.org/docs/current/ddl-constraints.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.4'
+  enunciado: ¿Qué tipo de dato es el adecuado para guardar importes en euros?
+  opciones:
+  - id: a
+    texto: double precision
+  - id: b
+    texto: real
+  - id: c
+    texto: text
+  - id: d
+    texto: numeric(10,2)
+  correctas:
+  - d
+  explicacion: numeric es un decimal exacto. Los tipos de coma flotante son binarios
+    y no representan exactamente valores como 0,10, lo que produce errores de redondeo
+    al sumar.
+  distractores:
+    a: Es coma flotante binaria; acumula errores de redondeo.
+    b: Es coma flotante de menor precisión, con el mismo problema.
+    c: Como texto no se puede sumar ni validar como número.
+  referencia: https://www.postgresql.org/docs/current/datatype-numeric.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '1.2'
+  enunciado: Tras un INSERT rechazado por una clave foránea, el siguiente pedido válido
+    recibe el id 6 en lugar del 5. ¿Por qué?
+  opciones:
+  - id: a
+    texto: Porque la base de datos está corrupta
+  - id: b
+    texto: Porque el intento fallido consumió un valor de la secuencia, y las secuencias
+      no garantizan números consecutivos
+  - id: c
+    texto: Porque PostgreSQL reserva los números impares
+  - id: d
+    texto: Porque el pedido 5 se borró automáticamente
+  correctas:
+  - b
+  explicacion: El valor de la secuencia se obtiene antes de comprobar las restricciones
+    y no se devuelve si la fila falla. Por eso no conviene usar estas claves como
+    numeración correlativa obligatoria.
+  distractores:
+    a: Es el funcionamiento normal de las secuencias.
+    c: No hay ninguna reserva de ese tipo.
+    d: El pedido 5 nunca llegó a existir.
+  referencia: https://www.postgresql.org/docs/current/ddl-identity-columns.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.2'
+  enunciado: ¿Qué ventaja tiene una clave subrogada (un id generado) frente a usar
+    el DNI como clave primaria de clientes?
+  opciones:
+  - id: a
+    texto: Que no cambia aunque cambien los datos de negocio, y no obliga a actualizar
+      las claves foráneas
+  - id: b
+    texto: Que ocupa más espacio
+  - id: c
+    texto: Que admite duplicados
+  - id: d
+    texto: Que hace innecesario el índice
+  correctas:
+  - a
+  explicacion: Los datos de negocio pueden cambiar, corregirse o faltar (un cliente
+    extranjero sin DNI). Una clave sin significado es estable. El DNI puede seguir
+    protegido con UNIQUE.
+  distractores:
+    b: Ocupar más no es una ventaja; un entero suele ocupar menos que un texto.
+    c: Una clave primaria nunca admite duplicados.
+    d: La clave primaria crea su propio índice en cualquier caso.
+  referencia: https://www.postgresql.org/docs/current/ddl-constraints.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.4'
+  enunciado: ¿Qué clientes devuelve WHERE ciudad <> 'Madrid' con los datos de la lección?
+  opciones:
+  - id: a
+    texto: Luis y Marta
+  - id: b
+    texto: Marta
+  - id: c
+    texto: Ninguno
+  - id: d
+    texto: Luis
+  correctas:
+  - d
+  explicacion: La ciudad de Marta es NULL, y NULL <> 'Madrid' da desconocido, que
+    WHERE trata como falso. Solo queda Luis.
+  distractores:
+    a: Marta no sale, porque la comparación con NULL no es verdadera.
+    b: Es justo la fila que se pierde por el NULL.
+    c: Luis cumple la condición.
+  referencia: https://www.postgresql.org/docs/current/functions-comparison.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.2'
+  enunciado: ¿Qué diferencia hay entre WHERE y HAVING?
+  opciones:
+  - id: a
+    texto: Ninguna; son sinónimos
+  - id: b
+    texto: WHERE filtra filas antes de agrupar; HAVING filtra grupos después de agregar
+  - id: c
+    texto: HAVING es más rápido que WHERE
+  - id: d
+    texto: WHERE solo funciona con números
+  correctas:
+  - b
+  explicacion: Por el orden lógico, WHERE actúa antes de GROUP BY y no puede usar
+    agregados; HAVING actúa sobre los grupos y sí puede.
+  distractores:
+    a: Actúan en momentos distintos de la evaluación.
+    c: Filtrar pronto con WHERE suele ser más eficiente; no al revés.
+    d: WHERE admite condiciones sobre cualquier tipo.
+  referencia: https://www.postgresql.org/docs/current/queries-table-expressions.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '2.2'
+  enunciado: ¿Qué valor sale para Marta en esta consulta?
+  codigo:
+    lenguaje: sql
+    fuente: 'SELECT c.nombre, count(*) AS pedidos
+
+      FROM clientes c
+
+      LEFT JOIN pedidos p ON p.cliente_id = c.id
+
+      GROUP BY c.nombre;
+
+      '
+  opciones:
+  - id: a
+    texto: '0'
+  - id: b
+    texto: 'NULL'
+  - id: c
+    texto: '1'
+  - id: d
+    texto: Marta no aparece
+  correctas:
+  - c
+  explicacion: El LEFT JOIN añade una fila para Marta con las columnas del pedido
+    a NULL, y count(*) cuenta filas, así que da 1. Para obtener 0 hay que usar count(p.id),
+    que ignora los NULL.
+  distractores:
+    a: Es el resultado correcto que se busca, pero requiere count(p.id).
+    b: count nunca devuelve NULL; como mínimo devuelve 0.
+    d: El LEFT JOIN conserva a Marta.
+  referencia: https://www.postgresql.org/docs/current/functions-aggregate.html
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.3'
+  enunciado: ¿Por qué falla SELECT total * 1.21 AS con_iva FROM pedidos WHERE con_iva
+    > 100?
+  opciones:
+  - id: a
+    texto: Porque WHERE se evalúa antes que SELECT, y el alias con_iva todavía no
+      existe
+  - id: b
+    texto: Porque no se puede multiplicar un numeric
+  - id: c
+    texto: Porque los alias deben ir entre comillas
+  - id: d
+    texto: Porque falta GROUP BY
+  correctas:
+  - a
+  explicacion: Según el orden lógico, el alias se define en SELECT, que va después
+    de WHERE. Hay que repetir la expresión en WHERE o usar una subconsulta o CTE.
+  distractores:
+    b: numeric admite multiplicaciones.
+    c: Los alias sin espacios no necesitan comillas.
+    d: No hay agregados, así que no hace falta agrupar.
+  referencia: https://www.postgresql.org/docs/current/queries-table-expressions.html
+- id: L03-002
+  tipo: matching
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: En una tabla única de pedidos con la ciudad del cliente repetida en cada
+    fila, empareja cada situación con su anomalía.
+  prompts:
+  - id: '1'
+    texto: Ana se muda y se cambia la ciudad en una fila pero no en otra
+  - id: '2'
+    texto: No se puede dar de alta un producto que aún no se ha vendido
+  - id: '3'
+    texto: Al borrar el único pedido de Luis, se pierde que Luis existe
+  opciones:
+  - id: a
+    texto: Anomalía de actualización
+  - id: b
+    texto: Anomalía de inserción
+  - id: c
+    texto: Anomalía de borrado
+  - id: d
+    texto: Anomalía de índice
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: La redundancia hace que actualizar sea propenso a contradicciones,
+    que no se pueda insertar sin datos ajenos y que borrar elimine información de
+    más.
+  distractores:
+    d: No existe una anomalía de índice en la teoría de la normalización.
+  referencia: https://en.wikipedia.org/wiki/Database_normalization
+- id: L03-003
+  tipo: matching
+  dificultad: media
+  objetivo: '3.3'
+  enunciado: Indica qué forma normal incumple cada diseño.
+  prompts:
+  - id: '1'
+    texto: clientes(id, nombre, telefonos), con telefonos = '600…, 611…'
+  - id: '2'
+    texto: lineas_pedido(pedido_id, producto_id, cantidad, nombre_producto), con clave
+      (pedido_id, producto_id)
+  - id: '3'
+    texto: clientes(id, nombre, codigo_postal, ciudad)
+  opciones:
+  - id: a
+    texto: 1FN
+  - id: b
+    texto: 2FN
+  - id: c
+    texto: 3FN
+  - id: d
+    texto: Ninguna
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Varios teléfonos en una celda no son atómicos (1FN); nombre_producto
+    depende solo de una parte de la clave (2FN); la ciudad depende del código postal,
+    que no es clave (3FN).
+  distractores:
+    d: Los tres diseños tienen redundancia o valores no atómicos.
+  referencia: https://en.wikipedia.org/wiki/Database_normalization
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.4'
+  enunciado: La tabla lineas_pedido guarda el precio_unitario aplicado, aunque el
+    precio también está en productos. ¿Es redundancia que habría que eliminar?
+  opciones:
+  - id: a
+    texto: Sí; el precio debe leerse de productos
+  - id: b
+    texto: Sí, porque incumple la 1FN
+  - id: c
+    texto: Solo si la tabla es pequeña
+  - id: d
+    texto: No; es un dato histórico, el precio cobrado en ese pedido, que no debe
+      cambiar si cambia el catálogo
+  correctas:
+  - d
+  explicacion: El precio del catálogo y el precio de una venta pasada son datos distintos.
+    Si se leyera de productos, cambiar el catálogo alteraría pedidos antiguos.
+  distractores:
+    a: Las facturas antiguas mostrarían precios que no se cobraron.
+    b: El valor es atómico; no hay incumplimiento de la 1FN.
+    c: El tamaño no cambia el significado del dato.
+  referencia: https://en.wikipedia.org/wiki/Database_normalization
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.1'
+  enunciado: En una relación uno a muchos entre clientes y pedidos, ¿dónde va la clave
+    foránea?
+  opciones:
+  - id: a
+    texto: En clientes, con una columna pedido_id
+  - id: b
+    texto: En una tabla intermedia obligatoria
+  - id: c
+    texto: En pedidos, con una columna cliente_id
+  - id: d
+    texto: En ambas tablas
+  correctas:
+  - c
+  explicacion: La clave foránea va en el lado «muchos». Cada pedido apunta a su único
+    cliente.
+  distractores:
+    a: Un cliente solo podría tener un pedido.
+    b: La tabla intermedia es para relaciones muchos a muchos.
+    d: Duplicaría la relación y podría contradecirse.
+  referencia: https://www.postgresql.org/docs/current/ddl-constraints.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.3'
+  enunciado: ¿Qué resume la frase «de la clave, de toda la clave y de nada más que
+    la clave»?
+  opciones:
+  - id: a
+    texto: Que cada columna debe formar parte de la clave primaria
+  - id: b
+    texto: 'Las tres primeras formas normales: dependencia de la clave (1FN), de toda
+      ella (2FN) y solo de ella (3FN)'
+  - id: c
+    texto: Que cada tabla debe tener una sola columna
+  - id: d
+    texto: Las reglas de los índices compuestos
+  correctas:
+  - b
+  explicacion: Cada columna que no es clave debe depender de la clave, de la clave
+    completa y de nada más.
+  distractores:
+    a: Las columnas dependen de la clave, no forman parte de ella.
+    c: Las tablas normalizadas tienen las columnas que hagan falta.
+    d: La frase trata de dependencias, no de índices.
+  referencia: https://en.wikipedia.org/wiki/Database_normalization
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: En PostgreSQL, al declarar pedidos.cliente_id REFERENCES clientes(id),
+    ¿se crea un índice sobre pedidos.cliente_id?
+  opciones:
+  - id: a
+    texto: Sí, igual que con la clave primaria
+  - id: b
+    texto: Solo si la tabla tiene más de mil filas
+  - id: c
+    texto: Sí, pero solo de lectura
+  - id: d
+    texto: No; la clave foránea no crea índice en la columna que referencia, y suele
+      convenir crearlo
+  correctas:
+  - d
+  explicacion: La documentación de PostgreSQL indica que declarar una clave foránea
+    no crea automáticamente un índice en las columnas que referencian. Las consultas
+    por cliente y los borrados en clientes lo agradecen.
+  distractores:
+    a: Lo crean la clave primaria y UNIQUE, no la clave foránea.
+    b: La creación de índices no depende del número de filas.
+    c: No existen índices «de solo lectura» en este sentido.
+  referencia: https://www.postgresql.org/docs/current/ddl-constraints.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: EXPLAIN muestra «Seq Scan on ventas … Filter (cliente_id = 42)». ¿Qué
+    significa?
+  opciones:
+  - id: a
+    texto: Que el motor recorrerá toda la tabla y comprobará cada fila
+  - id: b
+    texto: Que se usa un índice secuencial
+  - id: c
+    texto: Que la consulta ha fallado
+  - id: d
+    texto: Que la tabla está ordenada por cliente_id
+  correctas:
+  - a
+  explicacion: Seq Scan es un recorrido secuencial de la tabla completa; Filter indica
+    la condición que se evalúa en cada fila.
+  distractores:
+    b: No interviene ningún índice; eso aparecería como Index Scan o Bitmap Index
+      Scan.
+    c: EXPLAIN muestra el plan; no indica errores.
+    d: El plan no dice nada del orden físico de la tabla.
+  referencia: https://www.postgresql.org/docs/current/using-explain.html
+- id: L04-004
+  tipo: matching
+  dificultad: alta
+  objetivo: '4.3'
+  enunciado: Con un índice sobre (cliente_id, fecha), indica cómo se aprovecha en
+    cada consulta.
+  prompts:
+  - id: '1'
+    texto: WHERE cliente_id = 42
+  - id: '2'
+    texto: WHERE cliente_id = 42 AND fecha >= '2026-03-01'
+  - id: '3'
+    texto: WHERE fecha = '2026-03-01'
+  opciones:
+  - id: a
+    texto: Bien, por la primera columna
+  - id: b
+    texto: Bien, por las dos columnas
+  - id: c
+    texto: Peor; hay que recorrer el índice entero o depender del skip scan
+  - id: d
+    texto: No se puede ejecutar
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: El índice es más eficiente con condiciones sobre las primeras columnas.
+    Sin condición sobre cliente_id, en la prueba PostgreSQL recorrió el índice entero
+    con un coste mucho mayor.
+  distractores:
+    d: Todas las consultas se ejecutan; solo cambia el plan.
+  referencia: https://www.postgresql.org/docs/current/indexes-multicolumn.html
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.4'
+  enunciado: Hay un índice sobre usuarios(email) y la consulta es WHERE lower(email)
+    = 'ana@example.com'. ¿Qué pasa?
+  opciones:
+  - id: a
+    texto: Usa el índice sin problema
+  - id: b
+    texto: Falla con un error
+  - id: c
+    texto: El índice sobre email no sirve para lower(email); hay que crear un índice
+      sobre la expresión
+  - id: d
+    texto: Convierte el índice a minúsculas automáticamente
+  correctas:
+  - c
+  explicacion: El índice guarda email tal cual, no lower(email). Un índice sobre la
+    expresión, CREATE INDEX ON usuarios (lower(email)), sí se aprovecha.
+  distractores:
+    a: El valor buscado es una transformación que el índice no contiene.
+    b: La consulta funciona; simplemente no usa el índice.
+    d: Los índices no se transforman solos.
+  referencia: https://www.postgresql.org/docs/current/indexes-expressional.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '4.4'
+  enunciado: Con un índice sobre cliente_id, la consulta WHERE cliente_id > 10 devuelve
+    198 026 de 200 000 filas y el plan es Seq Scan. ¿Por qué?
+  opciones:
+  - id: a
+    texto: Porque el índice está dañado
+  - id: b
+    texto: Porque los índices no sirven con el operador >
+  - id: c
+    texto: Porque falta ejecutar ANALYZE
+  - id: d
+    texto: Porque la condición es poco selectiva y recorrer la tabla es más barato
+      que ir del índice a casi todas las filas
+  correctas:
+  - d
+  explicacion: El planificador estima el coste. Cuando casi todas las filas cumplen
+    la condición, el recorrido secuencial gana.
+  distractores:
+    a: El índice funciona; el planificador decide no usarlo.
+    b: Un árbol B sirve para rangos con > y <.
+    c: Las estadísticas estaban actualizadas en la prueba; la estimación de filas
+      era correcta.
+  referencia: https://www.postgresql.org/docs/current/using-explain.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: ¿Qué diferencia hay entre EXPLAIN y EXPLAIN ANALYZE?
+  opciones:
+  - id: a
+    texto: EXPLAIN ANALYZE ejecuta la consulta y muestra los tiempos y filas reales,
+      además del plan
+  - id: b
+    texto: Ninguna
+  - id: c
+    texto: EXPLAIN ANALYZE actualiza las estadísticas de la tabla
+  - id: d
+    texto: EXPLAIN solo funciona con SELECT
+  correctas:
+  - a
+  explicacion: EXPLAIN muestra el plan estimado sin ejecutar. EXPLAIN ANALYZE lo ejecuta
+    de verdad, así que con un UPDATE o DELETE conviene hacerlo dentro de una transacción
+    que se deshaga.
+  distractores:
+    b: Uno estima y el otro mide.
+    c: Las estadísticas se actualizan con ANALYZE a secas.
+    d: EXPLAIN también muestra el plan de INSERT, UPDATE o DELETE.
+  referencia: https://www.postgresql.org/docs/current/using-explain.html
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: En la tabla de la lección, ¿qué valor tiene la columna acumulado en el
+    segundo pedido de Ana (80,00 el 15 de octubre)?
+  codigo:
+    lenguaje: sql
+    fuente: 'sum(p.total) OVER (PARTITION BY c.id ORDER BY p.fecha) AS acumulado
+
+      '
+  opciones:
+  - id: a
+    texto: '80.00'
+  - id: b
+    texto: '545.50'
+  - id: c
+    texto: '120.00'
+  - id: d
+    texto: '200.00'
+  correctas:
+  - d
+  explicacion: La ventana agrupa por cliente y ordena por fecha. Para el segundo pedido
+    de Ana, suma 120 + 80 = 200.
+  distractores:
+    a: Sería el total del pedido, sin acumular.
+    b: Es la suma de todos los pedidos; PARTITION BY la limita a cada cliente.
+    c: Es el acumulado del primer pedido de Ana.
+  referencia: https://www.postgresql.org/docs/current/tutorial-window.html
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: ¿Qué diferencia hay entre GROUP BY y una función de ventana con PARTITION
+    BY?
+  opciones:
+  - id: a
+    texto: Ninguna
+  - id: b
+    texto: GROUP BY devuelve una fila por grupo; la función de ventana mantiene todas
+      las filas y añade el cálculo a cada una
+  - id: c
+    texto: PARTITION BY solo funciona con fechas
+  - id: d
+    texto: GROUP BY es más moderno
+  correctas:
+  - b
+  explicacion: La ventana calcula sobre el grupo sin colapsarlo, por eso puede mostrar
+    a la vez el detalle de cada pedido y el acumulado del cliente.
+  distractores:
+    a: Producen resultados con un número de filas distinto.
+    c: PARTITION BY admite columnas de cualquier tipo.
+    d: GROUP BY es anterior; las funciones de ventana llegaron después al estándar.
+  referencia: https://www.postgresql.org/docs/current/tutorial-window.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '5.3'
+  enunciado: ¿Qué problema tiene implementar el upsert como «SELECT para ver si existe
+    y después INSERT o UPDATE»?
+  opciones:
+  - id: a
+    texto: Que dos peticiones simultáneas pueden ver «no existe» e intentar insertar
+      las dos (condición de carrera)
+  - id: b
+    texto: Ninguno, si se hace rápido
+  - id: c
+    texto: Que SELECT bloquea la tabla entera
+  - id: d
+    texto: Que UPDATE no funciona después de un SELECT
+  correctas:
+  - a
+  explicacion: Entre la consulta y la escritura puede colarse otra transacción. ON
+    CONFLICT resuelve la operación de forma atómica.
+  distractores:
+    b: La rapidez reduce la probabilidad, pero no elimina la carrera.
+    c: En PostgreSQL un SELECT normal no bloquea la tabla.
+    d: UPDATE funciona con normalidad después de un SELECT.
+  referencia: https://www.postgresql.org/docs/current/sql-insert.html
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.1'
+  enunciado: Con los datos de la lección, ¿qué clientes devuelve la CTE que compara
+    el gasto de cada cliente con la media?
+  opciones:
+  - id: a
+    texto: Solo Pablo
+  - id: b
+    texto: Ana, Luis y Pablo
+  - id: c
+    texto: Ana y Pablo
+  - id: d
+    texto: Ninguno
+  correctas:
+  - c
+  explicacion: Los gastos son 200 (Ana), 45,50 (Luis) y 300 (Pablo). La media es 181,83,
+    que superan Ana y Pablo.
+  distractores:
+    a: Ana también supera la media.
+    b: Luis está por debajo de la media.
+    d: Dos clientes la superan.
+  referencia: https://www.postgresql.org/docs/current/queries-with.html
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '5.4'
+  enunciado: La consulta WHERE id NOT IN (SELECT cliente_id FROM bajas) no devuelve
+    ninguna fila, aunque hay clientes que no están de baja. La tabla bajas tiene un
+    cliente_id NULL. ¿Por qué?
+  opciones:
+  - id: a
+    texto: Porque NOT IN no se puede usar con subconsultas
+  - id: b
+    texto: Porque bajas está vacía
+  - id: c
+    texto: Porque NOT IN ignora los NULL
+  - id: d
+    texto: Porque comparar con un NULL da desconocido, así que x NOT IN (…, NULL)
+      nunca es verdadero
+  correctas:
+  - d
+  explicacion: NOT IN equivale a una cadena de desigualdades unidas por AND; la que
+    se hace con NULL es desconocida y hace desconocido todo el resultado. NOT EXISTS
+    no tiene este problema.
+  distractores:
+    a: NOT IN admite subconsultas; el problema está en el NULL.
+    b: Tiene al menos una fila, la del NULL.
+    c: Es al contrario, el NULL contamina el resultado.
+  referencia: https://www.postgresql.org/docs/current/functions-subquery.html
+- id: L05-007
+  tipo: matching
+  dificultad: media
+  objetivo: '5.4'
+  enunciado: Elige la forma más natural para cada pregunta.
+  prompts:
+  - id: '1'
+    texto: Mostrar el nombre del cliente junto a cada pedido
+  - id: '2'
+    texto: Clientes que tienen al menos un pedido
+  - id: '3'
+    texto: Pedidos por encima del total medio
+  opciones:
+  - id: a
+    texto: JOIN
+  - id: b
+    texto: EXISTS
+  - id: c
+    texto: Subconsulta escalar con avg
+  - id: d
+    texto: UNION
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: JOIN combina columnas de dos tablas, EXISTS comprueba si hay alguna
+    fila relacionada y una subconsulta escalar compara con un valor calculado.
+  distractores:
+    d: UNION apila resultados de consultas con las mismas columnas; no responde a
+      ninguna de estas preguntas.
+  referencia: https://www.postgresql.org/docs/current/functions-subquery.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.2'
+  enunciado: ¿Qué función de ventana devuelve el valor de la fila anterior dentro
+    de la partición, por ejemplo el pedido previo del mismo cliente?
+  opciones:
+  - id: a
+    texto: lag()
+  - id: b
+    texto: lead()
+  - id: c
+    texto: rank()
+  - id: d
+    texto: count()
+  correctas:
+  - a
+  explicacion: lag devuelve un valor de una fila anterior y lead, de una posterior,
+    según el orden de la ventana.
+  distractores:
+    b: lead mira hacia delante, no hacia atrás.
+    c: rank devuelve la posición en el orden.
+    d: count cuenta filas.
+  referencia: https://www.postgresql.org/docs/current/tutorial-window.html

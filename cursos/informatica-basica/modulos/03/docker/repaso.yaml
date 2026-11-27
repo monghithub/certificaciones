@@ -1,0 +1,838 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '1.2'
+  enunciado: ¿Cuál es la diferencia fundamental entre un contenedor y una máquina
+    virtual?
+  opciones:
+  - id: a
+    texto: El contenedor comparte el núcleo del anfitrión; la máquina virtual tiene
+      su propio núcleo
+  - id: b
+    texto: El contenedor no puede usar la red
+  - id: c
+    texto: La máquina virtual solo funciona en la nube
+  - id: d
+    texto: El contenedor necesita un hipervisor
+  correctas:
+  - a
+  explicacion: Una máquina virtual emula un ordenador completo con su sistema operativo;
+    un contenedor es un proceso aislado que usa el núcleo del anfitrión. Por eso arranca
+    en segundos y ocupa menos.
+  distractores:
+    b: Los contenedores tienen red propia gracias a los namespaces de red.
+    c: Las máquinas virtuales funcionan en cualquier anfitrión con un hipervisor.
+    d: El hipervisor es propio de las máquinas virtuales.
+  referencia: https://docs.docker.com/learn/content/what-is-a-container/
+- id: L01-002
+  tipo: matching
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Empareja cada necesidad del contenedor con la función de Linux que la
+    cubre.
+  prompts:
+  - id: '1'
+    texto: Que el contenedor solo vea sus propios procesos
+  - id: '2'
+    texto: Que el contenedor no use más de 512 MB de memoria
+  - id: '3'
+    texto: Que el contenedor tenga su propia IP e interfaces de red
+  opciones:
+  - id: a
+    texto: Namespace de procesos
+  - id: b
+    texto: cgroups
+  - id: c
+    texto: Namespace de red
+  - id: d
+    texto: Hipervisor
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  explicacion: Los namespaces dan a cada contenedor su propia vista de un recurso
+    (procesos, red). Los cgroups limitan el consumo de recursos.
+  distractores:
+    d: Los contenedores no usan hipervisor; es propio de las máquinas virtuales.
+  referencia: https://man7.org/linux/man-pages/man7/namespaces.7.html
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.3'
+  enunciado: Dentro de un contenedor ejecutas ps y ves que la aplicación tiene el
+    PID 1. ¿Por qué?
+  opciones:
+  - id: a
+    texto: Porque la aplicación ha sustituido al init del anfitrión
+  - id: b
+    texto: Porque el contenedor tiene su propio namespace de procesos, en el que la
+      aplicación es el primero
+  - id: c
+    texto: Porque Docker reinicia el anfitrión
+  - id: d
+    texto: Es un error de ps dentro de contenedores
+  correctas:
+  - b
+  explicacion: El namespace de procesos da al contenedor su propio árbol de PID. Desde
+    el anfitrión, el mismo proceso tiene otro PID distinto.
+  distractores:
+    a: El init del anfitrión sigue funcionando; solo cambia la vista del contenedor.
+    c: Ejecutar un contenedor no reinicia nada.
+    d: Es el comportamiento esperado de los namespaces.
+  referencia: https://man7.org/linux/man-pages/man7/namespaces.7.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '1.4'
+  enunciado: ¿Qué relación hay entre una imagen y un contenedor?
+  opciones:
+  - id: a
+    texto: Son lo mismo con distinto nombre
+  - id: b
+    texto: Un contenedor contiene varias imágenes
+  - id: c
+    texto: La imagen es una plantilla de solo lectura y el contenedor, una instancia
+      en ejecución con su propia capa escribible
+  - id: d
+    texto: La imagen es el contenedor detenido
+  correctas:
+  - c
+  explicacion: De una misma imagen se pueden crear muchos contenedores, cada uno con
+    su capa escribible. Como una clase y sus objetos.
+  distractores:
+    a: Son conceptos distintos, la plantilla y su instancia.
+    b: Un contenedor se crea a partir de una imagen.
+    d: Un contenedor detenido sigue siendo un contenedor, con su capa escribible.
+  referencia: https://docs.docker.com/learn/content/what-is-a-container/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.4'
+  enunciado: ¿Qué aporta la Open Container Initiative?
+  opciones:
+  - id: a
+    texto: Un registro público gratuito de imágenes
+  - id: b
+    texto: Estándares abiertos de imagen, ejecución y distribución, para que las imágenes
+      funcionen con distintas herramientas
+  - id: c
+    texto: Una alternativa a Linux para contenedores
+  - id: d
+    texto: Un sistema de máquinas virtuales
+  correctas:
+  - b
+  explicacion: Gracias a los estándares OCI, una imagen construida con Docker se ejecuta
+    en Podman, containerd o Kubernetes.
+  distractores:
+    a: Eso es Docker Hub u otros registros, no la OCI.
+    c: La OCI estandariza formatos; no sustituye al núcleo.
+    d: No trata de máquinas virtuales.
+  referencia: https://opencontainers.org/
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '1.1'
+  enunciado: Un equipo sufre errores que solo aparecen en producción porque allí hay
+    otra versión de una biblioteca del sistema. ¿Cómo ayudan los contenedores?
+  opciones:
+  - id: a
+    texto: Hacen que el código se ejecute más rápido
+  - id: b
+    texto: Sustituyen las pruebas automáticas
+  - id: c
+    texto: Empaquetan la aplicación con sus dependencias, de modo que el entorno es
+      el mismo en desarrollo y en producción
+  - id: d
+    texto: Actualizan automáticamente las bibliotecas del servidor
+  correctas:
+  - c
+  explicacion: La imagen incluye las versiones exactas de lo que la aplicación necesita,
+    así que el entorno viaja con ella.
+  distractores:
+    a: El rendimiento es parecido al de un proceso normal; la ventaja es la reproducibilidad.
+    b: Las pruebas siguen siendo necesarias.
+    d: Las bibliotecas van dentro de la imagen; las del servidor no intervienen.
+  referencia: https://docs.docker.com/learn/content/what-is-a-container/
+- id: L02-001
+  tipo: matching
+  dificultad: baja
+  objetivo: '2.1'
+  enunciado: Empareja cada instrucción del Dockerfile con lo que hace.
+  prompts:
+  - id: '1'
+    texto: FROM
+  - id: '2'
+    texto: RUN
+  - id: '3'
+    texto: CMD
+  - id: '4'
+    texto: EXPOSE
+  opciones:
+  - id: a
+    texto: Imagen base de la que se parte
+  - id: b
+    texto: Ejecuta un comando al construir y guarda el resultado en una capa
+  - id: c
+    texto: Comando por defecto al ejecutar el contenedor
+  - id: d
+    texto: Documenta el puerto en el que escucha la aplicación
+  - id: e
+    texto: Publica el puerto en el anfitrión
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: FROM fija la base, RUN actúa al construir, CMD al ejecutar y EXPOSE
+    solo documenta el puerto.
+  distractores:
+    e: Publicar un puerto se hace al ejecutar, con docker run -p o con ports en Compose;
+      EXPOSE no lo hace.
+  referencia: https://docs.docker.com/reference/dockerfile/
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.2'
+  enunciado: Solo has cambiado app.py. Con el Dockerfile de la lección, ¿qué pasos
+    se reconstruyen?
+  codigo:
+    lenguaje: dockerfile
+    fuente: 'FROM python:3.12-slim
+
+      WORKDIR /app
+
+      COPY requirements.txt .
+
+      RUN pip install --no-cache-dir -r requirements.txt
+
+      COPY . .
+
+      RUN useradd --system --uid 10001 app
+
+      '
+  opciones:
+  - id: a
+    texto: Todos, desde FROM
+  - id: b
+    texto: Desde COPY . . en adelante; pip install sale de la caché
+  - id: c
+    texto: Solo pip install
+  - id: d
+    texto: Ninguno
+  correctas:
+  - b
+  explicacion: requirements.txt no ha cambiado, así que su COPY y el pip install se
+    reutilizan. COPY . . sí cambia, e invalida todas las capas siguientes.
+  distractores:
+    a: Las capas anteriores al cambio se reutilizan.
+    c: pip install no cambia, porque sus entradas son las mismas.
+    d: El COPY . . cambia porque app.py es distinto.
+  referencia: https://docs.docker.com/build/cache/
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.2'
+  enunciado: ¿Por qué el Dockerfile copia requirements.txt e instala las dependencias
+    antes de copiar el resto del código?
+  opciones:
+  - id: a
+    texto: Porque Docker exige ese orden
+  - id: b
+    texto: Para que la imagen sea más segura
+  - id: c
+    texto: Para que pip pueda leer el código
+  - id: d
+    texto: Para que un cambio de código no invalide la capa de las dependencias, que
+      se reutiliza de la caché
+  correctas:
+  - d
+  explicacion: Las dependencias cambian poco y el código, mucho. Al separarlas, la
+    instalación (lenta) solo se repite cuando cambia requirements.txt.
+  distractores:
+    a: Docker acepta cualquier orden; este es el que aprovecha la caché.
+    b: El orden no afecta a la seguridad.
+    c: pip solo necesita requirements.txt para instalar.
+  referencia: https://docs.docker.com/build/cache/
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.3'
+  enunciado: ¿Qué imprime docker run demo-ep a todos con este Dockerfile?
+  codigo:
+    lenguaje: dockerfile
+    fuente: 'FROM alpine:3.20
+
+      ENTRYPOINT ["echo", "hola"]
+
+      CMD ["mundo"]
+
+      '
+  opciones:
+  - id: a
+    texto: hola mundo
+  - id: b
+    texto: a todos
+  - id: c
+    texto: hola mundo a todos
+  - id: d
+    texto: hola a todos
+  correctas:
+  - d
+  explicacion: Los argumentos de docker run sustituyen a CMD y se añaden a ENTRYPOINT.
+    Queda echo hola a todos.
+  distractores:
+    a: Es lo que imprime sin argumentos, cuando se usa el CMD por defecto.
+    b: ENTRYPOINT no se sustituye con los argumentos.
+    c: Los argumentos sustituyen a CMD, no se suman a él.
+  referencia: https://docs.docker.com/reference/dockerfile/
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '2.4'
+  enunciado: El proyecto tiene un fichero .env con contraseñas y el Dockerfile hace
+    COPY . . sin .dockerignore. ¿Qué riesgo hay?
+  opciones:
+  - id: a
+    texto: Ninguno; COPY ignora los ficheros ocultos
+  - id: b
+    texto: Que el .env se copie dentro de la imagen y cualquiera que la descargue
+      pueda leer las contraseñas
+  - id: c
+    texto: Que la construcción falle
+  - id: d
+    texto: Que el contenedor no arranque
+  correctas:
+  - b
+  explicacion: COPY . . copia todo el contexto, incluidos los ficheros ocultos. Hay
+    que excluir .env (y .git) en .dockerignore.
+  distractores:
+    a: COPY no ignora los ficheros que empiezan por punto.
+    c: La construcción funciona; el problema es lo que acaba dentro.
+    d: El contenedor arranca; el riesgo es de seguridad.
+  referencia: https://docs.docker.com/build/concepts/context/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '2.1'
+  enunciado: Con EXPOSE 8000 en el Dockerfile, ejecutas docker run demo-hola:1 sin
+    -p. ¿Puedes abrir http://127.0.0.1:8000 desde el anfitrión?
+  opciones:
+  - id: a
+    texto: Sí, porque EXPOSE publica el puerto
+  - id: b
+    texto: Sí, pero solo desde Windows
+  - id: c
+    texto: No, porque EXPOSE solo documenta; hay que publicar el puerto con -p al
+      ejecutar
+  - id: d
+    texto: No, porque el puerto 8000 está prohibido
+  correctas:
+  - c
+  explicacion: EXPOSE indica en qué puerto escucha la aplicación, pero publicarlo
+    en el anfitrión requiere -p (por ejemplo, -p 127.0.0.1:8000:8000).
+  distractores:
+    a: EXPOSE no publica nada por sí solo.
+    b: El comportamiento es el mismo en cualquier sistema.
+    d: No hay ninguna restricción sobre el puerto 8000.
+  referencia: https://docs.docker.com/reference/dockerfile/
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '3.1'
+  enunciado: ¿Qué ventaja principal tiene una construcción multietapa?
+  opciones:
+  - id: a
+    texto: Que la construcción no usa caché
+  - id: b
+    texto: Que la imagen final solo lleva lo necesario para ejecutar, sin las herramientas
+      de compilación
+  - id: c
+    texto: Que se pueden ejecutar varios contenedores a la vez
+  - id: d
+    texto: Que la imagen funciona sin núcleo Linux
+  correctas:
+  - b
+  explicacion: Se compila en una etapa con todas las herramientas y se copia solo
+    el resultado a una etapa ligera. La imagen es más pequeña y tiene menos superficie
+    de ataque.
+  distractores:
+    a: La caché se sigue usando en cada etapa.
+    c: Ejecutar varios contenedores no depende de cómo se construye la imagen.
+    d: Los contenedores Linux siempre necesitan un núcleo Linux.
+  referencia: https://docs.docker.com/build/building/multi-stage/
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.2'
+  enunciado: ¿Por qué no conviene que el proceso del contenedor se ejecute como root?
+  opciones:
+  - id: a
+    texto: Porque root no puede abrir puertos
+  - id: b
+    texto: Porque el contenedor arranca más despacio
+  - id: c
+    texto: Porque si se explota una vulnerabilidad, el atacante tiene más privilegios
+      y más opciones de escapar al anfitrión
+  - id: d
+    texto: Porque Docker no lo permite
+  correctas:
+  - c
+  explicacion: Ejecutar con un usuario sin privilegios limita el daño de una intrusión.
+    Se combina con solo lectura y sin capacidades.
+  distractores:
+    a: Root puede abrir cualquier puerto, incluidos los bajos.
+    b: El usuario no afecta al tiempo de arranque.
+    d: Docker ejecuta como root por defecto si no se indica otro usuario.
+  referencia: https://docs.docker.com/build/building/best-practices/
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.3'
+  enunciado: ¿Qué problema tiene FROM python:latest en un proyecto que se construye
+    en la integración continua?
+  opciones:
+  - id: a
+    texto: Que no existe esa etiqueta
+  - id: b
+    texto: Que la imagen es más grande que con una etiqueta fija
+  - id: c
+    texto: Que Docker no admite etiquetas en FROM
+  - id: d
+    texto: Que una construcción futura puede usar otra versión mayor de Python y romper
+      la aplicación
+  correctas:
+  - d
+  explicacion: latest se mueve con cada versión. Fijar la versión (python:3.12-slim)
+    o el digest hace las construcciones predecibles.
+  distractores:
+    a: La etiqueta latest existe en la mayoría de las imágenes oficiales.
+    b: El tamaño depende de la variante, no de la etiqueta latest.
+    c: FROM admite etiquetas y digests.
+  referencia: https://docs.docker.com/build/building/best-practices/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '3.4'
+  enunciado: La construcción necesita un token para descargar paquetes privados. ¿Cuál
+    es la forma correcta de pasarlo?
+  opciones:
+  - id: a
+    texto: ARG TOKEN y usarlo en el RUN
+  - id: b
+    texto: ENV TOKEN=... en el Dockerfile
+  - id: c
+    texto: RUN --mount=type=secret,id=token y docker build --secret id=token,src=...
+  - id: d
+    texto: COPY token.txt . y borrarlo en el siguiente RUN
+  correctas:
+  - c
+  explicacion: El secreto montado solo existe durante ese RUN y no queda en ninguna
+    capa ni en el historial.
+  distractores:
+    a: Los valores de ARG pueden quedar en el historial de la imagen.
+    b: ENV queda grabado en la imagen y visible al ejecutarla.
+    d: Borrarlo en otra capa no lo elimina de la capa en la que se copió.
+  referencia: https://docs.docker.com/build/building/secrets/
+- id: L03-007
+  tipo: matching
+  dificultad: media
+  objetivo: '3.1'
+  enunciado: Empareja cada imagen base con su característica.
+  prompts:
+  - id: '1'
+    texto: python:3.12
+  - id: '2'
+    texto: python:3.12-slim
+  - id: '3'
+    texto: alpine:3.20
+  - id: '4'
+    texto: scratch
+  opciones:
+  - id: a
+    texto: Completa, con muchas herramientas; útil para construir o depurar
+  - id: b
+    texto: Reducida; buena opción por defecto para ejecutar
+  - id: c
+    texto: De pocos MB, usa musl en lugar de glibc
+  - id: d
+    texto: Vacía; solo para binarios autocontenidos
+  - id: e
+    texto: Incluye un JDK
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: Las variantes van de la más completa a la vacía. Cuanto más pequeña,
+    menos superficie de ataque y más cuidado con lo que falta.
+  distractores:
+    e: Ninguna de estas imágenes incluye un JDK.
+  referencia: https://docs.docker.com/build/building/best-practices/
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '3.3'
+  enunciado: Has fijado FROM python:3.12-slim. ¿Qué más debes hacer para mantener
+    la imagen segura con el tiempo?
+  opciones:
+  - id: a
+    texto: Nada; con la etiqueta fija ya está protegida
+  - id: b
+    texto: Reconstruirla periódicamente para incorporar los parches de seguridad de
+      la imagen base
+  - id: c
+    texto: Cambiar a latest
+  - id: d
+    texto: Borrar el Dockerfile
+  correctas:
+  - b
+  explicacion: Fijar la versión evita sorpresas, pero los parches solo llegan si se
+    reconstruye con la base actualizada.
+  distractores:
+    a: Las vulnerabilidades se descubren después; sin reconstruir, la imagen las conserva.
+    c: latest reintroduce las versiones impredecibles.
+    d: El Dockerfile es necesario para reconstruir.
+  referencia: https://docs.docker.com/build/building/best-practices/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.1'
+  enunciado: Ejecutas docker run -d -p 5432:5432 postgres:16 en un servidor con ufw
+    que solo permite SSH. ¿Es accesible la base de datos desde la red?
+  opciones:
+  - id: a
+    texto: No, porque ufw bloquea todo salvo SSH
+  - id: b
+    texto: No, porque Docker publica solo en 127.0.0.1 por defecto
+  - id: c
+    texto: Sí, porque Docker publica en todas las interfaces y sus reglas de cortafuegos
+      se aplican antes que las de ufw
+  - id: d
+    texto: Solo si se reinicia ufw
+  correctas:
+  - c
+  explicacion: Sin IP, -p publica en 0.0.0.0. Docker desvía el tráfico en la tabla
+    nat antes de que llegue a las cadenas que usa ufw, así que la configuración de
+    ufw no lo bloquea. Para uso interno, -p 127.0.0.1:5432:5432.
+  distractores:
+    a: La documentación de Docker advierte de que el tráfico a puertos publicados
+      no pasa por las reglas de ufw.
+    b: Sin IP, la publicación es en todas las interfaces.
+    d: Reiniciar ufw no cambia cómo enruta Docker el tráfico.
+  referencia: https://docs.docker.com/engine/network/packet-filtering-firewalls/
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '4.2'
+  enunciado: Eliminas el contenedor de PostgreSQL y lo vuelves a crear con la misma
+    imagen, sin volúmenes. ¿Qué pasa con los datos?
+  opciones:
+  - id: a
+    texto: Se pierden, porque estaban en la capa escribible del contenedor eliminado
+  - id: b
+    texto: Se conservan en la imagen
+  - id: c
+    texto: Se conservan en el registro
+  - id: d
+    texto: Se recuperan automáticamente del contenedor anterior
+  correctas:
+  - a
+  explicacion: La capa escribible pertenece a cada contenedor y desaparece con él.
+    Los datos que deben persistir van en un volumen.
+  distractores:
+    b: La imagen es de solo lectura; el contenedor no escribe en ella.
+    c: El registro almacena imágenes, no datos de contenedores.
+    d: Un contenedor nuevo empieza con una capa escribible vacía.
+  referencia: https://docs.docker.com/engine/storage/volumes/
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: '4.2'
+  enunciado: Elige el tipo de montaje adecuado para cada caso.
+  prompts:
+  - id: '1'
+    texto: Datos de una base de datos en producción
+  - id: '2'
+    texto: El código fuente durante el desarrollo, para ver los cambios al momento
+  - id: '3'
+    texto: Un fichero de configuración del anfitrión, en solo lectura
+  opciones:
+  - id: a
+    texto: Volumen
+  - id: b
+    texto: Montaje enlazado (bind mount)
+  - id: c
+    texto: La capa escribible del contenedor
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - b
+  explicacion: Los volúmenes los gestiona Docker y son lo indicado para datos persistentes.
+    Los montajes enlazados exponen carpetas o ficheros concretos del anfitrión.
+  distractores:
+    c: La capa escribible se pierde al eliminar el contenedor.
+  referencia: https://docs.docker.com/engine/storage/bind-mounts/
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: Dos contenedores arrancados sin --network no consiguen comunicarse usando
+    el nombre del otro. ¿Por qué?
+  opciones:
+  - id: a
+    texto: Porque los contenedores están aislados y no pueden comunicarse entre sí
+  - id: b
+    texto: Porque la red bridge por defecto no ofrece resolución por nombre; hay que
+      usar una red definida por el usuario
+  - id: c
+    texto: Porque falta publicar los puertos con -p
+  - id: d
+    texto: Porque los nombres de contenedor solo admiten mayúsculas
+  correctas:
+  - b
+  explicacion: Las redes definidas por el usuario incluyen DNS interno. En la bridge
+    por defecto, los contenedores solo se alcanzan por IP.
+  distractores:
+    a: Pueden comunicarse; lo que falla es la resolución por nombre.
+    c: -p publica en el anfitrión; no hace falta para la comunicación entre contenedores.
+    d: Los nombres de contenedor no exigen mayúsculas.
+  referencia: https://docs.docker.com/engine/network/drivers/bridge/
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '4.3'
+  enunciado: ¿Por qué la aplicación debe configurarse con DB_HOST=bd (el nombre del
+    contenedor) y no con su IP?
+  opciones:
+  - id: a
+    texto: Porque las IP de los contenedores pueden cambiar en cada arranque, y el
+      DNS interno resuelve el nombre
+  - id: b
+    texto: Porque las IP no funcionan dentro de Docker
+  - id: c
+    texto: Porque el nombre es más corto
+  - id: d
+    texto: Porque así se cifra la conexión
+  correctas:
+  - a
+  explicacion: Docker asigna las IP dinámicamente. El nombre se mantiene y el DNS
+    de la red lo traduce a la IP actual.
+  distractores:
+    b: Las IP funcionan, pero no son estables.
+    c: La longitud no es el motivo.
+    d: Resolver por nombre no cifra nada.
+  referencia: https://docs.docker.com/engine/network/drivers/bridge/
+- id: L04-008
+  tipo: matching
+  dificultad: baja
+  objetivo: '4.4'
+  enunciado: Empareja cada necesidad con el comando adecuado.
+  prompts:
+  - id: '1'
+    texto: Ver la salida de un contenedor en marcha
+  - id: '2'
+    texto: Abrir un shell dentro de un contenedor en marcha
+  - id: '3'
+    texto: Listar también los contenedores parados
+  - id: '4'
+    texto: Que el contenedor se elimine solo al terminar
+  opciones:
+  - id: a
+    texto: docker logs -f nombre
+  - id: b
+    texto: docker exec -it nombre sh
+  - id: c
+    texto: docker ps -a
+  - id: d
+    texto: docker run --rm ...
+  - id: e
+    texto: docker build .
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: logs muestra la salida, exec ejecuta un comando dentro, ps -a lista
+    todos y --rm limpia al terminar.
+  distractores:
+    e: docker build construye una imagen; no actúa sobre contenedores.
+  referencia: https://docs.docker.com/engine/containers/run/
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '5.2'
+  enunciado: En el compose.yaml de la lección, ¿qué nombre debe usar el servicio web
+    para conectarse a Redis?
+  opciones:
+  - id: a
+    texto: localhost
+  - id: b
+    texto: La IP del anfitrión
+  - id: c
+    texto: cache, el nombre del servicio
+  - id: d
+    texto: redis:7-alpine, el nombre de la imagen
+  correctas:
+  - c
+  explicacion: Compose crea una red por proyecto con DNS interno, en la que cada servicio
+    se resuelve por su nombre.
+  distractores:
+    a: Dentro del contenedor web, localhost es el propio contenedor web.
+    b: Redis no publica puertos en el anfitrión en este ejemplo.
+    d: El nombre de la imagen no es un nombre de red.
+  referencia: https://docs.docker.com/compose/
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.3'
+  enunciado: La aplicación falla al arrancar porque PostgreSQL aún no acepta conexiones,
+    aunque tiene depends_on db. ¿Qué cambio lo resuelve en Compose?
+  opciones:
+  - id: a
+    texto: Añadir un healthcheck a db y usar depends_on con condition service_healthy
+  - id: b
+    texto: Poner db antes que web en el fichero
+  - id: c
+    texto: Publicar el puerto de db
+  - id: d
+    texto: Usar docker compose down -v
+  correctas:
+  - a
+  explicacion: depends_on sin condición solo espera a que el contenedor arranque.
+    Con service_healthy, Compose espera a que pase la comprobación de salud.
+  distractores:
+    b: El orden en el fichero no determina el orden de arranque.
+    c: Publicar el puerto no cambia cuándo está lista la base de datos.
+    d: Borraría los datos sin resolver el problema.
+  referencia: https://docs.docker.com/compose/how-tos/startup-order/
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: '5.4'
+  enunciado: Ejecutas docker compose down y luego docker compose up -d. ¿Qué pasa
+    con los datos del volumen datos?
+  opciones:
+  - id: a
+    texto: Se pierden, porque down lo elimina todo
+  - id: b
+    texto: Se conservan, porque down no borra los volúmenes con nombre salvo que se
+      use -v
+  - id: c
+    texto: Se copian a la imagen
+  - id: d
+    texto: Se conservan solo si la imagen no ha cambiado
+  correctas:
+  - b
+  explicacion: down elimina contenedores y redes, pero conserva los volúmenes con
+    nombre. down -v sí los borra.
+  distractores:
+    a: down sin -v conserva los volúmenes.
+    c: Los volúmenes nunca se copian a la imagen.
+    d: El volumen es independiente de la imagen.
+  referencia: https://docs.docker.com/reference/compose-file/
+- id: L05-005
+  tipo: matching
+  dificultad: baja
+  objetivo: '5.4'
+  enunciado: Empareja cada tarea con su comando de Compose.
+  prompts:
+  - id: '1'
+    texto: Levantar todo en segundo plano
+  - id: '2'
+    texto: Ver la salida del servicio web
+  - id: '3'
+    texto: Reconstruir las imágenes y recrear lo que cambió
+  - id: '4'
+    texto: Parar y eliminar todo, incluidos los volúmenes
+  opciones:
+  - id: a
+    texto: docker compose up -d
+  - id: b
+    texto: docker compose logs -f web
+  - id: c
+    texto: docker compose up -d --build
+  - id: d
+    texto: docker compose down -v
+  - id: e
+    texto: docker compose ps
+  correctas:
+  - - '1'
+    - a
+  - - '2'
+    - b
+  - - '3'
+    - c
+  - - '4'
+    - d
+  explicacion: up levanta, logs muestra la salida, --build reconstruye y down -v elimina
+    también los volúmenes.
+  distractores:
+    e: ps muestra el estado de los servicios; no cambia nada.
+  referencia: https://docs.docker.com/compose/
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: '5.3'
+  enunciado: Con service_healthy en depends_on, ¿sigue haciendo falta que la aplicación
+    reintente la conexión a la base de datos?
+  opciones:
+  - id: a
+    texto: No; Compose evita que la base de datos se caiga
+  - id: b
+    texto: Solo en Windows
+  - id: c
+    texto: No, porque el healthcheck repara la base de datos
+  - id: d
+    texto: Sí; la condición solo afecta al arranque, y la base de datos puede caerse
+      y volver después
+  correctas:
+  - d
+  explicacion: depends_on ordena el arranque, pero no protege de caídas posteriores.
+    Una aplicación robusta reintenta las conexiones.
+  distractores:
+    a: Compose no puede evitar que un servicio se caiga.
+    b: El comportamiento no depende del sistema operativo.
+    c: El healthcheck comprueba el estado; no repara nada.
+  referencia: https://docs.docker.com/compose/how-tos/startup-order/
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: '5.1'
+  enunciado: El compose.yaml usa ${PUERTO:-8000}. ¿De dónde toma el valor PUERTO?
+  opciones:
+  - id: a
+    texto: De la imagen
+  - id: b
+    texto: De las variables de entorno del shell o del fichero .env junto al compose.yaml;
+      si no existe, usa 8000
+  - id: c
+    texto: De Docker Hub
+  - id: d
+    texto: Es una constante de 8000 que no se puede cambiar
+  correctas:
+  - b
+  explicacion: Compose sustituye las variables con el entorno y con el fichero .env
+    del proyecto; la sintaxis :-8000 da un valor por defecto.
+  distractores:
+    a: La sustitución ocurre al leer el compose.yaml, antes de crear contenedores.
+    c: Docker Hub no proporciona variables de configuración.
+    d: 8000 es solo el valor por defecto.
+  referencia: https://docs.docker.com/reference/compose-file/
