@@ -1,24 +1,108 @@
 {% extends "base.html" %}{% block titulo %}Curso{% endblock %}
 {% block contenido %}
-<h1>{{ curso.manifiesto.titulo }}</h1>
-{% if continuar %}
-<div class="card"><strong>Continuar donde lo dejaste</strong><br>
-  <a href="{{ base }}/modulo/{{ continuar.modulo.id }}/{{ continuar.seccion.id }}">{{ continuar.modulo.numero }} · {{ continuar.modulo.titulo }} — {{ continuar.seccion.titulo }}</a>
-  <span class="suave">({{ continuar.fecha|fecha }} UTC)</span></div>
-{% endif %}
-<div class="grid">
-{% for f in progreso %}{% set m = f.modulo %}
-  <div class="card">
-    <h2 style="margin-top:0">{{ m.numero }} · {{ m.titulo }}</h2>
-    <span class="etiqueta {{ 'completado' if f.estado == 'completado' else 'en' if f.estado == 'en curso' else '' }}">{{ f.estado }}</span>
-    {% if f.total %}
-    <div class="barra" style="margin:10px 0" aria-label="Progreso"><span style="width: {{ (100 * f.hechas / f.total)|round|int }}%"></span></div>
-    <div class="suave">{{ f.hechas }} de {{ f.total }} secciones completadas</div>
-    <ul>{% for s in m.secciones %}<li><a href="{{ base }}/modulo/{{ m.id }}/{{ s.id }}">{{ s.titulo }}</a>{% if s.id in f.completadas %} <span class="ok-t">✓</span>{% endif %}</li>{% endfor %}</ul>
-    {% else %}<p class="suave">Sin contenido todavía.</p>{% endif %}
-    {% if m.repaso %}<a class="btn sec" href="{{ base }}/tests">{{ m.repaso|length }} de repaso</a>{% endif %}
-    {% if m.preguntas %}<a class="btn sec" href="{{ base }}/tests">{{ m.preguntas|length }} de examen</a>{% endif %}
-  </div>
-{% else %}<p>No hay módulos disponibles.</p>{% endfor %}
+
+<div class="mb-8">
+  <h1 class="text-4xl font-bold mb-4">{{ curso.manifiesto.titulo }}</h1>
 </div>
+
+{% if continuar %}
+<div class="alert alert-info mb-8">
+  <svg class="stroke-current shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+  <div>
+    <h3 class="font-bold">Continúa donde lo dejaste</h3>
+    <a href="{{ base }}/modulo/{{ continuar.modulo.id }}/{{ continuar.seccion.id }}" class="link link-primary">
+      {{ continuar.modulo.numero }} · {{ continuar.modulo.titulo }} — {{ continuar.seccion.titulo }}
+    </a>
+    <p class="text-sm mt-1">({{ continuar.fecha|fecha }} UTC)</p>
+  </div>
+</div>
+{% endif %}
+
+{% if progreso %}
+
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>Módulo</th>
+        <th>Estado</th>
+        <th>Progreso</th>
+        <th>Preguntas</th>
+        <th class="text-right">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in progreso %}{% set m = f.modulo %}
+      <tr class="hover">
+        <td>
+          <div>
+            <a href="{{ base }}/modulo/{{ m.id }}/{{ m.secciones[0].id if m.secciones else '' }}" class="font-semibold link link-primary">
+              {{ m.numero }} · {{ m.titulo }}
+            </a>
+            {% if m.secciones %}
+            <details class="collapse collapse-arrow border-0 p-0 mt-2">
+              <summary class="cursor-pointer text-sm text-gray-600">{{ m.secciones|length }} secciones</summary>
+              <div class="text-sm space-y-1 mt-2">
+                {% for s in m.secciones %}
+                <div class="flex items-center gap-2">
+                  <a href="{{ base }}/modulo/{{ m.id }}/{{ s.id }}" class="link link-primary">{{ s.titulo }}</a>
+                  {% if s.id in f.completadas %}<span class="badge badge-success badge-sm">✓</span>{% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </details>
+            {% endif %}
+          </div>
+        </td>
+        <td>
+          {% if f.estado == 'completado' %}
+            <span class="badge badge-success">✓ Completado</span>
+          {% elif f.estado == 'en curso' %}
+            <span class="badge badge-info">⏳ En curso</span>
+          {% else %}
+            <span class="badge badge-ghost">— No iniciado</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if f.total %}
+          <div class="flex items-center space-x-2">
+            <progress class="progress progress-primary w-24 h-2" value="{{ f.hechas }}" max="{{ f.total }}"></progress>
+            <span class="text-sm font-semibold">{{ (100 * f.hechas / f.total)|round|int }}%</span>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">{{ f.hechas }}/{{ f.total }} secciones</p>
+          {% else %}
+          <span class="text-gray-400">Sin contenido</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="text-sm space-y-1">
+            {% if m.repaso %}<div class="badge badge-outline">📚 {{ m.repaso|length }} repaso</div>{% endif %}
+            {% if m.preguntas %}<div class="badge badge-outline">✍️ {{ m.preguntas|length }} examen</div>{% endif %}
+          </div>
+        </td>
+        <td>
+          <div class="flex gap-2 justify-end">
+            <a href="{{ base }}/modulo/{{ m.id }}/{{ m.secciones[0].id if m.secciones else '' }}" class="btn btn-sm btn-primary">Leer</a>
+            {% if m.repaso or m.preguntas %}<a href="{{ base }}/tests" class="btn btn-sm btn-secondary">Tests</a>{% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-8 p-4 bg-base-200 rounded-lg text-center">
+  <p class="text-sm">Total: {{ progreso|length }} módulo{{ 's' if progreso|length != 1 else '' }}</p>
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+  <svg class="stroke-current shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+  <span>No hay módulos disponibles en este curso</span>
+</div>
+
+{% endif %}
+
 {% endblock %}

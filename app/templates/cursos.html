@@ -1,19 +1,77 @@
 {% extends "base.html" %}{% block titulo %}Mis cursos{% endblock %}
 {% block contenido %}
-<h1>Mis cursos</h1>
-{% if not filas %}
-  {% if user.rol == 'admin' %}<div class="msg aviso">No hay cursos en el catálogo. Añade una carpeta <code>cursos/&lt;curso&gt;/</code> con su <code>curso.yaml</code> y pulsa «Recargar contenido» en <a href="/admin/usuarios">Usuarios</a>.</div>
-  {% else %}<div class="msg aviso">Todavía no tienes cursos asignados. Pide al administrador que te matricule.</div>{% endif %}
-{% endif %}
-<div class="grid">
-{% for f in filas %}{% set m = f.curso.manifiesto %}
-  <div class="card">
-    <h2 style="margin-top:0"><a href="/c/{{ m.slug }}/">{{ m.titulo }}</a></h2>
-    <div class="barra" style="margin:10px 0" aria-label="Progreso"><span style="width: {{ f.pct }}%"></span></div>
-    <div class="suave">{{ f.hechas }} de {{ f.total }} secciones completadas</div>
-    {% if f.posicion %}<p class="suave">Última lectura: <a href="/c/{{ m.slug }}/modulo/{{ f.posicion.modulo.id }}/{{ f.posicion.seccion.id }}">{{ f.posicion.modulo.numero }} · {{ f.posicion.seccion.titulo }}</a></p>{% endif %}
-    <a class="btn" href="/c/{{ m.slug }}/">Entrar</a> <a class="btn sec" href="/c/{{ m.slug }}/tests">Tests</a>
-  </div>
-{% endfor %}
+
+<div class="mb-8">
+  <h1 class="text-4xl font-bold mb-2">📚 Mis Cursos</h1>
+  <p class="text-gray-600">Accede a tus cursos de certificación y continúa estudiando donde lo dejaste</p>
 </div>
+
+{% if not filas %}
+  <div class="alert alert-warning">
+    <svg class="stroke-current shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    {% if user.rol == 'admin' %}
+      <span><strong>No hay cursos en el catálogo.</strong> Añade una carpeta <code>cursos/&lt;curso&gt;/</code> con su <code>curso.yaml</code> y pulsa «Recargar contenido» en <a href="/admin/usuarios" class="link">Usuarios</a>.</span>
+    {% else %}
+      <span><strong>No tienes cursos asignados.</strong> Pide al administrador que te matricule en un curso.</span>
+    {% endif %}
+  </div>
+{% else %}
+
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>Curso</th>
+        <th>Progreso</th>
+        <th class="text-right">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in filas %}{% set m = f.curso.manifiesto %}
+      <tr class="hover">
+        <td>
+          <div class="flex items-center space-x-3">
+            <div class="avatar placeholder">
+              <div class="bg-primary text-white w-10 rounded">
+                <span class="text-lg">📚</span>
+              </div>
+            </div>
+            <div>
+              <a href="/c/{{ m.slug }}/" class="font-semibold link link-primary">{{ m.titulo }}</a>
+              {% if f.posicion %}
+              <p class="text-sm text-gray-500">
+                Última lectura:
+                <a href="/c/{{ m.slug }}/modulo/{{ f.posicion.modulo.id }}/{{ f.posicion.seccion.id }}" class="link link-primary">
+                  {{ f.posicion.modulo.numero }} · {{ f.posicion.seccion.titulo }}
+                </a>
+              </p>
+              {% endif %}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center space-x-2">
+            <progress class="progress progress-primary w-32 h-2" value="{{ f.pct }}" max="100"></progress>
+            <span class="text-sm font-semibold">{{ f.pct }}%</span>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">{{ f.hechas }} de {{ f.total }} secciones</p>
+        </td>
+        <td>
+          <div class="flex gap-2 justify-end">
+            <a href="/c/{{ m.slug }}/" class="btn btn-sm btn-primary">Entrar</a>
+            <a href="/c/{{ m.slug }}/tests" class="btn btn-sm btn-secondary">Tests</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-8 text-center text-sm text-gray-500">
+  Total: {{ filas|length }} curso{{ 's' if filas|length != 1 else '' }} disponible{{ 's' if filas|length != 1 else '' }}
+</div>
+
+{% endif %}
+
 {% endblock %}
