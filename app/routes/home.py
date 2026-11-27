@@ -13,8 +13,6 @@ router = APIRouter(dependencies=[Depends(verificar_csrf)])
 @router.get("/")
 def inicio(request: Request, usuario: Usuario = Depends(requiere_usuario), db: Session = Depends(get_db)):
     cursos = cursos_accesibles(request, db, usuario)
-    if len(cursos) == 1:
-        return RedirectResponse(f"/c/{cursos[0].manifiesto.slug}/", 303)
     filas = []
     for c in cursos:
         progreso = stats.progreso_modulos(db, usuario.id, c)
