@@ -137,7 +137,7 @@ function toggleSidebar() {
             </div>
           </button>
           <ul tabindex="0" class="dropdown-content z-50 menu p-2 shadow bg-base-100 rounded-box w-52 border border-base-300">
-            <li><a href="#" disabled><strong>{{ user.nombre }}</strong><br><span class="text-xs">{{ user.rol }}</span></a></li>
+            <li><a href="#" disabled><strong>{{ user.nombre if user else '?' }}</strong><br><span class="text-xs">{{ user.rol if user else '' }}</span></a></li>
             <li class="divider my-1"></li>
             {% if acceso_libre %}
               <li><a disabled class="text-warning">🔓 Acceso libre (red local)</a></li>
