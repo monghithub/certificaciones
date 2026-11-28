@@ -14,7 +14,7 @@ from curso import alcance
 from curso import glosario as glosario_mod
 from curso.anclas import GeneradorAnclas
 from curso.cobertura import mapa as mapa_cobertura
-from curso.secciones import SECCIONES
+from curso.secciones import SECCIONES, detectar_secciones
 from curso.manifiesto import Manifiesto
 
 log = logging.getLogger(__name__)
@@ -192,7 +192,8 @@ class Contenido:
                         titulo = linea[2:].strip()
                         break
             mod = Modulo(d.name, m.group(1), titulo, es_simulacro=d.name == self.manifiesto.simulacro)
-            mod.secciones = [Seccion(i, t, d / f) for i, f, t in SECCIONES if (d / f).is_file()]
+            secciones_del_modulo = detectar_secciones(d)
+            mod.secciones = [Seccion(i, t, d / f) for i, f, t in secciones_del_modulo if (d / f).is_file()]
             self.modulos[mod.id] = mod
             self._cargar_preguntas(d, mod, validador)
             if not mod.es_simulacro:
