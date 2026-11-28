@@ -12,15 +12,13 @@ dominios:
   - {id: 4, nombre: "Contenedores y DevOps", peso: 20}
   - {id: 5, nombre: "Seguridad", peso: 20}
 
-# Configuración de examen
+# Simulacro y examen
+simulacro: simulacro-informatica-basica
 examen:
   preguntas: 50
   minutos: 90
-  tipos: [multiple_choice, matching, true_false]
-  distribucion: {multiple_choice: 60, matching: 20, true_false: 20}
-
-# Simulacro (referencia a carpeta o indicador de existencia)
-simulacro: null
+  tipos: [multiple_choice, matching]
+  distribucion: {multiple_choice: 70, matching: 30}
 
 # Banco de preguntas
 banco:
@@ -28,7 +26,7 @@ banco:
   minimo_simulacro: 50
   minimo_por_objetivo: 2
   minimo_por_tarea: 10
-  distribucion: {multiple_choice: 60, matching: 20, true_false: 20}
+  distribucion: {multiple_choice: 70, matching: 30}
 
 # Configuración de repaso
 repaso:
