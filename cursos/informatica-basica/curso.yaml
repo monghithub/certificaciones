@@ -1,103 +1,34 @@
-# Informática Básica
-# Compilación de temas fundamentales de informática
-
 slug: informatica-basica
 titulo: Informática Básica
-descripcion: Fundamentos de informática, sistemas operativos, redes y seguridad. Certificación base en conocimientos de tecnología.
-nivel: principiante
+proveedor: Educativo
+fuentes_oficiales: [man7.org, kernel.org, freedesktop.org, aws.amazon.com, docker.com]
 idioma: es-ES
-version: 1.0.0
 
-# Módulos: agrupación de temas por área
-modulos:
-  - numero: 00
-    titulo: Fundamentos
-    slug: fundamentos
-    secciones:
-      - id: linux
-        titulo: Linux y Shell para Desarrolladores
-        objetivo: Dominar Linux, comandos de shell, permisos y scripting
-        temas:
-          - linux-y-shell
-  
-  - numero: 01
-    titulo: Redes y Sistemas
-    slug: redes-sistemas
-    secciones:
-      - id: tcp
-        titulo: TCP/IP, DNS y TLS
-        objetivo: Entender cómo funcionan las redes
-        temas:
-          - tcp-ip-dns-y-tls
-      - id: http
-        titulo: HTTP y la Web
-        objetivo: Protocolos y arquitectura web
-        temas:
-          - http-y-la-web
+# Áreas de conocimiento
+dominios:
+  - {id: 1, nombre: "Fundamentos y Sistemas Operativos", peso: 20}
+  - {id: 2, nombre: "Redes y Comunicaciones", peso: 20}
+  - {id: 3, nombre: "Bases de Datos", peso: 20}
+  - {id: 4, nombre: "Contenedores y DevOps", peso: 20}
+  - {id: 5, nombre: "Seguridad", peso: 20}
 
-  - numero: 02
-    titulo: Bases de Datos
-    slug: bases-datos
-    secciones:
-      - id: sql
-        titulo: SQL y Modelado
-        objetivo: Diseño y consultas de bases de datos
-        temas:
-          - sql-y-modelado
-      - id: nosql
-        titulo: Bases de Datos NoSQL
-        objetivo: Bases de datos no relacionales
-        temas:
-          - bases-de-datos-nosql
+# Configuración de examen
+examen:
+  preguntas: 50
+  minutos: 90
+  tipos: [multiple_choice, matching, true_false]
+  distribucion: {multiple_choice: 60, matching: 20, true_false: 20}
 
-  - numero: 03
-    titulo: Contenedores y DevOps
-    slug: contenedores-devops
-    secciones:
-      - id: docker
-        titulo: Contenedores Docker
-        objetivo: Virtualización ligera con contenedores
-        temas:
-          - contenedores-docker
-      - id: kubernetes
-        titulo: Kubernetes
-        objetivo: Orquestación de contenedores
-        temas:
-          - kubernetes
-      - id: cicd
-        titulo: CI/CD y GitOps
-        objetivo: Automatización de despliegues
-        temas:
-          - ci-cd-y-gitops
+# Banco de preguntas
+banco:
+  minimo_por_modulo: 30
+  minimo_simulacro: 50
+  minimo_por_objetivo: 2
+  minimo_por_tarea: 10
+  distribucion: {multiple_choice: 60, matching: 20, true_false: 20}
 
-  - numero: 04
-    titulo: Seguridad
-    slug: seguridad
-    secciones:
-      - id: criptografia
-        titulo: Criptografía Aplicada
-        objetivo: Principios de seguridad criptográfica
-        temas:
-          - criptografia-aplicada
-      - id: web
-        titulo: Seguridad Web
-        objetivo: Vulnerabilidades y defensa web
-        temas:
-          - seguridad-web
-
-# Configuración de preguntas
-preguntas:
-  repaso:
-    min_por_leccion: 8
-    max_por_leccion: 15
-  examen:
-    min_por_leccion: 5
-    max_por_leccion: 10
-
-# Simulacro (opcional)
-simulacro:
-  total_preguntas: 50
-  tiempo_minutos: 90
-  activo: false
-  rotatorio: true
+# Configuración de repaso
+repaso:
+  minimo_por_modulo: 15
+  minimo_por_objetivo: 3
 
