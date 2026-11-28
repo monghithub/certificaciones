@@ -1,0 +1,15 @@
+slug: seguridad-web
+titulo: Seguridad en aplicaciones web (OWASP)
+area: seguridad
+nivel: intermedio
+idioma: es-ES
+resumen: Las vulnerabilidades más frecuentes según el OWASP Top 10:2025 y cómo evitarlas. Control de acceso (IDOR, SSRF), inyección SQL y XSS, almacenamiento de contraseñas y sesiones, configuración, dependencias y gestión de errores. Cada ataque se ha reproducido contra una aplicación vulnerable local y comprobado contra su versión corregida.
+requisitos: []
+etiquetas: [seguridad, owasp, inyeccion, xss, ssrf, contrasenas, idor]
+fuentes:
+  - owasp.org
+  - cheatsheetseries.owasp.org
+  - developer.mozilla.org
+  - pages.nist.gov
+ejercicios:
+  minimo_por_leccion: 8

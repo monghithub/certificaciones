@@ -1,0 +1,19 @@
+slug: criptografia-aplicada
+titulo: Criptografía aplicada
+area: seguridad
+nivel: intermedio
+idioma: es-ES
+resumen: Criptografía para quien desarrolla, sin matemáticas y con cada error reproducido en un laboratorio. Hash y contraseñas, cifrado autenticado, firmas y JWT, una CA propia, aleatoriedad y gestión de secretos.
+etiquetas: [criptografia, hash, argon2, aes-gcm, firmas, jwt, pki, secretos]
+requisitos: [tcp-ip-dns-y-tls]
+fuentes:
+  - rfc-editor.org
+  - cheatsheetseries.owasp.org
+  - csrc.nist.gov
+  - cryptography.io
+  - docs.python.org
+  - pyjwt.readthedocs.io
+  - docs.openssl.org
+  - docs.github.com
+ejercicios:
+  minimo_por_leccion: 8

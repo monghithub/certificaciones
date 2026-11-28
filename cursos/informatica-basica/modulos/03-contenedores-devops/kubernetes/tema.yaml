@@ -1,0 +1,13 @@
+slug: kubernetes
+titulo: Kubernetes
+area: plataformas
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo orquesta Kubernetes contenedores a partir de un estado deseado, con pods, Deployments, Services, configuración, recursos, sondas, almacenamiento y escalado, con manifiestos probados en un clúster real.
+requisitos: [contenedores-docker]
+etiquetas: [kubernetes, k8s, orquestacion, contenedores, kubectl]
+fuentes:
+  - kubernetes.io
+  - kind.sigs.k8s.io
+ejercicios:
+  minimo_por_leccion: 8

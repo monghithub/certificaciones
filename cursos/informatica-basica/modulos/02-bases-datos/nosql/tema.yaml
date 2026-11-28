@@ -1,0 +1,18 @@
+slug: bases-de-datos-nosql
+titulo: Bases de datos NoSQL
+area: datos
+nivel: intermedio
+idioma: es-ES
+resumen: Cuándo y cómo usar bases de datos no relacionales. Familias NoSQL, modelado de documentos según los accesos, índices y planes de ejecución en MongoDB, Redis como caché y para contadores, colas y rankings, y consistencia y replicación. Probado con MongoDB 9.0 sobre 200 000 documentos y con Redis 8.10.
+requisitos: [sql-y-modelado]
+etiquetas: [nosql, mongodb, redis, cache, indices, consistencia]
+fuentes:
+  - mongodb.com
+  - redis.io
+  - valkey.io
+  - cassandra.apache.org
+  - neo4j.com
+  - martinfowler.com
+  - allthingsdistributed.com
+ejercicios:
+  minimo_por_leccion: 8

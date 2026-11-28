@@ -1,0 +1,23 @@
+slug: ci-cd-y-gitops
+titulo: CI/CD y GitOps
+area: plataformas
+nivel: intermedio
+idioma: es-ES
+resumen: Del commit a producción. Integración continua y métricas DORA, flujos de trabajo de GitHub Actions seguros, entrega continua con artefactos inmutables, estrategias de despliegue y GitOps con Argo CD. Probado con actionlint 1.7 y con Argo CD 3.6 en un clúster kind de Kubernetes 1.37.
+requisitos: [contenedores-docker, kubernetes]
+etiquetas: [ci-cd, github-actions, gitops, argo-cd, despliegue, dora]
+fuentes:
+  - martinfowler.com
+  - dora.dev
+  - trunkbaseddevelopment.com
+  - docs.github.com
+  - github.com
+  - 12factor.net
+  - semver.org
+  - slsa.dev
+  - kubernetes.io
+  - opengitops.dev
+  - argo-cd.readthedocs.io
+  - fluxcd.io
+ejercicios:
+  minimo_por_leccion: 8

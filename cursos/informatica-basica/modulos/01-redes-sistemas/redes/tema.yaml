@@ -1,0 +1,22 @@
+slug: tcp-ip-dns-y-tls
+titulo: TCP/IP, DNS y TLS
+area: redes
+nivel: intermedio
+idioma: es-ES
+resumen: Lo que hay debajo de HTTP, comprobado con dig, ss, curl y openssl. Capas y direcciones IP, TCP frente a UDP, cómo se resuelve un nombre, cómo se establece una conexión TLS y se valida un certificado, y un método para diagnosticar fallos de red.
+etiquetas: [redes, tcp, udp, ip, dns, tls, certificados, diagnostico]
+requisitos: [http-y-la-web]
+fuentes:
+  - rfc-editor.org
+  - iana.org
+  - letsencrypt.org
+  - cabforum.org
+  - man7.org
+  - man.openbsd.org
+  - bind9.readthedocs.io
+  - docs.openssl.org
+  - docs.python.org
+  - everything.curl.dev
+  - curl.se
+ejercicios:
+  minimo_por_leccion: 8

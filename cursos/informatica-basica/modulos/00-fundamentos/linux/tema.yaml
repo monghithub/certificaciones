@@ -1,0 +1,15 @@
+slug: linux-y-shell
+titulo: Linux y shell para desarrolladores
+area: plataformas
+nivel: basico
+idioma: es-ES
+resumen: Lo que un desarrollador necesita de Linux, comprobado en Ubuntu 26.04 con bash 5.3. Ficheros y permisos, procesos y señales, redirecciones y tuberías, scripts que fallan bien, y servicios y registros con systemd.
+etiquetas: [linux, bash, shell, permisos, procesos, systemd, scripts]
+fuentes:
+  - man7.org
+  - tiswww.case.edu
+  - freedesktop.org
+  - shellcheck.net
+  - refspecs.linuxfoundation.org
+ejercicios:
+  minimo_por_leccion: 8

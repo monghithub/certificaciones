@@ -1,0 +1,16 @@
+slug: http-y-la-web
+titulo: HTTP y la web
+area: redes
+nivel: basico
+idioma: es-ES
+resumen: Cómo funciona HTTP por dentro, comprobado con curl y un navegador real. Peticiones, métodos y códigos de estado; cabeceras y caché; cookies y SameSite; el origen y CORS; y qué cambian HTTP/2 y HTTP/3.
+etiquetas: [http, web, cache, cookies, cors, http2, http3]
+fuentes:
+  - rfc-editor.org
+  - datatracker.ietf.org
+  - whatwg.org
+  - developer.mozilla.org
+  - curl.se
+  - web.dev
+ejercicios:
+  minimo_por_leccion: 8

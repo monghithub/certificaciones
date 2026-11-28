@@ -1,0 +1,12 @@
+slug: sql-y-modelado
+titulo: SQL y modelado relacional
+area: datos
+nivel: basico
+idioma: es-ES
+resumen: El modelo relacional, las consultas SQL (JOIN, agregados, NULL, CTE y funciones de ventana), la normalización y los índices, con ejemplos ejecutados en PostgreSQL.
+etiquetas: [sql, postgresql, bases-de-datos, modelado, indices]
+fuentes:
+  - postgresql.org
+  - en.wikipedia.org
+ejercicios:
+  minimo_por_leccion: 8

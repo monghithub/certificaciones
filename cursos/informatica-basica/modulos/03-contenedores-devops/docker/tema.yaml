@@ -1,0 +1,13 @@
+slug: contenedores-docker
+titulo: Contenedores y Docker
+area: plataformas
+nivel: basico
+idioma: es-ES
+resumen: Qué es un contenedor y en qué se diferencia de una máquina virtual, cómo se construyen imágenes con un Dockerfile, cómo se ejecutan con puertos, volúmenes y redes, y cómo se orquestan varios servicios con Docker Compose.
+etiquetas: [docker, contenedores, compose, imagenes, linux]
+fuentes:
+  - docs.docker.com
+  - opencontainers.org
+  - man7.org
+ejercicios:
+  minimo_por_leccion: 8
