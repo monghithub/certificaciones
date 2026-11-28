@@ -1,0 +1,705 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿Qué imprime node ejecuta.ts con Node 26?
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      const precio: number = "20";
+      console.log("se ejecutó igualmente:", precio + 1);
+  opciones:
+    - {id: a, texto: "Error TS2322 y no se ejecuta"}
+    - {id: b, texto: "se ejecutó igualmente: 21"}
+    - {id: c, texto: "se ejecutó igualmente: 201"}
+    - {id: d, texto: "TypeError en ejecución"}
+  correctas: [c]
+  explicacion: Node quita los tipos sin comprobarlos; precio vale el texto "20" y + concatena. tsc sí habría dado el error TS2322.
+  distractores:
+    a: Eso lo hace tsc, no Node.
+    b: Es un texto, así que no suma.
+    d: Concatenar texto y número es válido en JavaScript.
+  referencia: https://nodejs.org/api/typescript.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué queda de los tipos de TypeScript cuando el programa se ejecuta?
+  opciones:
+    - {id: a, texto: "Nada; se borran al compilar o al quitarlos Node"}
+    - {id: b, texto: "Se convierten en comprobaciones automáticas"}
+    - {id: c, texto: "Se guardan como metadatos que se pueden consultar"}
+    - {id: d, texto: "Se convierten en clases de Java"}
+  correctas: [a]
+  explicacion: Lo que se ejecuta es JavaScript; por eso los tipos no validan datos externos.
+  distractores:
+    b: No se genera ninguna comprobación.
+    c: No hay metadatos de tipos en ejecución.
+    d: No tiene relación con Java.
+  referencia: https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: '¿Compila la última línea? interface ConNombre { nombre: string }; const producto = { id: 1, nombre: "libro", precio: 20 };'
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      const n: ConNombre = producto;
+  opciones:
+    - {id: a, texto: "No, porque producto no declara implements ConNombre"}
+    - {id: b, texto: "No, porque tiene propiedades de más"}
+    - {id: c, texto: "Solo con un cast"}
+    - {id: d, texto: "Sí, porque tiene la forma requerida (nombre: string)"}
+  correctas: [d]
+  explicacion: El tipado es estructural. Las propiedades de más solo se rechazan cuando se escribe el literal directamente.
+  distractores:
+    a: TypeScript no necesita declarar la relación.
+    b: Desde una variable, las propiedades de más se aceptan.
+    c: No hace falta.
+  referencia: https://www.typescriptlang.org/docs/handbook/type-compatibility.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: '¿Qué ocurre con const literal: ConNombre = { nombre: "libro", precio: 20 }?'
+  opciones:
+    - {id: a, texto: "Compila"}
+    - {id: b, texto: "Error TS2353, porque un literal no puede tener propiedades que no están en el tipo"}
+    - {id: c, texto: "Error en ejecución"}
+    - {id: d, texto: "Se elimina precio en silencio"}
+  correctas: [b]
+  explicacion: La comprobación de propiedades sobrantes en literales detecta errores de escritura. tsc 7 dio TS2353.
+  distractores:
+    a: Desde una variable compilaría; desde el literal, no.
+    c: Es un error de compilación.
+    d: No se transforma nada.
+  referencia: https://www.typescriptlang.org/docs/handbook/type-compatibility.html
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué diferencia hay entre any y unknown?
+  opciones:
+    - {id: a, texto: "Ninguna"}
+    - {id: b, texto: "unknown solo admite cadenas"}
+    - {id: c, texto: "any desactiva la comprobación; unknown obliga a comprobar el tipo antes de usar el valor"}
+    - {id: d, texto: "any es más estricto"}
+  correctas: [c]
+  explicacion: Con unknown, x.toUpperCase() dio TS18046 hasta comprobar typeof x === "string".
+  distractores:
+    a: El compilador los trata de forma opuesta.
+    b: Admite cualquier valor, pero no deja usarlo sin comprobar.
+    d: Es al revés.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.4"
+  enunciado: ¿Qué cambió en TypeScript 7?
+  opciones:
+    - {id: a, texto: "El compilador es nativo, escrito en Go, y unas 10 veces más rápido"}
+    - {id: b, texto: "Se eliminaron los genéricos"}
+    - {id: c, texto: "Ya no hace falta JavaScript"}
+    - {id: d, texto: "Los tipos se comprueban al ejecutar"}
+  correctas: [a]
+  explicacion: El anuncio indica mejoras de entre 8 y 12 veces en compilaciones completas, con el mismo comportamiento.
+  distractores:
+    b: El lenguaje se mantiene.
+    c: Sigue generando y ejecutando JavaScript.
+    d: Los tipos siguen borrándose.
+  referencia: https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Un tsconfig.json nuevo no menciona strict. Con TypeScript 7, ¿está activo el modo estricto?
+  opciones:
+    - {id: a, texto: "No, hay que activarlo"}
+    - {id: b, texto: "Sí, desde TypeScript 6 strict vale true por defecto"}
+    - {id: c, texto: "Solo en Node"}
+    - {id: d, texto: "Depende del editor"}
+  correctas: [b]
+  explicacion: El anuncio de TypeScript 6 cambió el valor por defecto. En la prueba, un parámetro sin tipo dio TS7006.
+  distractores:
+    a: Era así antes de TypeScript 6.
+    c: Es una opción del compilador.
+    d: Depende del tsconfig, no del editor.
+  referencia: https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/
+- id: L01-008
+  tipo: completar
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Completa la función para que acepte cualquier valor pero solo llame a toUpperCase si es texto.
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      function procesar(x: [[1]]) {
+        if ([[2]] x === "string") {
+          return x.toUpperCase();
+        }
+      }
+  huecos:
+    - {id: "1", respuestas: [unknown]}
+    - {id: "2", respuestas: [typeof]}
+  explicacion: unknown obliga a comprobar; typeof estrecha el tipo a string dentro del if.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.2"
+  enunciado: ¿Qué devuelve longitud(12345)?
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      function longitud(x: string | number | null): number {
+        if (x === null) return 0;
+        if (typeof x === "string") return x.length;
+        return x.toString().length;
+      }
+  opciones:
+    - {id: a, texto: "0"}
+    - {id: b, texto: "12345"}
+    - {id: c, texto: "Error de compilación"}
+    - {id: d, texto: "5"}
+  correctas: [d]
+  explicacion: No es null ni string, así que llega a la última línea, donde x es number. Se ejecutó con Node 26.
+  distractores:
+    a: Solo para null.
+    b: Devuelve la longitud, no el número.
+    c: Tras las comprobaciones, x es number y toString es válido.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Quitas el case "bizum" del switch de describir, que tiene la asignación a never en el default. ¿Qué pasa?
+  opciones:
+    - {id: a, texto: "Compila y, con un Bizum, devuelve undefined"}
+    - {id: b, texto: "Error TS2322, porque el caso bizum no se puede asignar a never"}
+    - {id: c, texto: "Compila con una advertencia"}
+    - {id: d, texto: "Error en ejecución al llegar un Bizum"}
+  correctas: [b]
+  explicacion: El caso sin tratar llega al default y no cabe en never. tsc 7 dio TS2322 con el tipo del caso olvidado.
+  distractores:
+    a: La asignación a never lo impide.
+    c: Es un error.
+    d: Se detecta al compilar.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+- id: L02-003
+  tipo: completar
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Completa la comprobación de exhaustividad.
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      switch (pago.tipo) {
+        // ...casos...
+        default: {
+          const imposible: [[1]] = [[2]];
+          return imposible;
+        }
+      }
+  huecos:
+    - {id: "1", respuestas: [never]}
+    - {id: "2", respuestas: [pago]}
+  explicacion: Si se han tratado todos los casos, pago es never en el default y la asignación es válida.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué es una unión discriminada?
+  opciones:
+    - {id: a, texto: "Una unión de objetos con una propiedad literal común que indica el caso"}
+    - {id: b, texto: "Una unión que excluye null"}
+    - {id: c, texto: "Una clase abstracta"}
+    - {id: d, texto: "Un enum de números"}
+  correctas: [a]
+  explicacion: La propiedad tipo permite a TypeScript estrechar a cada caso en un switch o un if.
+  distractores:
+    b: No tiene relación con null.
+    c: Son tipos de objeto, no clases.
+    d: Usa literales de texto, no un enum.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+- id: L02-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué comprobaciones estrechan el tipo en TypeScript?
+  opciones:
+    - {id: a, texto: "typeof x === \"string\""}
+    - {id: b, texto: "x instanceof Date"}
+    - {id: c, texto: "\"iban\" in pago"}
+    - {id: d, texto: "Un comentario // x es string"}
+    - {id: e, texto: "console.log(x)"}
+  correctas: [a, b, c]
+  explicacion: El compilador entiende typeof, instanceof, in, la igualdad y las funciones de guarda.
+  distractores:
+    d: Los comentarios no afectan al tipo.
+    e: Mostrar el valor no lo comprueba.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: 'En modo estricto, ¿qué pasa con let nombre: string = null?'
+  opciones:
+    - {id: a, texto: "Compila"}
+    - {id: b, texto: "Se convierte en cadena vacía"}
+    - {id: c, texto: "Error, porque string no incluye null; hay que declarar string | null"}
+    - {id: d, texto: "Error solo al ejecutar"}
+  correctas: [c]
+  explicacion: El modo estricto separa null y undefined del resto de tipos para obligar a tratarlos.
+  distractores:
+    a: Solo compilaría sin el modo estricto.
+    b: No hay conversión.
+    d: Es un error de compilación.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
+- id: L02-007
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.4"
+  enunciado: Empareja cada operador con su uso.
+  prompts:
+    - {id: "1", texto: "cliente?.direccion?.ciudad"}
+    - {id: "2", texto: "nombre ?? \"anónimo\""}
+    - {id: "3", texto: "x === null"}
+  opciones:
+    - {id: a, texto: "Acceder a una propiedad solo si el objeto existe"}
+    - {id: b, texto: "Usar un valor por defecto si es null o undefined"}
+    - {id: c, texto: "Comprobar null y estrechar el tipo"}
+    - {id: d, texto: "Convertir a número"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Son las herramientas habituales para tratar valores ausentes en modo estricto.
+  distractores:
+    d: Ninguno de ellos convierte tipos.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué tipo describe mejor una moneda que solo puede ser EUR, USD o GBP?
+  opciones:
+    - {id: a, texto: "string"}
+    - {id: b, texto: "\"EUR\" | \"USD\" | \"GBP\""}
+    - {id: c, texto: "any"}
+    - {id: d, texto: "number"}
+  correctas: [b]
+  explicacion: Una unión de tipos literales solo admite esos valores; el compilador rechaza cualquier otro.
+  distractores:
+    a: Admitiría cualquier texto.
+    c: Desactiva la comprobación.
+    d: No es un número.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: 'Con function campo<T, K extends keyof T>(obj: T, clave: K): T[K], ¿qué pasa con campo(libro, "color") si Producto no tiene color?'
+  opciones:
+    - {id: a, texto: "Devuelve undefined"}
+    - {id: b, texto: "Error de compilación, porque \"color\" no es una clave de Producto"}
+    - {id: c, texto: "Devuelve any"}
+    - {id: d, texto: "Añade la propiedad"}
+  correctas: [b]
+  explicacion: K extends keyof T limita la clave a las propiedades de T.
+  distractores:
+    a: No llega a ejecutarse.
+    c: La restricción lo impide.
+    d: Solo lee propiedades.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/keyof-types.html
+- id: L03-002
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada tipo utilitario con su resultado sobre Producto.
+  prompts:
+    - {id: "1", texto: "Omit<Producto, \"id\">"}
+    - {id: "2", texto: "Partial<Producto>"}
+    - {id: "3", texto: "Pick<Producto, \"nombre\">"}
+    - {id: "4", texto: "Readonly<Producto>"}
+  opciones:
+    - {id: a, texto: "Todas las propiedades salvo id"}
+    - {id: b, texto: "Todas las propiedades, opcionales"}
+    - {id: c, texto: "Solo nombre"}
+    - {id: d, texto: "Todas, de solo lectura"}
+    - {id: e, texto: "Todas, obligatorias y sin null"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son tipos incluidos en TypeScript para derivar unos de otros.
+  distractores:
+    e: Eso sería Required combinado con NonNullable.
+  referencia: https://www.typescriptlang.org/docs/handbook/utility-types.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: '¿Qué dio tsc 7 con function cambiar(p: Readonly<Producto>) { p.precio = 1; }?'
+  opciones:
+    - {id: a, texto: "Nada; compila"}
+    - {id: b, texto: "Un error en ejecución"}
+    - {id: c, texto: "Una advertencia"}
+    - {id: d, texto: "Error TS2540, porque precio es de solo lectura"}
+  correctas: [d]
+  explicacion: Readonly marca las propiedades como de solo lectura para el compilador.
+  distractores:
+    a: El compilador lo rechaza.
+    b: Al ejecutar no hay ninguna protección; el error es de compilación.
+    c: Es un error.
+  referencia: https://www.typescriptlang.org/docs/handbook/utility-types.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.2"
+  enunciado: Si el código se ejecuta saltándose tsc, ¿impide Readonly modificar el objeto?
+  opciones:
+    - {id: a, texto: "No; Readonly solo existe al compilar. Para impedirlo al ejecutar haría falta Object.freeze"}
+    - {id: b, texto: "Sí, lanza un error"}
+    - {id: c, texto: "Sí, ignora la asignación"}
+    - {id: d, texto: "Solo en Node 26"}
+  correctas: [a]
+  explicacion: Los tipos se borran; Readonly no genera ningún código.
+  distractores:
+    b: No queda nada en ejecución que lo compruebe.
+    c: La asignación se produce.
+    d: Node tampoco lo comprueba.
+  referencia: https://www.typescriptlang.org/docs/handbook/utility-types.html
+- id: L03-005
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa el código para derivar la unión "EUR" | "USD" | "GBP" de la lista.
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      const MONEDAS = ["EUR", "USD", "GBP"] as [[1]];
+      type Moneda = (typeof MONEDAS)[[[2]]];
+  huecos:
+    - {id: "1", respuestas: [const]}
+    - {id: "2", respuestas: [number]}
+  explicacion: as const conserva los literales, e indexar con number da la unión de los elementos.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/keyof-types.html
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: '¿Qué diferencia hay entre const IVA: Record<string, number> = {...} y const IVA = {...} satisfies Record<string, number>?'
+  opciones:
+    - {id: a, texto: "Ninguna"}
+    - {id: b, texto: "satisfies convierte los valores en texto"}
+    - {id: c, texto: "Con la anotación, el tipo pasa a ser Record y cualquier clave compila; con satisfies se comprueba el valor y se conservan las claves exactas"}
+    - {id: d, texto: "satisfies solo funciona en Node"}
+  correctas: [c]
+  explicacion: satisfies valida sin ensanchar el tipo. En la prueba, acceder a una clave inexistente con satisfies dio TS2339.
+  distractores:
+    a: Cambia el tipo resultante.
+    b: No transforma valores.
+    d: Es una comprobación del compilador.
+  referencia: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: '¿Qué tipo devuelve primero(["a", "b"]) con function primero<T>(lista: readonly T[]): T | undefined?'
+  opciones:
+    - {id: a, texto: "string | undefined"}
+    - {id: b, texto: "any"}
+    - {id: c, texto: "string[]"}
+    - {id: d, texto: "unknown"}
+  correctas: [a]
+  explicacion: T se deduce como string, y el retorno admite undefined porque la lista puede estar vacía.
+  distractores:
+    b: El genérico conserva el tipo.
+    c: Devuelve un elemento, no la lista.
+    d: T se deduce del argumento.
+  referencia: https://www.typescriptlang.org/docs/handbook/2/generics.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Por qué definir NuevoProducto como Omit<Producto, "id"> en vez de repetir las propiedades?
+  opciones:
+    - {id: a, texto: "Porque es más rápido al ejecutar"}
+    - {id: b, texto: "Porque al cambiar Producto, NuevoProducto se actualiza solo"}
+    - {id: c, texto: "Porque es obligatorio"}
+    - {id: d, texto: "Porque elimina el id de la base de datos"}
+  correctas: [b]
+  explicacion: Derivar evita definiciones duplicadas que se desincronizan.
+  distractores:
+    a: Los tipos no existen al ejecutar.
+    c: Es una opción de diseño.
+    d: Solo afecta al tipo.
+  referencia: https://www.typescriptlang.org/docs/handbook/utility-types.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué imprimió este código con Node 26?
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      const desdeRed: Producto = JSON.parse('{"id": "uno", "nombre": 3}');
+      console.log(typeof desdeRed.id, desdeRed.precio);
+  opciones:
+    - {id: a, texto: "Error de compilación"}
+    - {id: b, texto: "string undefined"}
+    - {id: c, texto: "number 0"}
+    - {id: d, texto: "TypeError al hacer JSON.parse"}
+  correctas: [b]
+  explicacion: JSON.parse devuelve any y la anotación no comprueba nada al ejecutar. El tipo miente.
+  distractores:
+    a: Compila, porque any se puede asignar a cualquier tipo.
+    c: No hay conversión ni valores por defecto.
+    d: El JSON es válido.
+  referencia: https://zod.dev/
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Dónde hay que validar los datos en ejecución?
+  opciones:
+    - {id: a, texto: "En cada función, por si acaso"}
+    - {id: b, texto: "En ningún sitio; los tipos bastan"}
+    - {id: c, texto: "Solo en el navegador"}
+    - {id: d, texto: "En los bordes, donde entran datos externos; dentro bastan los tipos"}
+  correctas: [d]
+  explicacion: Validar una vez al entrar hace que los tipos sean fiables en el resto del sistema.
+  distractores:
+    a: Repite comprobaciones que el compilador ya garantiza.
+    b: Los tipos no existen al ejecutar.
+    c: El servidor también recibe datos externos.
+  referencia: https://zod.dev/
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: '¿Qué devolvió NuevoProductoSchema.parse({ nombre: "  libro ", precio: 20 })?'
+  opciones:
+    - {id: a, texto: "{ nombre: 'libro', precio: 20, etiquetas: [] }"}
+    - {id: b, texto: "{ nombre: '  libro ', precio: 20 }"}
+    - {id: c, texto: "true"}
+    - {id: d, texto: "Un error, porque faltan las etiquetas"}
+  correctas: [a]
+  explicacion: trim() recorta el nombre y default([]) completa las etiquetas. parse devuelve el dato transformado.
+  distractores:
+    b: El esquema transforma el valor.
+    c: Devuelve los datos, no un booleano.
+    d: Tienen un valor por defecto.
+  referencia: https://zod.dev/basics
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué diferencia hay entre parse y safeParse?
+  opciones:
+    - {id: a, texto: "safeParse no valida"}
+    - {id: b, texto: "parse lanza un error si los datos no son válidos; safeParse devuelve un objeto con success y los datos o el error"}
+    - {id: c, texto: "parse es asíncrono"}
+    - {id: d, texto: "Son iguales"}
+  correctas: [b]
+  explicacion: safeParse es cómodo para devolver un 400 con todos los problemas sin usar excepciones.
+  distractores:
+    a: Valida igual.
+    c: Ambos son síncronos; hay variantes asíncronas aparte.
+    d: Se comportan distinto ante datos inválidos.
+  referencia: https://zod.dev/basics
+- id: L04-005
+  tipo: completar
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Completa la línea para deducir el tipo del esquema.
+  codigo:
+    lenguaje: typescript
+    fuente: |
+      type NuevoProducto = z.[[1]]<[[2]] NuevoProductoSchema>;
+  huecos:
+    - {id: "1", respuestas: [infer]}
+    - {id: "2", respuestas: [typeof]}
+  explicacion: z.infer recibe el tipo del esquema, que se obtiene con typeof.
+  referencia: https://zod.dev/basics
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué ventaja tiene deducir el tipo con z.infer en lugar de escribir una interfaz aparte?
+  opciones:
+    - {id: a, texto: "Que el tipo y la validación salen de una sola definición y no se desincronizan"}
+    - {id: b, texto: "Que el programa es más rápido"}
+    - {id: c, texto: "Que no hace falta validar"}
+    - {id: d, texto: "Que el tipo existe al ejecutar"}
+  correctas: [a]
+  explicacion: Si se añade un campo al esquema, el tipo lo incluye automáticamente.
+  distractores:
+    b: No afecta al rendimiento.
+    c: El esquema es la validación.
+    d: El tipo se sigue borrando; lo que existe al ejecutar es el esquema.
+  referencia: https://zod.dev/basics
+- id: L04-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué datos conviene validar al llegar?
+  opciones:
+    - {id: a, texto: "El cuerpo de una petición HTTP"}
+    - {id: b, texto: "La respuesta de una API externa"}
+    - {id: c, texto: "Las variables de entorno"}
+    - {id: d, texto: "El valor que una función propia pasa a otra"}
+    - {id: e, texto: "Una constante del propio código"}
+  correctas: [a, b, c]
+  explicacion: Son bordes por donde entran datos que el compilador no controla.
+  distractores:
+    d: Entre funciones propias, el compilador ya lo comprueba.
+    e: El compilador conoce su valor.
+  referencia: https://zod.dev/
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.2"
+  enunciado: '¿Qué mensajes dio safeParse({ nombre: "   ", precio: -1 })?'
+  opciones:
+    - {id: a, texto: "Solo el del nombre"}
+    - {id: b, texto: "Ninguno"}
+    - {id: c, texto: "Uno genérico"}
+    - {id: d, texto: "Los dos: el del nombre vacío y el de precio no positivo, cada uno con su ruta"}
+  correctas: [d]
+  explicacion: Zod revisa el objeto completo y devuelve la lista de problemas con su ruta.
+  distractores:
+    a: Revisa todos los campos.
+    b: Los dos valores son inválidos.
+    c: Cada problema tiene su mensaje.
+  referencia: https://zod.dev/basics
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué pasó al ejecutar con node un fichero .ts que declara enum Estado { Pendiente, Pagado }?
+  opciones:
+    - {id: a, texto: "Funcionó igual que con tsc"}
+    - {id: b, texto: "Imprimió un aviso y siguió"}
+    - {id: c, texto: "SyntaxError ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX, porque enum no se puede borrar"}
+    - {id: d, texto: "Lo convirtió en una unión"}
+  correctas: [c]
+  explicacion: Node solo quita sintaxis de tipos; un enum genera código, y en el modo de solo borrado no se admite.
+  distractores:
+    a: Node no transforma código, solo borra tipos.
+    b: Es un error que detiene la ejecución.
+    d: No hace conversiones.
+  referencia: https://nodejs.org/api/typescript.html
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué hace erasableSyntaxOnly en tsconfig.json?
+  opciones:
+    - {id: a, texto: "Hace que tsc rechace la sintaxis que no se puede borrar, como enum, para que el código funcione con Node"}
+    - {id: b, texto: "Borra los ficheros generados"}
+    - {id: c, texto: "Desactiva la comprobación de tipos"}
+    - {id: d, texto: "Elimina los comentarios"}
+  correctas: [a]
+  explicacion: Con la opción, tsc dio TS1294 en el enum, antes de ejecutar.
+  distractores:
+    b: No borra ficheros.
+    c: La comprobación sigue activa.
+    d: No tiene relación con los comentarios.
+  referencia: https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: 'Con noUncheckedIndexedAccess, ¿qué pasa con const n: string = nombres[3], si nombres es string[]?'
+  opciones:
+    - {id: a, texto: "Compila y n vale undefined al ejecutar"}
+    - {id: b, texto: "Error TS2322, porque el acceso es string | undefined"}
+    - {id: c, texto: "Lanza un error de índice al ejecutar"}
+    - {id: d, texto: "Devuelve una cadena vacía"}
+  correctas: [b]
+  explicacion: La opción añade undefined a los accesos por índice y obliga a comprobarlos.
+  distractores:
+    a: Es lo que pasa sin la opción.
+    c: JavaScript devuelve undefined, no lanza un error.
+    d: No hay valores por defecto.
+  referencia: https://www.typescriptlang.org/tsconfig/#noUncheckedIndexedAccess
+- id: L05-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué limitaciones tiene ejecutar TypeScript directamente con Node 26?
+  opciones:
+    - {id: a, texto: "No comprueba los tipos"}
+    - {id: b, texto: "Ignora tsconfig.json, así que no admite alias de rutas (paths)"}
+    - {id: c, texto: "No admite enum ni otra sintaxis que genere código"}
+    - {id: d, texto: "Solo funciona en Windows"}
+    - {id: e, texto: "No admite interfaces"}
+  correctas: [a, b, c]
+  explicacion: La documentación de Node lo describe así; las interfaces se borran sin problema.
+  distractores:
+    d: Funciona en cualquier sistema.
+    e: Las interfaces son sintaxis de tipos y se borran.
+  referencia: https://nodejs.org/api/typescript.html
+- id: L05-005
+  tipo: completar
+  dificultad: baja
+  objetivo: "5.3"
+  enunciado: Completa las órdenes de la CI que comprueban los tipos y ejecutan las pruebas.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      npx tsc --[[1]]
+      node --[[2]] src/*.test.ts
+  huecos:
+    - {id: "1", respuestas: [noEmit]}
+    - {id: "2", respuestas: [test]}
+  explicacion: tsc --noEmit solo comprueba tipos; node --test ejecuta las pruebas de node:test.
+  referencia: https://nodejs.org/api/test.html
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Con TypeScript 7, el código usa process.env pero tsc dice que no encuentra process. ¿Qué falta?
+  opciones:
+    - {id: a, texto: "Activar strict"}
+    - {id: b, texto: "Usar any"}
+    - {id: c, texto: "Instalar Node 26"}
+    - {id: d, texto: "Declarar types ['node'] y tener @types/node, porque desde TypeScript 6 types vale []"}
+  correctas: [d]
+  explicacion: TypeScript 6 dejó de incluir por defecto todos los paquetes de node_modules/@types.
+  distractores:
+    a: strict no añade declaraciones.
+    b: Ocultaría el problema.
+    c: Es un problema de declaraciones de tipos, no de la versión de Node.
+  referencia: https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué usarías en lugar de enum Estado { Pendiente, Pagado } para que funcione con Node?
+  opciones:
+    - {id: a, texto: "type Estado = \"pendiente\" | \"pagado\", o un objeto as const"}
+    - {id: b, texto: "Una clase abstracta"}
+    - {id: c, texto: "any"}
+    - {id: d, texto: "Un comentario con los valores"}
+  correctas: [a]
+  explicacion: Las uniones de literales y los objetos as const son sintaxis borrable o JavaScript normal.
+  distractores:
+    b: No modela un conjunto de valores.
+    c: Pierde la comprobación.
+    d: El compilador no lo entiende.
+  referencia: https://nodejs.org/api/typescript.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: ¿Por qué el proyecto del tema usa noEmit?
+  opciones:
+    - {id: a, texto: "Para no comprobar tipos"}
+    - {id: b, texto: "Porque tsc solo comprueba los tipos; Node ejecuta los .ts directamente"}
+    - {id: c, texto: "Para que tsc sea más lento"}
+    - {id: d, texto: "Porque Node no admite JavaScript"}
+  correctas: [b]
+  explicacion: No hace falta generar JavaScript si Node ejecuta los ficheros TypeScript.
+  distractores:
+    a: Comprueba los tipos igual.
+    c: Al contrario, hace menos trabajo.
+    d: Node ejecuta JavaScript.
+  referencia: https://www.typescriptlang.org/tsconfig/

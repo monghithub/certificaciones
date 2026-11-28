@@ -1,0 +1,13 @@
+slug: concurrencia-en-java
+titulo: Concurrencia en Java
+area: lenguajes
+nivel: avanzado
+idioma: es-ES
+resumen: Concurrencia en Java 25 con cada problema reproducido. Condiciones de carrera y visibilidad, cerrojos y atómicos, ejecutores y CompletableFuture, hilos virtuales sin pinning y concurrencia estructurada, y cómo diagnosticar interbloqueos y fallos silenciosos.
+etiquetas: [java, concurrencia, hilos, hilos-virtuales, completablefuture, jdk-25]
+requisitos: [java-moderno]
+fuentes:
+  - docs.oracle.com
+  - openjdk.org
+ejercicios:
+  minimo_por_leccion: 8

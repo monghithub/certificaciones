@@ -1,0 +1,14 @@
+slug: oauth2-y-oidc
+titulo: OAuth 2.0 y OpenID Connect
+area: seguridad
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo delegar el acceso con OAuth 2.0 y autenticar usuarios con OpenID Connect, con el flujo de código y PKCE, las credenciales de cliente, los tokens JWT y las recomendaciones de seguridad del RFC 9700, comprobados contra Keycloak.
+etiquetas: [oauth2, oidc, jwt, pkce, autenticacion, autorizacion]
+fuentes:
+  - rfc-editor.org
+  - openid.net
+  - oauth.net
+  - keycloak.org
+ejercicios:
+  minimo_por_leccion: 8

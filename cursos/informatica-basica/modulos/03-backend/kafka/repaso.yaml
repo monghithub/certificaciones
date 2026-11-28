@@ -1,0 +1,545 @@
+- id: L01-001
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué ventajas tiene que pedidos publique un mensaje en un broker en lugar de llamar directamente a facturación, envíos y correo?
+  opciones:
+    - {id: a, texto: "Pedidos no necesita conocer a cada destinatario"}
+    - {id: b, texto: "Si envíos está caído, el mensaje espera en el broker"}
+    - {id: c, texto: "Los consumidores procesan a su ritmo aunque lleguen picos"}
+    - {id: d, texto: "Los sistemas ven el cambio en el mismo instante"}
+    - {id: e, texto: "Desaparecen los mensajes duplicados"}
+  correctas: [a, b, c]
+  explicacion: El broker desacopla a productor y consumidores, guarda los mensajes mientras alguien está caído y amortigua los picos.
+  distractores:
+    d: Al contrario, se asume consistencia eventual, con un pequeño retraso.
+    e: Según la garantía de entrega, puede haber duplicados.
+  referencia: https://kafka.apache.org/41/getting-started/introduction/
+- id: L01-002
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Elige el tipo de canal para cada caso.
+  prompts:
+    - {id: "1", texto: "Repartir la generación de facturas entre cinco procesos iguales"}
+    - {id: "2", texto: "Que facturación, envíos y correo se enteren de cada pedido"}
+    - {id: "3", texto: "Procesar cada imagen subida exactamente con uno de varios trabajadores"}
+  opciones:
+    - {id: a, texto: "Punto a punto (cola)"}
+    - {id: b, texto: "Publicación-suscripción"}
+    - {id: c, texto: "Llamada HTTP síncrona"}
+  correctas: [["1", a], ["2", b], ["3", a]]
+  explicacion: Una cola reparte cada mensaje a un solo consumidor; publicación-suscripción lo entrega a todos los suscriptores.
+  distractores:
+    c: Ninguno de los casos necesita una respuesta inmediata.
+  referencia: https://www.enterpriseintegrationpatterns.com/patterns/messaging/
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿Qué coste asume un sistema al pasar de llamadas directas a mensajería asíncrona?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Que el productor tiene que conocer a cada consumidor"}
+    - {id: c, texto: "Que no puede haber más de un consumidor"}
+    - {id: d, texto: "Consistencia eventual, posibles duplicados o desorden, y una pieza más que operar"}
+  correctas: [d]
+  explicacion: Los sistemas se ponen al día con retraso, hay que diseñar para mensajes repetidos y el broker hay que mantenerlo y vigilarlo.
+  distractores:
+    a: Desacoplar tiene contrapartidas.
+    b: Es justo lo que la mensajería evita.
+    c: Puede haber muchos consumidores.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué diferencia fundamental hay entre Kafka y un broker de colas como RabbitMQ?
+  opciones:
+    - {id: a, texto: "Kafka guarda los eventos durante un periodo de retención, se consuman o no, y cada consumidor puede releerlos"}
+    - {id: b, texto: "Kafka no permite varios consumidores"}
+    - {id: c, texto: "RabbitMQ solo funciona en Windows"}
+    - {id: d, texto: "Kafka entrega cada mensaje y lo borra al confirmarlo"}
+  correctas: [a]
+  explicacion: La documentación de Kafka señala que, a diferencia de los sistemas de mensajería tradicionales, los eventos no se borran al consumirlos, sino según la retención configurada.
+  distractores:
+    b: Admite muchos consumidores y grupos.
+    c: RabbitMQ es multiplataforma.
+    d: Es el modelo de un broker de colas tradicional.
+  referencia: https://kafka.apache.org/41/getting-started/introduction/
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Qué libro dio nombre a los patrones de mensajería como el canal punto a punto o el de mensajes muertos?
+  opciones:
+    - {id: a, texto: "Design Patterns, de la GoF"}
+    - {id: b, texto: "Enterprise Integration Patterns, de Gregor Hohpe y Bobby Woolf (2003)"}
+    - {id: c, texto: "Clean Architecture"}
+    - {id: d, texto: "Domain-Driven Design"}
+  correctas: [b]
+  explicacion: Enterprise Integration Patterns recoge los patrones de integración con mensajes, que hoy usan todos los brokers.
+  distractores:
+    a: Recoge patrones de diseño orientado a objetos.
+    c: Trata de arquitectura de aplicaciones.
+    d: Trata de modelado del dominio.
+  referencia: https://www.enterpriseintegrationpatterns.com/patterns/messaging/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: Un equipo quiere que un servicio nuevo pueda procesar desde el principio todos los pedidos del último mes. ¿Qué broker encaja mejor?
+  opciones:
+    - {id: a, texto: "Una cola que borra cada mensaje al confirmarlo"}
+    - {id: b, texto: "Ninguno; hay que reenviar los pedidos a mano"}
+    - {id: c, texto: "Kafka, con una retención suficiente, para que el servicio nuevo lea desde el primer offset"}
+    - {id: d, texto: "Una llamada HTTP a cada servicio"}
+  correctas: [c]
+  explicacion: Kafka conserva los eventos durante la retención y cada grupo nuevo puede empezar desde el principio.
+  distractores:
+    a: Los mensajes ya consumidos no estarían.
+    b: Kafka lo permite sin reenviar nada.
+    d: No conserva el historial.
+  referencia: https://kafka.apache.org/41/getting-started/introduction/
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Cómo combina Kafka los dos tipos de canal?
+  opciones:
+    - {id: a, texto: "No los combina; solo es publicación-suscripción"}
+    - {id: b, texto: "Dentro de un grupo de consumidores reparte los mensajes como una cola, y cada grupo distinto recibe todos, como en publicación-suscripción"}
+    - {id: c, texto: "Con dos productos distintos"}
+    - {id: d, texto: "Solo con RabbitMQ delante"}
+  correctas: [b]
+  explicacion: El grupo de consumidores es el mecanismo que permite usar Kafka de las dos maneras.
+  distractores:
+    a: Dentro de un grupo, cada mensaje lo procesa un solo consumidor.
+    c: Es el mismo producto.
+    d: No necesita otro broker.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: El cliente pulsa «Comprar» y la aplicación debe decirle al momento si hay stock. ¿Encaja aquí la mensajería asíncrona?
+  opciones:
+    - {id: a, texto: "Sí, porque desacoplar es preferible a esperar"}
+    - {id: b, texto: "Sí, con una cola de respuesta obligatoria"}
+    - {id: c, texto: "No, porque los brokers son lentos"}
+    - {id: d, texto: "No para esa comprobación, que necesita una respuesta inmediata; sí para avisar después a facturación o envíos"}
+  correctas: [d]
+  explicacion: Lo que necesita respuesta en el momento suele ir por una llamada directa. Lo que puede ocurrir después encaja con mensajes.
+  distractores:
+    a: Cada estilo encaja en unos casos; no hay uno siempre mejor.
+    b: Se puede, pero complica algo que una llamada resuelve directamente.
+    c: Los brokers son rápidos; la cuestión es si el usuario espera una respuesta.
+  referencia: https://www.enterpriseintegrationpatterns.com/patterns/messaging/
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Envías tres eventos con la clave cliente-1 a un tema de 3 particiones. ¿Qué garantiza Kafka?
+  opciones:
+    - {id: a, texto: "Que irán a la misma partición y quien la lea los recibirá en el orden en que se escribieron"}
+    - {id: b, texto: "Que irán cada uno a una partición distinta"}
+    - {id: c, texto: "Que se leerán en orden respecto a los eventos de los demás clientes"}
+    - {id: d, texto: "Que solo se guardará el último"}
+  correctas: [a]
+  explicacion: La documentación garantiza que los eventos con la misma clave van a la misma partición y se leen en el orden de escritura. En la prueba, A1, A2 y A3 quedaron en la partición 1 y en orden.
+  distractores:
+    b: El reparto por clave los agrupa en una partición.
+    c: No hay orden global entre particiones ni entre claves distintas.
+    d: Eso solo ocurre con la compactación, y a largo plazo.
+  referencia: https://kafka.apache.org/41/getting-started/introduction/
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: Los eventos de un pedido (creado, pagado, enviado) deben procesarse en orden. ¿Qué clave usarías?
+  opciones:
+    - {id: a, texto: "Ninguna, para repartir mejor la carga"}
+    - {id: b, texto: "El tipo de evento"}
+    - {id: c, texto: "La fecha"}
+    - {id: d, texto: "El identificador del pedido"}
+  correctas: [d]
+  explicacion: Con el identificador del pedido como clave, todos sus eventos van a la misma partición y se leen en orden.
+  distractores:
+    a: Sin clave, los eventos de un pedido podrían ir a particiones distintas y leerse desordenados.
+    b: Juntaría los eventos de un mismo tipo, no los de un pedido.
+    c: Repartiría los eventos de un pedido por fechas.
+  referencia: https://kafka.apache.org/41/getting-started/introduction/
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: En la prueba, ¿qué offset tuvo el tercer evento de la partición 1?
+  opciones:
+    - {id: a, texto: "3"}
+    - {id: b, texto: "2"}
+    - {id: c, texto: "1"}
+    - {id: d, texto: "Depende del consumidor"}
+  correctas: [b]
+  explicacion: Los offsets empiezan en 0 dentro de cada partición; el tercer evento tiene el offset 2 (pedido-A2).
+  distractores:
+    a: Sería el cuarto evento.
+    c: Es el segundo.
+    d: El offset es una propiedad del evento en la partición, igual para todos los consumidores.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Un grupo de consumidores lee todos los eventos de un tema. ¿Qué les pasa en Kafka?
+  opciones:
+    - {id: a, texto: "Se borran"}
+    - {id: b, texto: "Se mueven a otro tema"}
+    - {id: c, texto: "Se conservan hasta que vence la retención, y otros grupos pueden leerlos"}
+    - {id: d, texto: "Se comprimen en un único evento"}
+  correctas: [c]
+  explicacion: La documentación indica que los eventos no se borran tras consumirlos. En la prueba, un segundo grupo leyó los mismos seis eventos.
+  distractores:
+    a: Es el comportamiento de una cola tradicional.
+    b: Kafka no mueve eventos entre temas por sí mismo.
+    d: La compactación guarda el último por clave, no uno único.
+  referencia: https://kafka.apache.org/41/getting-started/introduction/
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: ¿Cuál es la retención por defecto de los eventos en un broker de Kafka?
+  opciones:
+    - {id: a, texto: "1 hora"}
+    - {id: b, texto: "24 horas"}
+    - {id: c, texto: "Indefinida"}
+    - {id: d, texto: "168 horas (7 días)"}
+  correctas: [d]
+  explicacion: log.retention.hours vale 168 por defecto, según la documentación de configuración del broker.
+  distractores:
+    a: Es mucho menos que el valor por defecto.
+    b: Tampoco es el valor por defecto.
+    c: Hay que configurarla expresamente.
+  referencia: https://kafka.apache.org/41/configuration/broker-configs/
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: Quieres un tema con el estado actual de cada producto (precio y stock), donde solo importa el último valor de cada uno. ¿Qué configuración encaja?
+  opciones:
+    - {id: a, texto: "cleanup.policy=compact, con el identificador del producto como clave"}
+    - {id: b, texto: "Una retención de 1 minuto"}
+    - {id: c, texto: "Una sola partición sin clave"}
+    - {id: d, texto: "Borrar el tema cada día"}
+  correctas: [a]
+  explicacion: La compactación conserva al menos el último evento de cada clave, así que el tema guarda el estado actual de cada producto.
+  distractores:
+    b: Perdería el estado de los productos que no cambian en ese minuto.
+    c: Sin clave, la compactación no sabe qué eventos son del mismo producto.
+    d: Se perdería todo el estado.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L02-007
+  tipo: completar
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: Completa la orden para crear el tema pedidos con 3 particiones.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      kafka-topics.sh --bootstrap-server localhost:9092 \
+        --create --topic pedidos --[[1]] 3 --[[2]] 1
+  huecos:
+    - {id: "1", respuestas: [partitions]}
+    - {id: "2", respuestas: [replication-factor]}
+  explicacion: --partitions fija el número de particiones y --replication-factor el número de copias de cada una; en producción suele ser 3.
+  referencia: https://kafka.apache.org/41/getting-started/introduction/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Vas a actualizar un clúster con ZooKeeper a Kafka 4.0. ¿Qué dice la documentación?
+  opciones:
+    - {id: a, texto: "Que ZooKeeper sigue siendo opcional"}
+    - {id: b, texto: "Que Kafka 4.0 solo admite el modo KRaft; antes hay que migrar con una versión puente, la última es la 3.9"}
+    - {id: c, texto: "Que Kafka 4.0 necesita dos ZooKeeper"}
+    - {id: d, texto: "Que basta con cambiar la imagen"}
+  correctas: [b]
+  explicacion: La documentación indica que Kafka 4.0 solo admite KRaft y que la migración desde ZooKeeper se hace con una versión puente, la última de las cuales es la 3.9.
+  distractores:
+    a: El modo ZooKeeper se eliminó en la 4.0.
+    c: Kafka 4.0 no usa ZooKeeper.
+    d: Hace falta migrar los metadatos a KRaft.
+  referencia: https://kafka.apache.org/41/getting-started/upgrade/
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Un tema tiene 3 particiones y un grupo tiene 2 consumidores. ¿Cómo se reparten?
+  opciones:
+    - {id: a, texto: "Los dos leen las 3 particiones y reciben cada evento dos veces"}
+    - {id: b, texto: "Cada partición la lee un solo consumidor; uno lee dos particiones y el otro una"}
+    - {id: c, texto: "Solo trabaja el primer consumidor"}
+    - {id: d, texto: "Kafka crea una cuarta partición"}
+  correctas: [b]
+  explicacion: Dentro de un grupo, cada partición tiene un único consumidor. En la prueba, el consumidor 1 leyó las particiones 0 y 1 y el 2, la partición 2.
+  distractores:
+    a: Dentro de un grupo los eventos no se duplican.
+    c: Las particiones se reparten entre los consumidores disponibles.
+    d: El número de particiones no cambia solo.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Los grupos facturacion y envios leen el tema pedidos, de 6 eventos, desde el principio. ¿Cuántos eventos recibe cada grupo?
+  opciones:
+    - {id: a, texto: "3 cada uno"}
+    - {id: b, texto: "6 el primero y 0 el segundo"}
+    - {id: c, texto: "6 cada uno, porque cada grupo lleva sus propios offsets"}
+    - {id: d, texto: "Ninguno"}
+  correctas: [c]
+  explicacion: Entre grupos no hay reparto; cada uno lee el tema completo, como en publicación-suscripción.
+  distractores:
+    a: El reparto ocurre entre consumidores de un mismo grupo, no entre grupos.
+    b: El primer grupo no consume los eventos para los demás.
+    d: Los eventos siguen en el tema.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Qué indica el lag de un grupo de consumidores?
+  opciones:
+    - {id: a, texto: "Cuántos eventos le quedan por procesar"}
+    - {id: b, texto: "Cuánto tarda la red"}
+    - {id: c, texto: "Cuántos consumidores tiene"}
+    - {id: d, texto: "Cuántas particiones tiene el tema"}
+  correctas: [a]
+  explicacion: Es la diferencia entre el último offset de cada partición y el offset confirmado por el grupo. Si crece, los consumidores no dan abasto.
+  distractores:
+    b: No mide la latencia de red.
+    c: Los miembros se ven con --members.
+    d: Las particiones se ven al describir el tema.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L03-004
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa la orden para que el grupo facturacion vuelva a leer el tema desde el principio.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group facturacion \
+        --topic pedidos --reset-offsets --[[1]] --[[2]]
+  huecos:
+    - {id: "1", respuestas: [to-earliest]}
+    - {id: "2", respuestas: [execute]}
+  explicacion: --to-earliest lleva los offsets al principio y --execute aplica el cambio; sin él, la orden solo muestra lo que haría.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Un tema tiene 3 particiones y el grupo procesa con lentitud. Pasas de 3 a 6 consumidores. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "El consumo se duplica"}
+    - {id: b, texto: "Tres consumidores se quedan sin particiones; el paralelismo sigue limitado a 3"}
+    - {id: c, texto: "Kafka divide cada partición en dos"}
+    - {id: d, texto: "Los eventos se procesan dos veces"}
+  correctas: [b]
+  explicacion: Como cada partición la lee un solo consumidor del grupo, sobran los consumidores que excedan el número de particiones. Primero hay que aumentar las particiones.
+  distractores:
+    a: Sin más particiones, no hay más trabajo que repartir.
+    c: Las particiones no se dividen solas.
+    d: El grupo no duplica eventos.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Uno de los dos consumidores del grupo se cae. ¿Qué pasa con sus particiones?
+  opciones:
+    - {id: a, texto: "Se quedan sin leer hasta que vuelva"}
+    - {id: b, texto: "Se borran"}
+    - {id: c, texto: "Se reasignan al consumidor que sigue activo mediante un reequilibrio"}
+    - {id: d, texto: "Se mueven a otro tema"}
+  correctas: [c]
+  explicacion: El grupo se reequilibra y reparte las particiones entre los consumidores vivos, que continúan desde los últimos offsets confirmados.
+  distractores:
+    a: El reequilibrio evita que se queden sin consumidor.
+    b: Las particiones y sus eventos no dependen de los consumidores.
+    d: Kafka no mueve particiones entre temas.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Por qué el estado de un grupo de consumidores en Kafka es tan pequeño?
+  opciones:
+    - {id: a, texto: "Porque guarda una copia comprimida de cada evento"}
+    - {id: b, texto: "Porque solo necesita un número por partición, el offset del siguiente evento que debe leer"}
+    - {id: c, texto: "Porque no guarda nada"}
+    - {id: d, texto: "Porque lo guarda el productor"}
+  correctas: [b]
+  explicacion: La documentación lo destaca frente a los brokers que confirman mensaje a mensaje, porque basta un entero por partición, que se guarda periódicamente.
+  distractores:
+    a: Los eventos están en el tema, no en el estado del grupo.
+    c: Guarda los offsets confirmados.
+    d: El productor no sabe nada de los consumidores.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L03-008
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada necesidad con la forma de configurarla en Kafka.
+  prompts:
+    - {id: "1", texto: "Repartir los eventos entre cuatro instancias del servicio de facturación"}
+    - {id: "2", texto: "Que facturación y envíos reciban todos los eventos"}
+    - {id: "3", texto: "Reprocesar los eventos tras corregir un error"}
+  opciones:
+    - {id: a, texto: "Las cuatro instancias en el mismo grupo, con al menos cuatro particiones"}
+    - {id: b, texto: "Un grupo distinto para cada servicio"}
+    - {id: c, texto: "Mover los offsets del grupo con --reset-offsets"}
+    - {id: d, texto: "Crear un tema por consumidor"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El grupo reparte, los grupos distintos difunden y mover los offsets permite volver a leer.
+  distractores:
+    d: Duplicaría los eventos sin necesidad; los grupos ya resuelven estos casos.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L04-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: Empareja cada garantía con su definición.
+  prompts:
+    - {id: "1", texto: "Como máximo una vez"}
+    - {id: "2", texto: "Al menos una vez"}
+    - {id: "3", texto: "Exactamente una vez"}
+  opciones:
+    - {id: a, texto: "Puede perder mensajes, pero no los repite"}
+    - {id: b, texto: "No pierde mensajes, pero puede repetirlos"}
+    - {id: c, texto: "Cada mensaje se procesa una sola vez"}
+    - {id: d, texto: "Los mensajes se entregan en orden global"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Son las tres semánticas de entrega que define la documentación de Kafka.
+  distractores:
+    d: El orden es otra propiedad, y solo se garantiza dentro de cada partición.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Un consumidor confirma el offset antes de procesar el mensaje y se cae justo después de confirmar. ¿Qué pasa con ese mensaje?
+  opciones:
+    - {id: a, texto: "Se vuelve a entregar al reiniciar"}
+    - {id: b, texto: "Se procesa dos veces"}
+    - {id: c, texto: "Va a la cola de mensajes muertos"}
+    - {id: d, texto: "Se pierde, porque el offset ya indica que se procesó"}
+  correctas: [d]
+  explicacion: Confirmar antes de procesar da la garantía de como máximo una vez; un fallo entre medias pierde el mensaje.
+  distractores:
+    a: Eso ocurriría confirmando después de procesar.
+    b: No llega a procesarse ni una vez.
+    c: Nadie lo envía allí; simplemente se salta.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué valores por defecto tienen acks y enable.idempotence en el productor de Kafka 4.1?
+  opciones:
+    - {id: a, texto: "acks=0 y enable.idempotence=false"}
+    - {id: b, texto: "acks=1 y enable.idempotence=false"}
+    - {id: c, texto: "acks=all y enable.idempotence=true"}
+    - {id: d, texto: "No tienen valor por defecto"}
+  correctas: [c]
+  explicacion: La documentación de configuración del productor indica Default all para acks y Default true para enable.idempotence.
+  distractores:
+    a: Con acks=0 se podrían perder mensajes sin enterarse.
+    b: No son los valores por defecto actuales.
+    d: Ambos tienen valor por defecto.
+  referencia: https://kafka.apache.org/41/configuration/producer-configs/
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué problema evita enable.idempotence=true en el productor?
+  opciones:
+    - {id: a, texto: "Que los reintentos por un fallo del broker escriban copias duplicadas del mensaje en el registro"}
+    - {id: b, texto: "Que el consumidor procese un mensaje dos veces"}
+    - {id: c, texto: "Que se pierdan mensajes al consumir"}
+    - {id: d, texto: "Que el tema se quede sin espacio"}
+  correctas: [a]
+  explicacion: El productor idempotente asegura que se escribe una sola copia aunque reintente. Lo que haga después el consumidor es otra mitad del problema.
+  distractores:
+    b: La duplicación al consumir depende de cuándo se confirma el offset.
+    c: Las pérdidas al consumir dependen también del consumidor.
+    d: El espacio depende de la retención.
+  referencia: https://kafka.apache.org/41/configuration/producer-configs/
+- id: L04-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué técnicas hacen idempotente a un consumidor que crea facturas?
+  opciones:
+    - {id: a, texto: "Guardar el identificador de cada mensaje procesado y descartar los repetidos"}
+    - {id: b, texto: "Una restricción UNIQUE sobre el número de pedido en la tabla de facturas"}
+    - {id: c, texto: "Operaciones que fijan un estado en lugar de sumar"}
+    - {id: d, texto: "Confirmar el offset antes de procesar"}
+    - {id: e, texto: "Aumentar el número de particiones"}
+  correctas: [a, b, c]
+  explicacion: Todas impiden que un mensaje repetido produzca un segundo efecto.
+  distractores:
+    d: Cambia la garantía a como máximo una vez y puede perder mensajes.
+    e: No tiene relación con los duplicados.
+  referencia: https://www.enterpriseintegrationpatterns.com/patterns/messaging/IdempotentReceiver.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Un consumidor lee de Kafka y escribe en PostgreSQL. ¿Qué combinación da un resultado sin pérdidas ni efectos duplicados?
+  opciones:
+    - {id: a, texto: "Activar el modo exactamente una vez de Kafka, que cubre también la base de datos"}
+    - {id: b, texto: "Entrega al menos una vez, confirmando después de procesar, y un consumidor idempotente"}
+    - {id: c, texto: "Entrega como máximo una vez"}
+    - {id: d, texto: "Confirmar el offset en otra tarea, cada hora"}
+  correctas: [b]
+  explicacion: Las garantías de Kafka no se extienden a sistemas externos. Al menos una vez evita pérdidas y la idempotencia absorbe los duplicados.
+  distractores:
+    a: Las transacciones de Kafka cubren lo que se lee y escribe en Kafka, no una base de datos externa.
+    c: Puede perder mensajes.
+    d: Al reiniciar se repetiría una hora de mensajes, y seguiría haciendo falta idempotencia.
+  referencia: https://kafka.apache.org/41/design/design/
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Un mensaje con datos corruptos hace fallar al consumidor una y otra vez, y la partición deja de avanzar. ¿Qué patrón lo resuelve?
+  opciones:
+    - {id: a, texto: "Borrar el tema"}
+    - {id: b, texto: "Aumentar la retención"}
+    - {id: c, texto: "Reiniciar el consumidor sin parar"}
+    - {id: d, texto: "Un canal de mensajes muertos: tras varios intentos, enviar el mensaje a un tema aparte y seguir con el resto"}
+  correctas: [d]
+  explicacion: El canal de mensajes muertos aparta lo que no se puede procesar para revisarlo después, sin bloquear la partición.
+  distractores:
+    a: Perdería todos los mensajes.
+    b: No resuelve el bloqueo.
+    c: El mensaje seguiría fallando.
+  referencia: https://www.enterpriseintegrationpatterns.com/patterns/messaging/DeadLetterChannel.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Según la documentación de Kafka, ¿en qué dos mitades se divide el problema de las garantías de entrega?
+  opciones:
+    - {id: a, texto: "Red y disco"}
+    - {id: b, texto: "La durabilidad al publicar y la garantía al consumir"}
+    - {id: c, texto: "Temas y particiones"}
+    - {id: d, texto: "Brokers y ZooKeeper"}
+  correctas: [b]
+  explicacion: Hay que asegurar tanto que el mensaje queda guardado al publicarlo como que se procesa correctamente al consumirlo.
+  distractores:
+    a: Son recursos del sistema, no las mitades del problema.
+    c: Son la estructura de los datos.
+    d: Kafka 4 no usa ZooKeeper.
+  referencia: https://kafka.apache.org/41/design/design/

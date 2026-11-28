@@ -1,0 +1,694 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿Qué es lo esencial que define un estilo de arquitectura?
+  opciones:
+    - {id: a, texto: "El lenguaje de programación"}
+    - {id: b, texto: "El número de servidores"}
+    - {id: c, texto: "Sus reglas sobre cómo se reparten las responsabilidades y en qué dirección van las dependencias"}
+    - {id: d, texto: "El framework web"}
+  correctas: [c]
+  explicacion: Las diferencias entre estilos se reducen sobre todo a adónde apuntan las dependencias.
+  distractores:
+    a: Un estilo se aplica en cualquier lenguaje.
+    b: Es una cuestión de despliegue.
+    d: Es tecnología, no estilo.
+  referencia: https://martinfowler.com/architecture/
+- id: L01-002
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Empareja cada estilo con lo que favorece principalmente.
+  prompts:
+    - {id: "1", texto: "Capas"}
+    - {id: "2", texto: "Hexagonal o limpia"}
+    - {id: "3", texto: "Microservicios"}
+    - {id: "4", texto: "Dirigida por eventos"}
+  opciones:
+    - {id: a, texto: "Sencillez y familiaridad"}
+    - {id: b, texto: "Probar y cambiar el dominio sin la tecnología"}
+    - {id: c, texto: "Despliegue y escala independientes por equipo"}
+    - {id: d, texto: "Desacoplamiento en el tiempo"}
+    - {id: e, texto: "No tener ningún coste"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Cada estilo favorece unos atributos a costa de otros.
+  distractores:
+    e: Ninguno es gratis.
+  referencia: https://martinfowler.com/architecture/
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué estilo de arquitectura es mejor?
+  opciones:
+    - {id: a, texto: "Microservicios, por ser el más moderno"}
+    - {id: b, texto: "Capas, por ser el más conocido"}
+    - {id: c, texto: "Depende de qué atributos de calidad importan en el sistema y de qué compromisos se aceptan"}
+    - {id: d, texto: "Clean architecture, sea cual sea el proyecto"}
+  correctas: [c]
+  explicacion: Elegir un estilo es elegir qué compromisos aceptar.
+  distractores:
+    a: Tiene costes que no siempre compensan.
+    b: Tiene limitaciones conocidas.
+    d: Añade estructura que no siempre compensa.
+  referencia: https://iso25000.com/en/iso-25000-standards/iso-25010
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Puede un microservicio tener arquitectura hexagonal por dentro?
+  opciones:
+    - {id: a, texto: "No, son estilos incompatibles"}
+    - {id: b, texto: "Sí: la estructura interna y la forma de desplegar son ejes distintos"}
+    - {id: c, texto: "Solo en Java"}
+    - {id: d, texto: "Solo si usa eventos"}
+  correctas: [b]
+  explicacion: Hexagonal organiza el código; microservicios decide las unidades de despliegue.
+  distractores:
+    a: Se combinan bien.
+    c: No depende del lenguaje.
+    d: No es una condición.
+  referencia: https://martinfowler.com/architecture/
+- id: L01-005
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.3"
+  enunciado: Empareja cada concepto con lo que describe.
+  prompts:
+    - {id: "1", texto: "Arquitectura limpia"}
+    - {id: "2", texto: "Monolito modular"}
+    - {id: "3", texto: "Microservicios"}
+  opciones:
+    - {id: a, texto: "La estructura interna del código y la dirección de sus dependencias"}
+    - {id: b, texto: "Una única unidad de despliegue dividida en módulos"}
+    - {id: c, texto: "Varias unidades de despliegue independientes"}
+    - {id: d, texto: "Un lenguaje de programación"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: La limpia organiza el código; monolito modular y microservicios deciden cómo se despliega.
+  distractores:
+    d: Ninguno de ellos es un lenguaje.
+  referencia: https://martinfowler.com/architecture/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué característica de calidad de la ISO/IEC 25010 pesa más al elegir entre capas, hexagonal o limpia?
+  opciones:
+    - {id: a, texto: "La mantenibilidad: lo fácil que es entender, probar y cambiar el sistema"}
+    - {id: b, texto: "La eficiencia energética del hardware"}
+    - {id: c, texto: "La capacidad de interacción con el usuario"}
+    - {id: d, texto: "La compatibilidad con otros fabricantes"}
+  correctas: [a]
+  explicacion: Estos estilos reorganizan dependencias para facilitar el cambio y las pruebas.
+  distractores:
+    b: No depende de la estructura del código.
+    c: Depende sobre todo de la interfaz.
+    d: No es lo que buscan estos estilos.
+  referencia: https://iso25000.com/en/iso-25000-standards/iso-25010
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Dos equipos discuten si usar cebolla o limpia. ¿Qué conviene comparar?
+  opciones:
+    - {id: a, texto: "Los colores de sus diagramas"}
+    - {id: b, texto: "Sus reglas de dependencia, que son casi iguales; la diferencia práctica es pequeña"}
+    - {id: c, texto: "Cuál tiene más capas"}
+    - {id: d, texto: "Cuál es más reciente"}
+  correctas: [b]
+  explicacion: Ambas ponen el dominio en el centro y hacen que las dependencias apunten hacia dentro.
+  distractores:
+    a: El diagrama no es el estilo.
+    c: El número de capas es secundario.
+    d: No es un criterio técnico.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué coste tienen hexagonal, cebolla y limpia frente a las capas clásicas?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Más interfaces y traducciones entre el dominio y la tecnología"}
+    - {id: c, texto: "Que no se pueden probar"}
+    - {id: d, texto: "Que exigen microservicios"}
+  correctas: [b]
+  explicacion: Proteger el dominio exige puertos, adaptadores y conversiones.
+  distractores:
+    a: Añaden estructura.
+    c: Facilitan las pruebas.
+    d: Son independientes del despliegue.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: En una arquitectura en capas clásica, ¿qué dependencia está permitida?
+  opciones:
+    - {id: a, texto: "Que el acceso a datos llame a la presentación"}
+    - {id: b, texto: "Que la lógica de negocio use el acceso a datos"}
+    - {id: c, texto: "Que el negocio conozca los controladores web"}
+    - {id: d, texto: "Entre capas, en ambas direcciones"}
+  correctas: [b]
+  explicacion: Cada capa depende solo de las de debajo.
+  distractores:
+    a: Va hacia arriba.
+    c: Va hacia arriba.
+    d: Hay una dirección permitida.
+  referencia: https://martinfowler.com/bliki/PresentationDomainDataLayering.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Cuál es el problema principal de las capas clásicas que resuelven hexagonal, cebolla y limpia?
+  opciones:
+    - {id: a, texto: "Que tienen demasiadas capas"}
+    - {id: b, texto: "Que no permiten bases de datos"}
+    - {id: c, texto: "Que el negocio depende de la persistencia, así que probarlo exige la base de datos y cambiar de tecnología toca el núcleo"}
+    - {id: d, texto: "Que no se pueden desplegar"}
+  correctas: [c]
+  explicacion: Estos estilos invierten esa dependencia para que la persistencia dependa del dominio.
+  distractores:
+    a: El número de capas no es el problema.
+    b: Las usan.
+    d: Se despliegan sin problema.
+  referencia: https://martinfowler.com/bliki/PresentationDomainDataLayering.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué informó import-linter cuando crear_pedido importó tienda.web.api?
+  opciones:
+    - {id: a, texto: "Nada; las importaciones no se comprueban"}
+    - {id: b, texto: "Un aviso de estilo"}
+    - {id: c, texto: "Que se rompía el contrato de capas: tienda.aplicacion no puede importar tienda.web, con el fichero y la línea"}
+    - {id: d, texto: "Un error de sintaxis"}
+  correctas: [c]
+  explicacion: La aplicación está por debajo de la web, y el contrato prohíbe esa dirección.
+  distractores:
+    a: El contrato comprueba justamente eso.
+    b: Fue un contrato roto, no un aviso.
+    d: El código es válido; viola una regla de arquitectura.
+  referencia: https://import-linter.readthedocs.io/en/stable/contract_types/
+- id: L02-004
+  tipo: completar
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Completa el contrato que impide que el dominio importe la infraestructura.
+  codigo:
+    lenguaje: ini
+    fuente: |
+      [importlinter:contract:dominio-puro]
+      name = El dominio no depende de la infraestructura
+      type = [[1]]
+      source_modules = tienda.dominio
+      [[2]] = tienda.infraestructura
+  huecos:
+    - {id: "1", respuestas: [forbidden]}
+    - {id: "2", respuestas: [forbidden_modules]}
+  explicacion: Un contrato forbidden prohíbe que los módulos de origen importen los indicados.
+  referencia: https://import-linter.readthedocs.io/en/stable/contract_types/
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué es una función de aptitud de arquitectura?
+  opciones:
+    - {id: a, texto: "Una comprobación automática y repetible de una característica de la arquitectura, por ejemplo en la CI"}
+    - {id: b, texto: "Una función matemática del dominio"}
+    - {id: c, texto: "Un ejercicio para el equipo"}
+    - {id: d, texto: "Una métrica de rendimiento del servidor"}
+  correctas: [a]
+  explicacion: Los contratos de import-linter o las reglas de ArchUnit son ejemplos.
+  distractores:
+    b: No es lógica de negocio.
+    c: No es una actividad del equipo.
+    d: Puede medir rendimiento, pero el concepto es más amplio.
+  referencia: https://www.thoughtworks.com/radar/techniques/architectural-fitness-function
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Casi todas las peticiones atraviesan la capa de negocio sin que esta haga nada, solo para llegar a los datos. ¿Qué sugiere?
+  opciones:
+    - {id: a, texto: "Que falta otra capa"}
+    - {id: b, texto: "Que quizá la aplicación es esencialmente un CRUD y no necesita tanta estructura"}
+    - {id: c, texto: "Que hay que pasar a microservicios"}
+    - {id: d, texto: "Que la base de datos es lenta"}
+  correctas: [b]
+  explicacion: Las capas sin lógica solo añaden código que pasa datos.
+  distractores:
+    a: Empeoraría el problema.
+    c: No tiene relación.
+    d: No es un problema de rendimiento.
+  referencia: https://martinfowler.com/bliki/PresentationDomainDataLayering.html
+- id: L02-007
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: Empareja cada herramienta con su lenguaje.
+  prompts:
+    - {id: "1", texto: "import-linter"}
+    - {id: "2", texto: "ArchUnit"}
+    - {id: "3", texto: "Spring Modulith"}
+  opciones:
+    - {id: a, texto: "Python"}
+    - {id: b, texto: "Java, con pruebas de JUnit"}
+    - {id: c, texto: "Java con Spring, para monolitos modulares"}
+    - {id: d, texto: "JavaScript"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Todas convierten reglas de arquitectura en comprobaciones automáticas.
+  distractores:
+    d: Ninguna de las tres es para JavaScript.
+  referencia: https://www.archunit.org/userguide/html/000_Index.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Por qué ejecutar las comprobaciones de arquitectura en la CI?
+  opciones:
+    - {id: a, texto: "Porque las reglas que no se comprueban se erosionan poco a poco y los atajos llegan a la rama principal"}
+    - {id: b, texto: "Porque es obligatorio por ley"}
+    - {id: c, texto: "Para que el código compile"}
+    - {id: d, texto: "No hace falta; basta con documentarlas"}
+  correctas: [a]
+  explicacion: Una regla automática detiene el atajo antes de integrarlo.
+  distractores:
+    b: No hay tal ley.
+    c: El código compila igual con violaciones.
+    d: La documentación sola no impide los atajos.
+  referencia: https://www.thoughtworks.com/radar/techniques/architectural-fitness-function
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Qué tienen en común hexagonal, cebolla y limpia?
+  opciones:
+    - {id: a, texto: "Que exigen microservicios"}
+    - {id: b, texto: "El dominio en el centro y las dependencias apuntando hacia él: la infraestructura depende del dominio"}
+    - {id: c, texto: "Que tienen exactamente seis capas"}
+    - {id: d, texto: "Que prohíben las bases de datos"}
+  correctas: [b]
+  explicacion: Las tres invierten la dependencia de las capas clásicas.
+  distractores:
+    a: Son independientes del despliegue.
+    c: El número de capas varía y no es lo esencial.
+    d: Las usan detrás de adaptadores.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué dice la regla de dependencia de la arquitectura limpia?
+  opciones:
+    - {id: a, texto: "Que las dependencias del código fuente solo pueden apuntar hacia dentro"}
+    - {id: b, texto: "Que cada clase debe tener una interfaz"}
+    - {id: c, texto: "Que las dependencias apuntan hacia fuera"}
+    - {id: d, texto: "Que no puede haber dependencias"}
+  correctas: [a]
+  explicacion: Nada de un círculo interior puede conocer algo de uno exterior.
+  distractores:
+    b: No exige interfaces para todo.
+    c: Es al revés.
+    d: Las hay, pero en una dirección.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L03-003
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada estilo con su autor y año.
+  prompts:
+    - {id: "1", texto: "Arquitectura cebolla"}
+    - {id: "2", texto: "Arquitectura limpia"}
+    - {id: "3", texto: "Arquitectura hexagonal (puertos y adaptadores)"}
+  opciones:
+    - {id: a, texto: "Jeffrey Palermo, 2008"}
+    - {id: b, texto: "Robert C. Martin, 2012"}
+    - {id: c, texto: "Alistair Cockburn"}
+    - {id: d, texto: "Martin Fowler, 2014"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Son los artículos originales de cada estilo.
+  distractores:
+    d: Fowler escribió sobre capas y microservicios, no propuso estos estilos.
+  referencia: https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/
+- id: L03-004
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada término de la arquitectura limpia con su equivalente aproximado en hexagonal.
+  prompts:
+    - {id: "1", texto: "Entidades"}
+    - {id: "2", texto: "Casos de uso"}
+    - {id: "3", texto: "Adaptadores de interfaz"}
+  opciones:
+    - {id: a, texto: "El modelo de dominio"}
+    - {id: b, texto: "La lógica de aplicación detrás de los puertos de entrada"}
+    - {id: c, texto: "Los adaptadores"}
+    - {id: d, texto: "La base de datos"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El vocabulario cambia, pero las piezas se corresponden.
+  distractores:
+    d: Es parte de los frameworks y drivers, en el borde.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: En la arquitectura cebolla, ¿qué puede depender de qué?
+  opciones:
+    - {id: a, texto: "Las capas interiores de las exteriores"}
+    - {id: b, texto: "Unas capas de otras, sin restricción de dirección"}
+    - {id: c, texto: "El código de capas más centrales, nunca de las exteriores; el acoplamiento va hacia el centro"}
+    - {id: d, texto: "Solo la capa exterior de la base de datos"}
+  correctas: [c]
+  explicacion: Es la regla fundamental que describe Palermo.
+  distractores:
+    a: Es al revés.
+    b: La regla limita la dirección.
+    d: La base de datos está en el anillo exterior.
+  referencia: https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Una aplicación interna solo da de alta, consulta y borra registros, sin reglas de negocio. ¿Compensa la arquitectura limpia?
+  opciones:
+    - {id: a, texto: "Sí, porque protege el dominio"}
+    - {id: b, texto: "Sí, porque es la más moderna"}
+    - {id: c, texto: "Solo con microservicios"}
+    - {id: d, texto: "Probablemente no; sin lógica que proteger, sus interfaces y traducciones son coste sin beneficio"}
+  correctas: [d]
+  explicacion: Unas capas sencillas son más claras para un CRUD; se pueden extraer puertos si aparece la necesidad.
+  distractores:
+    a: Añade estructura sin necesidad.
+    b: La novedad no es un criterio.
+    c: No tiene relación con el despliegue.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Un equipo pasa semanas debatiendo si su proyecto es hexagonal o limpio. ¿Qué es lo importante?
+  opciones:
+    - {id: a, texto: "Elegir el nombre correcto"}
+    - {id: b, texto: "Cumplir la regla de dependencia y comprobarla automáticamente"}
+    - {id: c, texto: "Dibujar el diagrama con la forma adecuada"}
+    - {id: d, texto: "Usar el número de capas exacto del libro"}
+  correctas: [b]
+  explicacion: Son la misma idea; lo que aporta valor es que las dependencias apunten hacia el dominio.
+  distractores:
+    a: El nombre no cambia el código.
+    c: El diagrama no es la arquitectura.
+    d: El número de capas es secundario.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Cómo consigue el dominio no depender de la base de datos en estos estilos?
+  opciones:
+    - {id: a, texto: "No usando base de datos"}
+    - {id: b, texto: "Copiando el código de la base de datos en el dominio"}
+    - {id: c, texto: "Definiendo una interfaz en el dominio que la infraestructura implementa (inversión de dependencias)"}
+    - {id: d, texto: "Usando variables globales"}
+  correctas: [c]
+  explicacion: El dominio dice lo que necesita; la infraestructura se adapta a ello.
+  distractores:
+    a: La usan, detrás de un adaptador.
+    b: Lo acoplaría más.
+    d: No resuelve la dependencia.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Qué es un monolito modular?
+  opciones:
+    - {id: a, texto: "Un monolito sin estructura"}
+    - {id: b, texto: "Una aplicación que se despliega como una unidad, dividida en módulos por capacidad de negocio con API pública e interior oculto"}
+    - {id: c, texto: "Un conjunto de microservicios en el mismo servidor"}
+    - {id: d, texto: "Una aplicación con una sola clase"}
+  correctas: [b]
+  explicacion: Une la sencillez del despliegue único con la modularidad.
+  distractores:
+    a: Es justo lo que evita.
+    c: Serían varios procesos con red entre ellos.
+    d: No tiene relación.
+  referencia: https://docs.spring.io/spring-modulith/reference/fundamentals.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué informó Spring Modulith cuando Pedidos usó tienda.inventario.interno.Almacen?
+  opciones:
+    - {id: a, texto: "Nada"}
+    - {id: b, texto: "Un error de compilación"}
+    - {id: c, texto: "Que el módulo pedidos depende de un tipo no expuesto del módulo inventario, con el método y la línea"}
+    - {id: d, texto: "Un ciclo"}
+  correctas: [c]
+  explicacion: Los subpaquetes de un módulo son internos; los demás módulos solo deben usar su API pública.
+  distractores:
+    a: verify() falló con una violación.
+    b: El código compila; viola una regla de arquitectura.
+    d: El ciclo apareció en otra prueba.
+  referencia: https://docs.spring.io/spring-modulith/reference/verification.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Por defecto, ¿qué considera Spring Modulith un módulo de la aplicación?
+  opciones:
+    - {id: a, texto: "Cada clase"}
+    - {id: b, texto: "Cada paquete directo bajo el paquete de la clase principal"}
+    - {id: c, texto: "Cada fichero de configuración"}
+    - {id: d, texto: "Cada dependencia de Maven"}
+  correctas: [b]
+  explicacion: En el ejemplo, tienda.pedidos y tienda.inventario.
+  distractores:
+    a: Un módulo agrupa muchas clases.
+    c: No se basa en la configuración.
+    d: Se basa en los paquetes del código.
+  referencia: https://docs.spring.io/spring-modulith/reference/fundamentals.html
+- id: L04-004
+  tipo: completar
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Completa la prueba que verifica la estructura modular.
+  codigo:
+    lenguaje: java
+    fuente: |
+      ApplicationModules modulos = ApplicationModules.[[1]](TiendaApplication.class);
+      modulos.[[2]]();
+  huecos:
+    - {id: "1", respuestas: [of]}
+    - {id: "2", respuestas: [verify]}
+  explicacion: of analiza los módulos a partir de la clase principal y verify lanza una excepción si hay violaciones.
+  referencia: https://docs.spring.io/spring-modulith/reference/verification.html
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Inventario pasa a importar Pedidos, que ya usaba Inventario. ¿Qué detectó la verificación?
+  opciones:
+    - {id: a, texto: "Un ciclo: inventario -> pedidos -> inventario"}
+    - {id: b, texto: "Nada, porque usa las API públicas"}
+    - {id: c, texto: "Un error de compilación"}
+    - {id: d, texto: "Un tipo interno expuesto"}
+  correctas: [a]
+  explicacion: Aunque se usen API públicas, los ciclos entre módulos están prohibidos.
+  distractores:
+    b: Los ciclos se detectan igual.
+    c: Compila.
+    d: El problema es la dependencia mutua.
+  referencia: https://docs.spring.io/spring-modulith/reference/verification.html
+- id: L04-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué ventajas tiene un monolito modular frente a microservicios?
+  opciones:
+    - {id: a, texto: "Un solo despliegue"}
+    - {id: b, texto: "Transacciones locales entre módulos"}
+    - {id: c, texto: "Llamadas en memoria, sin red"}
+    - {id: d, texto: "Escalar cada módulo por separado"}
+    - {id: e, texto: "Desplegar cada módulo de forma independiente"}
+  correctas: [a, b, c]
+  explicacion: Evita los costes de la distribución mientras se mantiene la modularidad.
+  distractores:
+    d: Es una ventaja de los microservicios.
+    e: Es una ventaja de los microservicios.
+  referencia: https://martinfowler.com/bliki/MonolithFirst.html
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Cómo debe usar el módulo Pedidos el stock del módulo Inventario?
+  opciones:
+    - {id: a, texto: "Leyendo sus tablas"}
+    - {id: b, texto: "Creando un Almacen interno de inventario"}
+    - {id: c, texto: "A través de su API pública, Inventario.hayStock"}
+    - {id: d, texto: "Copiando su código"}
+  correctas: [c]
+  explicacion: Con la API pública, la verificación pasó.
+  distractores:
+    a: Acopla a los datos internos.
+    b: Es la violación detectada.
+    d: Duplica la lógica.
+  referencia: https://docs.spring.io/spring-modulith/reference/fundamentals.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué pasa con un monolito modular cuyas reglas no se comprueban?
+  opciones:
+    - {id: a, texto: "Nada"}
+    - {id: b, texto: "Se convierte en microservicios"}
+    - {id: c, texto: "Se vuelve más rápido"}
+    - {id: d, texto: "Los módulos se van usando por dentro hasta que vuelve a ser un monolito enredado"}
+  correctas: [d]
+  explicacion: Por eso la verificación se ejecuta en la CI.
+  distractores:
+    a: Los límites se erosionan.
+    b: No cambia de forma de despliegue.
+    c: No tiene relación.
+  referencia: https://docs.spring.io/spring-modulith/reference/verification.html
+- id: L05-001
+  tipo: matching
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Empareja cada situación con el estilo que mejor encaja.
+  prompts:
+    - {id: "1", texto: "Aplicación de gestión de un equipo pequeño con altas, bajas y consultas"}
+    - {id: "2", texto: "Motor de tarificación con reglas complejas que hay que probar a fondo"}
+    - {id: "3", texto: "Tres equipos y cuatro contextos, con un único entorno de producción"}
+    - {id: "4", texto: "Diez equipos autónomos con servicios de cargas muy distintas"}
+  opciones:
+    - {id: a, texto: "Capas"}
+    - {id: b, texto: "Hexagonal o limpia"}
+    - {id: c, texto: "Monolito modular"}
+    - {id: d, texto: "Microservicios"}
+    - {id: e, texto: "Un único fichero de script"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: La lógica de negocio y la organización de los equipos guían la elección.
+  distractores:
+    e: No sostiene una aplicación con usuarios y datos.
+  referencia: https://martinfowler.com/architecture/
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Es correcto usar hexagonal en el módulo de pagos y capas en el de datos maestros, dentro del mismo monolito modular?
+  opciones:
+    - {id: a, texto: "No, todo el sistema debe usar el mismo estilo"}
+    - {id: b, texto: "Sí: cada módulo usa la estructura que su lógica justifica"}
+    - {id: c, texto: "Solo si son microservicios"}
+    - {id: d, texto: "Solo en Python"}
+  correctas: [b]
+  explicacion: Los estilos se combinan; no hace falta uniformidad donde no aporta.
+  distractores:
+    a: La uniformidad no es un objetivo en sí.
+    c: Es válido también en un monolito modular.
+    d: No depende del lenguaje.
+  referencia: https://martinfowler.com/architecture/
+- id: L05-003
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "5.3"
+  enunciado: ¿Qué partes tiene un ADR según Michael Nygard?
+  opciones:
+    - {id: a, texto: "Título"}
+    - {id: b, texto: "Contexto"}
+    - {id: c, texto: "Decisión"}
+    - {id: d, texto: "Estado y consecuencias"}
+    - {id: e, texto: "El código fuente completo"}
+  correctas: [a, b, c, d]
+  explicacion: Es un documento breve que explica qué se decidió, por qué y qué implica.
+  distractores:
+    e: El ADR explica la decisión, no contiene el código.
+  referencia: https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Una decisión registrada en un ADR cambia dos años después. ¿Qué se hace?
+  opciones:
+    - {id: a, texto: "Borrar el ADR antiguo"}
+    - {id: b, texto: "Editar el ADR antiguo hasta que diga lo nuevo"}
+    - {id: c, texto: "Escribir un ADR nuevo que sustituye al anterior, que queda marcado como sustituido"}
+    - {id: d, texto: "Nada"}
+  correctas: [c]
+  explicacion: El historial de decisiones explica cómo y por qué evolucionó la arquitectura.
+  distractores:
+    a: Se pierde el contexto histórico.
+    b: Se reescribe la historia.
+    d: La documentación quedaría desfasada.
+  referencia: https://adr.github.io/
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Dónde se guardan los ADR?
+  opciones:
+    - {id: a, texto: "En el repositorio, junto al código, por ejemplo en docs/adr/"}
+    - {id: b, texto: "En el correo de quien decidió"}
+    - {id: c, texto: "En la memoria del equipo"}
+    - {id: d, texto: "En una presentación que no se versiona"}
+  correctas: [a]
+  explicacion: Versionados con el código, se revisan en pull requests y no se pierden.
+  distractores:
+    b: Se pierde al cambiar de equipo.
+    c: Se olvida.
+    d: No tiene historial.
+  referencia: https://adr.github.io/
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: El equipo nunca ha operado sistemas distribuidos. ¿Cómo influye en la elección?
+  opciones:
+    - {id: a, texto: "No influye"}
+    - {id: b, texto: "Obliga a usar microservicios para aprender"}
+    - {id: c, texto: "Es una razón para empezar con un monolito modular y no asumir los costes de operación de los microservicios"}
+    - {id: d, texto: "Obliga a no usar módulos"}
+  correctas: [c]
+  explicacion: Lo que el equipo sabe operar hoy es un factor real de la decisión.
+  distractores:
+    a: Es un factor importante.
+    b: Producción no es el sitio para aprender a operarlos.
+    d: Los módulos no exigen experiencia en sistemas distribuidos.
+  referencia: https://martinfowler.com/bliki/MonolithFirst.html
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Por qué un ADR debe recoger también las alternativas descartadas?
+  opciones:
+    - {id: a, texto: "Para que quien lo lea entienda por qué no se eligieron y no repita el mismo debate"}
+    - {id: b, texto: "Para alargar el documento"}
+    - {id: c, texto: "Porque lo exige la ley"}
+    - {id: d, texto: "No debe recogerlas"}
+  correctas: [a]
+  explicacion: El contexto de lo descartado es tan útil como la decisión.
+  distractores:
+    b: La brevedad es una virtud del ADR.
+    c: No hay tal obligación.
+    d: Ayudan a entender la decisión.
+  referencia: https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: En la combinación propuesta (monolito modular con eventos entre módulos), ¿qué facilita extraer después un módulo como servicio?
+  opciones:
+    - {id: a, texto: "Que sus límites, su API pública y sus eventos ya existen y están comprobados"}
+    - {id: b, texto: "Que comparte la base de datos con todos"}
+    - {id: c, texto: "Que no tiene pruebas"}
+    - {id: d, texto: "Que usa el mismo lenguaje"}
+  correctas: [a]
+  explicacion: La extracción se reduce a cambiar llamadas en memoria por llamadas o mensajes por red.
+  distractores:
+    b: Lo dificultaría.
+    c: Lo haría arriesgado.
+    d: No es lo que lo facilita.
+  referencia: https://martinfowler.com/bliki/MonolithFirst.html

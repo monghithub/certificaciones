@@ -1,0 +1,677 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿Qué hace distinto a un sistema distribuido de un programa en un solo proceso?
+  opciones:
+    - {id: a, texto: "Que es más rápido"}
+    - {id: b, texto: "Los fallos parciales: una parte falla mientras el resto sigue, sin saber qué ha pasado"}
+    - {id: c, texto: "Que usa más memoria"}
+    - {id: d, texto: "Que no puede fallar"}
+  correctas: [b]
+  explicacion: En un proceso, una llamada termina o falla el programa entero. Entre máquinas, quien espera no distingue un nodo caído de uno lento o de un mensaje perdido.
+  distractores:
+    a: Distribuir añade latencia de red a cada llamada.
+    c: La memoria no es lo que lo define.
+    d: Falla más a menudo, porque tiene más piezas.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L01-002
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Un cliente manda «cobrar 50 €» y no recibe respuesta en 300 ms. ¿Qué puede haber pasado?
+  opciones:
+    - {id: a, texto: "La petición no llegó al servidor"}
+    - {id: b, texto: "Llegó y el servidor sigue procesándola"}
+    - {id: c, texto: "El servidor cobró y la respuesta se perdió"}
+    - {id: d, texto: "El servidor está caído"}
+    - {id: e, texto: "El cobro falló con seguridad"}
+  correctas: [a, b, c, d]
+  explicacion: Desde el cliente todas son iguales. Un timeout significa «no sé qué pasó».
+  distractores:
+    e: El cobro pudo hacerse; en la prueba, el servidor cobró en cada intento.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: En la prueba, el servidor tarda 500 ms, el cliente espera 300 ms y reintenta tres veces sin clave de idempotencia. ¿Cuántos cargos se registraron?
+  opciones:
+    - {id: a, texto: "Ninguno, porque el cliente no recibió respuesta"}
+    - {id: b, texto: "Uno"}
+    - {id: c, texto: "Tres, uno por intento"}
+    - {id: d, texto: "Seis"}
+  correctas: [c]
+  explicacion: El servidor procesó cada petición aunque el cliente dejara de esperar. El cliente cree que nada salió bien y hay tres cargos.
+  distractores:
+    a: El servidor no sabe que el cliente se ha cansado de esperar; sigue y cobra.
+    b: Es lo que se consigue con la clave de idempotencia.
+    d: Hubo tres peticiones, una por intento.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué cambia al mandar la misma clave de idempotencia en los tres intentos?
+  opciones:
+    - {id: a, texto: "Que el cliente recibe respuesta a tiempo"}
+    - {id: b, texto: "Que el servidor responde más rápido"}
+    - {id: c, texto: "Que el cliente deja de reintentar"}
+    - {id: d, texto: "Que el servidor reconoce la repetición y registra un solo cargo"}
+  correctas: [d]
+  explicacion: En la prueba quedó un cargo. El cliente sigue sin saber el resultado, pero puede reintentar sin miedo y consultar después por esa clave.
+  distractores:
+    a: El servidor sigue tardando 500 ms; el cliente sigue sin respuesta.
+    b: La clave no cambia el tiempo de proceso.
+    c: Reintenta igual; lo que cambia es el efecto.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L01-005
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Empareja cada semántica de entrega con cómo se consigue.
+  prompts:
+    - {id: "1", texto: "Como mucho una vez"}
+    - {id: "2", texto: "Al menos una vez"}
+    - {id: "3", texto: "Efecto de una sola vez"}
+  opciones:
+    - {id: a, texto: "No reintentar"}
+    - {id: b, texto: "Reintentar hasta recibir confirmación"}
+    - {id: c, texto: "Reintentar y que el receptor deduplique"}
+    - {id: d, texto: "Usar una red sin pérdidas"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: La primera pierde operaciones, la segunda duplica y la tercera combina reintentos con un receptor idempotente.
+  distractores:
+    d: La red real pierde mensajes; el diseño tiene que contar con ello.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: Un proveedor anuncia entrega «exactamente una vez». ¿Cómo hay que entenderlo?
+  opciones:
+    - {id: a, texto: "Que la red no pierde mensajes"}
+    - {id: b, texto: "Que el efecto ocurre una vez gracias a reintentos más deduplicación, con condiciones que conviene leer"}
+    - {id: c, texto: "Que el receptor no necesita ser idempotente en ningún caso"}
+    - {id: d, texto: "Que no hace falta confirmar los mensajes"}
+  correctas: [b]
+  explicacion: Por la red solo hay como mucho una vez o al menos una vez. El «exactamente una vez» es un efecto que se construye deduplicando, y suele valer solo dentro de ese sistema.
+  distractores:
+    a: Ninguna red real lo garantiza.
+    c: Fuera del sistema que lo garantiza (una base de datos, otra API), el efecto puede repetirse.
+    d: Sin confirmación no se sabe si hay que reintentar.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L01-007
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.4"
+  enunciado: ¿Cuáles son suposiciones falsas sobre la red, de la lista de falacias de la computación distribuida?
+  opciones:
+    - {id: a, texto: "La red es fiable"}
+    - {id: b, texto: "La latencia es cero"}
+    - {id: c, texto: "La topología no cambia"}
+    - {id: d, texto: "Las conexiones pueden cortarse"}
+    - {id: e, texto: "Los contenedores cambian de IP"}
+  correctas: [a, b, c]
+  explicacion: Son tres de las ocho falacias. Las otras dos opciones describen la realidad que las desmiente.
+  distractores:
+    d: Es cierto; desmiente que la red sea fiable.
+    e: Es cierto; desmiente que la topología no cambie.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Un servicio cae 2 segundos y mil clientes reintentan cada 100 ms exactos. ¿Qué problema hay y cómo se evita?
+  opciones:
+    - {id: a, texto: "Los reintentos sincronizados convierten el fallo breve en una avalancha; se evita con espera exponencial y variación aleatoria"}
+    - {id: b, texto: "Ninguno, porque los reintentos son rápidos"}
+    - {id: c, texto: "Que los clientes se quedan sin memoria"}
+    - {id: d, texto: "Que el servidor cambia de IP"}
+  correctas: [a]
+  explicacion: Al volver, el servicio recibe miles de peticiones a la vez y puede volver a caer. La espera exponencial reduce la carga y el jitter reparte los reintentos.
+  distractores:
+    b: Esa rapidez es justo el problema; nadie da tiempo al servicio.
+    c: La memoria del cliente no es la que sufre.
+    d: Reintentar no cambia la topología.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Un timeout se calcula como time.time() + 5 y se comprueba con time.time(). NTP atrasa el reloj 10 segundos justo después. ¿Qué pasa?
+  opciones:
+    - {id: a, texto: "Vence a los 5 segundos, como estaba previsto"}
+    - {id: b, texto: "Vence al instante"}
+    - {id: c, texto: "Tarda unos 15 segundos en vencer, porque el reloj de pared ha retrocedido"}
+    - {id: d, texto: "Python lanza una excepción"}
+  correctas: [c]
+  explicacion: El reloj de pared puede ir hacia atrás. Las duraciones se miden con time.monotonic(), que no se ve afectado por los cambios del reloj del sistema.
+  distractores:
+    a: El reloj de referencia ha retrocedido 10 segundos.
+    b: Eso pasaría si el reloj se adelantara.
+    d: Python devuelve el valor menor sin avisar.
+  referencia: https://docs.python.org/3/library/time.html
+- id: L02-002
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: Empareja cada uso con el reloj adecuado.
+  prompts:
+    - {id: "1", texto: "Medir cuánto tarda una consulta"}
+    - {id: "2", texto: "Guardar la fecha de creación de un pedido"}
+    - {id: "3", texto: "Decidir si ha vencido un timeout"}
+  opciones:
+    - {id: a, texto: "time.monotonic() o System.nanoTime()"}
+    - {id: b, texto: "time.time() o Instant.now()"}
+    - {id: c, texto: "El reloj de Lamport"}
+  correctas: [["1", a], ["2", b], ["3", a]]
+  explicacion: Las duraciones, con el monótono; la hora del día, con el de pared.
+  distractores:
+    c: Un reloj lógico ordena eventos, no mide tiempo.
+  referencia: https://docs.python.org/3/library/time.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: El reloj de B va 120 ms atrasado respecto al de A. A escribe precio=10 y, 50 ms después, B escribe precio=12. Con «gana la última escritura», ¿qué queda?
+  opciones:
+    - {id: a, texto: "precio=12, porque se escribió después"}
+    - {id: b, texto: "precio=10, porque la marca de B parece 70 ms más antigua"}
+    - {id: c, texto: "Un error de conflicto"}
+    - {id: d, texto: "Los dos valores"}
+  correctas: [b]
+  explicacion: La escritura posterior se pierde sin error. Por eso Cassandra pide sincronizar los relojes con NTP.
+  distractores:
+    a: El sistema decide por la marca de tiempo, no por el orden real.
+    c: Last write wins resuelve en silencio, sin avisar.
+    d: Se queda con una sola versión.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html
+- id: L02-004
+  tipo: ordering
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Ordena las reglas de un reloj de Lamport tal como se aplican al recibir un mensaje en un proceso con contador 0 y un mensaje con L=2.
+  opciones:
+    - {id: a, texto: "Leer el contador adjunto al mensaje, 2"}
+    - {id: b, texto: "Tomar el máximo entre el propio contador y el recibido, 2"}
+    - {id: c, texto: "Sumar 1, y queda en 3"}
+    - {id: d, texto: "Al enviar el siguiente mensaje, sumar 1 y adjuntar 4"}
+  correctas: [a, b, c, d]
+  explicacion: Es lo que hizo el servicio de pagos en la simulación, que recibió L=2, pasó a 3 y envió con 4.
+  referencia: https://lamport.azurewebsites.net/pubs/time-clocks.pdf
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: En la simulación, «actualiza catálogo» en Envíos tiene L=1 y «crea pedido» en Pedidos también L=1. ¿Qué se puede concluir?
+  opciones:
+    - {id: a, texto: "Que ocurrieron a la vez"}
+    - {id: b, texto: "Que «actualiza catálogo» fue antes"}
+    - {id: c, texto: "Que uno causó el otro"}
+    - {id: d, texto: "Nada sobre su orden: son concurrentes, ninguno causa el otro"}
+  correctas: [d]
+  explicacion: El reloj de Lamport garantiza que la causa tiene número menor que el efecto, pero no al revés. Dos eventos sin relación pueden tener cualquier número.
+  distractores:
+    a: El reloj lógico no mide tiempo real.
+    b: Tener el mismo número no ordena nada.
+    c: No hubo mensajes entre ellos.
+  referencia: https://lamport.azurewebsites.net/pubs/time-clocks.pdf
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué garantiza un reloj de Lamport?
+  opciones:
+    - {id: a, texto: "Si un evento causa otro, el primero tiene un número menor"}
+    - {id: b, texto: "Si un evento tiene un número menor, ocurrió antes en el tiempo real"}
+    - {id: c, texto: "La hora exacta de cada evento"}
+    - {id: d, texto: "Que no hay eventos concurrentes"}
+  correctas: [a]
+  explicacion: La garantía va en un solo sentido, de la causalidad al número.
+  distractores:
+    b: Es la implicación contraria, que no se cumple.
+    c: No mide tiempo.
+    d: Los eventos concurrentes siguen existiendo; el reloj no los distingue.
+  referencia: https://lamport.azurewebsites.net/pubs/time-clocks.pdf
+- id: L02-007
+  tipo: matching
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Empareja cada necesidad con la herramienta.
+  prompts:
+    - {id: "1", texto: "Detectar que dos escrituras fueron concurrentes"}
+    - {id: "2", texto: "Que todos los nodos acepten el mismo orden de operaciones"}
+    - {id: "3", texto: "Un orden compatible con la causalidad, barato"}
+  opciones:
+    - {id: a, texto: "Reloj vectorial"}
+    - {id: b, texto: "Un líder que numera las operaciones, o consenso"}
+    - {id: c, texto: "Reloj de Lamport"}
+    - {id: d, texto: "El reloj de pared de cada nodo"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El vectorial distingue concurrencia, el de Lamport solo ordena causalmente y el orden total exige un único punto de decisión.
+  distractores:
+    d: Los relojes de pared están desajustados y pueden ir hacia atrás.
+  referencia: https://lamport.azurewebsites.net/pubs/time-clocks.pdf
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: El Dynamo original usaba relojes vectoriales y Cassandra usa «gana la última escritura». ¿Qué ofrecen los relojes vectoriales que LWW no ofrece?
+  opciones:
+    - {id: a, texto: "Más velocidad"}
+    - {id: b, texto: "No necesitar réplicas"}
+    - {id: c, texto: "Detectar que dos escrituras son concurrentes, en lugar de descartar una en silencio"}
+    - {id: d, texto: "Sincronizar los relojes de pared"}
+  correctas: [c]
+  explicacion: Con relojes vectoriales el sistema sabe que hay un conflicto y puede guardar las dos versiones para reconciliarlas. LWW elige una por la marca de tiempo.
+  distractores:
+    a: Son más costosos, no más rápidos.
+    b: Se usan precisamente entre réplicas.
+    d: No tocan los relojes de pared.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html
+- id: L03-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: Empareja cada sistema con su modelo de replicación.
+  prompts:
+    - {id: "1", texto: "PostgreSQL con réplicas"}
+    - {id: "2", texto: "Cassandra"}
+    - {id: "3", texto: "etcd"}
+  opciones:
+    - {id: a, texto: "Con líder"}
+    - {id: b, texto: "Sin líder"}
+    - {id: c, texto: "Sin replicación"}
+  correctas: [["1", a], ["2", b], ["3", a]]
+  explicacion: PostgreSQL y etcd mandan las escrituras a un líder; Cassandra, como Dynamo, escribe en varias réplicas sin líder.
+  distractores:
+    c: Los tres replican los datos.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Un usuario cambia su nombre, la escritura se confirma y, al recargar, ve el nombre antiguo. ¿Qué ha pasado probablemente?
+  opciones:
+    - {id: a, texto: "La escritura se perdió"}
+    - {id: b, texto: "La lectura fue a un seguidor al que aún no había llegado el cambio"}
+    - {id: c, texto: "El navegador no envió la petición"}
+    - {id: d, texto: "El líder rechazó la escritura"}
+  correctas: [b]
+  explicacion: Con replicación asíncrona, el líder confirma antes de que todos los seguidores tengan el cambio. El remedio es leer del líder lo que el usuario acaba de modificar.
+  distractores:
+    a: La escritura está en el líder; el seguidor la recibirá pronto.
+    c: La escritura se confirmó, así que llegó.
+    d: Si la hubiera rechazado, no se habría confirmado.
+  referencia: https://jepsen.io/consistency
+- id: L03-003
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada anomalía del retraso de réplica con su remedio habitual.
+  prompts:
+    - {id: "1", texto: "El usuario no ve lo que acaba de escribir"}
+    - {id: "2", texto: "Al recargar dos veces, el dato va hacia atrás"}
+    - {id: "3", texto: "Un seguidor sirve datos de hace minutos tras un pico de escrituras"}
+  opciones:
+    - {id: a, texto: "Leer del líder lo que el usuario acaba de modificar"}
+    - {id: b, texto: "Que cada usuario lea siempre de la misma réplica"}
+    - {id: c, texto: "Añadir más seguidores"}
+    - {id: d, texto: "Vigilar el retraso de réplica y sacar del balanceo al seguidor que se queda atrás"}
+  correctas: [["1", a], ["2", b], ["3", d]]
+  explicacion: La primera es leer lo propio; la segunda, lecturas monótonas; la tercera se vigila como cualquier otra métrica.
+  distractores:
+    c: Más seguidores no reducen el retraso; pueden aumentarlo.
+  referencia: https://jepsen.io/consistency
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Con N = 3 réplicas, ¿qué combinación evita las lecturas antiguas según la regla R + W > N?
+  opciones:
+    - {id: a, texto: "W = 1, R = 1"}
+    - {id: b, texto: "W = 2, R = 1"}
+    - {id: c, texto: "W = 1, R = 2"}
+    - {id: d, texto: "W = 2, R = 2"}
+  correctas: [d]
+  explicacion: 2 + 2 > 3, así que las réplicas leídas y escritas comparten al menos una. En la simulación dio 0 % de lecturas antiguas.
+  distractores:
+    a: Dio un 66,7 % de lecturas antiguas.
+    b: 2 + 1 = 3, no supera N; dio un 33 %.
+    c: También suma 3; dio un 34 %.
+  referencia: https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: Con N = 3 se elige W = 3, R = 1 para que las lecturas sean rápidas. ¿Qué precio se paga?
+  opciones:
+    - {id: a, texto: "Las lecturas ven datos antiguos"}
+    - {id: b, texto: "Ninguno"}
+    - {id: c, texto: "Las escrituras esperan a las tres réplicas y se bloquean en cuanto una cae"}
+    - {id: d, texto: "Se pierden escrituras"}
+  correctas: [c]
+  explicacion: R + W > N se cumple, pero toda la disponibilidad de escritura depende de que estén las tres. Lo habitual es mayoría y mayoría.
+  distractores:
+    a: Con W = 3, cualquier réplica tiene la última escritura confirmada.
+    b: El precio está en las escrituras.
+    d: No se confirma ninguna sin las tres; se rechazan, no se pierden.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: En etcd, con un seguidor aislado de la red, se cambia stock de 5 a 0 en la mayoría. ¿Qué devuelve una lectura serializable en el seguidor aislado?
+  opciones:
+    - {id: a, texto: "5, el valor antiguo"}
+    - {id: b, texto: "0, el valor nuevo"}
+    - {id: c, texto: "Un error de timeout"}
+    - {id: d, texto: "Nada, la clave desaparece"}
+  correctas: [a]
+  explicacion: La lectura serializable responde con lo que tiene el nodo, sin consultar a la mayoría. Es rápida, pero puede ser antigua.
+  distractores:
+    b: El cambio no ha llegado al nodo aislado.
+    c: Es lo que pasó con la lectura linealizable.
+    d: La clave sigue en el nodo, con su valor anterior.
+  referencia: https://etcd.io/docs/v3.6/learning/api_guarantees/
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: ¿Por qué falló la lectura linealizable en el seguidor aislado?
+  opciones:
+    - {id: a, texto: "Porque la clave no existía"}
+    - {id: b, texto: "Porque etcd no admite lecturas en seguidores"}
+    - {id: c, texto: "Porque el comando estaba mal escrito"}
+    - {id: d, texto: "Porque necesita confirmar con la mayoría que tiene lo último, y aislado no puede"}
+  correctas: [d]
+  explicacion: Prefiere fallar a devolver un dato que quizá ya no es el último. Es la elección de consistencia frente a disponibilidad durante una partición.
+  distractores:
+    a: La lectura serializable la encontró con valor 5.
+    b: Las admite; la linealizable pasa por el consenso.
+    c: El mismo comando funcionó al reconectar.
+  referencia: https://etcd.io/docs/v3.6/learning/api_guarantees/
+- id: L03-008
+  tipo: completar
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Completa la orden para pedir a etcd una lectura serializable, más rápida pero posiblemente antigua.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      etcdctl get stock --consistency=[[1]]
+  huecos:
+    - {id: "1", respuestas: ["s"]}
+  explicacion: Por defecto la lectura es linealizable (l). Con s responde el nodo sin pasar por el consenso.
+  referencia: https://etcd.io/docs/v3.6/learning/api_guarantees/
+- id: L04-001
+  tipo: ordering
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Ordena lo que ocurre en Raft desde que cae el líder hasta que se confirma una nueva escritura.
+  opciones:
+    - {id: a, texto: "Un seguidor no recibe latidos durante el election timeout"}
+    - {id: b, texto: "Se presenta como candidato en un término nuevo y pide votos"}
+    - {id: c, texto: "Obtiene los votos de la mayoría y pasa a ser líder"}
+    - {id: d, texto: "Recibe una escritura y la copia a los seguidores"}
+    - {id: e, texto: "La escritura se confirma cuando la tiene la mayoría"}
+  correctas: [a, b, c, d, e]
+  explicacion: La detección de la caída se basa en un timeout; por eso la elección no es instantánea.
+  referencia: https://raft.github.io/raft.pdf
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Cuándo se considera confirmada una escritura en Raft?
+  opciones:
+    - {id: a, texto: "Cuando la recibe el líder"}
+    - {id: b, texto: "Cuando la tienen los tres nodos del clúster"}
+    - {id: c, texto: "Cuando la tiene la mayoría de los nodos"}
+    - {id: d, texto: "Cuando el cliente la envía"}
+  correctas: [c]
+  explicacion: Con la mayoría basta, y cualquier líder futuro necesitará votos de esa mayoría, así que tendrá la escritura.
+  distractores:
+    a: Si el líder cae justo después, la escritura podría perderse.
+    b: Esperar a los tres haría que un solo nodo caído bloqueara las escrituras.
+    d: Enviarla no garantiza que llegue.
+  referencia: https://raft.github.io/raft.pdf
+- id: L04-003
+  tipo: matching
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Empareja cada tamaño de clúster con los fallos que tolera sin perder la mayoría.
+  prompts:
+    - {id: "1", texto: "3 nodos"}
+    - {id: "2", texto: "4 nodos"}
+    - {id: "3", texto: "5 nodos"}
+  opciones:
+    - {id: a, texto: "1 fallo"}
+    - {id: b, texto: "2 fallos"}
+    - {id: c, texto: "3 fallos"}
+  correctas: [["1", a], ["2", a], ["3", b]]
+  explicacion: La mayoría de N es N/2 + 1. Un cuarto nodo sube la mayoría a 3 sin tolerar más fallos.
+  distractores:
+    c: Haría falta un clúster de 7 nodos.
+  referencia: https://etcd.io/docs/v3.6/faq/
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Al matar el líder de etcd con SIGKILL, las escrituras volvieron a los 1188 ms; con docker stop, a los 411 ms. ¿Por qué la diferencia?
+  opciones:
+    - {id: a, texto: "Con SIGTERM, etcd traspasa el liderazgo antes de apagarse; con SIGKILL, los seguidores esperan al election timeout de 1 s"}
+    - {id: b, texto: "SIGKILL borra los datos"}
+    - {id: c, texto: "docker stop no detiene el contenedor"}
+    - {id: d, texto: "Fue casualidad"}
+  correctas: [a]
+  explicacion: Una caída brusca solo se detecta por la falta de latidos, y eso requiere esperar el election timeout.
+  distractores:
+    b: Los datos de los demás nodos siguen ahí.
+    c: Lo detiene, pero ordenadamente.
+    d: La diferencia corresponde al election timeout, que es de 1000 ms por defecto.
+  referencia: https://etcd.io/docs/v3.6/tuning/
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: En un clúster de 3, el líder queda aislado de la red. ¿Qué ocurre con una escritura enviada al antiguo líder?
+  opciones:
+    - {id: a, texto: "Se acepta, y al reconectar hay dos versiones"}
+    - {id: b, texto: "Se reenvía a la mayoría"}
+    - {id: c, texto: "Se acepta y se pierde"}
+    - {id: d, texto: "No se confirma: el antiguo líder solo se tiene a sí mismo y no reúne mayoría"}
+  correctas: [d]
+  explicacion: En la prueba dio «context deadline exceeded». Los otros dos eligieron un líder en el término 3 y siguieron aceptando escrituras. No hay split brain.
+  distractores:
+    a: Sin mayoría no confirma nada, así que no aparecen dos versiones.
+    b: Aislado, no puede hablar con la mayoría.
+    c: No se acepta; el cliente recibe un error.
+  referencia: https://etcd.io/docs/v3.6/op-guide/failures/
+- id: L04-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Con dos de los tres nodos de etcd parados, ¿qué ocurrió en el superviviente?
+  opciones:
+    - {id: a, texto: "Las escrituras fallaron con request timed out"}
+    - {id: b, texto: "La lectura linealizable falló"}
+    - {id: c, texto: "La lectura serializable devolvió el valor que tenía"}
+    - {id: d, texto: "Se convirtió en líder"}
+    - {id: e, texto: "Aceptó escrituras y las sincronizó después"}
+  correctas: [a, b, c]
+  explicacion: Sin mayoría, etcd elige consistencia y no acepta nada que la mayoría pudiera contradecir. Solo sirve lecturas serializables, posiblemente antiguas.
+  distractores:
+    d: Para ser líder necesita los votos de la mayoría, 2 de 3.
+    e: Sin mayoría no confirma escrituras.
+  referencia: https://etcd.io/docs/v3.6/op-guide/failures/
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.4"
+  enunciado: La instancia A tiene el lease de facturación, sufre una pausa del recolector de basura de 10 s y, al despertar, escribe facturas. Mientras tanto, B tomó el lease. ¿Qué lo evita?
+  opciones:
+    - {id: a, texto: "Un lease más largo"}
+    - {id: b, texto: "Un token de fencing: la base de datos rechaza la escritura de A porque ya vio uno mayor, el de B"}
+    - {id: c, texto: "Comprobar el lease justo antes de escribir"}
+    - {id: d, texto: "Usar relojes sincronizados"}
+  correctas: [b]
+  explicacion: En etcd sirve la create_revision de la clave, 3 para A y 5 para B. El recurso protegido rechaza los tokens menores que el último visto.
+  distractores:
+    a: Solo hace falta una pausa más larga que el lease para el mismo problema.
+    c: La pausa puede ocurrir entre la comprobación y la escritura.
+    d: El problema no es la hora, sino que A no sabe que estuvo congelada.
+  referencia: https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html
+- id: L04-008
+  tipo: completar
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Completa las órdenes para conceder un lease de 5 segundos y asociarle la clave del líder.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      ID=$(etcdctl lease [[1]] 5 | awk '{print $2}')
+      etcdctl put lider/facturacion instancia-A --[[2]]=$ID
+  huecos:
+    - {id: "1", respuestas: ["grant"]}
+    - {id: "2", respuestas: ["lease"]}
+  explicacion: Si nadie renueva el lease con lease keep-alive, caduca y la clave desaparece. En la prueba, a los 7 s ya no estaba.
+  referencia: https://etcd.io/docs/v3.6/dev-guide/interacting_v3/
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: ¿Qué diferencia hay entre replicar y particionar?
+  opciones:
+    - {id: a, texto: "Son lo mismo"}
+    - {id: b, texto: "Replicar copia los mismos datos en varios nodos; particionar reparte datos distintos entre nodos"}
+    - {id: c, texto: "Particionar copia los datos y replicar los reparte"}
+    - {id: d, texto: "Replicar solo se usa en caché"}
+  correctas: [b]
+  explicacion: Replicar da disponibilidad y lecturas; particionar da capacidad. Se suelen combinar, con réplicas de cada partición.
+  distractores:
+    a: Resuelven problemas distintos.
+    c: Es al revés.
+    d: Se replican bases de datos, colas y almacenes de configuración.
+  referencia: https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Una tabla de eventos se particiona por rangos de fecha. ¿Qué problema aparece?
+  opciones:
+    - {id: a, texto: "Las consultas por rango de fechas son lentas"}
+    - {id: b, texto: "Los datos no caben"}
+    - {id: c, texto: "Todas las escrituras de hoy van a la misma partición, que se satura"}
+    - {id: d, texto: "No se pueden borrar eventos antiguos"}
+  correctas: [c]
+  explicacion: Con claves secuenciales, la partición del final recibe todas las escrituras. Particionar por hash reparte la carga a costa de las consultas por rango.
+  distractores:
+    a: Al contrario; por rangos es lo que mejor funciona.
+    b: El problema es la carga, no el espacio.
+    d: De hecho es fácil, porque se borra la partición antigua entera.
+  referencia: https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf
+- id: L05-003
+  tipo: matching
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Empareja cada esquema con el porcentaje de claves que se movió en la prueba al pasar de 4 a 5 nodos.
+  prompts:
+    - {id: "1", texto: "hash % N"}
+    - {id: "2", texto: "Hashing consistente con 100 nodos virtuales"}
+    - {id: "3", texto: "Lo ideal: solo la parte del nodo nuevo"}
+  opciones:
+    - {id: a, texto: "80,2 %"}
+    - {id: b, texto: "21,8 %"}
+    - {id: c, texto: "20 %"}
+    - {id: d, texto: "0 %"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Con hash % N cambia el dueño de casi todas las claves; con el anillo, solo el tramo que ocupa el nodo nuevo.
+  distractores:
+    d: El nodo nuevo tiene que recibir alguna clave para servir de algo.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Una caché repartida con hash % N entre 4 servidores pasa a 5. ¿Qué efecto tiene?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "La caché va más rápida"}
+    - {id: c, texto: "Se pierde el 20 % de los aciertos"}
+    - {id: d, texto: "Unas cuatro de cada cinco claves cambian de servidor y se pierden casi todos los aciertos de golpe"}
+  correctas: [d]
+  explicacion: Las lecturas van al servidor nuevo de cada clave, que no la tiene, y el origen recibe casi todo el tráfico. Con hashing consistente se movería alrededor del 20 %.
+  distractores:
+    a: El cambio de N reasigna casi todas las claves.
+    b: A corto plazo, mucho más lenta.
+    c: Sería con hashing consistente.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Con un solo punto por nodo en el anillo, n4 tenía 41 455 claves y n3, 8514. ¿Qué lo corrige?
+  opciones:
+    - {id: a, texto: "Dar a cada nodo muchos puntos en el anillo, nodos virtuales"}
+    - {id: b, texto: "Volver a hash % N"}
+    - {id: c, texto: "Añadir más claves"}
+    - {id: d, texto: "Cambiar la función de hash por otra más lenta"}
+  correctas: [a]
+  explicacion: Con 100 nodos virtuales por nodo, todos quedaron cerca de 20 000 claves. Además, al caer un nodo, sus tramos se reparten entre muchos.
+  distractores:
+    b: Reparte bien, pero mueve el 80 % al cambiar N.
+    c: El desequilibrio viene de los tramos del anillo, no del número de claves.
+    d: La velocidad del hash no influye en el reparto.
+  referencia: https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf
+- id: L05-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué ventajas dan los nodos virtuales?
+  opciones:
+    - {id: a, texto: "Un reparto de claves más equilibrado"}
+    - {id: b, texto: "Al caer un nodo, su carga se reparte entre muchos en lugar de recaer en su vecino"}
+    - {id: c, texto: "Dar más carga a un nodo más potente con más nodos virtuales"}
+    - {id: d, texto: "Que no haga falta replicar"}
+    - {id: e, texto: "Que las consultas por rango sean eficientes"}
+  correctas: [a, b, c]
+  explicacion: Son la forma habitual de usar el hashing consistente, como en Dynamo y Cassandra.
+  distractores:
+    d: El particionado no sustituye a la replicación.
+    e: Siguen repartiendo por hash, así que los rangos tocan todos los nodos.
+  referencia: https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: Los pedidos se particionan por país. ¿Qué problema aparece?
+  opciones:
+    - {id: a, texto: "Ninguno, porque el hash reparte bien"}
+    - {id: b, texto: "La clave tiene poca variedad y carga muy desigual: los países grandes saturan su partición"}
+    - {id: c, texto: "No se pueden consultar los pedidos de un país"}
+    - {id: d, texto: "Los pedidos se duplican"}
+  correctas: [b]
+  explicacion: El reparto uniforme de claves no da carga uniforme si unas claves tienen mucho más tráfico. Una clave con más variedad, como el identificador del pedido o del cliente, reparte mejor.
+  distractores:
+    a: El hash reparte los países, pero cada país sigue entero en una partición.
+    c: Es justo la consulta más fácil, porque todo está en una partición.
+    d: Particionar no duplica.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.4"
+  enunciado: La partición de un usuario famoso recibe millones de lecturas. Se reparte su clave con un sufijo aleatorio en 8 claves. ¿Qué coste tiene?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Se pierden datos"}
+    - {id: c, texto: "Para ver todos sus datos hay que leer las 8 claves y combinarlas"}
+    - {id: d, texto: "Deja de funcionar el hashing consistente"}
+  correctas: [c]
+  explicacion: Se gana reparto de carga a cambio de lecturas más complejas. Solo compensa para las claves de verdad calientes.
+  distractores:
+    a: Las lecturas completas pasan a tocar varias particiones.
+    b: Los datos siguen todos, repartidos en 8 claves.
+    d: Las 8 claves se reparten con el mismo anillo.
+  referencia: https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html

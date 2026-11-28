@@ -1,0 +1,693 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿En qué sistema compensa más aplicar DDD a fondo?
+  opciones:
+    - {id: a, texto: "Un CRUD para mantener la lista de países"}
+    - {id: b, texto: "Un prototipo que se tirará en un mes"}
+    - {id: c, texto: "El motor de tarificación de una aseguradora, con reglas complejas que la diferencian de la competencia"}
+    - {id: d, texto: "Una integración que copia ficheros de un servidor a otro"}
+  correctas: [c]
+  explicacion: DDD compensa con un dominio complejo que es la ventaja del negocio.
+  distractores:
+    a: Es un CRUD sin reglas complejas.
+    b: No vive lo suficiente.
+    d: No tiene un dominio rico.
+  referencia: https://martinfowler.com/bliki/DomainDrivenDesign.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Negocio habla de «suspender a un cliente» y el código tiene setFlagBloqueo(true). ¿Qué propone el lenguaje ubicuo?
+  opciones:
+    - {id: a, texto: "Que negocio aprenda los nombres del código"}
+    - {id: b, texto: "Que el código use el lenguaje del negocio, por ejemplo cliente.suspender()"}
+    - {id: c, texto: "Mantener un diccionario de traducción entre ambos"}
+    - {id: d, texto: "Nada; los nombres no importan"}
+  correctas: [b]
+  explicacion: El mismo vocabulario en conversaciones y código evita traducciones en las que se pierden reglas.
+  distractores:
+    a: El lenguaje se construye juntos, partiendo del negocio.
+    c: Es la traducción que se quiere evitar.
+    d: Los nombres comunican el modelo.
+  referencia: https://martinfowler.com/bliki/UbiquitousLanguage.html
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Para una aerolínea, empareja cada parte con su tipo de subdominio.
+  prompts:
+    - {id: "1", texto: "Optimización de precios y ocupación de los vuelos"}
+    - {id: "2", texto: "Gestión de reclamaciones por equipaje"}
+    - {id: "3", texto: "Inicio de sesión de los empleados"}
+  opciones:
+    - {id: a, texto: "Central"}
+    - {id: b, texto: "De soporte"}
+    - {id: c, texto: "Genérico"}
+    - {id: d, texto: "Infraestructura de red"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El central diferencia a la empresa; el de soporte es propio pero no diferencia; el genérico es igual en todas.
+  distractores:
+    d: No es un tipo de subdominio de DDD.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué hacer con un subdominio genérico como la autenticación?
+  opciones:
+    - {id: a, texto: "Modelarlo con el máximo detalle"}
+    - {id: b, texto: "Ponerle el mejor equipo"}
+    - {id: c, texto: "Comprarlo o usar una solución existente, como Keycloak"}
+    - {id: d, texto: "Ignorarlo"}
+  correctas: [c]
+  explicacion: No aporta ventaja competitiva; el esfuerzo de modelado va al dominio central.
+  distractores:
+    a: Es esfuerzo sin retorno diferencial.
+    b: El mejor equipo va al dominio central.
+    d: Hace falta, pero no hay que construirlo.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: ¿Qué es el diseño estratégico en DDD?
+  opciones:
+    - {id: a, texto: "Repartir el sistema en contextos delimitados y definir cómo se relacionan"}
+    - {id: b, texto: "Elegir el framework"}
+    - {id: c, texto: "Escribir agregados y repositorios"}
+    - {id: d, texto: "Planificar los sprints"}
+  correctas: [a]
+  explicacion: Es lo de más impacto; los agregados y repositorios son diseño táctico.
+  distractores:
+    b: Es una decisión técnica, no de DDD.
+    c: Es diseño táctico.
+    d: Es gestión del proyecto.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.4"
+  enunciado: Un equipo renombra sus clases a PedidoAggregate y PedidoRepository, sin hablar con negocio ni definir contextos. ¿Está haciendo DDD?
+  opciones:
+    - {id: a, texto: "Sí, porque usa los patrones"}
+    - {id: b, texto: "Sí, si además usa microservicios"}
+    - {id: c, texto: "No; aplica nombres tácticos sin el modelado con los expertos ni el diseño estratégico, que son lo esencial"}
+    - {id: d, texto: "Solo si usa Java"}
+  correctas: [c]
+  explicacion: Es el error más común; los patrones tácticos sin el modelo compartido no aportan.
+  distractores:
+    a: Los nombres no hacen el modelo.
+    b: DDD no depende de microservicios.
+    d: No depende del lenguaje.
+  referencia: https://martinfowler.com/bliki/DomainDrivenDesign.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: En una reunión, «cliente» resulta significar cosas distintas para comercial y para facturación. ¿Qué se hace?
+  opciones:
+    - {id: a, texto: "Elegir un significado al azar"}
+    - {id: b, texto: "Precisar el término (o reconocer dos contextos distintos) y reflejarlo en el código"}
+    - {id: c, texto: "Evitar la palabra"}
+    - {id: d, texto: "Usar la definición del diccionario"}
+  correctas: [b]
+  explicacion: Las ambigüedades se resuelven en el lenguaje y en el modelo; a menudo revelan un límite entre contextos.
+  distractores:
+    a: Ocultaría el malentendido.
+    c: El concepto existe y hay que nombrarlo.
+    d: El significado lo da el negocio.
+  referencia: https://martinfowler.com/bliki/UbiquitousLanguage.html
+- id: L01-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: ¿Qué pertenece al diseño táctico de DDD?
+  opciones:
+    - {id: a, texto: "Agregados"}
+    - {id: b, texto: "Eventos de dominio"}
+    - {id: c, texto: "Repositorios"}
+    - {id: d, texto: "Mapas de contexto"}
+    - {id: e, texto: "Identificar el dominio central"}
+  correctas: [a, b, c]
+  explicacion: Son bloques para modelar dentro de un contexto.
+  distractores:
+    d: Es diseño estratégico.
+    e: Es diseño estratégico.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué es un contexto delimitado?
+  opciones:
+    - {id: a, texto: "Una tabla de la base de datos"}
+    - {id: b, texto: "Un límite dentro del cual un modelo y su lenguaje son coherentes"}
+    - {id: c, texto: "Un microservicio, por definición"}
+    - {id: d, texto: "Una carpeta del proyecto"}
+  correctas: [b]
+  explicacion: Dentro, cada término tiene un significado; fuera, puede tener otro.
+  distractores:
+    a: Es un concepto de modelado, no de almacenamiento.
+    c: Puede implementarse como servicio o como módulo de un monolito.
+    d: La estructura de carpetas puede reflejarlo, pero no lo define.
+  referencia: https://martinfowler.com/bliki/BoundedContext.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Catálogo, Almacén y Facturación necesitan datos distintos de un producto. ¿Qué comparten entre ellos?
+  opciones:
+    - {id: a, texto: "Una única clase Producto con los campos de los tres"}
+    - {id: b, texto: "La misma tabla"}
+    - {id: c, texto: "El identificador del producto; cada contexto tiene su propio modelo"}
+    - {id: d, texto: "Nada"}
+  correctas: [c]
+  explicacion: Compartir el identificador permite relacionarlos sin acoplar sus modelos.
+  distractores:
+    a: Acaba siendo una clase enorme que cambia por todos los motivos.
+    b: Acopla los contextos a través de la base de datos.
+    d: Necesitan referirse al mismo producto.
+  referencia: https://martinfowler.com/bliki/BoundedContext.html
+- id: L02-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué indica que hay un límite entre contextos?
+  opciones:
+    - {id: a, texto: "Una palabra significa cosas distintas para distintos grupos"}
+    - {id: b, texto: "Equipos distintos con ritmos de cambio distintos"}
+    - {id: c, texto: "Procesos de negocio que funcionan con cierta independencia"}
+    - {id: d, texto: "Que dos clases estén en ficheros distintos"}
+    - {id: e, texto: "Que se use otro lenguaje de programación"}
+  correctas: [a, b, c]
+  explicacion: Los límites salen del lenguaje, la organización y los procesos.
+  distractores:
+    d: Es una cuestión de organización del código.
+    e: La tecnología no define el modelo.
+  referencia: https://martinfowler.com/bliki/BoundedContext.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: ¿Qué diferencia hay entre subdominio y contexto delimitado?
+  opciones:
+    - {id: a, texto: "Son lo mismo"}
+    - {id: b, texto: "El subdominio está en el problema (el negocio); el contexto delimitado, en la solución (el software)"}
+    - {id: c, texto: "El subdominio es técnico y el contexto es de negocio"}
+    - {id: d, texto: "El contexto es más grande que el subdominio por definición"}
+  correctas: [b]
+  explicacion: Lo ideal es que coincidan, pero con sistemas heredados a menudo no lo hacen.
+  distractores:
+    a: Se parecen, pero son de planos distintos.
+    c: Es al revés.
+    d: No hay relación fija de tamaño.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L02-005
+  tipo: matching
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Empareja cada situación con la relación del mapa de contextos.
+  prompts:
+    - {id: "1", texto: "Facturación adopta tal cual el formato que exige la Agencia Tributaria"}
+    - {id: "2", texto: "Pedidos traduce el modelo del proveedor de pagos al suyo"}
+    - {id: "3", texto: "Catálogo tiene en cuenta lo que necesita Pedidos al cambiar su API"}
+    - {id: "4", texto: "Dos equipos comparten un pequeño modelo de dirección postal que solo cambian de acuerdo"}
+  opciones:
+    - {id: a, texto: "Conformista"}
+    - {id: b, texto: "Capa anticorrupción"}
+    - {id: c, texto: "Cliente-proveedor"}
+    - {id: d, texto: "Núcleo compartido"}
+    - {id: e, texto: "Caminos separados"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son relaciones descritas en DDD y en el material de context mapping de DDD Crew.
+  distractores:
+    e: Sería no integrarse en absoluto.
+  referencia: https://github.com/ddd-crew/context-mapping
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué es un servicio de host abierto con un lenguaje publicado?
+  opciones:
+    - {id: a, texto: "Un contexto que ofrece una API estable y documentada que cualquiera puede consumir"}
+    - {id: b, texto: "Un servidor sin autenticación"}
+    - {id: c, texto: "Un repositorio público de código"}
+    - {id: d, texto: "Una base de datos compartida"}
+  correctas: [a]
+  explicacion: Evita integraciones a medida para cada consumidor.
+  distractores:
+    b: No tiene relación con la seguridad.
+    c: No trata del código fuente.
+    d: Compartir la base de datos acopla los contextos.
+  referencia: https://github.com/ddd-crew/context-mapping
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿A qué suele corresponder un contexto delimitado en la organización?
+  opciones:
+    - {id: a, texto: "A un equipo y una unidad desplegable, como un módulo o un servicio"}
+    - {id: b, texto: "A una persona"}
+    - {id: c, texto: "A toda la empresa"}
+    - {id: d, texto: "A una tabla"}
+  correctas: [a]
+  explicacion: Un equipo que posee un contexto puede evolucionar su modelo sin coordinarse con todos.
+  distractores:
+    b: Es demasiado poco.
+    c: Sería volver al modelo único.
+    d: Es demasiado poco.
+  referencia: https://martinfowler.com/bliki/BoundedContext.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Un modelo único de Producto con campos de catálogo, almacén, facturación y envíos, ¿qué problema causa?
+  opciones:
+    - {id: a, texto: "Ninguno; es más sencillo"}
+    - {id: b, texto: "Que la base de datos no lo admite"}
+    - {id: c, texto: "Que es más rápido"}
+    - {id: d, texto: "Una clase enorme que cambia por motivos de cuatro áreas y que nadie entiende del todo"}
+  correctas: [d]
+  explicacion: Cada área necesita datos y reglas distintos; mezclarlos acopla todo con todo.
+  distractores:
+    a: Parece más sencillo al principio y se complica.
+    b: La base de datos lo admite; el problema es de diseño.
+    c: No es más rápido.
+  referencia: https://martinfowler.com/bliki/BoundedContext.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: El pedido tiene 600 € y se intenta añadir una línea de 500 € con un límite de 1000 €. ¿Qué ocurrió?
+  opciones:
+    - {id: a, texto: "Se añadió y quedó en 1100 €"}
+    - {id: b, texto: "Se añadió solo una parte"}
+    - {id: c, texto: "IllegalStateException - Supera el límite de 1000 €, y el pedido quedó como estaba"}
+    - {id: d, texto: "Se confirmó el pedido"}
+  correctas: [c]
+  explicacion: La raíz comprueba la invariante antes de cambiar el estado.
+  distractores:
+    a: La raíz lo impide.
+    b: No hay añadidos parciales.
+    d: Añadir no confirma.
+  referencia: https://martinfowler.com/bliki/DDD_Aggregate.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.2"
+  enunciado: ¿Qué pasó al añadir una línea de 5000 € a través de la lista que devolvía lineasMal()?
+  codigo:
+    lenguaje: java
+    fuente: |
+      List<Linea> lineasMal() { return lineas; }
+
+      p.lineasMal().add(new Linea(new ProductoId("x"), 1, euros("5000")));
+  opciones:
+    - {id: a, texto: "UnsupportedOperationException"}
+    - {id: b, texto: "Se añadió saltándose la invariante: el total pasó a 5640 €"}
+    - {id: c, texto: "El agregado la rechazó por superar el límite"}
+    - {id: d, texto: "No compila"}
+  correctas: [b]
+  explicacion: Al exponer la lista interna, se puede modificar sin pasar por la raíz. lineas() devolvía una copia inmutable y lanzó UnsupportedOperationException.
+  distractores:
+    a: Eso hizo la versión con List.copyOf.
+    c: La raíz no se entera; nadie llama a anadir.
+    d: Compila sin problemas.
+  referencia: https://martinfowler.com/bliki/DDD_Aggregate.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Por qué solo se accede a las líneas de un pedido a través del propio Pedido?
+  opciones:
+    - {id: a, texto: "Porque Java no permite otra cosa"}
+    - {id: b, texto: "Por rendimiento"}
+    - {id: c, texto: "Por convención de nombres"}
+    - {id: d, texto: "Porque la raíz es la que garantiza las invariantes del conjunto"}
+  correctas: [d]
+  explicacion: Si cualquiera pudiera tocar las líneas, nadie garantizaría reglas como el límite de importe.
+  distractores:
+    a: Java lo permitiría; es una decisión de diseño.
+    b: El motivo es la consistencia.
+    c: Es una regla con un propósito.
+  referencia: https://martinfowler.com/bliki/DDD_Aggregate.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Cómo debe referenciar un Pedido a su Cliente, que es otro agregado?
+  opciones:
+    - {id: a, texto: "Con su identificador (clienteId)"}
+    - {id: b, texto: "Con el objeto Cliente completo dentro del pedido"}
+    - {id: c, texto: "Con una copia de los datos del cliente"}
+    - {id: d, texto: "Sin referencia"}
+  correctas: [a]
+  explicacion: Referenciar por identificador mantiene los agregados pequeños e independientes.
+  distractores:
+    b: Mezclaría dos unidades de consistencia.
+    c: Duplica datos que cambian en otro sitio.
+    d: El pedido necesita saber de quién es.
+  referencia: https://www.dddcommunity.org/library/vernon_2011/
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: Al confirmar un pedido hay que sumar puntos al cliente. Según las reglas de Vernon, ¿cómo se hace?
+  opciones:
+    - {id: a, texto: "En la misma transacción, modificando los dos agregados"}
+    - {id: b, texto: "Metiendo los puntos dentro del agregado Pedido"}
+    - {id: c, texto: "Con consistencia eventual: el pedido emite un evento y otra transacción actualiza al cliente"}
+    - {id: d, texto: "No se puede"}
+  correctas: [c]
+  explicacion: Una transacción por agregado; entre agregados, consistencia eventual mediante eventos.
+  distractores:
+    a: Las transacciones no deberían cruzar los límites de los agregados.
+    b: Los puntos son del cliente, no del pedido.
+    d: Se hace con eventos.
+  referencia: https://www.dddcommunity.org/library/vernon_2011/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Los usuarios A y B leen el pedido en la versión 1. A guarda primero. ¿Qué pasa cuando B guarda?
+  opciones:
+    - {id: a, texto: "Se guarda y pisa los cambios de A"}
+    - {id: b, texto: "Se mezclan los cambios"}
+    - {id: c, texto: "Se bloquea hasta que A termine"}
+    - {id: d, texto: "Se rechaza porque el pedido ya está en la versión 2; B debe recargar y repetir"}
+  correctas: [d]
+  explicacion: Es concurrencia optimista; en la prueba, ConcurrentModificationException con versión 2 y leída 1.
+  distractores:
+    a: Es justo lo que evita la versión.
+    b: No hay mezcla automática.
+    c: El bloqueo sería concurrencia pesimista.
+  referencia: https://martinfowler.com/bliki/DDD_Aggregate.html
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué es un modelo anémico?
+  opciones:
+    - {id: a, texto: "Objetos del dominio con solo datos, getters y setters, y la lógica en servicios externos que pueden saltarse las reglas"}
+    - {id: b, texto: "Un modelo con pocas clases"}
+    - {id: c, texto: "Un modelo sin base de datos"}
+    - {id: d, texto: "Un modelo con objetos valor"}
+  correctas: [a]
+  explicacion: Fowler lo describe como antipatrón; en DDD, el comportamiento vive con los datos.
+  distractores:
+    b: El tamaño no lo define.
+    c: No tiene relación con la persistencia.
+    d: Los objetos valor son parte de un buen modelo.
+  referencia: https://martinfowler.com/bliki/AnemicDomainModel.html
+- id: L03-008
+  tipo: completar
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Completa el método para devolver las líneas sin permitir modificarlas desde fuera.
+  codigo:
+    lenguaje: java
+    fuente: |
+      List<Linea> lineas() {
+          return [[1]].[[2]](lineas);
+      }
+  huecos:
+    - {id: "1", respuestas: [List]}
+    - {id: "2", respuestas: [copyOf]}
+  explicacion: List.copyOf devuelve una copia inmutable; intentar modificarla lanza UnsupportedOperationException.
+  referencia: https://martinfowler.com/bliki/DDD_Aggregate.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Cuál es un buen nombre para un evento de dominio?
+  opciones:
+    - {id: a, texto: "ActualizarEstadoPedido"}
+    - {id: b, texto: "PedidoConfirmado"}
+    - {id: c, texto: "EventoTabla3"}
+    - {id: d, texto: "ConfirmarPedidoCommand"}
+  correctas: [b]
+  explicacion: Un evento es un hecho que ya ha ocurrido, en pasado y con el lenguaje del negocio.
+  distractores:
+    a: Es una orden en infinitivo y con jerga técnica.
+    c: No dice nada del negocio.
+    d: Es una orden, no un hecho.
+  referencia: https://martinfowler.com/eaaDev/DomainEvent.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Cuántos eventos PedidoConfirmado generó llamar dos veces a confirmar()?
+  opciones:
+    - {id: a, texto: "Uno, porque la segunda llamada no cambia el estado"}
+    - {id: b, texto: "Dos"}
+    - {id: c, texto: "Ninguno"}
+    - {id: d, texto: "Un error"}
+  correctas: [a]
+  explicacion: El método es idempotente; si ya está confirmado, no vuelve a registrar el hecho.
+  distractores:
+    b: Duplicaría el hecho y sus efectos.
+    c: La primera confirmación sí lo registró.
+    d: La segunda llamada terminó bien sin cambios.
+  referencia: https://martinfowler.com/eaaDev/DomainEvent.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Cuándo debe publicar la aplicación los eventos registrados por un agregado?
+  opciones:
+    - {id: a, texto: "Antes de guardar el agregado"}
+    - {id: b, texto: "Después de guardarlo, de forma fiable (por ejemplo, con el patrón outbox)"}
+    - {id: c, texto: "Solo al final del día, en lote"}
+    - {id: d, texto: "Cuando el usuario cierre sesión"}
+  correctas: [b]
+  explicacion: Si se publican antes y el guardado falla, se anuncia algo que no ocurrió.
+  distractores:
+    a: El hecho aún no es definitivo.
+    c: Retrasa sin motivo a quienes reaccionan.
+    d: No tiene relación con la sesión.
+  referencia: https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-events-design-implementation
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Empareja cada responsabilidad con el elemento adecuado.
+  prompts:
+    - {id: "1", texto: "Calcular el precio con reglas que combinan cliente, producto y campaña"}
+    - {id: "2", texto: "Cargar el pedido, llamar a confirmar(), guardarlo y publicar sus eventos"}
+    - {id: "3", texto: "Comprobar que un pedido confirmado no admite más líneas"}
+  opciones:
+    - {id: a, texto: "Servicio de dominio"}
+    - {id: b, texto: "Servicio de aplicación (caso de uso)"}
+    - {id: c, texto: "La raíz del agregado"}
+    - {id: d, texto: "El controlador web"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Las reglas viven en el dominio; el servicio de aplicación orquesta sin reglas.
+  distractores:
+    d: Solo traduce HTTP.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: Un servicio de aplicación contiene «if (pedido.total() > 1000) throw …». ¿Qué problema hay?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Que es lento"}
+    - {id: c, texto: "Que no compila"}
+    - {id: d, texto: "Que una regla del negocio se ha escapado del dominio; otro caso de uso podría saltársela"}
+  correctas: [d]
+  explicacion: La invariante debe vivir en el agregado, que es el único que puede garantizarla siempre.
+  distractores:
+    a: Lleva al modelo anémico.
+    b: No es un problema de rendimiento.
+    c: Compila; el problema es de diseño.
+  referencia: https://martinfowler.com/bliki/AnemicDomainModel.html
+- id: L04-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué características tiene un repositorio en DDD?
+  opciones:
+    - {id: a, texto: "Hay uno por agregado, solo para las raíces"}
+    - {id: b, texto: "Carga y guarda el agregado entero"}
+    - {id: c, texto: "Su interfaz pertenece al dominio y su implementación a la infraestructura"}
+    - {id: d, texto: "Hay uno por tabla, también para las líneas"}
+    - {id: e, texto: "Expone consultas SQL arbitrarias"}
+  correctas: [a, b, c]
+  explicacion: Da acceso a agregados como si fueran una colección, sin detalles de persistencia.
+  distractores:
+    d: Las líneas se acceden a través del pedido.
+    e: Expondría la persistencia al dominio.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L04-007
+  tipo: completar
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Completa el puerto del repositorio de pedidos.
+  codigo:
+    lenguaje: java
+    fuente: |
+      interface Pedidos {
+          [[1]]<Pedido> porId(PedidoId id);
+          void [[2]](Pedido pedido);
+      }
+  huecos:
+    - {id: "1", respuestas: [Optional]}
+    - {id: "2", respuestas: [guardar]}
+  explicacion: Optional expresa que puede no existir; guardar persiste el agregado entero.
+  referencia: https://www.domainlanguage.com/ddd/reference/
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Para qué no se debe usar un evento de dominio?
+  opciones:
+    - {id: a, texto: "Para que otro agregado reaccione con consistencia eventual"}
+    - {id: b, texto: "Para avisar a otro contexto"}
+    - {id: c, texto: "Para pedir a otro servicio que haga algo y esperar su respuesta en la misma petición"}
+    - {id: d, texto: "Como registro de lo ocurrido en el negocio"}
+  correctas: [c]
+  explicacion: Un evento anuncia un hecho; una petición con respuesta es una llamada o una orden.
+  distractores:
+    a: Es su uso principal.
+    b: Es un uso habitual.
+    d: Es un uso válido.
+  referencia: https://martinfowler.com/eaaDev/DomainEvent.html
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué devolvió la traducción del PagoExterno con st "00" y amt_cents 64000?
+  opciones:
+    - {id: a, texto: "Pago con importe 640.00 y estado COBRADO"}
+    - {id: b, texto: "Pago con importe 64000 y estado 00"}
+    - {id: c, texto: "Un error"}
+    - {id: d, texto: "Pago con estado PENDIENTE"}
+  correctas: [a]
+  explicacion: La capa anticorrupción convierte los céntimos en Dinero y el código del proveedor en el estado del dominio.
+  distractores:
+    b: Sería usar el modelo ajeno sin traducir.
+    c: La traducción funcionó.
+    d: "00 es un código conocido de aprobación."
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué problema evita la capa anticorrupción?
+  opciones:
+    - {id: a, texto: "Que el proveedor cobre de más"}
+    - {id: b, texto: "Que los conceptos y códigos del sistema ajeno se extiendan por el dominio propio y lo acoplen a él"}
+    - {id: c, texto: "Los errores de red"}
+    - {id: d, texto: "La concurrencia"}
+  correctas: [b]
+  explicacion: Así un cambio del proveedor solo afecta a la traducción.
+  distractores:
+    a: No controla la facturación del proveedor.
+    c: Es otra preocupación.
+    d: No tiene relación.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.1"
+  enunciado: El proveedor envía un estado nuevo, "99", que la traducción no conoce. ¿Cómo debe tratarse?
+  opciones:
+    - {id: a, texto: "Como COBRADO, para no molestar al cliente"}
+    - {id: b, texto: "Ignorando el mensaje"}
+    - {id: c, texto: "Como PENDIENTE: ante la duda, el lado seguro, sin dar por cobrado algo que no lo está"}
+    - {id: d, texto: "Lanzando el estado tal cual al dominio"}
+  correctas: [c]
+  explicacion: Es lo que hace el default del switch; un fallo nunca debe conceder lo que no se ha comprobado.
+  distractores:
+    a: Enviaría pedidos sin cobrar.
+    b: Se perdería información.
+    d: Contaminaría el dominio con el modelo ajeno.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: En una arquitectura hexagonal, ¿dónde vive la capa anticorrupción?
+  opciones:
+    - {id: a, texto: "En el adaptador que habla con el sistema externo"}
+    - {id: b, texto: "En el agregado"}
+    - {id: c, texto: "En el controlador web"}
+    - {id: d, texto: "En la base de datos"}
+  correctas: [a]
+  explicacion: El adaptador traduce entre el mundo exterior y los puertos del dominio.
+  distractores:
+    b: El dominio no debe conocer el modelo ajeno.
+    c: Es otro adaptador, para HTTP de entrada.
+    d: No es una capa de datos.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Por qué publicar a otros contextos un evento de integración y no el objeto interno del agregado?
+  opciones:
+    - {id: a, texto: "Porque es más rápido"}
+    - {id: b, texto: "Porque los objetos no se pueden serializar"}
+    - {id: c, texto: "Porque es obligatorio en Kafka"}
+    - {id: d, texto: "Para poder cambiar el modelo interno sin romper a los consumidores; el evento es un contrato público y versionado"}
+  correctas: [d]
+  explicacion: Separar contrato e implementación protege a ambos lados.
+  distractores:
+    a: El motivo es el desacoplamiento.
+    b: Se pueden serializar.
+    c: Kafka no lo exige.
+  referencia: https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-events-design-implementation
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Exige cada contexto delimitado un microservicio propio?
+  opciones:
+    - {id: a, texto: "Sí"}
+    - {id: b, texto: "No; puede ser un módulo de un monolito modular con límites comprobados"}
+    - {id: c, texto: "Solo en Java"}
+    - {id: d, texto: "Solo si usa eventos"}
+  correctas: [b]
+  explicacion: El contexto es un límite de modelo; cómo se despliega es otra decisión.
+  distractores:
+    a: Es una confusión frecuente.
+    c: No depende del lenguaje.
+    d: Los módulos también pueden usar eventos.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/microservices/model/domain-analysis
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.3"
+  enunciado: ¿Por qué es prudente empezar con un monolito modular y separar contextos después?
+  opciones:
+    - {id: a, texto: "Porque los microservicios están obsoletos"}
+    - {id: b, texto: "Porque corregir un límite equivocado dentro del monolito es una refactorización, y entre servicios es una migración"}
+    - {id: c, texto: "Porque los monolitos no necesitan pruebas"}
+    - {id: d, texto: "Porque es más fácil de escalar"}
+  correctas: [b]
+  explicacion: Los límites se aprenden con el tiempo; equivocarse en un monolito sale mucho más barato.
+  distractores:
+    a: Siguen siendo útiles con motivos concretos.
+    c: Necesitan pruebas igual.
+    d: Escala de forma conjunta, no más fácilmente.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/microservices/model/domain-analysis
+- id: L05-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué razones concretas justifican separar un contexto en un servicio propio?
+  opciones:
+    - {id: a, texto: "Necesita escalar de forma muy distinta al resto"}
+    - {id: b, texto: "Lo mantiene un equipo independiente con su propio ritmo de despliegue"}
+    - {id: c, texto: "Requisitos distintos de tecnología o de aislamiento"}
+    - {id: d, texto: "Que está de moda"}
+    - {id: e, texto: "Que el código tiene más de diez clases"}
+  correctas: [a, b, c]
+  explicacion: Separar tiene un coste en red, consistencia y operación; debe compensarlo un motivo real.
+  distractores:
+    d: No es una razón técnica.
+    e: El tamaño por sí solo no lo justifica.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/microservices/model/domain-analysis

@@ -1,0 +1,665 @@
+- id: L01-001
+  tipo: ordering
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Ordena los niveles de la pirámide de pruebas de los más numerosos a los menos.
+  opciones:
+    - {id: a, texto: "Pruebas unitarias"}
+    - {id: b, texto: "Pruebas de integración"}
+    - {id: c, texto: "Pruebas de extremo a extremo"}
+  correctas: [a, b, c]
+  explicacion: La base son muchas pruebas unitarias rápidas; arriba, pocas pruebas de extremo a extremo, lentas y frágiles.
+  referencia: https://martinfowler.com/bliki/TestPyramid.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Quién popularizó la pirámide de pruebas y dónde?
+  opciones:
+    - {id: a, texto: "Kent Beck, en Extreme Programming Explained"}
+    - {id: b, texto: "Mike Cohn, en Succeeding with Agile (2009)"}
+    - {id: c, texto: "Martin Fowler, en Refactoring"}
+    - {id: d, texto: "Robert C. Martin, en Clean Code"}
+  correctas: [b]
+  explicacion: Fowler explica que la mayoría la conoce por el libro de Mike Cohn de 2009, donde se llama Test Automation Pyramid.
+  distractores:
+    a: Kent Beck desarrolló el TDD, no la pirámide.
+    c: Fowler la ha difundido, pero atribuye su popularidad a Cohn.
+    d: Martin escribe sobre pruebas, pero no es el origen de la pirámide.
+  referencia: https://martinfowler.com/bliki/TestPyramid.html
+- id: L01-003
+  tipo: ordering
+  dificultad: baja
+  objetivo: "1.3"
+  enunciado: Ordena las partes de una prueba bien estructurada.
+  opciones:
+    - {id: a, texto: "Preparar los datos y los objetos"}
+    - {id: b, texto: "Actuar, ejecutando la operación que se prueba"}
+    - {id: c, texto: "Comprobar el resultado con aserciones"}
+  correctas: [a, b, c]
+  explicacion: Preparar, actuar y comprobar (Arrange, Act, Assert) hace que cada prueba se lea de un vistazo.
+  referencia: https://docs.pytest.org/en/stable/how-to/fixtures.html
+- id: L01-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué propiedades debe tener una buena prueba unitaria?
+  opciones:
+    - {id: a, texto: "Ser rápida"}
+    - {id: b, texto: "No depender de otras pruebas ni del orden de ejecución"}
+    - {id: c, texto: "Dar el mismo resultado en cada ejecución"}
+    - {id: d, texto: "Llamar a servicios reales de Internet"}
+    - {id: e, texto: "Comprobar muchas cosas distintas en una sola prueba"}
+  correctas: [a, b, c]
+  explicacion: Rapidez, aislamiento y repetibilidad hacen que las pruebas se ejecuten a menudo y que se confíe en ellas.
+  distractores:
+    d: La red las hace lentas e imprevisibles.
+    e: Cuando falla, no se sabe qué se ha roto; mejor un motivo por prueba.
+  referencia: https://martinfowler.com/articles/practical-test-pyramid.html
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Una prueba comprueba que un método llama a tres métodos privados en un orden concreto. Tras una refactorización que no cambia el resultado, falla. ¿Qué indica?
+  opciones:
+    - {id: a, texto: "Que la refactorización tiene un error"}
+    - {id: b, texto: "Que faltan pruebas"}
+    - {id: c, texto: "Que la prueba comprobaba la implementación en lugar del comportamiento"}
+    - {id: d, texto: "Que hay que prohibir las refactorizaciones"}
+  correctas: [c]
+  explicacion: Si el comportamiento no cambió, la prueba no debería fallar. Las pruebas deben fijarse en el qué, no en el cómo.
+  distractores:
+    a: El enunciado dice que el resultado no cambió.
+    b: El problema es la forma de la prueba existente.
+    d: Las pruebas existen precisamente para poder refactorizar con confianza.
+  referencia: https://martinfowler.com/articles/practical-test-pyramid.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: El cupón DESCUENTO10 se aplica a pedidos de 50 € o más. ¿Qué casos de prueba son más valiosos?
+  opciones:
+    - {id: a, texto: "Un pedido de 1000 €"}
+    - {id: b, texto: "Los valores en el límite, como 49,99 € y 50 €, y un cupón no válido"}
+    - {id: c, texto: "Solo un pedido de 0 €"}
+    - {id: d, texto: "Muchos pedidos de importes al azar"}
+  correctas: [b]
+  explicacion: Los errores se concentran en los límites (por ejemplo, confundir > con >=). Probar justo a cada lado del límite los detecta.
+  distractores:
+    a: Lejos del límite no distingue > de >=.
+    c: Deja sin probar el caso en que el descuento se aplica.
+    d: Los valores al azar hacen la prueba poco repetible y suelen esquivar el límite.
+  referencia: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Por qué no basta con tener solo pruebas de extremo a extremo?
+  opciones:
+    - {id: a, texto: "Porque no dan confianza"}
+    - {id: b, texto: "Porque no se pueden automatizar"}
+    - {id: c, texto: "Porque no se pueden ejecutar en la integración continua"}
+    - {id: d, texto: "Porque son lentas, frágiles y, cuando fallan, cuesta localizar la causa"}
+  correctas: [d]
+  explicacion: Dan confianza en el conjunto, pero no sirven como base. Las pruebas unitarias señalan el fallo concreto en milisegundos.
+  distractores:
+    a: Dan mucha confianza en que todo está conectado.
+    b: Se automatizan con herramientas de navegador o de API.
+    c: Se pueden ejecutar, aunque tardan.
+  referencia: https://martinfowler.com/bliki/TestPyramid.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: Una prueba falla un día sí y otro no, sin cambios en el código. Usa datetime.now() para decidir si una oferta está vigente. ¿Qué propiedad incumple?
+  opciones:
+    - {id: a, texto: "La repetibilidad; depende de la hora a la que se ejecuta"}
+    - {id: b, texto: "La rapidez"}
+    - {id: c, texto: "El aislamiento de la red"}
+    - {id: d, texto: "Ninguna; es normal"}
+  correctas: [a]
+  explicacion: Una prueba que depende del reloj real da resultados distintos según el momento. Hay que fijar la hora, pasándola como parámetro o con un doble.
+  distractores:
+    b: El problema no es el tiempo que tarda.
+    c: No usa la red.
+    d: Las pruebas que fallan a ratos minan la confianza en toda la batería.
+  referencia: https://martinfowler.com/articles/practical-test-pyramid.html
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué devuelve carrito.total_con_descuento("DESCUENTO10") si el carrito tiene 2 libros de 20 € y una lámpara de 10 €?
+  opciones:
+    - {id: a, texto: "50"}
+    - {id: b, texto: "45.00"}
+    - {id: c, texto: "40"}
+    - {id: d, texto: "5.00"}
+  correctas: [b]
+  explicacion: El total es 50, que cumple total >= 50, así que se aplica el 10 %; 50 × 0,9 = 45,00. La prueba test_cupon_aplica_a_partir_de_50 lo comprueba.
+  distractores:
+    a: El cupón sí se aplica, porque la condición es mayor o igual.
+    c: Sería el total sin la lámpara.
+    d: Es el importe del descuento, no el total.
+  referencia: https://docs.pytest.org/en/stable/how-to/assert.html
+- id: L02-002
+  tipo: completar
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: Completa la prueba para comprobar que añadir cero unidades lanza ErrorDeCarrito.
+  codigo:
+    lenguaje: python
+    fuente: |
+      def test_cantidad_no_positiva_se_rechaza(carrito):
+          with pytest.[[1]](ErrorDeCarrito, [[2]]="positiva"):
+              carrito.anadir("libro", Decimal("20"), 0)
+  huecos:
+    - {id: "1", respuestas: [raises]}
+    - {id: "2", respuestas: [match]}
+  explicacion: pytest.raises falla si no se lanza la excepción indicada, y match comprueba que el mensaje contiene el texto.
+  referencia: https://docs.pytest.org/en/stable/how-to/assert.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Dos pruebas usan la fixture carrito, y la primera añade una lámpara. ¿Qué carrito recibe la segunda?
+  opciones:
+    - {id: a, texto: "El mismo, con la lámpara"}
+    - {id: b, texto: "Uno vacío"}
+    - {id: c, texto: "Ninguno; las fixtures solo sirven para una prueba"}
+    - {id: d, texto: "Uno nuevo con los 2 libros, porque por defecto la fixture se crea para cada prueba"}
+  correctas: [d]
+  explicacion: El alcance por defecto es la función. Cada prueba recibe su propia instancia y no le afectan las demás.
+  distractores:
+    a: Solo pasaría con un alcance mayor, como module.
+    b: La fixture añade los 2 libros cada vez.
+    c: Una fixture puede usarse en cualquier número de pruebas.
+  referencia: https://docs.pytest.org/en/stable/how-to/fixtures.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Una fixture arranca una base de datos que tarda 3 segundos. ¿Cómo evitar arrancarla en cada prueba?
+  opciones:
+    - {id: a, texto: "Con scope=\"module\" o scope=\"session\", para compartirla"}
+    - {id: b, texto: "Con @pytest.mark.parametrize"}
+    - {id: c, texto: "Con pytest -x"}
+    - {id: d, texto: "Copiando la base de datos en cada prueba"}
+  correctas: [a]
+  explicacion: El alcance de la fixture decide cuántas veces se crea. Para recursos caros se comparte por módulo o por sesión, con cuidado de limpiar los datos entre pruebas.
+  distractores:
+    b: Parametrizar multiplica casos, no comparte recursos.
+    c: -x solo detiene la ejecución en el primer fallo.
+    d: Sería aún más lento.
+  referencia: https://docs.pytest.org/en/stable/how-to/fixtures.html
+- id: L02-005
+  tipo: completar
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Completa la prueba para que se ejecute con los tres cupones.
+  codigo:
+    lenguaje: python
+    fuente: |
+      @pytest.mark.[[1]]("cupon, esperado", [
+          (None, Decimal("40")),
+          ("DESCUENTO10", Decimal("40")),
+          ("OTRO", Decimal("40")),
+      ])
+      def test_cupon_por_debajo_del_minimo(carrito, [[2]], esperado):
+          assert carrito.total_con_descuento(cupon) == esperado
+  huecos:
+    - {id: "1", respuestas: [parametrize]}
+    - {id: "2", respuestas: [cupon]}
+  explicacion: parametrize recibe los nombres de los parámetros y la lista de casos; la función los declara como argumentos.
+  referencia: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: En una prueba parametrizada con tres casos, falla el segundo. ¿Qué pasa con el tercero?
+  opciones:
+    - {id: a, texto: "No se ejecuta"}
+    - {id: b, texto: "Se ejecuta, porque cada caso es una prueba independiente"}
+    - {id: c, texto: "Se marca como fallido también"}
+    - {id: d, texto: "Se ejecuta solo con -x"}
+  correctas: [b]
+  explicacion: pytest genera una prueba por caso y las informa por separado.
+  distractores:
+    a: Solo dejaría de ejecutarse con -x, que se detiene en el primer fallo.
+    c: Cada caso tiene su propio resultado.
+    d: Es al revés; -x detiene la ejecución.
+  referencia: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- id: L02-007
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.4"
+  enunciado: Empareja cada necesidad con la opción de pytest.
+  prompts:
+    - {id: "1", texto: "Ejecutar solo las pruebas cuyo nombre contiene cupon"}
+    - {id: "2", texto: "Detenerse en el primer fallo"}
+    - {id: "3", texto: "Repetir solo las que fallaron la última vez"}
+  opciones:
+    - {id: a, texto: "-k cupon"}
+    - {id: b, texto: "-x"}
+    - {id: c, texto: "--lf"}
+    - {id: d, texto: "--cov"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: -k filtra por nombre, -x para en el primer fallo y --lf repite los últimos fallos.
+  distractores:
+    d: --cov es del complemento pytest-cov y mide la cobertura.
+  referencia: https://docs.pytest.org/en/stable/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Una fixture crea un fichero temporal y debe borrarlo al terminar la prueba. ¿Cómo se escribe?
+  opciones:
+    - {id: a, texto: "Con return y un finally en la prueba"}
+    - {id: b, texto: "No se puede"}
+    - {id: c, texto: "Con yield para entregar el fichero; el código posterior al yield se ejecuta al terminar"}
+    - {id: d, texto: "Con @pytest.mark.parametrize"}
+  correctas: [c]
+  explicacion: Una fixture con yield entrega el valor y, cuando la prueba acaba, ejecuta el código de después para limpiar, aunque la prueba falle.
+  distractores:
+    a: Repartiría la limpieza por cada prueba; la fixture debe encargarse.
+    b: Es un uso habitual de las fixtures.
+    d: Parametrizar no tiene relación con la limpieza.
+  referencia: https://docs.pytest.org/en/stable/how-to/fixtures.html
+- id: L03-001
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada doble con su tipo.
+  prompts:
+    - {id: "1", texto: "Una clase con una lista en memoria que guarda y busca pedidos"}
+    - {id: "2", texto: "Un objeto que devuelve siempre el tipo de cambio 1,10"}
+    - {id: "3", texto: "Un Mock al que después se le hace assert_called_once_with"}
+    - {id: "4", texto: "Un objeto que se pasa al constructor pero la prueba nunca usa"}
+  opciones:
+    - {id: a, texto: "Fake"}
+    - {id: b, texto: "Stub"}
+    - {id: c, texto: "Mock"}
+    - {id: d, texto: "Dummy"}
+    - {id: e, texto: "Prueba de contrato"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: El fake funciona con un atajo, el stub da respuestas fijas, el mock verifica llamadas y el dummy solo rellena un parámetro.
+  distractores:
+    e: Una prueba de contrato es un tipo de prueba, no un doble.
+  referencia: https://martinfowler.com/bliki/TestDouble.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué contiene falso.enviados tras ejecutar la prueba con NotificadorFalso y un libro de 20 €?
+  opciones:
+    - {id: a, texto: "Una lista vacía"}
+    - {id: b, texto: "[(\"ana@example.com\", \"Pedido confirmado: 20 EUR\")]"}
+    - {id: c, texto: "El número 20"}
+    - {id: d, texto: "Un objeto Mock"}
+  correctas: [b]
+  explicacion: El servicio llama a enviar con el destino y el texto, y el fake los guarda en su lista. La prueba lo comprueba con una igualdad.
+  distractores:
+    a: confirmar llama a enviar una vez.
+    c: El total va dentro del texto.
+    d: El fake es una clase normal, no un Mock.
+  referencia: https://martinfowler.com/bliki/TestDouble.html
+- id: L03-003
+  tipo: completar
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Completa la comprobación de que el notificador se llamó una sola vez con esos argumentos.
+  codigo:
+    lenguaje: python
+    fuente: |
+      notificador = [[1]]()
+      ServicioPedidos(notificador).confirmar("ana@example.com", carrito)
+      notificador.enviar.[[2]]("ana@example.com", "Pedido confirmado: 20 EUR")
+  huecos:
+    - {id: "1", respuestas: [Mock, MagicMock]}
+    - {id: "2", respuestas: [assert_called_once_with]}
+  explicacion: Mock registra las llamadas, y assert_called_once_with falla si no hubo exactamente una con esos argumentos.
+  referencia: https://docs.python.org/3/library/unittest.mock.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: El módulo informes.py hace from smtplib import SMTP y usa SMTP(...). ¿Qué hay que parchear en la prueba?
+  opciones:
+    - {id: a, texto: "smtplib.SMTP"}
+    - {id: b, texto: "informes.smtplib.SMTP"}
+    - {id: c, texto: "informes.SMTP, porque es el nombre que busca el módulo"}
+    - {id: d, texto: "No se puede parchear"}
+  correctas: [c]
+  explicacion: La documentación de Python indica parchear donde se busca el objeto. Tras from smtplib import SMTP, el módulo usa su propio nombre informes.SMTP.
+  distractores:
+    a: El módulo ya copió la referencia al importar; cambiar smtplib.SMTP no le afecta.
+    b: El módulo no importó smtplib, así que ese nombre no existe en él.
+    d: Se puede, con el nombre correcto.
+  referencia: https://docs.python.org/3/library/unittest.mock.html#where-to-patch
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Un Mock() sustituye a un notificador, y el código llama por error a notificador.envair(...). ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Falla con AttributeError"}
+    - {id: b, texto: "El Mock acepta la llamada sin error, porque responde a cualquier atributo; con spec o create_autospec fallaría"}
+    - {id: c, texto: "El intérprete corrige el nombre"}
+    - {id: d, texto: "No compila"}
+  correctas: [b]
+  explicacion: Un Mock sin especificación crea atributos al vuelo. Limitarlo a la interfaz real descubre errores de nombres.
+  distractores:
+    a: Solo fallaría con un Mock con especificación.
+    c: Python no corrige nombres.
+    d: Python no compila de antemano; el error aparecería en ejecución, si aparece.
+  referencia: https://docs.python.org/3/library/unittest.mock.html
+- id: L03-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: ¿Qué son señales de abuso de mocks?
+  opciones:
+    - {id: a, texto: "Cada prueba comprueba con assert_called_with cada llamada interna"}
+    - {id: b, texto: "Se mockean objetos de valor del propio dominio, como Decimal o un Carrito"}
+    - {id: c, texto: "Las pruebas se rompen con refactorizaciones que no cambian el comportamiento"}
+    - {id: d, texto: "Se usa un fake de la base de datos en las pruebas unitarias"}
+    - {id: e, texto: "Se fija la hora con un doble del reloj"}
+  correctas: [a, b, c]
+  explicacion: Verificar cada interacción y sustituir código propio acopla las pruebas a la implementación y quita valor a la prueba.
+  distractores:
+    d: Es un uso razonable de un doble en un borde.
+    e: Fijar el reloj hace la prueba repetible.
+  referencia: https://martinfowler.com/bliki/TestDouble.html
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Para probar avisar_pedido hace falta la cadena smtp.return_value.__enter__.return_value.sendmail. ¿Qué sugiere?
+  opciones:
+    - {id: a, texto: "Que unittest.mock está mal diseñado"}
+    - {id: b, texto: "Que hay que usar más patch"}
+    - {id: c, texto: "Que la prueba es perfecta"}
+    - {id: d, texto: "Que el código crea su dependencia y está acoplado a la biblioteca; inyectar un notificador simplificaría el diseño y la prueba"}
+  correctas: [d]
+  explicacion: Cuando un doble cuesta tanto de preparar, el problema suele estar en el diseño. Con inyección, basta un fake de una línea.
+  distractores:
+    a: La cadena refleja cómo se usa SMTP como gestor de contexto.
+    b: Más parches complicarían aún más la prueba.
+    c: Funciona, pero es frágil y difícil de leer.
+  referencia: https://docs.python.org/3/library/unittest.mock.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Dónde conviene usar dobles de prueba en una batería de pruebas unitarias?
+  opciones:
+    - {id: a, texto: "En cada clase, para aislar unas de otras"}
+    - {id: b, texto: "En ningún sitio"}
+    - {id: c, texto: "En los bordes (red, correo, reloj, base de datos), usando el código real dentro"}
+    - {id: d, texto: "Solo en el dominio"}
+  correctas: [c]
+  explicacion: Sustituir lo externo hace las pruebas rápidas y repetibles; usar el código real dentro comprueba que las piezas encajan.
+  distractores:
+    a: Aislar cada clase acopla las pruebas a la implementación.
+    b: Sin dobles, las unitarias dependerían de servicios externos.
+    d: El dominio es justo lo que se quiere probar con código real.
+  referencia: https://martinfowler.com/articles/practical-test-pyramid.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Las pruebas usan SQLite en memoria, pero producción usa PostgreSQL. ¿Qué riesgo hay?
+  opciones:
+    - {id: a, texto: "Ninguno; el SQL es estándar"}
+    - {id: b, texto: "Que las pruebas sean más lentas"}
+    - {id: c, texto: "Que no se puedan usar fixtures"}
+    - {id: d, texto: "Que diferencias de sintaxis, tipos o comportamiento pasen desapercibidas hasta producción"}
+  correctas: [d]
+  explicacion: Cada motor tiene sus particularidades. Probar contra el mismo motor, por ejemplo con Testcontainers, elimina esa fuente de errores.
+  distractores:
+    a: Los motores difieren en tipos, funciones y comportamiento.
+    b: SQLite en memoria suele ser más rápido; el problema es otro.
+    c: Las fixtures funcionan con cualquier motor.
+  referencia: https://testcontainers.com/
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Qué hace Testcontainers?
+  opciones:
+    - {id: a, texto: "Arranca contenedores Docker desechables desde las pruebas para usar servicios reales"}
+    - {id: b, texto: "Simula una base de datos en memoria"}
+    - {id: c, texto: "Despliega la aplicación en producción"}
+    - {id: d, texto: "Genera datos de prueba al azar"}
+  correctas: [a]
+  explicacion: Las pruebas obtienen una base de datos (u otro servicio) real en un contenedor que se elimina al terminar.
+  distractores:
+    b: Usa el servicio real, no una simulación.
+    c: Solo se usa en pruebas.
+    d: No genera datos.
+  referencia: https://testcontainers.com/
+- id: L04-003
+  tipo: completar
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Completa la importación actual del contenedor de PostgreSQL en Testcontainers para Python.
+  codigo:
+    lenguaje: python
+    fuente: |
+      from testcontainers.[[1]].postgres import PostgresContainer
+
+      with PostgresContainer("postgres:17-alpine", driver=None) as pg:
+          url = pg.[[2]]()
+  huecos:
+    - {id: "1", respuestas: [community]}
+    - {id: "2", respuestas: [get_connection_url]}
+  explicacion: Las versiones recientes mueven el módulo a testcontainers.community.postgres; get_connection_url da la URL del contenedor arrancado.
+  referencia: https://testcontainers-python.readthedocs.io/en/latest/
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: En la prueba de la lección, ¿qué demuestra que UPDATE stock SET unidades = unidades - 2 lance CheckViolation?
+  opciones:
+    - {id: a, texto: "Que la restricción CHECK de la base de datos real protege el stock frente a cualquier escritura"}
+    - {id: b, texto: "Que el código de Python valida el stock"}
+    - {id: c, texto: "Que el fake funciona"}
+    - {id: d, texto: "Que el contenedor no arrancó"}
+  correctas: [a]
+  explicacion: Es una comprobación que solo tiene sentido contra la base de datos real; un fake en memoria no la reproduciría.
+  distractores:
+    b: La validación la hace PostgreSQL, no Python.
+    c: No hay ningún fake en esta prueba.
+    d: El error viene de PostgreSQL, que sí estaba en marcha.
+  referencia: https://testcontainers.com/
+- id: L04-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Compartes un contenedor de base de datos entre todas las pruebas. ¿Cómo evitas que se influyan entre sí?
+  opciones:
+    - {id: a, texto: "Una transacción por prueba que se deshace al final"}
+    - {id: b, texto: "Vaciar las tablas en una fixture al empezar cada prueba"}
+    - {id: c, texto: "Que cada prueba cree sus datos con identificadores únicos"}
+    - {id: d, texto: "Ejecutar las pruebas en un orden fijo y apoyarse en él"}
+    - {id: e, texto: "Usar un contenedor por cada línea de código"}
+  correctas: [a, b, c]
+  explicacion: Las tres técnicas mantienen las pruebas independientes sin pagar el coste de un contenedor por prueba.
+  distractores:
+    d: Depender del orden hace las pruebas frágiles y difíciles de ejecutar por separado.
+    e: No tiene sentido y sería lentísimo.
+  referencia: https://docs.pytest.org/en/stable/how-to/fixtures.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué problema resuelven las pruebas de contrato?
+  opciones:
+    - {id: a, texto: "Medir el rendimiento de una API"}
+    - {id: b, texto: "Comprobar que consumidor y proveedor siguen respetando la interfaz acordada sin desplegarlos juntos"}
+    - {id: c, texto: "Sustituir las pruebas unitarias"}
+    - {id: d, texto: "Generar documentación de la API"}
+  correctas: [b]
+  explicacion: Detectan antes de desplegar que un cambio del proveedor rompería a un consumidor, sin el coste de una prueba de extremo a extremo.
+  distractores:
+    a: El rendimiento se mide con pruebas de carga.
+    c: Complementan a las unitarias, no las sustituyen.
+    d: Pueden servir de documentación, pero no es su propósito.
+  referencia: https://martinfowler.com/bliki/ContractTest.html
+- id: L04-007
+  tipo: ordering
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Ordena el flujo de una prueba de contrato guiada por el consumidor.
+  opciones:
+    - {id: a, texto: "El consumidor define en sus pruebas las peticiones y respuestas que espera"}
+    - {id: b, texto: "Ese contrato se publica para el proveedor"}
+    - {id: c, texto: "El proveedor ejecuta el contrato contra su código en su integración continua"}
+    - {id: d, texto: "Si un cambio del proveedor rompe el contrato, falla antes de desplegar"}
+  correctas: [a, b, c, d]
+  explicacion: El consumidor fija lo que necesita y el proveedor lo verifica de forma continua, sin desplegar los dos servicios juntos.
+  referencia: https://docs.pact.io/
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.3"
+  enunciado: ¿Qué herramienta es la más conocida para las pruebas de contrato guiadas por el consumidor?
+  opciones:
+    - {id: a, texto: "Pact"}
+    - {id: b, texto: "pytest-cov"}
+    - {id: c, texto: "Testcontainers"}
+    - {id: d, texto: "Selenium"}
+  correctas: [a]
+  explicacion: Pact permite al consumidor definir el contrato y al proveedor verificarlo.
+  distractores:
+    b: Mide la cobertura de código.
+    c: Arranca dependencias reales en contenedores.
+    d: Automatiza navegadores para pruebas de extremo a extremo.
+  referencia: https://docs.pact.io/
+- id: L05-001
+  tipo: ordering
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: Ordena los pasos de un ciclo de TDD.
+  opciones:
+    - {id: a, texto: "Escribir una prueba que falla"}
+    - {id: b, texto: "Escribir el código mínimo para que pase"}
+    - {id: c, texto: "Refactorizar con las pruebas en verde"}
+  correctas: [a, b, c]
+  explicacion: Rojo, verde y refactorizar, repetido en ciclos cortos.
+  referencia: https://martinfowler.com/bliki/TestDrivenDevelopment.html
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: ¿Quién desarrolló el TDD y en qué contexto?
+  opciones:
+    - {id: a, texto: "Kent Beck, a finales de los noventa, como parte de la Programación Extrema"}
+    - {id: b, texto: "Mike Cohn, en 2009"}
+    - {id: c, texto: "Edgar F. Codd, en 1970"}
+    - {id: d, texto: "Alistair Cockburn, en 2005"}
+  correctas: [a]
+  explicacion: Fowler atribuye el TDD a Kent Beck, dentro de la Programación Extrema.
+  distractores:
+    b: Mike Cohn popularizó la pirámide de pruebas.
+    c: Codd propuso el modelo relacional.
+    d: Cockburn describió la arquitectura hexagonal.
+  referencia: https://martinfowler.com/bliki/TestDrivenDevelopment.html
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué paso previo al ciclo recomienda Fowler y se suele olvidar?
+  opciones:
+    - {id: a, texto: "Medir la cobertura"}
+    - {id: b, texto: "Escribir todo el código primero"}
+    - {id: c, texto: "Escribir una lista de casos de prueba y elegir en cada ciclo el siguiente"}
+    - {id: d, texto: "Desplegar en producción"}
+  correctas: [c]
+  explicacion: La lista orienta los ciclos; elegir bien el siguiente caso hace avanzar el diseño hacia lo importante.
+  distractores:
+    a: La cobertura no forma parte del ciclo.
+    b: Es lo contrario de TDD.
+    d: No tiene relación con el ciclo.
+  referencia: https://martinfowler.com/bliki/TestDrivenDevelopment.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: En el experimento, el descuento pasó por error del 10 % al 50 % y la prueba sin aserciones siguió pasando. ¿Qué cobertura tenía carrito.py?
+  opciones:
+    - {id: a, texto: "0 %"}
+    - {id: b, texto: "89 %, con la línea del descuento contada como cubierta"}
+    - {id: c, texto: "50 %"}
+    - {id: d, texto: "La prueba falló, así que no hay cobertura"}
+  correctas: [b]
+  explicacion: La prueba ejecutó la línea con el error, pero no comprobó el resultado. La cobertura cuenta líneas ejecutadas, no comprobadas.
+  distractores:
+    a: La prueba ejecuta la mayor parte de la clase.
+    c: El porcentaje no tiene relación con el descuento.
+    d: La prueba pasó, que es justo el problema.
+  referencia: https://martinfowler.com/bliki/TestCoverage.html
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: La dirección exige un 90 % de cobertura en todos los proyectos. ¿Qué riesgo señala Fowler?
+  opciones:
+    - {id: a, texto: "Que ninguno lo alcance"}
+    - {id: b, texto: "Que las pruebas sean más lentas"}
+    - {id: c, texto: "Que se pierda la cobertura de las librerías"}
+    - {id: d, texto: "Que se alcance con pruebas de poca calidad, incluso sin aserciones, en lugar de probar lo importante"}
+  correctas: [d]
+  explicacion: Citando a Brian Marick, Fowler advierte que, como objetivo, la cobertura es demasiado fácil de alcanzar con malas pruebas.
+  distractores:
+    a: Es fácil de alcanzar; el problema es cómo.
+    b: La velocidad no es el riesgo principal.
+    c: La cobertura de las bibliotecas no se suele medir.
+  referencia: https://martinfowler.com/bliki/TestCoverage.html
+- id: L05-006
+  tipo: completar
+  dificultad: baja
+  objetivo: "5.2"
+  enunciado: Completa la orden para medir la cobertura y ver qué líneas faltan.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      pytest [[1]]=. --cov-report=[[2]]
+  huecos:
+    - {id: "1", respuestas: [--cov]}
+    - {id: "2", respuestas: [term-missing]}
+  explicacion: --cov activa pytest-cov sobre el paquete indicado y term-missing lista en la terminal las líneas no ejecutadas.
+  referencia: https://pytest-cov.readthedocs.io/en/latest/
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: En una prueba de mutación, la herramienta cambia >= por > en la condición del cupón y todas las pruebas siguen pasando. ¿Qué significa?
+  opciones:
+    - {id: a, texto: "Que el mutante sobrevive; ninguna prueba comprueba el caso límite de 50 €"}
+    - {id: b, texto: "Que el código es correcto"}
+    - {id: c, texto: "Que la herramienta ha fallado"}
+    - {id: d, texto: "Que hay demasiadas pruebas"}
+  correctas: [a]
+  explicacion: Un mutante superviviente revela un comportamiento que las pruebas no fijan. Una prueba con un total de exactamente 50 € lo eliminaría.
+  distractores:
+    b: Precisamente indica un hueco en las pruebas.
+    c: Es el resultado que la técnica busca encontrar.
+    d: Indica que falta una, no que sobren.
+  referencia: https://en.wikipedia.org/wiki/Mutation_testing
+- id: L05-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué afirmaciones sobre las pruebas de mutación son correctas?
+  opciones:
+    - {id: a, texto: "Introducen pequeños cambios en el código y ejecutan las pruebas con cada uno"}
+    - {id: b, texto: "Un mutante eliminado indica que alguna prueba detecta ese cambio"}
+    - {id: c, texto: "Son lentas, porque ejecutan la batería muchas veces"}
+    - {id: d, texto: "Sustituyen a las pruebas unitarias"}
+    - {id: e, texto: "Miden el rendimiento del código"}
+  correctas: [a, b, c]
+  explicacion: Miden la capacidad de las pruebas para detectar errores y, por su coste, se suelen aplicar al código más crítico.
+  distractores:
+    d: Evalúan las pruebas existentes; no las sustituyen.
+    e: No tienen relación con el rendimiento.
+  referencia: https://en.wikipedia.org/wiki/Mutation_testing

@@ -1,0 +1,698 @@
+- id: L01-001
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué añade Spring Boot a Spring?
+  opciones:
+    - {id: a, texto: "Starters con versiones compatibles"}
+    - {id: b, texto: "Autoconfiguración según el classpath y las propiedades"}
+    - {id: c, texto: "Un servidor web integrado para ejecutar la aplicación como un JAR"}
+    - {id: d, texto: "Un lenguaje de programación propio"}
+    - {id: e, texto: "Una base de datos propia obligatoria"}
+  correctas: [a, b, c]
+  explicacion: Spring Boot hace práctico Spring con dependencias agrupadas, configuración automática, servidor integrado y funciones de operación.
+  distractores:
+    d: Se programa en Java (o Kotlin).
+    e: Funciona con la base de datos que se elija.
+  referencia: https://docs.spring.io/spring-boot/reference/using/auto-configuration.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: En Spring Boot 4, ¿qué starter sustituye a spring-boot-starter-web para Spring MVC?
+  opciones:
+    - {id: a, texto: "spring-boot-starter-webflux"}
+    - {id: b, texto: "spring-boot-starter-webmvc"}
+    - {id: c, texto: "spring-boot-starter-tomcat"}
+    - {id: d, texto: "Ninguno; se eliminó Spring MVC"}
+  correctas: [b]
+  explicacion: La guía de migración a Spring Boot 4 lista spring-boot-starter-web como obsoleto y spring-boot-starter-webmvc como su sustituto.
+  distractores:
+    a: WebFlux es el modelo reactivo, otra tecnología.
+    c: Tomcat es el servidor, no el starter de Spring MVC.
+    d: Spring MVC sigue siendo el modelo web principal.
+  referencia: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: En Spring Boot 4, ¿qué dependencia de pruebas acompaña a spring-boot-starter-data-jpa?
+  opciones:
+    - {id: a, texto: "spring-boot-starter-test sin más"}
+    - {id: b, texto: "junit-jupiter"}
+    - {id: c, texto: "spring-boot-starter-data-jpa-test"}
+    - {id: d, texto: "No hay pruebas para JPA"}
+  correctas: [c]
+  explicacion: Spring Boot 4 da a cada starter un compañero de pruebas que incluye las utilidades de esa tecnología, como @DataJpaTest.
+  distractores:
+    a: La guía recomienda listar los starters de prueba de cada tecnología.
+    b: JUnit va incluido, pero no aporta las piezas de JPA.
+    d: Existen pruebas específicas de la capa de datos.
+  referencia: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Spring Boot ha autoconfigurado un DataSource, pero defines tu propio bean DataSource. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Error, porque hay dos DataSource"}
+    - {id: b, texto: "Spring usa los dos a la vez"}
+    - {id: c, texto: "La autoconfiguración ignora tu bean"}
+    - {id: d, texto: "La autoconfiguración retrocede y se usa el tuyo"}
+  correctas: [d]
+  explicacion: Las autoconfiguraciones llevan condiciones como @ConditionalOnMissingBean y se retiran cuando el desarrollador define el bean.
+  distractores:
+    a: La autoconfiguración no crea el suyo si ya existe uno.
+    b: Solo hay uno.
+    c: Es al revés; tu bean tiene prioridad.
+  referencia: https://docs.spring.io/spring-boot/reference/using/auto-configuration.html
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.3"
+  enunciado: ¿Cómo se ve qué autoconfiguraciones se han aplicado y por qué?
+  opciones:
+    - {id: a, texto: "Arrancando con --debug, que imprime el informe de condiciones"}
+    - {id: b, texto: "Leyendo el pom.xml"}
+    - {id: c, texto: "No se puede"}
+    - {id: d, texto: "Con un perfil llamado auto"}
+  correctas: [a]
+  explicacion: El informe de condiciones lista las coincidencias positivas y negativas de cada autoconfiguración.
+  distractores:
+    b: El pom muestra dependencias, no la configuración aplicada.
+    c: Spring Boot ofrece el informe.
+    d: No existe ese perfil especial.
+  referencia: https://docs.spring.io/spring-boot/reference/using/auto-configuration.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: La clase TiendaApplication está en el paquete tienda.arranque y los controladores en tienda.web. Spring no encuentra los controladores. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque faltan dependencias"}
+    - {id: b, texto: "Porque @SpringBootApplication busca componentes en su paquete y subpaquetes, y tienda.web no es un subpaquete de tienda.arranque"}
+    - {id: c, texto: "Porque los controladores deben llamarse Controller"}
+    - {id: d, texto: "Porque Tomcat no ha arrancado"}
+  correctas: [b]
+  explicacion: La búsqueda de componentes parte del paquete de la clase anotada. Por eso se coloca en el paquete raíz.
+  distractores:
+    a: Las dependencias no deciden qué paquetes se escanean.
+    c: El nombre de la clase no importa.
+    d: Tomcat arranca aunque no haya controladores.
+  referencia: https://docs.spring.io/spring-boot/reference/using/auto-configuration.html
+- id: L01-007
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Empareja cada necesidad con su starter de Spring Boot 4.
+  prompts:
+    - {id: "1", texto: "API REST con Spring MVC"}
+    - {id: "2", texto: "Validar cuerpos de petición con anotaciones"}
+    - {id: "3", texto: "Endpoints de salud y métricas"}
+    - {id: "4", texto: "Repositorios JPA"}
+  opciones:
+    - {id: a, texto: "spring-boot-starter-webmvc"}
+    - {id: b, texto: "spring-boot-starter-validation"}
+    - {id: c, texto: "spring-boot-starter-actuator"}
+    - {id: d, texto: "spring-boot-starter-data-jpa"}
+    - {id: e, texto: "spring-boot-starter-classic"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son los starters de la aplicación del tema.
+  distractores:
+    e: Es el starter clásico para migrar rápido, que incluye módulos sin sus dependencias.
+  referencia: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Vas a migrar una aplicación grande de Spring Boot 3 a 4 y quieres que arranque cuanto antes. ¿Qué ofrece Spring Boot 4?
+  opciones:
+    - {id: a, texto: "Nada; hay que reescribirla"}
+    - {id: b, texto: "Una herramienta que traduce el código a Kotlin"}
+    - {id: c, texto: "Starters clásicos para arrancar rápido, aunque se recomienda migrar después a los modulares"}
+    - {id: d, texto: "Mantener la versión 3 dentro de la 4"}
+  correctas: [c]
+  explicacion: La guía de migración ofrece los classic starters para una configuración parecida a la de la versión anterior, y recomienda abandonarlos con el tiempo.
+  distractores:
+    a: No hace falta reescribir la aplicación.
+    b: No existe tal herramienta.
+    d: No se mezclan versiones.
+  referencia: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué forma de inyección de dependencias se recomienda en Spring?
+  opciones:
+    - {id: a, texto: "@Autowired en campos privados"}
+    - {id: b, texto: "Por constructor, con las dependencias en campos final"}
+    - {id: c, texto: "Buscar los beans a mano en el contexto"}
+    - {id: d, texto: "Variables estáticas globales"}
+  correctas: [b]
+  explicacion: Por constructor, las dependencias son explícitas, inmutables y fáciles de sustituir en pruebas sin Spring. Con un solo constructor no hace falta @Autowired.
+  distractores:
+    a: Oculta las dependencias y dificulta probar sin Spring.
+    c: Acopla el código al contenedor.
+    d: Rompe la gestión de beans y las pruebas.
+  referencia: https://docs.spring.io/spring-boot/reference/using/auto-configuration.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Con el record TiendaProperties validado (@PositiveOrZero en envioGratisDesde), se arranca con --tienda.envio-gratis-desde=-1. ¿Qué pasó en la prueba?
+  opciones:
+    - {id: a, texto: "Arrancó y usó -1"}
+    - {id: b, texto: "Arrancó y usó el valor del application.yml"}
+    - {id: c, texto: "No arrancó; informó de la propiedad, el valor, su origen y el motivo"}
+    - {id: d, texto: "Arrancó y falló en la primera petición"}
+  correctas: [c]
+  explicacion: 'Spring Boot mostró APPLICATION FAILED TO START con Property: tienda.envioGratisDesde, Value: "-1", el origen commandLineArgs y Reason: must be greater than or equal to 0.'
+  distractores:
+    a: La validación se aplica al vincular las propiedades.
+    b: El argumento tiene prioridad y no se ignora.
+    d: El error se detecta al arrancar, antes de atender peticiones.
+  referencia: https://docs.spring.io/spring-boot/reference/features/external-config.html
+- id: L02-003
+  tipo: completar
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Completa el record para vincular las propiedades tienda.* y validarlas.
+  codigo:
+    lenguaje: java
+    fuente: |
+      @[[1]]
+      @[[2]]("tienda")
+      public record TiendaProperties(@NotBlank String moneda, @PositiveOrZero BigDecimal envioGratisDesde) {}
+  huecos:
+    - {id: "1", respuestas: [Validated]}
+    - {id: "2", respuestas: [ConfigurationProperties]}
+  explicacion: '@ConfigurationProperties vincula el prefijo y @Validated activa la validación de las anotaciones.'
+  referencia: https://docs.spring.io/spring-boot/reference/features/external-config.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: En el application.yml la propiedad es envio-gratis-desde y en el record el componente es envioGratisDesde. ¿Se vinculan?
+  opciones:
+    - {id: a, texto: "No, los nombres deben coincidir exactamente"}
+    - {id: b, texto: "Sí, por la vinculación flexible de Spring Boot"}
+    - {id: c, texto: "Solo si se usa @Value"}
+    - {id: d, texto: "Solo en el perfil prod"}
+  correctas: [b]
+  explicacion: La vinculación flexible relaciona formas como envio-gratis-desde, envioGratisDesde o TIENDA_ENVIOGRATISDESDE. En la prueba, el valor 50 llegó al record.
+  distractores:
+    a: Spring Boot admite distintas formas del mismo nombre.
+    c: Es @Value el que exige el nombre exacto.
+    d: No depende del perfil.
+  referencia: https://docs.spring.io/spring-boot/reference/features/external-config.html
+- id: L02-005
+  tipo: ordering
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: Ordena estas fuentes de configuración de menor a mayor prioridad.
+  opciones:
+    - {id: a, texto: "application.yml dentro del JAR"}
+    - {id: b, texto: "application-prod.yml dentro del JAR, con el perfil prod activo"}
+    - {id: c, texto: "Variables de entorno del sistema"}
+    - {id: d, texto: "Argumentos de línea de órdenes"}
+  correctas: [a, b, c, d]
+  explicacion: Según la documentación, los ficheros de configuración van antes que las variables de entorno, y estas antes que los argumentos; entre ficheros, el de perfil gana al general.
+  referencia: https://docs.spring.io/spring-boot/reference/features/external-config.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: ¿Cómo se activa el perfil prod al desplegar en un contenedor?
+  opciones:
+    - {id: a, texto: "Con la variable de entorno SPRING_PROFILES_ACTIVE=prod"}
+    - {id: b, texto: "Renombrando application-prod.yml a application.yml antes de compilar"}
+    - {id: c, texto: "Con una anotación @Prod en la clase principal"}
+    - {id: d, texto: "No se puede en contenedores"}
+  correctas: [a]
+  explicacion: spring.profiles.active se puede dar como variable de entorno, sin recompilar.
+  distractores:
+    b: Obligaría a un artefacto distinto por entorno.
+    c: No existe esa anotación.
+    d: Las variables de entorno son la forma habitual en contenedores.
+  referencia: https://docs.spring.io/spring-boot/reference/features/profiles.html
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Dónde debe estar la contraseña de la base de datos de producción?
+  opciones:
+    - {id: a, texto: "En application-prod.yml, en el repositorio"}
+    - {id: b, texto: "En el código, como constante"}
+    - {id: c, texto: "En una variable de entorno o un gestor de secretos del entorno de despliegue"}
+    - {id: d, texto: "En el README"}
+  correctas: [c]
+  explicacion: Los secretos no se guardan en el repositorio; se inyectan en el entorno donde se ejecuta la aplicación.
+  distractores:
+    a: Cualquiera con acceso al repositorio la vería, y quedaría en el historial.
+    b: Igual de expuesta, y obliga a recompilar para cambiarla.
+    d: Es documentación pública del proyecto.
+  referencia: https://docs.spring.io/spring-boot/reference/features/external-config.html
+- id: L02-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué ventajas tiene @ConfigurationProperties frente a muchos @Value repartidos?
+  opciones:
+    - {id: a, texto: "Agrupa las propiedades relacionadas en un solo tipo"}
+    - {id: b, texto: "Permite validarlas al arrancar"}
+    - {id: c, texto: "Da tipos reales, como BigDecimal o Duration"}
+    - {id: d, texto: "Hace que las propiedades no se puedan cambiar por entorno"}
+    - {id: e, texto: "Elimina la necesidad del application.yml"}
+  correctas: [a, b, c]
+  explicacion: Un record de propiedades centraliza, tipa y valida la configuración.
+  distractores:
+    d: Se siguen pudiendo sobrescribir con perfiles, variables y argumentos.
+    e: Los valores siguen viniendo de las fuentes de configuración.
+  referencia: https://docs.spring.io/spring-boot/reference/features/external-config.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Se envía POST /productos con {"nombre":"","precio":0}. ¿Qué respondió la aplicación?
+  opciones:
+    - {id: a, texto: "201 con el producto creado"}
+    - {id: b, texto: "400 con application/problem+json, sin ejecutar el método del controlador"}
+    - {id: c, texto: "500 por una excepción"}
+    - {id: d, texto: "200 con un mensaje de aviso"}
+  correctas: [b]
+  explicacion: '@Valid comprobó @NotBlank y @DecimalMin("0.01") y Spring respondió 400 con title Bad Request.'
+  distractores:
+    a: El cuerpo no cumple las restricciones.
+    c: Un error de validación es un error del cliente, no del servidor.
+    d: Un cuerpo inválido no es un éxito.
+  referencia: https://docs.spring.io/spring-boot/reference/io/validation.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.3"
+  enunciado: ¿Qué es Problem Details?
+  opciones:
+    - {id: a, texto: "Un formato JSON estándar (RFC 9457) para describir errores de una API HTTP"}
+    - {id: b, texto: "Una herramienta de monitorización"}
+    - {id: c, texto: "El registro de errores de Spring"}
+    - {id: d, texto: "Un código de estado HTTP"}
+  correctas: [a]
+  explicacion: Define campos como type, title, status, detail e instance, con el tipo application/problem+json.
+  distractores:
+    b: Es un formato de respuesta.
+    c: Es un estándar de la IETF, no algo propio de Spring.
+    d: Acompaña al código de estado, no lo sustituye.
+  referencia: https://www.rfc-editor.org/rfc/rfc9457
+- id: L03-003
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa el manejador para devolver 404 en formato Problem Details.
+  codigo:
+    lenguaje: java
+    fuente: |
+      @[[1]](ProductoNoEncontrado.class)
+      public ProblemDetail noEncontrado(ProductoNoEncontrado e) {
+          return ProblemDetail.forStatusAndDetail(HttpStatus.[[2]], e.getMessage());
+      }
+  huecos:
+    - {id: "1", respuestas: [ExceptionHandler]}
+    - {id: "2", respuestas: [NOT_FOUND]}
+  explicacion: El manejador traduce la excepción de dominio al código HTTP. En la prueba devolvió 404 con detail "No existe el producto 99".
+  referencia: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Por qué el controlador devuelve ProductoDto y no la entidad Producto?
+  opciones:
+    - {id: a, texto: "Porque Spring no sabe convertir entidades a JSON"}
+    - {id: b, texto: "Porque los records son más rápidos"}
+    - {id: c, texto: "Por obligación de Spring Boot 4"}
+    - {id: d, texto: "Para que el contrato de la API no dependa de la tabla y no se expongan campos internos"}
+  correctas: [d]
+  explicacion: El DTO separa lo que publica la API de cómo se guarda; se pueden cambiar por separado.
+  distractores:
+    a: Sabe hacerlo, pero acopla la API a la persistencia.
+    b: La razón es de diseño, no de rendimiento.
+    c: No es obligatorio.
+  referencia: https://docs.spring.io/spring-boot/reference/web/servlet.html
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Dónde debe estar la regla «el envío es gratis a partir de 50 €»?
+  opciones:
+    - {id: a, texto: "En el controlador"}
+    - {id: b, texto: "En el servicio (Catalogo), con el umbral en las propiedades"}
+    - {id: c, texto: "En el JavaScript del navegador"}
+    - {id: d, texto: "En el manejador de excepciones"}
+  correctas: [b]
+  explicacion: El controlador solo traduce HTTP; las reglas de negocio van en el servicio, donde se pueden reutilizar y probar.
+  distractores:
+    a: Mezclaría HTTP con el negocio.
+    c: El cliente se puede manipular.
+    d: Es para traducir errores.
+  referencia: https://docs.spring.io/spring-boot/reference/web/servlet.html
+- id: L03-006
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada anotación con lo que hace.
+  prompts:
+    - {id: "1", texto: "@RequestBody"}
+    - {id: "2", texto: "@PathVariable"}
+    - {id: "3", texto: "@ResponseStatus(HttpStatus.CREATED)"}
+    - {id: "4", texto: "@Valid"}
+  opciones:
+    - {id: a, texto: "Convierte el cuerpo JSON de la petición en el objeto"}
+    - {id: b, texto: "Toma un valor de la ruta, como el id de /productos/{id}"}
+    - {id: c, texto: "Responde 201 cuando el método termina bien"}
+    - {id: d, texto: "Valida el objeto con sus anotaciones antes de entrar al método"}
+    - {id: e, texto: "Convierte el método en transaccional"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son las anotaciones del controlador de la lección.
+  distractores:
+    e: Eso lo hace @Transactional.
+  referencia: https://docs.spring.io/spring-boot/reference/web/servlet.html
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Un error inesperado se produce en producción. ¿Qué debe recibir el cliente?
+  opciones:
+    - {id: a, texto: "La traza completa de la excepción, para depurar"}
+    - {id: b, texto: "Un 200 con un cuerpo vacío"}
+    - {id: c, texto: "Un 500 con un Problem Details genérico; la traza va al registro del servidor"}
+    - {id: d, texto: "Nada; se cierra la conexión"}
+  correctas: [c]
+  explicacion: La traza da pistas a un atacante y no ayuda al usuario; se registra en el servidor.
+  distractores:
+    a: Expone detalles internos.
+    b: Oculta que ha habido un error.
+    d: El cliente necesita saber qué ha pasado.
+  referencia: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Varios controladores lanzan ProductoNoEncontrado. ¿Dónde pones el manejador para no repetirlo?
+  opciones:
+    - {id: a, texto: "En una clase con @RestControllerAdvice"}
+    - {id: b, texto: "En la entidad Producto"}
+    - {id: c, texto: "En el repositorio"}
+    - {id: d, texto: "En el application.yml"}
+  correctas: [a]
+  explicacion: '@RestControllerAdvice aplica sus @ExceptionHandler a todos los controladores.'
+  distractores:
+    b: La entidad no conoce HTTP.
+    c: El repositorio tampoco.
+    d: Los manejadores son código.
+  referencia: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: Con productos de 35, 20 y 2 €, ¿qué devolvió findByPrecioLessThanOrderByPrecioAsc(30)?
+  opciones:
+    - {id: a, texto: "[boli, libro]"}
+    - {id: b, texto: "[libro, boli]"}
+    - {id: c, texto: "[lampara]"}
+    - {id: d, texto: "Error, porque falta la implementación del método"}
+  correctas: [a]
+  explicacion: Spring Data traduce el nombre a «precio menor que 30, ordenado por precio ascendente». Es el resultado de la prueba con @DataJpaTest.
+  distractores:
+    b: El orden es ascendente.
+    c: 35 no es menor que 30.
+    d: Spring Data genera la implementación a partir del nombre.
+  referencia: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué quedó en la tabla tras llamar desde fuera a altaDoble("ok", " "), anotado con @Transactional?
+  codigo:
+    lenguaje: java
+    fuente: |
+      @Transactional
+      public void altaDoble(String a, String b) {
+          repositorio.save(new Producto(a, BigDecimal.ONE));
+          if (b.isBlank()) throw new IllegalArgumentException("Nombre vacío");
+          repositorio.save(new Producto(b, BigDecimal.ONE));
+      }
+  opciones:
+    - {id: a, texto: "1 fila, la del producto ok"}
+    - {id: b, texto: "2 filas"}
+    - {id: c, texto: "0 filas, porque la excepción deshizo la transacción"}
+    - {id: d, texto: "1 fila con el nombre vacío"}
+  correctas: [c]
+  explicacion: IllegalArgumentException es una RuntimeException, así que la transacción se deshizo. La prueba contó 0 filas.
+  distractores:
+    a: Sería el resultado sin transacción.
+    b: El segundo save no llega a ejecutarse.
+    d: El nombre vacío se rechaza antes de guardarlo.
+  referencia: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Otro método del mismo bean, sin @Transactional, llama a altaDoble("ok", " "). ¿Cuántas filas quedaron en la prueba?
+  codigo:
+    lenguaje: java
+    fuente: |
+      public void altaDobleDesdeDentro(String a, String b) {
+          altaDoble(a, b);
+      }
+  opciones:
+    - {id: a, texto: "0, igual que antes"}
+    - {id: b, texto: "1, porque la llamada interna no pasó por el proxy y no hubo transacción"}
+    - {id: c, texto: "2"}
+    - {id: d, texto: "Error de compilación"}
+  correctas: [b]
+  explicacion: La autoinvocación va directa al objeto, sin el proxy que abre la transacción. El primer save quedó guardado.
+  distractores:
+    a: Sería así si la llamada pasara por el proxy.
+    c: La excepción impide el segundo save.
+    d: El código compila; el problema es del comportamiento.
+  referencia: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: En la prueba, catalogo.getClass().getName() devolvió tienda.Catalogo$$SpringCGLIB$$0. ¿Qué indica?
+  opciones:
+    - {id: a, texto: "Que hay un error de configuración"}
+    - {id: b, texto: "Que la clase se ha compilado dos veces"}
+    - {id: c, texto: "Que Catalogo es un record"}
+    - {id: d, texto: "Que el bean inyectado es un proxy generado por Spring que envuelve a Catalogo"}
+  correctas: [d]
+  explicacion: El proxy es la subclase que aplica @Transactional antes de llamar al método real.
+  distractores:
+    a: Es el comportamiento normal.
+    b: Es una clase generada en ejecución.
+    c: Catalogo es una clase normal.
+  referencia: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: Un método @Transactional lanza IOException (una excepción comprobada). Con la configuración por defecto, ¿qué pasa con la transacción?
+  opciones:
+    - {id: a, texto: "Se deshace"}
+    - {id: b, texto: "No se deshace; para ello hay que usar rollbackFor"}
+    - {id: c, texto: "Se queda abierta"}
+    - {id: d, texto: "Spring convierte la excepción en RuntimeException y la deshace"}
+  correctas: [b]
+  explicacion: Por defecto, Spring solo deshace ante RuntimeException y Error.
+  distractores:
+    a: Solo las no comprobadas la deshacen por defecto.
+    c: Se cierra al salir del método.
+    d: Spring no hace esa conversión.
+  referencia: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html
+- id: L04-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Cómo se evita el problema de la autoinvocación con @Transactional?
+  opciones:
+    - {id: a, texto: "Anotar el método que se llama desde fuera del bean"}
+    - {id: b, texto: "Mover el método transaccional a otro bean e inyectarlo"}
+    - {id: c, texto: "Hacer el método private"}
+    - {id: d, texto: "Añadir @Transactional en el repositorio y ya está"}
+    - {id: e, texto: "Llamarlo dos veces"}
+  correctas: [a, b]
+  explicacion: La transacción debe empezar en una llamada que pase por el proxy.
+  distractores:
+    c: Un método privado tampoco pasa por el proxy.
+    d: Cada save tendría su propia transacción, y el primero no se desharía.
+    e: No cambia nada.
+  referencia: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+- id: L04-007
+  tipo: completar
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: Completa el repositorio de productos con clave Long.
+  codigo:
+    lenguaje: java
+    fuente: |
+      public interface ProductoRepository extends [[1]]<Producto, [[2]]> {
+          List<Producto> findByNombre(String nombre);
+      }
+  huecos:
+    - {id: "1", respuestas: [JpaRepository]}
+    - {id: "2", respuestas: [Long]}
+  explicacion: JpaRepository recibe el tipo de la entidad y el de su clave.
+  referencia: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿En qué capa se pone normalmente @Transactional?
+  opciones:
+    - {id: a, texto: "En el controlador"}
+    - {id: b, texto: "En la entidad"}
+    - {id: c, texto: "En el servicio, que sabe qué operaciones forman una unidad"}
+    - {id: d, texto: "En el application.yml"}
+  correctas: [c]
+  explicacion: El servicio orquesta los casos de uso, y cada caso de uso suele ser una unidad transaccional.
+  distractores:
+    a: El controlador solo traduce HTTP.
+    b: Las entidades no delimitan transacciones.
+    d: Las transacciones se declaran en el código.
+  referencia: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+- id: L05-001
+  tipo: matching
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Empareja cada prueba con la anotación más adecuada.
+  prompts:
+    - {id: "1", texto: "Que POST /productos con un nombre vacío responde 400"}
+    - {id: "2", texto: "Que una consulta derivada devuelve los productos en el orden correcto"}
+    - {id: "3", texto: "Que un fallo a mitad de un caso de uso deshace lo guardado"}
+  opciones:
+    - {id: a, texto: "@WebMvcTest"}
+    - {id: b, texto: "@DataJpaTest"}
+    - {id: c, texto: "@SpringBootTest"}
+    - {id: d, texto: "@JsonTest"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: La validación es de la capa web, la consulta de la capa de datos, y la transacción necesita el servicio real con su proxy y la base de datos.
+  distractores:
+    d: Prueba solo la serialización JSON.
+  referencia: https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: En una prueba con @WebMvcTest, ¿para qué sirve @MockitoBean Catalogo catalogo?
+  opciones:
+    - {id: a, texto: "Para usar el Catalogo real con la base de datos"}
+    - {id: b, texto: "Para sustituir el bean Catalogo por un doble de Mockito y probar solo la capa web"}
+    - {id: c, texto: "Para desactivar el controlador"}
+    - {id: d, texto: "Para generar datos de prueba"}
+  correctas: [b]
+  explicacion: '@WebMvcTest no crea los servicios; el doble ocupa su lugar y se programa con given(...).'
+  distractores:
+    a: El objetivo es aislar la capa web.
+    c: El controlador es lo que se prueba.
+    d: Programa respuestas, no genera datos.
+  referencia: https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html
+- id: L05-003
+  tipo: completar
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Completa la prueba para comprobar el 404.
+  codigo:
+    lenguaje: java
+    fuente: |
+      given(catalogo.buscar(99)).willThrow(new ProductoNoEncontrado(99));
+      assertThat(mvc.[[1]]().uri("/productos/99")).hasStatus(HttpStatus.[[2]]);
+  huecos:
+    - {id: "1", respuestas: [get]}
+    - {id: "2", respuestas: [NOT_FOUND]}
+  explicacion: MockMvcTester construye la petición y permite aserciones de AssertJ sobre la respuesta.
+  referencia: https://docs.spring.io/spring-framework/reference/testing/mockmvc/assertj.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.1"
+  enunciado: El servicio Catalogo tiene el error de autoinvocación con @Transactional. ¿Qué prueba lo detecta?
+  opciones:
+    - {id: a, texto: "Una de @WebMvcTest con Catalogo sustituido por un doble"}
+    - {id: b, texto: "Una unitaria con el repositorio sustituido por un doble"}
+    - {id: c, texto: "Una de @SpringBootTest que provoca el fallo y cuenta las filas"}
+    - {id: d, texto: "Ninguna"}
+  correctas: [c]
+  explicacion: El problema está en el proxy y la base de datos reales; solo una prueba con el contexto completo lo muestra. Así se detectó en el tema.
+  distractores:
+    a: El servicio es un doble; no hay proxy ni transacción.
+    b: Sin Spring no hay proxy, y el doble no guarda nada.
+    d: La prueba de integración lo detectó.
+  referencia: https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.3"
+  enunciado: Por defecto, ¿qué endpoints de Actuator expone Spring Boot por HTTP?
+  opciones:
+    - {id: a, texto: "Todos"}
+    - {id: b, texto: "Ninguno"}
+    - {id: c, texto: "Solo health"}
+    - {id: d, texto: "health, env y heapdump"}
+  correctas: [c]
+  explicacion: La documentación indica que por defecto solo se expone health, porque los endpoints pueden contener información sensible.
+  distractores:
+    a: Sería peligroso.
+    b: health está expuesto.
+    d: env y heapdump son sensibles y no se exponen por defecto.
+  referencia: https://docs.spring.io/spring-boot/reference/actuator/endpoints.html
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Con management.endpoints.web.exposure.include=health,info, ¿qué respondió GET /actuator/env en la prueba?
+  opciones:
+    - {id: a, texto: "200 con las variables de entorno"}
+    - {id: b, texto: "401"}
+    - {id: c, texto: "500"}
+    - {id: d, texto: "404, porque no está expuesto"}
+  correctas: [d]
+  explicacion: Solo se exponen los endpoints de la lista; el resto no existe por HTTP.
+  distractores:
+    a: env no está en la lista.
+    b: No hay seguridad configurada; simplemente no existe.
+    c: No es un error del servidor.
+  referencia: https://docs.spring.io/spring-boot/reference/actuator/endpoints.html
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué rutas de Actuator encajan con las sondas de Kubernetes?
+  opciones:
+    - {id: a, texto: "/actuator/env y /actuator/beans"}
+    - {id: b, texto: "/actuator/health/liveness y /actuator/health/readiness"}
+    - {id: c, texto: "/actuator/metrics"}
+    - {id: d, texto: "/actuator/heapdump"}
+  correctas: [b]
+  explicacion: Los grupos liveness y readiness de health reflejan los estados de disponibilidad de la aplicación. La respuesta de /actuator/health los listó.
+  distractores:
+    a: Muestran configuración y beans, no la salud.
+    c: Son métricas, no sondas.
+    d: Es un volcado de memoria, y sensible.
+  referencia: https://docs.spring.io/spring-boot/reference/actuator/endpoints.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: En Spring Boot 4, ¿en qué paquete está @WebMvcTest?
+  opciones:
+    - {id: a, texto: "org.springframework.boot.test.autoconfigure.web.servlet"}
+    - {id: b, texto: "org.springframework.web.test"}
+    - {id: c, texto: "org.junit.jupiter.api"}
+    - {id: d, texto: "org.springframework.boot.webmvc.test.autoconfigure"}
+  correctas: [d]
+  explicacion: Con la modularización de Spring Boot 4, cada módulo usa su propio paquete; la clase se encontró en el JAR de spring-boot-webmvc-test 4.1.2.
+  distractores:
+    a: Era su paquete en Spring Boot 3.
+    b: No existe ese paquete.
+    c: Es el paquete de JUnit.
+  referencia: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide

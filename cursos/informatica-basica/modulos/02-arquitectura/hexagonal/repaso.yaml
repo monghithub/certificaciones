@@ -1,0 +1,872 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: Según Cockburn, ¿cuál es el problema principal que motiva la arquitectura hexagonal?
+  opciones:
+    - {id: a, texto: "Que las bases de datos relacionales escalan mal"}
+    - {id: b, texto: "Que la lógica de negocio se mezcla con el código de la interfaz y de la infraestructura"}
+    - {id: c, texto: "Que los microservicios son difíciles de desplegar"}
+    - {id: d, texto: "Que los lenguajes orientados a objetos no permiten interfaces"}
+  correctas: [b]
+  explicacion: El artículo parte de la «infiltración» de la lógica de negocio en el código de la interfaz de usuario, que impide probarla automáticamente, usarla por lotes o desde otro programa.
+  distractores:
+    a: El patrón no trata del rendimiento de las bases de datos; de hecho, permite cambiar de base de datos sin tocar el negocio.
+    c: El artículo es de 2005 y no habla de microservicios; el patrón se aplica igual a un monolito.
+    d: Los puertos son precisamente interfaces; el patrón da por hecho que existen.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L01-002
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿Qué consecuencias de mezclar lógica de negocio e interfaz cita el artículo original?
+  opciones:
+    - {id: a, texto: "No se puede probar la lógica con pruebas automáticas"}
+    - {id: b, texto: "No se puede pasar de un uso humano a un proceso por lotes"}
+    - {id: c, texto: "Otro programa no puede usar la aplicación con facilidad"}
+    - {id: d, texto: "La aplicación consume más memoria"}
+    - {id: e, texto: "No se pueden usar transacciones en la base de datos"}
+  correctas: [a, b, c]
+  explicacion: Cockburn enumera tres problemas, todos con la misma causa (la lógica atada a la pantalla) y en este orden, falta de pruebas automáticas, imposibilidad de ejecutar por lotes y dificultad para que otro programa use la aplicación.
+  distractores:
+    d: El consumo de memoria no tiene relación con dónde vive la lógica de negocio.
+    e: Las transacciones son una cuestión de la persistencia, no de la separación entre negocio e interfaz.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L01-003
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Empareja cada elemento de un servicio de reservas con su papel en la arquitectura hexagonal.
+  prompts:
+    - {id: "1", texto: "Interfaz ReservarSala, con el método reservar(solicitud)"}
+    - {id: "2", texto: "Controlador REST que recibe POST /reservas"}
+    - {id: "3", texto: "Interfaz Salas, con buscar() y guardar()"}
+    - {id: "4", texto: "Clase que implementa Salas con JPA y PostgreSQL"}
+  opciones:
+    - {id: a, texto: "Puerto de entrada"}
+    - {id: b, texto: "Adaptador de entrada"}
+    - {id: c, texto: "Puerto de salida"}
+    - {id: d, texto: "Adaptador de salida"}
+    - {id: e, texto: "Entidad del dominio"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Los puertos son interfaces con el vocabulario del negocio (ReservarSala, Salas); los adaptadores traducen a una tecnología (HTTP en el controlador, JPA en el repositorio).
+  distractores:
+    e: Ninguno de los elementos es un concepto del negocio con identidad; una entidad sería, por ejemplo, la clase Sala.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: La aplicación consulta a una API externa el tipo de cambio entre euros y dólares, y recibe la respuesta. ¿Qué tipo de puerto usa?
+  opciones:
+    - {id: a, texto: "Un puerto de entrada, porque recibe datos del exterior"}
+    - {id: b, texto: "Un puerto de entrada y otro de salida, uno por cada sentido"}
+    - {id: c, texto: "Un puerto de salida, porque es la aplicación quien inicia la conversación"}
+    - {id: d, texto: "Ninguno: las APIs externas se llaman directamente desde el dominio"}
+  correctas: [c]
+  explicacion: El tipo de puerto lo decide quién inicia la conversación. La aplicación pide el tipo de cambio, así que la API externa es un actor secundario y se alcanza por un puerto de salida, aunque devuelva datos.
+  distractores:
+    a: Confunde la dirección de los datos con quién inicia la conversación.
+    b: Una conversación pregunta-respuesta es un único puerto; la respuesta forma parte de la misma llamada.
+    d: Llamar a la API desde el dominio ataría las reglas de negocio a una tecnología, justo lo que el patrón evita.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L01-005
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Clasifica cada actor de una tienda online como primario o secundario respecto a la aplicación de pedidos.
+  prompts:
+    - {id: "1", texto: "Cliente que confirma la compra en la web"}
+    - {id: "2", texto: "Pasarela de pagos a la que se cobra el pedido"}
+    - {id: "3", texto: "Prueba automática que crea un pedido"}
+    - {id: "4", texto: "Servicio de correo que envía la factura"}
+  opciones:
+    - {id: a, texto: "Actor primario"}
+    - {id: b, texto: "Actor secundario"}
+    - {id: c, texto: "Parte del dominio"}
+  correctas: [["1", a], ["2", b], ["3", a], ["4", b]]
+  explicacion: El cliente y la prueba ponen en marcha a la aplicación (primarios). La pasarela de pagos y el correo son sistemas que la aplicación pone en marcha (secundarios).
+  distractores:
+    c: Ninguno forma parte del dominio; todos están fuera de la aplicación y se conectan a ella por puertos.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.4"
+  enunciado: ¿Por qué Cockburn dibujó la aplicación como un hexágono?
+  opciones:
+    - {id: a, texto: "Porque toda aplicación debe tener exactamente seis puertos"}
+    - {id: b, texto: "Porque el patrón define seis capas obligatorias"}
+    - {id: c, texto: "Por la forma de las celdas de un panal, que simbolizan módulos independientes"}
+    - {id: d, texto: "Para dejar sitio a los puertos y romper con el dibujo de capas apiladas"}
+  correctas: [d]
+  explicacion: El autor explica que el hexágono resalta la diferencia entre dentro y fuera, trata de forma simétrica todo lo exterior y deja sitio para dibujar los puertos; el número seis no importa.
+  distractores:
+    a: El artículo dice que lo habitual son dos, tres o cuatro puertos.
+    b: El patrón distingue dentro y fuera, no seis capas.
+    c: Es una interpretación popular, pero no es la razón que da el autor.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Un equipo quiere que su servicio de reservas pueda usarse también desde una cola de mensajes, además de desde la web. Con arquitectura hexagonal, ¿qué tienen que añadir?
+  opciones:
+    - {id: a, texto: "Un caso de uso nuevo que duplique la lógica de reservar"}
+    - {id: b, texto: "Un adaptador de entrada que lea la cola y llame al puerto ReservarSala existente"}
+    - {id: c, texto: "Un puerto de salida nuevo hacia la cola"}
+    - {id: d, texto: "Una capa nueva entre el controlador REST y el servicio"}
+  correctas: [b]
+  explicacion: La operación ya existe como puerto de entrada. Solo cambia la tecnología por la que llega la petición, así que basta un adaptador nuevo que traduzca el mensaje a una llamada a ese puerto.
+  distractores:
+    a: Duplicar la lógica es lo que el patrón quiere evitar; el puerto se reutiliza.
+    c: La cola es quien inicia la conversación, así que es una entrada, no una salida.
+    d: No hace falta ninguna capa nueva; el controlador REST y el consumidor de la cola son adaptadores hermanos.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L01-008
+  tipo: ordering
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Ordena lo que ocurre cuando un usuario reserva una sala por la web en una aplicación hexagonal.
+  opciones:
+    - {id: a, texto: "El adaptador REST traduce la petición HTTP a una solicitud"}
+    - {id: b, texto: "La aplicación recibe la solicitud por el puerto de entrada y aplica las reglas"}
+    - {id: c, texto: "La aplicación guarda la reserva a través del puerto de salida"}
+    - {id: d, texto: "El adaptador de persistencia lo traduce a SQL"}
+  correctas: [a, b, c, d]
+  explicacion: La petición entra por un adaptador, cruza el puerto de entrada, la aplicación decide y, para guardar, sale por un puerto de salida hacia el adaptador que habla con la base de datos.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L02-001
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué de lo siguiente NO debería aparecer en las clases del dominio de una aplicación hexagonal?
+  opciones:
+    - {id: a, texto: "La anotación @Entity de JPA"}
+    - {id: b, texto: "Una llamada a LocalDateTime.now() en una regla"}
+    - {id: c, texto: "El uso de java.time.LocalDateTime como tipo de un atributo"}
+    - {id: d, texto: "Una lectura de System.getenv(\"AFORO_MAXIMO\")"}
+    - {id: e, texto: "Una excepción propia como ReservaRechazada"}
+  correctas: [a, b, d]
+  explicacion: La anotación de persistencia, la lectura del reloj y la de la configuración atan el dominio a la infraestructura o lo hacen imprevisible. Usar tipos de la biblioteca estándar y excepciones propias es correcto.
+  distractores:
+    c: LocalDateTime es parte de la biblioteca estándar; el problema es leer la hora actual, no usar el tipo.
+    e: Las excepciones del dominio son la forma correcta de expresar un motivo de negocio.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L02-002
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.2"
+  enunciado: Clasifica cada concepto de un sistema de reservas como entidad u objeto valor.
+  prompts:
+    - {id: "1", texto: "Sala, con un nombre que la identifica y reservas que cambian"}
+    - {id: "2", texto: "Franja horaria de 9:00 a 10:00"}
+    - {id: "3", texto: "Importe de 25 euros"}
+    - {id: "4", texto: "Cliente con su número de socio"}
+  opciones:
+    - {id: a, texto: "Entidad"}
+    - {id: b, texto: "Objeto valor"}
+    - {id: c, texto: "Puerto"}
+  correctas: [["1", a], ["2", b], ["3", b], ["4", a]]
+  explicacion: La sala y el cliente tienen identidad y estado que cambia (entidades). Una franja y un importe se definen solo por sus datos; dos franjas iguales son intercambiables (objetos valor).
+  distractores:
+    c: Los puertos son interfaces hacia el exterior, no conceptos del negocio.
+  referencia: https://martinfowler.com/bliki/ValueObject.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué imprime este código?
+  codigo:
+    lenguaje: java
+    fuente: |
+      var nueve = LocalDateTime.of(2026, 12, 1, 9, 0);
+      var a = new FranjaHoraria(nueve, nueve.plusHours(1));
+      var b = new FranjaHoraria(nueve.plusHours(1), nueve.plusHours(2));
+      var c = new FranjaHoraria(nueve, nueve.plusHours(1));
+      System.out.println(a.seSolapaCon(b) + " " + a.equals(c));
+  opciones:
+    - {id: a, texto: "true true"}
+    - {id: b, texto: "true false"}
+    - {id: c, texto: "false false"}
+    - {id: d, texto: "false true"}
+  correctas: [d]
+  explicacion: La franja de 9 a 10 y la de 10 a 11 son contiguas, no se solapan (inicio de a antes del fin de b, pero el inicio de b no es anterior al fin de a). Y un record compara por valor, así que dos franjas con los mismos datos son iguales.
+  distractores:
+    a: Las franjas contiguas no se solapan con la regla del ejemplo (isBefore es estricto).
+    b: Además de fallar el solape, un record implementa equals comparando sus componentes, no la identidad del objeto.
+    c: Acierta el solape, pero los records son iguales cuando sus componentes lo son.
+  referencia: https://martinfowler.com/bliki/ValueObject.html
+- id: L02-004
+  tipo: completar
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Completa el objeto valor para que sea imposible crear una franja que no termine después de empezar.
+  codigo:
+    lenguaje: java
+    fuente: |
+      public record FranjaHoraria(LocalDateTime inicio, LocalDateTime fin) {
+          public FranjaHoraria {
+              if (!fin.[[1]](inicio)) {
+                  [[2]] new IllegalArgumentException("Franja inválida");
+              }
+          }
+      }
+  huecos:
+    - {id: "1", respuestas: [isAfter]}
+    - {id: "2", respuestas: [throw]}
+  explicacion: El constructor compacto del record valida antes de asignar; si fin no es posterior a inicio, se lanza la excepción y el objeto nunca llega a existir.
+  referencia: https://martinfowler.com/bliki/ValueObject.html
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: En un proyecto, la clase Sala solo tiene getters y setters, y la comprobación de aforo y solapes está en ReservaService. ¿Cómo se llama este antipatrón y cuál es su problema principal?
+  opciones:
+    - {id: a, texto: "Modelo anémico: cualquier código puede dejar la sala en un estado inválido y las reglas se dispersan"}
+    - {id: b, texto: "Modelo anémico: consume más memoria al tener más clases"}
+    - {id: c, texto: "Objeto dios: la sala concentra demasiadas responsabilidades"}
+    - {id: d, texto: "No es un antipatrón: los servicios son el lugar correcto para las reglas"}
+  correctas: [a]
+  explicacion: Fowler llama modelo anémico al dominio sin comportamiento. Las reglas quedan fuera de los objetos que protegen, así que cualquiera puede saltárselas y tienden a repetirse en varios servicios.
+  distractores:
+    b: El problema no es de memoria, sino de dónde viven las reglas.
+    c: Es lo contrario de un objeto dios; aquí la sala no hace nada.
+    d: En hexagonal los casos de uso orquestan, pero las reglas de negocio pertenecen al dominio.
+  referencia: https://martinfowler.com/bliki/AnemicDomainModel.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: Hay que añadir la regla «no se puede reservar una franja que ya ha empezado». ¿Cuál es la forma más adecuada en una arquitectura hexagonal?
+  opciones:
+    - {id: a, texto: "Comprobar inicio.isBefore(LocalDateTime.now()) dentro de Sala.reservar"}
+    - {id: b, texto: "Comprobarlo en el controlador REST antes de llamar al caso de uso"}
+    - {id: c, texto: "Comprobarlo en la base de datos con una restricción CHECK"}
+    - {id: d, texto: "Pasar el instante actual a Sala.reservar, obtenido por el caso de uso de un puerto Reloj"}
+  correctas: [d]
+  explicacion: La regla es de negocio y va en el dominio, pero el instante actual es un dato del exterior. El caso de uso lo pide a un puerto Reloj y se lo pasa al dominio; así la prueba puede fijar la hora y el resultado es previsible.
+  distractores:
+    a: La regla está en el sitio correcto, pero leer el reloj dentro del dominio lo hace imprevisible y difícil de probar.
+    b: En el controlador, la regla no se aplicaría a otras entradas (una cola, un script).
+    c: Una restricción de base de datos con la hora actual depende del motor y deja la regla fuera del dominio.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Sala.reservar lanza ReservaRechazada si la sala está ocupada. ¿Quién debe convertir esa excepción en una respuesta HTTP 409?
+  opciones:
+    - {id: a, texto: "La propia Sala, lanzando directamente una ResponseStatusException"}
+    - {id: b, texto: "El adaptador REST de entrada"}
+    - {id: c, texto: "El caso de uso, devolviendo un ResponseEntity"}
+    - {id: d, texto: "El adaptador de persistencia, al detectar el conflicto"}
+  correctas: [b]
+  explicacion: La traducción a HTTP es responsabilidad del adaptador que habla HTTP. El dominio y el caso de uso expresan el motivo de negocio sin saber por qué tecnología ha llegado la petición.
+  distractores:
+    a: ResponseStatusException es de Spring Web; usarla ataría el dominio a HTTP.
+    c: ResponseEntity también es de HTTP; el caso de uso debe servir igual para una cola o una prueba.
+    d: El adaptador de persistencia no decide reglas de negocio ni respuestas HTTP.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: ¿Qué problema tiene este método de Sala?
+  codigo:
+    lenguaje: java
+    fuente: |
+      public List<Reserva> reservas() {
+          return reservas;   // el campo interno, un ArrayList
+      }
+  opciones:
+    - {id: a, texto: "Ninguno: devolver el campo es más eficiente que copiarlo"}
+    - {id: b, texto: "Que no compila, porque un método no puede devolver un campo final"}
+    - {id: c, texto: "Que quien lo llame puede añadir reservas sin pasar por las reglas de Sala.reservar"}
+    - {id: d, texto: "Que el método debería ser estático"}
+  correctas: [c]
+  explicacion: Al devolver la lista interna mutable, cualquier código puede hacer sala.reservas().add(...) y saltarse las comprobaciones de aforo y solape. La solución es devolver una copia inmutable, por ejemplo con List.copyOf.
+  distractores:
+    a: El ahorro es irrelevante frente a romper las reglas del dominio.
+    b: Compila sin problema; final impide reasignar el campo, no devolverlo.
+    d: Las reservas pertenecen a cada sala; un método estático no tendría a qué sala referirse.
+  referencia: https://martinfowler.com/bliki/AnemicDomainModel.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: ¿Qué nombre es más adecuado para el puerto de salida con el que la aplicación de reservas guarda y recupera salas?
+  opciones:
+    - {id: a, texto: "SalaJpaRepository"}
+    - {id: b, texto: "PostgresSalaDao"}
+    - {id: c, texto: "Salas"}
+    - {id: d, texto: "SalaRestClient"}
+  correctas: [c]
+  explicacion: Los puertos se nombran con el lenguaje del negocio. Salas expresa qué necesita la aplicación sin decir cómo se consigue.
+  distractores:
+    a: Menciona JPA, una tecnología; ese nombre encaja con el adaptador, no con el puerto.
+    b: Menciona PostgreSQL y el patrón DAO; ata el puerto a una base de datos concreta.
+    d: Sugiere que las salas se obtienen por HTTP; es otra tecnología concreta.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: En una aplicación hexagonal, ¿qué módulo importa a cuál?
+  opciones:
+    - {id: a, texto: "La aplicación importa el adaptador JPA para poder usarlo"}
+    - {id: b, texto: "El adaptador JPA importa el puerto Salas de la aplicación para implementarlo"}
+    - {id: c, texto: "Se importan mutuamente: la aplicación al adaptador y el adaptador a la aplicación"}
+    - {id: d, texto: "Ninguno importa al otro; se comunican por mensajes"}
+  correctas: [b]
+  explicacion: Por la inversión de dependencias, la aplicación define la interfaz y la infraestructura la implementa. La flecha de dependencia va del adaptador hacia la aplicación, nunca al revés.
+  distractores:
+    a: Es la dependencia de la arquitectura en capas clásica, la que hexagonal invierte.
+    c: Una dependencia circular rompería la regla de dependencias y la compilación por separado.
+    d: Dentro de un mismo servicio se comunican por llamadas a la interfaz, no por mensajes.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L03-003
+  tipo: ordering
+  dificultad: baja
+  objetivo: "3.3"
+  enunciado: Ordena los pasos típicos de un caso de uso que modifica el estado.
+  opciones:
+    - {id: a, texto: "Cargar la entidad por un puerto de salida"}
+    - {id: b, texto: "Pedir al dominio que aplique la operación y decida"}
+    - {id: c, texto: "Guardar la entidad por el puerto de salida"}
+    - {id: d, texto: "Notificar o publicar lo ocurrido"}
+  correctas: [a, b, c, d]
+  explicacion: El guion habitual es cargar, que el dominio decida, guardar y publicar. Notificar al final evita avisar de algo que no se ha llegado a guardar.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Qué está mal en este caso de uso?
+  codigo:
+    lenguaje: java
+    fuente: |
+      public ReservaId reservar(Solicitud s) {
+          Sala sala = salas.buscar(s.sala()).orElseThrow();
+          if (s.asistentes() > sala.aforo()) {
+              throw new ReservaRechazada("Aforo superado");
+          }
+          Reserva r = sala.reservar(ids.nuevo(), s.franja(), s.usuario(), s.asistentes());
+          salas.guardar(sala);
+          return r.id();
+      }
+  opciones:
+    - {id: a, texto: "Que el caso de uso decide una regla de negocio que corresponde a la sala"}
+    - {id: b, texto: "Que guarda la sala después de modificarla"}
+    - {id: c, texto: "Que recibe un objeto Solicitud en lugar de parámetros sueltos"}
+    - {id: d, texto: "Que usa un generador de ids en lugar de crear el UUID"}
+  correctas: [a]
+  explicacion: La comprobación de aforo es una regla de negocio y debe vivir en Sala.reservar. En el caso de uso queda duplicada o, si otro caso de uso no la repite, se la salta.
+  distractores:
+    b: Guardar después de que el dominio decida es exactamente el guion correcto.
+    c: Un tipo de solicitud propio del puerto es una práctica recomendada.
+    d: Obtener el id de un puerto hace el caso de uso previsible y fácil de probar.
+  referencia: https://martinfowler.com/bliki/AnemicDomainModel.html
+- id: L03-005
+  tipo: completar
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: Completa la declaración del puerto de salida y su implementación en el adaptador en memoria.
+  codigo:
+    lenguaje: java
+    fuente: |
+      public [[1]] Salas {
+          Optional<Sala> buscar(String nombre);
+          void guardar(Sala sala);
+      }
+
+      public class SalasEnMemoria [[2]] Salas {
+          private final Map<String, Sala> datos = new HashMap<>();
+          // ...
+      }
+  huecos:
+    - {id: "1", respuestas: [interface]}
+    - {id: "2", respuestas: [implements]}
+  explicacion: El puerto es una interfaz de la aplicación y el adaptador la implementa. Por eso el adaptador depende de la aplicación y no al revés.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.1"
+  enunciado: La aplicación debe enviar un correo cuando se confirma una reserva. ¿Qué firma de puerto de salida es más adecuada?
+  opciones:
+    - {id: a, texto: "void enviarEmail(String para, String asunto, String cuerpoHtml)"}
+    - {id: b, texto: "void enviar(MimeMessage mensaje)"}
+    - {id: c, texto: "ResponseEntity<Void> notificar(Reserva reserva)"}
+    - {id: d, texto: "void reservaConfirmada(Reserva reserva)"}
+  correctas: [d]
+  explicacion: El puerto expresa qué ha pasado en el negocio. El adaptador decide el canal (correo, SMS) y construye el asunto y el cuerpo. Así cambiar de canal o de plantilla no toca la aplicación.
+  distractores:
+    a: Obliga al caso de uso a saber que es un correo y a construir el HTML, que son detalles del adaptador.
+    b: MimeMessage es de Jakarta Mail; ata la aplicación a una biblioteca de correo.
+    c: ResponseEntity es de Spring Web, un tipo HTTP que no pinta nada en un puerto de salida.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: ¿Qué ventajas tiene definir un puerto de entrada por caso de uso (ReservarSala, CancelarReserva…) en lugar de una única interfaz con todos los métodos?
+  opciones:
+    - {id: a, texto: "Cada adaptador depende solo de las operaciones que usa"}
+    - {id: b, texto: "Cada caso de uso se puede probar y sustituir por separado"}
+    - {id: c, texto: "Las interfaces no crecen sin control a medida que se añaden operaciones"}
+    - {id: d, texto: "Desaparece la necesidad de adaptadores de entrada"}
+    - {id: e, texto: "La aplicación arranca más rápido"}
+  correctas: [a, b, c]
+  explicacion: Interfaces pequeñas y con un propósito reducen el acoplamiento y facilitan probar cada operación. Una interfaz grande acaba con métodos que cada cliente no usa.
+  distractores:
+    d: Los adaptadores siguen siendo necesarios para traducir cada tecnología.
+    e: El número de interfaces no afecta de forma apreciable al arranque.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: En la base de datos, las salas y sus reservas están en dos tablas. ¿Cómo debería ser el puerto de salida?
+  opciones:
+    - {id: a, texto: "Dos puertos, SalaTabla y ReservaTabla, uno por tabla"}
+    - {id: b, texto: "Un puerto Salas que guarda la sala con sus reservas, porque eso es lo que necesita la aplicación"}
+    - {id: c, texto: "Un puerto genérico Repositorio<T> reutilizable entre tablas"}
+    - {id: d, texto: "Ningún puerto: el caso de uso ejecuta SQL directamente"}
+  correctas: [b]
+  explicacion: Los puertos de salida se diseñan desde las necesidades de la aplicación, no desde el esquema. Que haya dos tablas es un detalle del adaptador de persistencia.
+  distractores:
+    a: Obliga al caso de uso a conocer el esquema y a coordinar dos guardados.
+    c: Un repositorio genérico no expresa nada del negocio y suele filtrar detalles de persistencia.
+    d: El SQL en el caso de uso ata la aplicación a la base de datos.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿De qué debería depender el controlador REST de un servicio hexagonal?
+  opciones:
+    - {id: a, texto: "Del repositorio JPA, para guardar directamente"}
+    - {id: b, texto: "De la clase ServicioReservas"}
+    - {id: c, texto: "De la entidad Sala, para modificarla"}
+    - {id: d, texto: "Del puerto de entrada ReservarSala"}
+  correctas: [d]
+  explicacion: El adaptador de entrada solo conoce el puerto. Qué clase lo implementa lo decide la raíz de composición, y así el controlador se puede probar con un doble del puerto.
+  distractores:
+    a: Usar el repositorio desde el controlador se salta el caso de uso y las reglas del dominio.
+    b: Depender de la implementación concreta en lugar del puerto ata el adaptador a una clase.
+    c: El controlador no manipula el dominio; delega en el caso de uso.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Con el controlador de la lección, ¿qué código HTTP recibe un cliente que intenta reservar una sala ya ocupada en esa franja?
+  codigo:
+    lenguaje: java
+    fuente: |
+      @ExceptionHandler(ReservaRechazada.class)
+      ProblemDetail rechazada(ReservaRechazada e) {
+          return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+      }
+
+      @ExceptionHandler(IllegalArgumentException.class)
+      ProblemDetail invalida(IllegalArgumentException e) {
+          return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+      }
+  opciones:
+    - {id: a, texto: "400 Bad Request"}
+    - {id: b, texto: "409 Conflict"}
+    - {id: c, texto: "500 Internal Server Error"}
+    - {id: d, texto: "201 Created"}
+  correctas: [b]
+  explicacion: Sala.reservar lanza ReservaRechazada cuando hay solape, y el manejador del adaptador la traduce a 409 Conflict con un cuerpo problem details.
+  distractores:
+    a: El 400 se reserva para IllegalArgumentException, que lanza la franja cuando sus datos son inválidos.
+    c: La excepción está manejada, así que no llega como error no controlado.
+    d: El 201 solo se devuelve cuando la reserva se crea.
+  referencia: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html
+- id: L04-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Por qué el adaptador JPA usa sus propias clases (SalaJpa, ReservaJpa) en lugar de anotar las del dominio?
+  opciones:
+    - {id: a, texto: "Para que el dominio no dependa de JPA ni de sus exigencias, como el constructor vacío"}
+    - {id: b, texto: "Para que los cambios en el esquema de la base de datos no obliguen a cambiar el dominio"}
+    - {id: c, texto: "Para poder usar campos final y validaciones en el constructor en el dominio"}
+    - {id: d, texto: "Porque JPA no permite guardar records"}
+    - {id: e, texto: "Para que las consultas sean más rápidas"}
+  correctas: [a, b, c]
+  explicacion: Separar los modelos mantiene el dominio libre de JPA, permite que cada modelo cambie por sus motivos y deja al dominio usar inmutabilidad y validaciones que JPA dificulta.
+  distractores:
+    d: Aunque JPA tiene limitaciones con los records como entidades, ese no es el motivo del patrón; se separaría igual con clases normales.
+    e: Tener dos modelos no acelera las consultas; el motivo es el desacoplamiento.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L04-004
+  tipo: completar
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Completa el adaptador de salida para que implemente el puerto Salas y convierta el resultado de Spring Data al dominio.
+  codigo:
+    lenguaje: java
+    fuente: |
+      @Component
+      class SalasJpa [[1]] Salas {
+          private final SalaJpaRepository repositorio;
+
+          @Override
+          public Optional<Sala> buscar(String nombre) {
+              return repositorio.findById(nombre).[[2]](SalasJpa::aDominio);
+          }
+      }
+  huecos:
+    - {id: "1", respuestas: [implements]}
+    - {id: "2", respuestas: [map]}
+  explicacion: El adaptador implementa el puerto de la aplicación. findById devuelve un Optional de SalaJpa, y map lo convierte en un Optional de Sala sin sacar el modelo JPA del adaptador.
+  referencia: https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html
+- id: L04-005
+  tipo: matching
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Empareja cada modelo con la parte del servicio a la que pertenece.
+  prompts:
+    - {id: "1", texto: "PeticionReserva (cuerpo JSON)"}
+    - {id: "2", texto: "ReservarSala.Solicitud"}
+    - {id: "3", texto: "FranjaHoraria"}
+    - {id: "4", texto: "ReservaJpa"}
+  opciones:
+    - {id: a, texto: "Adaptador REST"}
+    - {id: b, texto: "Puerto de entrada"}
+    - {id: c, texto: "Dominio"}
+    - {id: d, texto: "Adaptador de persistencia"}
+    - {id: e, texto: "Raíz de composición"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Cada capa tiene sus modelos. El JSON es del adaptador REST, la solicitud es del puerto, la franja es un objeto valor del dominio y la clase JPA es del adaptador de persistencia.
+  distractores:
+    e: La raíz de composición crea y conecta objetos; no define modelos de datos.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.4"
+  enunciado: La pasarela de pagos externa devuelve el error «card_declined». ¿Dónde se convierte ese código en algo que entienda la aplicación, como PagoRechazado?
+  opciones:
+    - {id: a, texto: "En el adaptador de salida de la pasarela"}
+    - {id: b, texto: "En el dominio, que debe conocer los códigos de cada proveedor"}
+    - {id: c, texto: "En el controlador REST, antes de responder al cliente"}
+    - {id: d, texto: "En el caso de uso, comparando el texto del error"}
+  correctas: [a]
+  explicacion: El adaptador es la frontera con el proveedor. Traduce sus códigos a conceptos de la aplicación, de modo que cambiar de pasarela solo cambia el adaptador.
+  distractores:
+    b: Si el dominio conoce los códigos del proveedor, queda atado a él.
+    c: El controlador REST es un adaptador de entrada; no habla con la pasarela.
+    d: Comparar textos del proveedor en el caso de uso filtra el modelo externo hacia dentro.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.1"
+  enunciado: La regla es «solo los administradores pueden reservar la sala de dirección». La petición puede llegar por REST o por una cola de mensajes. ¿Dónde se comprueba?
+  opciones:
+    - {id: a, texto: "En el controlador REST, con una anotación de seguridad"}
+    - {id: b, texto: "En cada adaptador de entrada, por separado"}
+    - {id: c, texto: "Dentro, en el caso de uso o en el dominio, con la identidad que traduce cada adaptador"}
+    - {id: d, texto: "En la base de datos, con permisos por usuario"}
+  correctas: [c]
+  explicacion: Los adaptadores autentican y traducen la identidad; quién puede hacer qué es una regla de la aplicación y debe cumplirse entre por donde entre la operación.
+  distractores:
+    a: La comprobación no se aplicaría a los mensajes de la cola.
+    b: Duplicar la regla en cada adaptador acaba en olvidos e inconsistencias.
+    d: Los permisos de base de datos no conocen las reglas de negocio sobre salas.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L04-008
+  tipo: ordering
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Ordena lo que ocurre dentro de SalasJpa.buscar cuando el caso de uso pide la sala «Atlas».
+  opciones:
+    - {id: a, texto: "El caso de uso llama a Salas.buscar(\"Atlas\")"}
+    - {id: b, texto: "El adaptador consulta SalaJpaRepository.findById"}
+    - {id: c, texto: "Spring Data devuelve un SalaJpa leído de la base de datos"}
+    - {id: d, texto: "El adaptador convierte SalaJpa en una Sala del dominio y la devuelve"}
+  correctas: [a, b, c, d]
+  explicacion: El caso de uso solo ve el puerto; el adaptador usa su repositorio interno, recibe el modelo JPA y lo convierte en dominio antes de devolverlo.
+  referencia: https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: ¿Qué es la raíz de composición en una aplicación hexagonal?
+  opciones:
+    - {id: a, texto: "La entidad principal del dominio, de la que dependen las demás"}
+    - {id: b, texto: "El único lugar donde se crean los adaptadores y se conectan con los casos de uso"}
+    - {id: c, texto: "La interfaz común de la que heredan los puertos"}
+    - {id: d, texto: "El paquete donde se guardan las clases JPA"}
+  correctas: [b]
+  explicacion: La raíz de composición (el paquete arranque, un main o una clase @Configuration) es el único sitio que conoce a la vez la aplicación y los adaptadores concretos, y los conecta.
+  distractores:
+    a: El dominio no tiene una entidad raíz de la que dependa todo; es otro concepto.
+    c: Los puertos no heredan de una interfaz común.
+    d: Las clases JPA son del adaptador de persistencia.
+  referencia: https://docs.spring.io/spring-framework/reference/core/beans/java/bean-annotation.html
+- id: L05-002
+  tipo: completar
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: Completa la configuración de Spring que crea el caso de uso a partir de los puertos de salida.
+  codigo:
+    lenguaje: java
+    fuente: |
+      @[[1]]
+      class Configuracion {
+
+          @[[2]]
+          ReservarSala reservarSala(Salas salas, GeneradorDeIds ids, Notificaciones n) {
+              return new ServicioReservas(salas, ids, n);
+          }
+      }
+  huecos:
+    - {id: "1", respuestas: [Configuration]}
+    - {id: "2", respuestas: [Bean]}
+  explicacion: Una clase @Configuration declara con métodos @Bean los objetos que Spring gestiona. Spring inyecta en los parámetros los adaptadores que implementan cada puerto.
+  referencia: https://docs.spring.io/spring-framework/reference/core/beans/java/bean-annotation.html
+- id: L05-003
+  tipo: matching
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Empareja cada doble de prueba con su tipo.
+  prompts:
+    - {id: "1", texto: "() -> ID, que siempre devuelve el mismo identificador"}
+    - {id: "2", texto: "notificadas::add, para comprobar después qué se notificó"}
+    - {id: "3", texto: "SalasEnMemoria, que guarda y busca salas en un HashMap"}
+    - {id: "4", texto: "Un objeto programado con las llamadas que espera y que falla si no se producen"}
+  opciones:
+    - {id: a, texto: "Stub"}
+    - {id: b, texto: "Spy"}
+    - {id: c, texto: "Fake"}
+    - {id: d, texto: "Mock"}
+    - {id: e, texto: "Dummy"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Un stub devuelve respuestas preparadas; un spy además registra las llamadas; un fake es una implementación funcional con un atajo; un mock verifica las llamadas esperadas.
+  distractores:
+    e: Un dummy se pasa pero no se usa; ninguno de los ejemplos es así.
+  referencia: https://martinfowler.com/bliki/TestDouble.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Por qué la prueba del caso de uso usa un generador de identificadores fijo (() -> ID) en lugar de UUID.randomUUID()?
+  opciones:
+    - {id: a, texto: "Porque UUID.randomUUID() no funciona fuera de Spring"}
+    - {id: b, texto: "Para que la prueba sea más rápida"}
+    - {id: c, texto: "Porque los identificadores aleatorios pueden repetirse"}
+    - {id: d, texto: "Para que el resultado sea exacto y repetible y se pueda comprobar el identificador devuelto"}
+  correctas: [d]
+  explicacion: Con un identificador fijo, la prueba puede afirmar exactamente qué id se devuelve, y da el mismo resultado en cada ejecución. Es la ventaja de que el id llegue por un puerto.
+  distractores:
+    a: UUID es de la biblioteca estándar de Java y funciona en cualquier sitio.
+    b: Generar un UUID es casi instantáneo; el motivo no es la velocidad.
+    c: La probabilidad de colisión es despreciable; el problema es que el valor no se conoce de antemano.
+  referencia: https://martinfowler.com/bliki/TestDouble.html
+- id: L05-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: ¿Qué conviene comprobar con pruebas de integración del adaptador JPA contra una base de datos real?
+  opciones:
+    - {id: a, texto: "Que el mapeo entre Sala y SalaJpa conserva todos los datos al guardar y leer"}
+    - {id: b, texto: "Que las restricciones y consultas funcionan en el motor real"}
+    - {id: c, texto: "Que guardar y volver a leer una sala con reservas devuelve las mismas reservas"}
+    - {id: d, texto: "Que no se puede reservar una sala ocupada"}
+    - {id: e, texto: "Que el controlador devuelve 409 ante un conflicto"}
+  correctas: [a, b, c]
+  explicacion: Las pruebas del adaptador comprueban la traducción y el comportamiento de la tecnología. Las reglas de negocio se prueban dentro, y el código HTTP en el adaptador REST.
+  distractores:
+    d: Es una regla del dominio; se prueba sin base de datos, en las pruebas de dentro del hexágono.
+    e: Es responsabilidad del adaptador REST y se prueba en sus propias pruebas.
+  referencia: https://martinfowler.com/articles/practical-test-pyramid.html
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.3"
+  enunciado: Una prueba del caso de uso hace verify() de cada llamada intermedia a los puertos, en orden. Tras una refactorización que no cambia el comportamiento, falla. ¿Qué ha pasado?
+  opciones:
+    - {id: a, texto: "La prueba estaba acoplada a la implementación por verificar interacciones en lugar del resultado"}
+    - {id: b, texto: "La refactorización ha introducido un error que la prueba ha detectado"}
+    - {id: c, texto: "Mockito no admite verificar llamadas en orden"}
+    - {id: d, texto: "Faltaba anotar la prueba con @SpringBootTest"}
+  correctas: [a]
+  explicacion: Verificar cada llamada fija el cómo y no el qué. Si el comportamiento observable no ha cambiado, la prueba debería pasar; comprobar el estado final con fakes la hace más robusta.
+  distractores:
+    b: El enunciado dice que el comportamiento no ha cambiado; el fallo viene de la forma de la prueba.
+    c: Mockito permite verificar en orden con InOrder; el problema es de diseño de la prueba.
+    d: Las pruebas de dentro del hexágono no necesitan Spring.
+  referencia: https://martinfowler.com/articles/mocksArentStubs.html
+- id: L05-007
+  tipo: ordering
+  dificultad: baja
+  objetivo: "5.4"
+  enunciado: Ordena los tipos de prueba de un servicio hexagonal de más numerosos (y rápidos) a menos numerosos (y lentos).
+  opciones:
+    - {id: a, texto: "Pruebas del dominio y de los casos de uso con dobles"}
+    - {id: b, texto: "Pruebas de cada adaptador con su tecnología"}
+    - {id: c, texto: "Pruebas de extremo a extremo con la aplicación completa"}
+  correctas: [a, b, c]
+  explicacion: Es la pirámide de pruebas aplicada al hexágono, muchas pruebas rápidas del núcleo, menos de los adaptadores y muy pocas de extremo a extremo.
+  referencia: https://martinfowler.com/articles/practical-test-pyramid.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Un caso de uso necesita el aforo máximo permitido en el edificio, que está en application.yml. ¿Cómo debe recibirlo?
+  opciones:
+    - {id: a, texto: "Con @Value(\"${aforo.maximo}\") en un campo del caso de uso"}
+    - {id: b, texto: "Por su constructor, leído en la raíz de composición"}
+    - {id: c, texto: "Leyendo el fichero application.yml desde el caso de uso"}
+    - {id: d, texto: "Con System.getenv dentro del dominio"}
+  correctas: [b]
+  explicacion: La configuración se lee en la raíz de composición y se pasa por el constructor. Así el caso de uso no depende de Spring ni de dónde está la configuración, y en las pruebas se pasa el valor que se quiera.
+  distractores:
+    a: Funciona, pero hace que el caso de uso dependa de Spring y de la clave de configuración.
+    c: Leer ficheros es infraestructura; no corresponde al caso de uso.
+    d: El dominio no lee variables de entorno.
+  referencia: https://docs.spring.io/spring-framework/reference/core/beans/java/bean-annotation.html
+- id: L06-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "6.1"
+  enunciado: ¿Cuál es la diferencia esencial entre una arquitectura en capas clásica y una hexagonal?
+  opciones:
+    - {id: a, texto: "Hexagonal tiene más capas"}
+    - {id: b, texto: "En hexagonal el negocio no depende de la persistencia: la aplicación define el puerto y la infraestructura lo implementa"}
+    - {id: c, texto: "En capas no se pueden usar interfaces"}
+    - {id: d, texto: "Hexagonal prohíbe las bases de datos relacionales"}
+  correctas: [b]
+  explicacion: La clave es la inversión de dependencias. En capas, el negocio importa la capa de datos; en hexagonal, la infraestructura depende de los puertos que define la aplicación.
+  distractores:
+    a: Hexagonal distingue dentro y fuera; no se trata de tener más capas.
+    c: En capas se usan interfaces; lo que cambia es quién las define y hacia dónde apuntan las dependencias.
+    d: La base de datos es un adaptador más; puede ser relacional o no.
+  referencia: https://martinfowler.com/bliki/PresentationDomainDataLayering.html
+- id: L06-002
+  tipo: matching
+  dificultad: baja
+  objetivo: "6.2"
+  enunciado: Empareja cada estilo de arquitectura con su autor y año de publicación.
+  prompts:
+    - {id: "1", texto: "Hexagonal (puertos y adaptadores)"}
+    - {id: "2", texto: "Arquitectura cebolla"}
+    - {id: "3", texto: "Clean Architecture"}
+  opciones:
+    - {id: a, texto: "Alistair Cockburn, 2005"}
+    - {id: b, texto: "Jeffrey Palermo, 2008"}
+    - {id: c, texto: "Robert C. Martin, 2012"}
+    - {id: d, texto: "Eric Evans, 2003"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Cockburn publicó hexagonal en 2005, Palermo la arquitectura cebolla en 2008 y Martin su artículo The Clean Architecture en 2012, como síntesis de las anteriores.
+  distractores:
+    d: Eric Evans es el autor de Domain-Driven Design (2003), que no es un estilo de arquitectura de este grupo.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L06-003
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "6.2"
+  enunciado: ¿Qué idea comparten hexagonal, cebolla y Clean Architecture?
+  opciones:
+    - {id: a, texto: "Que cada servicio debe desplegarse por separado"}
+    - {id: b, texto: "Que hay que usar exactamente cuatro círculos"}
+    - {id: c, texto: "Que las dependencias del código apuntan hacia el negocio, en el centro"}
+    - {id: d, texto: "Que la base de datos es el núcleo del sistema"}
+  correctas: [c]
+  explicacion: Las tres ponen el negocio en el centro y exigen que las dependencias apunten hacia dentro; Clean Architecture lo formula como la regla de dependencias.
+  distractores:
+    a: El despliegue por separado es propio de los microservicios, no de estos estilos.
+    b: Martin dice explícitamente que el número de círculos no es fijo.
+    d: Es justo lo contrario; la base de datos es un detalle del exterior.
+  referencia: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- id: L06-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "6.3"
+  enunciado: ¿En qué casos suele compensar aplicar arquitectura hexagonal?
+  opciones:
+    - {id: a, texto: "Un servicio de precios con reglas complejas que vivirá años"}
+    - {id: b, texto: "Una aplicación cuyas operaciones llegan por API, por una cola y por tareas programadas"}
+    - {id: c, texto: "Un sistema que puede cambiar de proveedor de pagos"}
+    - {id: d, texto: "Un script de migración de datos de un solo uso"}
+    - {id: e, texto: "Un formulario de contacto que solo guarda lo que se envía"}
+  correctas: [a, b, c]
+  explicacion: Compensa cuando hay reglas que proteger, varias entradas para las mismas operaciones o infraestructura que puede cambiar. El coste no se recupera en scripts desechables ni en CRUD sin reglas.
+  distractores:
+    d: Un script de un solo uso no se mantiene ni se prueba a largo plazo; el coste no se recupera.
+    e: Sin reglas de negocio, el dominio queda vacío y las conversiones solo añaden trabajo.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L06-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "6.4"
+  enunciado: Un compañero dice «no podemos usar hexagonal porque nuestra aplicación es un monolito». ¿Qué le responderías?
+  opciones:
+    - {id: a, texto: "Que tiene razón: hexagonal solo se aplica a microservicios"}
+    - {id: b, texto: "Que primero hay que dividir el monolito en microservicios"}
+    - {id: c, texto: "Que hexagonal exige usar DDD, y un monolito no puede"}
+    - {id: d, texto: "Que hexagonal organiza el código de una aplicación, sea monolito o microservicio"}
+  correctas: [d]
+  explicacion: Hexagonal es una forma de organizar una aplicación (dentro y fuera, puertos y adaptadores). Es independiente de cómo se despliegue; el artículo original es anterior a los microservicios.
+  distractores:
+    a: El patrón no depende de la forma de despliegue.
+    b: No hace falta dividir nada para aislar el negocio de la infraestructura.
+    c: Hexagonal y DDD son independientes, y DDD también se aplica en monolitos.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L06-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "6.4"
+  enunciado: ¿Cómo se relacionan Domain-Driven Design y la arquitectura hexagonal?
+  opciones:
+    - {id: a, texto: "Son lo mismo con distinto nombre"}
+    - {id: b, texto: "DDD modela el negocio y hexagonal lo aísla de la tecnología; son independientes y se combinan bien"}
+    - {id: c, texto: "Hexagonal es la parte de infraestructura de DDD"}
+    - {id: d, texto: "Son incompatibles, porque DDD exige capas"}
+  correctas: [b]
+  explicacion: DDD trata de cómo modelar el negocio (lenguaje ubicuo, contextos delimitados, agregados); hexagonal, de cómo aislar ese modelo. Uno no exige al otro, pero hexagonal da al modelo de DDD un sitio limpio.
+  distractores:
+    a: Responden a preguntas distintas, modelar frente a aislar.
+    c: Hexagonal no es parte de DDD; se publicó por separado.
+    d: Se combinan con frecuencia; DDD no impone una arquitectura en capas concreta.
+  referencia: https://martinfowler.com/bliki/BoundedContext.html
+- id: L06-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "6.3"
+  enunciado: Un equipo quiere adoptar hexagonal en una aplicación existente en capas, sin parar el desarrollo. ¿Qué primer paso es más razonable?
+  opciones:
+    - {id: a, texto: "Reescribir la aplicación desde cero con la nueva estructura"}
+    - {id: b, texto: "Crear una interfaz para cada clase antes de seguir"}
+    - {id: c, texto: "Introducir un puerto donde la lógica de negocio depende directamente de una infraestructura, empezando por la más problemática"}
+    - {id: d, texto: "Renombrar los paquetes a dominio, aplicacion e infraestructura"}
+  correctas: [c]
+  explicacion: Hexagonal se puede adoptar gradualmente. Invertir primero la dependencia más dolorosa (por ejemplo, la persistencia en las reglas más importantes) da el beneficio sin una reescritura.
+  distractores:
+    a: Una reescritura completa es arriesgada y no es necesaria.
+    b: Las interfaces solo aportan en los bordes del hexágono; crearlas en todas partes añade ruido.
+    d: Los nombres de los paquetes no cambian las dependencias, que es lo que define la arquitectura.
+  referencia: https://alistair.cockburn.us/hexagonal-architecture/
+- id: L06-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "6.1"
+  enunciado: En una arquitectura en capas, el servicio de negocio usa una interfaz SalaRepository definida en el propio paquete de negocio, y la capa de datos la implementa. ¿Qué se puede decir?
+  opciones:
+    - {id: a, texto: "Que ya aplica la idea esencial de hexagonal para la persistencia: la dependencia está invertida"}
+    - {id: b, texto: "Que sigue siendo una arquitectura en capas clásica, porque usa la palabra Repository"}
+    - {id: c, texto: "Que es un error, porque el negocio no puede definir interfaces"}
+    - {id: d, texto: "Que es Clean Architecture y no tiene relación con hexagonal"}
+  correctas: [a]
+  explicacion: Lo que define la arquitectura es hacia dónde apuntan las dependencias. Si el negocio define la interfaz y la capa de datos la implementa, la dependencia está invertida como en un puerto de salida.
+  distractores:
+    b: El nombre no decide la arquitectura; importan las dependencias.
+    c: Que el negocio defina las interfaces que necesita es justamente la inversión de dependencias.
+    d: Clean Architecture y hexagonal comparten esta misma idea; no son ajenas.
+  referencia: https://martinfowler.com/bliki/PresentationDomainDataLayering.html

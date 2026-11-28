@@ -1,0 +1,15 @@
+slug: algoritmos-y-estructuras
+titulo: Algoritmos y estructuras de datos
+area: programacion
+nivel: basico
+idioma: es-ES
+resumen: Lo esencial para elegir bien la estructura de datos y el algoritmo en el trabajo diario. Complejidad y notación O, listas, colas y pilas, tablas hash y el contrato de equals y hashCode, árboles y montículos, búsqueda binaria, ordenación, recursión con memoización y recorrido de grafos. Cada afirmación de rendimiento se ha medido con Python 3.15 y Java 25.
+requisitos: []
+etiquetas: [algoritmos, estructuras-de-datos, complejidad, python, java]
+fuentes:
+  - wiki.python.org
+  - docs.python.org
+  - docs.oracle.com
+  - en.wikipedia.org
+ejercicios:
+  minimo_por_leccion: 8

@@ -1,0 +1,697 @@
+- id: L01-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: Empareja cada objeto de Git con lo que guarda.
+  prompts:
+    - {id: "1", texto: "Blob"}
+    - {id: "2", texto: "Árbol"}
+    - {id: "3", texto: "Commit"}
+  opciones:
+    - {id: a, texto: "El contenido de un fichero, sin su nombre"}
+    - {id: b, texto: "Un directorio: nombres, permisos y hashes de sus entradas"}
+    - {id: c, texto: "Un árbol, sus padres, el autor, las fechas y el mensaje"}
+    - {id: d, texto: "La diferencia con el commit anterior"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Los nombres de fichero viven en los árboles y el contenido en los blobs. El commit apunta al árbol raíz de la instantánea.
+  distractores:
+    d: Git guarda instantáneas, no diferencias; el diff se calcula al comparar dos árboles.
+  referencia: https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Dos ficheros de un proyecto, config/a.txt y docs/b.txt, tienen exactamente el mismo contenido. ¿Cuántos blobs guarda Git para ellos?
+  opciones:
+    - {id: a, texto: "Dos, uno por fichero"}
+    - {id: b, texto: "Uno: el hash depende solo del contenido, así que los dos árboles apuntan al mismo blob"}
+    - {id: c, texto: "Ninguno hasta que se haga push"}
+    - {id: d, texto: "Uno por cada commit en que aparezcan"}
+  correctas: [b]
+  explicacion: El blob se identifica por el hash de su contenido, sin el nombre. Contenido igual es el mismo objeto, aunque aparezca en distintos directorios o en miles de commits.
+  distractores:
+    a: El nombre va en el árbol, no en el blob.
+    c: Los objetos se guardan en el repositorio local al hacer add y commit.
+    d: Si el contenido no cambia entre commits, se reutiliza el mismo blob.
+  referencia: https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Corriges una falta de ortografía en el mensaje del último commit con git commit --amend. ¿Qué pasa con su hash?
+  opciones:
+    - {id: a, texto: "Se mantiene, porque los ficheros no han cambiado"}
+    - {id: b, texto: "Solo cambian los cuatro últimos caracteres"}
+    - {id: c, texto: "Se mantiene hasta que hagas push"}
+    - {id: d, texto: "Cambia, porque el mensaje forma parte del contenido del commit"}
+  correctas: [d]
+  explicacion: El hash se calcula sobre todo el objeto commit, incluido el mensaje. En la prueba, el commit 37b7b62 pasó a ser f0c857d tras el amend.
+  distractores:
+    a: El árbol es el mismo, pero el commit es un objeto nuevo.
+    b: Un hash cambia por completo con cualquier cambio en la entrada.
+    c: El hash se calcula al crear el objeto, en local.
+  referencia: https://git-scm.com/docs/git-commit
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Qué es, físicamente, la rama main de un repositorio?
+  opciones:
+    - {id: a, texto: "Un fichero en refs/heads con el hash del último commit de la rama"}
+    - {id: b, texto: "Una copia completa de los ficheros del proyecto"}
+    - {id: c, texto: "Una carpeta con los commits de la rama"}
+    - {id: d, texto: "Una entrada en el servidor remoto"}
+  correctas: [a]
+  explicacion: Una rama es una referencia que apunta a un commit; la historia se reconstruye siguiendo los padres. Por eso crear una rama es instantáneo.
+  distractores:
+    b: Los ficheros están en los objetos; la rama solo apunta a un commit.
+    c: Los commits no se agrupan por rama; viven todos en el almacén de objetos.
+    d: Las ramas locales existen en tu repositorio aunque no haya remoto.
+  referencia: https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Haces git switch --detach a660cac, creas dos commits y cambias a main. ¿Qué pasa con esos commits?
+  opciones:
+    - {id: a, texto: "Se añaden a main"}
+    - {id: b, texto: "Git los borra al instante"}
+    - {id: c, texto: "Ninguna rama los apunta; siguen en el repositorio y se pueden recuperar con el reflog hasta que caduquen"}
+    - {id: d, texto: "Se suben al remoto en el siguiente push"}
+  correctas: [c]
+  explicacion: Con HEAD separado, los commits nuevos no hacen avanzar ninguna rama. Para conservarlos basta con crear una rama que los apunte, con su hash del reflog.
+  distractores:
+    a: main no se mueve, porque HEAD no apuntaba a ella.
+    b: Los objetos siguen ahí hasta que el reflog caduque y la recolección de basura los elimine.
+    d: push envía ramas; estos commits no pertenecen a ninguna.
+  referencia: https://git-scm.com/docs/gitglossary
+- id: L01-006
+  tipo: ordering
+  dificultad: baja
+  objetivo: "1.3"
+  enunciado: Ordena el recorrido de un cambio desde que editas un fichero hasta que forma parte de la historia.
+  opciones:
+    - {id: a, texto: "Editas el fichero en el directorio de trabajo"}
+    - {id: b, texto: "git add copia su contenido al índice y lo guarda como blob"}
+    - {id: c, texto: "git commit crea el árbol y el commit a partir del índice"}
+    - {id: d, texto: "La rama actual pasa a apuntar al commit nuevo"}
+  correctas: [a, b, c, d]
+  explicacion: El commit se hace a partir del índice, no del directorio de trabajo. Lo que no añades con git add no entra.
+  referencia: https://git-scm.com/docs/gitglossary
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: Haces git add informe.txt, después borras el fichero por error sin haber hecho commit. ¿Se puede recuperar el contenido que añadiste?
+  opciones:
+    - {id: a, texto: "No, porque no se llegó a hacer commit"}
+    - {id: b, texto: "Sí: git add ya lo guardó como blob, y git restore informe.txt lo trae desde el índice"}
+    - {id: c, texto: "Solo si hiciste push"}
+    - {id: d, texto: "Solo con una copia de seguridad del disco"}
+  correctas: [b]
+  explicacion: El índice guarda el contenido, no una marca. En la prueba, el blob estaba en .git/objects justo después del add, antes de ningún commit.
+  distractores:
+    a: El contenido está en el repositorio desde el add.
+    c: El índice es local y no depende del remoto.
+    d: Git tiene el contenido; no hace falta otra copia.
+  referencia: https://git-scm.com/docs/git-restore
+- id: L01-008
+  tipo: completar
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Completa los comandos para ver el tipo y el contenido del objeto al que apunta HEAD.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      git cat-file [[1]] HEAD
+      git cat-file [[2]] HEAD
+  huecos:
+    - {id: "1", respuestas: ["-t"]}
+    - {id: "2", respuestas: ["-p"]}
+  explicacion: -t muestra el tipo (commit, tree, blob o tag) y -p muestra el contenido de forma legible.
+  referencia: https://git-scm.com/docs/git-cat-file
+- id: L01-009
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: En un commit de fusión, ¿a qué se refiere HEAD^2?
+  opciones:
+    - {id: a, texto: "Al abuelo de HEAD"}
+    - {id: b, texto: "Al commit dos posiciones por delante"}
+    - {id: c, texto: "A la segunda rama remota"}
+    - {id: d, texto: "Al segundo padre: la punta de la rama que se fusionó"}
+  correctas: [d]
+  explicacion: ^n elige el padre número n y ~n retrocede n generaciones por el primer padre. HEAD~2 es el abuelo; HEAD^2, el segundo padre de una fusión.
+  distractores:
+    a: El abuelo es HEAD~2.
+    b: Git no tiene una notación para commits posteriores, porque un commit no sabe quién lo sigue.
+    c: Las ramas remotas se nombran como origin/main, no con ^.
+  referencia: https://git-scm.com/docs/gitrevisions
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué hace git switch -c tema?
+  opciones:
+    - {id: a, texto: "Copia el proyecto a una carpeta llamada tema"}
+    - {id: b, texto: "Crea la rama tema en el commit actual y cambia a ella"}
+    - {id: c, texto: "Crea la rama tema en el remoto"}
+    - {id: d, texto: "Fusiona la rama tema en la actual"}
+  correctas: [b]
+  explicacion: -c crea la rama y switch mueve HEAD a ella. Como una rama es solo una referencia, es instantáneo.
+  distractores:
+    a: Git no copia ficheros para crear ramas.
+    c: La rama es local hasta que la subes con push.
+    d: Fusionar es git merge.
+  referencia: https://git-scm.com/docs/git-switch
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: git branch -d tema responde que la rama no está completamente fusionada. ¿Qué significa?
+  opciones:
+    - {id: a, texto: "Que tema tiene commits que ninguna otra rama contiene, y borrarla los dejaría sin referencia"}
+    - {id: b, texto: "Que el remoto está caído"}
+    - {id: c, texto: "Que tema tiene conflictos sin resolver"}
+    - {id: d, texto: "Que hay que borrarla primero en el remoto"}
+  correctas: [a]
+  explicacion: -d protege el trabajo que solo esa rama apunta. Si de verdad quieres descartarlo, -D la borra igualmente; los commits seguirían recuperables con el reflog un tiempo.
+  distractores:
+    b: La comprobación es local.
+    c: Los conflictos aparecen al fusionar, no al borrar.
+    d: Borrar una rama local no depende del remoto.
+  referencia: https://git-scm.com/docs/git-branch
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: main no ha recibido commits desde que creaste funcionalidad, que tiene dos. ¿Qué hace git merge funcionalidad estando en main?
+  opciones:
+    - {id: a, texto: "Crea un commit de fusión con dos padres"}
+    - {id: b, texto: "Copia los dos commits con hashes nuevos"}
+    - {id: c, texto: "Mueve la referencia main hasta el último commit de funcionalidad, sin crear commits"}
+    - {id: d, texto: "Da un conflicto"}
+  correctas: [c]
+  explicacion: Es un avance rápido. En la prueba, Git respondió Actualizando a660cac..ee2d2e3 y Fast-forward.
+  distractores:
+    a: Solo hay commit de fusión si las dos ramas han avanzado o si se pide con --no-ff.
+    b: Los commits no se copian; main pasa a apuntar a los mismos.
+    d: No puede haber conflicto si solo un lado ha cambiado.
+  referencia: https://git-scm.com/docs/git-merge
+- id: L02-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: main y otra han avanzado cada una con un commit desde su ancestro común. ¿Qué es cierto de git merge otra?
+  opciones:
+    - {id: a, texto: "Git busca el ancestro común de las dos puntas"}
+    - {id: b, texto: "Crea un commit de fusión con dos padres"}
+    - {id: c, texto: "git merge-base main otra devuelve ese ancestro"}
+    - {id: d, texto: "Los commits de otra reciben hashes nuevos"}
+    - {id: e, texto: "Es un avance rápido"}
+  correctas: [a, b, c]
+  explicacion: Con dos historias divergentes, Git fusiona a tres vías (la base y las dos puntas) y crea un commit con dos padres.
+  distractores:
+    d: Fusionar no cambia los commits existentes; es el rebase el que crea commits nuevos.
+    e: El avance rápido solo es posible si la rama destino no ha avanzado.
+  referencia: https://git-scm.com/docs/git-merge-base
+- id: L02-005
+  tipo: ordering
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: Ordena los pasos para terminar una fusión con un conflicto en tarifa.txt.
+  opciones:
+    - {id: a, texto: "Editar tarifa.txt, decidir el contenido y quitar las marcas <<<<<<<, ======= y >>>>>>>"}
+    - {id: b, texto: "git add tarifa.txt para marcarlo como resuelto"}
+    - {id: c, texto: "git commit para completar la fusión"}
+  correctas: [a, b, c]
+  explicacion: Git deja el fichero con las dos versiones marcadas. Tú decides el resultado, lo añades al índice y confirmas.
+  referencia: https://git-scm.com/docs/git-merge#_how_to_resolve_conflicts
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: En un conflicto aparece «<<<<<<< HEAD / precio = 11 / ======= / precio = 12 / >>>>>>> subida». ¿Qué es cada parte?
+  opciones:
+    - {id: a, texto: "Arriba, la versión de subida; abajo, la de la rama actual"}
+    - {id: b, texto: "Arriba, el ancestro común; abajo, el resultado propuesto"}
+    - {id: c, texto: "Las dos son versiones antiguas; Git ya guardó el resultado"}
+    - {id: d, texto: "Arriba, la versión de la rama actual (HEAD); abajo, la de la rama que fusionas, subida"}
+  correctas: [d]
+  explicacion: La parte entre <<<<<<< HEAD y ======= es la tuya; entre ======= y >>>>>>>, la de la otra rama. Con merge.conflictStyle diff3 o zdiff3, Git muestra también la base.
+  distractores:
+    a: Es al revés.
+    b: La base solo aparece con el estilo diff3 o zdiff3, en una sección marcada con |||||||.
+    c: Hasta que no resuelves y confirmas, no hay resultado.
+  referencia: https://git-scm.com/docs/git-merge#_how_conflicts_are_presented
+- id: L02-007
+  tipo: completar
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: Completa el comando para cancelar una fusión con conflictos y volver al estado anterior.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      git merge [[1]]
+  huecos:
+    - {id: "1", respuestas: ["--abort"]}
+  explicacion: git merge --abort deshace la fusión a medias y restaura la rama y los ficheros. En la prueba, git status quedó limpio.
+  referencia: https://git-scm.com/docs/git-merge
+- id: L02-008
+  tipo: matching
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Empareja cada forma de integrar una rama con la historia que deja.
+  prompts:
+    - {id: "1", texto: "git merge --no-ff tema"}
+    - {id: "2", texto: "git merge --squash tema y después git commit"}
+    - {id: "3", texto: "git merge tema, cuando la rama destino no ha avanzado"}
+  opciones:
+    - {id: a, texto: "Un commit de fusión que agrupa los commits de la rama"}
+    - {id: b, texto: "Un solo commit nuevo con todos los cambios, sin los commits de la rama"}
+    - {id: c, texto: "Los commits de la rama, en línea, sin commit de fusión"}
+    - {id: d, texto: "Una etiqueta con el nombre de la rama"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: --no-ff fuerza un commit de fusión, --squash condensa todo en un commit y el avance rápido solo mueve la referencia.
+  distractores:
+    d: Ninguna forma de fusionar crea etiquetas.
+  referencia: https://git-scm.com/docs/git-merge
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Haces git rebase main en tu rama tema, que tenía el commit D1 con hash a3355e3. ¿Qué hash tiene D1 después?
+  opciones:
+    - {id: a, texto: "El mismo, a3355e3, porque el cambio es igual"}
+    - {id: b, texto: "Uno nuevo, porque el commit tiene otro padre y por tanto es otro objeto"}
+    - {id: c, texto: "El de la punta de main"}
+    - {id: d, texto: "Ninguno, hasta que hagas push"}
+  correctas: [b]
+  explicacion: El padre forma parte del contenido del commit. Al cambiarlo, el hash cambia; en la prueba pasó de a3355e3 a 190ae92.
+  distractores:
+    a: Aunque el cambio sea igual, el objeto commit no lo es.
+    c: D1 se coloca encima de la punta de main; no es ese commit.
+    d: El hash se calcula al crear el commit, en local.
+  referencia: https://git-scm.com/docs/git-rebase
+- id: L03-002
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Qué diferencias hay entre integrar con rebase y con un commit de fusión?
+  opciones:
+    - {id: a, texto: "El rebase deja una historia lineal, sin commit de fusión"}
+    - {id: b, texto: "El rebase crea commits nuevos con otros hashes"}
+    - {id: c, texto: "La fusión conserva los commits originales y registra cuándo se unieron las ramas"}
+    - {id: d, texto: "El rebase evita los conflictos"}
+    - {id: e, texto: "La fusión cambia los hashes de la rama que se fusiona"}
+  correctas: [a, b, c]
+  explicacion: Las dos integran los mismos cambios. El rebase reescribe para dejar una línea limpia; la fusión respeta la historia tal como ocurrió.
+  distractores:
+    d: Si hay cambios incompatibles, el rebase también tiene conflictos, y uno por cada commit que los provoque.
+    e: Fusionar no toca los commits existentes.
+  referencia: https://git-scm.com/docs/git-rebase
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.2"
+  enunciado: Acabas de hacer un commit y te has olvidado de añadir un fichero. Nadie tiene aún ese commit. ¿Qué haces?
+  opciones:
+    - {id: a, texto: "git add del fichero y git commit --amend"}
+    - {id: b, texto: "git revert del commit y otro commit nuevo"}
+    - {id: c, texto: "Borrar el repositorio y clonarlo de nuevo"}
+    - {id: d, texto: "git push --force"}
+  correctas: [a]
+  explicacion: --amend rehace el último commit con lo que hay en el índice. Como nadie lo tiene, reescribirlo no molesta a nadie.
+  distractores:
+    b: revert es para deshacer commits ya compartidos; aquí sobra.
+    c: Perderías el trabajo local.
+    d: Subir no arregla el commit, y forzar es innecesario.
+  referencia: https://git-scm.com/docs/git-commit
+- id: L03-004
+  tipo: ordering
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Quieres fundir una corrección en el commit «Añade total», que no es el último de tu rama. Ordena los pasos.
+  opciones:
+    - {id: a, texto: "Haces la corrección y la añades con git add"}
+    - {id: b, texto: "git commit --fixup=<hash de Añade total>"}
+    - {id: c, texto: "git rebase -i --autosquash main"}
+    - {id: d, texto: "Compruebas con git log que solo quedan los commits con sentido"}
+  correctas: [a, b, c, d]
+  explicacion: El commit fixup! se coloca solo detrás de su destino al usar --autosquash y se funde con él. En la prueba, la rama pasó de tres commits a dos.
+  referencia: https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---autosquash
+- id: L03-005
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada acción del rebase interactivo con su efecto.
+  prompts:
+    - {id: "1", texto: "reword"}
+    - {id: "2", texto: "squash"}
+    - {id: "3", texto: "fixup"}
+    - {id: "4", texto: "drop"}
+  opciones:
+    - {id: a, texto: "Conserva el commit y permite cambiar su mensaje"}
+    - {id: b, texto: "Lo funde con el anterior y combina los dos mensajes"}
+    - {id: c, texto: "Lo funde con el anterior y descarta su mensaje"}
+    - {id: d, texto: "Elimina el commit"}
+    - {id: e, texto: "Lo sube al remoto"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son las órdenes de la lista que abre git rebase -i. pick, la de por defecto, deja el commit como está.
+  distractores:
+    e: El rebase trabaja en local; subir es cosa de push.
+  referencia: https://git-scm.com/docs/git-rebase#_interactive_mode
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Un compañero hizo rebase de main, que comparte todo el equipo, y lo subió con --force. ¿Qué problema provoca?
+  opciones:
+    - {id: a, texto: "Ninguno, porque el contenido es el mismo"}
+    - {id: b, texto: "Que el repositorio remoto se corrompe"}
+    - {id: c, texto: "Que los demás tienen los commits antiguos y su historia diverge: al integrar aparecen duplicados o se pierde trabajo"}
+    - {id: d, texto: "Que Git deja de aceptar commits en main"}
+  correctas: [c]
+  explicacion: Es la regla de oro. En ramas compartidas, los cambios se deshacen con git revert, que añade commits en lugar de reescribirlos.
+  distractores:
+    a: Los commits son otros objetos, con otros hashes, aunque el contenido coincida.
+    b: El remoto queda válido; el problema es la divergencia con los clones de los demás.
+    d: Git sigue aceptando commits; el problema es la historia de cada uno.
+  referencia: https://git-scm.com/docs/git-rebase#_recovering_from_upstream_rebase
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Ana hace git fetch sin integrar el commit que Luis acaba de subir, y después git push --force-with-lease. ¿Qué pasó en la prueba?
+  opciones:
+    - {id: a, texto: "El push se rechazó con stale info"}
+    - {id: b, texto: "El push se convirtió en un pull"}
+    - {id: c, texto: "Git fusionó automáticamente los dos commits"}
+    - {id: d, texto: "El push forzó la rama y el commit de Luis desapareció del remoto"}
+  correctas: [d]
+  explicacion: El fetch actualizó origin/main, y para --force-with-lease eso significa que Ana ya vio el estado del remoto. Por eso hay que añadir --force-if-includes.
+  distractores:
+    a: Ese rechazo ocurrió antes del fetch, cuando origin/main aún apuntaba a lo antiguo.
+    c: push no fusiona nada.
+    b: push no descarga cambios.
+  referencia: https://git-scm.com/docs/git-push
+- id: L03-008
+  tipo: completar
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Completa el comando para publicar una rama reescrita sin borrar lo que otros hayan subido, aunque hayas hecho fetch.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      git push [[1]] [[2]] origin tema
+  huecos:
+    - {id: "1", respuestas: ["--force-with-lease"]}
+    - {id: "2", respuestas: ["--force-if-includes"]}
+  explicacion: --force-with-lease solo fuerza si el remoto sigue donde lo viste, y --force-if-includes exige además que tu rama contenga lo que trajiste. Con push.useForceIfIncludes true, el segundo se aplica solo.
+  referencia: https://git-scm.com/docs/git-push
+- id: L04-001
+  tipo: matching
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Empareja cada situación con el flujo de ramas que mejor encaja.
+  prompts:
+    - {id: "1", texto: "Una aplicación web que se despliega varias veces al día, con buena CI"}
+    - {id: "2", texto: "Una biblioteca con las versiones 2.x y 3.x en mantenimiento a la vez"}
+    - {id: "3", texto: "Un equipo que integra en una sola rama, con ramas de como mucho un par de días"}
+  opciones:
+    - {id: a, texto: "GitHub flow"}
+    - {id: b, texto: "Git Flow"}
+    - {id: c, texto: "Desarrollo basado en el tronco"}
+    - {id: d, texto: "Una rama de larga duración por desarrollador"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: GitHub flow y el desarrollo basado en el tronco encajan con la entrega continua. Git Flow tiene sentido con varias versiones publicadas, como reconoce su propio autor.
+  distractores:
+    d: Las ramas de larga duración acumulan divergencia y conflictos; es lo que los tres flujos intentan evitar.
+  referencia: https://nvie.com/posts/a-successful-git-branching-model/
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Según la web de desarrollo basado en el tronco, ¿cuánto debería durar una rama de funcionalidad antes de fusionarse?
+  opciones:
+    - {id: a, texto: "Hasta que la funcionalidad esté completa, aunque tarde semanas"}
+    - {id: b, texto: "Un sprint completo"}
+    - {id: c, texto: "Un par de días como mucho"}
+    - {id: d, texto: "No importa, si se hace rebase a diario"}
+  correctas: [c]
+  explicacion: Más de dos días y la rama corre el riesgo de convertirse en una rama de larga duración, justo lo contrario del modelo. Las funcionalidades grandes se integran en partes, por ejemplo tras un interruptor de funcionalidad.
+  distractores:
+    a: Es el patrón que el modelo quiere evitar.
+    b: Un sprint suele durar semanas.
+    d: El rebase reduce los conflictos, pero el trabajo sigue sin integrarse ni verse en el tronco.
+  referencia: https://trunkbaseddevelopment.com/short-lived-feature-branches/
+- id: L04-003
+  tipo: ordering
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: Ordena los pasos de GitHub flow según la documentación de GitHub.
+  opciones:
+    - {id: a, texto: "Crear una rama"}
+    - {id: b, texto: "Hacer los cambios"}
+    - {id: c, texto: "Crear una solicitud de cambios"}
+    - {id: d, texto: "Atender los comentarios de la revisión"}
+    - {id: e, texto: "Fusionar la solicitud y borrar la rama"}
+  correctas: [a, b, c, d, e]
+  explicacion: main se mantiene desplegable porque todo entra por una solicitud revisada.
+  referencia: https://docs.github.com/en/get-started/using-github/github-flow
+- id: L04-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué hace más fácil de revisar una solicitud de cambios?
+  opciones:
+    - {id: a, texto: "Que tenga un solo propósito"}
+    - {id: b, texto: "Que cada commit se entienda por separado y deje las pruebas en verde"}
+    - {id: c, texto: "Que la descripción explique qué cambia, por qué y cómo se ha probado"}
+    - {id: d, texto: "Juntar varias mejoras sin relación para ahorrar revisiones"}
+    - {id: e, texto: "Conservar los commits «arreglo» y «ahora sí» para que se vea el proceso"}
+  correctas: [a, b, c]
+  explicacion: Quien revisa necesita entender el cambio y poder seguirlo commit a commit.
+  distractores:
+    d: Mezclar cambios hace la revisión más larga y difícil, y complica deshacer solo uno.
+    e: Esos commits no aportan; se funden con fixup antes de pedir revisión.
+  referencia: https://docs.github.com/en/get-started/using-github/github-flow
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.3"
+  enunciado: ¿Qué debe explicar sobre todo el mensaje de un commit?
+  opciones:
+    - {id: a, texto: "Qué cambia y por qué; el cómo ya está en el diff"}
+    - {id: b, texto: "La lista de ficheros tocados"}
+    - {id: c, texto: "La hora a la que se hizo"}
+    - {id: d, texto: "El nombre de quien lo revisará"}
+  correctas: [a]
+  explicacion: Dentro de meses, el diff seguirá diciendo cómo; el motivo solo estará en el mensaje.
+  distractores:
+    b: Los ficheros los muestra git show --stat.
+    c: La fecha va en los metadatos del commit.
+    d: La revisión pertenece a la solicitud de cambios, no al commit.
+  referencia: https://git-scm.com/docs/git-commit#_discussion
+- id: L04-006
+  tipo: matching
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Con Conventional Commits y versionado semántico, empareja cada mensaje con la versión que haría subir.
+  prompts:
+    - {id: "1", texto: "fix(pedidos): redondeo del IVA"}
+    - {id: "2", texto: "feat(api): endpoint de devoluciones"}
+    - {id: "3", texto: "feat(api)!: elimina el campo precio_sin_iva"}
+  opciones:
+    - {id: a, texto: "Parche (1.4.2 → 1.4.3)"}
+    - {id: b, texto: "Menor (1.4.2 → 1.5.0)"}
+    - {id: c, texto: "Mayor (1.4.2 → 2.0.0)"}
+    - {id: d, texto: "Ninguna"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: fix corresponde al parche, feat a la versión menor, y el ! (o la nota BREAKING CHANGE) a la mayor.
+  distractores:
+    d: Los tres tipos cambian la versión; docs o test, por ejemplo, no la cambiarían.
+  referencia: https://www.conventionalcommits.org/en/v1.0.0/
+- id: L04-007
+  tipo: completar
+  dificultad: baja
+  objetivo: "4.3"
+  enunciado: Completa el mensaje, siguiendo Conventional Commits, de un commit que corrige un error en el componente consola.
+  codigo:
+    lenguaje: text
+    fuente: |
+      [[1]]([[2]]): la sesión caducada ya no muestra un error 500
+  huecos:
+    - {id: "1", respuestas: ["fix"]}
+    - {id: "2", respuestas: ["consola"]}
+  explicacion: El tipo fix indica una corrección y el ámbito, entre paréntesis, la parte afectada.
+  referencia: https://www.conventionalcommits.org/en/v1.0.0/
+- id: L04-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué reglas de rama protegida de GitHub ayudan a que main se mantenga estable y con la historia intacta?
+  opciones:
+    - {id: a, texto: "Exigir revisiones antes de fusionar"}
+    - {id: b, texto: "Exigir que pasen las comprobaciones de estado (CI)"}
+    - {id: c, texto: "No permitir pushes forzados"}
+    - {id: d, texto: "Permitir push directo a main a quien tenga permiso de escritura"}
+    - {id: e, texto: "Desactivar la integración continua para ir más rápido"}
+  correctas: [a, b, c]
+  explicacion: Las reglas convierten en obligatorio lo que el equipo ha acordado, sin depender de la memoria de cada uno.
+  distractores:
+    d: Saltarse las solicitudes de cambios elimina la revisión y la CI previas.
+    e: Sin CI, nada comprueba que main siga funcionando.
+  referencia: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+- id: L05-001
+  tipo: matching
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Tras git reset HEAD~1 con cada modo, ¿dónde quedan los cambios del commit deshecho?
+  prompts:
+    - {id: "1", texto: "--soft"}
+    - {id: "2", texto: "--mixed (el modo por defecto)"}
+    - {id: "3", texto: "--hard"}
+  opciones:
+    - {id: a, texto: "En el índice, preparados para otro commit"}
+    - {id: b, texto: "En los ficheros, sin añadir al índice"}
+    - {id: c, texto: "En ningún sitio: los ficheros quedan como el commit anterior"}
+    - {id: d, texto: "En un commit nuevo de reversión"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Es lo que mostró git status en la prueba, M  f con --soft, M f sin preparar con --mixed y limpio con --hard.
+  distractores:
+    d: Un commit de reversión lo crea git revert, no reset.
+  referencia: https://git-scm.com/docs/git-reset
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Has añadido por error config.local con git add, pero quieres conservar tus cambios en ese fichero. ¿Qué haces?
+  opciones:
+    - {id: a, texto: "git restore config.local"}
+    - {id: b, texto: "git reset --hard"}
+    - {id: c, texto: "git revert HEAD"}
+    - {id: d, texto: "git restore --staged config.local"}
+  correctas: [d]
+  explicacion: --staged saca el fichero del índice y deja tus cambios en el directorio de trabajo.
+  distractores:
+    a: Sin --staged, restore descarta tus cambios en el fichero y vuelve a la versión del índice.
+    b: Descartaría todos los cambios no confirmados del repositorio.
+    c: revert deshace un commit; aquí todavía no hay commit.
+  referencia: https://git-scm.com/docs/git-restore
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.1"
+  enunciado: Ejecutas git reset --hard con cambios en dos ficheros que nunca habías añadido ni confirmado. ¿Puedes recuperarlos con el reflog?
+  opciones:
+    - {id: a, texto: "Sí, con git reflog y git reset --hard HEAD@{1}"}
+    - {id: b, texto: "Sí, con git stash pop"}
+    - {id: c, texto: "No: nunca llegaron al repositorio, así que Git no los tiene"}
+    - {id: d, texto: "Sí, pero solo durante 30 días"}
+  correctas: [c]
+  explicacion: El reflog recupera commits. Lo que solo estaba en el directorio de trabajo no se guardó en ningún objeto. Antes de un reset --hard, guárdalo con stash o con un commit.
+  distractores:
+    a: HEAD@{1} devuelve la rama a un commit, pero esos cambios no estaban en ninguno.
+    b: Solo hay algo que recuperar con stash pop si antes hiciste stash.
+    d: Los plazos del reflog son para commits, y estos cambios no lo eran.
+  referencia: https://git-scm.com/docs/git-reset
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Un commit que ya está en main, y que todo el equipo tiene, rompe la facturación. ¿Cómo lo deshaces?
+  opciones:
+    - {id: a, texto: "git revert del commit, que crea otro commit con el cambio inverso"}
+    - {id: b, texto: "git reset --hard al commit anterior y push --force"}
+    - {id: c, texto: "git rebase -i para quitar el commit con drop"}
+    - {id: d, texto: "Borrar main y volver a crearla"}
+  correctas: [a]
+  explicacion: revert añade historia en lugar de reescribirla, así que los demás solo tienen que hacer pull. En la prueba creó el commit Revert "dos".
+  distractores:
+    b: Reescribe la historia compartida y obliga a todos a rehacer sus clones o pierde su trabajo.
+    c: También reescribe la historia de una rama compartida.
+    d: Es una forma aún más brusca de reescribir la historia.
+  referencia: https://git-scm.com/docs/git-revert
+- id: L05-005
+  tipo: ordering
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Has hecho git reset --hard HEAD~2 por error en tu rama local. Ordena los pasos para recuperarla.
+  opciones:
+    - {id: a, texto: "git reflog para ver por dónde ha pasado HEAD"}
+    - {id: b, texto: "Localizar la entrada anterior al reset y su hash"}
+    - {id: c, texto: "git reset --hard con ese hash"}
+    - {id: d, texto: "Comprobar con git log que vuelven los dos commits"}
+  correctas: [a, b, c, d]
+  explicacion: El reset solo movió la rama; los commits siguen en el repositorio y el reflog dice dónde estaban. En la prueba, HEAD@{1} apuntaba a 37b7b62.
+  referencia: https://git-scm.com/docs/git-reflog
+- id: L05-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué es cierto del reflog?
+  opciones:
+    - {id: a, texto: "Registra los movimientos de HEAD y de las ramas en tu repositorio"}
+    - {id: b, texto: "Es local: no se sube con push"}
+    - {id: c, texto: "Por defecto, sus entradas caducan a los 90 días, y a los 30 si el commit es inalcanzable"}
+    - {id: d, texto: "Permite recuperar cambios que no se llegaron a añadir ni confirmar"}
+    - {id: e, texto: "Se comparte entre los clones del repositorio"}
+  correctas: [a, b, c]
+  explicacion: Es la red de seguridad local para recuperar commits tras un reset, un rebase o una rama borrada.
+  distractores:
+    d: Solo registra commits; lo que no se confirmó no está en ningún objeto.
+    e: Cada clon tiene su propio reflog.
+  referencia: https://git-scm.com/docs/git-gc
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: En git bisect run, ¿qué significa que el comando de prueba termine con el código 125?
+  opciones:
+    - {id: a, texto: "Que el commit es bueno"}
+    - {id: b, texto: "Que el commit es malo"}
+    - {id: c, texto: "Que bisect termine con un error"}
+    - {id: d, texto: "Que ese commit no se puede probar y bisect lo salte"}
+  correctas: [d]
+  explicacion: 0 es bueno; de 1 a 127, salvo 125, es malo; y 125 marca el commit como imposible de probar, por ejemplo porque no compila.
+  distractores:
+    a: Bueno es el código 0.
+    b: 125 es la excepción dentro del rango de malos.
+    c: bisect se detiene con códigos superiores a 127.
+  referencia: https://git-scm.com/docs/git-bisect
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.4"
+  enunciado: En la prueba, bisect encontró el commit culpable entre 8 probando 3. ¿Cuántas pruebas harían falta, aproximadamente, con 1000 commits?
+  opciones:
+    - {id: a, texto: "Unas 10"}
+    - {id: b, texto: "Unas 500"}
+    - {id: c, texto: "1000"}
+    - {id: d, texto: "Unas 125"}
+  correctas: [a]
+  explicacion: Cada prueba descarta la mitad de los candidatos, así que hacen falta unas log₂(1000) ≈ 10.
+  distractores:
+    b: Sería una búsqueda lineal que se para a la mitad, en promedio.
+    c: Sería probar todos los commits uno a uno.
+    d: No corresponde a ninguna estrategia de búsqueda.
+  referencia: https://git-scm.com/docs/git-bisect
+- id: L05-009
+  tipo: completar
+  dificultad: baja
+  objetivo: "5.4"
+  enunciado: Completa los comandos para apartar tus cambios sin confirmar, cambiar de rama un momento y recuperarlos a la vuelta.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      git [[1]]
+      git switch hotfix
+      # ... arreglas algo y vuelves
+      git switch tema
+      git stash [[2]]
+  huecos:
+    - {id: "1", respuestas: ["stash", "stash push"]}
+    - {id: "2", respuestas: ["pop"]}
+  explicacion: git stash aparta los cambios y deja el directorio limpio; git stash pop los vuelve a aplicar y los quita de la lista.
+  referencia: https://git-scm.com/docs/git-stash

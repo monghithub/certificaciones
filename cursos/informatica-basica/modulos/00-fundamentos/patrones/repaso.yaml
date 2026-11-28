@@ -1,0 +1,843 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué es un patrón de diseño?
+  opciones:
+    - {id: a, texto: "Una biblioteca de código que se importa y se usa tal cual"}
+    - {id: b, texto: "Una solución probada a un problema de diseño que se repite, que se adapta a cada caso"}
+    - {id: c, texto: "Una regla del compilador que obliga a estructurar el código"}
+    - {id: d, texto: "Un framework de Java"}
+  correctas: [b]
+  explicacion: Un patrón describe un problema recurrente y una solución general, con sus consecuencias. Se adapta a cada contexto; no es código listo para usar.
+  distractores:
+    a: Un patrón no se importa; se aplica escribiendo código adaptado al caso.
+    c: El compilador no conoce los patrones.
+    d: Los patrones son independientes del lenguaje y del framework.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L01-002
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué elementos describen un patrón en el catálogo de la GoF?
+  opciones:
+    - {id: a, texto: "Nombre"}
+    - {id: b, texto: "Problema"}
+    - {id: c, texto: "Solución"}
+    - {id: d, texto: "Consecuencias"}
+    - {id: e, texto: "Lenguaje de programación obligatorio"}
+  correctas: [a, b, c, d]
+  explicacion: Cada patrón tiene un nombre, describe el problema y su contexto, la solución en términos de elementos y relaciones, y las consecuencias de aplicarlo.
+  distractores:
+    e: Los patrones no imponen un lenguaje; el libro usa C++ y Smalltalk solo como ejemplo.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Clasifica cada patrón en su categoría.
+  prompts:
+    - {id: "1", texto: "Builder"}
+    - {id: "2", texto: "Decorator"}
+    - {id: "3", texto: "Observer"}
+    - {id: "4", texto: "Adapter"}
+    - {id: "5", texto: "Strategy"}
+  opciones:
+    - {id: a, texto: "Creacional"}
+    - {id: b, texto: "Estructural"}
+    - {id: c, texto: "De comportamiento"}
+    - {id: d, texto: "Arquitectónico"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", b], ["5", c]]
+  explicacion: Builder crea objetos (creacional); Decorator y Adapter combinan objetos (estructurales); Observer y Strategy reparten responsabilidades y comunicación (de comportamiento).
+  distractores:
+    d: Los patrones arquitectónicos, como la arquitectura hexagonal, no forman parte del catálogo de la GoF.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Cuántos patrones recoge el libro Design Patterns de la GoF?
+  opciones:
+    - {id: a, texto: "10"}
+    - {id: b, texto: "16"}
+    - {id: c, texto: "23"}
+    - {id: d, texto: "50"}
+  correctas: [c]
+  explicacion: El libro de 1994 recoge 23 patrones, 5 creacionales, 7 estructurales y 11 de comportamiento.
+  distractores:
+    a: Es el número aproximado que se usa a diario, no el del catálogo.
+    b: Es el número de patrones que, según Peter Norvig, se simplifican o desaparecen en Lisp o Dylan.
+    d: El catálogo original es más pequeño; otros libros han añadido patrones después.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué significa «programa contra una interfaz, no contra una implementación»?
+  opciones:
+    - {id: a, texto: "Que hay que escribir primero la interfaz gráfica"}
+    - {id: b, texto: "Que cada clase debe tener su interfaz aunque no se necesite"}
+    - {id: c, texto: "Que no se pueden usar clases concretas en ningún caso"}
+    - {id: d, texto: "Que el cliente debe depender de un tipo abstracto, para poder recibir cualquier implementación sin cambiar"}
+  correctas: [d]
+  explicacion: Al depender de la abstracción, el cliente no conoce la clase concreta y se le puede pasar otra implementación. Es la misma idea que la inversión de dependencias.
+  distractores:
+    a: Interfaz aquí es un tipo abstracto, no la interfaz de usuario.
+    b: El principio pide depender de abstracciones donde hay variación, no crear interfaces por sistema.
+    c: Las clases concretas se usan; lo que cambia es de qué tipo depende el cliente.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Hay tres formatos de informe y dos opciones (comprimir o no). Con herencia harían falta seis subclases. ¿Qué propone la GoF?
+  opciones:
+    - {id: a, texto: "Componer el informe con un objeto formato y otro de compresión, combinables en tiempo de ejecución"}
+    - {id: b, texto: "Crear las seis subclases"}
+    - {id: c, texto: "Meter las seis combinaciones en un único método con if"}
+    - {id: d, texto: "Usar un Singleton para cada formato"}
+  correctas: [a]
+  explicacion: Preferir la composición a la herencia evita la explosión de subclases. Cada pieza varía por separado y se combinan al construir el objeto.
+  distractores:
+    b: Es la explosión de subclases que el principio quiere evitar.
+    c: Concentra todas las variantes en un método que crecerá sin control.
+    d: Singleton no tiene relación con combinar comportamientos.
+  referencia: https://en.wikipedia.org/wiki/Composition_over_inheritance
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Quiénes son la «banda de los cuatro»?
+  opciones:
+    - {id: a, texto: "Kent Beck, Martin Fowler, Robert C. Martin y Erich Gamma"}
+    - {id: b, texto: "Erich Gamma, Richard Helm, Ralph Johnson y John Vlissides"}
+    - {id: c, texto: "Los cuatro fundadores de Java"}
+    - {id: d, texto: "Los autores del manifiesto ágil"}
+  correctas: [b]
+  explicacion: Son los cuatro autores de Design Patterns (1994).
+  distractores:
+    a: Solo Gamma es autor del libro; los demás son otros referentes del diseño de software.
+    c: Java se presentó en 1995 y no tiene relación con el libro.
+    d: El manifiesto ágil (2001) tuvo diecisiete firmantes.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: En una revisión de código, un compañero comenta «esto es un Decorator». ¿Qué ventaja de los patrones ilustra?
+  opciones:
+    - {id: a, texto: "Que el código se ejecuta más rápido"}
+    - {id: b, texto: "Que el patrón asegura que no hay errores"}
+    - {id: c, texto: "Que el nombre del patrón es un vocabulario común que resume la intención del diseño"}
+    - {id: d, texto: "Que el compilador comprobará el patrón"}
+  correctas: [c]
+  explicacion: El nombre del patrón transmite de golpe la estructura y la intención, lo que agiliza las conversaciones de diseño.
+  distractores:
+    a: Un patrón no tiene relación directa con el rendimiento.
+    b: Un patrón mal aplicado sigue teniendo errores.
+    d: El compilador no sabe nada de patrones.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué problema resuelve Factory Method?
+  opciones:
+    - {id: a, texto: "Que el cliente no tenga que decidir qué clase concreta crear, porque esa decisión se concentra en un método"}
+    - {id: b, texto: "Que solo pueda existir una instancia de una clase"}
+    - {id: c, texto: "Que un objeto se pueda copiar"}
+    - {id: d, texto: "Que un objeto notifique sus cambios"}
+  correctas: [a]
+  explicacion: Factory Method encapsula la creación. El cliente pide un objeto y recibe el tipo abstracto, sin conocer la clase concreta.
+  distractores:
+    b: Es la intención de Singleton.
+    c: Copiar objetos es la idea de Prototype.
+    d: Es Observer.
+  referencia: https://refactoring.guru/design-patterns/factory-method
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué ocurre al ejecutar Pedido.para("luis").build() con el Builder de la lección?
+  codigo:
+    lenguaje: java
+    fuente: |
+      Pedido build() {
+          if (lineas.isEmpty()) throw new IllegalStateException("Un pedido necesita al menos una línea");
+          return new Pedido(this);
+      }
+  opciones:
+    - {id: a, texto: "Devuelve un pedido vacío"}
+    - {id: b, texto: "Devuelve null"}
+    - {id: c, texto: "No compila"}
+    - {id: d, texto: "Lanza IllegalStateException porque no hay líneas"}
+  correctas: [d]
+  explicacion: build() valida el estado acumulado antes de crear el pedido. Sin líneas, lanza la excepción y no se crea ningún pedido inválido.
+  distractores:
+    a: El Builder impide justamente crear un pedido inválido.
+    b: El método no devuelve null; lanza una excepción.
+    c: El código compila; el error se produce al ejecutar.
+  referencia: https://refactoring.guru/design-patterns/builder
+- id: L02-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Cuándo tiene sentido usar Builder?
+  opciones:
+    - {id: a, texto: "Cuando el objeto tiene muchos atributos opcionales"}
+    - {id: b, texto: "Cuando hay reglas de validez entre atributos que conviene comprobar al final"}
+    - {id: c, texto: "Cuando un constructor tendría muchos parámetros del mismo tipo, fáciles de confundir"}
+    - {id: d, texto: "Cuando el objeto tiene dos atributos obligatorios"}
+    - {id: e, texto: "Cuando se quiere que la clase tenga una sola instancia"}
+  correctas: [a, b, c]
+  explicacion: Builder brilla con muchos opcionales, validaciones cruzadas y constructores ilegibles. Con pocos atributos obligatorios, un record es más simple.
+  distractores:
+    d: Con dos atributos obligatorios basta un constructor o un record.
+    e: Limitar las instancias es Singleton, no Builder.
+  referencia: https://refactoring.guru/design-patterns/builder
+- id: L02-004
+  tipo: completar
+  dificultad: baja
+  objetivo: "2.2"
+  enunciado: Completa el método del Builder para que se puedan encadenar las llamadas.
+  codigo:
+    lenguaje: java
+    fuente: |
+      Builder linea(String l) {
+          lineas.add(l);
+          return [[1]];
+      }
+  huecos:
+    - {id: "1", respuestas: [this]}
+  explicacion: Devolver el propio Builder permite encadenar llamadas (interfaz fluida), como en Pedido.para("ana").linea("libro").urgente().build().
+  referencia: https://refactoring.guru/design-patterns/builder
+- id: L02-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué problemas suele causar el patrón Singleton?
+  opciones:
+    - {id: a, texto: "Introduce estado global oculto"}
+    - {id: b, texto: "Dificulta sustituir la instancia por un doble en las pruebas"}
+    - {id: c, texto: "Su inicialización perezosa puede fallar con varios hilos si se hace mal"}
+    - {id: d, texto: "Impide crear objetos inmutables"}
+    - {id: e, texto: "Obliga a usar herencia"}
+  correctas: [a, b, c]
+  explicacion: Singleton expone un estado global que cualquiera puede tocar, oculta dependencias, complica las pruebas y tiene riesgos de concurrencia en la inicialización.
+  distractores:
+    d: Una instancia única puede ser inmutable; ese no es el problema.
+    e: Singleton no requiere herencia.
+  referencia: https://refactoring.guru/design-patterns/singleton
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: Una aplicación necesita una sola conexión al servicio de pagos. ¿Qué alternativa a Singleton es preferible?
+  opciones:
+    - {id: a, texto: "Un campo static público con la conexión"}
+    - {id: b, texto: "Crear una nueva conexión en cada clase que la necesite"}
+    - {id: c, texto: "Guardar la conexión en una variable de entorno"}
+    - {id: d, texto: "Crear una única instancia en la raíz de composición e inyectarla a quien la necesite"}
+  correctas: [d]
+  explicacion: Sigue habiendo una sola instancia, pero la dependencia es visible en el constructor y se puede sustituir en las pruebas. Es lo que hacen contenedores como Spring con sus beans.
+  distractores:
+    a: Es otra forma de estado global, con los mismos problemas que Singleton.
+    b: Crearía muchas conexiones, justo lo que se quiere evitar.
+    c: Una variable de entorno guarda texto, no un objeto conexión.
+  referencia: https://refactoring.guru/design-patterns/singleton
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué devuelve exportadorPara("csv").exportar(...) con los datos {a=1, b=2} ordenados?
+  codigo:
+    lenguaje: java
+    fuente: |
+      case "csv" -> d -> String.join("\n",
+              d.entrySet().stream().map(e -> e.getKey() + "," + e.getValue()).toList());
+  opciones:
+    - {id: a, texto: "Dos líneas, «a,1» y «b,2»"}
+    - {id: b, texto: "Una línea, «{a=1, b=2}»"}
+    - {id: c, texto: "Una línea, «a,1,b,2»"}
+    - {id: d, texto: "Lanza IllegalArgumentException"}
+  correctas: [a]
+  explicacion: Cada entrada se convierte en «clave,valor» y String.join las une con saltos de línea.
+  distractores:
+    b: Ese es el resultado del exportador json, que usa toString del mapa.
+    c: Las entradas se unen con saltos de línea, no con comas.
+    d: La excepción solo se lanza con un formato desconocido.
+  referencia: https://refactoring.guru/design-patterns/factory-method
+- id: L02-008
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: Empareja cada problema con el patrón creacional que lo resuelve.
+  prompts:
+    - {id: "1", texto: "Elegir la clase concreta según un formato, en un solo sitio"}
+    - {id: "2", texto: "Construir un objeto con muchos opcionales y validarlo al final"}
+    - {id: "3", texto: "Crear objetos copiando un prototipo existente"}
+  opciones:
+    - {id: a, texto: "Factory Method"}
+    - {id: b, texto: "Builder"}
+    - {id: c, texto: "Prototype"}
+    - {id: d, texto: "Adapter"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Factory Method concentra la elección de la clase, Builder construye por pasos y Prototype crea objetos clonando uno existente.
+  distractores:
+    d: Adapter es estructural; adapta interfaces, no crea objetos.
+  referencia: https://en.wikipedia.org/wiki/Design_Patterns
+- id: L02-009
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué parte del patrón Singleton es la que lo convierte en un problema?
+  opciones:
+    - {id: a, texto: "Que exista una sola instancia de la clase"}
+    - {id: b, texto: "Que la clase controle su propia creación y que se llegue a ella con un método estático desde cualquier sitio"}
+    - {id: c, texto: "Que la instancia ocupe memoria durante toda la ejecución"}
+    - {id: d, texto: "Que la clase no se pueda heredar"}
+  correctas: [b]
+  explicacion: Singleton mezcla cardinalidad, ciclo de vida y acceso. Tener una sola instancia es una decisión legítima; lo que hace daño es que la clase decida su ciclo de vida y que el acceso estático oculte la dependencia.
+  distractores:
+    a: Un pool de conexiones o un cliente HTTP deben ser únicos. La alternativa con inyección también tiene una sola instancia.
+    c: Cualquier objeto compartido de larga vida ocupa memoria; no es lo que se le critica.
+    d: La herencia no forma parte del problema que se le atribuye.
+  referencia: https://refactoring.guru/design-patterns/singleton
+- id: L02-010
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: Ocho hilos llaman a la vez a getInstance() por primera vez. ¿Qué puede pasar?
+  codigo:
+    lenguaje: java
+    fuente: |
+      static Perezoso getInstance() {
+          if (instancia == null) instancia = new Perezoso();
+          return instancia;
+      }
+  opciones:
+    - {id: a, texto: "Se crea una sola instancia, porque el campo es static"}
+    - {id: b, texto: "La JVM lanza una excepción de concurrencia"}
+    - {id: c, texto: "Se crean varias instancias, y cada hilo puede quedarse con una distinta"}
+    - {id: d, texto: "Los hilos esperan a que el primero termine de construirla"}
+  correctas: [c]
+  explicacion: Varios hilos pueden ver null antes de que ninguno asigne el campo. En el laboratorio, con 8 hilos, pasó en un tercio de las 1000 rondas, con hasta 8 instancias. Un holder o un enum lo evitan.
+  distractores:
+    a: Que el campo sea static significa que lo comparten todos, no que la comprobación y la asignación sean atómicas.
+    b: La JVM no detecta esta carrera; simplemente ocurre.
+    d: Eso pasaría con synchronized o con el holder. Aquí no hay nada que haga esperar.
+  referencia: https://en.wikipedia.org/wiki/Double-checked_locking
+- id: L02-011
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.5"
+  enunciado: Un bean de Spring con ámbito singleton envía cada noche las facturas del día. El servicio pasa de una réplica a tres. ¿Qué ocurre y qué conviene hacer?
+  opciones:
+    - {id: a, texto: "Se envían una vez, porque el bean es singleton"}
+    - {id: b, texto: "Se envían tres veces; hace falta elegir un líder o un cerrojo distribuido con caducidad, y que la tarea sea idempotente"}
+    - {id: c, texto: "Se envían tres veces; basta con convertir la clase en un Singleton con enum"}
+    - {id: d, texto: "Se envían tres veces; basta con cambiar el ámbito del bean a prototype"}
+  correctas: [b]
+  explicacion: Cada réplica tiene su propio contenedor y su propio bean. La unicidad en todo el sistema necesita coordinación entre réplicas, por ejemplo con un Lease de Kubernetes, y la tarea debe tolerar ejecutarse dos veces si el líder cambia a mitad.
+  distractores:
+    a: El ámbito singleton es por contenedor. Tres réplicas son tres contenedores.
+    c: Un enum es único por cargador de clases dentro de un proceso; las réplicas no comparten memoria.
+    d: Prototype crearía más instancias, no menos, y cada réplica seguiría ejecutando la tarea.
+  referencia: https://kubernetes.io/docs/concepts/architecture/leases/
+- id: L02-012
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.5"
+  enunciado: ¿En cuál de estos casos se suele aceptar el acceso estático a una instancia compartida?
+  opciones:
+    - {id: a, texto: "La tabla de tarifas que usa el cálculo de pedidos"}
+    - {id: b, texto: "El usuario de la petición en curso"}
+    - {id: c, texto: "El logger de una clase"}
+    - {id: d, texto: "El cliente del servicio de pagos"}
+  correctas: [c]
+  explicacion: El registro es transversal, se configura fuera del código y no cambia el resultado del programa, así que el acceso estático apenas estorba. Es la excepción más aceptada.
+  distractores:
+    a: Cambia según el entorno y las pruebas necesitan tarifas conocidas. Mejor un objeto de configuración inyectado.
+    b: Cambia con cada petición; en un objeto compartido mezclaría los datos de dos peticiones simultáneas.
+    d: Las pruebas necesitan un doble que no cobre de verdad. Mejor un bean inyectado por interfaz.
+  referencia: https://refactoring.guru/design-patterns/singleton
+- id: L02-013
+  tipo: matching
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Empareja cada necesidad con el ámbito de Spring que le corresponde.
+  prompts:
+    - {id: "1", texto: "Un cliente HTTP sin estado que comparte toda la aplicación"}
+    - {id: "2", texto: "Un carrito que cada usuario del objeto modifica a su manera"}
+    - {id: "3", texto: "Los datos de la petición HTTP en curso"}
+  opciones:
+    - {id: a, texto: "singleton"}
+    - {id: b, texto: "prototype"}
+    - {id: c, texto: "request"}
+    - {id: d, texto: "Un Singleton clásico con getInstance()"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: La unicidad pasa a ser configuración del contenedor. La clase es la misma; solo cambia cuántas instancias crea Spring y cuánto viven.
+  distractores:
+    d: Daría una instancia única, pero con acceso estático y sin poder sustituirla en las pruebas.
+  referencia: https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html
+- id: L02-014
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Un compañero dice que los @Service de Spring Boot «son Singleton, y Singleton es un antipatrón». ¿Qué le responderías?
+  opciones:
+    - {id: a, texto: "Que confunde el patrón Singleton con el ámbito singleton: Spring crea una instancia y la inyecta, pero la clase no se hace única ni se alcanza con getInstance()"}
+    - {id: b, texto: "Que tiene razón y conviene declarar los servicios con ámbito prototype"}
+    - {id: c, texto: "Que tiene razón, pero solo si el servicio tiene constructor privado"}
+    - {id: d, texto: "Que no son únicos: Spring crea uno nuevo para cada clase que lo inyecta"}
+  correctas: [a]
+  explicacion: La documentación de Spring distingue su bean singleton del patrón de la GoF. El bean es único por contenedor y por definición, lo decide la configuración y llega por el constructor, así que se ve en la firma y se sustituye en las pruebas.
+  distractores:
+    b: Prototype crearía una instancia por cada inyección sin resolver nada; el problema del patrón no era tener una sola instancia.
+    c: Un @Service tiene constructor normal y Spring lo crea con él. El constructor privado es del patrón, no del ámbito.
+    d: Con el ámbito por defecto, todos los que lo inyectan reciben la misma instancia; en el laboratorio, ClientePagos se creó una vez.
+  referencia: https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: ¿Qué devuelve AdaptadorMeteo.celsius cuando la API antigua devuelve "68.0" grados Fahrenheit?
+  codigo:
+    lenguaje: java
+    fuente: |
+      public double celsius(String ciudad) {
+          return (Double.parseDouble(api.tempF(ciudad)) - 32) * 5 / 9;
+      }
+  opciones:
+    - {id: a, texto: "68.0"}
+    - {id: b, texto: "36.0"}
+    - {id: c, texto: "154.4"}
+    - {id: d, texto: "20.0"}
+  correctas: [d]
+  explicacion: (68 − 32) × 5 / 9 = 20. El adaptador convierte el texto en número y los Fahrenheit en Celsius, que es lo que espera la interfaz Termometro.
+  distractores:
+    a: Es el valor en Fahrenheit sin convertir.
+    b: Es 68 − 32 sin multiplicar por 5/9.
+    c: Sería la conversión inversa, de Celsius a Fahrenheit.
+  referencia: https://refactoring.guru/design-patterns/adapter
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué devuelve esta expresión?
+  codigo:
+    lenguaje: java
+    fuente: |
+      new Mayusculas(new Recortado(new Texto("  hola  "))).leer()
+  opciones:
+    - {id: a, texto: "\"  hola  \""}
+    - {id: b, texto: "\"HOLA\""}
+    - {id: c, texto: "Lanza una excepción, porque un record no puede envolver a otro"}
+    - {id: d, texto: "\"hola\", recortado pero en minúsculas"}
+  correctas: [b]
+  explicacion: Mayusculas llama a Recortado, que llama a Texto. El texto se recorta y después se pasa a mayúsculas.
+  distractores:
+    a: Es el texto original, sin aplicar ningún decorador.
+    c: Un record puede tener como componente otro objeto que implementa la misma interfaz; es como funciona el decorador.
+    d: Faltaría aplicar Mayusculas, la capa exterior.
+  referencia: https://refactoring.guru/design-patterns/decorator
+- id: L03-003
+  tipo: completar
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Completa un decorador que añade un prefijo al texto de la fuente envuelta.
+  codigo:
+    lenguaje: java
+    fuente: |
+      record ConPrefijo(String prefijo, Fuente f) [[1]] Fuente {
+          public String leer() {
+              return prefijo + f.[[2]]();
+          }
+      }
+  huecos:
+    - {id: "1", respuestas: [implements]}
+    - {id: "2", respuestas: [leer]}
+  explicacion: El decorador implementa la misma interfaz que envuelve y delega en ella, añadiendo su comportamiento antes o después.
+  referencia: https://refactoring.guru/design-patterns/decorator
+- id: L03-004
+  tipo: matching
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Empareja cada situación con el patrón estructural adecuado.
+  prompts:
+    - {id: "1", texto: "Integrar una biblioteca de pagos cuya API no encaja con la interfaz de tu aplicación"}
+    - {id: "2", texto: "Añadir registro y caché, combinables, a un cliente HTTP"}
+    - {id: "3", texto: "Ofrecer una operación «comprar» que coordine inventario, pagos y envíos"}
+    - {id: "4", texto: "Cargar una imagen pesada solo cuando se vaya a mostrar"}
+  opciones:
+    - {id: a, texto: "Adapter"}
+    - {id: b, texto: "Decorator"}
+    - {id: c, texto: "Facade"}
+    - {id: d, texto: "Proxy"}
+    - {id: e, texto: "Builder"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Adapter hace encajar interfaces, Decorator añade comportamientos combinables, Facade simplifica un subsistema y Proxy controla el acceso (aquí, carga perezosa).
+  distractores:
+    e: Builder es creacional; construye objetos por pasos.
+  referencia: https://refactoring.guru/design-patterns
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Decorator y Proxy tienen la misma estructura (un objeto con la misma interfaz que envuelve a otro). ¿Qué los distingue?
+  opciones:
+    - {id: a, texto: "Que el Proxy usa herencia y el Decorator no"}
+    - {id: b, texto: "Que el Decorator solo existe en Java"}
+    - {id: c, texto: "Nada; son el mismo patrón con dos nombres"}
+    - {id: d, texto: "La intención; el decorador añade funcionalidad elegida por el cliente y el proxy controla el acceso al objeto"}
+  correctas: [d]
+  explicacion: La diferencia está en el propósito. Un decorador se apila para añadir comportamiento; un proxy gestiona el acceso al objeto real, a menudo de forma transparente.
+  distractores:
+    a: Ambos suelen implementarse por composición.
+    b: Ambos patrones son independientes del lenguaje.
+    c: Son distintos en intención, aunque compartan estructura.
+  referencia: https://refactoring.guru/design-patterns/proxy
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Spring aplica @Transactional a un bean envolviéndolo en otro objeto que abre y cierra la transacción alrededor de cada llamada. ¿Qué patrón usa?
+  opciones:
+    - {id: a, texto: "Proxy"}
+    - {id: b, texto: "Facade"}
+    - {id: c, texto: "Adapter"}
+    - {id: d, texto: "Builder"}
+  correctas: [a]
+  explicacion: El framework crea un sustituto con la misma interfaz que controla el acceso al objeto real, añadiendo la gestión de la transacción de forma transparente.
+  distractores:
+    b: Una fachada simplifica un subsistema; aquí se mantiene la misma interfaz.
+    c: Un adaptador cambia la interfaz; aquí no cambia.
+    d: Builder construye objetos; no envuelve llamadas.
+  referencia: https://refactoring.guru/design-patterns/proxy
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué patrón aplica la biblioteca de Java en new BufferedReader(new InputStreamReader(new FileInputStream(f)))?
+  opciones:
+    - {id: a, texto: "Singleton"}
+    - {id: b, texto: "Decorator"}
+    - {id: c, texto: "Observer"}
+    - {id: d, texto: "Template Method"}
+  correctas: [b]
+  explicacion: Cada clase envuelve a la anterior y le añade algo (convertir bytes en caracteres, añadir un búfer y la lectura por líneas). Es el ejemplo clásico de decoradores apilados.
+  distractores:
+    a: No hay una instancia única; se crean objetos nuevos.
+    c: Ningún objeto notifica cambios a suscriptores.
+    d: No hay una clase base con un algoritmo y pasos abstractos.
+  referencia: https://refactoring.guru/design-patterns/decorator
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: La fachada TiendaFacade ha crecido hasta tener cuarenta métodos y conocer todos los detalles de cada subsistema. ¿Qué ha pasado?
+  opciones:
+    - {id: a, texto: "Que se ha aplicado correctamente el patrón"}
+    - {id: b, texto: "Que se ha convertido en un Adapter"}
+    - {id: c, texto: "Que ha degenerado en un objeto dios que concentra demasiadas responsabilidades"}
+    - {id: d, texto: "Que debería convertirse en Singleton"}
+  correctas: [c]
+  explicacion: Una fachada debe ofrecer unas pocas operaciones simples. Si absorbe toda la lógica, concentra responsabilidades y se convierte en un objeto dios difícil de mantener.
+  distractores:
+    a: El patrón busca simplificar, no centralizar toda la lógica.
+    b: Un adaptador traduce una interfaz concreta; el problema aquí es otro.
+    d: Hacerla Singleton añadiría estado global sin resolver el problema.
+  referencia: https://refactoring.guru/design-patterns/facade
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Qué patrón aplica lista.sort(Comparator.comparing(Persona::edad))?
+  opciones:
+    - {id: a, texto: "Observer"}
+    - {id: b, texto: "Strategy"}
+    - {id: c, texto: "Singleton"}
+    - {id: d, texto: "Facade"}
+  correctas: [b]
+  explicacion: El algoritmo de ordenación es fijo, pero el criterio de comparación es una estrategia que se pasa como parámetro.
+  distractores:
+    a: No hay suscriptores que reaccionen a cambios.
+    c: No se limita el número de instancias.
+    d: No se simplifica ningún subsistema.
+  referencia: https://refactoring.guru/design-patterns/strategy
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué imprime este código?
+  codigo:
+    lenguaje: java
+    fuente: |
+      Stock s = new Stock(10);
+      s.suscribir(u -> { if (u < 5) System.out.println("Reponer: quedan " + u); });
+      s.retirar(3);
+      s.retirar(4);
+  opciones:
+    - {id: a, texto: "Reponer: quedan 7"}
+    - {id: b, texto: "Nada"}
+    - {id: c, texto: "Reponer: quedan 3"}
+    - {id: d, texto: "Reponer: quedan 7 y después Reponer: quedan 3"}
+  correctas: [c]
+  explicacion: Tras retirar 3 quedan 7, que no es menor que 5. Tras retirar 4 quedan 3, y el suscriptor imprime el aviso.
+  distractores:
+    a: Con 7 unidades la condición u < 5 es falsa.
+    b: La segunda retirada sí deja menos de 5 unidades.
+    d: Solo la segunda notificación cumple la condición.
+  referencia: https://refactoring.guru/design-patterns/observer
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Con el Editor de la lección, ¿cuál es el texto tras escribir("Hola"), escribir(" mundo") y deshacer()?
+  opciones:
+    - {id: a, texto: "\"Hola\""}
+    - {id: b, texto: "\" mundo\""}
+    - {id: c, texto: "\"\""}
+    - {id: d, texto: "\"Hola mundo\""}
+  correctas: [a]
+  explicacion: El historial es una pila; deshacer saca el último comando (escribir " mundo") y lo revierte.
+  distractores:
+    b: Se deshace lo último, no lo primero.
+    c: Solo se deshace un comando.
+    d: deshacer() sí revierte la última escritura.
+  referencia: https://refactoring.guru/design-patterns/command
+- id: L04-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Para qué sirve convertir operaciones en objetos con el patrón Command?
+  opciones:
+    - {id: a, texto: "Para poder deshacerlas"}
+    - {id: b, texto: "Para encolarlas y ejecutarlas más tarde"}
+    - {id: c, texto: "Para registrarlas en un historial"}
+    - {id: d, texto: "Para asegurar una sola instancia del editor"}
+    - {id: e, texto: "Para cambiar la interfaz de una biblioteca"}
+  correctas: [a, b, c]
+  explicacion: Al ser objetos, las operaciones se pueden guardar en una pila de deshacer, en una cola o en un registro.
+  distractores:
+    d: Limitar instancias es Singleton.
+    e: Cambiar una interfaz es Adapter.
+  referencia: https://refactoring.guru/design-patterns/command
+- id: L04-005
+  tipo: matching
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Empareja cada característica con Template Method o Strategy.
+  prompts:
+    - {id: "1", texto: "Se basa en herencia"}
+    - {id: "2", texto: "Se basa en composición"}
+    - {id: "3", texto: "La variante se elige al pasar un objeto en tiempo de ejecución"}
+    - {id: "4", texto: "Fija el orden de los pasos en un método final"}
+  opciones:
+    - {id: a, texto: "Template Method"}
+    - {id: b, texto: "Strategy"}
+    - {id: c, texto: "Observer"}
+  correctas: [["1", a], ["2", b], ["3", b], ["4", a]]
+  explicacion: Template Method usa herencia y fija el esqueleto; Strategy usa composición y permite elegir el algoritmo en tiempo de ejecución.
+  distractores:
+    c: Observer trata de notificar cambios, no de variar un algoritmo.
+  referencia: https://refactoring.guru/design-patterns/template-method
+- id: L04-006
+  tipo: completar
+  dificultad: baja
+  objetivo: "4.4"
+  enunciado: Completa la subclase para que el informe de ventas rellene el paso que falta.
+  codigo:
+    lenguaje: java
+    fuente: |
+      abstract class Informe {
+          final String generar() { return cabecera() + "\n" + cuerpo() + "\n" + pie(); }
+          String cabecera() { return "== Informe =="; }
+          [[1]] String cuerpo();
+          String pie() { return "-- fin --"; }
+      }
+
+      class InformeVentas [[2]] Informe {
+          String cuerpo() { return "Ventas: 42"; }
+      }
+  huecos:
+    - {id: "1", respuestas: [abstract]}
+    - {id: "2", respuestas: [extends]}
+  explicacion: El paso variable se declara abstract en la base, y la subclase hereda (extends) y lo implementa. generar() fija el orden.
+  referencia: https://refactoring.guru/design-patterns/template-method
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: En una aplicación de larga duración, la memoria crece sin parar. Cada vez que se abre una ventana, se suscribe al Stock, pero al cerrarla nadie cancela la suscripción. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Nada; el recolector de basura libera las ventanas cerradas"}
+    - {id: b, texto: "El Stock mantiene referencias a los suscriptores, así que las ventanas cerradas no se liberan"}
+    - {id: c, texto: "El Stock se convierte en Singleton"}
+    - {id: d, texto: "Las notificaciones se pierden"}
+  correctas: [b]
+  explicacion: Es el problema del oyente caducado (lapsed listener). La lista de suscriptores sigue apuntando a las ventanas, así que no se pueden recoger. Hay que darse de baja al cerrar.
+  distractores:
+    a: El recolector no libera objetos que siguen referenciados desde la lista de oyentes.
+    c: El número de instancias de Stock no cambia.
+    d: Las notificaciones llegan, también a ventanas que ya no deberían recibirlas.
+  referencia: https://refactoring.guru/design-patterns/observer
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué devuelve iva.apply(new BigDecimal("100"), new BigDecimal("0.21"))?
+  codigo:
+    lenguaje: java
+    fuente: |
+      BiFunction<BigDecimal, BigDecimal, BigDecimal> iva = (base, tipo) -> base.multiply(tipo);
+  opciones:
+    - {id: a, texto: "121.00"}
+    - {id: b, texto: "100.21"}
+    - {id: c, texto: "21.00"}
+    - {id: d, texto: "0.21"}
+  correctas: [c]
+  explicacion: La función multiplica la base por el tipo, 100 × 0,21 = 21,00. BigDecimal conserva dos decimales, la suma de las escalas de los operandos.
+  distractores:
+    a: Sería la base más el impuesto; la función solo calcula el impuesto.
+    b: Sería sumar en lugar de multiplicar.
+    d: Es el tipo, no el resultado.
+  referencia: https://refactoring.guru/design-patterns/strategy
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué mostró Peter Norvig en 1996 sobre los patrones de la GoF?
+  opciones:
+    - {id: a, texto: "Que los 23 patrones son igual de necesarios en Lisp que en C++"}
+    - {id: b, texto: "Que 16 de los 23 se simplifican o desaparecen en lenguajes como Lisp o Dylan"}
+    - {id: c, texto: "Que los patrones solo funcionan en C++"}
+    - {id: d, texto: "Que había que añadir 16 patrones nuevos al catálogo"}
+  correctas: [b]
+  explicacion: Norvig mostró que muchas estructuras del catálogo suplen carencias del lenguaje, y que con funciones de primera clase, macros o tipado dinámico dejan de ser necesarias.
+  distractores:
+    a: Su conclusión es la contraria; muchos sobran en lenguajes más expresivos.
+    c: Los patrones se aplican en muchos lenguajes.
+    d: No propuso ampliar el catálogo.
+  referencia: https://norvig.com/design-patterns/
+- id: L05-002
+  tipo: matching
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Empareja cada patrón con la característica del lenguaje que suele sustituirlo.
+  prompts:
+    - {id: "1", texto: "Strategy"}
+    - {id: "2", texto: "Iterator"}
+    - {id: "3", texto: "Decorator de funciones en Python"}
+    - {id: "4", texto: "Singleton en Python"}
+  opciones:
+    - {id: a, texto: "Funciones de primera clase y lambdas"}
+    - {id: b, texto: "Bucles for-each y generadores"}
+    - {id: c, texto: "La sintaxis @decorador, como @functools.cache"}
+    - {id: d, texto: "Una variable a nivel de módulo"}
+    - {id: e, texto: "Herencia múltiple"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Una lambda es una estrategia; el for-each y los generadores son iteradores; @ aplica decoradores a funciones; y un módulo de Python se carga una sola vez, así que una variable suya es única.
+  distractores:
+    e: La herencia múltiple no sustituye a ninguno de estos patrones.
+  referencia: https://norvig.com/design-patterns/
+- id: L05-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué son ejemplos de antipatrones?
+  opciones:
+    - {id: a, texto: "Objeto dios, una clase que lo sabe y lo hace todo"}
+    - {id: b, texto: "Martillo de oro, usar la misma herramienta o patrón para todo"}
+    - {id: c, texto: "Singleton usado para tener acceso global cómodo"}
+    - {id: d, texto: "Strategy con dos algoritmos reales que se eligen en tiempo de ejecución"}
+    - {id: e, texto: "Adapter para integrar una biblioteca externa"}
+  correctas: [a, b, c]
+  explicacion: El objeto dios, el martillo de oro y el Singleton como acceso global parecen cómodos y suelen empeorar el diseño.
+  distractores:
+    d: Es un uso justificado de Strategy.
+    e: Es justo el caso para el que existe Adapter.
+  referencia: https://en.wikipedia.org/wiki/Anti-pattern
+- id: L05-004
+  tipo: ordering
+  dificultad: baja
+  objetivo: "5.3"
+  enunciado: Ordena el camino recomendable para introducir un patrón.
+  opciones:
+    - {id: a, texto: "Escribir la solución directa"}
+    - {id: b, texto: "Detectar un síntoma, como un switch repetido"}
+    - {id: c, texto: "Identificar el patrón que resuelve ese síntoma"}
+    - {id: d, texto: "Refactorizar hacia el patrón con pruebas que protejan el comportamiento"}
+  correctas: [a, b, c, d]
+  explicacion: Se parte del problema real, no del patrón. Así cada patrón del código tiene una razón visible.
+  referencia: https://martinfowler.com/bliki/Yagni.html
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.2"
+  enunciado: En un proyecto nuevo hay una FabricaDeEstrategiasDeExportacion que crea una única estrategia, ExportadorCsv, y nadie ha pedido otros formatos. ¿Qué harías?
+  opciones:
+    - {id: a, texto: "Añadir más fábricas para mantener la coherencia"}
+    - {id: b, texto: "Convertir la fábrica en Singleton"}
+    - {id: c, texto: "Dejarla, porque los patrones mejoran el código por sí mismos"}
+    - {id: d, texto: "Simplificar a una llamada directa a ExportadorCsv y reintroducir la abstracción cuando haya otro formato"}
+  correctas: [d]
+  explicacion: Sin variación, la fábrica y la estrategia son coste sin beneficio. Si llega otro formato, extraer la abstracción es barato.
+  distractores:
+    a: Multiplica la complejidad sin necesidad.
+    b: Añadiría estado global sin resolver nada.
+    c: Un patrón sin problema que resolver añade complejidad.
+  referencia: https://martinfowler.com/bliki/Yagni.html
+- id: L05-006
+  tipo: completar
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Completa el decorador de Python que guarda en caché los resultados de una función.
+  codigo:
+    lenguaje: python
+    fuente: |
+      import functools
+
+      @functools.[[1]]
+      def fibonacci(n: int) -> int:
+          return n if n < 2 else fibonacci(n - 1) + fibonacci(n - 2)
+
+      print(fibonacci(80))
+  huecos:
+    - {id: "1", respuestas: [cache, lru_cache]}
+  explicacion: functools.cache (o lru_cache) envuelve la función y guarda los resultados ya calculados. Es el patrón Decorator integrado en la sintaxis del lenguaje.
+  referencia: https://norvig.com/design-patterns/
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Si una lambda puede hacer de Strategy, ¿sigue teniendo sentido conocer el patrón?
+  opciones:
+    - {id: a, texto: "No; los patrones están obsoletos"}
+    - {id: b, texto: "Solo si se programa en C++"}
+    - {id: c, texto: "Sí; sirve para reconocer la estructura, nombrarla y razonar sobre sus consecuencias"}
+    - {id: d, texto: "Solo para aprobar entrevistas"}
+  correctas: [c]
+  explicacion: La forma de escribirlo cambia, pero la idea (algoritmos intercambiables tras una interfaz) y su nombre siguen siendo útiles para diseñar y comunicarse.
+  distractores:
+    a: Las ideas siguen vigentes, aunque la implementación sea más breve.
+    b: El patrón es útil en cualquier lenguaje.
+    d: Su valor principal es el diseño y la comunicación en el día a día.
+  referencia: https://norvig.com/design-patterns/
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.2"
+  enunciado: ¿Qué es el antipatrón del martillo de oro?
+  opciones:
+    - {id: a, texto: "Usar la misma herramienta o patrón para cualquier problema, encaje o no"}
+    - {id: b, texto: "Una clase que lo sabe y lo hace todo"}
+    - {id: c, texto: "Un código lleno de saltos imposible de seguir"}
+    - {id: d, texto: "Una optimización prematura"}
+  correctas: [a]
+  explicacion: «Si solo tienes un martillo, todo parece un clavo». Aplicar la herramienta conocida a problemas que no encajan produce soluciones forzadas.
+  distractores:
+    b: Es el objeto dios.
+    c: Es el código espagueti.
+    d: La optimización prematura es otro problema distinto.
+  referencia: https://en.wikipedia.org/wiki/Anti-pattern

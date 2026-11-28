@@ -1,0 +1,23 @@
+slug: diseno-de-apis
+titulo: Diseño de APIs
+area: arquitectura
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo diseñar APIs que se entienden, fallan bien y evolucionan sin romper a nadie, comprobado con una API en Spring Boot 4.2. Recursos y REST, errores con Problem Details, concurrencia optimista, paginación, idempotencia, contratos OpenAPI, versionado y cuándo elegir gRPC.
+etiquetas: [api, rest, openapi, http, grpc, versionado, spring-boot]
+requisitos: [http-y-la-web, spring-boot]
+fuentes:
+  - rfc-editor.org
+  - datatracker.ietf.org
+  - ietf.org
+  - spec.openapis.org
+  - martinfowler.com
+  - ics.uci.edu
+  - grpc.io
+  - protobuf.dev
+  - graphql.org
+  - springdoc.org
+  - docs.spring.io
+  - standardwebhooks.com
+ejercicios:
+  minimo_por_leccion: 8

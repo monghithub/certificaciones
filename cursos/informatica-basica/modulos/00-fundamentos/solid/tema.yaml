@@ -1,0 +1,15 @@
+slug: principios-solid
+titulo: Principios SOLID
+area: programacion
+nivel: basico
+idioma: es-ES
+resumen: Los cinco principios de diseño orientado a objetos (responsabilidad única, abierto/cerrado, sustitución de Liskov, segregación de interfaces e inversión de dependencias), con ejemplos en Java y Python y criterios para no aplicarlos de más.
+etiquetas: [solid, diseno, orientacion-a-objetos, java, python]
+fuentes:
+  - blog.cleancoder.com
+  - en.wikipedia.org
+  - martinfowler.com
+  - docs.python.org
+  - docs.oracle.com
+ejercicios:
+  minimo_por_leccion: 8

@@ -1,0 +1,694 @@
+- id: L01-001
+  tipo: ordering
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: Ordena los pasos en que dos hilos pierden un incremento al ejecutar contador++ a la vez.
+  opciones:
+    - {id: a, texto: "El hilo 1 lee 41"}
+    - {id: b, texto: "El hilo 2 lee 41"}
+    - {id: c, texto: "El hilo 1 escribe 42"}
+    - {id: d, texto: "El hilo 2 escribe 42, y se pierde un incremento"}
+  correctas: [a, b, c, d]
+  explicacion: contador++ es leer, sumar y escribir. Si las lecturas se intercalan, los dos escriben el mismo valor.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Cuatro hilos incrementan un int compartido un millón de veces cada uno, sin sincronizar. ¿Qué resultado dio el primer intento de la prueba?
+  opciones:
+    - {id: a, texto: "Exactamente 4.000.000"}
+    - {id: b, texto: "Una excepción ConcurrentModificationException"}
+    - {id: c, texto: "3.809.830: se perdieron incrementos"}
+    - {id: d, texto: "Un número mayor que 4.000.000"}
+  correctas: [c]
+  explicacion: Se perdieron 190.170 incrementos por la condición de carrera. Java no avisa; el resultado es simplemente incorrecto.
+  distractores:
+    a: Salió así en otros intentos, por casualidad, no en el primero.
+    b: Esa excepción es de las colecciones; un int no la lanza.
+    d: Los incrementos se pierden, no se duplican.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.4"
+  enunciado: El mismo código sin sincronizar dio el total correcto en el segundo y el tercer intento. ¿Qué se concluye?
+  opciones:
+    - {id: a, texto: "Que el código es correcto y el primer intento fue un error de la JVM"}
+    - {id: b, texto: "Que nada: los fallos de concurrencia son intermitentes, y que una ejecución salga bien no prueba que el código sea correcto"}
+    - {id: c, texto: "Que basta con ejecutarlo dos veces"}
+    - {id: d, texto: "Que el JIT corrige las condiciones de carrera"}
+  correctas: [b]
+  explicacion: Las optimizaciones del JIT redujeron la ventana en esas ejecuciones, pero el código sigue sin garantías. Hay que razonar con el modelo de memoria, no con pruebas que pasan.
+  distractores:
+    a: La JVM se comportó según el modelo de memoria; el error es del código.
+    c: Repetir no da garantías; puede fallar en producción con otra carga.
+    d: El JIT no corrige nada; solo cambia cuándo se manifiesta el fallo.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Un hilo ejecuta while (!parar) n++; y otro pone parar = true un segundo después. Sin volatile, ¿qué pasó en la prueba?
+  opciones:
+    - {id: a, texto: "El hilo terminó al instante"}
+    - {id: b, texto: "El hilo terminó con un segundo de retraso"}
+    - {id: c, texto: "Lanzó una excepción de visibilidad"}
+    - {id: d, texto: "El hilo seguía vivo tres segundos después: no veía el cambio"}
+  correctas: [d]
+  explicacion: Sin relación «ocurre antes», el JIT puede leer la variable una vez y convertir el bucle en infinito. Con volatile, el otro hilo terminó.
+  distractores:
+    a: Terminó el hilo con volatile, no este.
+    b: No terminó en absoluto mientras se observó.
+    c: Java no detecta ni avisa de los problemas de visibilidad.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5
+- id: L01-005
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Empareja cada acción del hilo A con la acción del hilo B que crea una relación «ocurre antes».
+  prompts:
+    - {id: "1", texto: "A escribe una variable volatile"}
+    - {id: "2", texto: "A sale de un bloque synchronized (cerrojo)"}
+    - {id: "3", texto: "A llama a b.start()"}
+    - {id: "4", texto: "B termina su ejecución"}
+  opciones:
+    - {id: a, texto: "B lee esa misma variable volatile"}
+    - {id: b, texto: "B entra en un synchronized sobre el mismo cerrojo"}
+    - {id: c, texto: "El código del hilo b empieza a ejecutarse"}
+    - {id: d, texto: "A vuelve de b.join()"}
+    - {id: e, texto: "B lee una variable normal un rato después"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son relaciones definidas en el capítulo 17 de la JLS. Garantizan que B ve lo que A escribió antes.
+  distractores:
+    e: El paso del tiempo no crea ninguna garantía; hace falta una de las relaciones del modelo.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: Declaras el contador como volatile int y los cuatro hilos siguen haciendo contador++. ¿Se arregla?
+  opciones:
+    - {id: a, texto: "No: volatile da visibilidad, pero contador++ sigue siendo leer, sumar y escribir, y se pierden incrementos"}
+    - {id: b, texto: "Solo en equipos con un procesador"}
+    - {id: c, texto: "Sí, pero es más lento"}
+    - {id: d, texto: "Sí, volatile hace atómicas las operaciones"}
+  correctas: [a]
+  explicacion: Para la atomicidad hace falta un cerrojo o una clase atómica como AtomicLong.
+  distractores:
+    d: volatile no hace atómicas las operaciones compuestas.
+    b: Con un procesador también se puede cambiar de hilo entre la lectura y la escritura.
+    c: No se arregla, sea más rápido o más lento.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html
+- id: L01-007
+  tipo: completar
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Completa la declaración para que el cambio de la bandera desde otro hilo sea visible en el bucle.
+  codigo:
+    lenguaje: java
+    fuente: |
+      static [[1]] boolean parar = false;
+
+      // hilo trabajador
+      while (!parar) { trabajar(); }
+  huecos:
+    - {id: "1", respuestas: ["volatile"]}
+  explicacion: Escribir una variable volatile ocurre antes que cualquier lectura posterior de esa variable, así que el bucle ve el cambio.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5
+- id: L01-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué afirmaciones sobre el modelo de memoria de Java son correctas?
+  opciones:
+    - {id: a, texto: "Sin una relación «ocurre antes», un hilo puede no ver nunca lo que escribió otro"}
+    - {id: b, texto: "Tomar un cerrojo garantiza ver lo que hizo el último hilo que liberó ese mismo cerrojo"}
+    - {id: c, texto: "volatile garantiza visibilidad, pero no atomicidad de las operaciones compuestas"}
+    - {id: d, texto: "Las escrituras se ven en los demás hilos en cuanto pasa un milisegundo"}
+    - {id: e, texto: "El JIT no puede reordenar ni simplificar lecturas de variables normales"}
+  correctas: [a, b, c]
+  explicacion: El modelo solo garantiza lo que establecen sus relaciones. Fuera de ellas, el compilador y el procesador pueden reordenar y guardar valores.
+  distractores:
+    d: No hay ningún plazo; sin relación, puede no verse nunca, como en la prueba.
+    e: Puede, y es lo que hizo con el bucle sin volatile.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Cuándo conviene ReentrantLock en lugar de synchronized?
+  opciones:
+    - {id: a, texto: "En todo caso, porque es más moderno"}
+    - {id: b, texto: "Cuando hace falta esperar el cerrojo con un plazo o poder interrumpir la espera"}
+    - {id: c, texto: "Cuando la sección crítica es muy corta"}
+    - {id: d, texto: "Cuando no se quiere crear la relación «ocurre antes»"}
+  correctas: [b]
+  explicacion: ReentrantLock añade tryLock con plazo, lockInterruptibly, equidad opcional y varias condiciones. A cambio, hay que liberarlo a mano en un finally.
+  distractores:
+    a: synchronized es más simple y se libera solo; es la opción por defecto.
+    c: La longitud de la sección no decide entre los dos.
+    d: Los dos crean la relación «ocurre antes».
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/package-summary.html
+- id: L02-002
+  tipo: completar
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Completa el patrón para usar un ReentrantLock sin dejarlo tomado si la sección lanza una excepción.
+  codigo:
+    lenguaje: java
+    fuente: |
+      cerrojo.lock();
+      [[1]] {
+          actualizarSaldos();
+      } [[2]] {
+          cerrojo.unlock();
+      }
+  huecos:
+    - {id: "1", respuestas: ["try"]}
+    - {id: "2", respuestas: ["finally"]}
+  explicacion: El unlock en finally se ejecuta también si hay una excepción. Si se olvida, el cerrojo queda tomado y los demás hilos esperan para siempre.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/package-summary.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: En la prueba, ¿cuánto tardaron cuatro hilos en hacer cuatro millones de incrementos con AtomicLong frente a synchronized?
+  opciones:
+    - {id: a, texto: "Lo mismo, unos 195 ms"}
+    - {id: b, texto: "AtomicLong tardó el doble"}
+    - {id: c, texto: "52 ms con AtomicLong frente a 195 ms con synchronized, y los dos con el total exacto"}
+    - {id: d, texto: "AtomicLong perdió algunos incrementos"}
+  correctas: [c]
+  explicacion: AtomicLong usa una instrucción de comparar e intercambiar del procesador y evita el coste del cerrojo.
+  distractores:
+    a: synchronized fue casi cuatro veces más lento.
+    b: Fue al revés.
+    d: Los atómicos no pierden incrementos; los tres métodos dieron 4.000.000.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/atomic/LongAdder.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: Con cuatro hilos, LongAdder tardó 67 ms y AtomicLong 52 ms. ¿Cuándo compensa LongAdder?
+  opciones:
+    - {id: a, texto: "Con mucha contención, como un contador de métricas que actualizan muchos hilos y se lee de vez en cuando"}
+    - {id: b, texto: "Para contadores en general, tenga o no contención"}
+    - {id: c, texto: "Cuando hace falta leer el valor exacto en todo momento"}
+    - {id: d, texto: "Solo en programas de un hilo"}
+  correctas: [a]
+  explicacion: Reparte la suma en celdas para que los hilos no compitan por la misma. Con poca contención, ese reparto no se nota o cuesta algo más, como en la prueba.
+  distractores:
+    b: Con poca contención, AtomicLong basta y fue más rápido.
+    c: sum() recorre las celdas y no es una instantánea exacta mientras se escribe.
+    d: Con un solo hilo no hay contención que repartir.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/atomic/LongAdder.html
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Dos hilos quedan en interbloqueo esperando cada uno el cerrojo del otro. ¿Qué hace la JVM?
+  opciones:
+    - {id: a, texto: "Aborta uno de los dos hilos, como una base de datos"}
+    - {id: b, texto: "Nada: los dos quedan parados para siempre, aunque se puede detectar con ThreadMXBean o jstack"}
+    - {id: c, texto: "Libera los cerrojos tras un minuto"}
+    - {id: d, texto: "Lanza una DeadlockException en los dos hilos"}
+  correctas: [b]
+  explicacion: A diferencia de PostgreSQL, que aborta una transacción, Java no resuelve el interbloqueo. findDeadlockedThreads devolvió los dos hilos de la prueba.
+  distractores:
+    a: Es lo que hacen las bases de datos, no la JVM.
+    c: No hay ningún plazo para los cerrojos de synchronized.
+    d: Esa excepción no existe.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.management/java/lang/management/ThreadMXBean.html
+- id: L02-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué formas evitan el interbloqueo entre las transferencias A a B y B a A?
+  opciones:
+    - {id: a, texto: "Tomar siempre primero el cerrojo de la cuenta con el número menor"}
+    - {id: b, texto: "Usar tryLock con plazo y, si falla, soltar el primero y reintentar"}
+    - {id: c, texto: "Evitar tomar un cerrojo dentro de otro cuando se pueda"}
+    - {id: d, texto: "Añadir Thread.sleep antes del segundo cerrojo"}
+    - {id: e, texto: "Declarar las cuentas como volatile"}
+  correctas: [a, b, c]
+  explicacion: Un orden global rompe el ciclo de espera; tryLock evita esperar para siempre; y menos anidamiento reduce las ocasiones.
+  distractores:
+    d: Dormir hace el interbloqueo más probable; en la prueba se usó justo para provocarlo.
+    e: volatile no tiene relación con los cerrojos.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/package-summary.html
+- id: L02-007
+  tipo: matching
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Empareja cada situación con la herramienta más adecuada.
+  prompts:
+    - {id: "1", texto: "Un contador de peticiones atendidas"}
+    - {id: "2", texto: "Mover dinero entre dos saldos que deben cambiar juntos"}
+    - {id: "3", texto: "Un objeto de configuración que no cambia tras crearse"}
+    - {id: "4", texto: "Un contador de métricas que actualizan cientos de hilos"}
+  opciones:
+    - {id: a, texto: "AtomicLong"}
+    - {id: b, texto: "Un cerrojo (synchronized o ReentrantLock)"}
+    - {id: c, texto: "Un record inmutable, sin sincronización"}
+    - {id: d, texto: "LongAdder"}
+    - {id: e, texto: "Una variable volatile con ++"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Un dato suelto, un atómico; varios datos que cambian juntos, un cerrojo; lo inmutable no necesita nada; y con mucha contención, LongAdder.
+  distractores:
+    e: volatile no hace atómico el ++.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/atomic/LongAdder.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Un método hace una llamada HTTP de dos segundos dentro de un bloque synchronized que comparten todas las peticiones. ¿Qué problema provoca?
+  opciones:
+    - {id: a, texto: "Ninguno, porque la llamada es de lectura"}
+    - {id: b, texto: "La llamada se cancela al entrar en synchronized"}
+    - {id: c, texto: "Un interbloqueo seguro"}
+    - {id: d, texto: "Todas las peticiones se atienden de una en una durante dos segundos cada una"}
+  correctas: [d]
+  explicacion: La sección crítica debe ser corta. Una espera de red dentro de un cerrojo compartido convierte el servicio en una cola.
+  distractores:
+    a: Aunque solo lea, ocupa el cerrojo y los demás esperan.
+    b: Java no cancela nada al entrar en un cerrojo.
+    c: Con un solo cerrojo no hay interbloqueo; hay espera.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.1
+- id: L03-001
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada tipo de trabajo con el ejecutor más adecuado.
+  prompts:
+    - {id: "1", texto: "Comprimir imágenes, que usa la CPU todo el tiempo"}
+    - {id: "2", texto: "Miles de llamadas a otras APIs que pasan casi todo el tiempo esperando"}
+    - {id: "3", texto: "Limpiar una caché cada cinco minutos"}
+  opciones:
+    - {id: a, texto: "newFixedThreadPool con unos tantos hilos como núcleos"}
+    - {id: b, texto: "newVirtualThreadPerTaskExecutor"}
+    - {id: c, texto: "newScheduledThreadPool"}
+    - {id: d, texto: "Un Thread nuevo por cada tarea, creado a mano"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El cálculo no gana con más hilos que núcleos; las esperas de E/S sí escalan con hilos virtuales; y lo periódico va con un ejecutor programado.
+  distractores:
+    d: Crear hilos de plataforma a mano no escala ni se controla.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ExecutorService.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Qué pasa al salir del bloque try (var ex = Executors.newFixedThreadPool(4)) { … } desde JDK 19?
+  opciones:
+    - {id: a, texto: "Se cancelan las tareas pendientes"}
+    - {id: b, texto: "Nada; el ejecutor sigue vivo"}
+    - {id: c, texto: "Se espera a que terminen las tareas enviadas y se cierra el ejecutor"}
+    - {id: d, texto: "Se lanza una excepción si queda alguna tarea"}
+  correctas: [c]
+  explicacion: ExecutorService es AutoCloseable, y close() deja de aceptar tareas y espera a que terminen las que había. Es lo que se usó en todas las pruebas de la lección.
+  distractores:
+    a: close() espera; para cancelar está shutdownNow().
+    b: El ejecutor se cierra al salir del bloque.
+    d: Las tareas pendientes se esperan, no provocan un error.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ExecutorService.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Tres llamadas en paralelo con CompletableFuture tardan 200 ms, 300 ms y 5 s, y la última tiene completeOnTimeout de 500 ms. ¿Cuánto tardó el resultado combinado en la prueba?
+  opciones:
+    - {id: a, texto: "5,5 s, la suma de las tres"}
+    - {id: b, texto: "Unos 509 ms, con «stock desconocido» como valor por defecto"}
+    - {id: c, texto: "300 ms"}
+    - {id: d, texto: "5 s, lo que tarda la más lenta"}
+  correctas: [b]
+  explicacion: Corrieron a la vez, y la lenta se completó con el valor por defecto al cumplirse el plazo de 500 ms.
+  distractores:
+    a: Serían secuenciales, y no lo son.
+    c: Faltaría esperar el plazo de la tercera.
+    d: completeOnTimeout evita esperar a la lenta.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/CompletableFuture.html
+- id: L03-004
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada necesidad con el método de CompletableFuture.
+  prompts:
+    - {id: "1", texto: "Juntar el usuario y sus pedidos, que se obtienen por separado"}
+    - {id: "2", texto: "Con el id del usuario, lanzar otra llamada asíncrona que lo necesita"}
+    - {id: "3", texto: "Si la llamada falla, devolver un valor por defecto"}
+    - {id: "4", texto: "Si tarda más de 500 ms, fallar con TimeoutException"}
+  opciones:
+    - {id: a, texto: "thenCombine"}
+    - {id: b, texto: "thenCompose"}
+    - {id: c, texto: "exceptionally"}
+    - {id: d, texto: "orTimeout"}
+    - {id: e, texto: "get() en un bucle"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: thenCombine junta resultados independientes, thenCompose encadena dependientes, exceptionally recupera errores y orTimeout limita la espera.
+  distractores:
+    e: Bloquear con get anula la ventaja de componer de forma asíncrona.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/CompletableFuture.html
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: 'Ocho hilos cuentan visitas con Integer v = m.get(k); m.put(k, v == null ? 1 : v + 1); sobre un ConcurrentHashMap. ¿Qué pasó en la prueba?'
+  opciones:
+    - {id: a, texto: "Dio 800.000, porque ConcurrentHashMap es seguro"}
+    - {id: b, texto: "Lanzó ConcurrentModificationException"}
+    - {id: c, texto: "Se bloqueó"}
+    - {id: d, texto: "Perdió entre 140.000 y 230.000 visitas en cada intento"}
+  correctas: [d]
+  explicacion: Cada operación es atómica, pero la secuencia get y put no; otro hilo escribe entre medias. Con merge salió 800.000 en los tres intentos.
+  distractores:
+    a: Lo seguro es cada operación, no la combinación.
+    b: ConcurrentHashMap no lanza esa excepción.
+    c: No hay ningún cerrojo que pueda bloquear.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html
+- id: L03-006
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa la línea para sumar una visita de forma atómica en un ConcurrentHashMap<String, Integer>.
+  codigo:
+    lenguaje: java
+    fuente: |
+      visitas.[[1]]("portada", 1, Integer::sum);
+  huecos:
+    - {id: "1", respuestas: ["merge"]}
+  explicacion: merge pone 1 si la clave no existe o combina el valor actual con 1 mediante Integer::sum, todo en una sola operación atómica.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Con un ArrayBlockingQueue de capacidad 5 y el consumidor parado, ¿en qué estado quedó el productor en la prueba?
+  opciones:
+    - {id: a, texto: "WAITING, bloqueado en put con la cola llena"}
+    - {id: b, texto: "TERMINATED, porque descartó los elementos"}
+    - {id: c, texto: "RUNNABLE, añadiendo elementos sin límite"}
+    - {id: d, texto: "Lanzó una excepción de cola llena"}
+  correctas: [a]
+  explicacion: put espera mientras la cola esté llena. Así, un consumidor lento frena al productor en lugar de acumular trabajo sin fin.
+  distractores:
+    b: Terminó solo después, cuando el consumidor vació la cola.
+    c: La capacidad limita lo que puede añadir.
+    d: put espera; add sí lanzaría una excepción con la cola llena.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/package-summary.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Un servicio recibe eventos más rápido de lo que los procesa y los mete en una LinkedBlockingQueue sin capacidad máxima. ¿Qué riesgo hay?
+  opciones:
+    - {id: a, texto: "Ninguno, porque la cola es segura entre hilos"}
+    - {id: b, texto: "Que los eventos salgan desordenados"}
+    - {id: c, texto: "Que la cola crezca hasta agotar la memoria"}
+    - {id: d, texto: "Que el productor se bloquee"}
+  correctas: [c]
+  explicacion: Sin límite no hay contrapresión. Una cola acotada obliga a decidir qué hacer cuando se llena, como esperar, rechazar o descartar.
+  distractores:
+    a: Ser segura entre hilos no la hace ilimitada en memoria.
+    b: La cola mantiene el orden.
+    d: Sin capacidad máxima, el productor no se bloquea, y ese es el problema.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/package-summary.html
+- id: L04-001
+  tipo: matching
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Empareja cada tarea con la forma de ejecutarla.
+  prompts:
+    - {id: "1", texto: "Un servidor con miles de peticiones que esperan a la base de datos"}
+    - {id: "2", texto: "Redimensionar miles de imágenes"}
+    - {id: "3", texto: "No abrir más de 20 conexiones a la base de datos a la vez"}
+  opciones:
+    - {id: a, texto: "Un hilo virtual por petición"}
+    - {id: b, texto: "Un pool fijo con unos tantos hilos como núcleos"}
+    - {id: c, texto: "El pool de conexiones o un Semaphore de 20 permisos"}
+    - {id: d, texto: "Un pool de hilos virtuales reutilizados"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Los hilos virtuales sirven para esperar, no para calcular. Para limitar un recurso se limita el recurso, no el número de hilos.
+  distractores:
+    d: Los hilos virtuales no se reutilizan ni se meten en un pool; se crea uno por tarea.
+  referencia: https://docs.oracle.com/en/java/javase/25/core/virtual-threads.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Por qué no mejoran los hilos virtuales una tarea que usa la CPU todo el tiempo?
+  opciones:
+    - {id: a, texto: "Porque los hilos virtuales son más lentos calculando"}
+    - {id: b, texto: "Porque su ventaja es liberar el portador mientras se espera; si no hay esperas, los núcleos siguen siendo el límite"}
+    - {id: c, texto: "Porque no se pueden usar con bucles"}
+    - {id: d, texto: "Porque solo funcionan con E/S de red"}
+  correctas: [b]
+  explicacion: Un hilo virtual que calcula ocupa su portador igual que un hilo de plataforma. No hay más núcleos por crear más hilos.
+  distractores:
+    a: Calculan igual de rápido; simplemente no aportan nada en ese caso.
+    c: Pueden ejecutar cualquier código.
+    d: Se desmontan con muchas operaciones bloqueantes, no solo de red.
+  referencia: https://docs.oracle.com/en/java/javase/25/core/virtual-threads.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: Mil hilos virtuales esperan 100 ms dentro de synchronized, cada uno con su cerrojo, con 4 portadores. ¿Qué tiempos dio la prueba con JDK 21 y con JDK 25?
+  opciones:
+    - {id: a, texto: "Unos 100 ms en los dos"}
+    - {id: b, texto: "25 s en los dos"}
+    - {id: c, texto: "25 s con JDK 21, por el pinning, y 115 ms con JDK 25"}
+    - {id: d, texto: "115 ms con JDK 21 y 25 s con JDK 25"}
+  correctas: [c]
+  explicacion: En JDK 21, el hilo fijado ocupaba su portador durante la espera, y las tareas iban de 4 en 4. El JEP 491, en JDK 24, eliminó ese fijado.
+  distractores:
+    a: En JDK 21 el pinning lo impedía.
+    b: JDK 25 ya no fija los hilos dentro de synchronized.
+    d: Es al revés.
+  referencia: https://openjdk.org/jeps/491
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Un equipo usa JDK 25 y hilos virtuales. ¿Debe cambiar sus bloques synchronized por ReentrantLock para evitar el pinning?
+  opciones:
+    - {id: a, texto: "No: desde JDK 24, el JEP 491 permite desmontar los hilos virtuales dentro de synchronized"}
+    - {id: b, texto: "Sí, en cada bloque que espere E/S"}
+    - {id: c, texto: "Sí, pero solo en los métodos estáticos"}
+    - {id: d, texto: "No, porque los hilos virtuales no admiten synchronized"}
+  correctas: [a]
+  explicacion: Era el consejo con JDK 21. Con JDK 24 o posterior ya no hace falta; quedan casos raros de fijado, como el código nativo.
+  distractores:
+    b: El problema se resolvió en la JVM.
+    c: No hay distinción entre métodos estáticos y de instancia.
+    d: synchronized funciona con hilos virtuales; el problema era el fijado.
+  referencia: https://openjdk.org/jeps/491
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Dentro de un StructuredTaskScope, la subtarea pedidos() falla a los 100 ms mientras usuario() tarda 300 ms. ¿Qué pasó en la prueba?
+  opciones:
+    - {id: a, texto: "Esperó a usuario() y salió a los 300 ms"}
+    - {id: b, texto: "Devolvió el usuario y un valor nulo para los pedidos"}
+    - {id: c, texto: "usuario() siguió corriendo en segundo plano tras salir del bloque"}
+    - {id: d, texto: "Canceló usuario() y salió con FailedException a los 112 ms"}
+  correctas: [d]
+  explicacion: El ámbito cancela las subtareas hermanas cuando una falla y no deja ninguna suelta al terminar el bloque.
+  distractores:
+    a: No espera a las demás si una ya ha fallado.
+    b: El fallo se propaga como excepción, no como nulo.
+    c: Al salir del ámbito no queda ninguna subtarea viva; es lo que la diferencia de un ejecutor.
+  referencia: https://openjdk.org/jeps/505
+- id: L04-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué es cierto de la concurrencia estructurada en noviembre de 2026?
+  opciones:
+    - {id: a, texto: "Sigue en preview: quinta en JDK 25, sexta en JDK 26 y séptima en JDK 27"}
+    - {id: b, texto: "Necesita --enable-preview, y su API puede cambiar"}
+    - {id: c, texto: "Agrupa subtareas que empiezan y terminan juntas"}
+    - {id: d, texto: "Es definitiva desde JDK 21"}
+    - {id: e, texto: "Sustituye a los hilos virtuales"}
+  correctas: [a, b, c]
+  explicacion: Es la situación según los JEP 505, 525 y 533. Se apoya en hilos virtuales y los complementa.
+  distractores:
+    d: No es definitiva; sigue en preview.
+    e: Las subtareas se ejecutan en hilos virtuales; no los sustituye.
+  referencia: https://openjdk.org/jeps/533
+- id: L04-007
+  tipo: completar
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Completa el código para que procesar() y todo lo que llame vean el usuario «ana» solo durante esta ejecución.
+  codigo:
+    lenguaje: java
+    fuente: |
+      static final ScopedValue<String> USUARIO = ScopedValue.newInstance();
+
+      ScopedValue.[[1]](USUARIO, "ana").[[2]](() -> servicio.procesar());
+  huecos:
+    - {id: "1", respuestas: ["where"]}
+    - {id: "2", respuestas: ["run"]}
+  explicacion: where liga el valor y run ejecuta el código con él. Al salir, el valor deja de estar ligado; en la prueba, isBound() devolvió false fuera del ámbito.
+  referencia: https://openjdk.org/jeps/506
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué ventaja tiene ScopedValue sobre ThreadLocal para pasar el usuario de la petición?
+  opciones:
+    - {id: a, texto: "Que se puede modificar desde los métodos llamados"}
+    - {id: b, texto: "Que es inmutable y deja de existir al salir del ámbito, sin limpiarlo a mano"}
+    - {id: c, texto: "Que dura toda la vida del hilo"}
+    - {id: d, texto: "Que solo funciona con hilos de plataforma"}
+  correctas: [b]
+  explicacion: Con ThreadLocal hay que acordarse de limpiar el valor, y en un pool se puede filtrar a la tarea siguiente. ScopedValue es definitivo desde JDK 25 (JEP 506).
+  distractores:
+    a: Es inmutable; poder cambiarlo desde cualquier sitio es justo un problema de ThreadLocal.
+    c: Dura lo que el ámbito, no lo que el hilo.
+    d: Está pensado precisamente para hilos virtuales y subtareas.
+  referencia: https://openjdk.org/jeps/506
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Una tarea enviada con submit lanza una excepción y nadie llama a get() sobre su Future. ¿Qué pasa?
+  opciones:
+    - {id: a, texto: "La excepción se imprime en la consola"}
+    - {id: b, texto: "La aplicación termina"}
+    - {id: c, texto: "El ejecutor reintenta la tarea"}
+    - {id: d, texto: "La excepción queda guardada en el Future y nadie la ve"}
+  correctas: [d]
+  explicacion: En la prueba no apareció nada hasta llamar a get(), que la devolvió envuelta en una ExecutionException. Sin get(), el fallo es silencioso.
+  distractores:
+    a: Eso pasa con execute, que la entrega al manejador de excepciones no capturadas.
+    b: Solo falla esa tarea; el resto sigue.
+    c: Los ejecutores no reintentan.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ExecutorService.html
+- id: L05-002
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué formas evitan que las excepciones de las tareas pasen inadvertidas?
+  opciones:
+    - {id: a, texto: "Llamar a get() o join() y tratar la excepción"}
+    - {id: b, texto: "Terminar las cadenas de CompletableFuture con exceptionally o whenComplete que registre el error"}
+    - {id: c, texto: "Usar concurrencia estructurada, que propaga el fallo al ámbito"}
+    - {id: d, texto: "Aumentar el número de hilos del pool"}
+    - {id: e, texto: "Envolver el submit en un try-catch"}
+  correctas: [a, b, c]
+  explicacion: La excepción se produce en otro hilo y viaja en el Future; alguien tiene que recogerla.
+  distractores:
+    d: Más hilos no cambian dónde queda la excepción.
+    e: submit no lanza la excepción de la tarea; la guarda.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/CompletableFuture.html
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.2"
+  enunciado: En un pool fijo de 2 hilos, dos tareas lanzan subtareas al mismo pool y esperan su resultado con get(). ¿Qué pasó en la prueba?
+  opciones:
+    - {id: a, texto: "Terminó bien, un poco más despacio"}
+    - {id: b, texto: "Tras 2 s no había resultado: los dos hilos esperaban subtareas que no tenían hilo donde ejecutarse"}
+    - {id: c, texto: "jstack detectó un interbloqueo de cerrojos"}
+    - {id: d, texto: "El pool creó hilos nuevos para las subtareas"}
+  correctas: [b]
+  explicacion: Es el agotamiento del pool. Se evita sin bloquear dentro del pool en espera de tareas del mismo pool, por ejemplo componiendo con thenCompose o usando otro ejecutor.
+  distractores:
+    a: No puede terminar; ningún hilo queda libre.
+    c: No hay cerrojos implicados, así que jstack no lo marca como interbloqueo.
+    d: Un pool fijo no crea hilos nuevos.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ExecutorService.html
+- id: L05-004
+  tipo: matching
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Empareja cada necesidad con la herramienta de diagnóstico.
+  prompts:
+    - {id: "1", texto: "Ver qué hace cada hilo de plataforma y detectar interbloqueos de cerrojos"}
+    - {id: "2", texto: "Obtener un volcado que incluya los hilos virtuales"}
+    - {id: "3", texto: "Que la propia aplicación compruebe si hay interbloqueos en su comprobación de salud"}
+  opciones:
+    - {id: a, texto: "jstack PID"}
+    - {id: b, texto: "jcmd PID Thread.dump_to_file -format=json fichero"}
+    - {id: c, texto: "ThreadMXBean.findDeadlockedThreads()"}
+    - {id: d, texto: "Aumentar el nivel de los registros"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: jstack informó «Found one Java-level deadlock» con los dos hilos de la prueba; jcmd generó un volcado en JSON; y ThreadMXBean dio el mismo resultado desde dentro.
+  distractores:
+    d: Los registros no muestran dónde está parado cada hilo.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/specs/man/jstack.html
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Por qué conviene dar nombre a los hilos, como transferencia-A-a-B?
+  opciones:
+    - {id: a, texto: "Porque en un volcado con cientos de hilos, Thread-17 no dice qué está haciendo"}
+    - {id: b, texto: "Porque los hilos con nombre son más rápidos"}
+    - {id: c, texto: "Porque es obligatorio desde Java 21"}
+    - {id: d, texto: "Porque evita los interbloqueos"}
+  correctas: [a]
+  explicacion: El volcado de la prueba se entiende de un vistazo gracias a los nombres. Con hilos virtuales, Thread.ofVirtual().name(…) hace lo mismo.
+  distractores:
+    b: El nombre no influye en el rendimiento.
+    c: No es obligatorio.
+    d: Solo ayuda a encontrarlos.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/specs/man/jstack.html
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Un servicio va muy lento y sospechas que hay hilos atascados. ¿Qué haces con los volcados de hilos?
+  opciones:
+    - {id: a, texto: "Uno solo basta"}
+    - {id: b, texto: "Reiniciar primero y volcar después"}
+    - {id: c, texto: "Dos o tres separados unos segundos: un hilo que aparece siempre en el mismo sitio está atascado ahí"}
+    - {id: d, texto: "Volcar solo los hilos con más CPU"}
+  correctas: [c]
+  explicacion: Un único volcado es una foto; varios muestran qué no avanza.
+  distractores:
+    a: Un solo volcado no distingue un hilo atascado de uno que pasaba por ahí.
+    b: Reiniciar borra justo la evidencia.
+    d: Los hilos atascados suelen estar esperando y no consumen CPU.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/specs/man/jstack.html
+- id: L05-007
+  tipo: matching
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: Empareja cada pregunta de la revisión con el fallo que evita.
+  prompts:
+    - {id: "1", texto: "¿Cada dato compartido está protegido, es atómico, inmutable o confinado?"}
+    - {id: "2", texto: "¿Los cerrojos anidados se toman siempre en el mismo orden?"}
+    - {id: "3", texto: "¿Hay esperas de red dentro de un cerrojo?"}
+    - {id: "4", texto: "¿Las colas tienen límite?"}
+  opciones:
+    - {id: a, texto: "Condición de carrera"}
+    - {id: b, texto: "Interbloqueo"}
+    - {id: c, texto: "Todo el servicio en cola tras un cerrojo"}
+    - {id: d, texto: "Memoria agotada"}
+    - {id: e, texto: "Fallo de compilación"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: La revisión con estas preguntas encuentra lo que las pruebas no garantizan.
+  distractores:
+    e: Ninguna de estas preguntas tiene que ver con la compilación; los fallos concurrentes compilan sin problema.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.4"
+  enunciado: Las pruebas de un servicio concurrente pasan siempre en la CI. ¿Qué se puede concluir?
+  opciones:
+    - {id: a, texto: "Que no tiene condiciones de carrera"}
+    - {id: b, texto: "Que basta con aumentar las repeticiones de las pruebas"}
+    - {id: c, texto: "Que en producción se comportará igual"}
+    - {id: d, texto: "Poco sobre su corrección concurrente: los fallos son intermitentes y dependen de la carga, y hay que revisar el código"}
+  correctas: [d]
+  explicacion: En la lección 1, el mismo código sin sincronizar dio el total correcto dos de tres veces. Las pruebas ayudan, pero la garantía viene de razonar con el modelo de memoria.
+  distractores:
+    a: El código sin sincronizar también pasaba algunas veces.
+    b: Más repeticiones aumentan la probabilidad de ver un fallo, pero no demuestran que no exista.
+    c: Otra carga, otro equipo u otra JVM pueden mostrar el fallo.
+  referencia: https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html

@@ -1,0 +1,712 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué describe la notación O?
+  opciones:
+    - {id: a, texto: "Cuántos milisegundos tarda un programa"}
+    - {id: b, texto: "Cómo crece el coste de un algoritmo al crecer la entrada"}
+    - {id: c, texto: "Cuánta memoria tiene el equipo"}
+    - {id: d, texto: "El número de líneas del código"}
+  correctas: [b]
+  explicacion: Ignora constantes y la máquina; describe cómo escala.
+  distractores:
+    a: Eso depende de la máquina y se mide.
+    c: No describe el equipo.
+    d: No tiene relación.
+  referencia: https://en.wikipedia.org/wiki/Big_O_notation
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: En las mediciones, buscar en una lista tardó 382 µs con 100 000 elementos. ¿Cuánto tardó con 1 000 000?
+  opciones:
+    - {id: a, texto: "Unos 382 µs, igual"}
+    - {id: b, texto: "Unos 400 µs"}
+    - {id: c, texto: "Unos 3 942 µs, unas diez veces más"}
+    - {id: d, texto: "Unos 38 segundos"}
+  correctas: [c]
+  explicacion: La búsqueda en lista es O(n); con diez veces más datos, tarda unas diez veces más.
+  distractores:
+    a: Eso pasa con un conjunto.
+    b: Crece en proporción a n.
+    d: Eso sería un crecimiento cuadrático.
+  referencia: https://wiki.python.org/moin/TimeComplexity
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Empareja cada operación con su complejidad.
+  prompts:
+    - {id: "1", texto: "Comprobar si un elemento está en un conjunto"}
+    - {id: "2", texto: "Búsqueda binaria en una lista ordenada"}
+    - {id: "3", texto: "Recorrer una lista una vez"}
+    - {id: "4", texto: "Comparar cada elemento con todos los demás"}
+  opciones:
+    - {id: a, texto: "O(1) de media"}
+    - {id: b, texto: "O(log n)"}
+    - {id: c, texto: "O(n)"}
+    - {id: d, texto: "O(n²)"}
+    - {id: e, texto: "O(2ⁿ)"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son las clases habituales del trabajo diario.
+  distractores:
+    e: Es la del Fibonacci recursivo ingenuo.
+  referencia: https://en.wikipedia.org/wiki/Big_O_notation
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: El algoritmo de duplicados con dos bucles tardó 25,8 ms con 2 000 elementos. ¿Cuánto tardó con 4 000?
+  opciones:
+    - {id: a, texto: "Unos 52 ms"}
+    - {id: b, texto: "Unos 26 ms"}
+    - {id: c, texto: "Unos 107,6 ms, unas cuatro veces más"}
+    - {id: d, texto: "Unos 2 segundos"}
+  correctas: [c]
+  explicacion: Es O(n²); al duplicar n, el trabajo se multiplica por cuatro.
+  distractores:
+    a: Sería un crecimiento lineal.
+    b: El tiempo crece con n.
+    d: Crece, pero no tanto.
+  referencia: https://en.wikipedia.org/wiki/Big_O_notation
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: ¿Qué complejidad tiene este código?
+  codigo:
+    lenguaje: python
+    fuente: |
+      resultado = []
+      for x in pedidos:              # n pedidos
+          if x.cliente not in clientes_vip:   # clientes_vip es una lista de n elementos
+              resultado.append(x)
+  opciones:
+    - {id: a, texto: "O(n)"}
+    - {id: b, texto: "O(1)"}
+    - {id: c, texto: "O(log n)"}
+    - {id: d, texto: "O(n²), porque la búsqueda en la lista es O(n) y está dentro de un bucle de n"}
+  correctas: [d]
+  explicacion: Es una operación lineal oculta dentro de un bucle. Con clientes_vip como conjunto, sería O(n).
+  distractores:
+    a: El not in sobre una lista no es constante.
+    b: Recorre todos los pedidos.
+    c: No hay búsqueda binaria.
+  referencia: https://wiki.python.org/moin/TimeComplexity
+- id: L01-006
+  tipo: completar
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Completa la detección de duplicados en O(n).
+  codigo:
+    lenguaje: python
+    fuente: |
+      vistos = [[1]]()
+      for x in xs:
+          if x [[2]] vistos:
+              return True
+          vistos.add(x)
+      return False
+  huecos:
+    - {id: "1", respuestas: [set]}
+    - {id: "2", respuestas: [in]}
+  explicacion: La pertenencia en un conjunto es O(1) de media, así que el recorrido completo es O(n).
+  referencia: https://wiki.python.org/moin/TimeComplexity
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Cómo se simplifica O(n² + 3n + 10)?
+  opciones:
+    - {id: a, texto: "O(n²)"}
+    - {id: b, texto: "O(n)"}
+    - {id: c, texto: "O(10)"}
+    - {id: d, texto: "O(3n)"}
+  correctas: [a]
+  explicacion: Se conserva el término que más crece y se ignoran las constantes.
+  distractores:
+    b: n² domina para n grande.
+    c: Las constantes se ignoran.
+    d: Ni el factor ni el término menor cuentan.
+  referencia: https://en.wikipedia.org/wiki/Big_O_notation
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Tienes una lista de 20 configuraciones que se recorre una vez al arrancar. ¿Merece la pena optimizarla?
+  opciones:
+    - {id: a, texto: "Sí, hay que usar la estructura más eficiente posible"}
+    - {id: b, texto: "Sí, porque O(n) es lento"}
+    - {id: c, texto: "Sí, con un árbol equilibrado"}
+    - {id: d, texto: "Probablemente no: con datos tan pequeños, cualquier opción es rápida; la notación O importa cuando n crece"}
+  correctas: [d]
+  explicacion: La complejidad describe el crecimiento; con n pequeño y fijo, prima la claridad.
+  distractores:
+    a: Complica el código sin beneficio medible.
+    b: O(n) con 20 elementos es despreciable.
+    c: Añade complejidad sin necesidad.
+  referencia: https://en.wikipedia.org/wiki/Big_O_notation
+- id: L02-001
+  tipo: matching
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Empareja cada operación sobre una lista de Python con su coste.
+  prompts:
+    - {id: "1", texto: "l[500]"}
+    - {id: "2", texto: "l.append(x)"}
+    - {id: "3", texto: "l.insert(0, x)"}
+    - {id: "4", texto: "x in l"}
+  opciones:
+    - {id: a, texto: "O(1)"}
+    - {id: b, texto: "O(1) amortizado"}
+    - {id: c, texto: "O(n), desplaza todos los elementos"}
+    - {id: d, texto: "O(n), recorre la lista"}
+    - {id: e, texto: "O(log n)"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: La lista guarda los elementos seguidos en memoria.
+  distractores:
+    e: Ninguna de estas operaciones es logarítmica en una lista.
+  referencia: https://wiki.python.org/moin/TimeComplexity
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Al añadir elementos, la lista cambió de tamaño en memoria al llegar a 1, 5, 9, 17, 25… elementos. ¿Por qué append sigue siendo O(1)?
+  opciones:
+    - {id: a, texto: "Porque no copia elementos al crecer"}
+    - {id: b, texto: "Porque reserva capacidad de más; las copias son cada vez menos frecuentes y su coste repartido es constante (amortizado)"}
+    - {id: c, texto: "Porque Python usa listas enlazadas"}
+    - {id: d, texto: "No es O(1)"}
+  correctas: [b]
+  explicacion: Es el coste amortizado de las listas dinámicas.
+  distractores:
+    a: Al llenarse, copia.
+    c: list de CPython es un array dinámico.
+    d: Es O(1) amortizado.
+  referencia: https://wiki.python.org/moin/TimeComplexity
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Vaciar una cola de 100 000 elementos con list.pop(0) tardó 214 ms. ¿Y con deque.popleft()?
+  opciones:
+    - {id: a, texto: "Unos 214 ms"}
+    - {id: b, texto: "Unos 2 segundos"}
+    - {id: c, texto: "Unos 1,9 ms"}
+    - {id: d, texto: "No se puede usar deque como cola"}
+  correctas: [c]
+  explicacion: deque saca por el principio en O(1); pop(0) en una lista es O(n), y vaciarla entera O(n²).
+  distractores:
+    a: deque es mucho más rápida en esta operación.
+    b: Es al revés.
+    d: Es su uso principal.
+  referencia: https://docs.python.org/3/library/collections.html#collections.deque
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Con list.pop(0), vaciar 10 000 elementos tardó 2,1 ms y 100 000 tardó 214 ms. ¿Qué indica?
+  opciones:
+    - {id: a, texto: "Un crecimiento lineal"}
+    - {id: b, texto: "Un crecimiento cuadrático: con 10 veces más datos, 100 veces más tiempo"}
+    - {id: c, texto: "Un crecimiento constante"}
+    - {id: d, texto: "Un error de medida"}
+  correctas: [b]
+  explicacion: Cada pop(0) es O(n) y se hacen n, así que el total es O(n²).
+  distractores:
+    a: Sería unas 10 veces más.
+    c: El tiempo creció mucho.
+    d: Es lo que predice el análisis.
+  referencia: https://wiki.python.org/moin/TimeComplexity
+- id: L02-005
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: Empareja cada caso con la estructura adecuada.
+  prompts:
+    - {id: "1", texto: "Historial de deshacer"}
+    - {id: "2", texto: "Tareas pendientes atendidas por orden de llegada"}
+    - {id: "3", texto: "Acceso rápido al elemento en la posición i"}
+  opciones:
+    - {id: a, texto: "Pila (LIFO)"}
+    - {id: b, texto: "Cola (FIFO) con deque"}
+    - {id: c, texto: "Lista dinámica"}
+    - {id: d, texto: "Lista enlazada"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Deshacer saca lo último; una cola, lo primero; la lista da acceso por índice en O(1).
+  distractores:
+    d: Su acceso por índice es O(n).
+  referencia: https://docs.python.org/3/library/collections.html#collections.deque
+- id: L02-006
+  tipo: completar
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: Completa la cola con una estructura eficiente.
+  codigo:
+    lenguaje: python
+    fuente: |
+      from collections import [[1]]
+      cola = deque()
+      cola.append("tarea-1")
+      siguiente = cola.[[2]]()
+  huecos:
+    - {id: "1", respuestas: [deque]}
+    - {id: "2", respuestas: [popleft]}
+  explicacion: append añade al final y popleft saca del principio, ambas en O(1).
+  referencia: https://docs.python.org/3/library/collections.html#collections.deque
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué inconveniente tiene una lista enlazada frente a una lista dinámica?
+  opciones:
+    - {id: a, texto: "Que no admite inserciones"}
+    - {id: b, texto: "Que solo guarda números"}
+    - {id: c, texto: "Que es inmutable"}
+    - {id: d, texto: "Que el acceso por índice es O(n), cada nodo ocupa memoria extra y aprovecha peor la caché del procesador"}
+  correctas: [d]
+  explicacion: Por eso, en Java, ArrayList y ArrayDeque son la opción habitual.
+  distractores:
+    a: Inserta bien en un punto localizado.
+    b: Guarda cualquier tipo.
+    c: Se puede modificar.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/ArrayList.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: ¿Qué operaciones de una lista de Python sirven para usarla como pila?
+  opciones:
+    - {id: a, texto: "append y pop() del final, ambas O(1)"}
+    - {id: b, texto: "insert(0, x) y pop(0)"}
+    - {id: c, texto: "sort y reverse"}
+    - {id: d, texto: "index y count"}
+  correctas: [a]
+  explicacion: La pila trabaja en un solo extremo; el final de la lista es barato.
+  distractores:
+    b: Trabajar al principio es O(n).
+    c: No son operaciones de pila.
+    d: Son búsquedas lineales.
+  referencia: https://docs.python.org/3/tutorial/datastructures.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué devolvió este código con Java 25?
+  codigo:
+    lenguaje: java
+    fuente: |
+      static class PuntoSinEquals { int x, y; PuntoSinEquals(int x, int y) { this.x = x; this.y = y; } }
+
+      Set<PuntoSinEquals> a = new HashSet<>();
+      a.add(new PuntoSinEquals(1, 2));
+      System.out.println(a.contains(new PuntoSinEquals(1, 2)));
+  opciones:
+    - {id: a, texto: "true"}
+    - {id: b, texto: "Error de compilación"}
+    - {id: c, texto: "false, porque sin equals y hashCode dos objetos con las mismas coordenadas son distintos"}
+    - {id: d, texto: "NullPointerException"}
+  correctas: [c]
+  explicacion: Sin redefinirlos, se usan la identidad y el hash de identidad del objeto.
+  distractores:
+    a: Es lo que devolvió con un record.
+    b: Compila.
+    d: No hay ningún null.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué exige el contrato de equals y hashCode?
+  opciones:
+    - {id: a, texto: "Que objetos iguales según equals tengan el mismo hashCode"}
+    - {id: b, texto: "Que objetos distintos tengan hashCode distinto"}
+    - {id: c, texto: "Que hashCode devuelva números positivos"}
+    - {id: d, texto: "Que equals compare referencias"}
+  correctas: [a]
+  explicacion: Las tablas hash buscan por hash y luego confirman con equals; si dos iguales tuvieran distinto hash, no se encontrarían.
+  distractores:
+    b: Las colisiones están permitidas.
+    c: Puede ser negativo.
+    d: Se redefine justo para comparar por contenido.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: Se guarda un objeto en un HashSet y luego se cambia un campo que forma parte de su hashCode. ¿Qué pasó en la prueba?
+  opciones:
+    - {id: a, texto: "Se borró solo"}
+    - {id: b, texto: "Se recolocó automáticamente"}
+    - {id: c, texto: "Error al modificarlo"}
+    - {id: d, texto: "Siguió dentro (size 1), pero contains devolvió false"}
+  correctas: [d]
+  explicacion: El objeto quedó en la posición de su hash antiguo; la búsqueda va a la del nuevo.
+  distractores:
+    a: Siguió dentro.
+    b: La tabla no se entera del cambio.
+    c: Java no lo impide.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/HashMap.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: ¿Qué es una colisión en una tabla hash?
+  opciones:
+    - {id: a, texto: "Un error que corrompe la tabla"}
+    - {id: b, texto: "Que dos claves distintas caen en la misma posición; se resuelve comparándolas"}
+    - {id: c, texto: "Que dos hilos escriben a la vez"}
+    - {id: d, texto: "Que la tabla está llena"}
+  correctas: [b]
+  explicacion: Es normal y está prevista; muchas colisiones empeoran el rendimiento.
+  distractores:
+    a: Se gestiona sin errores.
+    c: Es un problema de concurrencia, no una colisión.
+    d: La tabla crece cuando se llena.
+  referencia: https://en.wikipedia.org/wiki/Hash_table
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Qué pasa en Python al usar la lista [1, 2] como clave de un diccionario?
+  opciones:
+    - {id: a, texto: "Funciona"}
+    - {id: b, texto: "Convierte la lista en tupla"}
+    - {id: c, texto: "TypeError, porque una lista no es hashable al ser mutable"}
+    - {id: d, texto: "Usa el primer elemento como clave"}
+  correctas: [c]
+  explicacion: 'Python impide usar objetos mutables como claves; Python 3.14 respondió: TypeError: cannot use list as a dict key (unhashable type: list). Una tupla sí sirve.'
+  distractores:
+    a: Python lo rechaza.
+    b: No convierte nada.
+    d: No hace eso.
+  referencia: https://docs.python.org/3/tutorial/datastructures.html
+- id: L03-006
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada necesidad con la estructura adecuada en Python.
+  prompts:
+    - {id: "1", texto: "Saber si un email ya está registrado"}
+    - {id: "2", texto: "Obtener un cliente a partir de su id"}
+    - {id: "3", texto: "Contar cuántas veces aparece cada palabra"}
+    - {id: "4", texto: "Quitar duplicados conservando el orden"}
+  opciones:
+    - {id: a, texto: "set"}
+    - {id: b, texto: "dict"}
+    - {id: c, texto: "collections.Counter"}
+    - {id: d, texto: "dict.fromkeys(lista)"}
+    - {id: e, texto: "Una lista y el operador in"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Todas se basan en tablas hash y operan en O(1) de media por elemento.
+  distractores:
+    e: Buscar en una lista es O(n).
+  referencia: https://wiki.python.org/moin/TimeComplexity
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Por qué un record de Java funciona bien como clave de un HashMap?
+  opciones:
+    - {id: a, texto: "Porque genera equals y hashCode a partir de sus componentes y sus campos son final"}
+    - {id: b, texto: "Porque es más pequeño"}
+    - {id: c, texto: "Porque HashMap trata los records de forma especial"}
+    - {id: d, texto: "No funciona bien"}
+  correctas: [a]
+  explicacion: Cumple el contrato y es inmutable; en la prueba, contains con un record igual devolvió true.
+  distractores:
+    b: El tamaño no importa.
+    c: No hay trato especial.
+    d: Es una buena clave.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Necesitas los clientes ordenados por apellido y consultar los que van de la C a la F. ¿Sirve un HashMap?
+  opciones:
+    - {id: a, texto: "Sí, es lo más rápido para todo"}
+    - {id: b, texto: "Sí, mantiene el orden alfabético"}
+    - {id: c, texto: "Solo con claves enteras"}
+    - {id: d, texto: "No; una tabla hash no conserva el orden de las claves ni permite rangos. Mejor un TreeMap"}
+  correctas: [d]
+  explicacion: El hash dispersa las claves; para orden y rangos se usa un árbol equilibrado.
+  distractores:
+    a: Es rápido por clave, pero no ordena.
+    b: No ordena por clave.
+    c: Tampoco ordena enteros.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/TreeMap.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué devolvió stock.subMap("k", "p") con las claves kiwi, manzana, pera y uva?
+  opciones:
+    - {id: a, texto: "{kiwi=7, manzana=5}"}
+    - {id: b, texto: "{kiwi=7, manzana=5, pera=3}"}
+    - {id: c, texto: "{pera=3, uva=1}"}
+    - {id: d, texto: "Error, porque k y p no son claves"}
+  correctas: [a]
+  explicacion: subMap devuelve el rango [k, p) en orden; pera es posterior a p.
+  distractores:
+    b: '"pera" es mayor que "p", así que queda fuera.'
+    c: Son las claves posteriores a p.
+    d: Los límites no tienen por qué existir.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/TreeMap.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué coste garantiza TreeMap para get, put y remove?
+  opciones:
+    - {id: a, texto: "O(1)"}
+    - {id: b, texto: "O(n)"}
+    - {id: c, texto: "O(log n)"}
+    - {id: d, texto: "O(n log n)"}
+  correctas: [c]
+  explicacion: Su documentación garantiza log(n) porque es un árbol rojo-negro equilibrado.
+  distractores:
+    a: Es el coste medio de HashMap.
+    b: Sería un árbol sin equilibrar en el peor caso.
+    d: Es el coste de ordenar.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/TreeMap.html
+- id: L04-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué permite un TreeMap que no permite un HashMap?
+  opciones:
+    - {id: a, texto: "Recorrer las claves en orden"}
+    - {id: b, texto: "Obtener la primera clave mayor o igual que una dada"}
+    - {id: c, texto: "Consultar un rango de claves"}
+    - {id: d, texto: "Búsquedas por clave en O(1) de media"}
+    - {id: e, texto: "Claves mutables sin problemas"}
+  correctas: [a, b, c]
+  explicacion: El árbol mantiene el orden; la tabla hash es más rápida por clave, pero no ordena.
+  distractores:
+    d: Eso es lo que ofrece HashMap.
+    e: Modificar una clave también rompe un árbol.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/TreeMap.html
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Empareja cada operación de un montículo de mínimos con su coste.
+  prompts:
+    - {id: "1", texto: "Ver el mínimo"}
+    - {id: "2", texto: "Insertar"}
+    - {id: "3", texto: "Extraer el mínimo"}
+  opciones:
+    - {id: a, texto: "O(1)"}
+    - {id: b, texto: "O(log n)"}
+    - {id: c, texto: "O(log n), al reorganizar tras sacarlo"}
+    - {id: d, texto: "O(n²)"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El mínimo está en la raíz; insertar y extraer recorren una rama del árbol.
+  distractores:
+    d: Ninguna operación de un montículo es cuadrática.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/PriorityQueue.html
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Para obtener los 5 mayores de 1 000 000 de números, ¿cuánto tardaron sorted()[-5:] y heapq.nlargest(5, …)?
+  opciones:
+    - {id: a, texto: "Lo mismo"}
+    - {id: b, texto: "Unos 152 ms frente a unos 7 ms"}
+    - {id: c, texto: "Unos 7 ms frente a unos 152 ms"}
+    - {id: d, texto: "nlargest dio un error"}
+  correctas: [b]
+  explicacion: nlargest recorre una vez con un montículo de 5 elementos (O(n log k)); ordenar todo es O(n log n).
+  distractores:
+    a: La diferencia es grande.
+    c: Es al revés.
+    d: Funcionó.
+  referencia: https://docs.python.org/3/library/heapq.html
+- id: L04-006
+  tipo: completar
+  dificultad: baja
+  objetivo: "4.3"
+  enunciado: Completa la línea para obtener los 10 pedidos de mayor importe.
+  codigo:
+    lenguaje: python
+    fuente: |
+      import heapq
+      top = heapq.[[1]](10, pedidos, key=lambda p: p.[[2]])
+  huecos:
+    - {id: "1", respuestas: [nlargest]}
+    - {id: "2", respuestas: [total, importe]}
+  explicacion: nlargest admite una función clave, como sorted.
+  referencia: https://docs.python.org/3/library/heapq.html
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Se añaden tareas con prioridades 3, 1 y 2 a una PriorityQueue que ordena por prioridad. ¿En qué orden salen?
+  opciones:
+    - {id: a, texto: "3, 1, 2"}
+    - {id: b, texto: "2, 1, 3"}
+    - {id: c, texto: "1, 2, 3"}
+    - {id: d, texto: "3, 2, 1"}
+  correctas: [c]
+  explicacion: Es un montículo de mínimos; en la prueba salieron las tareas 10, 20 y 30, de prioridades 1, 2 y 3.
+  distractores:
+    a: Es el orden de llegada.
+    b: No sigue ningún criterio.
+    d: Sería un montículo de máximos.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/PriorityQueue.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Cuántos niveles tiene, aproximadamente, un árbol de búsqueda equilibrado con un millón de claves?
+  opciones:
+    - {id: a, texto: "Unos 20"}
+    - {id: b, texto: "Unos 1 000"}
+    - {id: c, texto: "Un millón"}
+    - {id: d, texto: "2"}
+  correctas: [a]
+  explicacion: La altura es O(log₂ n), y log₂ de un millón es casi 20.
+  distractores:
+    b: Sería la raíz cuadrada.
+    c: Sería un árbol degenerado en lista.
+    d: Demasiado pocos para tantas claves.
+  referencia: https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/TreeMap.html
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué condición exige la búsqueda binaria?
+  opciones:
+    - {id: a, texto: "Que los datos sean números"}
+    - {id: b, texto: "Que los datos estén ordenados"}
+    - {id: c, texto: "Que haya menos de 1 000 elementos"}
+    - {id: d, texto: "Que no haya repetidos"}
+  correctas: [b]
+  explicacion: Solo con los datos ordenados se puede descartar la mitad en cada paso.
+  distractores:
+    a: Sirve con cualquier tipo comparable.
+    c: Brilla precisamente con muchos datos.
+    d: Admite repetidos.
+  referencia: https://docs.python.org/3/library/bisect.html
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: En un millón de valores ordenados, list.index() tardó 24 ms. ¿Y bisect_left?
+  opciones:
+    - {id: a, texto: "Unos 24 ms"}
+    - {id: b, texto: "Unos 2 ms"}
+    - {id: c, texto: "Menos de 1 µs, con unos 20 pasos"}
+    - {id: d, texto: "Unos 20 segundos"}
+  correctas: [c]
+  explicacion: La búsqueda binaria es O(log n); index recorre la lista, O(n).
+  distractores:
+    a: index no aprovecha el orden.
+    b: La diferencia es mucho mayor.
+    d: Es al revés.
+  referencia: https://docs.python.org/3/library/bisect.html
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué devolvió sorted(pedidos, key=lambda p p[1]) con [ana 3, luis 1, eva 3, juan 2, bea 1]?
+  opciones:
+    - {id: a, texto: "[luis 1, bea 1, juan 2, ana 3, eva 3]"}
+    - {id: b, texto: "[bea 1, luis 1, juan 2, ana 3, eva 3]"}
+    - {id: c, texto: "[luis 1, bea 1, juan 2, eva 3, ana 3]"}
+    - {id: d, texto: "[ana 3, eva 3, juan 2, luis 1, bea 1]"}
+  correctas: [a]
+  explicacion: La ordenación es estable; los empates conservan el orden original (luis antes que bea, ana antes que eva).
+  distractores:
+    b: Eso ordenaría también por nombre.
+    c: Invierte un empate, y la ordenación estable no lo hace.
+    d: Es orden descendente.
+  referencia: https://docs.python.org/3/howto/sorting.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Cuántas llamadas hizo el Fibonacci recursivo sin memoización para calcular fib(30)?
+  opciones:
+    - {id: a, texto: "30"}
+    - {id: b, texto: "31"}
+    - {id: c, texto: "Unas 900"}
+    - {id: d, texto: "2 692 537"}
+  correctas: [d]
+  explicacion: Recalcula los mismos valores muchas veces; el número de llamadas crece de forma exponencial. Con @cache, 31 valores.
+  distractores:
+    a: Haría falta memoización o un bucle.
+    b: Es lo que calculó la versión con @cache.
+    c: Son muchas más.
+  referencia: https://docs.python.org/3/library/functools.html#functools.cache
+- id: L05-005
+  tipo: completar
+  dificultad: baja
+  objetivo: "5.3"
+  enunciado: Completa la memoización.
+  codigo:
+    lenguaje: python
+    fuente: |
+      from functools import [[1]]
+
+      @[[2]]
+      def fibm(n):
+          return n if n < 2 else fibm(n - 1) + fibm(n - 2)
+  huecos:
+    - {id: "1", respuestas: [cache]}
+    - {id: "2", respuestas: [cache]}
+  explicacion: functools.cache guarda el resultado de cada argumento y lo reutiliza.
+  referencia: https://docs.python.org/3/library/functools.html#functools.cache
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: ¿Por qué la búsqueda en anchura encuentra el camino con menos aristas?
+  opciones:
+    - {id: a, texto: "Porque explora por niveles con una cola: llega antes a los nodos más cercanos"}
+    - {id: b, texto: "Porque prueba cada camino posible y elige el menor"}
+    - {id: c, texto: "Porque usa una pila"}
+    - {id: d, texto: "Porque ordena los nodos alfabéticamente"}
+  correctas: [a]
+  explicacion: Al explorar por distancia creciente, la primera vez que alcanza el destino es por el camino más corto en número de aristas.
+  distractores:
+    b: Visita cada nodo una vez.
+    c: Con una pila sería búsqueda en profundidad.
+    d: El orden alfabético no interviene.
+  referencia: https://en.wikipedia.org/wiki/Breadth-first_search
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: En la red de ejemplo, ¿qué camino devolvió la búsqueda en anchura de Puerto a Universidad?
+  opciones:
+    - {id: a, texto: "Puerto, Centro, Mercado, Teatro, Parque, Universidad"}
+    - {id: b, texto: "Puerto, Universidad"}
+    - {id: c, texto: "Puerto, Centro, Plaza, Museo, Universidad"}
+    - {id: d, texto: "No hay camino"}
+  correctas: [c]
+  explicacion: Es un camino de 4 aristas, el mínimo en esa red.
+  distractores:
+    a: Tiene 5 aristas.
+    b: No están conectados directamente.
+    d: Sí lo hay.
+  referencia: https://en.wikipedia.org/wiki/Breadth-first_search
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.4"
+  enunciado: Las conexiones de la red tienen ahora una duración en minutos. ¿Sigue sirviendo la búsqueda en anchura para el camino más rápido?
+  opciones:
+    - {id: a, texto: "Sí, sin cambios"}
+    - {id: b, texto: "No; minimiza el número de aristas, no la suma de pesos. Hace falta Dijkstra, que usa un montículo"}
+    - {id: c, texto: "Sí, si se ordenan los vecinos"}
+    - {id: d, texto: "No hay algoritmo para eso"}
+  correctas: [b]
+  explicacion: Con pesos, el camino con menos tramos puede ser el más lento.
+  distractores:
+    a: Ignora los pesos.
+    c: Ordenar los vecinos no basta.
+    d: Dijkstra lo resuelve con pesos no negativos.
+  referencia: https://en.wikipedia.org/wiki/Breadth-first_search

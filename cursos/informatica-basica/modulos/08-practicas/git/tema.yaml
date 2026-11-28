@@ -1,0 +1,15 @@
+slug: git-en-profundidad
+titulo: Git en profundidad
+area: practicas
+nivel: basico
+idioma: es-ES
+resumen: Git entendido por dentro, con cada comando comprobado en repositorios de prueba. Objetos y referencias, ramas y fusiones, rebase y push forzado sin perder trabajo, flujos de equipo y cómo recuperar casi cualquier error con reflog, revert y bisect.
+etiquetas: [git, control-de-versiones, ramas, rebase, flujo-de-trabajo]
+fuentes:
+  - git-scm.com
+  - trunkbaseddevelopment.com
+  - conventionalcommits.org
+  - docs.github.com
+  - nvie.com
+ejercicios:
+  minimo_por_leccion: 8

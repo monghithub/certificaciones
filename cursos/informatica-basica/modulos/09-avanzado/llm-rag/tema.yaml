@@ -1,0 +1,17 @@
+slug: llm-rag-y-agentes
+titulo: LLM, RAG y agentes
+area: ia
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo funcionan los modelos de lenguaje y cómo construir aplicaciones fiables con ellos. Tokens, temperatura y alucinaciones; embeddings y búsqueda semántica; generación aumentada por recuperación (RAG); llamadas a herramientas y agentes; y los riesgos del OWASP Top 10 para LLM, con la inyección de instrucciones a la cabeza. Todo probado con un Ollama local (Qwen3 1.7B y nomic-embed-text).
+requisitos: []
+etiquetas: [ia, llm, rag, embeddings, agentes, ollama, seguridad]
+fuentes:
+  - huggingface.co
+  - arxiv.org
+  - docs.ollama.com
+  - genai.owasp.org
+  - anthropic.com
+  - modelcontextprotocol.io
+ejercicios:
+  minimo_por_leccion: 8

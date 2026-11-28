@@ -1,0 +1,693 @@
+- id: L01-001
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿Cuáles son restricciones del estilo REST que describió Fielding?
+  opciones:
+    - {id: a, texto: "Comunicación sin estado"}
+    - {id: b, texto: "Respuestas que indican si se pueden cachear"}
+    - {id: c, texto: "Interfaz uniforme, con recursos identificados por URI"}
+    - {id: d, texto: "Usar JSON como formato de datos"}
+    - {id: e, texto: "Versionar la API en la URL"}
+  correctas: [a, b, c]
+  explicacion: El estilo REST se define por restricciones de arquitectura (cliente-servidor, sin estado, cacheable, interfaz uniforme, sistema en capas), no por un formato ni por convenciones de URL.
+  distractores:
+    d: REST no fija el formato; la tesis es de 2000 y no menciona JSON.
+    e: El versionado es una decisión de diseño de cada API, no una restricción de REST.
+  referencia: https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Cuál es la forma más adecuada de obtener el producto 8 en una API HTTP?
+  opciones:
+    - {id: a, texto: "GET /obtenerProducto?id=8"}
+    - {id: b, texto: "POST /productos/obtener con {\"id\":8}"}
+    - {id: c, texto: "GET /productos/8"}
+    - {id: d, texto: "GET /productos?accion=obtener&id=8"}
+  correctas: [c]
+  explicacion: La URI nombra el recurso y el método indica la acción. Así funcionan las cachés, los registros y las herramientas que entienden HTTP.
+  distractores:
+    a: Pone la acción en la ruta; el método ya dice que es una lectura.
+    b: Un POST para leer no se puede cachear y oculta que es una operación segura.
+    d: Mueve la acción a un parámetro; sigue sin aprovechar el método.
+  referencia: https://martinfowler.com/articles/richardsonMaturityModel.html
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Hay que permitir cancelar un pedido, lo que libera stock y avisa al cliente. ¿Cómo lo modelas?
+  opciones:
+    - {id: a, texto: "POST /pedidos/7/cancelacion, tratando la cancelación como un recurso"}
+    - {id: b, texto: "GET /pedidos/7/cancelar"}
+    - {id: c, texto: "DELETE /pedidos/7, que borra el pedido"}
+    - {id: d, texto: "PUT /cancelarPedido?id=7"}
+  correctas: [a]
+  explicacion: Las acciones que no encajan en crear, leer, modificar o borrar se modelan como un recurso nuevo. El pedido sigue existiendo, ahora cancelado, y la cancelación puede tener sus propios datos (motivo, fecha).
+  distractores:
+    b: Un GET no debe cambiar estado.
+    c: Borrar el pedido pierde su historia, y cancelar no es lo mismo que borrar.
+    d: Pone un verbo en la ruta y usa PUT sin un recurso que sustituir.
+  referencia: https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.3
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.3"
+  enunciado: Al crear un producto con POST /productos, ¿qué respuesta es la más adecuada?
+  opciones:
+    - {id: a, texto: "200 OK con el producto"}
+    - {id: b, texto: "204 No Content"}
+    - {id: c, texto: "302 Found hacia el producto"}
+    - {id: d, texto: "201 Created con la cabecera Location: /productos/8"}
+  correctas: [d]
+  explicacion: 201 indica que se ha creado un recurso, y Location dice dónde está. Es lo que devolvió la API de prueba, junto con el ETag de la primera versión.
+  distractores:
+    a: Funciona, pero no dice que se haya creado nada ni dónde está.
+    b: Deja al cliente sin saber el identificador del recurso nuevo.
+    c: Una redirección obliga a otra petición y no indica creación.
+  referencia: https://www.rfc-editor.org/rfc/rfc9110.html#section-15.3.2
+- id: L01-005
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Empareja cada operación con el método y la respuesta típicos.
+  prompts:
+    - {id: "1", texto: "Sustituir los datos completos del producto 8"}
+    - {id: "2", texto: "Cambiar solo el precio del producto 8"}
+    - {id: "3", texto: "Borrar el producto 8"}
+    - {id: "4", texto: "Pedir un informe que tarda varios minutos en generarse"}
+  opciones:
+    - {id: a, texto: "PUT /productos/8 → 200 o 204"}
+    - {id: b, texto: "PATCH /productos/8 → 200 o 204"}
+    - {id: c, texto: "DELETE /productos/8 → 204"}
+    - {id: d, texto: "POST /informes → 202 Accepted, con dónde consultar el estado"}
+    - {id: e, texto: "GET /productos/8/borrar → 200"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: PUT sustituye el recurso entero, PATCH cambia una parte, DELETE borra, y 202 indica que el trabajo se hará después.
+  distractores:
+    e: Un GET no debe cambiar estado.
+  referencia: https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3
+- id: L01-006
+  tipo: matching
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Empareja cada API con su nivel en el modelo de madurez de Richardson.
+  prompts:
+    - {id: "1", texto: "POST /api con {\"accion\":\"obtenerProducto\",\"id\":8} para todo"}
+    - {id: "2", texto: "POST /productos/8 para leer, modificar o borrar"}
+    - {id: "3", texto: "GET, PUT y DELETE sobre /productos/8, con 200, 204 y 404"}
+    - {id: "4", texto: "Como el anterior, y cada respuesta enlaza las acciones posibles"}
+  opciones:
+    - {id: a, texto: "Nivel 0"}
+    - {id: b, texto: "Nivel 1"}
+    - {id: c, texto: "Nivel 2"}
+    - {id: d, texto: "Nivel 3"}
+    - {id: e, texto: "Nivel 4"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Cada nivel añade algo de HTTP. Primero recursos, después métodos y códigos, y por último enlaces de hipermedia.
+  distractores:
+    e: El modelo solo tiene cuatro niveles, del 0 al 3.
+  referencia: https://martinfowler.com/articles/richardsonMaturityModel.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: La API de catálogo de la lección usa recursos, métodos y códigos de HTTP, pero sus respuestas no incluyen enlaces. ¿En qué nivel de Richardson está?
+  opciones:
+    - {id: a, texto: "Nivel 1"}
+    - {id: b, texto: "Nivel 2"}
+    - {id: c, texto: "Nivel 3"}
+    - {id: d, texto: "Nivel 0"}
+  correctas: [b]
+  explicacion: Tiene recursos (nivel 1) y usa los métodos y los códigos con su significado (nivel 2). Le faltan los enlaces de hipermedia del nivel 3, como a la mayoría de las API públicas.
+  distractores:
+    a: Va más allá de tener recursos; usa GET, POST y PUT con sus códigos.
+    c: El nivel 3 exige enlaces en las respuestas.
+    d: No tiene un único punto de entrada.
+  referencia: https://martinfowler.com/articles/richardsonMaturityModel.html
+- id: L01-008
+  tipo: completar
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Completa el método de Spring Boot para que, al crear un producto, responda 201 con la cabecera Location.
+  codigo:
+    lenguaje: java
+    fuente: |
+      @PostMapping("/productos")
+      public ResponseEntity<Producto> crear(@Valid @RequestBody NuevoProducto nuevo) {
+          Producto p = guardar(nuevo);
+          return ResponseEntity.[[1]](URI.create("/productos/" + p.id())).body(p);
+      }
+  huecos:
+    - {id: "1", respuestas: ["created"]}
+  explicacion: ResponseEntity.created(uri) fija el estado 201 y la cabecera Location con esa URI.
+  referencia: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-methods/responseentity.html
+- id: L02-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: Empareja cada campo de Problem Details (RFC 9457) con su contenido.
+  prompts:
+    - {id: "1", texto: "type"}
+    - {id: "2", texto: "title"}
+    - {id: "3", texto: "detail"}
+    - {id: "4", texto: "instance"}
+  opciones:
+    - {id: a, texto: "URI que identifica el tipo de problema"}
+    - {id: b, texto: "Resumen del tipo de problema, igual en todos sus casos"}
+    - {id: c, texto: "Explicación de este caso concreto"}
+    - {id: d, texto: "URI de esta ocurrencia del problema"}
+    - {id: e, texto: "La traza de pila del servidor"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Con status, son los miembros estándar. Lo demás que necesite un tipo de problema va en miembros de extensión.
+  distractores:
+    e: Las trazas son información interna; van al registro del servidor, no a la respuesta.
+  referencia: https://www.rfc-editor.org/rfc/rfc9457.html#section-3.1
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Dos errores distintos de una API devuelven 400 Bad Request. ¿Cómo distingue el cliente cuál es cuál según el RFC 9457?
+  opciones:
+    - {id: a, texto: "Por el texto de detail"}
+    - {id: b, texto: "Por el campo type, una URI distinta para cada tipo de problema"}
+    - {id: c, texto: "Por la cabecera Content-Length"}
+    - {id: d, texto: "No puede: el código ya lo dice todo"}
+  correctas: [b]
+  explicacion: type es el identificador estable del tipo de problema, pensado para que el cliente lo compare en el código. detail es texto para personas y puede cambiar o traducirse.
+  distractores:
+    a: Comparar textos es frágil; detail puede cambiar sin aviso.
+    c: El tamaño del cuerpo no identifica el problema.
+    d: Varios problemas comparten código; para eso existe type.
+  referencia: https://www.rfc-editor.org/rfc/rfc9457.html#section-3.1.1
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Con spring.mvc.problemdetails.enabled, un producto con campos no válidos devolvió detail «Invalid request content.». ¿Qué mejora tiene más valor para el cliente?
+  opciones:
+    - {id: a, texto: "Añadir la traza de la excepción en detail"}
+    - {id: b, texto: "Cambiar el código a 500"}
+    - {id: c, texto: "Devolver HTML con el error"}
+    - {id: d, texto: "Añadir un miembro de extensión con cada campo erróneo y su motivo, y un type propio"}
+  correctas: [d]
+  explicacion: Con la lista de campos y motivos, el cliente puede señalar cada error en el formulario. Es lo que se hizo en la prueba con un manejador propio.
+  distractores:
+    a: Expone detalles internos y no ayuda al usuario.
+    b: El error es de los datos del cliente; 500 indicaría un fallo del servidor.
+    c: Un cliente de API espera un formato que pueda procesar.
+  referencia: https://www.rfc-editor.org/rfc/rfc9457.html#section-3.2
+- id: L02-004
+  tipo: matching
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Empareja cada situación con el código de estado más adecuado.
+  prompts:
+    - {id: "1", texto: "Ya existe un producto con ese código de barras"}
+    - {id: "2", texto: "El cliente ha superado su cuota de peticiones"}
+    - {id: "3", texto: "El usuario autenticado intenta borrar un producto sin tener el rol"}
+    - {id: "4", texto: "El servicio está en mantenimiento durante diez minutos"}
+  opciones:
+    - {id: a, texto: "409 Conflict"}
+    - {id: b, texto: "429 Too Many Requests, con Retry-After"}
+    - {id: c, texto: "403 Forbidden"}
+    - {id: d, texto: "503 Service Unavailable, con Retry-After"}
+    - {id: e, texto: "200 OK con un campo error"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: El código dice la clase de problema y permite a los intermediarios y a los clientes reaccionar sin leer el cuerpo, por ejemplo reintentando tras Retry-After.
+  distractores:
+    e: Un error con 200 engaña a cachés, monitores y clientes, que lo tratan como éxito.
+  referencia: https://www.rfc-editor.org/rfc/rfc9110.html#section-15
+- id: L02-005
+  tipo: ordering
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Ana y Luis leen el producto 1 a la vez. Ordena lo que pasa con concurrencia optimista.
+  opciones:
+    - {id: a, texto: "Los dos reciben el producto con ETag \"1\""}
+    - {id: b, texto: "Ana envía PUT con If-Match \"1\" y recibe 200 con ETag \"2\""}
+    - {id: c, texto: "Luis envía PUT con If-Match \"1\" y recibe 412"}
+    - {id: d, texto: "Luis vuelve a leer, ve el cambio de Ana y decide qué hacer"}
+  correctas: [a, b, c, d]
+  explicacion: El servidor solo aplica el cambio si el ETag enviado coincide con la versión actual. Así el cambio de Ana no se pierde.
+  referencia: https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: La API exige If-Match para modificar productos. ¿Qué debe responder a un PUT que no lo lleva?
+  opciones:
+    - {id: a, texto: "428 Precondition Required"}
+    - {id: b, texto: "412 Precondition Failed"}
+    - {id: c, texto: "200 y aplicar el cambio"}
+    - {id: d, texto: "409 Conflict"}
+  correctas: [a]
+  explicacion: 428 (RFC 6585) indica que el servidor exige una petición condicional. 412 es para cuando la condición se envió y no se cumple.
+  distractores:
+    b: 412 es para una condición enviada que no se cumple; aquí no hay condición.
+    c: Permitiría actualizaciones perdidas, justo lo que se quiere evitar.
+    d: 409 indica un conflicto con el estado, no la falta de una condición.
+  referencia: https://www.rfc-editor.org/rfc/rfc6585.html#section-3
+- id: L02-007
+  tipo: completar
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Completa la propiedad de Spring Boot que hace que las excepciones de Spring MVC se respondan como Problem Details.
+  codigo:
+    lenguaje: properties
+    fuente: |
+      spring.mvc.[[1]].enabled=true
+  huecos:
+    - {id: "1", respuestas: ["problemdetails"]}
+  explicacion: Con spring.mvc.problemdetails.enabled, Spring Boot registra un manejador que traduce las excepciones estándar a application/problem+json.
+  referencia: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: Has escrito un @RestControllerAdvice para MethodArgumentNotValidException, pero las respuestas siguen siendo las genéricas de Spring Boot. ¿Qué pasó en la prueba?
+  opciones:
+    - {id: a, texto: "Faltaba la dependencia de validación"}
+    - {id: b, texto: "El método debía devolver un String"}
+    - {id: c, texto: "El manejador que registra Spring Boot al activar Problem Details atendía antes la excepción; se resolvió con @Order(Ordered.HIGHEST_PRECEDENCE)"}
+    - {id: d, texto: "Los @RestControllerAdvice no funcionan con records"}
+  correctas: [c]
+  explicacion: Cuando dos manejadores pueden atender la misma excepción, el orden decide. Al dar al propio la precedencia más alta, se aplicó y devolvió los campos erróneos.
+  distractores:
+    a: La validación funcionaba; por eso se lanzaba MethodArgumentNotValidException.
+    b: Puede devolver ProblemDetail; es lo que hizo al final.
+    d: El problema no tiene que ver con los records.
+  referencia: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Con paginación por desplazamiento y páginas de 3, alguien borra el elemento 2 entre la primera y la segunda página. En la simulación, ¿qué pasó?
+  opciones:
+    - {id: a, texto: "La segunda página repitió el elemento 3"}
+    - {id: b, texto: "Nada: el desplazamiento se ajusta solo"}
+    - {id: c, texto: "La segunda página empezó en el 5 y el elemento 4 no apareció en ninguna"}
+    - {id: d, texto: "La segunda página llegó vacía"}
+  correctas: [c]
+  explicacion: Al borrar un elemento anterior, todos los siguientes se desplazan una posición y el desplazamiento 3 cae ya sobre el 5. Con un cursor, la página siguiente continúa tras el último visto, el 3.
+  distractores:
+    a: Se repetiría un elemento si alguien insertara uno al principio, no al borrar.
+    b: El desplazamiento cuenta posiciones, no elementos concretos.
+    d: Quedaban elementos de sobra.
+  referencia: https://www.rfc-editor.org/rfc/rfc8288.html
+- id: L03-002
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada necesidad con el tipo de paginación que mejor encaja.
+  prompts:
+    - {id: "1", texto: "Un listado infinito de una red social, que cambia sin parar"}
+    - {id: "2", texto: "Un panel de administración donde se salta a la página 37"}
+    - {id: "3", texto: "Exportar por la API una tabla de 50 millones de filas"}
+  opciones:
+    - {id: a, texto: "Cursor"}
+    - {id: b, texto: "Desplazamiento"}
+    - {id: c, texto: "Cursor, porque OFFSET se vuelve lento cuanto más lejos"}
+    - {id: d, texto: "Sin paginar, todo de una vez"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El cursor es estable y barato; el desplazamiento solo compensa cuando hace falta saltar a una página concreta y los datos cambian poco.
+  distractores:
+    d: Devolver millones de filas en una respuesta agota memoria y tiempo en los dos lados.
+  referencia: https://www.rfc-editor.org/rfc/rfc8288.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Por qué la API de prueba devuelve el cursor codificado en Base64 («Mw») en lugar del id del último producto?
+  opciones:
+    - {id: a, texto: "Para que el cliente lo trate como opaco y la API pueda cambiar su contenido sin romper a nadie"}
+    - {id: b, texto: "Para cifrarlo"}
+    - {id: c, texto: "Porque JSON no admite números"}
+    - {id: d, texto: "Para que ocupe menos"}
+  correctas: [a]
+  explicacion: Si el cliente construye cursores a mano, queda atado a su formato. Opaco, la API puede añadir más datos al cursor (por ejemplo, el campo de orden) cuando lo necesite.
+  distractores:
+    b: Base64 es una codificación, no un cifrado; cualquiera puede decodificarlo.
+    c: JSON admite números.
+    d: Base64 ocupa más que el dato original.
+  referencia: https://www.rfc-editor.org/rfc/rfc4648.html
+- id: L03-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué decisiones mejoran una colección paginada?
+  opciones:
+    - {id: a, texto: "Un límite por defecto y un máximo de tamaño de página"}
+    - {id: b, texto: "Un orden explícito con un desempate único, como el id"}
+    - {id: c, texto: "Los filtros como parámetros de consulta"}
+    - {id: d, texto: "Devolver el total exacto en cada página, aunque la tabla tenga millones de filas"}
+    - {id: e, texto: "Ordenar de forma distinta en cada petición para repartir la carga"}
+  correctas: [a, b, c]
+  explicacion: El límite protege al servidor, el desempate hace estable el orden y los filtros en la consulta son fáciles de cachear y de documentar.
+  distractores:
+    d: Un COUNT exacto en una tabla enorme es caro; muchas API no lo dan o lo dan aparte.
+    e: Un orden cambiante hace que los elementos salten de página.
+  referencia: https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.1
+- id: L03-005
+  tipo: ordering
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Ordena lo que ocurre cuando un cliente reintenta un POST /pedidos con una clave de idempotencia.
+  opciones:
+    - {id: a, texto: "El cliente genera una clave única para esta operación"}
+    - {id: b, texto: "Envía el POST con Idempotency-Key y la API crea el pedido y guarda la respuesta con la clave"}
+    - {id: c, texto: "La respuesta se pierde por un corte de red"}
+    - {id: d, texto: "El cliente reintenta con la misma clave"}
+    - {id: e, texto: "La API devuelve la respuesta guardada sin crear otro pedido"}
+  correctas: [a, b, c, d, e]
+  explicacion: En la prueba, dos envíos con la clave 7b1c-pedido-42 devolvieron el mismo pedido y el total siguió en uno.
+  referencia: https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: La API guarda las claves de idempotencia en un mapa en memoria y tiene tres instancias detrás de un balanceador. ¿Qué problema hay?
+  opciones:
+    - {id: a, texto: "Ninguno, si las claves son UUID"}
+    - {id: b, texto: "Un reintento puede llegar a otra instancia, que no conoce la clave y crea otro pedido"}
+    - {id: c, texto: "El balanceador rechaza las cabeceras propias"}
+    - {id: d, texto: "Solo funciona con HTTP/2"}
+  correctas: [b]
+  explicacion: Las claves deben guardarse en un almacén compartido, como la base de datos o Redis, con una caducidad y con una comprobación atómica.
+  distractores:
+    a: El problema no es que las claves se repitan, sino dónde se guardan.
+    c: Los balanceadores pasan las cabeceras sin problema.
+    d: La versión de HTTP no influye.
+  referencia: https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/
+- id: L03-007
+  tipo: matching
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Según el borrador del IETF sobre Idempotency-Key, empareja cada situación con la respuesta propuesta.
+  prompts:
+    - {id: "1", texto: "La operación exige la clave y la petición no la lleva"}
+    - {id: "2", texto: "La clave ya se usó con un cuerpo de petición distinto"}
+    - {id: "3", texto: "Llega la misma clave mientras la primera petición se sigue procesando"}
+  opciones:
+    - {id: a, texto: "400 Bad Request"}
+    - {id: b, texto: "422 Unprocessable Content"}
+    - {id: c, texto: "409 Conflict"}
+    - {id: d, texto: "500 Internal Server Error"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El borrador propone esos códigos con un cuerpo Problem Details que enlace a la documentación. En la prueba, la misma clave con otra cantidad devolvió 422.
+  distractores:
+    d: Ninguna de estas situaciones es un fallo del servidor.
+  referencia: https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/
+- id: L03-008
+  tipo: completar
+  dificultad: baja
+  objetivo: "3.3"
+  enunciado: Completa la petición para que el servidor pueda detectar los reintentos de este pago.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      curl -X POST https://api.tienda.example/pagos \
+        -H 'Content-Type: application/json' \
+        -H '[[1]]: 3f9c2a7e-6b1d-4c8e-9a52-0e7d1b4f8c21' \
+        -d '{"pedido":"cd0aa425","importe":60}'
+  huecos:
+    - {id: "1", respuestas: ["Idempotency-Key"], mayusculas: false}
+  explicacion: La cabecera Idempotency-Key lleva un identificador único por operación, como un UUID, que el cliente repite en cada reintento.
+  referencia: https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: El esquema generado de NuevoProducto tenía required con solo nombre, y precio con exclusiveMinimum 0. ¿Qué revelaba?
+  opciones:
+    - {id: a, texto: "Que el precio debía ser mayor que cero y, por tanto, obligatorio"}
+    - {id: b, texto: "Un error del generador de springdoc"}
+    - {id: c, texto: "Que la API aceptaba productos sin precio, porque @Positive admite nulos y faltaba @NotNull"}
+    - {id: d, texto: "Que el precio solo se podía enviar como texto"}
+  correctas: [c]
+  explicacion: El contrato reflejaba fielmente el código. Un POST sin precio devolvió 201 con precio null; leer el contrato lo dejó a la vista.
+  distractores:
+    a: exclusiveMinimum solo restringe el valor si está presente; no lo hace obligatorio.
+    b: El generador acertó; el error estaba en las anotaciones.
+    d: El tipo del campo era number.
+  referencia: https://springdoc.org/
+- id: L04-002
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Para qué sirve un contrato OpenAPI?
+  opciones:
+    - {id: a, texto: "Generar documentación"}
+    - {id: b, texto: "Generar clientes en otros lenguajes"}
+    - {id: c, texto: "Levantar un servidor de prueba para trabajar en paralelo"}
+    - {id: d, texto: "Sustituir las pruebas de la lógica de negocio"}
+    - {id: e, texto: "Hacer la API más rápida"}
+  correctas: [a, b, c]
+  explicacion: El contrato describe la interfaz en un formato que leen las herramientas, y de él salen la documentación, los clientes, los servidores de prueba y la validación.
+  distractores:
+    d: Describe la forma de las peticiones y respuestas, no si los cálculos son correctos.
+    e: No influye en el rendimiento.
+  referencia: https://spec.openapis.org/oas/latest.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: El contrato generado por springdoc para GET /productos/{id} solo documentaba la respuesta 200. ¿Qué consecuencia tiene?
+  opciones:
+    - {id: a, texto: "Ninguna, porque los clientes deducen los errores"}
+    - {id: b, texto: "Los clientes generados y la documentación no saben que puede devolver 404, 412 o 428; hay que anotarlas o escribir el contrato primero"}
+    - {id: c, texto: "La API deja de devolver esos códigos"}
+    - {id: d, texto: "springdoc no admite códigos de error"}
+  correctas: [b]
+  explicacion: El enfoque de código primero solo documenta lo que el código declara. Las respuestas que salen de excepciones no aparecen sin anotaciones.
+  distractores:
+    a: Un cliente generado sin esas respuestas no las tratará bien.
+    c: El contrato no cambia el comportamiento de la API.
+    d: springdoc documenta las respuestas que se anotan en el código.
+  referencia: https://springdoc.org/
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Tres equipos (web, móvil y backend) van a empezar a la vez a trabajar con una API nueva. ¿Qué enfoque encaja mejor?
+  opciones:
+    - {id: a, texto: "Código primero: el backend la programa y después genera el contrato"}
+    - {id: b, texto: "Sin contrato: cada equipo pregunta al backend lo que necesita"}
+    - {id: c, texto: "Contrato primero: acordar el OpenAPI y dar a web y móvil un servidor de prueba"}
+    - {id: d, texto: "Esperar a que el backend termine para que los demás empiecen"}
+  correctas: [c]
+  explicacion: Con varios consumidores, acordar el contrato antes permite revisar el diseño y trabajar en paralelo. Para una API pequeña de un solo equipo, generar el contrato desde el código suele bastar.
+  distractores:
+    a: Web y móvil tendrían que esperar al código, y el diseño no se revisaría antes de programarlo.
+    b: Cada equipo tendría una idea distinta de la API.
+    d: Desaprovecha el trabajo en paralelo que permite el contrato.
+  referencia: https://spec.openapis.org/oas/latest.html
+- id: L04-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué cambios en una API son incompatibles con los clientes existentes?
+  opciones:
+    - {id: a, texto: "Renombrar el campo precio a importe"}
+    - {id: b, texto: "Hacer obligatorio un parámetro que era opcional"}
+    - {id: c, texto: "Cambiar el tipo de precio de número a texto"}
+    - {id: d, texto: "Añadir un campo opcional nuevo a la respuesta"}
+    - {id: e, texto: "Añadir un recurso nuevo"}
+  correctas: [a, b, c]
+  explicacion: Quitar, renombrar, cambiar tipos o endurecer la entrada rompe a quien ya usa la API.
+  distractores:
+    d: Es compatible si los clientes ignoran los campos que no conocen.
+    e: Los clientes existentes no lo usan, así que no les afecta.
+  referencia: https://martinfowler.com/bliki/TolerantReader.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Hay que pasar precio (euros con decimales) a precio_centimos (entero) sin romper a nadie. ¿Qué haces?
+  opciones:
+    - {id: a, texto: "Cambiar el campo en una noche de poco tráfico"}
+    - {id: b, texto: "Sacar una v2 entera de la API solo por este campo"}
+    - {id: c, texto: "Cambiar el tipo de precio y avisar por correo"}
+    - {id: d, texto: "Añadir precio_centimos junto a precio, migrar a los clientes y retirar precio cuando nadie lo use"}
+  correctas: [d]
+  explicacion: Es la técnica de expandir y contraer. Durante la transición conviven los dos campos, y las métricas dicen cuándo se puede retirar el antiguo.
+  distractores:
+    a: Rompe a los clientes que no se actualicen a la vez.
+    b: Multiplica el mantenimiento por un cambio que se puede hacer de forma compatible.
+    c: Los clientes que no lean el correo, o no se actualicen a tiempo, se rompen.
+  referencia: https://martinfowler.com/bliki/TolerantReader.html
+- id: L04-007
+  tipo: matching
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Empareja cada cabecera con su función al retirar /v1/productos.
+  prompts:
+    - {id: "1", texto: "Deprecation: @1798761600"}
+    - {id: "2", texto: "Sunset: Sat, 01 May 2027 00:00:00 GMT"}
+    - {id: "3", texto: "Link: </productos/2>; rel=\"successor-version\""}
+  opciones:
+    - {id: a, texto: "Indica desde cuándo está obsoleto, como marca de tiempo Unix"}
+    - {id: b, texto: "Indica cuándo dejará de responder"}
+    - {id: c, texto: "Indica dónde está la versión que lo sustituye"}
+    - {id: d, texto: "Desactiva la caché"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Deprecation (RFC 9745) y Sunset (RFC 8594) avisan en cada respuesta, y el enlace lleva a la alternativa. 1798761600 es el 1 de enero de 2027.
+  distractores:
+    d: La caché se controla con Cache-Control, no con estas cabeceras.
+  referencia: https://www.rfc-editor.org/rfc/rfc9745.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué es lo más importante al versionar una API?
+  opciones:
+    - {id: a, texto: "Subir la versión mayor lo menos posible, evolucionando con cambios compatibles"}
+    - {id: b, texto: "Poner la versión en la URL y no en una cabecera"}
+    - {id: c, texto: "Sacar una versión nueva cada trimestre"}
+    - {id: d, texto: "Mantener indefinidamente cada versión publicada"}
+  correctas: [a]
+  explicacion: Dónde va la versión es secundario. Cada versión mayor obliga a los clientes a migrar y al equipo a mantener dos, así que conviene evolucionar sin romper.
+  distractores:
+    b: Las tres estrategias funcionan; cada una tiene sus ventajas.
+    c: Versionar por calendario fuerza migraciones que nadie necesita.
+    d: Mantener versiones sin límite multiplica el coste; se retiran avisando con Deprecation y Sunset.
+  referencia: https://www.rfc-editor.org/rfc/rfc8594.html
+- id: L05-001
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué rasgos tiene gRPC?
+  opciones:
+    - {id: a, texto: "El contrato se define en un fichero .proto de Protocol Buffers"}
+    - {id: b, texto: "Viaja sobre HTTP/2"}
+    - {id: c, texto: "Admite streaming del servidor, del cliente y en los dos sentidos"}
+    - {id: d, texto: "Los navegadores lo usan directamente con fetch"}
+    - {id: e, texto: "Los mensajes viajan en JSON por defecto"}
+  correctas: [a, b, c]
+  explicacion: gRPC genera clientes y servidores desde el .proto, multiplexa sobre HTTP/2 y tiene cuatro tipos de llamada.
+  distractores:
+    d: Los navegadores necesitan gRPC-Web y un proxy intermedio.
+    e: El formato por defecto es el binario de Protocol Buffers.
+  referencia: https://grpc.io/docs/what-is-grpc/core-concepts/
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: En la prueba, el mismo producto ocupó 17 bytes en Protocol Buffers y 53 en JSON. ¿Por qué es más pequeño?
+  opciones:
+    - {id: a, texto: "Porque gRPC lo comprime con gzip"}
+    - {id: b, texto: "Porque protobuf omite los datos que no caben"}
+    - {id: c, texto: "Porque el formato binario identifica cada campo por su número en lugar de repetir su nombre"}
+    - {id: d, texto: "Porque los números se envían como texto más corto"}
+  correctas: [c]
+  explicacion: JSON repite los nombres de campo y escribe los números como texto. Protobuf usa el número de campo y codificaciones binarias compactas.
+  distractores:
+    a: La compresión es opcional y no se aplicó en la prueba.
+    b: Protobuf no pierde datos.
+    d: En binario, los enteros usan codificaciones de longitud variable, no texto.
+  referencia: https://protobuf.dev/programming-guides/proto3/
+- id: L05-003
+  tipo: completar
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Completa la definición para que VigilarPrecios devuelva una secuencia de productos a medida que cambia el precio.
+  codigo:
+    lenguaje: protobuf
+    fuente: |
+      service Catalogo {
+        rpc ObtenerProducto (PeticionProducto) returns (Producto);
+        rpc VigilarPrecios (PeticionProducto) returns ([[1]] Producto);
+      }
+  huecos:
+    - {id: "1", respuestas: ["stream"]}
+  explicacion: stream en la respuesta define una llamada con streaming del servidor. En la prueba, el cliente recibió tres precios seguidos.
+  referencia: https://grpc.io/docs/what-is-grpc/core-concepts/
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.2"
+  enunciado: Borras el campo precio_centimos = 3 de un mensaje y añades precio_con_iva = 3. ¿Qué problema hay?
+  opciones:
+    - {id: a, texto: "Los clientes antiguos interpretarán el número 3 con el significado viejo y leerán el precio con IVA como si fuera sin IVA"}
+    - {id: b, texto: "Ninguno, porque el nombre es distinto"}
+    - {id: c, texto: "El servidor deja de arrancar"}
+    - {id: d, texto: "Los mensajes ocupan el doble"}
+  correctas: [a]
+  explicacion: En binario, el campo se identifica por su número. Por eso no se reutilizan, y el borrado se marca con reserved 3; protoc rechaza entonces el reúso con «uses reserved number 3».
+  distractores:
+    b: El nombre no viaja en el formato binario.
+    c: El servidor arranca; el problema es silencioso, en los datos.
+    d: El tamaño no cambia.
+  referencia: https://protobuf.dev/programming-guides/proto3/
+- id: L05-005
+  tipo: matching
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Empareja cada cambio en un mensaje de protobuf con su efecto en los clientes existentes.
+  prompts:
+    - {id: "1", texto: "Añadir un campo con un número nuevo"}
+    - {id: "2", texto: "Quitar un campo y marcar su número como reserved"}
+    - {id: "3", texto: "Reutilizar el número de un campo borrado para otro dato"}
+  opciones:
+    - {id: a, texto: "Seguro: los clientes antiguos lo ignoran"}
+    - {id: b, texto: "Seguro, y evita que alguien reutilice el número"}
+    - {id: c, texto: "Peligroso: los clientes antiguos leen el dato con el significado viejo"}
+    - {id: d, texto: "Obliga a cambiar de versión de HTTP"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Las reglas de compatibilidad de protobuf giran en torno a los números de campo.
+  distractores:
+    d: La versión de HTTP no tiene relación con el esquema de los mensajes.
+  referencia: https://protobuf.dev/programming-guides/proto3/
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Cuál es la principal ventaja de GraphQL para una aplicación con frontend web y móvil que muestran datos distintos de los mismos productos?
+  opciones:
+    - {id: a, texto: "Que la caché HTTP funciona mejor"}
+    - {id: b, texto: "Que no necesita esquema"}
+    - {id: c, texto: "Que es más rápido que una API REST equivalente"}
+    - {id: d, texto: "Que cada cliente pide exactamente los campos y relaciones que necesita en una consulta"}
+  correctas: [d]
+  explicacion: Con un esquema tipado y un único punto de entrada, cada frontend compone su consulta sin que el backend tenga que crear un recurso a medida.
+  distractores:
+    a: Al ir todo por POST a un mismo punto, la caché HTTP ayuda menos.
+    b: GraphQL exige un esquema tipado.
+    c: El rendimiento depende de la implementación; las consultas complejas pueden ser costosas.
+  referencia: https://graphql.org/learn/
+- id: L05-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Una API avisa a tus sistemas con un webhook cada vez que se paga un pedido. ¿Qué debe hacer tu receptor?
+  opciones:
+    - {id: a, texto: "Verificar la firma de cada llamada"}
+    - {id: b, texto: "Tolerar que la misma notificación llegue más de una vez"}
+    - {id: c, texto: "Responder rápido y procesar después si el trabajo es largo"}
+    - {id: d, texto: "Aceptar las llamadas que tengan el formato correcto, sin más comprobaciones"}
+    - {id: e, texto: "Fallar si el evento llega fuera de orden, sin guardarlo"}
+  correctas: [a, b, c]
+  explicacion: Las entregas se reintentan, así que llegan duplicados (la especificación Standard Webhooks incluye un identificador único por evento para detectarlos); cualquiera puede llamar a tu URL, así que la firma es imprescindible; y un receptor lento provoca reintentos.
+  distractores:
+    d: Sin verificar la firma, un tercero podría inventar pagos.
+    e: Los reintentos pueden desordenar los eventos; el receptor debe manejarlo, no descartar.
+  referencia: https://www.standardwebhooks.com/
+- id: L05-008
+  tipo: matching
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: Empareja cada necesidad con el estilo de API que mejor encaja.
+  prompts:
+    - {id: "1", texto: "Una API pública que usan terceros desde sus navegadores"}
+    - {id: "2", texto: "Llamadas internas entre microservicios con mucho tráfico y streaming"}
+    - {id: "3", texto: "Avisar a los sistemas de un cliente cuando cambia el estado de un pedido"}
+  opciones:
+    - {id: a, texto: "REST con un contrato OpenAPI"}
+    - {id: b, texto: "gRPC"}
+    - {id: c, texto: "Webhooks"}
+    - {id: d, texto: "Un único POST /api con un campo acción"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: REST encaja con consumidores externos y navegadores, gRPC con servicios internos y los webhooks con los avisos asíncronos.
+  distractores:
+    d: Es el nivel 0 de Richardson; pierde la semántica de HTTP sin ganar nada.
+  referencia: https://grpc.io/docs/what-is-grpc/introduction/

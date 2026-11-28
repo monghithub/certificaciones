@@ -1,0 +1,22 @@
+slug: estilos-de-arquitectura
+titulo: Estilos de arquitectura comparados
+area: arquitectura
+nivel: intermedio
+idioma: es-ES
+resumen: Capas, hexagonal, cebolla, limpia, monolito modular, microservicios y arquitectura dirigida por eventos, comparados por sus reglas de dependencia y sus compromisos. Cómo comprobar los límites de forma automática (import-linter en Python y Spring Modulith en Java, ambos probados) y cómo elegir y documentar la decisión con ADR.
+requisitos: [arquitectura-hexagonal]
+etiquetas: [arquitectura, capas, clean-architecture, monolito-modular, adr, spring-modulith]
+fuentes:
+  - martinfowler.com
+  - alistair.cockburn.us
+  - jeffreypalermo.com
+  - blog.cleancoder.com
+  - docs.spring.io
+  - import-linter.readthedocs.io
+  - archunit.org
+  - adr.github.io
+  - cognitect.com
+  - iso25000.com
+  - thoughtworks.com
+ejercicios:
+  minimo_por_leccion: 8

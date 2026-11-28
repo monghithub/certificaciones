@@ -1,0 +1,14 @@
+slug: java-moderno
+titulo: Java moderno (17 a 25)
+area: lenguajes
+nivel: intermedio
+idioma: es-ES
+resumen: Lo que cambia en Java de la versión 17 a la 25 para escribir código más claro, con records, clases selladas, patrones en switch, hilos virtuales, colecciones secuenciadas, stream gatherers y ficheros compactos, todo compilado y ejecutado con JDK 25.
+etiquetas: [java, jdk25, records, pattern-matching, hilos-virtuales]
+fuentes:
+  - openjdk.org
+  - docs.oracle.com
+  - oracle.com
+  - docs.spring.io
+ejercicios:
+  minimo_por_leccion: 8

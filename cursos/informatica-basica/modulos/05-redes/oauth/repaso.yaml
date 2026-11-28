@@ -1,0 +1,701 @@
+- id: L01-001
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué problemas tiene dar tu usuario y contraseña de un servicio a otra aplicación para que acceda a tus datos?
+  opciones:
+    - {id: a, texto: "La aplicación puede hacer lo mismo que tú, no solo lo que necesita"}
+    - {id: b, texto: "No puedes retirarle el acceso sin cambiar la contraseña"}
+    - {id: c, texto: "Una fuga en la aplicación expone tu contraseña"}
+    - {id: d, texto: "La aplicación tarda más en conectarse"}
+    - {id: e, texto: "El servicio deja de funcionar"}
+  correctas: [a, b, c]
+  explicacion: OAuth sustituye la contraseña por tokens limitados en alcance y tiempo, y revocables, que el cliente obtiene sin ver la contraseña.
+  distractores:
+    d: El problema es de seguridad, no de velocidad.
+    e: El servicio sigue funcionando; el riesgo es el exceso de acceso.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L01-002
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Una aplicación de facturación lee tus pedidos de una tienda usando Keycloak. Empareja cada elemento con su rol en OAuth 2.0.
+  prompts:
+    - {id: "1", texto: "Tú, el usuario de la tienda"}
+    - {id: "2", texto: "La aplicación de facturación"}
+    - {id: "3", texto: "Keycloak"}
+    - {id: "4", texto: "La API de pedidos de la tienda"}
+  opciones:
+    - {id: a, texto: "Propietario del recurso"}
+    - {id: b, texto: "Cliente"}
+    - {id: c, texto: "Servidor de autorización"}
+    - {id: d, texto: "Servidor de recursos"}
+    - {id: e, texto: "Agente de usuario"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: El usuario concede el acceso, la aplicación lo pide, Keycloak emite los tokens y la API los acepta.
+  distractores:
+    e: El agente de usuario es el navegador que interviene en las redirecciones, no uno de los cuatro roles.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Quieres añadir «Iniciar sesión con la cuenta de la empresa» a una aplicación. ¿Qué protocolo está pensado para eso?
+  opciones:
+    - {id: a, texto: "OAuth 2.0 a secas, leyendo el token de acceso"}
+    - {id: b, texto: "OpenID Connect, que añade un ID token con la identidad del usuario"}
+    - {id: c, texto: "HTTP Basic"}
+    - {id: d, texto: "TLS"}
+  correctas: [b]
+  explicacion: OAuth 2.0 autoriza el acceso a recursos; OpenID Connect añade la autenticación, con un ID token pensado para que el cliente sepa quién es el usuario.
+  distractores:
+    a: El token de acceso es para la API y OAuth no define su formato; no sirve para identificar al usuario de forma fiable.
+    c: HTTP Basic envía la contraseña en cada petición y no permite usar un proveedor de identidad.
+    d: TLS cifra la conexión; no identifica usuarios.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L01-004
+  tipo: matching
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Clasifica cada aplicación como cliente público o confidencial.
+  prompts:
+    - {id: "1", texto: "Una SPA en React que se ejecuta en el navegador"}
+    - {id: "2", texto: "Un backend en Spring Boot que llama a otra API"}
+    - {id: "3", texto: "Una aplicación móvil"}
+    - {id: "4", texto: "Un proceso nocturno en un servidor que sincroniza datos"}
+  opciones:
+    - {id: a, texto: "Público"}
+    - {id: b, texto: "Confidencial"}
+    - {id: c, texto: "Servidor de recursos"}
+  correctas: [["1", a], ["2", b], ["3", a], ["4", b]]
+  explicacion: El criterio es si puede guardar un secreto. El código de una SPA o de una app móvil está en manos del usuario; el de un backend, no.
+  distractores:
+    c: Ninguna de ellas es la API protegida; todas son clientes.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Una SPA incluye en su código JavaScript un client_secret para autenticarse ante el servidor de autorización. ¿Qué problema hay?
+  opciones:
+    - {id: a, texto: "Ninguno; el código está minificado"}
+    - {id: b, texto: "Que el secreto caduca antes"}
+    - {id: c, texto: "Que cualquiera puede extraerlo del código, así que no protege nada; la SPA es un cliente público y debe usar PKCE"}
+    - {id: d, texto: "Que JavaScript no permite enviar secretos"}
+  correctas: [c]
+  explicacion: Todo lo que se entrega al navegador es visible para el usuario. Un cliente público no tiene secreto y se protege con PKCE.
+  distractores:
+    a: Minificar no oculta nada; el secreto sigue en el código descargado.
+    b: La caducidad no es el problema; lo es que no es secreto.
+    d: Se puede enviar, pero no sirve de protección.
+  referencia: https://www.rfc-editor.org/rfc/rfc7636
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué RFC define el marco de autorización OAuth 2.0 y en qué año se publicó?
+  opciones:
+    - {id: a, texto: "RFC 2616, en 1999"}
+    - {id: b, texto: "RFC 6749, en 2012"}
+    - {id: c, texto: "RFC 7519, en 2015"}
+    - {id: d, texto: "RFC 9700, en 2025"}
+  correctas: [b]
+  explicacion: OAuth 2.0 se publicó como RFC 6749 en octubre de 2012.
+  distractores:
+    a: El RFC 2616 es la antigua especificación de HTTP/1.1.
+    c: El RFC 7519 define los JSON Web Tokens.
+    d: El RFC 9700 recoge las buenas prácticas de seguridad actuales de OAuth 2.0.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Dónde introduce el usuario su contraseña en un flujo OAuth bien hecho?
+  opciones:
+    - {id: a, texto: "En el servidor de autorización, nunca en el cliente"}
+    - {id: b, texto: "En el cliente, que la reenvía"}
+    - {id: c, texto: "En el servidor de recursos"}
+    - {id: d, texto: "En la URL de redirección"}
+  correctas: [a]
+  explicacion: El usuario se autentica directamente ante el servidor de autorización. El cliente solo recibe tokens.
+  distractores:
+    b: Si el cliente ve la contraseña, se pierde la principal ventaja de OAuth.
+    c: La API recibe tokens, no contraseñas.
+    d: Las URL acaban en historiales y registros; nunca deben llevar contraseñas.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: Una aplicación usa el token de acceso que recibe para decidir quién es el usuario conectado, leyendo un campo que su proveedor incluye. ¿Qué problema tiene?
+  opciones:
+    - {id: a, texto: "Ninguno; los tokens de acceso tienen un formato estándar"}
+    - {id: b, texto: "Que el token de acceso es más lento"}
+    - {id: c, texto: "Que el token de acceso está cifrado"}
+    - {id: d, texto: "Que OAuth no define el formato del token de acceso ni está pensado para autenticar; para eso está el ID token de OpenID Connect"}
+  correctas: [d]
+  explicacion: El token de acceso es para el servidor de recursos y su contenido depende del proveedor. La identidad del usuario para el cliente la da el ID token.
+  distractores:
+    a: OAuth no fija el formato; puede ser un JWT o un valor opaco.
+    b: La velocidad no es el problema.
+    c: Normalmente va firmado, no cifrado, pero eso no cambia su propósito.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L02-001
+  tipo: ordering
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Ordena los pasos del flujo de código con PKCE.
+  opciones:
+    - {id: a, texto: "El cliente genera code_verifier y state y redirige al servidor con el code_challenge"}
+    - {id: b, texto: "El usuario inicia sesión en el servidor de autorización"}
+    - {id: c, texto: "El servidor redirige a la redirect_uri con el código y el state"}
+    - {id: d, texto: "El cliente canjea el código y el code_verifier en el endpoint de tokens"}
+    - {id: e, texto: "El servidor comprueba el verificador y devuelve los tokens"}
+  correctas: [a, b, c, d, e]
+  explicacion: El código viaja por el navegador; los tokens se obtienen en una petición directa en la que el cliente demuestra conocer el verificador.
+  referencia: https://www.rfc-editor.org/rfc/rfc7636
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: Con el método S256, ¿cuál es el code_challenge del code_verifier dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk (el ejemplo del apéndice B del RFC 7636)?
+  codigo:
+    lenguaje: python
+    fuente: |
+      import base64, hashlib
+      v = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+      print(base64.urlsafe_b64encode(hashlib.sha256(v.encode()).digest()).rstrip(b"=").decode())
+  opciones:
+    - {id: a, texto: "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"}
+    - {id: b, texto: "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"}
+    - {id: c, texto: "El mismo valor codificado en hexadecimal"}
+    - {id: d, texto: "No se puede calcular sin el client_secret"}
+  correctas: [b]
+  explicacion: S256 aplica SHA-256 al verificador y codifica el resultado en base64url sin relleno. El valor coincide con el del RFC.
+  distractores:
+    a: Sería el método plain, que envía el verificador tal cual.
+    c: PKCE usa base64url, no hexadecimal.
+    d: PKCE no usa el client_secret; por eso sirve a los clientes públicos.
+  referencia: https://www.rfc-editor.org/rfc/rfc7636
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Un atacante intercepta el código de autorización en la redirección. ¿Por qué no puede canjearlo si se usa PKCE?
+  opciones:
+    - {id: a, texto: "Porque el código está cifrado"}
+    - {id: b, texto: "Porque el código caduca al instante"}
+    - {id: c, texto: "Porque para canjearlo hace falta el code_verifier, que solo conoce el cliente y no ha pasado por el navegador"}
+    - {id: d, texto: "Porque el servidor comprueba la IP del atacante"}
+  correctas: [c]
+  explicacion: El navegador solo transportó el resumen (code_challenge). Sin el verificador original, el servidor rechaza el canje, como mostró Keycloak con «Invalid code verifier».
+  distractores:
+    a: El código no va cifrado; es un valor opaco.
+    b: Dura poco, pero lo suficiente para que un atacante rápido lo use sin PKCE.
+    d: OAuth no se basa en comprobar direcciones IP.
+  referencia: https://www.rfc-editor.org/rfc/rfc7636
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Según el RFC 9700 (enero de 2025), ¿es obligatorio PKCE?
+  opciones:
+    - {id: a, texto: "No, es opcional para los clientes públicos y los confidenciales"}
+    - {id: b, texto: "Solo para aplicaciones móviles"}
+    - {id: c, texto: "Solo si el cliente tiene secreto"}
+    - {id: d, texto: "Sí para los clientes públicos, y se recomienda también para los confidenciales"}
+  correctas: [d]
+  explicacion: El RFC 9700 establece que los clientes públicos deben usar PKCE y lo recomienda en general en el flujo de código.
+  distractores:
+    a: Las buenas prácticas actuales lo exigen en los clientes públicos.
+    b: Aplica a todos los clientes públicos, también a las SPA.
+    c: Es al revés; los que no tienen secreto son los que más lo necesitan.
+  referencia: https://www.rfc-editor.org/rfc/rfc9700
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Para qué sirve el parámetro state?
+  opciones:
+    - {id: a, texto: "Para que el cliente compruebe a la vuelta que la respuesta corresponde a una petición suya y evitar CSRF"}
+    - {id: b, texto: "Para guardar la contraseña del usuario"}
+    - {id: c, texto: "Para indicar el país del usuario"}
+    - {id: d, texto: "Para elegir el algoritmo de firma"}
+  correctas: [a]
+  explicacion: El cliente envía un valor aleatorio y verifica que vuelve igual. Así no acepta códigos que un atacante intente colarle en la sesión.
+  distractores:
+    b: Las contraseñas nunca viajan en los parámetros de OAuth.
+    c: No tiene relación con la localización.
+    d: El algoritmo de firma lo decide el servidor.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: El servidor de autorización acepta como redirect_uri cualquier URL que empiece por https://tienda.example.com. ¿Qué riesgo hay?
+  opciones:
+    - {id: a, texto: "Ninguno, porque el dominio es el correcto"}
+    - {id: b, texto: "Que un atacante use una URL como https://tienda.example.com.atacante.net y reciba el código"}
+    - {id: c, texto: "Que las redirecciones sean más lentas"}
+    - {id: d, texto: "Que el usuario tenga que iniciar sesión dos veces"}
+  correctas: [b]
+  explicacion: Una comparación por prefijo deja pasar dominios del atacante o rutas abiertas. Las URI de redirección deben compararse exactamente.
+  distractores:
+    a: El prefijo coincide con dominios que no son los tuyos.
+    c: El riesgo es de seguridad, no de rendimiento.
+    d: No afecta al número de inicios de sesión.
+  referencia: https://www.rfc-editor.org/rfc/rfc9700
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: Un cliente canjea un código y obtiene tokens. Después, alguien intenta canjear el mismo código otra vez. ¿Qué hizo Keycloak en la prueba de la lección?
+  opciones:
+    - {id: a, texto: "Devolvió los mismos tokens otra vez"}
+    - {id: b, texto: "Devolvió tokens nuevos"}
+    - {id: c, texto: "Rechazó el canje con invalid_grant y revocó los tokens emitidos con ese código"}
+    - {id: d, texto: "Rechazó el canje, pero los tokens anteriores siguieron activos"}
+  correctas: [c]
+  explicacion: El RFC 6749 indica que hay que rechazarlo y que se deberían revocar los tokens ya emitidos con ese código. En la prueba, la introspección pasó de active true a false.
+  distractores:
+    a: El código es de un solo uso.
+    b: No se emiten tokens con un código ya usado.
+    d: Keycloak también revocó los tokens emitidos con el código.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L02-008
+  tipo: completar
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Completa la petición de autorización del cliente público.
+  codigo:
+    lenguaje: text
+    fuente: |
+      GET /realms/tienda/protocol/openid-connect/auth
+        ?response_type=[[1]]
+        &client_id=web-tienda
+        &redirect_uri=http://127.0.0.1:9999/callback
+        &scope=openid
+        &state=AbC123
+        &code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM
+        &code_challenge_method=[[2]]
+  huecos:
+    - {id: "1", respuestas: [code]}
+    - {id: "2", respuestas: [S256]}
+  explicacion: response_type=code pide un código de autorización y code_challenge_method=S256 indica que el reto es el SHA-256 del verificador.
+  referencia: https://www.rfc-editor.org/rfc/rfc7636
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: Un servicio de pedidos necesita llamar cada noche a la API de inventario, sin ningún usuario implicado. ¿Qué flujo usa?
+  opciones:
+    - {id: a, texto: "Credenciales de cliente (client_credentials)"}
+    - {id: b, texto: "Código de autorización con PKCE"}
+    - {id: c, texto: "Implícito"}
+    - {id: d, texto: "Contraseña del propietario"}
+  correctas: [a]
+  explicacion: Sin usuario, el servicio se autentica como sí mismo con su identificador y su secreto y recibe un token en su nombre.
+  distractores:
+    b: Requiere un usuario que inicie sesión en un navegador.
+    c: Está desaconsejado y también requiere un usuario.
+    d: Está prohibido por el RFC 9700 y requiere la contraseña de un usuario.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: En la prueba con Keycloak, ¿qué devolvió el flujo de credenciales de cliente?
+  opciones:
+    - {id: a, texto: "Un access_token, un refresh_token y un id_token"}
+    - {id: b, texto: "Solo un id_token"}
+    - {id: c, texto: "Un access_token de 300 segundos y ningún refresh_token"}
+    - {id: d, texto: "Un error, porque el flujo está obsoleto"}
+  correctas: [c]
+  explicacion: Sin usuario no hay sesión que mantener; cuando el token caduca, el servicio pide otro con sus credenciales.
+  distractores:
+    a: El id_token identifica a un usuario, y aquí no lo hay; tampoco se emitió refresh token.
+    b: No hay usuario que identificar.
+    d: Es un flujo vigente para servicio a servicio.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Por qué los tokens de acceso suelen durar solo unos minutos?
+  opciones:
+    - {id: a, texto: "Para ahorrar espacio en el servidor"}
+    - {id: b, texto: "Porque los JWT no pueden durar más"}
+    - {id: c, texto: "Porque el usuario cambia de contraseña cada pocos minutos"}
+    - {id: d, texto: "Para limitar el daño si se filtran; el cliente los renueva con el refresh token"}
+  correctas: [d]
+  explicacion: Un token robado solo sirve hasta que caduca. El refresh token evita pedir de nuevo el inicio de sesión.
+  distractores:
+    a: El motivo es de seguridad, no de almacenamiento.
+    b: La duración la decide el servidor; un JWT puede durar lo que se quiera.
+    c: La contraseña no tiene relación con la duración del token.
+  referencia: https://www.rfc-editor.org/rfc/rfc6749
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.2"
+  enunciado: Con rotación de refresh tokens, el servidor recibe un refresh token que ya se había usado. ¿Qué indica?
+  opciones:
+    - {id: a, texto: "Que alguien pudo copiarlo, porque el legítimo ya recibió uno nuevo; el servidor puede revocar la sesión"}
+    - {id: b, texto: "Que el reloj del servidor va mal"}
+    - {id: c, texto: "Nada; es el uso normal"}
+    - {id: d, texto: "Que el usuario cambió su contraseña"}
+  correctas: [a]
+  explicacion: Con rotación, cada refresh token se usa una vez. Ver uno antiguo de nuevo revela un posible robo, y el servidor puede invalidar toda la familia de tokens.
+  distractores:
+    b: El reloj no influye en la reutilización.
+    c: Con rotación, reutilizar uno antiguo no es normal.
+    d: Cambiar la contraseña no produce reutilizaciones.
+  referencia: https://www.rfc-editor.org/rfc/rfc9700
+- id: L03-005
+  tipo: matching
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Empareja cada flujo con lo que dice de él el RFC 9700.
+  prompts:
+    - {id: "1", texto: "Implícito"}
+    - {id: "2", texto: "Contraseña del propietario"}
+    - {id: "3", texto: "Código de autorización con PKCE"}
+  opciones:
+    - {id: a, texto: "Los clientes no deberían usarlo (SHOULD NOT)"}
+    - {id: b, texto: "No debe usarse (MUST NOT)"}
+    - {id: c, texto: "Es el flujo recomendado; PKCE es obligatorio para clientes públicos"}
+    - {id: d, texto: "Solo para servicios sin usuario"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El RFC 9700 desaconseja el implícito, prohíbe el de contraseña y recomienda el flujo de código con PKCE.
+  distractores:
+    d: Es la descripción de las credenciales de cliente.
+  referencia: https://www.rfc-editor.org/rfc/rfc9700
+- id: L03-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: ¿Por qué no se debe usar el flujo de contraseña del propietario (grant_type=password)?
+  opciones:
+    - {id: a, texto: "Porque el cliente ve la contraseña del usuario"}
+    - {id: b, texto: "Porque dificulta o impide la autenticación multifactor"}
+    - {id: c, texto: "Porque el RFC 9700 dice que no debe usarse"}
+    - {id: d, texto: "Porque los tokens que emite no son JWT"}
+    - {id: e, texto: "Porque es más lento que el flujo de código"}
+  correctas: [a, b, c]
+  explicacion: El flujo devuelve al cliente la contraseña, justo lo que OAuth evita, y no deja al servidor controlar la autenticación.
+  distractores:
+    d: El formato del token no depende del flujo.
+    e: El problema es de seguridad, no de velocidad.
+  referencia: https://www.rfc-editor.org/rfc/rfc9700
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.3"
+  enunciado: Una aplicación de televisión necesita que el usuario inicie sesión, pero escribir con el mando es incómodo. ¿Qué flujo encaja?
+  opciones:
+    - {id: a, texto: "Flujo de dispositivo: la tele muestra un código y el usuario lo confirma desde el móvil"}
+    - {id: b, texto: "Contraseña del propietario, escrita con el mando"}
+    - {id: c, texto: "Implícito"}
+    - {id: d, texto: "Credenciales de cliente"}
+  correctas: [a]
+  explicacion: El flujo de dispositivo (RFC 8628) traslada el inicio de sesión a otro dispositivo con navegador.
+  distractores:
+    b: Está prohibido y además es incómodo.
+    c: Está desaconsejado.
+    d: No identifica al usuario.
+  referencia: https://www.rfc-editor.org/rfc/rfc8628
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: El documento de descubrimiento de Keycloak incluye password e implicit en grant_types_supported. ¿Significa que tu cliente debe permitirlos?
+  opciones:
+    - {id: a, texto: "Sí; si el servidor los anuncia, hay que usarlos"}
+    - {id: b, texto: "No; el servidor los soporta, pero cada cliente debe tenerlos desactivados salvo necesidad justificada"}
+    - {id: c, texto: "Sí, porque son más seguros"}
+    - {id: d, texto: "No, porque Keycloak los anuncia por error"}
+  correctas: [b]
+  explicacion: El servidor anuncia lo que es capaz de hacer. En la prueba, el cliente web-tienda tenía el flujo de contraseña desactivado y la petición recibió unauthorized_client.
+  distractores:
+    a: Anunciar una capacidad no obliga a usarla.
+    c: Son los flujos menos seguros.
+    d: No es un error; el servidor los soporta por compatibilidad.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Qué garantiza la firma de un JWT?
+  opciones:
+    - {id: a, texto: "Que su contenido es secreto"}
+    - {id: b, texto: "Que no se ha modificado desde que lo firmó el emisor"}
+    - {id: c, texto: "Que el usuario sigue conectado"}
+    - {id: d, texto: "Que el token no se puede copiar"}
+  correctas: [b]
+  explicacion: La firma protege la integridad y el origen. La carga solo está en base64url, así que cualquiera puede leerla.
+  distractores:
+    a: Firmado no es cifrado; la carga es legible.
+    c: El token no sabe si la sesión sigue abierta; eso lo dice la introspección.
+    d: Un token se puede copiar; por eso se transmite por HTTPS y dura poco.
+  referencia: https://www.rfc-editor.org/rfc/rfc7519
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: En la prueba, se cambiaron los roles de la carga de un token a admin y se reenvió con la firma original. ¿Qué respondió Keycloak?
+  opciones:
+    - {id: a, texto: "200, con los permisos de administrador"}
+    - {id: b, texto: "200, con los permisos originales"}
+    - {id: c, texto: "401, porque la firma ya no corresponde a la carga"}
+    - {id: d, texto: "500, por un error interno"}
+  correctas: [c]
+  explicacion: La firma se calcula sobre la cabecera y la carga. Al cambiar la carga, la firma deja de cuadrar y el token se rechaza.
+  distractores:
+    a: Sin la clave privada no se puede producir una firma válida para la carga modificada.
+    b: El servidor no «corrige» el token; lo rechaza.
+    d: Es un rechazo controlado, no un error del servidor.
+  referencia: https://www.rfc-editor.org/rfc/rfc7519
+- id: L04-003
+  tipo: matching
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Empareja cada claim con su significado.
+  prompts:
+    - {id: "1", texto: "iss"}
+    - {id: "2", texto: "aud"}
+    - {id: "3", texto: "exp"}
+    - {id: "4", texto: "sub"}
+  opciones:
+    - {id: a, texto: "Quién emitió el token"}
+    - {id: b, texto: "Para qué API está pensado"}
+    - {id: c, texto: "Cuándo caduca"}
+    - {id: d, texto: "Identificador del usuario o cliente"}
+    - {id: e, texto: "Contraseña cifrada"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: iss es el emisor, aud la audiencia, exp la caducidad y sub el sujeto.
+  distractores:
+    e: Un token nunca debe llevar contraseñas.
+  referencia: https://www.rfc-editor.org/rfc/rfc7519
+- id: L04-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué debe comprobar una API antes de aceptar un JWT de acceso?
+  opciones:
+    - {id: a, texto: "La firma, con la clave pública del JWKS del emisor"}
+    - {id: b, texto: "Que el emisor (iss) y la audiencia (aud) son los esperados"}
+    - {id: c, texto: "Que no ha caducado (exp)"}
+    - {id: d, texto: "Que el algoritmo es el que indica el propio token, sea cual sea"}
+    - {id: e, texto: "Que el token tiene menos de 1000 caracteres"}
+  correctas: [a, b, c]
+  explicacion: Firma, emisor, audiencia y caducidad son el mínimo, además de los permisos de cada operación.
+  distractores:
+    d: La API debe fijar los algoritmos que acepta; fiarse del alg del token permite ataques como aceptar none.
+    e: La longitud no indica validez.
+  referencia: https://www.rfc-editor.org/rfc/rfc8725
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: La API de facturación valida firma, emisor y caducidad, pero no la audiencia. ¿Qué riesgo hay?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Que acepte tokens caducados"}
+    - {id: c, texto: "Que rechace tokens válidos"}
+    - {id: d, texto: "Que acepte tokens emitidos para otra API del mismo proveedor"}
+  correctas: [d]
+  explicacion: Un token pensado para otra API, quizá con menos protección, también pasaría. La audiencia limita cada token a su destinatario.
+  distractores:
+    a: Sin audiencia, cualquier token del emisor sirve en cualquier API.
+    b: La caducidad sí se comprueba.
+    c: El riesgo es el contrario, aceptar de más.
+  referencia: https://www.rfc-editor.org/rfc/rfc8725
+- id: L04-006
+  tipo: matching
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Empareja cada característica con la forma de validar tokens.
+  prompts:
+    - {id: "1", texto: "No necesita llamar al servidor en cada petición"}
+    - {id: "2", texto: "Detecta al instante un token revocado"}
+    - {id: "3", texto: "Funciona con tokens opacos, que no son JWT"}
+  opciones:
+    - {id: a, texto: "Validación local con JWKS"}
+    - {id: b, texto: "Introspección"}
+    - {id: c, texto: "Ninguna de las dos"}
+  correctas: [["1", a], ["2", b], ["3", b]]
+  explicacion: La validación local comprueba la firma sin red, pero no se entera de revocaciones; la introspección pregunta al servidor y sirve con cualquier token.
+  distractores:
+    c: Cada característica la cumple una de las dos formas.
+  referencia: https://www.rfc-editor.org/rfc/rfc7662
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Dónde debe enviar el cliente el token de acceso al llamar a la API?
+  opciones:
+    - {id: a, texto: "En la cabecera Authorization: Bearer, sobre HTTPS"}
+    - {id: b, texto: "En la URL, como ?access_token=…"}
+    - {id: c, texto: "En una cookie sin HttpOnly"}
+    - {id: d, texto: "En el cuerpo de una petición GET"}
+  correctas: [a]
+  explicacion: El RFC 6750 define la cabecera Authorization con el esquema Bearer. Las URL quedan registradas en historiales, registros y la cabecera Referer.
+  distractores:
+    b: Expone el token en historiales y registros.
+    c: Una cookie accesible desde JavaScript queda expuesta a XSS.
+    d: Las peticiones GET no deben llevar cuerpo.
+  referencia: https://www.rfc-editor.org/rfc/rfc6750
+- id: L04-008
+  tipo: completar
+  dificultad: baja
+  objetivo: "4.4"
+  enunciado: Completa la cabecera con la que el cliente envía el token a la API.
+  codigo:
+    lenguaje: http
+    fuente: |
+      GET /pedidos HTTP/1.1
+      Host: api.tienda.example
+      [[1]]: [[2]] eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+  huecos:
+    - {id: "1", respuestas: [Authorization]}
+    - {id: "2", respuestas: [Bearer]}
+  explicacion: El RFC 6750 define el esquema Bearer en la cabecera Authorization; quien porta el token puede usarlo, de ahí el nombre.
+  referencia: https://www.rfc-editor.org/rfc/rfc6750
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: ¿Qué scope hay que pedir para que el flujo de código sea de OpenID Connect y devuelva un ID token?
+  opciones:
+    - {id: a, texto: "openid"}
+    - {id: b, texto: "profile"}
+    - {id: c, texto: "email"}
+    - {id: d, texto: "offline_access"}
+  correctas: [a]
+  explicacion: El scope openid convierte la petición en una autenticación de OpenID Connect; los demás piden datos adicionales.
+  distractores:
+    b: Pide el nombre y otros datos del perfil, pero sin openid no hay ID token.
+    c: Pide el correo; tampoco activa OIDC por sí solo.
+    d: Pide un refresh token de larga duración.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L05-002
+  tipo: matching
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Empareja cada afirmación con el token al que se refiere.
+  prompts:
+    - {id: "1", texto: "Dice al cliente quién ha iniciado sesión"}
+    - {id: "2", texto: "Se envía a la API en la cabecera Authorization"}
+    - {id: "3", texto: "En la prueba, su aud era web-tienda"}
+    - {id: "4", texto: "Su formato depende del proveedor"}
+  opciones:
+    - {id: a, texto: "ID token"}
+    - {id: b, texto: "Token de acceso"}
+    - {id: c, texto: "Refresh token"}
+  correctas: [["1", a], ["2", b], ["3", a], ["4", b]]
+  explicacion: El ID token es un JWT para el cliente, con su client_id como audiencia; el token de acceso es para la API y OAuth no fija su formato.
+  distractores:
+    c: El refresh token solo sirve para pedir tokens nuevos al servidor de autorización.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Para qué sirve el nonce en OpenID Connect?
+  opciones:
+    - {id: a, texto: "Para cifrar el ID token"}
+    - {id: b, texto: "Para indicar el idioma de la pantalla de inicio de sesión"}
+    - {id: c, texto: "Para ligar el ID token a la petición del cliente y evitar que se reutilice uno capturado"}
+    - {id: d, texto: "Para renovar el token de acceso"}
+  correctas: [c]
+  explicacion: El cliente envía un valor aleatorio y comprueba que el ID token lo contiene. Un token de otra petición no tendría ese valor.
+  distractores:
+    a: El nonce no cifra nada.
+    b: El idioma se indica con ui_locales.
+    d: Renovar es tarea del refresh token.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.3"
+  enunciado: Una aplicación guarda a sus usuarios usando el email del ID token como identificador. ¿Qué problema puede haber?
+  opciones:
+    - {id: a, texto: "Ninguno; el email es único y estable"}
+    - {id: b, texto: "Que el email puede cambiar o reasignarse a otra persona; lo estable es la pareja iss y sub"}
+    - {id: c, texto: "Que el email no viene en el ID token"}
+    - {id: d, texto: "Que el email ocupa demasiado"}
+  correctas: [b]
+  explicacion: Un usuario puede cambiar de correo, y una dirección dada de baja puede asignarse a otra persona. OIDC define sub como identificador estable dentro de cada emisor.
+  distractores:
+    a: Los correos cambian y se reasignan.
+    c: Con el scope email sí viene, pero no es un buen identificador.
+    d: El tamaño no es el problema.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: ¿Qué ofrece la URL /.well-known/openid-configuration?
+  opciones:
+    - {id: a, texto: "La lista de usuarios del proveedor"}
+    - {id: b, texto: "Las claves privadas del servidor"}
+    - {id: c, texto: "Un formulario de registro"}
+    - {id: d, texto: "La configuración pública del proveedor, el emisor, los endpoints, el JWKS y los flujos soportados"}
+  correctas: [d]
+  explicacion: El documento de descubrimiento permite configurar un cliente solo con la URL del emisor.
+  distractores:
+    a: No expone usuarios.
+    b: Nunca se publican claves privadas; el JWKS tiene las públicas.
+    c: No es un formulario.
+  referencia: https://openid.net/specs/openid-connect-discovery-1_0.html
+- id: L05-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué debe comprobar el cliente al recibir un ID token?
+  opciones:
+    - {id: a, texto: "La firma y el emisor (iss)"}
+    - {id: b, texto: "Que aud contiene su propio client_id"}
+    - {id: c, texto: "Que el nonce coincide con el que envió"}
+    - {id: d, texto: "Que contiene el scope de la API de pedidos"}
+    - {id: e, texto: "Que su tamaño es par"}
+  correctas: [a, b, c]
+  explicacion: El cliente valida firma, emisor, audiencia, caducidad y nonce para asegurarse de que el token es para él y para esta petición.
+  distractores:
+    d: Los permisos de la API van en el token de acceso, no en el ID token.
+    e: El tamaño no tiene ningún significado.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: Un usuario ya inició sesión en Keycloak desde la aplicación A. Al entrar en la aplicación B del mismo realm, no tiene que escribir la contraseña. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque la aplicación A le pasa la contraseña a la B"}
+    - {id: b, texto: "Porque comparten base de datos"}
+    - {id: c, texto: "Por el inicio de sesión único; el proveedor ya tiene una sesión del usuario y emite un código para B sin pedir credenciales"}
+    - {id: d, texto: "Porque el ID token de A sirve para B"}
+  correctas: [c]
+  explicacion: La sesión vive en el proveedor de identidad. Cada aplicación recibe sus propios tokens, pero el usuario solo se autentica una vez.
+  distractores:
+    a: Las aplicaciones nunca ven ni comparten la contraseña.
+    b: Las aplicaciones no necesitan compartir nada entre ellas.
+    d: El ID token de A tiene como audiencia a A; B debe recibir el suyo.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.2"
+  enunciado: Un frontend envía el ID token a la API de pedidos para identificarse. ¿Es correcto?
+  opciones:
+    - {id: a, texto: "Sí, es la práctica recomendada"}
+    - {id: b, texto: "No; el ID token es para el cliente, y a la API se le envía el token de acceso emitido para ella"}
+    - {id: c, texto: "Solo si la API está en el mismo dominio"}
+    - {id: d, texto: "Solo si el ID token no ha caducado"}
+  correctas: [b]
+  explicacion: El ID token tiene como audiencia al cliente. La API debe recibir un token de acceso con su propia audiencia y los permisos necesarios.
+  distractores:
+    a: Las especificaciones separan ambos tokens precisamente para esto.
+    c: El dominio no cambia el propósito del token.
+    d: La caducidad no lo convierte en el token adecuado.
+  referencia: https://openid.net/specs/openid-connect-core-1_0.html

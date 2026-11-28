@@ -1,0 +1,21 @@
+slug: python-backend
+titulo: Python para backend
+area: lenguajes
+nivel: intermedio
+idioma: es-ES
+resumen: Python moderno para servicios web. Proyectos con uv, ruff y mypy; tipos y novedades hasta Python 3.15; validación con Pydantic; APIs con FastAPI y SQLAlchemy; asincronía y pruebas. Todo el código se ha ejecutado con Python 3.15.2, FastAPI 0.165 y Pydantic 2.14.
+requisitos: []
+etiquetas: [python, fastapi, pydantic, asyncio, uv, tipos]
+fuentes:
+  - docs.python.org
+  - peps.python.org
+  - devguide.python.org
+  - docs.astral.sh
+  - mypy.readthedocs.io
+  - docs.pydantic.dev
+  - fastapi.tiangolo.com
+  - docs.sqlalchemy.org
+  - docs.pytest.org
+  - packaging.python.org
+ejercicios:
+  minimo_por_leccion: 8

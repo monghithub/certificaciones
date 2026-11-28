@@ -1,0 +1,723 @@
+- id: L01-001
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué versiones de Java son LTS según la hoja de ruta de Oracle?
+  opciones:
+    - {id: a, texto: "17"}
+    - {id: b, texto: "21"}
+    - {id: c, texto: "25"}
+    - {id: d, texto: "22"}
+    - {id: e, texto: "24"}
+  correctas: [a, b, c]
+  explicacion: Las LTS posteriores a Java 8 son 11, 17, 21 y 25; las intermedias, como 22 o 24, se sustituyen a los seis meses.
+  distractores:
+    d: Es una versión sin soporte a largo plazo.
+    e: También es una versión sin soporte a largo plazo.
+  referencia: https://www.oracle.com/java/technologies/java-se-support-roadmap.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Cada cuánto tiempo publica Oracle una versión LTS de Java?
+  opciones:
+    - {id: a, texto: "Cada seis meses"}
+    - {id: b, texto: "Cada año"}
+    - {id: c, texto: "Cada dos años"}
+    - {id: d, texto: "Cada cinco años"}
+  correctas: [c]
+  explicacion: Oracle indica que prevé una LTS cada dos años; tras la 25 (septiembre de 2025), la siguiente prevista es Java 29, en septiembre de 2027.
+  distractores:
+    a: Cada seis meses sale una versión, pero no todas son LTS.
+    b: Las LTS no son anuales.
+    d: El intervalo es menor.
+  referencia: https://www.oracle.com/java/technologies/java-se-support-roadmap.html
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Empareja cada característica con la versión en que fue definitiva.
+  prompts:
+    - {id: "1", texto: "Records (JEP 395)"}
+    - {id: "2", texto: "Clases selladas (JEP 409)"}
+    - {id: "3", texto: "Hilos virtuales (JEP 444)"}
+    - {id: "4", texto: "Ficheros fuente compactos (JEP 512)"}
+  opciones:
+    - {id: a, texto: "16"}
+    - {id: b, texto: "17"}
+    - {id: c, texto: "21"}
+    - {id: d, texto: "25"}
+    - {id: e, texto: "11"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Según cada JEP en openjdk.org, los records son de Java 16, las clases selladas de 17, los hilos virtuales de 21 y los ficheros compactos de 25.
+  distractores:
+    e: Ninguna de estas características existía en Java 11.
+  referencia: https://openjdk.org/jeps/0
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué es una característica preliminar (preview) de Java?
+  opciones:
+    - {id: a, texto: "Una característica completa pero no definitiva, que se activa con --enable-preview y puede cambiar o desaparecer"}
+    - {id: b, texto: "Una característica a medio implementar"}
+    - {id: c, texto: "Una característica definitiva de pago"}
+    - {id: d, texto: "Una característica que solo existe en las LTS"}
+  correctas: [a]
+  explicacion: El JEP 12 la define como totalmente especificada e implementada, pero no permanente, para recoger opiniones antes de decidir.
+  distractores:
+    b: Está completa; lo que no es definitivo es su diseño.
+    c: No tiene relación con licencias.
+    d: Aparecen en cualquier versión.
+  referencia: https://openjdk.org/jeps/12
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: ¿Qué hace java Hola.java con este fichero en Java 25?
+  codigo:
+    lenguaje: java
+    fuente: |
+      void main() {
+          var nombres = List.of("Ana", "Luis");
+          for (var n : nombres) {
+              IO.println("Hola, " + n);
+          }
+      }
+  opciones:
+    - {id: a, texto: "Error, porque falta la clase"}
+    - {id: b, texto: "Error, porque main no es static"}
+    - {id: c, texto: "Error, porque falta import java.util.List"}
+    - {id: d, texto: "Imprime «Hola, Ana» y «Hola, Luis»"}
+  correctas: [d]
+  explicacion: Con el JEP 512, un fichero compacto no declara clase, admite un main de instancia y tiene disponibles los paquetes de java.base. Se comprobó con JDK 25.
+  distractores:
+    a: En Java 25 la clase es implícita.
+    b: Se admiten métodos main de instancia.
+    c: En los ficheros compactos, los paquetes de java.base se importan de forma automática.
+  referencia: https://openjdk.org/jeps/512
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Dónde se describe la motivación, el diseño y la versión de una novedad del JDK?
+  opciones:
+    - {id: a, texto: "En su JEP, en openjdk.org"}
+    - {id: b, texto: "En el código fuente de la JVM"}
+    - {id: c, texto: "En Stack Overflow"}
+    - {id: d, texto: "En el manifiesto del JAR"}
+  correctas: [a]
+  explicacion: Cada JEP recoge la propuesta, su estado y la versión en que se entregó.
+  distractores:
+    b: El código no explica la motivación.
+    c: Es una comunidad de preguntas, no la fuente oficial.
+    d: El manifiesto describe un JAR concreto.
+  referencia: https://openjdk.org/jeps/0
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Tu empresa desarrolla un servicio que estará en producción varios años. ¿Qué versión de Java elegirías en noviembre de 2026?
+  opciones:
+    - {id: a, texto: "Java 27, la más reciente, aunque no sea LTS"}
+    - {id: b, texto: "Java 25, la LTS más reciente"}
+    - {id: c, texto: "Java 8"}
+    - {id: d, texto: "Una versión con características preliminares activadas"}
+  correctas: [b]
+  explicacion: Para producción a largo plazo se usa una LTS. Las versiones no LTS dejan de recibir actualizaciones a los seis meses.
+  distractores:
+    a: Habría que actualizar cada seis meses para seguir con soporte.
+    c: Es una LTS muy antigua y sin las novedades del tema.
+    d: Las características preliminares pueden cambiar.
+  referencia: https://www.oracle.com/java/technologies/java-se-support-roadmap.html
+- id: L01-008
+  tipo: completar
+  dificultad: baja
+  objetivo: "1.3"
+  enunciado: Completa las órdenes para compilar y ejecutar un programa que usa una característica preliminar en Java 25.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      javac --release 25 --[[1]] Demo.java
+      java --[[2]] Demo
+  huecos:
+    - {id: "1", respuestas: [enable-preview]}
+    - {id: "2", respuestas: [enable-preview]}
+  explicacion: Las características preliminares deben activarse tanto al compilar como al ejecutar.
+  referencia: https://openjdk.org/jeps/12
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué genera el compilador para record Importe(long centimos, String moneda)?
+  opciones:
+    - {id: a, texto: "Solo los campos"}
+    - {id: b, texto: "Constructor, accesores centimos() y moneda(), equals, hashCode y toString"}
+    - {id: c, texto: "Getters getCentimos() y setters"}
+    - {id: d, texto: "Una tabla en la base de datos"}
+  correctas: [b]
+  explicacion: El record deriva todo eso de sus componentes. Los accesores llevan el nombre del componente, sin get, y no hay setters porque es inmutable.
+  distractores:
+    a: Genera también los métodos.
+    c: No hay setters y los accesores no llevan el prefijo get.
+    d: Un record es una clase del lenguaje, no tiene relación con la base de datos.
+  referencia: https://openjdk.org/jeps/395
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué imprime este código?
+  codigo:
+    lenguaje: java
+    fuente: |
+      var diez = new Importe(1000, "EUR");
+      System.out.println(diez.sumar(diez));
+      System.out.println(diez.equals(new Importe(1000, "EUR")));
+  opciones:
+    - {id: a, texto: "Importe@1b6d3586 y false"}
+    - {id: b, texto: "2000 y true"}
+    - {id: c, texto: "Importe[centimos=2000, moneda=EUR] y true"}
+    - {id: d, texto: "Importe[centimos=2000, moneda=EUR] y false"}
+  correctas: [c]
+  explicacion: El toString generado muestra los componentes, y equals compara por valor. Es la salida de la ejecución con JDK 25.
+  distractores:
+    a: Sería el toString y el equals por identidad de una clase normal.
+    b: toString muestra el record completo, no solo un número.
+    d: Los records se comparan por sus componentes.
+  referencia: https://openjdk.org/jeps/395
+- id: L02-003
+  tipo: completar
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Completa el constructor compacto para que no pueda existir un importe negativo.
+  codigo:
+    lenguaje: java
+    fuente: |
+      record Importe(long centimos, String moneda) {
+          [[1]] {
+              if (centimos < 0) [[2]] new IllegalArgumentException("Importe negativo");
+          }
+      }
+  huecos:
+    - {id: "1", respuestas: [Importe]}
+    - {id: "2", respuestas: [throw]}
+  explicacion: El constructor compacto se escribe con el nombre del record y sin parámetros; las asignaciones las añade el compilador al final.
+  referencia: https://openjdk.org/jeps/395
+- id: L02-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Para qué casos encaja un record?
+  opciones:
+    - {id: a, texto: "Un objeto valor del dominio, como un importe o una franja horaria"}
+    - {id: b, texto: "Un DTO de la API, como el cuerpo de una petición"}
+    - {id: c, texto: "Un mensaje o evento inmutable"}
+    - {id: d, texto: "Una entidad JPA que se modifica con setters"}
+    - {id: e, texto: "Una clase que necesita extender otra clase"}
+  correctas: [a, b, c]
+  explicacion: Los records encajan en datos inmutables. Sus campos son final y no pueden extender otras clases.
+  distractores:
+    d: JPA necesita constructor vacío y campos modificables.
+    e: Un record no puede extender otra clase.
+  referencia: https://openjdk.org/jeps/395
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Con sealed interface Pago permits Tarjeta, ¿qué ocurre al compilar record Efectivo(String n) implements Pago {}?
+  opciones:
+    - {id: a, texto: "Compila con una advertencia"}
+    - {id: b, texto: "Falla en tiempo de ejecución"}
+    - {id: c, texto: "Compila sin problema"}
+    - {id: d, texto: "Error de compilación, porque Efectivo no está en la cláusula permits"}
+  correctas: [d]
+  explicacion: 'javac respondió: class is not allowed to extend sealed class: Pago (as it is not listed in its permits clause).'
+  distractores:
+    a: Es un error, no una advertencia.
+    b: Se detecta al compilar.
+    c: Solo los tipos permitidos pueden implementar una interfaz sellada.
+  referencia: https://openjdk.org/jeps/409
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: ¿Qué modificador deben tener las subclases permitidas de una clase sellada?
+  opciones:
+    - {id: a, texto: "public"}
+    - {id: b, texto: "final, sealed o non-sealed"}
+    - {id: c, texto: "abstract"}
+    - {id: d, texto: "Ninguno en especial"}
+  correctas: [b]
+  explicacion: Cada subclase decide si cierra la jerarquía (final), la sigue restringiendo (sealed) o la vuelve a abrir (non-sealed). Los records son implícitamente final.
+  distractores:
+    a: La visibilidad no es lo que exige el JEP.
+    c: Una subclase abstracta no resuelve qué pasa con sus propias subclases.
+    d: El compilador exige uno de los tres.
+  referencia: https://openjdk.org/jeps/409
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué ventaja da modelar Pago como interfaz sellada cuyos casos son records?
+  opciones:
+    - {id: a, texto: "Que el compilador conoce todos los casos y puede comprobar que un switch los cubre"}
+    - {id: b, texto: "Que los pagos se guardan solos en la base de datos"}
+    - {id: c, texto: "Que se pueden añadir casos sin recompilar"}
+    - {id: d, texto: "Que se ejecuta más rápido"}
+  correctas: [a]
+  explicacion: Es un conjunto cerrado de casos con sus datos; el compilador detecta los casos olvidados.
+  distractores:
+    b: No tiene relación con la persistencia.
+    c: Es al contrario; añadir un caso exige tratarlo en los switch.
+    d: La ventaja es de corrección, no de rendimiento.
+  referencia: https://openjdk.org/jeps/409
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Por qué un record no sirve como entidad JPA tradicional?
+  opciones:
+    - {id: a, texto: "Porque JPA no admite clases con métodos"}
+    - {id: b, texto: "Porque los records no se pueden serializar"}
+    - {id: c, texto: "Porque JPA necesita un constructor sin argumentos y campos modificables, y los campos de un record son final"}
+    - {id: d, texto: "Porque los records son lentos"}
+  correctas: [c]
+  explicacion: El modelo de JPA asigna los campos después de construir el objeto, algo incompatible con la inmutabilidad de un record.
+  distractores:
+    a: Las entidades JPA suelen tener métodos.
+    b: Los records se pueden serializar.
+    d: El problema no es el rendimiento.
+  referencia: https://openjdk.org/jeps/395
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: ¿Qué devuelve longitud("   ")?
+  codigo:
+    lenguaje: java
+    fuente: |
+      static int longitud(Object o) {
+          if (o instanceof String s && !s.isBlank()) return s.length();
+          return 0;
+      }
+  opciones:
+    - {id: a, texto: "3"}
+    - {id: b, texto: "0"}
+    - {id: c, texto: "Error de compilación"}
+    - {id: d, texto: "NullPointerException"}
+  correctas: [b]
+  explicacion: Es un String, pero isBlank() es true, así que la condición falla y devuelve 0. Se comprobó con JDK 25.
+  distractores:
+    a: Sería la longitud si no se comprobara isBlank.
+    c: El patrón con && es válido desde Java 16.
+    d: No hay ningún null.
+  referencia: https://openjdk.org/jeps/394
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Con el switch de la lección, ¿qué devuelve describir para una tarjeta 5500000000000004 con un importe de 200 000 céntimos?
+  opciones:
+    - {id: a, texto: "Tarjeta acabada en 0004"}
+    - {id: b, texto: "Error, porque dos casos encajan"}
+    - {id: c, texto: "Tarjeta con importe alto"}
+    - {id: d, texto: "Pago desconocido"}
+  correctas: [c]
+  explicacion: Los casos se prueban en orden y el primero, con la guarda importe > 100 000, se cumple.
+  distractores:
+    a: Sería el resultado si el caso general estuviera antes.
+    b: Que encajen varios es válido; se elige el primero.
+    d: No existe ese caso.
+  referencia: https://openjdk.org/jeps/441
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.2"
+  enunciado: Si en el switch se pone el caso Tarjeta(var numero, var _) antes del caso con la guarda de importe alto, ¿qué pasa?
+  opciones:
+    - {id: a, texto: "Nada, el orden no importa"}
+    - {id: b, texto: "El compilador da un error, porque el caso con guarda queda dominado por el general y nunca se alcanzaría"}
+    - {id: c, texto: "Se eligen los dos casos"}
+    - {id: d, texto: "Se ejecuta el último caso"}
+  correctas: [b]
+  explicacion: 'Un patrón sin guarda que cubre al siguiente lo hace inalcanzable. Con JDK 25, javac respondió: this case label is dominated by a preceding case label.'
+  distractores:
+    a: Los casos se prueban en orden.
+    c: Una expresión switch elige un solo caso.
+    d: Se elige el primero que encaja, no el último.
+  referencia: https://openjdk.org/jeps/441
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Quitas el caso Bizum de un switch sobre la interfaz sellada Pago, sin default. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Compila y, con un Bizum, devuelve null"}
+    - {id: b, texto: "Compila con una advertencia"}
+    - {id: c, texto: "Error de compilación, porque el switch no cubre todos los valores posibles"}
+    - {id: d, texto: "Lanza una excepción solo si llega un Bizum"}
+  correctas: [c]
+  explicacion: 'javac respondió: the switch expression does not cover all possible input values. El compilador conoce los tres casos de la jerarquía sellada.'
+  distractores:
+    a: Una expresión switch no puede quedarse sin valor.
+    b: Es un error, no una advertencia.
+    d: Se detecta al compilar, no al ejecutar.
+  referencia: https://openjdk.org/jeps/441
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: ¿Por qué es preferible no poner default en un switch exhaustivo sobre un tipo sellado?
+  opciones:
+    - {id: a, texto: "Porque default es más lento"}
+    - {id: b, texto: "Porque está prohibido"}
+    - {id: c, texto: "Porque default solo admite constantes"}
+    - {id: d, texto: "Porque al añadir un tipo nuevo, sin default el compilador señala cada switch que hay que actualizar; con default, el caso nuevo caería en él sin avisar"}
+  correctas: [d]
+  explicacion: La exhaustividad convierte un olvido en un error de compilación. Un default la anula.
+  distractores:
+    a: El rendimiento no es la razón.
+    b: Está permitido, pero quita la comprobación.
+    c: default no tiene esa restricción.
+  referencia: https://openjdk.org/jeps/441
+- id: L03-006
+  tipo: completar
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Completa el caso para descomponer el Bizum y usar solo el teléfono.
+  codigo:
+    lenguaje: java
+    fuente: |
+      return switch (pago) {
+          // ...
+          case Bizum(var telefono, var [[1]]) [[2]] "Bizum a " + telefono;
+      };
+  huecos:
+    - {id: "1", respuestas: [_]}
+    - {id: "2", respuestas: ["->"]}
+  explicacion: _ (JEP 456) marca el componente que no se usa, y -> separa el patrón del resultado.
+  referencia: https://openjdk.org/jeps/456
+- id: L03-007
+  tipo: matching
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Empareja cada elemento con el JEP que lo introdujo como definitivo.
+  prompts:
+    - {id: "1", texto: "if (o instanceof String s)"}
+    - {id: "2", texto: "case Tarjeta t when ..."}
+    - {id: "3", texto: "case Bizum(var telefono, var importe)"}
+    - {id: "4", texto: "var _"}
+  opciones:
+    - {id: a, texto: "JEP 394 (Java 16)"}
+    - {id: b, texto: "JEP 441 (Java 21)"}
+    - {id: c, texto: "JEP 440 (Java 21)"}
+    - {id: d, texto: "JEP 456 (Java 22)"}
+    - {id: e, texto: "JEP 286 (Java 10)"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: instanceof con patrón llegó en Java 16; los patrones en switch y los de record, en Java 21; las variables sin nombre, en Java 22.
+  distractores:
+    e: El JEP 286 introdujo var para variables locales.
+  referencia: https://openjdk.org/jeps/0
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué diferencia una expresión switch con -> del switch clásico con dos puntos?
+  opciones:
+    - {id: a, texto: "Que devuelve un valor y no tiene caídas entre casos, así que no hace falta break"}
+    - {id: b, texto: "Que solo admite números"}
+    - {id: c, texto: "Que es más lenta"}
+    - {id: d, texto: "Ninguna"}
+  correctas: [a]
+  explicacion: El JEP 361 introdujo la forma con ->, que evita el clásico error de olvidar un break.
+  distractores:
+    b: Admite enumerados, cadenas y patrones.
+    c: No es más lenta.
+    d: El comportamiento es distinto.
+  referencia: https://openjdk.org/jeps/361
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Con JDK 25, se lanzan 10 000 tareas que esperan 1 segundo cada una con Executors.newVirtualThreadPerTaskExecutor(). ¿Cuánto tardó en total?
+  opciones:
+    - {id: a, texto: "Unos 10 000 segundos"}
+    - {id: b, texto: "Unos 1,04 segundos, porque todas esperaron a la vez"}
+    - {id: c, texto: "Unos 100 segundos"}
+    - {id: d, texto: "Falló por falta de memoria"}
+  correctas: [b]
+  explicacion: Mientras esperan, los hilos virtuales liberan su hilo del sistema; las 10 000 esperas se solapan.
+  distractores:
+    a: Sería ejecutarlas una detrás de otra.
+    c: No hay un límite de 100 hilos con un ejecutor de hilos virtuales.
+    d: Los hilos virtuales son muy ligeros; 10 000 no son un problema.
+  referencia: https://openjdk.org/jeps/444
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué hace la JVM cuando un hilo virtual se bloquea esperando una respuesta de la base de datos?
+  opciones:
+    - {id: a, texto: "Lo desmonta de su hilo del sistema (carrier), que queda libre para otro hilo virtual"}
+    - {id: b, texto: "Bloquea el hilo del sistema hasta que llegue la respuesta"}
+    - {id: c, texto: "Cancela la consulta"}
+    - {id: d, texto: "Crea un hilo del sistema nuevo"}
+  correctas: [a]
+  explicacion: Es lo que permite tener muchos más hilos virtuales que hilos del sistema.
+  distractores:
+    b: Es lo que hacen los hilos del sistema, y lo que los hilos virtuales evitan.
+    c: La consulta continúa.
+    d: No hace falta crear hilos del sistema.
+  referencia: https://docs.oracle.com/en/java/javase/25/core/virtual-threads.html
+- id: L04-003
+  tipo: matching
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Indica si los hilos virtuales encajan en cada caso.
+  prompts:
+    - {id: "1", texto: "Un servidor que atiende miles de peticiones que consultan una API y una base de datos"}
+    - {id: "2", texto: "Calcular durante horas un modelo numérico que ocupa todos los núcleos"}
+    - {id: "3", texto: "Un pool fijo de 200 hilos virtuales reutilizados"}
+  opciones:
+    - {id: a, texto: "Encajan"}
+    - {id: b, texto: "No aportan; el límite son los núcleos"}
+    - {id: c, texto: "No se deben reunir en pools; se crea uno por tarea"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: La documentación de Oracle los recomienda para tareas que esperan E/S y desaconseja usarlos para trabajo intensivo de CPU o reunirlos en pools.
+  referencia: https://docs.oracle.com/en/java/javase/25/core/virtual-threads.html
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: ¿Qué es un hilo virtual anclado (pinned) y qué cambió el JEP 491?
+  opciones:
+    - {id: a, texto: "Un hilo que ha terminado; el JEP 491 los elimina antes"}
+    - {id: b, texto: "Un hilo con prioridad alta; el JEP 491 la quitó"}
+    - {id: c, texto: "Un hilo que no puede desmontarse de su carrier, por ejemplo en código nativo; el JEP 491 (Java 24) eliminó casi todos los anclajes por synchronized"}
+    - {id: d, texto: "Un error que detiene la aplicación"}
+  correctas: [c]
+  explicacion: El anclaje no produce errores, pero impide liberar el hilo del sistema y limita la escalabilidad.
+  distractores:
+    a: El anclaje ocurre mientras el hilo está activo.
+    b: No tiene relación con la prioridad.
+    d: La documentación indica que no hace la aplicación incorrecta.
+  referencia: https://openjdk.org/jeps/491
+- id: L04-005
+  tipo: completar
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Completa el código para ejecutar cada tarea en su propio hilo virtual y esperar a que terminen.
+  codigo:
+    lenguaje: java
+    fuente: |
+      [[1]] (var ejecutor = Executors.[[2]]()) {
+          tareas.forEach(ejecutor::submit);
+      }
+  huecos:
+    - {id: "1", respuestas: [try]}
+    - {id: "2", respuestas: [newVirtualThreadPerTaskExecutor]}
+  explicacion: El ejecutor crea un hilo virtual por tarea, y el try con recursos espera a que todas terminen antes de cerrarlo.
+  referencia: https://openjdk.org/jeps/444
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué ventaja principal tienen los hilos virtuales frente a la programación reactiva o asíncrona?
+  opciones:
+    - {id: a, texto: "Que el código se ejecuta en la GPU"}
+    - {id: b, texto: "Que se puede escribir código síncrono y bloqueante normal, fácil de leer y depurar, y aun así escalar"}
+    - {id: c, texto: "Que no necesitan memoria"}
+    - {id: d, texto: "Que las bases de datos responden más rápido"}
+  correctas: [b]
+  explicacion: El modelo de un hilo por petición vuelve a ser viable sin reescribir el código en estilo asíncrono.
+  distractores:
+    a: No tienen relación con la GPU.
+    c: Necesitan poca memoria, pero no ninguna.
+    d: No cambian lo que tarda la base de datos.
+  referencia: https://docs.oracle.com/en/java/javase/25/core/virtual-threads.html
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Cómo se activan los hilos virtuales en Spring Boot?
+  opciones:
+    - {id: a, texto: "Con la propiedad spring.threads.virtual.enabled=true, con Java 21 o posterior"}
+    - {id: b, texto: "Con una dependencia de pago"}
+    - {id: c, texto: "Reescribiendo los controladores en estilo reactivo"}
+    - {id: d, texto: "No se pueden usar en Spring"}
+  correctas: [a]
+  explicacion: La documentación de Spring Boot indica esa propiedad, requiere Java 21 y recomienda Java 24 o posterior.
+  distractores:
+    b: Es una propiedad del propio Spring Boot.
+    c: Su ventaja es justo no tener que hacerlo.
+    d: Spring Boot los soporta.
+  referencia: https://docs.spring.io/spring-boot/reference/features/spring-application.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué ofrece ScopedValue (JEP 506) frente a ThreadLocal?
+  opciones:
+    - {id: a, texto: "Un valor inmutable compartido solo durante un bloque y sus llamadas, más adecuado con muchos hilos virtuales"}
+    - {id: b, texto: "Un valor global y modificable"}
+    - {id: c, texto: "Un valor que se guarda en la base de datos"}
+    - {id: d, texto: "Lo mismo con otro nombre"}
+  correctas: [a]
+  explicacion: El valor tiene un ámbito acotado y no se puede modificar, así que no se queda olvidado ni se filtra entre tareas.
+  distractores:
+    b: Es inmutable y acotado a un ámbito.
+    c: Vive en memoria durante la ejecución.
+    d: Cambia el modelo, de valor por hilo a valor por ámbito.
+  referencia: https://openjdk.org/jeps/506
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué devuelve este código?
+  codigo:
+    lenguaje: java
+    fuente: |
+      IntStream.rangeClosed(1, 7).boxed()
+              .gather(Gatherers.windowFixed(3))
+              .toList();
+  opciones:
+    - {id: a, texto: "[[1, 2, 3], [4, 5, 6], [7]]"}
+    - {id: b, texto: "[[1, 2, 3], [4, 5, 6]]"}
+    - {id: c, texto: "[[1, 2, 3], [2, 3, 4], [3, 4, 5]]"}
+    - {id: d, texto: "[3, 6, 7]"}
+  correctas: [a]
+  explicacion: windowFixed agrupa en bloques de 3 y el último bloque lleva lo que sobra. Es la salida de la ejecución con JDK 25.
+  distractores:
+    b: El último elemento no se descarta.
+    c: Serían ventanas deslizantes, con windowSliding.
+    d: No suma ni toma el último de cada bloque.
+  referencia: https://openjdk.org/jeps/485
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.2"
+  enunciado: Con List etapas = [creado, pagado, enviado], ¿qué devuelve etapas.getLast()?
+  opciones:
+    - {id: a, texto: "\"creado\""}
+    - {id: b, texto: "\"enviado\""}
+    - {id: c, texto: "2"}
+    - {id: d, texto: "Error de compilación"}
+  correctas: [b]
+  explicacion: getLast es uno de los métodos de las colecciones secuenciadas de Java 21.
+  distractores:
+    a: Es el primero, con getFirst.
+    c: Es el índice del último, no su valor.
+    d: Compila desde Java 21.
+  referencia: https://openjdk.org/jeps/431
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué devuelve etapas.reversed() en una List?
+  opciones:
+    - {id: a, texto: "Una copia nueva ordenada al revés"}
+    - {id: b, texto: "Una vista de la lista en orden inverso, sin copiar"}
+    - {id: c, texto: "La misma lista, ordenada alfabéticamente"}
+    - {id: d, texto: "void, porque invierte la lista original"}
+  correctas: [b]
+  explicacion: reversed devuelve una vista; los cambios en la lista original se ven a través de ella.
+  distractores:
+    a: No copia los elementos.
+    c: No ordena por valor.
+    d: Devuelve una colección y no modifica el orden de la original.
+  referencia: https://openjdk.org/jeps/431
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Cuál de estos usos de var es menos recomendable?
+  opciones:
+    - {id: a, texto: "var pedidos = new ArrayList<Pedido>();"}
+    - {id: b, texto: "var nombre = \"Ana\";"}
+    - {id: c, texto: "var resultado = servicio.procesar(datos);"}
+    - {id: d, texto: "for (var p : pedidos)"}
+  correctas: [c]
+  explicacion: Si el tipo no es evidente en la misma línea, var oculta información al lector.
+  distractores:
+    a: El tipo está en la propia línea.
+    b: Es obvio que es un String.
+    d: En un bucle sobre una colección tipada, el tipo es claro por el contexto.
+  referencia: https://openjdk.org/jeps/286
+- id: L05-005
+  tipo: completar
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: Completa el bloque de texto con el JSON del pedido.
+  codigo:
+    lenguaje: java
+    fuente: |
+      String json = [[1]]
+              {"pedido": 42, "estado": "PAGADO"}
+              [[2]];
+  huecos:
+    - {id: "1", respuestas: ['"""']}
+    - {id: "2", respuestas: ['"""']}
+  explicacion: Los bloques de texto se delimitan con tres comillas dobles; la apertura va seguida de un salto de línea.
+  referencia: https://openjdk.org/jeps/378
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: ¿Qué permite el JEP 513 (Java 25) en este constructor?
+  codigo:
+    lenguaje: java
+    fuente: |
+      Cliente(String nombre) {
+          if (nombre == null || nombre.isBlank()) throw new IllegalArgumentException("Nombre vacío");
+          super(nombre.strip());
+      }
+  opciones:
+    - {id: a, texto: "Nada; no compila porque super debe ir primero"}
+    - {id: b, texto: "Usar this antes de super"}
+    - {id: c, texto: "Llamar a super dos veces"}
+    - {id: d, texto: "Validar el argumento antes de llamar a super, sin usar this"}
+  correctas: [d]
+  explicacion: Desde Java 25 se pueden poner sentencias antes de super(...) siempre que no usen el objeto que se está construyendo. Compiló y funcionó con JDK 25.
+  distractores:
+    a: Era así antes del JEP 513.
+    b: Antes de super no se puede usar this.
+    c: Solo se llama una vez.
+  referencia: https://openjdk.org/jeps/513
+- id: L05-007
+  tipo: matching
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Empareja cada característica con su versión definitiva.
+  prompts:
+    - {id: "1", texto: "var"}
+    - {id: "2", texto: "Bloques de texto"}
+    - {id: "3", texto: "Colecciones secuenciadas"}
+    - {id: "4", texto: "Stream gatherers"}
+  opciones:
+    - {id: a, texto: "Java 10"}
+    - {id: b, texto: "Java 15"}
+    - {id: c, texto: "Java 21"}
+    - {id: d, texto: "Java 24"}
+    - {id: e, texto: "Java 8"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Según sus JEP, var llegó en Java 10, los bloques de texto en 15, las colecciones secuenciadas en 21 y los gatherers en 24.
+  distractores:
+    e: Java 8 introdujo los streams y las lambdas, no ninguna de estas.
+  referencia: https://openjdk.org/jeps/0
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Dónde se puede usar var?
+  opciones:
+    - {id: a, texto: "En campos de clase"}
+    - {id: b, texto: "Solo en variables locales con valor inicial"}
+    - {id: c, texto: "En parámetros de métodos públicos"}
+    - {id: d, texto: "Como tipo de retorno"}
+  correctas: [b]
+  explicacion: El JEP 286 limita var a variables locales inicializadas, donde el compilador puede deducir el tipo.
+  distractores:
+    a: Los campos deben declarar su tipo.
+    c: Los parámetros de los métodos declaran su tipo; var solo se admite en los parámetros de las lambdas.
+    d: El tipo de retorno se declara siempre.
+  referencia: https://openjdk.org/jeps/286

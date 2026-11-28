@@ -1,0 +1,720 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Con qué frecuencia publica Python una versión nueva y cuánto dura su soporte?
+  opciones:
+    - {id: a, texto: "Cada seis meses, con LTS cada dos años"}
+    - {id: b, texto: "Cada año en octubre, con soporte durante cinco años"}
+    - {id: c, texto: "Cada cinco años, con soporte durante diez"}
+    - {id: d, texto: "Cuando está lista, sin calendario"}
+  correctas: [b]
+  explicacion: Según el PEP 602 y la guía de desarrollo, hay una versión anual y cada una llega a su fin de vida cinco años después.
+  distractores:
+    a: Es el modelo de Java.
+    c: El ciclo es anual.
+    d: Hay un calendario fijo.
+  referencia: https://devguide.python.org/versions/
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Desde Python 3.13, ¿qué pasa dos años después de publicarse una versión?
+  opciones:
+    - {id: a, texto: "Llega a su fin de vida"}
+    - {id: b, texto: "Pasa a ser LTS"}
+    - {id: c, texto: "Solo recibe correcciones de seguridad y ya no se publican binarios"}
+    - {id: d, texto: "Recibe nuevas características"}
+  correctas: [c]
+  explicacion: La fase de correcciones de errores dura dos años; después solo hay arreglos de seguridad hasta el quinto año.
+  distractores:
+    a: El fin de vida llega a los cinco años.
+    b: Python no tiene versiones LTS.
+    d: Las características nuevas solo entran antes de la primera beta.
+  referencia: https://devguide.python.org/versions/
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué diferencia hay entre pyproject.toml y uv.lock?
+  opciones:
+    - {id: a, texto: "pyproject.toml dice qué versiones se aceptan; uv.lock fija las exactas, también las de las dependencias indirectas"}
+    - {id: b, texto: "Son el mismo fichero en dos formatos"}
+    - {id: c, texto: "uv.lock se genera en cada máquina y no se sube al repositorio"}
+    - {id: d, texto: "pyproject.toml solo se usa en producción"}
+  correctas: [a]
+  explicacion: El bloqueo es lo que garantiza que todos los entornos instalen exactamente lo mismo, y por eso se versiona.
+  distractores:
+    b: Tienen propósitos distintos.
+    c: Se sube al repositorio para que todos usen las mismas versiones.
+    d: Describe el proyecto en todos los entornos.
+  referencia: https://docs.astral.sh/uv/concepts/projects/sync/
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: En la CI ejecutas uv run --locked pytest y alguien cambió pyproject.toml sin actualizar uv.lock. ¿Qué pasa?
+  opciones:
+    - {id: a, texto: "uv actualiza el bloqueo y sigue"}
+    - {id: b, texto: "uv ignora el cambio"}
+    - {id: c, texto: "Instala las últimas versiones de todo"}
+    - {id: d, texto: "uv da un error en lugar de actualizar el bloqueo"}
+  correctas: [d]
+  explicacion: La documentación de uv indica que, con --locked, si el bloqueo no está al día se produce un error.
+  distractores:
+    a: Es lo que hace sin --locked.
+    b: Detecta que no coinciden.
+    c: No instala nada distinto del bloqueo.
+  referencia: https://docs.astral.sh/uv/concepts/projects/sync/
+- id: L01-005
+  tipo: completar
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Completa las órdenes para añadir FastAPI al proyecto y pytest solo como herramienta de desarrollo.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      uv [[1]] fastapi
+      uv add [[2]] pytest
+  huecos:
+    - {id: "1", respuestas: [add]}
+    - {id: "2", respuestas: [--dev]}
+  explicacion: --dev añade la dependencia al grupo dev, que no se instala en producción.
+  referencia: https://docs.astral.sh/uv/concepts/projects/
+- id: L01-006
+  tipo: matching
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Empareja cada herramienta con su función.
+  prompts:
+    - {id: "1", texto: "uv"}
+    - {id: "2", texto: "ruff"}
+    - {id: "3", texto: "mypy"}
+    - {id: "4", texto: "pytest"}
+  opciones:
+    - {id: a, texto: "Gestionar Python, el entorno y las dependencias"}
+    - {id: b, texto: "Revisar el estilo y los errores comunes, y formatear"}
+    - {id: c, texto: "Comprobar los tipos sin ejecutar el código"}
+    - {id: d, texto: "Ejecutar las pruebas"}
+    - {id: e, texto: "Servir la aplicación web"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son las herramientas del proyecto de ejemplo.
+  distractores:
+    e: Eso lo hace uvicorn.
+  referencia: https://docs.astral.sh/uv/concepts/projects/
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: 'Una función anotada como def total(x: int) -> int recibe "3" al ejecutarse. ¿Qué hace Python?'
+  opciones:
+    - {id: a, texto: "Lanza TypeError por la anotación"}
+    - {id: b, texto: 'Convierte "3" a 3'}
+    - {id: c, texto: "Nada especial; las anotaciones no se comprueban al ejecutar. Lo detectaría mypy antes"}
+    - {id: d, texto: "No compila"}
+  correctas: [c]
+  explicacion: Las anotaciones son información para herramientas como mypy, Pydantic o FastAPI; el intérprete no las aplica.
+  distractores:
+    a: El intérprete no valida anotaciones.
+    b: Python no convierte tipos por la anotación; Pydantic sí lo haría.
+    d: Python no tiene un paso de compilación que lo impida.
+  referencia: https://docs.python.org/3/library/typing.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Por qué ruff, mypy y pytest van en el grupo dev?
+  opciones:
+    - {id: a, texto: "Porque solo se necesitan para desarrollar y probar, no para ejecutar el servicio en producción"}
+    - {id: b, texto: "Porque son de pago"}
+    - {id: c, texto: "Porque uv no admite otra opción"}
+    - {id: d, texto: "Porque así se ejecutan más rápido"}
+  correctas: [a]
+  explicacion: Separarlas reduce lo que se instala en la imagen de producción.
+  distractores:
+    b: Son libres.
+    c: Se podrían poner como dependencias normales, pero no conviene.
+    d: El grupo no cambia la velocidad.
+  referencia: https://docs.astral.sh/uv/concepts/projects/
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué devuelve describir(Importe(200_000))?
+  codigo:
+    lenguaje: python
+    fuente: |
+      def describir(x: object) -> str:
+          match x:
+              case Importe(centimos=c) if c > 100_000:
+                  return "importe alto"
+              case Importe(centimos=c, moneda=m):
+                  return f"{c / 100:.2f} {m}"
+              case _:
+                  return "desconocido"
+  opciones:
+    - {id: a, texto: "2000.00 EUR"}
+    - {id: b, texto: "desconocido"}
+    - {id: c, texto: "importe alto"}
+    - {id: d, texto: "Error, porque encajan dos casos"}
+  correctas: [c]
+  explicacion: Los casos se prueban en orden y el primero, con la guarda, se cumple. Es la salida de la ejecución con Python 3.15.
+  distractores:
+    a: Sería el resultado si el caso general fuera primero.
+    b: Es un Importe, así que encaja antes.
+    d: Se elige el primer caso que encaja.
+  referencia: https://peps.python.org/pep-0636/
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: '¿Qué devuelve describir({"tipo": "bizum", "telefono": "600123123"}) con un caso case {"tipo": "bizum", "telefono": tel}?'
+  opciones:
+    - {id: a, texto: "desconocido, porque match no admite diccionarios"}
+    - {id: b, texto: "Bizum a 600123123"}
+    - {id: c, texto: "Error, porque el diccionario no es una clase"}
+    - {id: d, texto: "Bizum a tel"}
+  correctas: [b]
+  explicacion: Los patrones de diccionario comprueban las claves y capturan valores en variables.
+  distractores:
+    a: match admite patrones de diccionario.
+    c: No hace falta que sea una clase.
+    d: tel es una variable capturada, no un texto.
+  referencia: https://peps.python.org/pep-0636/
+- id: L02-003
+  tipo: completar
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Completa la declaración genérica con la sintaxis del PEP 695.
+  codigo:
+    lenguaje: python
+    fuente: |
+      [[1]] Id = int
+
+      class Repositorio[[2]]:
+          def buscar(self, id: Id) -> T | None: ...
+  huecos:
+    - {id: "1", respuestas: [type]}
+    - {id: "2", respuestas: ["[T]"]}
+  explicacion: Desde Python 3.12, type declara alias y los parámetros de tipo van entre corchetes tras el nombre de la clase.
+  referencia: https://peps.python.org/pep-0695/
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.2"
+  enunciado: ¿Qué hace @dataclass(frozen=True)?
+  opciones:
+    - {id: a, texto: "Guarda la clase en disco"}
+    - {id: b, texto: "Genera constructor, igualdad y representación, e impide modificar los campos"}
+    - {id: c, texto: "Hace la clase más rápida congelando la memoria"}
+    - {id: d, texto: "Convierte la clase en un diccionario"}
+  correctas: [b]
+  explicacion: Es la forma habitual de crear objetos valor inmutables, como los records de Java.
+  distractores:
+    a: No tiene relación con la persistencia.
+    c: frozen se refiere a la inmutabilidad.
+    d: Sigue siendo una clase.
+  referencia: https://docs.python.org/3/library/typing.html
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué imprimió este código con Python 3.15?
+  codigo:
+    lenguaje: python
+    fuente: |
+      lazy import json
+      import sys
+      print("json" in sys.modules)
+      json.dumps({})
+      print("json" in sys.modules)
+  opciones:
+    - {id: a, texto: "False y True"}
+    - {id: b, texto: "True y True"}
+    - {id: c, texto: "SyntaxError"}
+    - {id: d, texto: "False y False"}
+  correctas: [a]
+  explicacion: Con lazy import (PEP 810), el módulo se carga en el primer uso.
+  distractores:
+    b: Sería una importación normal.
+    c: Es sintaxis válida desde Python 3.15.
+    d: Al usarlo, se carga.
+  referencia: https://peps.python.org/pep-0810/
+- id: L02-006
+  tipo: matching
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Empareja cada novedad con su versión de Python.
+  prompts:
+    - {id: "1", texto: "Plantillas t\"…\" (PEP 750)"}
+    - {id: "2", texto: "frozendict (PEP 814)"}
+    - {id: "3", texto: "class Repositorio[T] (PEP 695)"}
+    - {id: "4", texto: "match (PEP 634)"}
+  opciones:
+    - {id: a, texto: "3.14"}
+    - {id: b, texto: "3.15"}
+    - {id: c, texto: "3.12"}
+    - {id: d, texto: "3.10"}
+    - {id: e, texto: "3.8"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Según los documentos de novedades y los PEP correspondientes.
+  distractores:
+    e: Ninguna de estas novedades es de 3.8.
+  referencia: https://docs.python.org/3.15/whatsnew/3.15.html
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: ¿Para qué sirven las plantillas t"…" de Python 3.14 frente a las f-strings?
+  opciones:
+    - {id: a, texto: "Son f-strings más rápidas"}
+    - {id: b, texto: "Traducen el texto a otros idiomas"}
+    - {id: c, texto: "Devuelven un objeto Template con el texto y los valores separados, para procesarlos (por ejemplo, escaparlos) antes de unirlos"}
+    - {id: d, texto: "Solo admiten números"}
+  correctas: [c]
+  explicacion: Una f-string se convierte en una cadena al momento; una plantilla conserva sus partes, y eso permite construir SQL o HTML seguros.
+  distractores:
+    a: No es una optimización.
+    b: No tienen relación con la traducción.
+    d: Admiten cualquier valor.
+  referencia: https://peps.python.org/pep-0750/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Un método devuelve T | None. ¿Qué te obliga a hacer mypy antes de usar el resultado como T?
+  opciones:
+    - {id: a, texto: "Nada"}
+    - {id: b, texto: "Comprobar que no es None"}
+    - {id: c, texto: "Convertirlo a cadena"}
+    - {id: d, texto: "Capturar una excepción"}
+  correctas: [b]
+  explicacion: El tipo declara que puede faltar el valor; mypy marca el uso directo como error hasta que se trata el caso None.
+  distractores:
+    a: mypy lo comprueba.
+    c: No es necesario.
+    d: No hay ninguna excepción; el valor puede ser None.
+  referencia: https://mypy.readthedocs.io/en/stable/
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Con el modelo NuevoProducto de la lección, ¿qué nombre se guardó al enviar "  libro "?
+  opciones:
+    - {id: a, texto: "\"  libro \""}
+    - {id: b, texto: "Error de validación"}
+    - {id: c, texto: "\"LIBRO\""}
+    - {id: d, texto: "\"libro\", porque el validador quita los espacios"}
+  correctas: [d]
+  explicacion: El validador devuelve el valor transformado, y ese es el que queda en el modelo. La respuesta de la API fue nombre libro.
+  distractores:
+    a: El validador lo modifica.
+    b: Tras quitar los espacios no está vacío.
+    c: No cambia mayúsculas.
+  referencia: https://docs.pydantic.dev/latest/concepts/validators/
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: 'Se envía {"nombre": "   ", "precio": -1}. ¿Qué errores devolvió Pydantic?'
+  opciones:
+    - {id: a, texto: "Solo el primero, el del nombre"}
+    - {id: b, texto: "Los dos, cada uno con su ubicación (body.nombre y body.precio)"}
+    - {id: c, texto: "Ninguno; se corrigen solos"}
+    - {id: d, texto: "Un error genérico sin detalle"}
+  correctas: [b]
+  explicacion: Pydantic valida todos los campos y devuelve la lista completa de errores.
+  distractores:
+    a: No se detiene en el primero.
+    c: No se corrigen los valores inválidos.
+    d: Cada error tiene tipo, ubicación y mensaje.
+  referencia: https://docs.pydantic.dev/latest/concepts/models/
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: ¿Cómo apareció el campo precio (Decimal) en el JSON de la respuesta?
+  opciones:
+    - {id: a, texto: "Como el número 20.0"}
+    - {id: b, texto: "Como la cadena \"20\""}
+    - {id: c, texto: "Como un objeto con parte entera y decimal"}
+    - {id: d, texto: "No apareció"}
+  correctas: [b]
+  explicacion: Pydantic serializa Decimal como cadena en JSON para no perder precisión. La respuesta real fue precio "20".
+  distractores:
+    a: Un número JSON se leería como coma flotante.
+    c: No usa esa estructura.
+    d: Es un campo declarado del modelo de salida.
+  referencia: https://docs.pydantic.dev/latest/concepts/serialization/
+- id: L03-004
+  tipo: completar
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Completa el modelo para que el precio sea mayor que cero y el nombre tenga al menos un carácter.
+  codigo:
+    lenguaje: python
+    fuente: |
+      class NuevoProducto(BaseModel):
+          nombre: Annotated[str, Field([[1]]=1)]
+          precio: Annotated[Decimal, Field([[2]]=0)]
+  huecos:
+    - {id: "1", respuestas: [min_length]}
+    - {id: "2", respuestas: [gt]}
+  explicacion: min_length limita la longitud y gt exige un valor estrictamente mayor.
+  referencia: https://docs.pydantic.dev/latest/concepts/models/
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Para qué sirve model_config = ConfigDict(from_attributes=True) en ProductoLeido?
+  opciones:
+    - {id: a, texto: "Para leer atributos de un objeto, como una entidad de SQLAlchemy, con model_validate"}
+    - {id: b, texto: "Para guardar el modelo en la base de datos"}
+    - {id: c, texto: "Para que los atributos sean opcionales"}
+    - {id: d, texto: "Para exponer el resto de atributos de la entidad"}
+  correctas: [a]
+  explicacion: Por defecto Pydantic espera un diccionario; con from_attributes acepta objetos y copia solo los campos declarados.
+  distractores:
+    b: Pydantic no persiste nada.
+    c: No cambia la obligatoriedad.
+    d: Solo salen los campos declarados en el modelo.
+  referencia: https://docs.pydantic.dev/latest/concepts/models/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Con env_prefix="TIENDA_", ¿qué variable de entorno da valor a envio_gratis_desde?
+  opciones:
+    - {id: a, texto: "ENVIO_GRATIS_DESDE"}
+    - {id: b, texto: "tienda.envio-gratis-desde"}
+    - {id: c, texto: "TIENDA_ENVIO_GRATIS_DESDE"}
+    - {id: d, texto: "TIENDA"}
+  correctas: [c]
+  explicacion: pydantic-settings une el prefijo y el nombre del campo para buscar la variable.
+  distractores:
+    a: Falta el prefijo.
+    b: Es el formato de Spring Boot.
+    d: Es solo el prefijo.
+  referencia: https://docs.pydantic.dev/latest/concepts/pydantic_settings/
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Qué ventajas tiene cargar la configuración con BaseSettings frente a os.environ disperso por el código?
+  opciones:
+    - {id: a, texto: "Tipos reales, como Decimal o int, sin conversiones manuales"}
+    - {id: b, texto: "Validación al arrancar"}
+    - {id: c, texto: "Un solo sitio que documenta toda la configuración"}
+    - {id: d, texto: "Cifra automáticamente los secretos"}
+    - {id: e, texto: "Impide cambiar la configuración por entorno"}
+  correctas: [a, b, c]
+  explicacion: Es el equivalente de las propiedades tipadas de Spring.
+  distractores:
+    d: No cifra nada; los secretos se protegen en el entorno.
+    e: Lee del entorno precisamente para poder cambiarla.
+  referencia: https://docs.pydantic.dev/latest/concepts/pydantic_settings/
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: ¿Por qué se separan NuevoProducto (entrada) y ProductoLeido (salida)?
+  opciones:
+    - {id: a, texto: "Porque Pydantic no permite reutilizar modelos"}
+    - {id: b, texto: "Porque la entrada no tiene id (lo asigna la base de datos) y cada contrato puede cambiar por separado"}
+    - {id: c, texto: "Por rendimiento"}
+    - {id: d, texto: "Porque FastAPI lo exige"}
+  correctas: [b]
+  explicacion: El cliente no envía el id, pero lo recibe; mezclar ambos obliga a campos opcionales confusos.
+  distractores:
+    a: Se pueden reutilizar.
+    c: La razón es de diseño.
+    d: FastAPI no lo exige.
+  referencia: https://docs.pydantic.dev/latest/concepts/models/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: 'Se envía POST /productos con {"nombre": "   ", "precio": -1}. ¿Qué código respondió FastAPI?'
+  opciones:
+    - {id: a, texto: "400"}
+    - {id: b, texto: "500"}
+    - {id: c, texto: "422, con la lista de errores, sin ejecutar la función"}
+    - {id: d, texto: "201"}
+  correctas: [c]
+  explicacion: FastAPI responde 422 cuando la validación falla. Spring Boot, en cambio, responde 400.
+  distractores:
+    a: Es lo que respondería Spring Boot.
+    b: No es un error del servidor.
+    d: La entrada no es válida.
+  referencia: https://fastapi.tiangolo.com/tutorial/handling-errors/
+- id: L04-002
+  tipo: matching
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: En las rutas del ejemplo, empareja cada parámetro con el sitio del que lo toma FastAPI.
+  prompts:
+    - {id: "1", texto: "producto_id: int (aparece en la ruta)"}
+    - {id: "2", texto: "nuevo: NuevoProducto (un BaseModel)"}
+    - {id: "3", texto: "menos_de: float = 30 (no aparece en la ruta)"}
+    - {id: "4", texto: "sesion: Annotated[Session, Depends(obtener_sesion)]"}
+  opciones:
+    - {id: a, texto: "De la ruta"}
+    - {id: b, texto: "Del cuerpo JSON"}
+    - {id: c, texto: "De la cadena de consulta (?menos_de=30)"}
+    - {id: d, texto: "De una dependencia"}
+    - {id: e, texto: "De una cookie"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: FastAPI deduce el origen de cada parámetro por su tipo y su nombre.
+  distractores:
+    e: Las cookies se declaran con Cookie().
+  referencia: https://fastapi.tiangolo.com/tutorial/dependencies/
+- id: L04-003
+  tipo: completar
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Completa la ruta para responder 404 si no existe el producto.
+  codigo:
+    lenguaje: python
+    fuente: |
+      producto = sesion.get(Producto, producto_id)
+      if producto is None:
+          raise [[1]](status_code=[[2]], detail=f"No existe el producto {producto_id}")
+  huecos:
+    - {id: "1", respuestas: [HTTPException]}
+    - {id: "2", respuestas: ["404"]}
+  explicacion: HTTPException corta la ruta y devuelve el código y el detalle. En la prueba, la respuesta fue detail No existe el producto 99.
+  referencia: https://fastapi.tiangolo.com/tutorial/handling-errors/
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Por qué obtener_sesion usa yield en lugar de return?
+  codigo:
+    lenguaje: python
+    fuente: |
+      def obtener_sesion() -> Iterator[Session]:
+          with fabrica() as sesion:
+              yield sesion
+  opciones:
+    - {id: a, texto: "Para que la sesión se comparta entre peticiones"}
+    - {id: b, texto: "Para que el código posterior (cerrar la sesión) se ejecute cuando la ruta termina, haya error o no"}
+    - {id: c, texto: "Porque FastAPI no admite return en dependencias"}
+    - {id: d, texto: "Para que sea asíncrona"}
+  correctas: [b]
+  explicacion: Es el patrón de FastAPI para abrir y cerrar un recurso por petición.
+  distractores:
+    a: Se crea una sesión por petición.
+    c: Admite dependencias con return.
+    d: yield no la convierte en asíncrona.
+  referencia: https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Dónde ofrece FastAPI la documentación interactiva de la API?
+  opciones:
+    - {id: a, texto: "En /docs, generada a partir de los tipos"}
+    - {id: b, texto: "Hay que escribirla a mano en un fichero YAML"}
+    - {id: c, texto: "En /actuator"}
+    - {id: d, texto: "No ofrece documentación"}
+  correctas: [a]
+  explicacion: FastAPI genera el esquema OpenAPI con los modelos y las rutas y lo muestra en /docs.
+  distractores:
+    b: La genera sola.
+    c: Es una ruta de Spring Boot Actuator.
+    d: Es una de sus funciones principales.
+  referencia: https://fastapi.tiangolo.com/tutorial/dependencies/
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: La ruta declara -> ProductoLeido. ¿Qué efecto tiene ese tipo de retorno?
+  opciones:
+    - {id: a, texto: "Ninguno; Python ignora las anotaciones"}
+    - {id: b, texto: "Convierte la respuesta en XML"}
+    - {id: c, texto: "Guarda el producto"}
+    - {id: d, texto: "FastAPI valida y filtra la respuesta con ese modelo y la documenta en OpenAPI"}
+  correctas: [d]
+  explicacion: Aunque Python no aplique anotaciones, FastAPI las lee y las usa.
+  distractores:
+    a: FastAPI sí las usa.
+    b: La respuesta es JSON.
+    c: No tiene relación con la persistencia.
+  referencia: https://fastapi.tiangolo.com/tutorial/dependencies/
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué ventaja tiene declarar las columnas con Mapped[int] en SQLAlchemy 2?
+  opciones:
+    - {id: a, texto: "Crea la tabla más rápido"}
+    - {id: b, texto: "Los tipos de las columnas son visibles para mypy y el editor"}
+    - {id: c, texto: "Valida la entrada HTTP"}
+    - {id: d, texto: "Evita usar una base de datos"}
+  correctas: [b]
+  explicacion: El estilo declarativo de SQLAlchemy 2 integra las anotaciones de tipo en el modelo.
+  distractores:
+    a: No afecta a la creación.
+    c: Eso lo hace Pydantic.
+    d: Sigue necesitando una base de datos.
+  referencia: https://docs.sqlalchemy.org/en/21/orm/quickstart.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué ventaja principal tiene obtener la sesión con Depends en vez de crearla dentro de cada ruta?
+  opciones:
+    - {id: a, texto: "Que no hace falta base de datos"}
+    - {id: b, texto: "Que las rutas son asíncronas"}
+    - {id: c, texto: "Que se gestiona en un solo sitio y se puede sustituir en las pruebas"}
+    - {id: d, texto: "Que la sesión dura toda la vida de la aplicación"}
+  correctas: [c]
+  explicacion: La dependencia centraliza la creación y el cierre, y app.dependency_overrides permite cambiarla por una base de pruebas.
+  distractores:
+    a: Sigue habiendo base de datos.
+    b: No cambia si la ruta es asíncrona.
+    d: Hay una sesión por petición.
+  referencia: https://fastapi.tiangolo.com/tutorial/dependencies/
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Con uvicorn, 10 peticiones simultáneas a esta ruta. ¿Cuánto tardaron en total?
+  codigo:
+    lenguaje: python
+    fuente: |
+      @app.get("/async-bloqueante")
+      async def async_bloqueante() -> str:
+          time.sleep(1)
+          return "ok"
+  opciones:
+    - {id: a, texto: "Unos 1,01 s"}
+    - {id: b, texto: "Unos 10,05 s, porque time.sleep bloquea el bucle de eventos"}
+    - {id: c, texto: "Unos 5 s"}
+    - {id: d, texto: "Fallaron por tiempo de espera"}
+  correctas: [b]
+  explicacion: La llamada bloqueante detiene el único hilo del bucle, así que las peticiones se atienden de una en una.
+  distractores:
+    a: Fue el tiempo de las rutas que no bloquean.
+    c: No hay paralelismo parcial.
+    d: Terminaron todas, aunque una detrás de otra.
+  referencia: https://fastapi.tiangolo.com/async/
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: La misma espera de 1 s con time.sleep, pero declarada con def normal. ¿Cuánto tardaron 10 peticiones?
+  opciones:
+    - {id: a, texto: "Unos 10 s"}
+    - {id: b, texto: "Error, porque FastAPI exige async def"}
+    - {id: c, texto: "Unos 1,01 s, porque FastAPI ejecuta las rutas def en un grupo de hilos"}
+    - {id: d, texto: "Unos 20 s"}
+  correctas: [c]
+  explicacion: La documentación de FastAPI indica que las rutas con def normal se ejecutan en un grupo de hilos externo para no bloquear el servidor.
+  distractores:
+    a: El bucle no se bloquea.
+    b: FastAPI admite ambas.
+    d: No hay penalización.
+  referencia: https://fastapi.tiangolo.com/async/
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Tu ruta consulta la base de datos con una biblioteca síncrona. ¿Cómo la declaras?
+  opciones:
+    - {id: a, texto: "Con def, para que FastAPI la ejecute en un hilo aparte"}
+    - {id: b, texto: "Con async def, porque es más rápido"}
+    - {id: c, texto: "Con async def y time.sleep entre consultas"}
+    - {id: d, texto: "Es indiferente"}
+  correctas: [a]
+  explicacion: async def solo conviene si todo lo que espera dentro es asíncrono; si no, bloquearía el bucle.
+  distractores:
+    b: Con bibliotecas síncronas es el peor caso.
+    c: Empeora el bloqueo.
+    d: La prueba mostró una diferencia de 1 s a 10 s.
+  referencia: https://fastapi.tiangolo.com/async/
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: ¿Qué hace una corrutina cuando ejecuta await asyncio.sleep(1)?
+  opciones:
+    - {id: a, texto: "Bloquea el hilo un segundo"}
+    - {id: b, texto: "Termina la corrutina"}
+    - {id: c, texto: "Crea un proceso nuevo"}
+    - {id: d, texto: "Cede el control al bucle de eventos, que puede avanzar otras corrutinas mientras espera"}
+  correctas: [d]
+  explicacion: Es lo que permite atender muchas esperas en un solo hilo.
+  distractores:
+    a: Eso hace time.sleep.
+    b: Continúa al terminar la espera.
+    c: asyncio trabaja en un solo hilo.
+  referencia: https://docs.python.org/3/library/asyncio-task.html
+- id: L05-005
+  tipo: completar
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Completa la fixture para que las peticiones usen la sesión de prueba.
+  codigo:
+    lenguaje: python
+    fuente: |
+      app.[[1]][obtener_sesion] = sesion_de_prueba
+      with TestClient(app) as c:
+          yield c
+      app.dependency_overrides.[[2]]()
+  huecos:
+    - {id: "1", respuestas: [dependency_overrides]}
+    - {id: "2", respuestas: [clear]}
+  explicacion: dependency_overrides sustituye la dependencia original; al terminar se limpia para no afectar a otras pruebas.
+  referencia: https://fastapi.tiangolo.com/advanced/testing-dependencies/
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.3"
+  enunciado: Las pruebas con SQLite en memoria fallaban con OperationalError porque la tabla no existía. ¿Qué lo resolvió?
+  opciones:
+    - {id: a, texto: "Usar un fichero en lugar de memoria"}
+    - {id: b, texto: "Usar StaticPool, para que todas las sesiones compartan la misma conexión y, por tanto, la misma base"}
+    - {id: c, texto: "Reintentar la petición"}
+    - {id: d, texto: "Declarar las rutas con async def"}
+  correctas: [b]
+  explicacion: SQLite en memoria crea una base distinta por conexión; la tabla se creó en una y la petición usaba otra.
+  distractores:
+    a: Funcionaría, pero no es el problema de fondo.
+    c: Fallaría igual.
+    d: No tiene relación con las conexiones.
+  referencia: https://fastapi.tiangolo.com/advanced/testing-dependencies/
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué limitación tiene probar con SQLite en memoria una aplicación que usa PostgreSQL en producción?
+  opciones:
+    - {id: a, texto: "Ninguna"}
+    - {id: b, texto: "Que es más lento"}
+    - {id: c, texto: "Que no se comporta igual en tipos, bloqueos y SQL específico, así que las consultas y transacciones conviene probarlas contra PostgreSQL"}
+    - {id: d, texto: "Que no admite SQLAlchemy"}
+  correctas: [c]
+  explicacion: Para la integración real, se usa la misma base que en producción, por ejemplo con Testcontainers.
+  distractores:
+    a: Las diferencias pueden ocultar errores.
+    b: Es más rápido.
+    d: SQLAlchemy admite SQLite.
+  referencia: https://fastapi.tiangolo.com/advanced/testing-dependencies/
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.3"
+  enunciado: En una fixture de pytest, ¿qué ocurre con el código que va después del yield?
+  opciones:
+    - {id: a, texto: "No se ejecuta"}
+    - {id: b, texto: "Se ejecuta antes de la prueba"}
+    - {id: c, texto: "Se ejecuta solo si la prueba falla"}
+    - {id: d, texto: "Se ejecuta cuando termina la prueba, como limpieza"}
+  correctas: [d]
+  explicacion: El yield entrega el valor a la prueba; lo que sigue es la limpieza.
+  distractores:
+    a: Se ejecuta al terminar.
+    b: Lo de antes del yield es la preparación.
+    c: Se ejecuta siempre.
+  referencia: https://docs.pytest.org/en/stable/how-to/fixtures.html

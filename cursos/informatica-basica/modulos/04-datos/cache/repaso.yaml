@@ -1,0 +1,675 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Un origen tarda casi siempre 20 ms y a veces 400 ms. En la prueba, la media fue 35,3 ms. ¿Qué problema tiene usar la media?
+  opciones:
+    - {id: a, texto: "Ninguno, la media resume bien la latencia"}
+    - {id: b, texto: "Que es demasiado alta"}
+    - {id: c, texto: "Que describe una petición que no ocurre nunca y oculta que el 1 % tarda 400 ms"}
+    - {id: d, texto: "Que solo sirve con más de mil medidas"}
+  correctas: [c]
+  explicacion: Ninguna consulta tardó 35 ms. El p50 fue 20,1 ms y el p99, 400,1 ms; los percentiles describen la distribución real.
+  distractores:
+    a: Mezcla dos comportamientos muy distintos en un número que no corresponde a ninguno.
+    b: El problema no es el valor, sino lo que oculta.
+    d: El problema no depende del tamaño de la muestra.
+  referencia: https://sre.google/sre-book/monitoring-distributed-systems/
+- id: L01-002
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: Empareja cada medida de la prueba con su significado.
+  prompts:
+    - {id: "1", texto: "p50 = 20,1 ms"}
+    - {id: "2", texto: "p95 = 20,2 ms"}
+    - {id: "3", texto: "p99 = 400,1 ms"}
+  opciones:
+    - {id: a, texto: "La mitad de las peticiones tarda menos de eso"}
+    - {id: b, texto: "El 5 % de las peticiones tarda más de eso"}
+    - {id: c, texto: "El 1 % de las peticiones tarda más de eso"}
+    - {id: d, texto: "El tiempo medio"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Cada percentil dice qué parte de las peticiones queda por debajo. Los altos (p99, p99,9) muestran la cola lenta.
+  distractores:
+    d: La media fue 35,3 ms, un valor distinto de todos los percentiles.
+  referencia: https://sre.google/sre-book/monitoring-distributed-systems/
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.1"
+  enunciado: Una página hace 30 llamadas independientes a servicios cuyo p99 es de 400 ms. ¿Qué proporción de páginas tendrá al menos una llamada lenta?
+  opciones:
+    - {id: a, texto: "Un 1 %"}
+    - {id: b, texto: "Un 30 %, una por llamada"}
+    - {id: c, texto: "Ninguna, porque el p50 es bajo"}
+    - {id: d, texto: "Alrededor de un 26 %: 1 − 0,99³⁰"}
+  correctas: [d]
+  explicacion: La probabilidad de que las 30 sean rápidas es 0,99 elevado a 30, un 74 %. El resto, una de cada cuatro páginas, sufre la cola.
+  distractores:
+    a: Es la probabilidad de una sola llamada, no de 30.
+    b: Las probabilidades no se suman así.
+    c: Un p50 bajo no evita la cola.
+  referencia: https://sre.google/sre-book/monitoring-distributed-systems/
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: En el informe de la prueba, todo el equipo sospechaba de la búsqueda en una lista. ¿Qué mostró cProfile?
+  opciones:
+    - {id: a, texto: "Que la búsqueda en la lista era el 90 % del tiempo"}
+    - {id: b, texto: "Que lo más lento era serializar el JSON (13 ms), y la búsqueda, 8 ms"}
+    - {id: c, texto: "Que el tiempo se iba en cargar los pedidos"}
+    - {id: d, texto: "Que no había ningún punto lento"}
+  correctas: [b]
+  explicacion: La intuición falla a menudo. Medir con un perfilador dice dónde está el tiempo antes de cambiar nada.
+  distractores:
+    a: La búsqueda fue algo menos de un tercio del total.
+    c: Cargar los pedidos fue lo más rápido de las tres partes, 5 ms.
+    d: Había una parte claramente dominante, el JSON.
+  referencia: https://docs.python.org/3/library/profile.html
+- id: L01-005
+  tipo: ordering
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Ordena el ciclo para mejorar el rendimiento de un servicio.
+  opciones:
+    - {id: a, texto: "Fijar un objetivo sobre un percentil"}
+    - {id: b, texto: "Medir la situación actual"}
+    - {id: c, texto: "Perfilar para saber dónde se va el tiempo"}
+    - {id: d, texto: "Cambiar una sola cosa"}
+    - {id: e, texto: "Volver a medir y comparar"}
+  correctas: [a, b, c, d, e]
+  explicacion: Sin objetivo no se sabe cuándo parar, y cambiando varias cosas a la vez no se sabe cuál funcionó.
+  referencia: https://sre.google/sre-book/service-level-objectives/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Cuál es un buen objetivo de rendimiento?
+  opciones:
+    - {id: a, texto: "Que la API sea lo más rápida posible"}
+    - {id: b, texto: "Que la media baje de 50 ms"}
+    - {id: c, texto: "Mejorar un 10 % cada mes"}
+    - {id: d, texto: "Que el p99 de GET /productos/{id} sea menor que 200 ms en el 99,9 % de los minutos"}
+  correctas: [d]
+  explicacion: Es medible, se refiere a un percentil y a una operación concreta, y dice cuándo está cumplido.
+  distractores:
+    a: No dice cuándo parar.
+    b: La media oculta la cola lenta.
+    c: No dice qué se mide ni cuándo basta.
+  referencia: https://sre.google/sre-book/service-level-objectives/
+- id: L01-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: ¿En qué casos ayuda una caché?
+  opciones:
+    - {id: a, texto: "El catálogo de productos, que se lee mucho y cambia poco"}
+    - {id: b, texto: "El resultado de llamar a un servicio externo lento que admite datos de hace un minuto"}
+    - {id: c, texto: "La página de inicio, igual para todos y costosa de generar"}
+    - {id: d, texto: "El saldo de una cuenta justo antes de autorizar un cargo"}
+    - {id: e, texto: "Una consulta lenta por falta de un índice que se puede crear"}
+  correctas: [a, b, c]
+  explicacion: Compensa con muchas lecturas, datos caros de obtener y tolerancia a algo de antigüedad.
+  distractores:
+    d: Hace falta el valor exacto al instante; un saldo cacheado permitiría gastar dos veces.
+    e: Crear el índice resuelve la causa; la caché solo la tapa.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Una caché tiene una tasa de aciertos del 5 %. ¿Qué efecto tiene?
+  opciones:
+    - {id: a, texto: "Mejora mucho el rendimiento"}
+    - {id: b, texto: "Ninguno"}
+    - {id: c, texto: "Casi siempre añade una consulta a la caché antes de ir al origen, así que puede empeorar la latencia"}
+    - {id: d, texto: "Reduce la carga del origen a la mitad"}
+  correctas: [c]
+  explicacion: El 95 % de las lecturas pagan la consulta a la caché y además la del origen. Hay que revisar qué se cachea, las claves o la caducidad.
+  distractores:
+    a: Con tan pocos aciertos, apenas ahorra.
+    b: Sí tiene efecto, el de añadir trabajo.
+    d: Solo evita el 5 % de las consultas al origen.
+  referencia: https://redis.io/docs/latest/develop/reference/eviction/
+- id: L02-001
+  tipo: ordering
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: Ordena las capas donde se puede cachear, de la más cercana al usuario a la más cercana a los datos.
+  opciones:
+    - {id: a, texto: "Navegador"}
+    - {id: b, texto: "CDN o proxy inverso"}
+    - {id: c, texto: "Memoria del proceso de la aplicación"}
+    - {id: d, texto: "Redis"}
+    - {id: e, texto: "Base de datos"}
+  correctas: [a, b, c, d, e]
+  explicacion: Cuanto más cerca del usuario, menos viaje, pero más difícil de invalidar desde el servidor.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L02-002
+  tipo: matching
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Empareja cada capa con el tiempo de lectura medido en la prueba.
+  prompts:
+    - {id: "1", texto: "lru_cache en el proceso"}
+    - {id: "2", texto: "Redis en local"}
+    - {id: "3", texto: "Consulta al origen"}
+  opciones:
+    - {id: a, texto: "0,06 µs"}
+    - {id: b, texto: "280 µs"}
+    - {id: c, texto: "20 ms"}
+    - {id: d, texto: "5 s"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Cada capa está a varios órdenes de magnitud de la siguiente. Redis incluye el viaje de red y deserializar el JSON.
+  distractores:
+    d: Ninguna capa tardó tanto en la prueba.
+  referencia: https://docs.python.org/3/library/functools.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Una API tiene 10 instancias y guarda los productos en una lru_cache de cada proceso. Al cambiar un precio, ¿qué problema aparece?
+  opciones:
+    - {id: a, texto: "Cada instancia tiene su copia: hay que avisar a las 10, y mientras tanto cada una puede servir un precio distinto"}
+    - {id: b, texto: "La caché se borra sola en las 10 instancias"}
+    - {id: c, texto: "Ninguno, porque la memoria es compartida"}
+    - {id: d, texto: "La aplicación no arranca"}
+  correctas: [a]
+  explicacion: La caché en el proceso es la más rápida, pero no se comparte. Una caché compartida como Redis se invalida con un solo DEL.
+  distractores:
+    b: Nada avisa a las instancias por su cuenta.
+    c: Cada proceso tiene su propia memoria.
+    d: Arranca; el problema es la consistencia.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L02-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué ventajas tiene Redis frente a una caché en el proceso?
+  opciones:
+    - {id: a, texto: "Una sola copia para todas las instancias"}
+    - {id: b, texto: "Se invalida con un solo DEL"}
+    - {id: c, texto: "Sobrevive al reinicio de la aplicación"}
+    - {id: d, texto: "Es más rápida que la memoria del proceso"}
+    - {id: e, texto: "No necesita invalidarse"}
+  correctas: [a, b, c]
+  explicacion: A cambio, cada lectura es un viaje de red, cientos de microsegundos frente a nanosegundos.
+  distractores:
+    d: En la prueba fue unas 4.000 veces más lenta que lru_cache.
+    e: Cualquier caché se queda desactualizada si el origen cambia y no se invalida.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: Una tienda guarda en caché la ficha del producto con la clave producto:7, pero la ficha muestra el precio en la moneda de cada usuario. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Nada, porque el producto es el mismo"}
+    - {id: b, texto: "La caché se llena más rápido"}
+    - {id: c, texto: "Redis convierte la moneda"}
+    - {id: d, texto: "Un usuario puede ver el precio en la moneda de otro, porque la clave no incluye lo que cambia la respuesta"}
+  correctas: [d]
+  explicacion: Todo lo que cambia la respuesta (moneda, idioma, permisos) debe ir en la clave, por ejemplo producto:v1:7:EUR.
+  distractores:
+    a: El producto es el mismo, pero la respuesta no.
+    b: El problema es que se sirve la respuesta equivocada.
+    c: Redis guarda y devuelve lo que le dan.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L02-006
+  tipo: completar
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Completa la clave para que, al cambiar el formato de lo que se guarda, las entradas antiguas no se lean y caduquen solas.
+  codigo:
+    lenguaje: python
+    fuente: |
+      clave = f"producto:[[1]]:{producto_id}:{moneda}"
+  huecos:
+    - {id: "1", respuestas: ["v2", "v1", "v3"]}
+  explicacion: Una versión en la clave separa los formatos. Al subirla, las claves antiguas dejan de leerse y desaparecen al caducar.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Tras 2000 lecturas del mismo producto, lru_cache mostró CacheInfo(hits=2000, misses=1, …). ¿Qué indica?
+  opciones:
+    - {id: a, texto: "Que la caché falló 2000 veces"}
+    - {id: b, texto: "Que la primera lectura fue al origen y las 2000 siguientes se sirvieron desde la caché"}
+    - {id: c, texto: "Que la caché está llena"}
+    - {id: d, texto: "Que hay 2000 productos en caché"}
+  correctas: [b]
+  explicacion: hits son los aciertos y misses, los fallos. Con una tasa de aciertos tan alta, la caché ahorra casi todas las consultas.
+  distractores:
+    a: Los fallos (misses) fueron uno.
+    c: currsize era 1 de 1000.
+    d: Había un solo producto, el 7.
+  referencia: https://docs.python.org/3/library/functools.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué respuesta no debe guardar nunca una CDN compartida?
+  opciones:
+    - {id: a, texto: "El logotipo de la tienda"}
+    - {id: b, texto: "La hoja de estilos"}
+    - {id: c, texto: "La página «Mi cuenta» con los datos del usuario"}
+    - {id: d, texto: "La lista pública de categorías"}
+  correctas: [c]
+  explicacion: Una caché compartida sirve la misma respuesta a muchos usuarios. Lo que depende del usuario se marca con Cache-Control private o no-store.
+  distractores:
+    a: Es igual para todos; se puede cachear.
+    b: También es igual para todos.
+    d: Es pública e igual para todos.
+  referencia: https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.7
+- id: L03-001
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada patrón de caché con quién hace qué.
+  prompts:
+    - {id: "1", texto: "Cache-aside"}
+    - {id: "2", texto: "Read-through"}
+    - {id: "3", texto: "Write-through"}
+    - {id: "4", texto: "Write-behind"}
+  opciones:
+    - {id: a, texto: "La aplicación mira la caché y, si no está, carga del origen y la guarda"}
+    - {id: b, texto: "La caché sabe cargar el dato del origen cuando falta"}
+    - {id: c, texto: "Cada escritura va a la caché y al origen a la vez"}
+    - {id: d, texto: "La escritura se hace en la caché y llega al origen más tarde, en lotes"}
+    - {id: e, texto: "La caché se borra entera cada noche"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Los dos primeros son de lectura y los dos últimos, de escritura.
+  distractores:
+    e: Vaciar la caché periódicamente no es ninguno de estos patrones.
+  referencia: https://docs.spring.io/spring-framework/reference/integration/cache.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Cuál es el principal riesgo de write-behind?
+  opciones:
+    - {id: a, texto: "Que las escrituras son lentas"}
+    - {id: b, texto: "Que la caché va por detrás del origen"}
+    - {id: c, texto: "Que lee demasiado del origen"}
+    - {id: d, texto: "Que si la caché cae antes de llevar los cambios al origen, se pierden"}
+  correctas: [d]
+  explicacion: La aplicación da la escritura por hecha en cuanto la acepta la caché. Solo encaja con datos que se pueden perder, como contadores de visitas.
+  distractores:
+    a: Es al revés; son muy rápidas.
+    b: La caché tiene lo último; el que va por detrás es el origen.
+    c: Las escrituras se agrupan, así que el origen recibe menos.
+  referencia: https://docs.spring.io/spring-framework/reference/integration/cache.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Cuál es la combinación más habitual en una aplicación de negocio?
+  opciones:
+    - {id: a, texto: "Cache-aside para leer, y escribir en el origen y borrar la entrada de la caché"}
+    - {id: b, texto: "Write-behind para todo"}
+    - {id: c, texto: "No poner TTL"}
+    - {id: d, texto: "Guardar en caché solo lo que se escribe"}
+  correctas: [a]
+  explicacion: Es sencillo y no pierde datos. La siguiente lectura recarga el valor nuevo, con las ventanas de inconsistencia que trata la lección 4.
+  distractores:
+    b: Arriesga perder escrituras de negocio.
+    c: Sin TTL, un dato mal invalidado vive para siempre.
+    d: Cachear al escribir guarda datos que quizá nadie lea.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: Mil productos se cargan en la caché a la vez al arrancar, todos con TTL de 300 s. ¿Qué pasa a los cinco minutos y cómo se evita?
+  opciones:
+    - {id: a, texto: "Nada, porque Redis escalona las caducidades"}
+    - {id: b, texto: "Caducan todos a la vez y van juntos al origen; se evita añadiendo una variación aleatoria al TTL"}
+    - {id: c, texto: "Redis se reinicia"}
+    - {id: d, texto: "Se duplican las claves"}
+  correctas: [b]
+  explicacion: Con un 10 % de variación, en la prueba las mil claves caducaron repartidas en 31 segundos distintos en lugar de en uno.
+  distractores:
+    a: Redis caduca cada clave cuando le toca; no reparte nada.
+    c: Las caducidades no reinician Redis.
+    d: Las claves simplemente desaparecen al caducar.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Alguien hace miles de peticiones a /productos/<id> con identificadores que no existen. Sin caché negativa, ¿qué pasa?
+  opciones:
+    - {id: a, texto: "Redis bloquea al cliente"}
+    - {id: b, texto: "La caché las responde todas"}
+    - {id: c, texto: "Cada petición llega a la base de datos, porque no hay nada que guardar en la caché"}
+    - {id: d, texto: "La base de datos crea los productos"}
+  correctas: [c]
+  explicacion: Guardar un marcador de «no existe» con un TTL corto protege el origen. En la prueba, cinco lecturas de un producto inexistente hicieron una sola consulta.
+  distractores:
+    b: Sin un marcador, no hay nada que la caché pueda responder.
+    a: Redis no limita peticiones por su cuenta.
+    d: Leer no crea nada.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L03-006
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa la línea para guardar el producto con un TTL de 300 segundos más hasta un 10 % de variación aleatoria.
+  codigo:
+    lenguaje: python
+    fuente: |
+      r.set(clave, json.dumps(dato), [[1]]=ttl + random.randint(0, ttl // 10))
+  huecos:
+    - {id: "1", respuestas: ["ex"]}
+  explicacion: ex fija la caducidad en segundos. Con ttl 300, la clave del producto de la prueba quedó con 317 s.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Una respuesta lleva Cache-Control max-age=60, stale-while-revalidate=300. ¿Qué puede hacer una caché a los 90 segundos?
+  opciones:
+    - {id: a, texto: "Borrarla, porque ha caducado"}
+    - {id: b, texto: "Nada; debe esperar a la nueva respuesta"}
+    - {id: c, texto: "Servir la respuesta antigua mientras pide la nueva en segundo plano"}
+    - {id: d, texto: "Servirla 300 segundos más sin refrescarla"}
+  correctas: [c]
+  explicacion: Los primeros 60 segundos es fresca; durante los 300 siguientes se puede servir caducada mientras se revalida, así nadie espera al origen.
+  distractores:
+    b: Eso es lo que evita la directiva.
+    a: Puede seguir usándola durante la ventana de stale-while-revalidate.
+    d: La directiva obliga a revalidar en segundo plano, no a dejar de hacerlo.
+  referencia: https://www.rfc-editor.org/rfc/rfc5861.html
+- id: L03-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Qué buenas prácticas aplica la función obtener_producto de la lección?
+  opciones:
+    - {id: a, texto: "Clave con espacio de nombres y versión, producto:v1:<id>"}
+    - {id: b, texto: "TTL en todas las entradas"}
+    - {id: c, texto: "Un marcador con TTL corto para los productos que no existen"}
+    - {id: d, texto: "Un cerrojo para evitar las estampidas"}
+    - {id: e, texto: "Write-behind de las escrituras"}
+  correctas: [a, b, c]
+  explicacion: Con todo eso, diez lecturas de dos productos hicieron solo dos consultas a la base de datos.
+  distractores:
+    d: Esta función no lo tiene; las estampidas se tratan en la lección 5.
+    e: La función solo lee; no escribe en el origen.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L04-001
+  tipo: ordering
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: Ordena los pasos de la carrera que dejó la caché con el precio 10 y la base de datos con 12.
+  opciones:
+    - {id: a, texto: "El lector no encuentra p:2 en la caché"}
+    - {id: b, texto: "El lector lee el precio 10 de la base de datos"}
+    - {id: c, texto: "El escritor cambia el precio a 12 en la base de datos"}
+    - {id: d, texto: "El escritor borra p:2 de la caché"}
+    - {id: e, texto: "El lector guarda el precio 10 en la caché"}
+  correctas: [a, b, c, d, e]
+  explicacion: El borrado del escritor llegó antes que la escritura del lector, que tenía un valor ya obsoleto. Queda así hasta que la entrada caduque.
+  referencia: https://martinfowler.com/bliki/TwoHardThings.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: En la prueba de la carrera, la entrada se guardó sin TTL. ¿Cuánto tiempo sirve la caché el precio antiguo?
+  opciones:
+    - {id: a, texto: "Hasta la siguiente lectura"}
+    - {id: b, texto: "Un minuto, el valor por defecto de Redis"}
+    - {id: c, texto: "Hasta que otro cambio vuelva a borrar la entrada o se reinicie la caché; si no ocurre, para siempre"}
+    - {id: d, texto: "Hasta que el escritor termine"}
+  correctas: [c]
+  explicacion: Sin TTL no hay red de seguridad. Por eso toda entrada de caché debe llevar caducidad, aunque haya invalidación.
+  distractores:
+    a: Las lecturas encuentran la entrada y la sirven, así que no se corrige sola.
+    b: Redis no pone caducidad por defecto.
+    d: El escritor ya había terminado antes de que se guardara el valor antiguo.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Por qué es difícil invalidar una caché?
+  opciones:
+    - {id: a, texto: "Porque es una copia, y con lecturas y escrituras concurrentes el orden de las operaciones puede dejarla con un valor antiguo"}
+    - {id: b, texto: "Porque Redis no permite borrar claves"}
+    - {id: c, texto: "Porque las cachés no admiten TTL"}
+    - {id: d, texto: "Porque hay que reiniciar la aplicación para borrar la caché"}
+  correctas: [a]
+  explicacion: Cada copia tiene que enterarse de cada cambio, en el orden correcto. Es la «primera cosa difícil» de la frase de Phil Karlton.
+  distractores:
+    b: DEL borra claves sin problema.
+    c: Redis admite TTL en cada clave.
+    d: Se borra en caliente, con DEL.
+  referencia: https://martinfowler.com/bliki/TwoHardThings.html
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Dos escritores cambian a la vez el mismo producto y, después de escribir en la base de datos, cada uno escribe su valor en la caché. ¿Qué puede pasar?
+  opciones:
+    - {id: a, texto: "Nada, porque cada escritor deja su valor"}
+    - {id: b, texto: "Que la caché quede con el valor del escritor que llegó primero a la base de datos, si llega el último a la caché"}
+    - {id: c, texto: "Que Redis rechace la segunda escritura"}
+    - {id: d, texto: "Que la base de datos quede con los dos valores"}
+  correctas: [b]
+  explicacion: El orden en la base de datos y el orden en la caché pueden no coincidir. Borrar la entrada evita este problema, o hay que condicionar la escritura a una versión que solo crece.
+  distractores:
+    a: Justo el problema es que uno de los dos valores pisa al otro en el orden equivocado.
+    c: Redis acepta las dos escrituras.
+    d: La base de datos guarda el último valor escrito.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L04-005
+  tipo: matching
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Empareja cada técnica con lo que aporta.
+  prompts:
+    - {id: "1", texto: "TTL en cada entrada"}
+    - {id: "2", texto: "Guardar la versión junto al valor"}
+    - {id: "3", texto: "Doble borrado diferido"}
+    - {id: "4", texto: "Invalidación por eventos con CDC"}
+  opciones:
+    - {id: a, texto: "Que un dato equivocado tenga caducidad"}
+    - {id: b, texto: "No escribir en la caché un valor más antiguo que el que hay"}
+    - {id: c, texto: "Cubrir la carrera del lector lento volviendo a borrar al poco tiempo"}
+    - {id: d, texto: "Que cada cambio de la base de datos invalide las cachés sin depender del código"}
+    - {id: e, texto: "Que la caché sea siempre exacta"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Ninguna da exactitud total; juntas reducen la ventana de inconsistencia y acotan su duración.
+  distractores:
+    e: Una caché es una copia; siempre hay una ventana en que puede estar desactualizada.
+  referencia: https://martinfowler.com/bliki/TwoHardThings.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué pregunta conviene hacerse antes de decidir el TTL de un dato?
+  opciones:
+    - {id: a, texto: "¿Cuánta memoria tiene Redis?"}
+    - {id: b, texto: "¿Cuántas veces se lee al día?"}
+    - {id: c, texto: "¿Cuántos campos tiene el dato?"}
+    - {id: d, texto: "¿Cuánto tiempo puede estar mal este dato sin que importe?"}
+  correctas: [d]
+  explicacion: La tolerancia del negocio a datos antiguos fija el TTL. Si la respuesta es «nada», el dato no se cachea.
+  distractores:
+    a: La memoria influye en cuántas claves caben, no en cuánto pueden durar.
+    b: Las lecturas deciden si compensa cachear, no cuánto puede durar.
+    c: El tamaño del dato no tiene relación con su vigencia.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L04-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué datos conviene leer siempre del origen en lugar de una caché?
+  opciones:
+    - {id: a, texto: "El saldo antes de autorizar un cargo"}
+    - {id: b, texto: "El stock al confirmar un pedido"}
+    - {id: c, texto: "El estado de un pago al decidir si enviar el pedido"}
+    - {id: d, texto: "El nombre de las categorías del menú"}
+    - {id: e, texto: "La imagen del logotipo"}
+  correctas: [a, b, c]
+  explicacion: Son decisiones que no toleran un valor antiguo; un dato cacheado permitiría gastar dos veces o vender lo que no hay.
+  distractores:
+    d: Cambia poco y un retraso de minutos no importa.
+    e: Es estático y perfecto para cachear.
+  referencia: https://martinfowler.com/bliki/TwoHardThings.html
+- id: L04-008
+  tipo: completar
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Completa la función de actualización siguiendo la estrategia recomendada de escribir en el origen e invalidar.
+  codigo:
+    lenguaje: python
+    fuente: |
+      def cambiar_precio(pid, precio):
+          bd.actualizar_precio(pid, precio)
+          r.[[1]](f"producto:v1:{pid}")
+  huecos:
+    - {id: "1", respuestas: ["delete"]}
+  explicacion: Borrar la entrada hace que la siguiente lectura recargue el valor nuevo. Actualizarla en la caché tiene el problema de los escritores concurrentes.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Una clave muy leída caduca y 50 peticiones la buscan a la vez. Sin protección, ¿cuántas llamadas al origen hubo en la prueba?
+  opciones:
+    - {id: a, texto: "1"}
+    - {id: b, texto: "2"}
+    - {id: c, texto: "25"}
+    - {id: d, texto: "50"}
+  correctas: [d]
+  explicacion: Ninguna encuentra la clave, así que todas van al origen a la vez. Es la estampida.
+  distractores:
+    a: Es lo que se consiguió con el cerrojo y la segunda lectura.
+    b: Es lo que se consiguió con el cerrojo sin la segunda lectura.
+    c: Nada reparte las peticiones a la mitad.
+  referencia: https://redis.io/docs/latest/develop/clients/patterns/distributed-locks/
+- id: L05-002
+  tipo: completar
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Completa la orden para crear el cerrojo solo si no existe y con caducidad de 5 segundos, de forma atómica.
+  codigo:
+    lenguaje: python
+    fuente: |
+      if r.set(f"cerrojo:{pid}", "1", [[1]]=True, [[2]]=5):
+          ...
+  huecos:
+    - {id: "1", respuestas: ["nx"]}
+    - {id: "2", respuestas: ["ex"]}
+  explicacion: NX crea la clave solo si no existe y EX le pone caducidad en la misma orden. Si el proceso muere, el cerrojo caduca solo.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.2"
+  enunciado: Con el cerrojo pero sin volver a leer la caché tras conseguirlo, la prueba dio a veces 2 llamadas al origen. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque Redis concedió el cerrojo a dos hilos a la vez"}
+    - {id: b, texto: "Porque un hilo que falló el primer GET consiguió el cerrojo justo después de que otro regenerara la clave y lo soltara"}
+    - {id: c, texto: "Porque el cerrojo caducó a los 5 segundos"}
+    - {id: d, texto: "Porque el origen respondió dos veces"}
+  correctas: [b]
+  explicacion: El cerrojo ya estaba libre y la clave ya estaba en caché, pero ese hilo no lo comprobó. Volver a mirar tras conseguir el cerrojo dejó siempre una sola llamada.
+  distractores:
+    a: SET NX solo lo concede a uno; los dos lo consiguieron en momentos distintos.
+    c: El origen tardaba 200 ms, muy por debajo de 5 s.
+    d: Fueron dos peticiones distintas al origen.
+  referencia: https://redis.io/docs/latest/commands/set/
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.1"
+  enunciado: El origen tarda a veces más que la caducidad del cerrojo (EX 5). ¿Qué puede pasar?
+  opciones:
+    - {id: a, texto: "El cerrojo caduca, otro lo consigue y hay dos regenerando a la vez"}
+    - {id: b, texto: "Redis amplía el cerrojo automáticamente"}
+    - {id: c, texto: "El primer hilo se detiene"}
+    - {id: d, texto: "Nada, porque el cerrojo dura lo que haga falta"}
+  correctas: [a]
+  explicacion: Para evitar estampidas basta, porque como mucho hay alguna llamada extra. Para proteger datos con exclusión estricta hacen falta algoritmos más cuidadosos.
+  distractores:
+    b: Redis no sabe que el dueño sigue trabajando.
+    c: El hilo sigue con lo suyo; nadie lo interrumpe.
+    d: Caduca a los 5 segundos, que es justo para lo que se puso EX.
+  referencia: https://redis.io/docs/latest/develop/clients/patterns/distributed-locks/
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Un Redis usado como caché tiene maxmemory de 4 MB y la política por defecto. ¿Qué pasa al llenarse?
+  opciones:
+    - {id: a, texto: "Borra las claves más antiguas"}
+    - {id: b, texto: "Se reinicia"}
+    - {id: c, texto: "Rechaza las escrituras con un error, porque la política por defecto es noeviction"}
+    - {id: d, texto: "Guarda en disco lo que no cabe"}
+  correctas: [c]
+  explicacion: En la prueba, al llegar a 2557 claves dio «command not allowed when used memory > 'maxmemory'». Para una caché hay que usar allkeys-lru o allkeys-lfu.
+  distractores:
+    a: Eso hace allkeys-lru, no la política por defecto.
+    b: Sigue funcionando; solo rechaza escrituras.
+    d: Redis no desborda la memoria a disco.
+  referencia: https://redis.io/docs/latest/develop/reference/eviction/
+- id: L05-006
+  tipo: matching
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Empareja cada política de expulsión de Redis con su uso.
+  prompts:
+    - {id: "1", texto: "noeviction"}
+    - {id: "2", texto: "allkeys-lru"}
+    - {id: "3", texto: "allkeys-lfu"}
+    - {id: "4", texto: "volatile-lru"}
+  opciones:
+    - {id: a, texto: "Redis como almacén de datos que no se pueden perder"}
+    - {id: b, texto: "Caché general: quita las usadas hace más tiempo"}
+    - {id: c, texto: "Caché con unas pocas claves muy populares: quita las menos usadas"}
+    - {id: d, texto: "Mezcla de caché y datos permanentes: solo quita claves con TTL"}
+    - {id: e, texto: "Guardar las claves expulsadas en otro servidor"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: La política se elige según si Redis es caché, almacén o las dos cosas.
+  distractores:
+    e: Ninguna política mueve las claves a otro sitio; las expulsadas desaparecen.
+  referencia: https://redis.io/docs/latest/develop/reference/eviction/
+- id: L05-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: El producto anunciado en televisión recibe la mitad de las lecturas y satura el nodo de Redis que lo tiene. ¿Qué ayuda?
+  opciones:
+    - {id: a, texto: "Una copia en la memoria de cada proceso con TTL de pocos segundos"}
+    - {id: b, texto: "Repartir la clave en varias copias y leer una al azar"}
+    - {id: c, texto: "Servirlo con stale-while-revalidate para que nadie espere al refrescar"}
+    - {id: d, texto: "Quitar el TTL de la clave"}
+    - {id: e, texto: "Cambiar la política a noeviction"}
+  correctas: [a, b, c]
+  explicacion: Las dos primeras reparten la carga de la clave caliente; la tercera evita que su caducidad provoque una estampida.
+  distractores:
+    d: No reduce la carga del nodo y deja el dato sin red de seguridad.
+    e: La política de expulsión no reparte lecturas.
+  referencia: https://redis.io/docs/latest/develop/use/keyspace/
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: En un Redis de 64 bits, ¿qué significa maxmemory 0, el valor por defecto?
+  opciones:
+    - {id: a, texto: "Que no admite datos"}
+    - {id: b, texto: "Sin límite: crece hasta que el sistema se queda sin memoria"}
+    - {id: c, texto: "Que usa la mitad de la RAM"}
+    - {id: d, texto: "Que expulsa claves sin parar"}
+  correctas: [b]
+  explicacion: Para usar Redis como caché hay que fijar maxmemory y una política de expulsión.
+  distractores:
+    a: Admite datos; 0 significa sin límite.
+    c: No reserva ninguna fracción por su cuenta.
+    d: Sin límite, no necesita expulsar nada.
+  referencia: https://redis.io/docs/latest/develop/reference/eviction/

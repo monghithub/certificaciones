@@ -1,0 +1,17 @@
+slug: cache-y-rendimiento
+titulo: Caché y rendimiento
+area: datos
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo medir el rendimiento y cuándo y cómo cachear sin romper la consistencia, comprobado con Python y Redis 8.10. Percentiles y perfiles, capas de caché, patrones de lectura y escritura, invalidación, estampidas y expulsión por memoria.
+etiquetas: [cache, rendimiento, redis, latencia, percentiles, invalidacion]
+requisitos: [bases-de-datos-nosql, http-y-la-web]
+fuentes:
+  - redis.io
+  - docs.python.org
+  - sre.google
+  - martinfowler.com
+  - rfc-editor.org
+  - docs.spring.io
+ejercicios:
+  minimo_por_leccion: 8

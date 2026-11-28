@@ -1,0 +1,682 @@
+- id: L01-001
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Según Lewis y Fowler, ¿qué caracteriza a los microservicios?
+  opciones:
+    - {id: a, texto: "Cada servicio corre en su propio proceso"}
+    - {id: b, texto: "Se organizan alrededor de capacidades de negocio"}
+    - {id: c, texto: "Se despliegan de forma independiente"}
+    - {id: d, texto: "Comparten una única base de datos"}
+    - {id: e, texto: "Deben escribirse en el mismo lenguaje"}
+  correctas: [a, b, c]
+  explicacion: La independencia de despliegue es lo central; la gestión centralizada es mínima.
+  distractores:
+    d: Cada servicio gestiona sus datos.
+    e: Pueden usar lenguajes distintos.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué es la prima de los microservicios?
+  opciones:
+    - {id: a, texto: "Un bono para los equipos que los usan"}
+    - {id: b, texto: "El coste adicional de complejidad que exigen, que solo compensa en sistemas suficientemente complejos"}
+    - {id: c, texto: "La licencia de un producto"}
+    - {id: d, texto: "El ahorro en servidores"}
+  correctas: [b]
+  explicacion: Fowler la describe como un sobrecoste de productividad que se paga hasta que el sistema es lo bastante complejo.
+  distractores:
+    a: No es un incentivo económico.
+    c: No es un producto.
+    d: Es un coste, no un ahorro.
+  referencia: https://martinfowler.com/bliki/MicroservicePremium.html
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Una startup de cuatro personas empieza un producto nuevo. ¿Qué arquitectura le recomendarías?
+  opciones:
+    - {id: a, texto: "Veinte microservicios desde el principio"}
+    - {id: b, texto: "Un monolito modular, extrayendo servicios cuando haya motivos concretos"}
+    - {id: c, texto: "Un servicio por cada tabla"}
+    - {id: d, texto: "Funciones sin servidor para cada endpoint"}
+  correctas: [b]
+  explicacion: Fowler observa que casi todos los éxitos empezaron como monolito; al principio los límites correctos no se conocen.
+  distractores:
+    a: Pagaría la prima sin necesitarla.
+    c: Acopla los servicios por los datos y los multiplica sin sentido.
+    d: Fragmenta sin límites de negocio.
+  referencia: https://martinfowler.com/bliki/MonolithFirst.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Para publicar un cambio, el equipo debe desplegar a la vez seis servicios en un orden concreto. ¿Qué tiene?
+  opciones:
+    - {id: a, texto: "Microservicios bien diseñados"}
+    - {id: b, texto: "Una arquitectura sin servidor"}
+    - {id: c, texto: "Un monolito modular"}
+    - {id: d, texto: "Un monolito distribuido: los costes de la red sin la independencia"}
+  correctas: [d]
+  explicacion: Si no se pueden desplegar de forma independiente, se ha perdido la ventaja principal.
+  distractores:
+    a: Les falta la independencia.
+    b: No tiene relación.
+    c: Un monolito modular se despliega como una unidad, sin red entre módulos.
+  referencia: https://martinfowler.com/bliki/MonolithFirst.html
+- id: L01-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué requisitos previos cita Fowler antes de adoptar microservicios?
+  opciones:
+    - {id: a, texto: "Poder crear entornos rápidamente"}
+    - {id: b, texto: "Monitorización básica"}
+    - {id: c, texto: "Despliegue rápido y automatizado"}
+    - {id: d, texto: "Tener más de cien desarrolladores"}
+    - {id: e, texto: "Usar Kubernetes obligatoriamente"}
+  correctas: [a, b, c]
+  explicacion: Con muchos servicios, sin automatización ni visibilidad, la operación se vuelve inmanejable.
+  distractores:
+    d: No pone un número.
+    e: No exige una tecnología concreta.
+  referencia: https://martinfowler.com/bliki/MicroservicePrerequisites.html
+- id: L01-006
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Empareja cada ventaja con el coste que trae.
+  prompts:
+    - {id: "1", texto: "Despliegue independiente por equipo"}
+    - {id: "2", texto: "Escalar cada servicio por separado"}
+    - {id: "3", texto: "Cada servicio con sus datos"}
+  opciones:
+    - {id: a, texto: "Contratos entre servicios que no se pueden romper"}
+    - {id: b, texto: "Llamadas por red con latencia y fallos parciales"}
+    - {id: c, texto: "Consistencia eventual entre servicios"}
+    - {id: d, texto: "Menos servidores"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Cada ventaja de la independencia tiene un coste asociado.
+  distractores:
+    d: No es un coste, y además no suele ser cierto.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué es lo más importante que aporta un microservicio bien diseñado?
+  opciones:
+    - {id: a, texto: "Que tiene pocas líneas de código"}
+    - {id: b, texto: "Que usa contenedores"}
+    - {id: c, texto: "Que un equipo puede cambiarlo y desplegarlo sin coordinarse con los demás"}
+    - {id: d, texto: "Que usa el lenguaje más moderno"}
+  correctas: [c]
+  explicacion: El tamaño y la tecnología son secundarios; la independencia es el objetivo.
+  distractores:
+    a: El tamaño no es el criterio.
+    b: Es una forma de desplegar, no la esencia.
+    d: No es lo que aporta.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Cuándo tiene sentido extraer un módulo del monolito modular a un servicio?
+  opciones:
+    - {id: a, texto: "Cuando lo pide un artículo de moda"}
+    - {id: b, texto: "Cuando hay un motivo concreto: escala muy distinta, un equipo independiente o un ritmo de despliegue propio"}
+    - {id: c, texto: "Cuando el módulo tiene más de cinco clases"}
+    - {id: d, texto: "Al llegar el viernes"}
+  correctas: [b]
+  explicacion: Separar tiene un coste; debe compensarlo una necesidad real.
+  distractores:
+    a: No es un motivo técnico.
+    c: El tamaño no basta.
+    d: No es un criterio.
+  referencia: https://martinfowler.com/bliki/MonolithFirst.html
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Un sistema se parte en servicio-api, servicio-logica y servicio-datos. ¿Qué problema tiene?
+  opciones:
+    - {id: a, texto: "Ninguno; es una separación clara"}
+    - {id: b, texto: "Que son demasiados"}
+    - {id: c, texto: "Parte por capas técnicas: cualquier funcionalidad atraviesa los tres y los cambios obligan a desplegarlos juntos"}
+    - {id: d, texto: "Que no usa contenedores"}
+  correctas: [c]
+  explicacion: Los límites deben seguir capacidades de negocio, con datos, reglas y API de punta a punta.
+  distractores:
+    a: Separa la tecnología, no el negocio.
+    b: El número no es el problema.
+    d: No tiene relación.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué suele ser un buen límite para un microservicio?
+  opciones:
+    - {id: a, texto: "Una capacidad de negocio, que suele coincidir con un contexto delimitado"}
+    - {id: b, texto: "Una tabla de la base de datos"}
+    - {id: c, texto: "Una clase"}
+    - {id: d, texto: "Un endpoint"}
+  correctas: [a]
+  explicacion: Pedidos, Pagos o Envíos contienen sus datos, sus reglas y su API.
+  distractores:
+    b: Un servicio por tabla multiplica el acoplamiento.
+    c: Es demasiado pequeño.
+    d: Fragmenta sin sentido de negocio.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/microservices/model/domain-analysis
+- id: L02-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué síntomas indican límites equivocados?
+  opciones:
+    - {id: a, texto: "Casi todos los cambios tocan varios servicios"}
+    - {id: b, texto: "Dos servicios escriben en las mismas tablas"}
+    - {id: c, texto: "Una petición genera una cadena larga de llamadas síncronas entre servicios"}
+    - {id: d, texto: "Cada servicio tiene su propio repositorio de código"}
+    - {id: e, texto: "Cada servicio tiene un equipo dueño"}
+  correctas: [a, b, c]
+  explicacion: Indican que un mismo contexto está repartido o que varios están mezclados.
+  distractores:
+    d: Es una práctica habitual y sana.
+    e: Es lo deseable.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué dice la ley de Conway?
+  opciones:
+    - {id: a, texto: "Que el software duplica su complejidad cada dos años"}
+    - {id: b, texto: "Que los sistemas reproducen la estructura de comunicación de la organización que los diseña"}
+    - {id: c, texto: "Que añadir personas a un proyecto retrasado lo retrasa más"}
+    - {id: d, texto: "Que todo servicio acaba fallando"}
+  correctas: [b]
+  explicacion: Fowler la ilustra con un compilador de una pasada con un equipo y de dos pasadas con dos equipos.
+  distractores:
+    a: No es lo que dice.
+    c: Es la ley de Brooks.
+    d: No es la ley de Conway.
+  referencia: https://martinfowler.com/bliki/ConwaysLaw.html
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: ¿Qué es la maniobra inversa de Conway?
+  opciones:
+    - {id: a, texto: "Organizar los equipos según la arquitectura que se quiere obtener"}
+    - {id: b, texto: "Deshacer un despliegue"}
+    - {id: c, texto: "Juntar los servicios en uno solo"}
+    - {id: d, texto: "Ignorar la estructura de la organización"}
+  correctas: [a]
+  explicacion: Si los sistemas copian a las organizaciones, se puede actuar sobre la organización para guiar el diseño.
+  distractores:
+    b: No tiene relación con los despliegues.
+    c: No es eso.
+    d: Es justo lo contrario.
+  referencia: https://martinfowler.com/bliki/ConwaysLaw.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Un equipo crea servicio-cliente, servicio-direccion y servicio-telefono. ¿Qué pasará?
+  opciones:
+    - {id: a, texto: "Mejor escalabilidad"}
+    - {id: b, texto: "Nada"}
+    - {id: c, texto: "Que no podrán usar bases de datos"}
+    - {id: d, texto: "Muchas llamadas entre servicios para cualquier operación y un acoplamiento alto: son demasiado pequeños"}
+  correctas: [d]
+  explicacion: Partir por entidades fragmenta una sola capacidad en varios servicios que siempre cambian juntos.
+  distractores:
+    a: El cuello de botella pasa a ser la red.
+    b: La fragmentación tiene costes.
+    c: Pueden, pero no es el problema.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Tres equipos modifican a la vez el mismo servicio cada semana. ¿Qué indica?
+  opciones:
+    - {id: a, texto: "Buena colaboración"}
+    - {id: b, texto: "Un problema de límites o de organización: un servicio debería tener un equipo dueño"}
+    - {id: c, texto: "Que el servicio es pequeño"}
+    - {id: d, texto: "Que hay que añadir más equipos"}
+  correctas: [b]
+  explicacion: La propiedad compartida obliga a coordinarse y anula la independencia.
+  distractores:
+    a: Es coordinación que la arquitectura debería evitar.
+    c: Más bien lo contrario.
+    d: Empeoraría la situación.
+  referencia: https://martinfowler.com/bliki/ConwaysLaw.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Por qué conviene descubrir los límites dentro de un monolito modular?
+  opciones:
+    - {id: a, texto: "Porque corregir un límite equivocado allí es una refactorización, y entre servicios es una migración"}
+    - {id: b, texto: "Porque los monolitos no tienen límites"}
+    - {id: c, texto: "Porque es obligatorio"}
+    - {id: d, texto: "Porque los servicios no se pueden cambiar"}
+  correctas: [a]
+  explicacion: Los límites se aprenden con el uso; equivocarse dentro de un despliegue único sale mucho más barato.
+  distractores:
+    b: Un monolito modular tiene límites explícitos.
+    c: Es una recomendación, no una obligación.
+    d: Se pueden cambiar, pero cuesta más.
+  referencia: https://martinfowler.com/bliki/MonolithFirst.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Con inventario tardando 5 s y pedidos llamándolo sin tiempo de espera, ¿qué se midió con 20 peticiones simultáneas?
+  opciones:
+    - {id: a, texto: "Fallaron al instante"}
+    - {id: b, texto: "Tardaron unos 5,09 s: cada petición quedó retenida esperando"}
+    - {id: c, texto: "Tardaron 0,10 s"}
+    - {id: d, texto: "Respondieron 503"}
+  correctas: [b]
+  explicacion: Sin tiempo de espera, la lentitud de inventario se traslada a pedidos y retiene sus recursos.
+  distractores:
+    a: Sin protección, esperaron.
+    c: Fue el tiempo con inventario sano.
+    d: Eso pasó con el interruptor abierto.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Por qué un servicio lento puede tumbar también a quien lo llama, incluso en funciones que no lo necesitan?
+  opciones:
+    - {id: a, texto: "Porque comparten el código"}
+    - {id: b, texto: "Porque las peticiones retenidas agotan las conexiones y la memoria del que llama: un fallo en cascada"}
+    - {id: c, texto: "Porque el servicio lento envía virus"}
+    - {id: d, texto: "No puede pasar"}
+  correctas: [b]
+  explicacion: Los recursos son compartidos; si se agotan esperando, no queda nada para el resto.
+  distractores:
+    a: Pueden ser servicios totalmente distintos.
+    c: No tiene relación.
+    d: Es un fallo muy habitual.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Con tiempo de espera de 0,5 s y el interruptor abierto tras 3 fallos, ¿cuánto tardaron en fallar las tandas siguientes?
+  opciones:
+    - {id: a, texto: "Unos 0,02 s, con 503 y sin llamar a inventario"}
+    - {id: b, texto: "Unos 5 s"}
+    - {id: c, texto: "Unos 0,5 s cada una"}
+    - {id: d, texto: "No fallaron"}
+  correctas: [a]
+  explicacion: El interruptor abierto falla al instante y deja respirar al servicio enfermo.
+  distractores:
+    b: Sería sin ninguna protección.
+    c: Fue la primera tanda, antes de abrirse.
+    d: Inventario seguía lento.
+  referencia: https://martinfowler.com/bliki/CircuitBreaker.html
+- id: L03-004
+  tipo: ordering
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Ordena los estados de un interruptor durante una avería y su recuperación.
+  opciones:
+    - {id: a, texto: "Cerrado: las llamadas pasan"}
+    - {id: b, texto: "Abierto: tras varios fallos, se falla al instante"}
+    - {id: c, texto: "Semiabierto: pasado un tiempo, se deja pasar una prueba"}
+    - {id: d, texto: "Cerrado de nuevo: la prueba fue bien"}
+  correctas: [a, b, c, d]
+  explicacion: El interruptor se abre para proteger y comprueba de vez en cuando si el servicio se ha recuperado.
+  referencia: https://martinfowler.com/bliki/CircuitBreaker.html
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: Un cliente reintentó un cobro tres veces tras otros tantos timeouts, sin clave de idempotencia. ¿Cuántos cobros se hicieron?
+  opciones:
+    - {id: a, texto: "Ninguno, porque hubo timeout"}
+    - {id: b, texto: "Uno"}
+    - {id: c, texto: "Tres: el servidor cobraba en cada intento aunque la respuesta no llegara a tiempo"}
+    - {id: d, texto: "Seis"}
+  correctas: [c]
+  explicacion: Un timeout no significa que la operación no se hiciera. Con Idempotency-Key, el mismo escenario hizo un único cobro.
+  distractores:
+    a: El timeout era del cliente; el servidor siguió trabajando.
+    b: Fue el resultado con la clave de idempotencia.
+    d: Hubo tres intentos.
+  referencia: https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/
+- id: L03-006
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa el reintento seguro de un cobro.
+  codigo:
+    lenguaje: python
+    fuente: |
+      clave = str(uuid.uuid4())          # una por operación, no por intento
+      for intento in range(3):
+          try:
+              return c.post("/cobros", headers={"[[1]]": clave}, timeout=0.3)
+          except httpx.TimeoutException:
+              time.sleep(0.1 * 2 ** intento + random.random() * 0.1)   # espera [[2]] con variación
+  huecos:
+    - {id: "1", respuestas: [Idempotency-Key]}
+    - {id: "2", respuestas: [exponencial]}
+  explicacion: La misma clave en cada reintento evita duplicar el cobro; la espera crece y lleva algo de azar.
+  referencia: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Qué reglas hacen seguros los reintentos?
+  opciones:
+    - {id: a, texto: "Espera exponencial con variación aleatoria"}
+    - {id: b, texto: "Un límite de intentos"}
+    - {id: c, texto: "Reintentar solo errores transitorios y operaciones idempotentes"}
+    - {id: d, texto: "Reintentar al instante y sin límite hasta que funcione"}
+    - {id: e, texto: "Reintentar también los errores 400"}
+  correctas: [a, b, c]
+  explicacion: Así se superan fallos pasajeros sin saturar al servicio ni duplicar operaciones.
+  distractores:
+    d: Saturaría a un servicio que intenta recuperarse.
+    e: Un 400 se repetiría igual.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/retry
+- id: L03-008
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada necesidad con el tipo de comunicación.
+  prompts:
+    - {id: "1", texto: "Mostrar el stock de un producto en la página"}
+    - {id: "2", texto: "Avisar a Envíos y Facturación de que se confirmó un pedido"}
+    - {id: "3", texto: "Generar un informe que tarda diez minutos"}
+  opciones:
+    - {id: a, texto: "Síncrona, con tiempo de espera"}
+    - {id: b, texto: "Asíncrona, con un evento"}
+    - {id: c, texto: "Asíncrona: se encarga y se avisa al terminar"}
+    - {id: d, texto: "Compartiendo la base de datos"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Las consultas inmediatas son síncronas; los avisos y procesos largos, asíncronos.
+  distractores:
+    d: Acopla los servicios por los datos.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: El servicio de Informes lee directamente las tablas del servicio de Pedidos. ¿Qué riesgo hay?
+  opciones:
+    - {id: a, texto: "Ninguno, si solo lee"}
+    - {id: b, texto: "Que el informe va más lento"}
+    - {id: c, texto: "Que un cambio de esquema en Pedidos rompe Informes sin que nadie se entere hasta producción, y que ya no son independientes"}
+    - {id: d, texto: "Que se pierden datos"}
+  correctas: [c]
+  explicacion: El esquema pasa a ser un contrato oculto; Informes debería usar la API o los eventos de Pedidos.
+  distractores:
+    a: Leer también acopla al esquema interno.
+    b: El problema es el acoplamiento.
+    d: No es el riesgo principal.
+  referencia: https://microservices.io/patterns/data/database-per-service.html
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Exige la base de datos por servicio un servidor de base de datos distinto para cada servicio?
+  opciones:
+    - {id: a, texto: "Sí"}
+    - {id: b, texto: "No; puede ser un esquema propio en un servidor compartido, siempre que solo el dueño acceda a él"}
+    - {id: c, texto: "Solo en la nube"}
+    - {id: d, texto: "Solo con NoSQL"}
+  correctas: [b]
+  explicacion: Lo esencial es la propiedad exclusiva de los datos, no la máquina.
+  distractores:
+    a: Es una opción, no un requisito.
+    c: No depende del entorno.
+    d: No depende del tipo de base.
+  referencia: https://microservices.io/patterns/data/database-per-service.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Crear un pedido implica reservar stock en Inventario y cobrar en Pagos. ¿Cómo se mantiene la consistencia?
+  opciones:
+    - {id: a, texto: "Con una transacción distribuida que bloquee las tres bases"}
+    - {id: b, texto: "Con una saga: transacciones locales en cada servicio y acciones compensatorias si algo falla"}
+    - {id: c, texto: "No hace falta consistencia"}
+    - {id: d, texto: "Compartiendo la base de datos"}
+  correctas: [b]
+  explicacion: Si el cobro falla, se compensa liberando la reserva. Se practica en el tema de arquitectura dirigida por eventos.
+  distractores:
+    a: Bloquea recursos y depende de que todos estén disponibles.
+    c: Un pedido cobrado sin stock es un problema real.
+    d: Rompe la independencia.
+  referencia: https://microservices.io/patterns/data/database-per-service.html
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué resuelve el patrón outbox?
+  opciones:
+    - {id: a, texto: "Guardar el cambio y el evento en la misma transacción local, para no perder el evento si el proceso cae antes de publicarlo"}
+    - {id: b, texto: "Enviar correos"}
+    - {id: c, texto: "Cifrar los eventos"}
+    - {id: d, texto: "Borrar datos antiguos"}
+  correctas: [a]
+  explicacion: Un proceso aparte publica los eventos guardados, con entrega al menos una vez.
+  distractores:
+    b: No tiene relación con el correo.
+    c: No cifra nada.
+    d: No es su propósito.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L04-005
+  tipo: matching
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Empareja cada patrón de datos entre servicios con su característica.
+  prompts:
+    - {id: "1", texto: "Composición de APIs"}
+    - {id: "2", texto: "Vista de lectura alimentada por eventos (CQRS)"}
+    - {id: "3", texto: "Saga"}
+  opciones:
+    - {id: a, texto: "Sencilla, pero suma latencias y falla si falla cualquiera de los servicios"}
+    - {id: b, texto: "Rápida y disponible, con datos eventualmente al día"}
+    - {id: c, texto: "Transacciones locales encadenadas, con compensaciones si algo falla"}
+    - {id: d, texto: "Una consulta SQL con join entre las bases de los servicios"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Las dos primeras responden consultas que cruzan servicios; la saga mantiene la consistencia de las escrituras.
+  distractores:
+    d: Rompe la propiedad de los datos.
+  referencia: https://microservices.io/patterns/data/api-composition.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Un servicio guarda una copia del nombre del cliente que recibe por eventos. ¿Es correcto?
+  opciones:
+    - {id: a, texto: "No; duplicar datos está prohibido"}
+    - {id: b, texto: "Solo si es una copia de seguridad"}
+    - {id: c, texto: "Solo si comparten la base de datos"}
+    - {id: d, texto: "Sí, es normal, siempre que haya un único dueño del dato y la copia se derive de sus eventos"}
+  correctas: [d]
+  explicacion: Las copias derivadas permiten responder sin depender del otro servicio.
+  distractores:
+    a: Es habitual en esta arquitectura.
+    b: Es una copia de trabajo, no de seguridad.
+    c: Es justo lo que se evita.
+  referencia: https://microservices.io/patterns/data/database-per-service.html
+- id: L04-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Por qué se evitan las transacciones distribuidas (2PC) entre microservicios?
+  opciones:
+    - {id: a, texto: "Bloquean recursos mientras se coordinan"}
+    - {id: b, texto: "Necesitan que todos los participantes estén disponibles"}
+    - {id: c, texto: "Acoplan los servicios en el tiempo"}
+    - {id: d, texto: "Porque no existen"}
+    - {id: e, texto: "Porque SQL no las admite"}
+  correctas: [a, b, c]
+  explicacion: Contradicen la independencia que se busca con los microservicios.
+  distractores:
+    d: Existen.
+    e: Algunas bases las admiten; el problema es otro.
+  referencia: https://microservices.io/patterns/data/database-per-service.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Por qué los consumidores de eventos deben ser idempotentes?
+  opciones:
+    - {id: a, texto: "Porque la entrega suele ser al menos una vez y un evento puede llegar repetido"}
+    - {id: b, texto: "Porque es más rápido"}
+    - {id: c, texto: "Porque los eventos se pierden"}
+    - {id: d, texto: "No hace falta"}
+  correctas: [a]
+  explicacion: Procesar dos veces el mismo evento no debe duplicar el efecto.
+  distractores:
+    b: No es un tema de velocidad.
+    c: Con outbox no se pierden, pero se pueden repetir.
+    d: Sin idempotencia, una repetición duplica efectos.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué no debe contener una pasarela de API?
+  opciones:
+    - {id: a, texto: "Enrutamiento"}
+    - {id: b, texto: "Autenticación"}
+    - {id: c, texto: "Límites de peticiones"}
+    - {id: d, texto: "Lógica de negocio, como las reglas de precios"}
+  correctas: [d]
+  explicacion: Con lógica de negocio, la pasarela se convierte en un monolito en la puerta.
+  distractores:
+    a: Es su función principal.
+    b: Es una función común habitual.
+    c: Es una función común habitual.
+  referencia: https://microservices.io/patterns/apigateway.html
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué es un BFF (Backend for Frontend)?
+  opciones:
+    - {id: a, texto: "Una pasarela específica para un tipo de cliente, que agrega lo que esa interfaz necesita"}
+    - {id: b, texto: "Una base de datos para el frontend"}
+    - {id: c, texto: "Un framework de JavaScript"}
+    - {id: d, texto: "Un servicio de autenticación"}
+  correctas: [a]
+  explicacion: La aplicación móvil y la web pueden necesitar datos y formas distintas.
+  distractores:
+    b: No es una base de datos.
+    c: No es un framework.
+    d: Puede apoyarse en la autenticación, pero no es eso.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: En Kubernetes, ¿cómo encuentra el servicio de pedidos al de inventario?
+  opciones:
+    - {id: a, texto: "Con la IP fija de un pod"}
+    - {id: b, texto: "Con un fichero de configuración que se edita a mano en cada despliegue"}
+    - {id: c, texto: "Con el nombre DNS estable de un Service, que reparte entre las réplicas sanas"}
+    - {id: d, texto: "Preguntando al usuario"}
+  correctas: [c]
+  explicacion: El Service da descubrimiento y balanceo; las IP de los pods cambian.
+  distractores:
+    a: Cambia con cada reinicio.
+    b: Frágil y manual.
+    d: No tiene sentido.
+  referencia: https://kubernetes.io/docs/concepts/services-networking/service/
+- id: L05-004
+  tipo: matching
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Empareja cada cambio en una API con su tipo.
+  prompts:
+    - {id: "1", texto: "Añadir un campo opcional a la respuesta"}
+    - {id: "2", texto: "Renombrar un campo que usan los clientes"}
+    - {id: "3", texto: "Añadir un endpoint nuevo"}
+  opciones:
+    - {id: a, texto: "Compatible"}
+    - {id: b, texto: "Incompatible: necesita una versión nueva que conviva con la antigua"}
+    - {id: c, texto: "Compatible, sin afectar a nadie"}
+    - {id: d, texto: "Prohibido en cualquier caso"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Se puede añadir sin romper; quitar o cambiar significados exige versionar.
+  distractores:
+    d: Se puede hacer con una versión nueva.
+  referencia: https://martinfowler.com/articles/microservices.html
+- id: L05-005
+  tipo: ordering
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Ordena el flujo de las pruebas de contrato dirigidas por el consumidor.
+  opciones:
+    - {id: a, texto: "El consumidor define en sus pruebas las peticiones y las respuestas que espera"}
+    - {id: b, texto: "Se publica el contrato resultante"}
+    - {id: c, texto: "El proveedor verifica en su CI que cumple los contratos"}
+    - {id: d, texto: "Si rompe alguno, la CI del proveedor falla antes de desplegar"}
+  correctas: [a, b, c, d]
+  explicacion: Cada servicio se prueba por separado sin levantar el sistema completo.
+  referencia: https://docs.pact.io/
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué problema evitan las pruebas de contrato frente a un entorno con todos los servicios levantados?
+  opciones:
+    - {id: a, texto: "Que haya que escribir pruebas"}
+    - {id: b, texto: "La lentitud y fragilidad de los entornos completos, y volver a acoplar los despliegues"}
+    - {id: c, texto: "Los errores de compilación"}
+    - {id: d, texto: "La necesidad de una API"}
+  correctas: [b]
+  explicacion: Detectan incompatibilidades manteniendo los despliegues independientes.
+  distractores:
+    a: Siguen siendo pruebas.
+    c: No tiene relación.
+    d: Prueban justo la API.
+  referencia: https://docs.pact.io/
+- id: L05-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: ¿Qué observabilidad mínima exige un sistema de microservicios?
+  opciones:
+    - {id: a, texto: "Trazas distribuidas que propaguen el contexto entre servicios"}
+    - {id: b, texto: "Logs estructurados con el trace_id"}
+    - {id: c, texto: "Métricas por servicio y alertas por SLO"}
+    - {id: d, texto: "Un único fichero de log en el servidor de la pasarela"}
+    - {id: e, texto: "Revisar los servidores a mano cada mañana"}
+  correctas: [a, b, c]
+  explicacion: Sin ellas, un fallo que cruza varios servicios es imposible de diagnosticar.
+  distractores:
+    d: No ve lo que pasa dentro de los servicios.
+    e: No escala ni detecta los problemas a tiempo.
+  referencia: https://martinfowler.com/bliki/MicroservicePrerequisites.html
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Un consumidor falla porque la respuesta trae un campo nuevo que no conoce. ¿Qué debería hacer el consumidor?
+  opciones:
+    - {id: a, texto: "Exigir al proveedor que no añada campos"}
+    - {id: b, texto: "Ignorar los campos que no conoce (ser tolerante)"}
+    - {id: c, texto: "Rechazar la respuesta ante un cambio"}
+    - {id: d, texto: "Copiar el código del proveedor"}
+  correctas: [b]
+  explicacion: La tolerancia del consumidor permite que el proveedor evolucione con cambios compatibles.
+  distractores:
+    a: Impediría evolucionar la API.
+    c: Rompe ante cambios compatibles.
+    d: Acopla a la implementación.
+  referencia: https://martinfowler.com/articles/microservices.html

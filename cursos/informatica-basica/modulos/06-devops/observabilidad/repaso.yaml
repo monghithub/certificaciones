@@ -1,0 +1,687 @@
+- id: L01-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Empareja cada pregunta con la señal que mejor la responde.
+  prompts:
+    - {id: "1", texto: "¿Cuántos errores por segundo hay y va a peor?"}
+    - {id: "2", texto: "¿En qué servicio se fueron los 900 ms de esta petición?"}
+    - {id: "3", texto: "¿Qué mensaje de error devolvió el banco en el pedido 14?"}
+  opciones:
+    - {id: a, texto: "Métricas"}
+    - {id: b, texto: "Trazas"}
+    - {id: c, texto: "Logs"}
+    - {id: d, texto: "Copias de seguridad"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Las métricas agregan, las trazas siguen una petición y los logs cuentan el detalle de un evento.
+  distractores:
+    d: No son una señal de observabilidad.
+  referencia: https://opentelemetry.io/docs/concepts/signals/
+- id: L01-002
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.3"
+  enunciado: ¿Cuáles son las cuatro señales doradas del libro de SRE de Google?
+  opciones:
+    - {id: a, texto: "Latencia"}
+    - {id: b, texto: "Tráfico"}
+    - {id: c, texto: "Errores"}
+    - {id: d, texto: "Saturación"}
+    - {id: e, texto: "Número de líneas de código"}
+  correctas: [a, b, c, d]
+  explicacion: Son las métricas que el libro recomienda vigilar en un servicio de cara al usuario.
+  distractores:
+    e: No dice nada del estado del servicio.
+  referencia: https://sre.google/sre-book/monitoring-distributed-systems/
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Empareja cada método con lo que mide.
+  prompts:
+    - {id: "1", texto: "RED"}
+    - {id: "2", texto: "USE"}
+    - {id: "3", texto: "Señales doradas"}
+  opciones:
+    - {id: a, texto: "Tasa, errores y duración de un servicio"}
+    - {id: b, texto: "Utilización, saturación y errores de un recurso"}
+    - {id: c, texto: "Latencia, tráfico, errores y saturación"}
+    - {id: d, texto: "Coste, uso y rendimiento de la nube"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: RED se aplica a servicios, USE a recursos como CPU o disco, y las señales doradas combinan ambos enfoques.
+  distractores:
+    d: No corresponde a ninguno de los tres métodos.
+  referencia: https://www.brendangregg.com/usemethod.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: ¿Qué distingue observar de monitorizar?
+  opciones:
+    - {id: a, texto: "Que observar usa gráficos"}
+    - {id: b, texto: "Que observar permite responder preguntas nuevas sin desplegar código, no solo vigilar fallos previstos"}
+    - {id: c, texto: "Que observar es más barato"}
+    - {id: d, texto: "Ninguna; son sinónimos"}
+  correctas: [b]
+  explicacion: La monitorización avisa de lo que ya sabes que puede fallar; la observabilidad ayuda con lo que no habías previsto.
+  distractores:
+    a: Ambas usan gráficos.
+    c: Suele requerir más datos.
+    d: Tienen alcances distintos.
+  referencia: https://opentelemetry.io/docs/concepts/observability-primer/
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: ¿Cuál de estos es un SLO?
+  opciones:
+    - {id: a, texto: "La CPU del servidor"}
+    - {id: b, texto: "La proporción de peticiones correctas"}
+    - {id: c, texto: "El 99,9 % de las peticiones correctas en 30 días"}
+    - {id: d, texto: "Un contrato con penalizaciones económicas"}
+  correctas: [c]
+  explicacion: El SLO es el objetivo para un SLI; la proporción de peticiones correctas es el SLI.
+  distractores:
+    a: Es una métrica de recurso, no un objetivo.
+    b: Es el indicador (SLI), no el objetivo.
+    d: Eso es un SLA, un acuerdo con consecuencias.
+  referencia: https://sre.google/sre-book/service-level-objectives/
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: El SLO es del 99,9 % y este mes se ha cumplido al 99,95 %. ¿Qué indica el presupuesto de error?
+  opciones:
+    - {id: a, texto: "Que sobra margen, y se puede arriesgar más, por ejemplo desplegando con más frecuencia"}
+    - {id: b, texto: "Que hay que congelar los despliegues"}
+    - {id: c, texto: "Que hay que subir el SLO al 100 %"}
+    - {id: d, texto: "Nada; solo importa el SLA"}
+  correctas: [a]
+  explicacion: Mientras quede presupuesto se puede asumir riesgo; si se agota, se prioriza la fiabilidad.
+  distractores:
+    b: Eso se hace cuando el presupuesto se agota.
+    c: Un 100 % no deja margen para cambiar nada.
+    d: El SLO guía las decisiones internas.
+  referencia: https://sre.google/sre-book/service-level-objectives/
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué alerta merece despertar a alguien de madrugada?
+  opciones:
+    - {id: a, texto: "La CPU de un nodo al 95 % sin efecto en los usuarios"}
+    - {id: b, texto: "Un log de nivel WARNING"}
+    - {id: c, texto: "El disco de un nodo de pruebas al 80 %"}
+    - {id: d, texto: "La tasa de errores consume el presupuesto de error tan deprisa que el SLO se incumplirá en horas"}
+  correctas: [d]
+  explicacion: El libro de SRE recomienda alertar por síntomas que afectan al usuario, no por causas internas.
+  distractores:
+    a: Es una causa posible, sin síntoma.
+    b: Un aviso aislado no es urgente.
+    c: No afecta a producción.
+  referencia: https://sre.google/sre-book/monitoring-distributed-systems/
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Qué permite saltar de una métrica alarmante a la traza y a los logs de las peticiones afectadas?
+  opciones:
+    - {id: a, texto: "La hora aproximada"}
+    - {id: b, texto: "Un identificador común, el trace_id, presente en las tres señales"}
+    - {id: c, texto: "El nombre del servidor"}
+    - {id: d, texto: "No se puede"}
+  correctas: [b]
+  explicacion: Correlacionar por trace_id es lo que hace útiles las tres señales juntas.
+  distractores:
+    a: Por hora se mezclan miles de peticiones.
+    c: Un servidor atiende muchas peticiones a la vez.
+    d: Se puede con un identificador compartido.
+  referencia: https://opentelemetry.io/docs/concepts/signals/
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué ventaja tiene un log en JSON con campos frente a una línea de texto libre?
+  opciones:
+    - {id: a, texto: "Que ocupa menos"}
+    - {id: b, texto: "Que se puede filtrar y agrupar por campos sin expresiones regulares frágiles"}
+    - {id: c, texto: "Que no hace falta guardarlo"}
+    - {id: d, texto: "Que se cifra solo"}
+  correctas: [b]
+  explicacion: El sistema de logs entiende los campos y permite consultas como estado_http=502 agrupado por servicio.
+  distractores:
+    a: Suele ocupar algo más.
+    c: Se guarda igual.
+    d: El formato no cifra nada.
+  referencia: https://opentelemetry.io/docs/concepts/signals/logs/
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Cuál es la mejor forma de registrar un cobro fallido?
+  opciones:
+    - {id: a, texto: "log.info(f\"Pedido {pedido} no cobrado ({estado})\")"}
+    - {id: b, texto: "print(pedido, estado)"}
+    - {id: c, texto: "log.info(\"cobro fallido\", extra={\"pedido\": pedido, \"estado_http\": estado})"}
+    - {id: d, texto: "No registrarlo"}
+  correctas: [c]
+  explicacion: El mensaje fijo agrupa todos los eventos iguales y los datos variables quedan en campos consultables.
+  distractores:
+    a: Mezcla los datos con el texto y cada mensaje es distinto.
+    b: Sin nivel, sin estructura y sin contexto.
+    d: Es un hecho de negocio relevante.
+  referencia: https://opentelemetry.io/docs/concepts/signals/logs/
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: En el laboratorio, ¿qué tenían en común los logs de pedidos y de pagos para el pedido 1?
+  opciones:
+    - {id: a, texto: "El mismo span_id"}
+    - {id: b, texto: "El mismo nombre de servicio"}
+    - {id: c, texto: "Nada"}
+    - {id: d, texto: "El mismo trace_id, 3ae12b4c…, porque pertenecen a la misma traza"}
+  correctas: [d]
+  explicacion: El contexto se propagó de pedidos a pagos, y cada log incluye el trace_id del contexto en curso.
+  distractores:
+    a: Cada servicio tiene su propio span.
+    b: Son servicios distintos.
+    c: Comparten la traza.
+  referencia: https://opentelemetry.io/docs/concepts/context-propagation/
+- id: L02-004
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: ¿Qué datos no deben aparecer en los logs?
+  opciones:
+    - {id: a, texto: "Contraseñas y tokens"}
+    - {id: b, texto: "Números de tarjeta completos"}
+    - {id: c, texto: "Datos personales innecesarios"}
+    - {id: d, texto: "El identificador del pedido"}
+    - {id: e, texto: "El trace_id"}
+  correctas: [a, b, c]
+  explicacion: Los logs se copian y conservan mucho tiempo y los lee mucha gente.
+  distractores:
+    d: Es necesario para investigar y no es sensible.
+    e: Sirve para correlacionar.
+  referencia: https://opentelemetry.io/docs/concepts/signals/logs/
+- id: L02-005
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: Empareja cada evento con su nivel de log.
+  prompts:
+    - {id: "1", texto: "La base de datos no responde y la petición falla"}
+    - {id: "2", texto: "El primer intento de cobro falló y el reintento funcionó"}
+    - {id: "3", texto: "Se ha creado el pedido 42"}
+    - {id: "4", texto: "Valor de cada variable en un bucle, para desarrollo"}
+  opciones:
+    - {id: a, texto: "ERROR"}
+    - {id: b, texto: "WARNING"}
+    - {id: c, texto: "INFO"}
+    - {id: d, texto: "DEBUG"}
+    - {id: e, texto: "CRITICAL para todo"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: El nivel indica la importancia; DEBUG suele estar desactivado en producción.
+  distractores:
+    e: Un nivel máximo para todo hace inútil el filtrado.
+  referencia: https://opentelemetry.io/docs/concepts/signals/logs/
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Quieres saber cuántos pedidos por minuto se crean. ¿Qué usas?
+  opciones:
+    - {id: a, texto: "Una métrica de tipo contador"}
+    - {id: b, texto: "Un log por pedido, y contarlos"}
+    - {id: c, texto: "Una traza por minuto"}
+    - {id: d, texto: "Un fichero de texto"}
+  correctas: [a]
+  explicacion: Contar es el trabajo de las métricas, que son baratas y se agregan; contar logs es caro y lento.
+  distractores:
+    b: Funciona, pero cuesta mucho más.
+    c: Las trazas describen peticiones, no ritmos.
+    d: No escala.
+  referencia: https://opentelemetry.io/docs/concepts/signals/metrics/
+- id: L02-007
+  tipo: completar
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Completa el código que añade el identificador de la traza en curso a un log.
+  codigo:
+    lenguaje: python
+    fuente: |
+      ctx = trace.get_current_span().[[1]]()
+      if ctx.is_valid:
+          campos["trace_id"] = format(ctx.[[2]], "032x")
+  huecos:
+    - {id: "1", respuestas: [get_span_context]}
+    - {id: "2", respuestas: [trace_id]}
+  explicacion: El contexto del span en curso da el trace_id, que se formatea como 32 caracteres hexadecimales.
+  referencia: https://opentelemetry.io/docs/concepts/context-propagation/
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Por qué el mensaje del log debe ser fijo («cobro fallido») y los datos ir en campos?
+  opciones:
+    - {id: a, texto: "Porque JSON no admite variables"}
+    - {id: b, texto: "Para que todos los eventos del mismo tipo se agrupen y se cuenten juntos"}
+    - {id: c, texto: "Para ahorrar espacio"}
+    - {id: d, texto: "Por seguridad"}
+  correctas: [b]
+  explicacion: Si cada mensaje lleva su número de pedido, hay miles de mensajes distintos y no se pueden agrupar.
+  distractores:
+    a: JSON admite cualquier valor.
+    c: La razón es poder agrupar.
+    d: No tiene relación con la seguridad.
+  referencia: https://opentelemetry.io/docs/concepts/signals/logs/
+- id: L03-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: Empareja cada medida con el tipo de métrica adecuado.
+  prompts:
+    - {id: "1", texto: "Pedidos creados desde el arranque"}
+    - {id: "2", texto: "Peticiones en curso en este momento"}
+    - {id: "3", texto: "Duración de cada cobro"}
+  opciones:
+    - {id: a, texto: "Contador"}
+    - {id: b, texto: "Medidor (gauge)"}
+    - {id: c, texto: "Histograma"}
+    - {id: d, texto: "Log"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El contador solo crece, el medidor sube y baja, y el histograma reparte observaciones en intervalos.
+  distractores:
+    d: No es un tipo de métrica.
+  referencia: https://prometheus.io/docs/concepts/metric_types/
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Por qué no se debe usar el id de usuario como etiqueta de una métrica?
+  opciones:
+    - {id: a, texto: "Porque es un dato personal"}
+    - {id: b, texto: "Porque crea una serie temporal por usuario, y la cardinalidad dispara la memoria y la lentitud"}
+    - {id: c, texto: "Porque Prometheus no admite números en las etiquetas"}
+    - {id: d, texto: "Porque las etiquetas solo admiten dos valores"}
+  correctas: [b]
+  explicacion: Cada combinación de etiquetas es una serie. La documentación de Prometheus desaconseja etiquetas con muchos valores.
+  distractores:
+    a: Es otro motivo para cuidarlo, pero el problema técnico es la cardinalidad.
+    c: Las etiquetas son texto y admiten dígitos.
+    d: Pueden tener varios valores, pero pocos.
+  referencia: https://prometheus.io/docs/practices/naming/
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: ¿Qué calcula sum(rate(pedidos_creados_total[1m]))?
+  opciones:
+    - {id: a, texto: "Los pedidos creados en total"}
+    - {id: b, texto: "Los pedidos del último minuto, sin dividir"}
+    - {id: c, texto: "El número de servicios"}
+    - {id: d, texto: "Los pedidos creados por segundo, calculados sobre el último minuto"}
+  correctas: [d]
+  explicacion: rate da el aumento por segundo de un contador en la ventana indicada y tiene en cuenta los reinicios. En el laboratorio dio 3,6.
+  distractores:
+    a: Eso es el valor del contador.
+    b: Eso sería increase, no rate.
+    c: No cuenta servicios.
+  referencia: https://prometheus.io/docs/prometheus/latest/querying/functions/
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Un histograma en segundos con los límites por defecto del SDK de Python (0, 5, 10, 25…) dio un p99 de 4,95 s para cobros de menos de 1 s. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque había cobros de casi 5 s"}
+    - {id: b, texto: "Porque Prometheus estaba mal configurado"}
+    - {id: c, texto: "Porque esos límites están pensados para milisegundos; todo cayó en el bucket de 0 a 5 y el cálculo interpoló dentro de él"}
+    - {id: d, texto: "Porque rate no funciona con histogramas"}
+  correctas: [c]
+  explicacion: Con límites ajustados a segundos, el p99 pasó a 0,951 s. Un percentil solo es tan preciso como sus buckets.
+  distractores:
+    a: El más lento tardó unos 0,95 s.
+    b: Prometheus calculó bien con los datos que tenía.
+    d: rate es necesario sobre los buckets.
+  referencia: https://prometheus.io/docs/practices/histograms/
+- id: L03-005
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa la consulta del percentil 99 del cobro.
+  codigo:
+    lenguaje: promql
+    fuente: |
+      [[1]](0.99, sum by (le) ([[2]](pedidos_cobro_duracion_seconds_bucket[1m])))
+  huecos:
+    - {id: "1", respuestas: [histogram_quantile]}
+    - {id: "2", respuestas: [rate]}
+  explicacion: Se calcula el ritmo de cada bucket, se agrupa por le (el límite) y se obtiene el percentil.
+  referencia: https://prometheus.io/docs/prometheus/latest/querying/functions/
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: El contador pedidos.creados del SDK, ¿con qué nombre apareció en Prometheus?
+  opciones:
+    - {id: a, texto: "pedidos.creados"}
+    - {id: b, texto: "pedidos_creados_total"}
+    - {id: c, texto: "PedidosCreados"}
+    - {id: d, texto: "creados"}
+  correctas: [b]
+  explicacion: El exportador convirtió los puntos en guiones bajos y añadió el sufijo _total de los contadores, según las convenciones clásicas de Prometheus.
+  distractores:
+    a: El exportador de Prometheus del Collector convirtió los puntos en guiones bajos.
+    c: No se cambia el formato de esa forma.
+    d: Se conserva el nombre completo.
+  referencia: https://prometheus.io/docs/practices/naming/
+- id: L03-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Tu SLO es que el 99 % de los cobros dure menos de 300 ms. ¿Dónde conviene un límite de bucket?
+  opciones:
+    - {id: a, texto: "Da igual"}
+    - {id: b, texto: "Solo en 10 s"}
+    - {id: c, texto: "En 1 ms y 2 ms"}
+    - {id: d, texto: "Justo en 0,3 s, para medir con precisión cuántos cobros cumplen el objetivo"}
+  correctas: [d]
+  explicacion: Con un límite en el umbral del SLO, la proporción que lo cumple es exacta, sin interpolar.
+  distractores:
+    a: La precisión depende de dónde están los límites.
+    b: Todo caería en el mismo bucket.
+    c: No cubre el rango de los valores.
+  referencia: https://prometheus.io/docs/practices/histograms/
+- id: L03-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué etiquetas son razonables para la métrica de duración del cobro?
+  opciones:
+    - {id: a, texto: "resultado (ok, error)"}
+    - {id: b, texto: "metodo_pago (tarjeta, transferencia, bizum)"}
+    - {id: c, texto: "id del pedido"}
+    - {id: d, texto: "email del cliente"}
+    - {id: e, texto: "trace_id"}
+  correctas: [a, b]
+  explicacion: Son dimensiones con pocos valores. Los identificadores únicos van en logs y trazas.
+  distractores:
+    c: Una serie por pedido.
+    d: Una serie por cliente, y además es un dato personal.
+    e: Una serie por petición.
+  referencia: https://prometheus.io/docs/practices/naming/
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: En traceparent 00-3ae12b4c1f6aa1a62d850bd79cfd5be3-1ad850544f8588b1-03, ¿qué es 3ae12b4c1f6aa1a62d850bd79cfd5be3?
+  opciones:
+    - {id: a, texto: "El identificador de la traza, el mismo en todos los servicios de la petición"}
+    - {id: b, texto: "El identificador del usuario"}
+    - {id: c, texto: "El identificador del span de pagos"}
+    - {id: d, texto: "Una firma de seguridad"}
+  correctas: [a]
+  explicacion: El segundo campo es el trace_id; el tercero, el span padre; el último, los indicadores.
+  distractores:
+    b: No contiene datos del usuario.
+    c: El tercer campo es el span padre, de pedidos.
+    d: No es una firma.
+  referencia: https://www.w3.org/TR/trace-context-2/
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: ¿Qué significa el indicador 03 al final del traceparent?
+  opciones:
+    - {id: a, texto: "Que es la tercera llamada"}
+    - {id: b, texto: "Que la traza está muestreada (bit 01) y que el trace_id es aleatorio (bit 02)"}
+    - {id: c, texto: "Que hay tres servicios"}
+    - {id: d, texto: "Que la versión del protocolo es la 3"}
+  correctas: [b]
+  explicacion: Los indicadores son bits; el estándar W3C de nivel 2 define el de muestreo y el de aleatoriedad.
+  distractores:
+    a: No es un contador de llamadas.
+    c: No indica el número de servicios.
+    d: La versión es el primer campo, 00.
+  referencia: https://www.w3.org/TR/trace-context-2/
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Un servicio intermedio hace su propia llamada HTTP sin instrumentar y no reenvía traceparent. ¿Qué pasa?
+  opciones:
+    - {id: a, texto: "Nada; el trace_id se deduce"}
+    - {id: b, texto: "Se pierden las métricas"}
+    - {id: c, texto: "La traza se rompe en dos trazas sin relación"}
+    - {id: d, texto: "El servicio falla"}
+  correctas: [c]
+  explicacion: El servicio siguiente no recibe el contexto y empieza una traza nueva.
+  distractores:
+    a: No hay forma de deducirlo.
+    b: Las métricas no dependen de la propagación.
+    d: La llamada funciona; solo se pierde la relación.
+  referencia: https://opentelemetry.io/docs/concepts/context-propagation/
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: 'En la traza del pedido 1: la llamada de pedidos empezó a +37,8 ms y el span de pagos a +62,8 ms. ¿Qué revela?'
+  opciones:
+    - {id: a, texto: "Unos 25 ms entre el envío y el inicio del procesamiento en pagos, invisibles con logs o métricas"}
+    - {id: b, texto: "Un error"}
+    - {id: c, texto: "Que pagos es más rápido"}
+    - {id: d, texto: "Nada útil"}
+  correctas: [a]
+  explicacion: Las trazas muestran dónde se va el tiempo, también en los huecos entre servicios (red, colas de conexiones, arranque).
+  distractores:
+    b: La petición terminó bien.
+    c: No compara velocidades.
+    d: Es justo el tipo de detalle que aportan las trazas.
+  referencia: https://opentelemetry.io/docs/concepts/signals/traces/
+- id: L04-005
+  tipo: completar
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Completa el código para crear un span propio con el id del pedido.
+  codigo:
+    lenguaje: python
+    fuente: |
+      with tracer.[[1]]("validar-stock") as span:
+          span.[[2]]("pedido.id", pedido)
+  huecos:
+    - {id: "1", respuestas: [start_as_current_span]}
+    - {id: "2", respuestas: [set_attribute]}
+  explicacion: start_as_current_span crea el span como hijo del actual; set_attribute añade datos de la petición.
+  referencia: https://opentelemetry.io/docs/concepts/signals/traces/
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Por qué el id del pedido sí es adecuado como atributo de un span, pero no como etiqueta de una métrica?
+  opciones:
+    - {id: a, texto: "Porque los spans son más baratos"}
+    - {id: b, texto: "Porque las métricas no admiten números"}
+    - {id: c, texto: "No es adecuado en ninguno de los dos"}
+    - {id: d, texto: "Porque un span describe una petición concreta, mientras que cada valor de etiqueta crea una serie temporal nueva"}
+  correctas: [d]
+  explicacion: Los atributos de span no multiplican series; las etiquetas de métrica sí.
+  distractores:
+    a: El motivo es la cardinalidad, no el precio de cada span.
+    b: Las etiquetas son texto.
+    c: En los spans es justo lo que se necesita para investigar.
+  referencia: https://opentelemetry.io/docs/concepts/signals/traces/
+- id: L04-007
+  tipo: matching
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Empareja cada tipo de muestreo con su característica.
+  prompts:
+    - {id: "1", texto: "Head (al empezar la traza)"}
+    - {id: "2", texto: "Tail (al terminar la traza)"}
+    - {id: "3", texto: "ParentBased"}
+  opciones:
+    - {id: a, texto: "Barato, pero descarta errores al azar"}
+    - {id: b, texto: "Puede guardar todas las trazas con error, a costa de memoria en el Collector"}
+    - {id: c, texto: "Cada servicio respeta la decisión que llega en traceparent"}
+    - {id: d, texto: "Guarda solo las trazas de los lunes"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Son las estrategias descritas en la documentación de OpenTelemetry.
+  distractores:
+    d: No es una estrategia de muestreo.
+  referencia: https://opentelemetry.io/docs/concepts/sampling/
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: En el pedido 14, pagos respondió 502. ¿Qué spans acabaron con estado de error?
+  opciones:
+    - {id: a, texto: "Solo el de pagos"}
+    - {id: b, texto: "Ninguno, porque fue un error controlado"}
+    - {id: c, texto: "El de la ruta en pagos, la llamada HTTP de pedidos y la ruta de pedidos"}
+    - {id: d, texto: "Solo validar-stock"}
+  correctas: [c]
+  explicacion: El error se propagó hacia arriba y cada span del recorrido se marcó; validar-stock terminó bien.
+  distractores:
+    a: El fallo afectó también a pedidos.
+    b: Se marcaron con ERROR.
+    d: Ese paso terminó sin errores.
+  referencia: https://opentelemetry.io/docs/concepts/signals/traces/
+- id: L05-001
+  tipo: matching
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Empareja cada pieza de OpenTelemetry con su función.
+  prompts:
+    - {id: "1", texto: "API"}
+    - {id: "2", texto: "SDK"}
+    - {id: "3", texto: "OTLP"}
+    - {id: "4", texto: "Collector"}
+  opciones:
+    - {id: a, texto: "Lo que usa el código para crear spans y métricas"}
+    - {id: b, texto: "La implementación: muestreo, lotes y exportadores"}
+    - {id: c, texto: "El protocolo de envío de la telemetría"}
+    - {id: d, texto: "El servicio que recibe, procesa y reenvía"}
+    - {id: e, texto: "La base de datos de las trazas"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: OpenTelemetry genera y transporta la telemetría; el almacenamiento lo ponen otros sistemas, como Jaeger o Prometheus.
+  distractores:
+    e: OpenTelemetry no almacena; eso lo hace Jaeger u otro sistema.
+  referencia: https://opentelemetry.io/docs/concepts/signals/
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Decides cambiar Jaeger por otro sistema de trazas compatible con OTLP. ¿Qué cambias?
+  opciones:
+    - {id: a, texto: "El código de cada servicio"}
+    - {id: b, texto: "El exportador en la configuración del Collector"}
+    - {id: c, texto: "La instrumentación de FastAPI"}
+    - {id: d, texto: "Nada; no se puede cambiar"}
+  correctas: [b]
+  explicacion: Los servicios envían al Collector por OTLP; el destino final solo aparece en su configuración.
+  distractores:
+    a: Los servicios no saben qué hay detrás del Collector.
+    c: La instrumentación no depende del destino.
+    d: Es justo una de las ventajas del estándar.
+  referencia: https://opentelemetry.io/docs/collector/configuration/
+- id: L05-003
+  tipo: ordering
+  dificultad: baja
+  objetivo: "5.3"
+  enunciado: Ordena las etapas de una tubería del Collector.
+  opciones:
+    - {id: a, texto: "Receptores (otlp)"}
+    - {id: b, texto: "Procesadores (batch)"}
+    - {id: c, texto: "Exportadores (jaeger, prometheus)"}
+  correctas: [a, b, c]
+  explicacion: Cada tubería recibe, procesa y exporta una señal.
+  referencia: https://opentelemetry.io/docs/collector/configuration/
+- id: L05-004
+  tipo: completar
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Completa la tubería de trazas del Collector.
+  codigo:
+    lenguaje: yaml
+    fuente: |
+      service:
+        pipelines:
+          traces:
+            [[1]]: [otlp]
+            processors: [batch]
+            [[2]]: [otlp_grpc/jaeger]
+  huecos:
+    - {id: "1", respuestas: [receivers]}
+    - {id: "2", respuestas: [exporters]}
+  explicacion: Cada tubería declara sus receptores, procesadores y exportadores.
+  referencia: https://opentelemetry.io/docs/collector/configuration/
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.2"
+  enunciado: ¿Qué atributo del recurso determina el nombre del servicio que muestra Jaeger?
+  opciones:
+    - {id: a, texto: "host.name"}
+    - {id: b, texto: "http.route"}
+    - {id: c, texto: "trace_id"}
+    - {id: d, texto: "service.name"}
+  correctas: [d]
+  explicacion: El recurso identifica al emisor, y service.name es el atributo clave.
+  distractores:
+    a: Identifica la máquina, no el servicio.
+    b: Es un atributo de span.
+    c: Identifica una traza.
+  referencia: https://opentelemetry.io/docs/concepts/semantic-conventions/
+- id: L05-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: ¿Qué conviene hacer en los procesadores del Collector en lugar de en cada servicio?
+  opciones:
+    - {id: a, texto: "Agrupar en lotes antes de exportar"}
+    - {id: b, texto: "Eliminar atributos con datos sensibles"}
+    - {id: c, texto: "El muestreo tail, con la traza completa"}
+    - {id: d, texto: "La lógica de negocio"}
+    - {id: e, texto: "Validar los pedidos"}
+  correctas: [a, b, c]
+  explicacion: El Collector centraliza el tratamiento de la telemetría para todos los servicios.
+  distractores:
+    d: El Collector solo trata telemetría.
+    e: La validación pertenece al servicio.
+  referencia: https://opentelemetry.io/docs/collector/configuration/
+- id: L05-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: Una consulta usa http_response_status_code y no devuelve nada, aunque hay tráfico. ¿Qué comprobarías primero?
+  opciones:
+    - {id: a, texto: "Los nombres reales que emite la instrumentación: la de FastAPI 0.66b2 usaba todavía http_status_code"}
+    - {id: b, texto: "Que el servidor no esté apagado"}
+    - {id: c, texto: "La versión de Python"}
+    - {id: d, texto: "El cortafuegos"}
+  correctas: [a]
+  explicacion: Las convenciones semánticas cambian y las instrumentaciones se actualizan poco a poco. En el laboratorio, la etiqueta era http_status_code.
+  distractores:
+    b: Si hay tráfico, el servidor funciona.
+    c: No cambia los nombres.
+    d: Los datos llegan; lo que falla es el nombre.
+  referencia: https://opentelemetry.io/docs/concepts/semantic-conventions/
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Por qué se usa BatchSpanProcessor en vez de enviar cada span al terminar?
+  opciones:
+    - {id: a, texto: "Porque es obligatorio"}
+    - {id: b, texto: "Para cifrar los spans"}
+    - {id: c, texto: "Para enviar en lotes y en segundo plano, sin frenar las peticiones"}
+    - {id: d, texto: "Para guardar los spans en disco"}
+  correctas: [c]
+  explicacion: Enviar uno a uno añadiría una llamada de red a cada petición.
+  distractores:
+    a: Existe también un procesador simple, útil para pruebas.
+    b: No cifra nada.
+    d: Los guarda en memoria hasta enviarlos.
+  referencia: https://opentelemetry.io/docs/languages/python/

@@ -1,0 +1,19 @@
+slug: patrones-de-diseno
+titulo: Patrones de diseño esenciales
+area: programacion
+nivel: intermedio
+idioma: es-ES
+resumen: Los patrones del catálogo de la «banda de los cuatro» que más se usan hoy (Builder, Factory Method, Adapter, Decorator, Facade, Proxy, Strategy, Observer, Command, Template Method), cuándo aplicarlos y cuándo los sustituye una característica del lenguaje.
+requisitos: [principios-solid]
+etiquetas: [patrones, gof, diseno, java]
+fuentes:
+  - en.wikipedia.org
+  - refactoring.guru
+  - norvig.com
+  - martinfowler.com
+  - docs.oracle.com
+  - docs.spring.io
+  - kubernetes.io
+  - learn.microsoft.com
+ejercicios:
+  minimo_por_leccion: 8

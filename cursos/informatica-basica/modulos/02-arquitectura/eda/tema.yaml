@@ -1,0 +1,17 @@
+slug: arquitectura-dirigida-por-eventos
+titulo: Arquitectura dirigida por eventos
+area: arquitectura
+nivel: intermedio
+idioma: es-ES
+resumen: Los distintos significados de «dirigido por eventos» (notificación, transferencia de estado, event sourcing y CQRS), la publicación fiable con el patrón outbox, las sagas para procesos entre servicios y cuándo merece la pena cada patrón, con ejemplos ejecutados contra PostgreSQL y Kafka.
+requisitos: [mensajeria-y-kafka, transacciones-y-concurrencia]
+etiquetas: [eventos, outbox, sagas, event-sourcing, cqrs, microservicios]
+fuentes:
+  - martinfowler.com
+  - microservices.io
+  - cs.cornell.edu
+  - learn.microsoft.com
+  - debezium.io
+  - cloudevents.io
+ejercicios:
+  minimo_por_leccion: 8

@@ -1,0 +1,18 @@
+slug: observabilidad
+titulo: 'Observabilidad: logs, métricas y trazas'
+area: plataformas
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo saber qué pasa dentro de un sistema en producción. Señales doradas y objetivos de nivel de servicio, logs estructurados correlacionados, métricas con Prometheus, trazas distribuidas y OpenTelemetry con su Collector. Probado en un laboratorio con dos servicios Python, OpenTelemetry 1.45, Collector 0.165, Jaeger 2.23 y Prometheus 3.16.
+requisitos: [contenedores-docker]
+etiquetas: [observabilidad, opentelemetry, prometheus, jaeger, logs, metricas, trazas, sre]
+fuentes:
+  - opentelemetry.io
+  - prometheus.io
+  - sre.google
+  - brendangregg.com
+  - grafana.com
+  - jaegertracing.io
+  - w3.org
+ejercicios:
+  minimo_por_leccion: 8

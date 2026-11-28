@@ -1,0 +1,14 @@
+slug: entra-id-desarrolladores
+titulo: Microsoft Entra ID para desarrolladores
+area: seguridad
+nivel: intermedio
+idioma: es-ES
+resumen: Integrar aplicaciones y APIs con Microsoft Entra ID (antes Azure AD), con tenants, registros de aplicaciones, entidades de servicio, permisos y consentimiento, roles de aplicación, credenciales sin secretos y validación de tokens, según la documentación oficial de Microsoft.
+requisitos: [oauth2-y-oidc]
+etiquetas: [entra-id, azure-ad, msal, oidc, identidad]
+fuentes:
+  - learn.microsoft.com
+  - login.microsoftonline.com
+  - rfc-editor.org
+ejercicios:
+  minimo_por_leccion: 8

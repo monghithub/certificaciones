@@ -1,0 +1,21 @@
+slug: codigo-limpio-y-refactorizacion
+titulo: Código limpio y refactorización
+area: practicas
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo escribir código fácil de leer y de cambiar, reconocer sus olores y refactorizarlo sin romperlo, también cuando es código heredado sin pruebas, comprobado con Python 3.12, ruff 0.17.6, radon 6.0.1 y pytest 9.2 sobre una misma función de pedidos. Nombres, funciones pequeñas, deuda técnica, pruebas de caracterización, costuras, métricas y pruebas de mutación.
+etiquetas: [codigo-limpio, refactorizacion, olores, deuda-tecnica, codigo-heredado, ruff, radon, mutacion]
+requisitos: [pruebas, principios-solid]
+fuentes:
+  - martinfowler.com
+  - refactoring.com
+  - docs.astral.sh
+  - radon.readthedocs.io
+  - peps.python.org
+  - en.wikipedia.org
+  - pitest.org
+  - mutmut.readthedocs.io
+  - docs.pytest.org
+  - coverage.readthedocs.io
+ejercicios:
+  minimo_por_leccion: 8

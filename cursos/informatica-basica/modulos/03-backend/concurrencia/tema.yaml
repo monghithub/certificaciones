@@ -1,0 +1,13 @@
+slug: transacciones-y-concurrencia
+titulo: Transacciones, aislamiento y concurrencia
+area: datos
+nivel: avanzado
+idioma: es-ES
+resumen: Qué garantiza una transacción (ACID), qué anomalías aparecen cuando varias se ejecutan a la vez, cómo las evita cada nivel de aislamiento en PostgreSQL y qué patrones usar en la aplicación, todo reproducido con sesiones concurrentes reales.
+requisitos: [sql-y-modelado]
+etiquetas: [transacciones, acid, aislamiento, mvcc, bloqueos, postgresql]
+fuentes:
+  - postgresql.org
+  - en.wikipedia.org
+ejercicios:
+  minimo_por_leccion: 8

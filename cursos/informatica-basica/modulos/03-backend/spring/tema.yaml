@@ -1,0 +1,14 @@
+slug: spring-boot
+titulo: Spring Boot en profundidad
+area: lenguajes
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo funciona Spring Boot 4 por dentro (starters modulares, autoconfiguración y propiedades tipadas), cómo escribir APIs con validación y errores estándar, transacciones y sus trampas, pruebas por capas y Actuator, con una aplicación compilada y probada en Spring Boot 4.1.2 y Java 25.
+requisitos: [java-moderno]
+etiquetas: [spring-boot, spring, java, api-rest, jpa, actuator]
+fuentes:
+  - docs.spring.io
+  - github.com
+  - rfc-editor.org
+ejercicios:
+  minimo_por_leccion: 8

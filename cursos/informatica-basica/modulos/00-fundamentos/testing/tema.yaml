@@ -1,0 +1,19 @@
+slug: pruebas
+titulo: "Pruebas: unitarias, de integración y de contrato"
+area: programacion
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo probar software con criterio, con la pirámide de pruebas, pytest (fixtures y parametrización), dobles de prueba y unittest.mock, pruebas de integración con Testcontainers, pruebas de contrato, TDD y los límites de la cobertura, con todos los ejemplos ejecutados.
+etiquetas: [pruebas, pytest, mocks, testcontainers, tdd, cobertura]
+fuentes:
+  - docs.pytest.org
+  - docs.python.org
+  - martinfowler.com
+  - testcontainers.com
+  - testcontainers-python.readthedocs.io
+  - pytest-cov.readthedocs.io
+  - docs.pact.io
+  - junit.org
+  - en.wikipedia.org
+ejercicios:
+  minimo_por_leccion: 8

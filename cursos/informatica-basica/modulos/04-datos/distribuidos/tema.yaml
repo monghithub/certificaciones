@@ -1,0 +1,20 @@
+slug: sistemas-distribuidos
+titulo: Sistemas distribuidos
+area: arquitectura
+nivel: avanzado
+idioma: es-ES
+resumen: Los fundamentos que hay debajo de los microservicios y las bases de datos replicadas, comprobados con un clúster de etcd 3.6 y simulaciones en Python. Fallos parciales, relojes y orden, quórums, consenso con Raft, cerrojos con lease y particionado con hashing consistente.
+etiquetas: [distribuidos, consenso, raft, etcd, quorum, relojes, particionado]
+requisitos: [microservicios, bases-de-datos-nosql]
+fuentes:
+  - raft.github.io
+  - etcd.io
+  - lamport.azurewebsites.net
+  - martin.kleppmann.com
+  - aws.amazon.com
+  - docs.python.org
+  - allthingsdistributed.com
+  - cassandra.apache.org
+  - jepsen.io
+ejercicios:
+  minimo_por_leccion: 8

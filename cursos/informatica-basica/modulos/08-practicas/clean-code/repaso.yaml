@@ -1,0 +1,731 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: La función calc y su versión limpia dan exactamente el mismo total para cualquier pedido. ¿Dónde está entonces la diferencia?
+  opciones:
+    - {id: a, texto: "En la velocidad: el código limpio se ejecuta más rápido"}
+    - {id: b, texto: "En lo que cuesta entender y cambiar el código sin romperlo"}
+    - {id: c, texto: "En que el código limpio tiene menos fallos por definición"}
+    - {id: d, texto: "En que el código limpio ocupa menos líneas"}
+  correctas: [b]
+  explicacion: Al ordenador le da igual cómo se llamen las cosas. La calidad interna la nota quien tiene que leer y modificar el código, y se mide por el esfuerzo y el riesgo de cada cambio.
+  distractores:
+    a: Limpiar no busca rendimiento; a veces incluso añade llamadas a funciones. Si importa la velocidad, se mide aparte.
+    c: Un código claro facilita ver los fallos, pero los dos códigos hacen lo mismo, con sus mismos fallos si los tienen.
+    d: La versión limpia de este tema ocupa más líneas que la original, porque añade constantes y funciones con nombre.
+  referencia: https://martinfowler.com/bliki/TechnicalDebt.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Con una estructura de módulos clara, una función nueva costaría cuatro días. Con la actual, confusa, cuesta seis. Según la metáfora de la deuda técnica, ¿qué son esos dos días?
+  opciones:
+    - {id: a, texto: "El principal de la deuda, que se paga una sola vez"}
+    - {id: b, texto: "Una estimación mal hecha"}
+    - {id: c, texto: "El coste de escribir las pruebas"}
+    - {id: d, texto: "Los intereses, que se vuelven a pagar en cada cambio sobre ese código"}
+  correctas: [d]
+  explicacion: Es el ejemplo de Fowler. El esfuerzo extra que cuesta cada cambio por culpa de la mala calidad interna son los intereses; limpiar el código es pagar el principal para dejar de pagarlos.
+  distractores:
+    a: El principal es lo que costaría limpiar la estructura. Los dos días extra se pagan otra vez en el siguiente cambio, y por eso son intereses.
+    b: La estimación es correcta; el problema es el código, que hace más caro cualquier cambio.
+    c: Las pruebas no aparecen en el ejemplo; la diferencia viene de la estructura confusa.
+  referencia: https://martinfowler.com/bliki/TechnicalDebt.html
+- id: L01-003
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Empareja cada fragmento de calc con el nombre que revela su intención en la versión limpia.
+  prompts:
+    - {id: "1", texto: "t == 1"}
+    - {id: "2", texto: "1.21"}
+    - {id: "3", texto: "if tot < 50"}
+    - {id: "4", texto: "for i in p"}
+  opciones:
+    - {id: a, texto: "tipo_envio == URGENTE"}
+    - {id: b, texto: "IVA_GENERAL"}
+    - {id: c, texto: "importe >= ENVIO_GRATIS_DESDE"}
+    - {id: d, texto: "for linea in lineas"}
+    - {id: e, texto: "IVA_COMIDA"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Cada número mágico pasa a ser una constante que dice qué regla aplica, y cada nombre de una letra pasa a ser una palabra del negocio. Así se entiende la línea sin leer el resto de la función.
+  distractores:
+    e: La comida lleva 1.10, no 1.21, y en la versión limpia está dentro del diccionario IVA.
+  referencia: https://refactoring.com/catalog/replaceMagicLiteral.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Cuál de estos comentarios aporta algo que el código no puede decir por sí mismo?
+  opciones:
+    - {id: a, texto: "# calcula el total (encima de def calc)"}
+    - {id: b, texto: "# suma el envío (encima de importe += gastos_de_envio(...))"}
+    - {id: c, texto: "# nombre antiguo, mientras se migran las llamadas (junto a calc = total_pedido)"}
+    - {id: d, texto: "# recorre las líneas (encima de for linea in lineas)"}
+  correctas: [c]
+  explicacion: Explica por qué existe un alias que, sin el comentario, parecería sobrar. Un buen comentario cuenta el porqué o una intención que el código no puede expresar.
+  distractores:
+    a: Repite lo que debería decir el nombre de la función. Mejor cambiar el nombre a total_pedido.
+    b: El nombre gastos_de_envio ya lo dice. El comentario solo añade algo que mantener.
+    d: Describe la sintaxis. Cualquiera que lea Python ve que es un bucle sobre las líneas.
+  referencia: https://peps.python.org/pep-0008/
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Encima de cinco líneas de una función larga hay un comentario «calcula los gastos de envío». ¿Qué conviene hacer?
+  opciones:
+    - {id: a, texto: "Extraer esas líneas a una función gastos_de_envio y borrar el comentario"}
+    - {id: b, texto: "Dejarlo así: el comentario ya explica el bloque"}
+    - {id: c, texto: "Ampliar el comentario con el detalle de cada caso"}
+    - {id: d, texto: "Extraer las líneas a una función auxiliar1 y conservar el comentario"}
+  correctas: [a]
+  explicacion: Un bloque que necesita un comentario para decir qué hace es una idea con nombre propio. Al extraerlo, el nombre sustituye al comentario y la función original queda como un resumen.
+  distractores:
+    b: El comentario no se comprueba y puede quedar desfasado; el nombre de una función se lee cada vez que se llama.
+    c: Más comentario no reduce la complejidad de la función, solo la describe.
+    d: Un nombre como auxiliar1 no dice nada. Si la extracción no tiene un buen nombre, no es una idea propia.
+  referencia: https://refactoring.com/catalog/extractFunction.html
+- id: L01-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué señales de calc indican que hace más de una cosa? Marca todas las que correspondan.
+  opciones:
+    - {id: a, texto: "Mezcla tres decisiones: el IVA, el descuento VIP y el envío"}
+    - {id: b, texto: "Tiene hasta cinco niveles de sangría"}
+    - {id: c, texto: "Necesita un comentario para decir qué calcula"}
+    - {id: d, texto: "Devuelve un número redondeado"}
+    - {id: e, texto: "Recibe tres parámetros"}
+  correctas: [a, b, c]
+  explicacion: Varias decisiones independientes mezcladas, mucha anidación y un comentario que suple al nombre son señales de que la función hace demasiado. En la versión limpia, cada decisión tiene su función.
+  distractores:
+    d: Redondear el resultado es parte de calcular un total; no es otra responsabilidad.
+    e: Tres parámetros es un número razonable. Lo que falla es que tienen nombres de una letra.
+  referencia: https://refactoring.com/catalog/extractFunction.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.4"
+  enunciado: Un equipo sabe que su módulo de tarifas necesita una tabla en lugar de condicionales, pero lo publica así para llegar a una feria. Anota la tarea para la semana siguiente. ¿Qué tipo de deuda es?
+  opciones:
+    - {id: a, texto: "Inadvertida y prudente"}
+    - {id: b, texto: "Deliberada e imprudente"}
+    - {id: c, texto: "Deliberada y prudente"}
+    - {id: d, texto: "No es deuda, porque el código funciona"}
+  correctas: [c]
+  explicacion: Es deliberada porque saben que la contraen, y prudente porque valoran que llegar a la feria compensa y planean pagarla. Es el cuadrante «publicamos ya y la pagamos después».
+  distractores:
+    a: Inadvertida sería si no supieran que el diseño se podía mejorar. Aquí lo saben.
+    b: Imprudente sería tomar el atajo por costumbre, sin valorar el coste ni planear pagarlo.
+    d: El código que funciona también puede tener deuda. Los intereses aparecen al cambiarlo.
+  referencia: https://martinfowler.com/bliki/TechnicalDebtQuadrant.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.4"
+  enunciado: Hay deuda en dos sitios. Un exportador de informes antiguo que no se toca desde hace dos años y el cálculo de pedidos, que se cambia cada semana. Con tiempo para limpiar solo uno, ¿cuál conviene elegir?
+  opciones:
+    - {id: a, texto: "El exportador, porque es el código más antiguo"}
+    - {id: b, texto: "Los dos a medias, para repartir el esfuerzo"}
+    - {id: c, texto: "Ninguno: la deuda solo se paga en un proyecto aparte"}
+    - {id: d, texto: "El cálculo de pedidos, porque cada cambio paga intereses"}
+  correctas: [d]
+  explicacion: La deuda que más cuesta es la del código que se cambia a menudo, porque sus intereses se pagan cada semana. La de una zona que nadie toca puede no compensar pagarla.
+  distractores:
+    a: La edad no importa. Si nadie lo toca, su deuda casi no genera intereses.
+    b: Dos limpiezas a medias pueden dejar los dos módulos en un estado intermedio y peor.
+    c: La regla del campamento propone pagarla poco a poco, al pasar por el código, no en proyectos aparte.
+  referencia: https://martinfowler.com/bliki/TechnicalDebtQuadrant.html
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué es un olor de código?
+  opciones:
+    - {id: a, texto: "Una señal superficial y fácil de ver que suele apuntar a un problema más profundo del diseño"}
+    - {id: b, texto: "Un fallo que hace que el programa dé un resultado incorrecto"}
+    - {id: c, texto: "Un aviso del compilador o del intérprete"}
+    - {id: d, texto: "Código que no sigue la guía de estilo del equipo"}
+  correctas: [a]
+  explicacion: Es la definición de Fowler, con el término que acuñó Kent Beck. El olor se ve rápido y es una pista; hay que mirar si de verdad hay un problema detrás.
+  distractores:
+    b: Un código con olores puede funcionar bien. calc da el resultado correcto y está lleno de olores.
+    c: Ningún compilador avisa de un nombre críptico o de una responsabilidad mezclada. Algunos olores los detecta un linter si se activan sus reglas.
+    d: El estilo (sangría, longitud de línea) es otra cosa. Un código con un estilo perfecto puede tener funciones de cien líneas.
+  referencia: https://martinfowler.com/bliki/CodeSmell.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Una función de 35 líneas valida un formulario campo a campo, en orden y sin anidar. Se lee de corrido y no se ha cambiado en un año. ¿Qué conviene hacer con el olor «función larga»?
+  opciones:
+    - {id: a, texto: "Partirla en funciones de menos de diez líneas, porque es larga"}
+    - {id: b, texto: "Dejarla: el olor no apunta aquí a ningún problema real"}
+    - {id: c, texto: "Reescribirla desde cero con otro diseño"}
+    - {id: d, texto: "Añadir un comentario en cada bloque"}
+  correctas: [b]
+  explicacion: Un olor es una invitación a mirar, no una orden. Si la función se entiende bien, no mezcla responsabilidades y casi no se toca, refactorizarla no paga nada.
+  distractores:
+    a: Partir por longitud, sin ideas con nombre propio, puede dejar funciones como validar_parte_2 que se entienden peor.
+    c: Reescribir código que funciona y nadie toca añade riesgo sin beneficio.
+    d: Los comentarios no hacen falta si se lee de corrido, y habría que mantenerlos.
+  referencia: https://martinfowler.com/bliki/CodeSmell.html
+- id: L02-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué olores hay en este fragmento? Marca todos los que correspondan.
+  codigo:
+    lenguaje: python
+    fuente: |
+      def env(p, d):
+          if d != None:
+              if p > 30:
+                  return 0
+              else:
+                  if d == "ES":
+                      return 4.95
+                  else:
+                      return 12
+  opciones:
+    - {id: a, texto: "Números mágicos"}
+    - {id: b, texto: "Nombres crípticos"}
+    - {id: c, texto: "Condicionales anidados"}
+    - {id: d, texto: "Lista larga de parámetros"}
+    - {id: e, texto: "Clase grande"}
+  correctas: [a, b, c]
+  explicacion: 30, 4.95 y 12 no tienen nombre; env, p y d obligan a leer el cuerpo; y hay tres niveles de if. Las cláusulas de guarda y las constantes lo arreglan.
+  distractores:
+    d: Dos parámetros no es una lista larga. El problema es su nombre, no su número.
+    e: Es una función suelta, no una clase.
+  referencia: https://martinfowler.com/bliki/CodeSmell.html
+- id: L02-004
+  tipo: matching
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Empareja cada olor con la refactorización del catálogo de Fowler que lo corrige.
+  prompts:
+    - {id: "1", texto: "Tres niveles de if y else para calcular el envío"}
+    - {id: "2", texto: "crear_pedido(cliente, calle, numero, ciudad, cp, pais)"}
+    - {id: "3", texto: "Un bloque de diez líneas con el comentario «calcula el IVA»"}
+    - {id: "4", texto: "El tipo de envío es un entero, 1 o 2"}
+  opciones:
+    - {id: a, texto: "Replace Nested Conditional with Guard Clauses"}
+    - {id: b, texto: "Introduce Parameter Object"}
+    - {id: c, texto: "Extract Function"}
+    - {id: d, texto: "Replace Primitive with Object"}
+    - {id: e, texto: "Move Function"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Las guardas aplanan los condicionales, un objeto Direccion agrupa los parámetros que viajan juntos, el bloque comentado pasa a ser una función con nombre y el entero se sustituye por un tipo propio, como un enum.
+  distractores:
+    e: Move Function corrige la envidia de características, cuando una función usa más los datos de otro objeto que los suyos.
+  referencia: https://refactoring.com/catalog/
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Con ruff 0.17.6 y sin configuración, ruff check sobre calc responde «All checks passed!». ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque calc no tiene ningún problema que un linter pueda detectar"}
+    - {id: b, texto: "Porque ruff solo analiza clases, no funciones sueltas"}
+    - {id: c, texto: "Porque las reglas de complejidad, números mágicos y comparaciones con None o True no están activadas por defecto"}
+    - {id: d, texto: "Porque hace falta ejecutar ruff format antes"}
+  correctas: [c]
+  explicacion: Con --select E711,E712,C901,PLR0912,PLR2004, la misma función da seis avisos. Las reglas hay que activarlas en la configuración del proyecto para que actúen en cada cambio.
+  distractores:
+    a: Activando las reglas aparecen seis avisos, entre ellos complejidad 11 y 15 ramas.
+    b: ruff analiza funciones, métodos y módulos; C901 avisa precisamente de la función calc.
+    d: ruff format solo cambia el formato. No activa reglas del linter.
+  referencia: https://docs.astral.sh/ruff/settings/
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: ¿De qué línea avisa la regla PLR2004 de ruff (números mágicos en comparaciones)?
+  codigo:
+    lenguaje: python
+    fuente: |
+      UMBRAL = 50
+
+
+      def gastos(importe, tipo):
+          if tipo == 1:            # A
+              return 5
+          if importe >= UMBRAL:    # B
+              return 0
+          if importe < 20:         # C
+              return 6.5
+          return 3.5 * 1.21        # D
+  opciones:
+    - {id: a, texto: "De la A"}
+    - {id: b, texto: "De la B"}
+    - {id: c, texto: "De la D"}
+    - {id: d, texto: "De la C"}
+  correctas: [d]
+  explicacion: El 20 es un literal en una comparación y no está entre los valores que la regla ignora. Comprobado con ruff 0.17.6, que da un único aviso, el de esa línea.
+  distractores:
+    a: PLR2004 ignora 0, 1, -1, 0.0, 1.0, -1.0, y por defecto las cadenas y los bytes. El 1 del tipo de envío es un número mágico, pero esta regla no lo ve.
+    b: UMBRAL es una constante con nombre, que es justo lo que pide la regla.
+    c: 3.5 y 1.21 son números mágicos, pero no están en una comparación, que es lo único que mira PLR2004.
+  referencia: https://docs.astral.sh/ruff/rules/magic-value-comparison/
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué fragmento muestra obsesión por primitivos?
+  opciones:
+    - {id: a, texto: "def total_pedido(lineas, cliente, tipo_envio)"}
+    - {id: b, texto: "if tipo_envio == 1: ... (1 es urgente y 2 es estándar)"}
+    - {id: c, texto: "IVA_GENERAL = 1.21"}
+    - {id: d, texto: "for linea in lineas"}
+  correctas: [b]
+  explicacion: Un concepto del negocio, el tipo de envío, se representa con un entero cuyo significado hay que recordar. Un tipo propio (por ejemplo, un enum TipoEnvio) le da nombre e impide valores como 7.
+  distractores:
+    a: Es una firma con nombres claros. Lo que reciben puede tener obsesión por primitivos, pero la firma no lo muestra.
+    c: Es una constante con nombre, la corrección de un número mágico.
+    d: Es un bucle con un nombre claro.
+  referencia: https://refactoring.com/catalog/replacePrimitiveWithObject.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: calc guarda el dinero en float. Cambiarlo por Decimal, ¿es una refactorización?
+  opciones:
+    - {id: a, texto: "Sí, porque solo cambia el tipo de una variable"}
+    - {id: b, texto: "Sí, si se hace en el mismo paso que extraer las funciones"}
+    - {id: c, texto: "No: puede cambiar algún resultado redondeado, así que es un arreglo y va en un paso aparte"}
+    - {id: d, texto: "No, porque Decimal no existe en la biblioteca estándar de Python"}
+  correctas: [c]
+  explicacion: Una refactorización no cambia el comportamiento observable. Si el total puede variar un céntimo, es un cambio de comportamiento, quizá deseable, que se hace con sus propias pruebas y fuera de la refactorización.
+  distractores:
+    a: El tipo del dinero afecta a los resultados. 0.1 + 0.2 da 0.30000000000000004 en float.
+    b: Mezclarlo con una refactorización impide saber cuál de los dos cambios ha movido un resultado.
+    d: decimal es un módulo de la biblioteca estándar de Python.
+  referencia: https://martinfowler.com/bliki/DefinitionOfRefactoring.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: ¿Cuál de estos cambios es una refactorización?
+  opciones:
+    - {id: a, texto: "Añadir la tarifa de envío a Portugal"}
+    - {id: b, texto: "Cobrar el envío urgente nacional a 6 € en lugar de 5 €"}
+    - {id: c, texto: "Cambiar float por Decimal, aunque algún total varíe un céntimo"}
+    - {id: d, texto: "Extraer el cálculo del IVA a subtotal_con_iva sin que cambie ningún total"}
+  correctas: [d]
+  explicacion: Una refactorización cambia la estructura interna sin cambiar el comportamiento observable. Extraer una función que da los mismos resultados es el ejemplo típico.
+  distractores:
+    a: Añade comportamiento nuevo. Es una funcionalidad, aunque se haga en el mismo fichero.
+    b: Cambia el resultado a propósito. Es un cambio de reglas de negocio.
+    c: Si un total puede cambiar, ya no es una refactorización, aunque el cambio sea deseable.
+  referencia: https://martinfowler.com/bliki/DefinitionOfRefactoring.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Kent Beck habla de llevar «dos sombreros», uno para añadir funcionalidad y otro para refactorizar, pero no los dos a la vez. ¿Qué problema evita?
+  opciones:
+    - {id: a, texto: "Que, si una prueba falla, no se sepa si la ha roto la funcionalidad nueva o la refactorización"}
+    - {id: b, texto: "Que el código quede con demasiadas funciones"}
+    - {id: c, texto: "Que haya que escribir pruebas para la refactorización"}
+    - {id: d, texto: "Que el commit sea demasiado pequeño"}
+  correctas: [a]
+  explicacion: Al refactorizar, las pruebas no deberían cambiar de resultado; al añadir una función, cambian a propósito. Si se mezclan, un fallo puede venir de cualquiera de los dos y se pierde la red de seguridad.
+  distractores:
+    b: El número de funciones no depende de separar los dos tipos de cambio.
+    c: Al refactorizar se usan las pruebas que ya existen para comprobar que nada cambia; separar los sombreros no las evita ni las exige.
+    d: Separar los cambios produce commits más pequeños, y eso es una ventaja.
+  referencia: https://martinfowler.com/bliki/DefinitionOfRefactoring.html
+- id: L03-003
+  tipo: ordering
+  dificultad: baja
+  objetivo: "3.2"
+  enunciado: Ordena el ciclo de un paso de refactorización.
+  opciones:
+    - {id: a, texto: "Hacer un cambio pequeño, como extraer una función"}
+    - {id: b, texto: "Comprobar que las pruebas están en verde antes de empezar"}
+    - {id: c, texto: "Hacer commit de ese paso"}
+    - {id: d, texto: "Ejecutar las pruebas"}
+  correctas: [b, a, d, c]
+  explicacion: Se parte de verde, se da un paso pequeño, se comprueba y, si sigue en verde, se guarda. Si algo falla, el culpable es el último paso, que es pequeño.
+  referencia: https://martinfowler.com/bliki/DefinitionOfRefactoring.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Tras extraer una función, 3 de los 60 casos de la prueba de caracterización fallan. ¿Qué conviene hacer?
+  opciones:
+    - {id: a, texto: "Actualizar los valores esperados de esos 3 casos"}
+    - {id: b, texto: "Seguir con el siguiente paso y revisarlo todo al final"}
+    - {id: c, texto: "Deshacer el paso, volver al último verde y repetirlo en pasos más pequeños"}
+    - {id: d, texto: "Borrar esos 3 casos, porque son poco frecuentes"}
+  correctas: [c]
+  explicacion: El paso ha cambiado el comportamiento. Volver al último punto verde es barato, y repetir el cambio en pasos más pequeños muestra dónde está el problema.
+  distractores:
+    a: Cambiar lo esperado convierte la refactorización en un cambio de comportamiento sin que nadie lo haya decidido.
+    b: Acumular pasos sobre uno roto hace más difícil encontrar cuál falló.
+    d: Borrar casos que fallan quita la red de seguridad justo donde ha detectado algo.
+  referencia: https://martinfowler.com/bliki/DefinitionOfRefactoring.html
+- id: L03-005
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa la versión con cláusulas de guarda de gastos_de_envio. El envío estándar nacional es gratis desde 50 € incluidos.
+  codigo:
+    lenguaje: python
+    fuente: |
+      def gastos_de_envio(importe, pais, tipo_envio):
+          urgente = tipo_envio == URGENTE
+          if pais != "ES":
+              [[1]] 15 if urgente else 25
+          if urgente:
+              return 5
+          return 0 if importe [[2]] ENVIO_GRATIS_DESDE else 3.5
+  huecos:
+    - {id: "1", respuestas: [return]}
+    - {id: "2", respuestas: [">="]}
+  explicacion: Cada guarda atiende un caso y sale con return, así que lo que queda debajo no necesita else. El original sumaba 3.5 si el importe era menor que 50; el equivalente es que sea gratis con importe >= 50.
+  referencia: https://refactoring.com/catalog/replaceNestedConditionalWithGuardClauses.html
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: ruff propone cambiar if c["vip"] == True por if c["vip"] y avisa de que es un arreglo inseguro. Si un cliente llegara con vip igual a "sí", ¿qué pasaría?
+  opciones:
+    - {id: a, texto: "Nada: las dos condiciones son equivalentes en Python"}
+    - {id: b, texto: "El original no aplicaría el descuento y el código nuevo sí"}
+    - {id: c, texto: "El código nuevo lanzaría TypeError"}
+    - {id: d, texto: "Los dos aplicarían el descuento"}
+  correctas: [b]
+  explicacion: '"sí" == True es False, pero "sí" es una cadena no vacía y se evalúa como cierta. Por eso el cambio solo es seguro si vip es siempre booleano. Los 60 casos usan booleanos y no lo detectan.'
+  distractores:
+    a: Solo son equivalentes con booleanos. Con 1 también coinciden, porque 1 == True, pero con una cadena no.
+    c: Python no lanza error al evaluar una cadena como condición; las no vacías cuentan como ciertas.
+    d: En el original, la comparación con True es falsa y no hay descuento.
+  referencia: https://docs.astral.sh/ruff/rules/true-false-comparison/
+- id: L03-007
+  tipo: multiple_response
+  dificultad: alta
+  objetivo: "3.1"
+  enunciado: 'Se sustituye el bloque de envío por la tabla ENVIOS = {("ES", 1): 5, ("ES", 2): 3.5, ("FR", 1): 15, ("FR", 2): 25}. ¿Qué es cierto? Marca todas las que correspondan.'
+  opciones:
+    - {id: a, texto: "Olvida el envío gratis desde 50 € y hace fallar 4 de los 60 casos"}
+    - {id: b, texto: "Con un país que no sea ES ni FR, lanza KeyError"}
+    - {id: c, texto: "La prueba de caracterización no detecta el KeyError, porque ningún caso usa otro país"}
+    - {id: d, texto: "Falla con los pedidos sin cliente"}
+    - {id: e, texto: "Cambia el IVA de los libros"}
+  correctas: [a, b, c]
+  explicacion: La tabla cambia el comportamiento en dos puntos. Uno lo detecta la prueba y el otro queda fuera de los casos que contiene. Por eso no es una refactorización, aunque parezca más limpia.
+  distractores:
+    d: Sin cliente, la función sale antes de mirar el envío y devuelve el subtotal, igual que el original.
+    e: El IVA se calcula en subtotal_con_iva, que no cambia.
+  referencia: https://martinfowler.com/bliki/DefinitionOfRefactoring.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Tienes que añadir el envío a Portugal y el bloque de envío actual, con cuatro if anidados, lo pone difícil. El código tiene buenas pruebas. ¿Qué orden conviene?
+  opciones:
+    - {id: a, texto: "Refactorizar primero el envío, con las pruebas en verde, y después añadir Portugal en otro paso"}
+    - {id: b, texto: "Añadir Portugal y refactorizar a la vez, en un solo commit"}
+    - {id: c, texto: "Añadir Portugal con otro if más y dejar el bloque como está"}
+    - {id: d, texto: "Reescribir el cálculo de pedidos entero desde cero"}
+  correctas: [a]
+  explicacion: Primero se hace fácil el cambio refactorizando, sin cambiar el comportamiento, y luego se hace el cambio, que ya es fácil. Cada paso se comprueba por separado.
+  distractores:
+    b: Mezcla los dos sombreros. Si algo falla, no se sabe si es la refactorización o la tarifa nueva.
+    c: Añade intereses a la deuda en el código que se está cambiando, justo donde más compensa pagarla.
+    d: Reescribir es más arriesgado y más largo que refactorizar la parte que molesta.
+  referencia: https://martinfowler.com/bliki/OpportunisticRefactoring.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: Según Michael Feathers, ¿qué hace que un código sea heredado?
+  opciones:
+    - {id: a, texto: "Que tenga más de cinco años"}
+    - {id: b, texto: "Que no tenga pruebas"}
+    - {id: c, texto: "Que esté escrito en un lenguaje antiguo"}
+    - {id: d, texto: "Que lo escribiera otro equipo"}
+  correctas: [b]
+  explicacion: Para Feathers, el código heredado es simplemente código sin pruebas. Lo que lo hace arriesgado es que nada avisa si un cambio rompe su comportamiento, y eso no depende de la edad.
+  distractores:
+    a: Un código de ayer sin pruebas ya es heredado, y uno de hace diez años con buenas pruebas se cambia con seguridad.
+    c: El lenguaje no importa; calc está escrita en Python moderno y es heredada.
+    d: Quién lo escribió no cambia el riesgo; lo cambia que haya pruebas que lo comprueben.
+  referencia: https://en.wikipedia.org/wiki/Characterization_test
+- id: L04-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué comprueba una prueba de caracterización?
+  opciones:
+    - {id: a, texto: "Que el código cumple la especificación de negocio"}
+    - {id: b, texto: "Que el código no lanza excepciones"}
+    - {id: c, texto: "Que se ejecuta cada línea del código"}
+    - {id: d, texto: "Que el código sigue dando las mismas salidas que cuando se grabaron"}
+  correctas: [d]
+  explicacion: Graba lo que hace hoy el código, sea correcto o no, y avisa si cambia. Por eso protege una refactorización, pero no dice si el comportamiento es el deseado.
+  distractores:
+    a: No parte de ninguna especificación. Si el código tiene un fallo, la prueba lo graba como si fuera correcto.
+    b: Comprueba resultados concretos. Una excepción grabada también forma parte del comportamiento.
+    c: Eso es la cobertura. La caracterización de calc cubre el 100 %, pero lo que comprueba son los resultados.
+  referencia: https://en.wikipedia.org/wiki/Characterization_test
+- id: L04-003
+  tipo: ordering
+  dificultad: baja
+  objetivo: "4.2"
+  enunciado: Ordena los pasos para refactorizar calc con una prueba de caracterización.
+  opciones:
+    - {id: a, texto: "Grabar en esperado.json lo que devuelve el código actual"}
+    - {id: b, texto: "Elegir entradas combinadas que recorran las ramas"}
+    - {id: c, texto: "Comparar las salidas con lo grabado"}
+    - {id: d, texto: "Dar un paso pequeño de refactorización"}
+  correctas: [b, a, d, c]
+  explicacion: Primero se eligen las entradas y se graba el comportamiento antes de tocar nada. Después, cada paso de refactorización se comprueba contra lo grabado.
+  referencia: https://en.wikipedia.org/wiki/Characterization_test
+- id: L04-004
+  tipo: completar
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Completa la prueba para que pytest ejecute un caso por cada combinación grabada y compare el resultado.
+  codigo:
+    lenguaje: python
+    fuente: |
+      @pytest.mark.[[1]]("l,c,t,esperado", json.load(open("esperado.json")))
+      def test_mismo_resultado(l, c, t, esperado):
+          assert pedidos.calc(LINEAS[l], CLIENTES[c], t) [[2]] esperado
+  huecos:
+    - {id: "1", respuestas: [parametrize]}
+    - {id: "2", respuestas: ["=="]}
+  explicacion: pytest.mark.parametrize genera una prueba por cada elemento de la lista, así que los 60 casos aparecen como 60 pruebas, y un fallo dice exactamente qué combinación cambió.
+  referencia: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Al estudiar calc descubres que un cliente VIP con 52,03 € paga 52,93 €, y uno normal, 52,03 €, porque el descuento se aplica antes de mirar el envío gratis. Estás a mitad de la refactorización. ¿Qué haces?
+  opciones:
+    - {id: a, texto: "Anotarlo, preguntarlo a negocio y, si es un fallo, corregirlo en un paso aparte después de refactorizar"}
+    - {id: b, texto: "Corregirlo en el siguiente paso de la refactorización"}
+    - {id: c, texto: "Cambiar esperado.json para que refleje lo correcto"}
+    - {id: d, texto: "Dejarlo así, porque la prueba de caracterización ya lo protege"}
+  correctas: [a]
+  explicacion: La refactorización no cambia el comportamiento. Si es un fallo, corregirlo es otro cambio, con su propia decisión y sus pruebas. Y puede ser una regla intencionada; solo negocio lo sabe.
+  distractores:
+    b: Mezclaría una corrección con la refactorización, y la prueba de caracterización dejaría de servir como red.
+    c: Cambiar lo esperado a mitad de la refactorización es decidir una regla de negocio sin preguntarla.
+    d: Además, ninguno de los 60 casos cae en esa franja, así que la prueba ni siquiera protege ese comportamiento.
+  referencia: https://en.wikipedia.org/wiki/Characterization_test
+- id: L04-006
+  tipo: multiple_response
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Los 60 casos cubren el 100 % de líneas y ramas. ¿Qué comportamientos quedan sin proteger? Marca todos los que correspondan.
+  opciones:
+    - {id: a, texto: "Un importe de exactamente 50 € con envío estándar nacional"}
+    - {id: b, texto: "Un país distinto de ES y FR"}
+    - {id: c, texto: "Un VIP cuyo importe pasa de 50 € a menos de 50 € con el descuento"}
+    - {id: d, texto: "Un pedido sin cliente"}
+    - {id: e, texto: "El envío urgente nacional"}
+  correctas: [a, b, c]
+  explicacion: La prueba solo protege los casos que contiene. Ejecutar todas las líneas no es lo mismo que comprobar los límites, otros países o franjas concretas de importes.
+  distractores:
+    d: CLIENTES empieza por None, así que hay 12 casos sin cliente.
+    e: Hay 12 casos de envío urgente a España; cambiar su precio hace fallar los 12.
+  referencia: https://coverage.readthedocs.io/en/latest/branch.html
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué valor espera esta prueba? Un libro lleva un IVA de 1.04.
+  codigo:
+    lenguaje: python
+    fuente: |
+      def test_envio_sustituido(monkeypatch):
+          monkeypatch.setattr(pedidos, "gastos_de_envio", lambda importe, pais, tipo_envio: 7)
+          linea = {"tipo": "libro", "precio": 20, "cant": 1}
+          assert pedidos.total_pedido([linea], {"vip": False, "pais": "ES"}, 2) == ...
+  opciones:
+    - {id: a, texto: "20.8, porque el envío nacional es gratis"}
+    - {id: b, texto: "24.3, con el envío estándar de 3,50 €"}
+    - {id: c, texto: "27.8, con el envío sustituido de 7 €"}
+    - {id: d, texto: "25.8, con el envío urgente de 5 €"}
+  correctas: [c]
+  explicacion: 20 × 1.04 = 20.8, y la costura del nombre de módulo hace que total_pedido llame a la lambda, que devuelve 7. La prueba pasa con 27.8 sin tocar total_pedido.
+  distractores:
+    a: El envío estándar solo es gratis desde 50 €, y además la función real no se llama.
+    b: Sería el resultado sin sustitución, porque 20.8 está por debajo de 50. monkeypatch la reemplaza durante la prueba.
+    d: El tipo de envío es 2, el estándar, y de todos modos la función real no se llama.
+  referencia: https://docs.pytest.org/en/stable/how-to/monkeypatch.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Hay que sustituir un sistema de facturación heredado y grande. ¿Qué propone el patrón de la higuera estranguladora?
+  opciones:
+    - {id: a, texto: "Reescribirlo entero en paralelo y cambiar de sistema en un solo día"}
+    - {id: b, texto: "Congelarlo y no tocarlo más"}
+    - {id: c, texto: "Refactorizarlo función a función hasta que quede limpio"}
+    - {id: d, texto: "Desviar funcionalidades una a una a código nuevo, a través de una costura, hasta poder retirar el antiguo"}
+  correctas: [d]
+  explicacion: La sustitución es gradual y visible. Cada funcionalidad migrada ya da valor, y el riesgo de cada paso es pequeño.
+  distractores:
+    a: Es la reescritura de golpe que el patrón intenta evitar. Durante meses no se entrega nada y el sistema nuevo tiene que igualarlo todo antes de servir.
+    b: Congelar no sustituye nada y deja los intereses de la deuda sin pagar.
+    c: Es una opción válida para limpiar un sistema que se quiere conservar, pero el patrón trata de sustituirlo.
+  referencia: https://martinfowler.com/bliki/StranglerFigApplication.html
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: ¿Qué complejidad ciclomática tiene esta función?
+  codigo:
+    lenguaje: python
+    fuente: |
+      def tarifa(pais, urgente, importe):
+          if pais != "ES":
+              return 25
+          if urgente:
+              return 5
+          if importe >= 50:
+              return 0
+          return 3.5
+  opciones:
+    - {id: a, texto: "3"}
+    - {id: b, texto: "4"}
+    - {id: c, texto: "5"}
+    - {id: d, texto: "7"}
+  correctas: [b]
+  explicacion: Tiene tres puntos de decisión, los tres if, y la complejidad es uno más el número de decisiones. radon la da como A (4).
+  distractores:
+    a: Es el número de decisiones; falta sumar el camino base.
+    c: Sería con cuatro decisiones. Los return no son decisiones.
+    d: Cuenta las líneas con instrucciones, no los caminos.
+  referencia: https://docs.astral.sh/ruff/rules/complex-structure/
+- id: L05-002
+  tipo: matching
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: Empareja cada complejidad ciclomática con el rango que le da radon.
+  prompts:
+    - {id: "1", texto: "3, como total_pedido"}
+    - {id: "2", texto: "11, como calc"}
+    - {id: "3", texto: "25"}
+    - {id: "4", texto: "45"}
+  opciones:
+    - {id: a, texto: "A"}
+    - {id: b, texto: "C"}
+    - {id: c, texto: "D"}
+    - {id: d, texto: "F"}
+    - {id: e, texto: "B"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: radon usa A para 1–5, B para 6–10, C para 11–20, D para 21–30, E para 31–40 y F para 41 o más.
+  distractores:
+    e: B es para 6–10. calc, con 11, ya queda en C.
+  referencia: https://radon.readthedocs.io/en/latest/commandline.html
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: radon da a calc un índice de mantenibilidad de 60.54 (rango A) y a la versión refactorizada, 64.43 (rango A). ¿Qué conclusión es la correcta?
+  opciones:
+    - {id: a, texto: "La refactorización no sirvió, porque las dos están en el mismo rango"}
+    - {id: b, texto: "calc era fácil de mantener, porque saca un A"}
+    - {id: c, texto: "El índice tiene un fallo y hay que descartarlo"}
+    - {id: d, texto: "Es una señal gruesa: sirve para tendencias de módulos, no para juzgar una función concreta"}
+  correctas: [d]
+  explicacion: El rango A va de 20 a 100, así que casi cualquier función pequeña lo saca. La complejidad ciclomática (de 11 a una media de 3) y la lectura del código dicen mucho más sobre este cambio.
+  distractores:
+    a: La complejidad por función bajó de 11 a una media de 3, y los nombres y la estructura mejoraron. Que el índice apenas se mueva dice más del índice que del cambio.
+    b: calc tiene números mágicos, nombres de una letra y hasta cinco niveles de sangría. El A del índice no lo refleja.
+    c: Es una métrica conocida y bien definida; el problema es pedirle más de lo que mide.
+  referencia: https://radon.readthedocs.io/en/latest/commandline.html
+- id: L05-004
+  tipo: completar
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Completa pyproject.toml para que ruff añada a sus reglas por defecto la de complejidad y la de números mágicos, con complejidad máxima 10.
+  codigo:
+    lenguaje: toml
+    fuente: |
+      [tool.ruff.lint]
+      [[1]] = ["C901", "PLR2004"]
+
+      [tool.ruff.lint.[[2]]]
+      max-complexity = 10
+  huecos:
+    - {id: "1", respuestas: [extend-select]}
+    - {id: "2", respuestas: [mccabe]}
+  explicacion: extend-select añade reglas a las de por defecto; select las sustituiría. El umbral de C901 se configura en la sección mccabe, el nombre de la herramienta original de la que viene la regla.
+  referencia: https://docs.astral.sh/ruff/settings/
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.2"
+  enunciado: Una función que traduce un protocolo antiguo tiene complejidad 14, y el equipo decide que partirla la haría menos clara. El proyecto tiene max-complexity = 10. ¿Qué conviene hacer?
+  opciones:
+    - {id: a, texto: "Marcar esa función con # noqa: C901 y un comentario que explique por qué"}
+    - {id: b, texto: "Subir max-complexity a 15 para todo el proyecto"}
+    - {id: c, texto: "Quitar C901 de la configuración"}
+    - {id: d, texto: "Partirla en paso1 y paso2 para que pase la regla"}
+  correctas: [a]
+  explicacion: La excepción queda en el único sitio donde está justificada, con su motivo a la vista. El resto del proyecto sigue avisando a partir de 10.
+  distractores:
+    b: Relajaría la alarma para todo el código por un único caso.
+    c: Desactivaría la alarma en todo el proyecto.
+    d: Cumple la regla sin mejorar el código, justo lo que el equipo había descartado.
+  referencia: https://docs.astral.sh/ruff/rules/complex-structure/
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: El mutante que cambia importe >= ENVIO_GRATIS_DESDE por importe > ENVIO_GRATIS_DESDE sobrevive a los 60 casos de caracterización. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque la prueba de caracterización no ejecuta gastos_de_envio"}
+    - {id: b, texto: "Porque los dos operadores son equivalentes con números decimales"}
+    - {id: c, texto: "Porque ningún caso tiene un importe de exactamente 50 €"}
+    - {id: d, texto: "Porque las herramientas de mutación no cambian operadores de comparación"}
+  correctas: [c]
+  explicacion: Los dos operadores solo dan resultados distintos con un importe de exactamente 50, y ningún caso lo tiene. La prueba unitaria gastos_de_envio(50, "ES", 2) == 0 mata ese mutante.
+  distractores:
+    a: La ejecuta, y con cobertura del 100 % de líneas y ramas. Ejecutarla no es comprobar sus límites.
+    b: Con 50 dan resultados distintos; con cualquier otro valor coinciden.
+    d: Cambiar > por >= es una de las mutaciones más típicas, y aquí se aplicó a mano.
+  referencia: https://pitest.org/
+- id: L05-007
+  tipo: multiple_response
+  dificultad: alta
+  objetivo: "5.4"
+  enunciado: ¿Qué afirmaciones son correctas? Marca todas las que correspondan.
+  opciones:
+    - {id: a, texto: "Un 100 % de cobertura de líneas y ramas no garantiza que se comprueben los límites"}
+    - {id: b, texto: "Un mutante superviviente señala un comportamiento que ninguna prueba comprueba"}
+    - {id: c, texto: "Las pruebas de mutación son lentas porque ejecutan las pruebas una vez por mutante"}
+    - {id: d, texto: "Un mutante muerto indica un fallo en el código de producción"}
+    - {id: e, texto: "Con 0 mutantes supervivientes, el comportamiento es el correcto"}
+  correctas: [a, b, c]
+  explicacion: La cobertura mide lo que se ejecuta y la mutación, lo que se comprueba. Ninguna de las dos dice si el comportamiento es el que quiere el negocio.
+  distractores:
+    d: Al contrario, un mutante muerto significa que las pruebas detectan ese cambio. El fallo lo pone la herramienta a propósito.
+    e: Las pruebas pueden comprobar con todo detalle un comportamiento equivocado, como hace la caracterización con los fallos grabados.
+  referencia: https://pitest.org/
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: Un equipo fija como objetivo que ninguna función supere complejidad 10. Para cumplirlo, alguien parte una función en parte_a y parte_b por la mitad. ¿Qué ha pasado?
+  opciones:
+    - {id: a, texto: "El código ha mejorado, porque la métrica ha bajado"}
+    - {id: b, texto: "Ha cumplido la métrica sin mejorar el código: la métrica ha pasado de alarma a objetivo"}
+    - {id: c, texto: "Ha aplicado la refactorización Extraer función correctamente"}
+    - {id: d, texto: "La complejidad total del programa ha bajado a la mitad"}
+  correctas: [b]
+  explicacion: Una métrica avisa de un posible problema. Usarla como objetivo invita a cumplirla de formas que no ayudan a entender el código, como partir sin ideas con nombre.
+  distractores:
+    a: La métrica ha bajado, pero ahora hay que leer dos funciones sin nombre significativo para entender una idea.
+    c: Extraer función da nombre a una idea. Cortar por la mitad no extrae ninguna.
+    d: La complejidad total no baja al repartirla. Cada mitad conserva sus decisiones.
+  referencia: https://docs.astral.sh/ruff/rules/complex-structure/

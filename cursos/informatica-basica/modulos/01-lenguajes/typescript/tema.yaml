@@ -1,0 +1,15 @@
+slug: typescript
+titulo: TypeScript
+area: lenguajes
+nivel: basico
+idioma: es-ES
+resumen: TypeScript para quien ya programa. Tipos estructurales y borrados, uniones discriminadas y exhaustividad, genéricos y tipos utilitarios, validación en los bordes con Zod, y un proyecto moderno con TypeScript 7 y Node 26, que ejecuta TypeScript directamente. Todo el código se ha comprobado con tsc 7.0.2 y Node 26.13.
+requisitos: []
+etiquetas: [typescript, javascript, node, tipos, zod]
+fuentes:
+  - typescriptlang.org
+  - devblogs.microsoft.com
+  - nodejs.org
+  - zod.dev
+ejercicios:
+  minimo_por_leccion: 8

@@ -1,0 +1,700 @@
+- id: L01-001
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué protocolos implementa Keycloak?
+  opciones:
+    - {id: a, texto: "OpenID Connect"}
+    - {id: b, texto: "OAuth 2.0"}
+    - {id: c, texto: "SAML 2.0"}
+    - {id: d, texto: "SMTP como protocolo de autenticación"}
+    - {id: e, texto: "Kerberos como único protocolo"}
+  correctas: [a, b, c]
+  explicacion: Keycloak actúa como proveedor de identidad y servidor de autorización con OIDC, OAuth 2.0 y SAML.
+  distractores:
+    d: SMTP sirve para enviar correos, por ejemplo de verificación, no para autenticar.
+    e: Keycloak puede integrarse con Kerberos, pero no es su único protocolo ni el principal.
+  referencia: https://www.keycloak.org/documentation
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Para qué debe usarse el realm master?
+  opciones:
+    - {id: a, texto: "Para los usuarios de las aplicaciones"}
+    - {id: b, texto: "Para las aplicaciones de producción"}
+    - {id: c, texto: "Solo para administrar Keycloak"}
+    - {id: d, texto: "Para las pruebas automáticas"}
+  correctas: [c]
+  explicacion: El realm master contiene a los administradores de Keycloak. Los usuarios de las aplicaciones van en realms propios, aislados de la administración.
+  distractores:
+    a: Mezclar usuarios de aplicaciones con los administradores aumenta el riesgo.
+    b: Las aplicaciones usan sus propios realms.
+    d: Las pruebas usan un realm propio, igual que las aplicaciones.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué valor tiene el claim iss de los tokens del realm tienda en la prueba?
+  opciones:
+    - {id: a, texto: "http://127.0.0.1:18180/realms/tienda"}
+    - {id: b, texto: "http://127.0.0.1:18180/realms/master"}
+    - {id: c, texto: "tienda"}
+    - {id: d, texto: "keycloak"}
+  correctas: [a]
+  explicacion: Cada realm es un emisor distinto, identificado por la URL base del realm. Las API deben configurar exactamente ese emisor.
+  distractores:
+    b: Es el emisor del realm master, otro distinto.
+    c: El emisor es una URL, no solo el nombre.
+    d: El emisor no es el nombre del producto.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L01-004
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Empareja cada rol del token de Ana con el claim donde aparece.
+  prompts:
+    - {id: "1", texto: "cliente (rol de realm)"}
+    - {id: "2", texto: "leer-pedidos (rol del cliente api-pedidos)"}
+    - {id: "3", texto: "view-profile (rol del cliente account)"}
+  opciones:
+    - {id: a, texto: "realm_access.roles"}
+    - {id: b, texto: "resource_access.api-pedidos.roles"}
+    - {id: c, texto: "resource_access.account.roles"}
+    - {id: d, texto: "scope"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Los roles de realm van en realm_access y los de cada cliente, en resource_access con el nombre del cliente.
+  distractores:
+    d: scope lista los scopes concedidos, no los roles.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Ana no tenía asignado el rol leer-pedidos, pero su token lo incluía. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque los roles de cliente se asignan por defecto a cada usuario"}
+    - {id: b, texto: "Porque pertenece al grupo atencion-al-cliente, que tiene ese rol, y los miembros lo heredan"}
+    - {id: c, texto: "Porque inició sesión desde la web"}
+    - {id: d, texto: "Por un error de Keycloak"}
+  correctas: [b]
+  explicacion: Los miembros de un grupo heredan sus roles. Luis, que no estaba en el grupo, no tenía el rol en su token.
+  distractores:
+    a: Luis no lo tenía, así que no se da a todos.
+    c: El cliente desde el que se inicia sesión no añade roles.
+    d: Es el comportamiento previsto de los grupos.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.4"
+  enunciado: ¿Qué hace el argumento start-dev al arrancar Keycloak?
+  opciones:
+    - {id: a, texto: "Arranca en modo de producción con HTTPS"}
+    - {id: b, texto: "Arranca en modo de desarrollo, con HTTP habilitado y una base de datos solo para pruebas"}
+    - {id: c, texto: "Borra los realms existentes"}
+    - {id: d, texto: "Arranca sin consola de administración"}
+  correctas: [b]
+  explicacion: El modo de desarrollo trae valores cómodos para probar, como HTTP habilitado, hostname no estricto y la base de datos dev-file, que no son aptos para producción.
+  distractores:
+    a: Producción se arranca con start y exige más configuración.
+    c: No borra nada.
+    d: La consola de administración está disponible.
+  referencia: https://www.keycloak.org/server/configuration
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Hay 40 personas de atención al cliente que necesitan leer pedidos. ¿Cómo lo gestionarías en Keycloak?
+  opciones:
+    - {id: a, texto: "Asignar el rol a cada una de las 40 personas"}
+    - {id: b, texto: "Crear un realm por persona"}
+    - {id: c, texto: "Crear un grupo con el rol y añadir a las personas al grupo"}
+    - {id: d, texto: "Dar el rol de administrador a todas"}
+  correctas: [c]
+  explicacion: Con un grupo, el permiso se gestiona en un solo sitio, y dar de alta o de baja a alguien es añadirlo o quitarlo del grupo.
+  distractores:
+    a: Funciona, pero es difícil de mantener y propenso a olvidos.
+    b: Los realms separan sistemas, no personas.
+    d: Daría muchos más permisos de los necesarios.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.2"
+  enunciado: Una empresa tiene una tienda online para clientes y una intranet para empleados, que no deben compartir usuarios. ¿Cómo lo organizarías?
+  opciones:
+    - {id: a, texto: "Dos realms, uno para clientes y otro para empleados"}
+    - {id: b, texto: "Todo en el realm master"}
+    - {id: c, texto: "Un solo realm y un atributo para distinguirlos"}
+    - {id: d, texto: "Un realm por aplicación de la empresa"}
+  correctas: [a]
+  explicacion: Los realms aíslan usuarios, clientes y configuración. Dos poblaciones que no deben mezclarse van en realms separados.
+  distractores:
+    b: master es solo para administrar Keycloak.
+    c: Un error de configuración podría dar acceso cruzado; los realms dan aislamiento real.
+    d: Separaría aplicaciones que sí comparten usuarios y rompería el inicio de sesión único.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L02-001
+  tipo: matching
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Elige la configuración de cliente adecuada para cada aplicación.
+  prompts:
+    - {id: "1", texto: "Una SPA donde inician sesión los usuarios"}
+    - {id: "2", texto: "Un proceso nocturno que llama a la API de inventario"}
+    - {id: "3", texto: "La API de pedidos, que solo valida tokens y define sus roles"}
+  opciones:
+    - {id: a, texto: "Público, con standard flow y PKCE S256"}
+    - {id: b, texto: "Confidencial, con service accounts"}
+    - {id: c, texto: "Confidencial, sin flujos habilitados"}
+    - {id: d, texto: "Público, con direct access grants"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Cada cliente habilita solo lo que necesita. La API no pide tokens; existe para definir sus roles y su audiencia.
+  distractores:
+    d: Direct access grants es el flujo de contraseña, prohibido por el RFC 9700.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: ¿Qué opción de un cliente de Keycloak corresponde al flujo de contraseña del propietario, que conviene desactivar?
+  opciones:
+    - {id: a, texto: "Standard flow"}
+    - {id: b, texto: "Direct access grants"}
+    - {id: c, texto: "Service accounts"}
+    - {id: d, texto: "Client authentication"}
+  correctas: [b]
+  explicacion: Direct access grants permite enviar usuario y contraseña directamente al endpoint de tokens. En la prueba, con la opción desactivada, la petición recibió unauthorized_client.
+  distractores:
+    a: Es el flujo de código de autorización, el recomendado.
+    c: Habilita las credenciales de cliente.
+    d: Decide si el cliente es confidencial o público.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: Una API Spring Boot valida que la audiencia sea api-pedidos y rechaza los tokens de la SPA, que tienen aud account. ¿Qué cambio en Keycloak lo arregla?
+  opciones:
+    - {id: a, texto: "Desactivar la validación de audiencia en la API"}
+    - {id: b, texto: "Añadir al cliente de la SPA un mapeador de audiencia que incluya api-pedidos"}
+    - {id: c, texto: "Cambiar el nombre del realm a api-pedidos"}
+    - {id: d, texto: "Usar el ID token en lugar del token de acceso"}
+  correctas: [b]
+  explicacion: El mapeador oidc-audience-mapper añade api-pedidos al claim aud. En la prueba, el token pasó a tener aud con api-pedidos y account, y la API lo aceptó.
+  distractores:
+    a: Quitar la validación abre la API a tokens emitidos para otras.
+    c: El nombre del realm cambia el emisor, no la audiencia.
+    d: El ID token tiene como audiencia a la SPA y la API también lo rechazó.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html#_audience
+- id: L02-004
+  tipo: completar
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Completa el mapeador para que el token de acceso incluya la audiencia de la API.
+  codigo:
+    lenguaje: json
+    fuente: |
+      {
+        "name": "audiencia-api-pedidos",
+        "protocol": "openid-connect",
+        "protocolMapper": "[[1]]",
+        "config": {
+          "included.client.audience": "[[2]]",
+          "access.token.claim": "true"
+        }
+      }
+  huecos:
+    - {id: "1", respuestas: [oidc-audience-mapper]}
+    - {id: "2", respuestas: [api-pedidos]}
+  explicacion: oidc-audience-mapper es el tipo de mapeador de audiencia, e included.client.audience indica qué cliente se añade al claim aud.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html#_audience
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: ¿Cuánto dura por defecto un token de acceso en un realm nuevo de Keycloak 26.4?
+  opciones:
+    - {id: a, texto: "300 segundos"}
+    - {id: b, texto: "1 hora"}
+    - {id: c, texto: "24 horas"}
+    - {id: d, texto: "No caduca"}
+  correctas: [a]
+  explicacion: accessTokenLifespan vale 300 segundos por defecto, y la diferencia entre exp e iat de los tokens de la prueba era 300.
+  distractores:
+    b: Es un valor habitual en otros proveedores, pero no el de Keycloak.
+    c: Sería demasiado largo para un token de acceso.
+    d: Todos los tokens de acceso de Keycloak llevan exp.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: Con revokeRefreshToken en false (el valor por defecto), ¿qué pasa con un refresh token después de usarlo?
+  opciones:
+    - {id: a, texto: "Deja de valer al instante"}
+    - {id: b, texto: "Sigue valiendo, aunque se haya entregado uno nuevo"}
+    - {id: c, texto: "Se convierte en un token de acceso"}
+    - {id: d, texto: "Revoca la sesión del usuario"}
+  correctas: [b]
+  explicacion: Keycloak entrega un refresh token nuevo en cada renovación, pero sin la opción activada el anterior no se invalida. Para clientes públicos conviene activar la rotación estricta.
+  distractores:
+    a: Ese es el comportamiento con revokeRefreshToken activado.
+    c: Los tipos de token no se convierten entre sí.
+    d: Usar un refresh token no cierra la sesión.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L02-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿Qué configuraciones endurecen un cliente público de Keycloak?
+  opciones:
+    - {id: a, texto: "Exigir PKCE con el método S256"}
+    - {id: b, texto: "Usar URI de redirección exactas, sin comodines"}
+    - {id: c, texto: "Desactivar direct access grants"}
+    - {id: d, texto: "Añadir un client secret en el código de la SPA"}
+    - {id: e, texto: "Permitir URI de redirección con el comodín *"}
+  correctas: [a, b, c]
+  explicacion: PKCE, redirecciones exactas y sin flujo de contraseña son las medidas del RFC 9700 trasladadas a Keycloak.
+  distractores:
+    d: Un secreto en el código de una SPA es visible para cualquiera.
+    e: Los comodines permiten desviar el código a dominios ajenos.
+  referencia: https://www.rfc-editor.org/rfc/rfc9700
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Varios clientes necesitan los mismos mapeadores (grupos del usuario y la audiencia de la API). ¿Dónde los configurarías?
+  opciones:
+    - {id: a, texto: "Copiando los mapeadores en cada cliente"}
+    - {id: b, texto: "En el realm master"}
+    - {id: c, texto: "En un client scope compartido, asignado a esos clientes"}
+    - {id: d, texto: "En la API"}
+  correctas: [c]
+  explicacion: Un client scope agrupa mapeadores y roles reutilizables; cambiarlo afecta a todos los clientes que lo usan.
+  distractores:
+    a: Funciona, pero duplica configuración que acabará desincronizada.
+    b: master es para administrar Keycloak, no para las aplicaciones.
+    d: La API valida los tokens; los mapeadores se configuran en Keycloak.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: Das de alta a un empleado con una contraseña provisional. ¿Cómo haces que la cambie en su primer inicio de sesión?
+  opciones:
+    - {id: a, texto: "Enviándole un correo para que se acuerde"}
+    - {id: b, texto: "Marcando la contraseña como temporal, o con la acción requerida de actualizar contraseña"}
+    - {id: c, texto: "Borrando el usuario al día siguiente"}
+    - {id: d, texto: "No se puede en Keycloak"}
+  correctas: [b]
+  explicacion: Una contraseña temporal o la acción requerida Update Password obligan a cambiarla antes de completar el inicio de sesión.
+  distractores:
+    a: No obliga a nada.
+    c: No resuelve el problema.
+    d: Keycloak lo ofrece de serie.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L03-002
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada necesidad con la herramienta de Keycloak.
+  prompts:
+    - {id: "1", texto: "Obligar a verificar el correo antes de entrar"}
+    - {id: "2", texto: "Exigir contraseñas de al menos 12 caracteres"}
+    - {id: "3", texto: "Bloquear temporalmente tras varios intentos fallidos"}
+  opciones:
+    - {id: a, texto: "Acción requerida Verify Email"}
+    - {id: b, texto: "Política de contraseñas del realm"}
+    - {id: c, texto: "Protección contra fuerza bruta"}
+    - {id: d, texto: "Mapeador de audiencia"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Cada necesidad tiene su herramienta en la configuración del realm o del usuario.
+  distractores:
+    d: El mapeador de audiencia modifica el claim aud de los tokens.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: Quieres exigir un código OTP a todos los usuarios del realm al iniciar sesión en el navegador. ¿Dónde lo configuras?
+  opciones:
+    - {id: a, texto: "En el mapeador de audiencia"}
+    - {id: b, texto: "En la API Spring Boot"}
+    - {id: c, texto: "En el flujo de autenticación del navegador del realm, haciendo obligatorio el paso OTP"}
+    - {id: d, texto: "En el realm master"}
+  correctas: [c]
+  explicacion: Los flujos de autenticación definen los pasos del inicio de sesión. Hacer obligatorio el OTP en el flujo del navegador lo exige a todos.
+  distractores:
+    a: Los mapeadores modifican tokens, no el inicio de sesión.
+    b: La API recibe tokens; no participa en el inicio de sesión.
+    d: master es para administrar Keycloak.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Quieres que los clientes de la tienda puedan entrar con su cuenta de Google. ¿Qué función de Keycloak usas?
+  opciones:
+    - {id: a, texto: "Intermediación de identidad, con Google como proveedor de identidad externo"}
+    - {id: b, texto: "Federación de usuarios LDAP"}
+    - {id: c, texto: "Un client scope"}
+    - {id: d, texto: "Un rol de realm"}
+  correctas: [a]
+  explicacion: Keycloak actúa como cliente de Google, recibe la identidad del usuario y emite sus propios tokens a la tienda.
+  distractores:
+    b: LDAP conecta directorios, no proveedores como Google.
+    c: Un client scope agrupa mapeadores y roles.
+    d: Un rol es un permiso, no una forma de iniciar sesión.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html#_identity_broker
+- id: L03-005
+  tipo: matching
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Empareja cada característica con intermediación de identidad o con federación de usuarios.
+  prompts:
+    - {id: "1", texto: "La pantalla de inicio de sesión la muestra el proveedor externo"}
+    - {id: "2", texto: "Se conecta a un directorio LDAP o Active Directory"}
+    - {id: "3", texto: "Se conecta a otro proveedor por OIDC o SAML"}
+    - {id: "4", texto: "Keycloak muestra su formulario y comprueba la contraseña contra el directorio"}
+  opciones:
+    - {id: a, texto: "Intermediación de identidad"}
+    - {id: b, texto: "Federación de usuarios"}
+    - {id: c, texto: "Client credentials"}
+  correctas: [["1", a], ["2", b], ["3", a], ["4", b]]
+  explicacion: La intermediación delega todo el inicio de sesión en otro proveedor; la federación usa un directorio como almacén de usuarios y contraseñas.
+  distractores:
+    c: Es un flujo de OAuth para servicios sin usuario.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html#_user-storage-federation
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Con la intermediación de identidad, ¿qué tokens reciben tus aplicaciones?
+  opciones:
+    - {id: a, texto: "Los de Google, reenviados por Keycloak"}
+    - {id: b, texto: "Los emitidos por Keycloak, con su emisor y sus roles"}
+    - {id: c, texto: "Ninguno; reciben la contraseña"}
+    - {id: d, texto: "Los dos, uno de cada proveedor"}
+  correctas: [b]
+  explicacion: Las aplicaciones solo confían en Keycloak. Que el usuario se autentique con un proveedor externo no cambia el emisor de los tokens que reciben.
+  distractores:
+    a: Las aplicaciones no tienen que entender los tokens de cada proveedor.
+    c: Las aplicaciones nunca ven contraseñas.
+    d: Solo reciben los de Keycloak.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html#_identity_broker
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué segundos factores ofrece Keycloak?
+  opciones:
+    - {id: a, texto: "Códigos OTP con una aplicación de autenticación"}
+    - {id: b, texto: "WebAuthn, con llaves de seguridad o passkeys"}
+    - {id: c, texto: "Configurarlos por usuario con acciones requeridas"}
+    - {id: d, texto: "La misma contraseña escrita dos veces"}
+    - {id: e, texto: "Una pregunta sobre el color favorito como único factor"}
+  correctas: [a, b, c]
+  explicacion: OTP y WebAuthn son factores de otra categoría (algo que tienes); se pueden exigir por usuario o en el flujo del realm.
+  distractores:
+    d: Repetir la contraseña no añade un factor distinto.
+    e: Una pregunta de seguridad es algo que sabes, igual que la contraseña, y fácil de adivinar.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.4"
+  enunciado: Una empresa tiene 5000 empleados en Active Directory y quiere SSO con OIDC para sus aplicaciones nuevas sin migrar cuentas. ¿Qué propones?
+  opciones:
+    - {id: a, texto: "Exportar los usuarios a un CSV y crearlos a mano en Keycloak"}
+    - {id: b, texto: "Pedir a cada empleado que se registre de nuevo"}
+    - {id: c, texto: "Federar Active Directory en Keycloak, que valida contra el directorio y ofrece OIDC a las aplicaciones"}
+    - {id: d, texto: "Dar a las aplicaciones acceso directo al directorio"}
+  correctas: [c]
+  explicacion: La federación mantiene el directorio como fuente de verdad y añade OIDC, SSO y segundo factor.
+  distractores:
+    a: Duplica cuentas y contraseñas que habría que mantener sincronizadas.
+    b: Es una fricción innecesaria y crea cuentas paralelas.
+    d: Cada aplicación tendría que integrarse con el directorio y vería contraseñas.
+  referencia: https://www.keycloak.org/docs/latest/server_admin/index.html#_user-storage-federation
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Qué hace Spring Security con la propiedad issuer-uri del servidor de recursos?
+  opciones:
+    - {id: a, texto: "Redirige a los usuarios a esa URL para iniciar sesión"}
+    - {id: b, texto: "Descarga el documento de descubrimiento, obtiene el JWKS y valida firma, emisor y caducidad de los tokens"}
+    - {id: c, texto: "Guarda los tokens en esa URL"}
+    - {id: d, texto: "Crea los usuarios en Keycloak"}
+  correctas: [b]
+  explicacion: Con el emisor, Spring descubre las claves públicas y valida los JWT de forma estándar, sin bibliotecas específicas de Keycloak.
+  distractores:
+    a: Un servidor de recursos no muestra pantallas de inicio de sesión; solo valida tokens.
+    c: Los tokens no se guardan en el servidor de autorización desde la API.
+    d: La API no gestiona usuarios.
+  referencia: https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+- id: L04-002
+  tipo: completar
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Completa la configuración para validar el emisor y la audiencia.
+  codigo:
+    lenguaje: yaml
+    fuente: |
+      spring:
+        security:
+          oauth2:
+            resourceserver:
+              jwt:
+                [[1]]: http://127.0.0.1:18180/realms/tienda
+                [[2]]: api-pedidos
+  huecos:
+    - {id: "1", respuestas: [issuer-uri]}
+    - {id: "2", respuestas: [audiences]}
+  explicacion: issuer-uri fija el emisor de confianza y audiences, la audiencia que debe tener el token.
+  referencia: https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Por defecto, ¿qué autoridades crea Spring Security a partir de un JWT?
+  opciones:
+    - {id: a, texto: "Una autoridad ROLE_ por cada rol de realm_access"}
+    - {id: b, texto: "Ninguna"}
+    - {id: c, texto: "Una autoridad con el prefijo SCOPE_ por cada scope del claim scope"}
+    - {id: d, texto: "Una autoridad por cada claim del token"}
+  correctas: [c]
+  explicacion: El conversor por defecto mira el claim scope. Para usar los roles de Keycloak hay que configurar un JwtAuthenticationConverter.
+  distractores:
+    a: realm_access es propio de Keycloak; Spring no lo conoce por defecto.
+    b: Crea las de los scopes.
+    d: Solo usa el claim de scopes.
+  referencia: https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: El conversor devuelve la autoridad leer-pedidos (sin prefijo) y la regla es hasRole("leer-pedidos"). ¿Qué ocurre con el token de Ana?
+  opciones:
+    - {id: a, texto: "200, porque el nombre coincide"}
+    - {id: b, texto: "401, porque el token no es válido"}
+    - {id: c, texto: "Error al arrancar la aplicación"}
+    - {id: d, texto: "403, porque hasRole busca ROLE_leer-pedidos y la autoridad no tiene el prefijo"}
+  correctas: [d]
+  explicacion: hasRole añade el prefijo ROLE_ al comparar. Por eso el conversor de la lección construye ROLE_ más el nombre del rol; también se podría usar hasAuthority con el nombre exacto.
+  distractores:
+    a: La comparación incluye el prefijo.
+    b: El token es válido; falla la autorización, no la autenticación.
+    c: La aplicación arranca; el fallo aparece al evaluar la petición.
+  referencia: https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+- id: L04-005
+  tipo: matching
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Empareja cada petición de la prueba con la respuesta de la API.
+  prompts:
+    - {id: "1", texto: "Sin cabecera Authorization"}
+    - {id: "2", texto: "Token de Ana, con la audiencia y el rol"}
+    - {id: "3", texto: "Token de Luis, con la audiencia pero sin el rol"}
+    - {id: "4", texto: "Token con audiencia account"}
+  opciones:
+    - {id: a, texto: "401"}
+    - {id: b, texto: "200"}
+    - {id: c, texto: "403"}
+    - {id: d, texto: "500"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", a]]
+  explicacion: Sin token o con un token no válido para la API, 401; con un token válido pero sin permisos, 403; con todo correcto, 200.
+  distractores:
+    d: Ninguna petición provocó un error interno.
+  referencia: https://www.rfc-editor.org/rfc/rfc6750
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué diferencia hay entre una respuesta 401 y una 403 de la API?
+  opciones:
+    - {id: a, texto: "Ninguna"}
+    - {id: b, texto: "401 indica que no hay token o no es válido; 403, que el token es válido pero no tiene permisos para la operación"}
+    - {id: c, texto: "401 es un error del servidor y 403, del cliente"}
+    - {id: d, texto: "403 indica que el token ha caducado"}
+  correctas: [b]
+  explicacion: 401 es un problema de autenticación (invalid_token) y 403, de autorización (insufficient_scope), según el RFC 6750.
+  distractores:
+    a: Indican problemas distintos y requieren soluciones distintas.
+    c: Los dos son errores de la petición del cliente (4xx).
+    d: Un token caducado da 401.
+  referencia: https://www.rfc-editor.org/rfc/rfc6750
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: En la prueba, enviar el ID token de Ana a la API devolvió 401. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque el ID token no está firmado"}
+    - {id: b, texto: "Porque había caducado"}
+    - {id: c, texto: "Porque su audiencia es el cliente web-tienda, no api-pedidos"}
+    - {id: d, texto: "Porque la API no admite JWT"}
+  correctas: [c]
+  explicacion: El ID token es para el cliente. La validación de audiencia lo rechaza, que es justo lo que debe pasar.
+  distractores:
+    a: El ID token está firmado igual que el de acceso.
+    b: Se usó recién emitido.
+    d: La API valida JWT; el de acceso sí lo aceptó.
+  referencia: https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: La regla es «un cliente solo puede ver sus propios pedidos». ¿Dónde la comprobarías en una API hexagonal protegida con Keycloak?
+  opciones:
+    - {id: a, texto: "En el caso de uso o el dominio, con el sub que el adaptador extrae del token"}
+    - {id: b, texto: "Solo con hasRole en el filtro de seguridad"}
+    - {id: c, texto: "En Keycloak, con un rol por pedido"}
+    - {id: d, texto: "En el frontend, ocultando los pedidos ajenos"}
+  correctas: [a]
+  explicacion: El filtro comprueba permisos generales (el rol); la pertenencia de cada pedido es una regla de negocio que debe aplicarse dentro, para cualquier entrada.
+  distractores:
+    b: Un rol no sabe a quién pertenece cada pedido.
+    c: Un rol por pedido sería inmanejable.
+    d: Ocultar en el frontend no impide llamar a la API directamente.
+  referencia: https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+- id: L05-001
+  tipo: matching
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Empareja cada característica con el modo de arranque.
+  prompts:
+    - {id: "1", texto: "HTTP habilitado y base de datos dev-file"}
+    - {id: "2", texto: "Exige HTTPS o un proxy, un nombre de host y una base de datos real"}
+    - {id: "3", texto: "Caché local, sin alta disponibilidad"}
+  opciones:
+    - {id: a, texto: "start-dev"}
+    - {id: b, texto: "start"}
+    - {id: c, texto: "export"}
+  correctas: [["1", a], ["2", b], ["3", a]]
+  explicacion: start-dev trae valores cómodos para pruebas; start está pensado para producción y exige configurar seguridad, host y base de datos.
+  distractores:
+    c: export sirve para volcar la configuración de los realms, no es un modo de servicio.
+  referencia: https://www.keycloak.org/server/configuration
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "5.2"
+  enunciado: ¿Qué dice la documentación de Keycloak sobre la base de datos dev-file?
+  opciones:
+    - {id: a, texto: "Que es la recomendada para producción"}
+    - {id: b, texto: "Que solo funciona en Windows"}
+    - {id: c, texto: "Que es más rápida que PostgreSQL"}
+    - {id: d, texto: "Que solo existe para desarrollo, no es adecuada para producción y debe sustituirse antes de desplegar"}
+  correctas: [d]
+  explicacion: dev-file es la base de datos por defecto para probar. En producción hay que configurar una base de datos soportada, como PostgreSQL.
+  distractores:
+    a: La documentación dice lo contrario.
+    b: Funciona en cualquier sistema; el problema es que no es apta para producción.
+    c: La rapidez no es el criterio, sino la fiabilidad y el soporte.
+  referencia: https://www.keycloak.org/server/db
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.2"
+  enunciado: Tras migrar Keycloak, su URL pública pasa de https://login.example.com a https://auth.example.com. Las API empiezan a rechazar los tokens nuevos. ¿Por qué?
+  opciones:
+    - {id: a, texto: "Porque el nombre de host forma parte del emisor (iss) y las API siguen configuradas con el antiguo"}
+    - {id: b, texto: "Porque se han perdido los usuarios"}
+    - {id: c, texto: "Porque los tokens ya no van firmados"}
+    - {id: d, texto: "Porque el certificado TLS es más largo"}
+  correctas: [a]
+  explicacion: El iss de los tokens se construye con el nombre de host. Las API validan el emisor y rechazan el nuevo hasta que se actualice su configuración.
+  distractores:
+    b: Los usuarios están en la base de datos y no dependen del host.
+    c: La firma no depende del nombre de host.
+    d: El certificado no interviene en la validación del iss.
+  referencia: https://www.keycloak.org/server/hostname
+- id: L05-004
+  tipo: completar
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Completa el arranque de producción detrás de un proxy que envía cabeceras X-Forwarded.
+  codigo:
+    lenguaje: bash
+    fuente: |
+      bin/kc.sh [[1]] \
+        --db=postgres --db-url=jdbc:postgresql://bd:5432/keycloak \
+        --hostname=https://login.example.com \
+        --http-enabled=true --[[2]]=xforwarded
+  huecos:
+    - {id: "1", respuestas: [start]}
+    - {id: "2", respuestas: [proxy-headers]}
+  explicacion: start es el modo de producción; proxy-headers indica a Keycloak que confíe en las cabeceras X-Forwarded del proxy, que termina TLS.
+  referencia: https://www.keycloak.org/server/hostname
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Quieres que cada entorno de pruebas arranque con el mismo realm configurado. ¿Qué opción de Keycloak lo facilita?
+  opciones:
+    - {id: a, texto: "Configurar a mano la consola en cada entorno"}
+    - {id: b, texto: "Copiar el directorio de la base de datos dev-file"}
+    - {id: c, texto: "Arrancar con --import-realm y el JSON del realm en el directorio data/import"}
+    - {id: d, texto: "Usar el realm master"}
+  correctas: [c]
+  explicacion: Al arrancar con --import-realm, Keycloak importa los ficheros .json de data/import, así que la configuración se versiona y se reproduce.
+  distractores:
+    a: No es repetible y es propenso a errores.
+    b: dev-file no es un formato para versionar ni para producción.
+    d: master es para administrar Keycloak.
+  referencia: https://www.keycloak.org/server/importExport
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.3"
+  enunciado: Vas a subir a Git la exportación de un realm. ¿Qué precaución debes tener?
+  opciones:
+    - {id: a, texto: "Ninguna; solo contiene configuración pública"}
+    - {id: b, texto: "Comprobar que no lleva secretos de clientes ni usuarios con credenciales; la opción --users skip excluye los usuarios"}
+    - {id: c, texto: "Comprimirla para que no se pueda leer"}
+    - {id: d, texto: "Renombrarla a .txt"}
+  correctas: [b]
+  explicacion: Una exportación puede incluir secretos de clientes y, según la opción --users, usuarios con sus credenciales. Hay que revisarla y sustituir los secretos por variables.
+  distractores:
+    a: Puede contener información sensible.
+    c: Comprimir no oculta nada.
+    d: Cambiar la extensión no cambia el contenido.
+  referencia: https://www.keycloak.org/server/importExport
+- id: L05-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: ¿Qué prácticas de seguridad aplicarías al operar Keycloak?
+  opciones:
+    - {id: a, texto: "Limitar el acceso a la consola de administración del realm master"}
+    - {id: b, texto: "Retirar la cuenta de administrador inicial y usar administradores con nombre propio"}
+    - {id: c, texto: "Actualizar Keycloak con regularidad"}
+    - {id: d, texto: "Registrar las aplicaciones en el realm master para simplificar"}
+    - {id: e, texto: "Dejar habilitados los flujos de los clientes por si acaso"}
+  correctas: [a, b, c]
+  explicacion: Proteger la administración, trazar quién administra y aplicar las correcciones de seguridad reducen el riesgo de una pieza tan crítica.
+  distractores:
+    d: Mezcla aplicaciones con la administración.
+    e: Cada flujo habilitado sin necesidad es superficie de ataque.
+  referencia: https://www.keycloak.org/server/configuration-production
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: En este tema, realm, clientes, roles, grupos y mapeadores se crearon sin usar la consola. ¿Cómo?
+  opciones:
+    - {id: a, texto: "Editando la base de datos con SQL"}
+    - {id: b, texto: "Con la API REST de administración, autenticándose con un token de administrador"}
+    - {id: c, texto: "Con ficheros YAML en el directorio de Keycloak"}
+    - {id: d, texto: "No es posible sin la consola"}
+  correctas: [b]
+  explicacion: La API de administración permite todo lo que hace la consola, lo que facilita automatizar la configuración.
+  distractores:
+    a: Editar la base de datos directamente es frágil y no está soportado.
+    c: Keycloak importa realms en JSON, no en YAML.
+    d: La API lo permite.
+  referencia: https://www.keycloak.org/server/configuration-production

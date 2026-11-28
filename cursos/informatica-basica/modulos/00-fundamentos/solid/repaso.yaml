@@ -1,0 +1,896 @@
+- id: L01-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: Empareja cada letra de SOLID con su principio.
+  prompts:
+    - {id: "1", texto: "S"}
+    - {id: "2", texto: "O"}
+    - {id: "3", texto: "L"}
+    - {id: "4", texto: "I"}
+    - {id: "5", texto: "D"}
+  opciones:
+    - {id: a, texto: "Responsabilidad única"}
+    - {id: b, texto: "Abierto/cerrado"}
+    - {id: c, texto: "Sustitución de Liskov"}
+    - {id: d, texto: "Segregación de interfaces"}
+    - {id: e, texto: "Inversión de dependencias"}
+    - {id: f, texto: "Separación de capas"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d], ["5", e]]
+  explicacion: S de Single responsibility, O de Open/closed, L de Liskov substitution, I de Interface segregation y D de Dependency inversion.
+  distractores:
+    f: La separación en capas es una idea de arquitectura, no una letra de SOLID.
+  referencia: https://en.wikipedia.org/wiki/SOLID
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Quién acuñó el acrónimo SOLID?
+  opciones:
+    - {id: a, texto: "Robert C. Martin, en su artículo de 2000"}
+    - {id: b, texto: "Barbara Liskov, en 1987"}
+    - {id: c, texto: "Michael Feathers, hacia 2004"}
+    - {id: d, texto: "Bertrand Meyer, en 1988"}
+  correctas: [c]
+  explicacion: Martin reunió los principios en 2000, pero el acrónimo lo propuso Michael Feathers hacia 2004 al reordenar sus iniciales.
+  distractores:
+    a: Martin reunió los principios, pero no acuñó el acrónimo.
+    b: Liskov formuló uno de los cinco principios, el de sustitución.
+    d: Meyer formuló el principio abierto/cerrado.
+  referencia: https://en.wikipedia.org/wiki/SOLID
+- id: L01-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Según la precisión de Robert C. Martin en 2014, ¿qué es una «razón para cambiar»?
+  opciones:
+    - {id: a, texto: "Cada método público de la clase"}
+    - {id: b, texto: "Un actor, una persona o grupo con una misma función de negocio que pide los cambios"}
+    - {id: c, texto: "Cada línea de código que puede tener errores"}
+    - {id: d, texto: "Cada dependencia externa de la clase"}
+  correctas: [b]
+  explicacion: Martin afirma que el principio va de personas. Un módulo debería recibir peticiones de cambio de un único actor, para que los cambios de un área no rompan lo que usa otra.
+  distractores:
+    a: Una clase puede tener varios métodos que cambian por el mismo motivo; eso es cohesión, no un problema.
+    c: Los errores no son el criterio del principio.
+    d: Las dependencias influyen en el acoplamiento, pero no definen la responsabilidad.
+  referencia: https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Cuántas responsabilidades, en el sentido del principio, tiene esta clase?
+  codigo:
+    lenguaje: java
+    fuente: |
+      class Factura {
+          BigDecimal calcularTotal() { ... }        // reglas fiscales
+          BigDecimal calcularIva() { ... }          // reglas fiscales
+          String generarPdf() { ... }               // diseño del documento
+          void guardar(Connection conexion) { ... } // persistencia
+      }
+  opciones:
+    - {id: a, texto: "Una, porque todo trata de facturas"}
+    - {id: b, texto: "Cuatro, una por método"}
+    - {id: c, texto: "Dos, cálculo y todo lo demás"}
+    - {id: d, texto: "Tres, cálculo fiscal, presentación en PDF y persistencia"}
+  correctas: [d]
+  explicacion: Los dos cálculos cambian por el mismo motivo (las reglas fiscales) y forman una sola responsabilidad. El PDF y la persistencia cambian por motivos y personas distintas.
+  distractores:
+    a: Tratar del mismo concepto no basta; cambian por motivos distintos.
+    b: calcularTotal y calcularIva cambian juntos; separarlos reduciría la cohesión.
+    c: El PDF y la persistencia cambian por motivos distintos entre sí.
+  referencia: https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html
+- id: L01-005
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué síntomas sugieren que una clase tiene varias responsabilidades?
+  opciones:
+    - {id: a, texto: "Su nombre necesita una «y», como ValidarYGuardarPedido"}
+    - {id: b, texto: "Recibe peticiones de cambio de áreas distintas del negocio"}
+    - {id: c, texto: "Importa a la vez una biblioteca de PDF, JDBC y las reglas fiscales"}
+    - {id: d, texto: "Tiene más de un método público"}
+    - {id: e, texto: "Está escrita en un lenguaje orientado a objetos"}
+  correctas: [a, b, c]
+  explicacion: Un nombre compuesto, cambios pedidos por actores distintos e imports de mundos distintos son señales de varias razones para cambiar.
+  distractores:
+    d: Tener varios métodos es normal si cambian por el mismo motivo.
+    e: El lenguaje no indica nada sobre las responsabilidades de una clase.
+  referencia: https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Martin describe varios síntomas del software que se «pudre». ¿Cuál corresponde a «un cambio en un sitio rompe cosas en sitios aparentemente no relacionados»?
+  opciones:
+    - {id: a, texto: "Rigidez"}
+    - {id: b, texto: "Fragilidad"}
+    - {id: c, texto: "Inmovilidad"}
+    - {id: d, texto: "Viscosidad"}
+  correctas: [b]
+  explicacion: La fragilidad es la tendencia del código a romperse en muchos sitios con cada cambio. La rigidez es la dificultad para cambiarlo y la inmovilidad, la dificultad para reutilizarlo.
+  distractores:
+    a: La rigidez es que cuesta mucho hacer un cambio, porque arrastra a muchos módulos.
+    c: La inmovilidad es que no se puede reutilizar una parte en otro sitio.
+    d: La viscosidad es que resulta más fácil hacer las cosas mal que bien, no que los cambios rompan otras partes.
+  referencia: https://en.wikipedia.org/wiki/SOLID
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: Un equipo aplica responsabilidad única y divide la clase Pedido en PedidoTotal, PedidoLineas, PedidoCliente y PedidoFechas, aunque todo cambia siempre a la vez por peticiones del mismo departamento. ¿Qué ha pasado?
+  opciones:
+    - {id: a, texto: "Han aplicado bien el principio: más clases significa mejor diseño"}
+    - {id: b, texto: "Han reducido el acoplamiento sin coste"}
+    - {id: c, texto: "Han separado lo que cambia junto, reduciendo la cohesión sin ganar nada"}
+    - {id: d, texto: "Han aplicado el principio de segregación de interfaces"}
+  correctas: [c]
+  explicacion: El principio separa lo que cambia por motivos distintos. Si todo cambia junto y a petición del mismo actor, dividirlo solo reparte un cambio entre cuatro clases.
+  distractores:
+    a: El número de clases no mide la calidad del diseño.
+    b: Ahora cada cambio toca cuatro clases que dependen entre sí; el acoplamiento no ha bajado.
+    d: La segregación de interfaces trata de los clientes de una interfaz, no de dividir una clase de datos.
+  referencia: https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html
+- id: L01-008
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Asigna cada método de una clase Empleado al actor que pediría sus cambios, como en el ejemplo de Martin.
+  prompts:
+    - {id: "1", texto: "calcularNomina()"}
+    - {id: "2", texto: "informeDeHoras()"}
+    - {id: "3", texto: "guardar()"}
+  opciones:
+    - {id: a, texto: "Departamento financiero"}
+    - {id: b, texto: "Operaciones"}
+    - {id: c, texto: "Equipo técnico"}
+    - {id: d, texto: "Clientes de la empresa"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: En el ejemplo original, el cálculo de la nómina lo especifica finanzas, el informe de horas lo usa operaciones y la persistencia la decide el equipo técnico. Tres actores, tres responsabilidades.
+  distractores:
+    d: Ninguno de los métodos responde a peticiones de los clientes externos.
+  referencia: https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Qué dice el principio abierto/cerrado?
+  opciones:
+    - {id: a, texto: "Que el código debe ser de código abierto pero con licencia cerrada"}
+    - {id: b, texto: "Que una clase debe cerrar sus recursos (ficheros, conexiones) al terminar"}
+    - {id: c, texto: "Que un módulo debe poder ampliarse sin modificar el código que ya funciona"}
+    - {id: d, texto: "Que los atributos deben ser privados y los métodos públicos"}
+  correctas: [c]
+  explicacion: El módulo está abierto a la extensión (se añade comportamiento) y cerrado a la modificación (no se cambia lo que funciona).
+  distractores:
+    a: El principio no trata de licencias.
+    b: Cerrar recursos es una buena práctica, pero no es este principio.
+    d: Es encapsulación, un concepto distinto.
+  referencia: https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.1"
+  enunciado: ¿Quién formuló el principio abierto/cerrado y dónde?
+  opciones:
+    - {id: a, texto: "Bertrand Meyer, en Object-Oriented Software Construction (1988)"}
+    - {id: b, texto: "Robert C. Martin, en Clean Code (2008)"}
+    - {id: c, texto: "Barbara Liskov, en 1987"}
+    - {id: d, texto: "La banda de los cuatro, en Design Patterns (1994)"}
+  correctas: [a]
+  explicacion: El término aparece en el libro de Bertrand Meyer de 1988. Martin lo reinterpretó después con interfaces y lo incluyó en SOLID.
+  distractores:
+    b: Martin lo popularizó dentro de SOLID, pero el principio es anterior.
+    c: Liskov formuló el principio de sustitución.
+    d: Design Patterns aplica la idea en varios patrones, pero no la formuló.
+  referencia: https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Con el código de la lección, ¿qué devuelve total con líneas de 40 y 60 euros y new Fijo(new BigDecimal("150"))?
+  codigo:
+    lenguaje: java
+    fuente: |
+      record Fijo(BigDecimal cantidad) implements Descuento {
+          public BigDecimal aplicar(BigDecimal i) {
+              return i.subtract(cantidad).max(BigDecimal.ZERO);
+          }
+      }
+  opciones:
+    - {id: a, texto: "-50"}
+    - {id: b, texto: "150"}
+    - {id: c, texto: "100"}
+    - {id: d, texto: "0"}
+  correctas: [d]
+  explicacion: El total es 100; restarle 150 daría -50, pero max(BigDecimal.ZERO) se queda con el mayor de los dos, que es 0.
+  distractores:
+    a: Sería el resultado sin el max que evita los negativos.
+    b: Es la cantidad del descuento, no el total.
+    c: Es el total sin aplicar el descuento.
+  referencia: https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Hay que añadir un descuento «3×2». Con el diseño de la lección, ¿qué hay que cambiar?
+  opciones:
+    - {id: a, texto: "Añadir un case al switch de aplicarDescuento"}
+    - {id: b, texto: "Añadir una clase nueva que implemente Descuento, sin tocar total ni los demás descuentos"}
+    - {id: c, texto: "Modificar la interfaz Descuento para añadir un método nuevo"}
+    - {id: d, texto: "Modificar total para que distinga el nuevo tipo"}
+  correctas: [b]
+  explicacion: El punto de extensión es la interfaz. Un descuento nuevo es código nuevo, y total y los descuentos existentes quedan intactos.
+  distractores:
+    a: El diseño de la lección sustituye ese switch precisamente para no tener que modificarlo.
+    c: Cambiar la interfaz obligaría a modificar todas las implementaciones.
+    d: total trabaja con cualquier Descuento; no necesita conocer los tipos concretos.
+  referencia: https://blog.cleancoder.com/uncle-bob/2014/05/12/TheOpenClosedPrinciple.html
+- id: L02-005
+  tipo: completar
+  dificultad: baja
+  objetivo: "2.2"
+  enunciado: Completa el descuento nuevo para que encaje en el punto de extensión.
+  codigo:
+    lenguaje: java
+    fuente: |
+      record DosPorUno(BigDecimal precioUnidad) [[1]] Descuento {
+          public BigDecimal [[2]](BigDecimal importe) {
+              return importe.subtract(precioUnidad);
+          }
+      }
+  huecos:
+    - {id: "1", respuestas: [implements]}
+    - {id: "2", respuestas: [aplicar]}
+  explicacion: La clase implementa la interfaz Descuento y su método aplicar. Con eso, total la acepta sin modificarse.
+  referencia: https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.3"
+  enunciado: Un servicio solo tiene un formato de exportación (CSV) y nadie ha pedido otro. Un compañero propone crear ya una interfaz Exportador con una fábrica para «cumplir abierto/cerrado». ¿Qué es más razonable?
+  opciones:
+    - {id: a, texto: "Crear la interfaz y la fábrica ahora, porque SOLID lo exige"}
+    - {id: b, texto: "Prohibir las interfaces en el proyecto"}
+    - {id: c, texto: "Crear una interfaz para cada método del servicio"}
+    - {id: d, texto: "Escribir el CSV directamente y extraer la interfaz cuando aparezca el segundo formato"}
+  correctas: [d]
+  explicacion: El cierre es estratégico. Sin una variación real, la abstracción es coste sin beneficio (YAGNI). Extraerla al llegar el segundo formato es barato.
+  distractores:
+    a: SOLID no exige anticipar variaciones que no existen.
+    b: Las interfaces son útiles donde hay variación; prohibirlas es el error contrario.
+    c: Multiplica las abstracciones sin motivo.
+  referencia: https://martinfowler.com/bliki/Yagni.html
+- id: L02-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué señales indican que conviene abrir un punto de extensión?
+  opciones:
+    - {id: a, texto: "El mismo switch sobre un tipo aparece en varios sitios"}
+    - {id: b, texto: "Cada mes el negocio pide una variante nueva del mismo comportamiento"}
+    - {id: c, texto: "Ya hay tres variantes y cada una obliga a tocar el mismo código"}
+    - {id: d, texto: "La clase tiene más de cien líneas"}
+    - {id: e, texto: "Es la primera versión y aún no hay variantes"}
+  correctas: [a, b, c]
+  explicacion: El principio se aplica donde hay variación real y repetida. Los switch repetidos y las peticiones frecuentes de variantes son las señales típicas.
+  distractores:
+    d: El tamaño de una clase no indica dónde hay variación.
+    e: Sin variantes no se sabe qué abstraer; es el caso de YAGNI.
+  referencia: https://blog.cleancoder.com/uncle-bob/2014/05/12/TheOpenClosedPrinciple.html
+- id: L02-008
+  tipo: completar
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Completa la versión en Python del punto de extensión, con un protocolo.
+  codigo:
+    lenguaje: python
+    fuente: |
+      from typing import [[1]]
+      from decimal import Decimal
+
+
+      class Descuento(Protocol):
+          def aplicar(self, importe: Decimal) -> Decimal: ...
+
+
+      class Porcentaje:
+          def __init__(self, pct: int) -> None:
+              self.pct = pct
+
+          def aplicar(self, importe: Decimal) -> Decimal:
+              return importe - importe * self.pct / [[2]]
+  huecos:
+    - {id: "1", respuestas: [Protocol]}
+    - {id: "2", respuestas: ["100"]}
+  explicacion: typing.Protocol define una interfaz estructural, así que Porcentaje la cumple sin heredar de ella. El porcentaje se divide entre 100 para obtener la fracción que se resta.
+  referencia: https://docs.python.org/3/library/typing.html#typing.Protocol
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.1"
+  enunciado: ¿Qué afirma el principio de sustitución de Liskov?
+  opciones:
+    - {id: a, texto: "Que los objetos de un subtipo deben poder usarse donde se espera el tipo base sin que el programa deje de ser correcto"}
+    - {id: b, texto: "Que toda clase debe heredar de una clase abstracta"}
+    - {id: c, texto: "Que no se debe usar la herencia"}
+    - {id: d, texto: "Que un subtipo debe tener exactamente los mismos métodos que su tipo base"}
+  correctas: [a]
+  explicacion: El principio exige sustituibilidad de comportamiento. Lo que se puede demostrar de los objetos del tipo base debe cumplirse también para los del subtipo.
+  distractores:
+    b: El principio no obliga a usar clases abstractas.
+    c: No prohíbe la herencia; dice cuándo un subtipo es correcto.
+    d: Tener los mismos métodos es la parte sintáctica; el principio trata del comportamiento.
+  referencia: https://en.wikipedia.org/wiki/Liskov_substitution_principle
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué imprime este programa?
+  codigo:
+    lenguaje: java
+    fuente: |
+      static int probar(Rectangulo r) {
+          r.setAncho(5);
+          r.setAlto(4);
+          return r.area();
+      }
+
+      System.out.println(probar(new Rectangulo()) + " " + probar(new Cuadrado()));
+  opciones:
+    - {id: a, texto: "20 20"}
+    - {id: b, texto: "20 25"}
+    - {id: c, texto: "20 16"}
+    - {id: d, texto: "16 16"}
+  correctas: [c]
+  explicacion: El rectángulo queda de 5×4, área 20. En el cuadrado, setAlto(4) fija también el ancho a 4, así que el área es 16. El cliente esperaba 20.
+  distractores:
+    a: Sería lo esperado si el cuadrado fuera sustituible, pero setAlto cambia también el ancho.
+    b: El último valor asignado es 4, no 5.
+    d: El rectángulo normal sí respeta ancho y alto independientes.
+  referencia: https://en.wikipedia.org/wiki/Liskov_substitution_principle
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Cuál es la lección del ejemplo del cuadrado y el rectángulo?
+  opciones:
+    - {id: a, texto: "Que la geometría no se puede modelar con objetos"}
+    - {id: b, texto: "Que la relación «es un» del mundo real no garantiza un subtipo correcto; importa el comportamiento que esperan los clientes"}
+    - {id: c, texto: "Que el cuadrado debe ser la clase base y el rectángulo el subtipo"}
+    - {id: d, texto: "Que los setters son un error de diseño en sí mismos"}
+  correctas: [b]
+  explicacion: Un cuadrado es un rectángulo en geometría, pero no se comporta como el rectángulo mutable que esperan los clientes, porque ancho y alto dejan de ser independientes.
+  distractores:
+    a: Se puede modelar; solo hay que diseñar la jerarquía según el comportamiento.
+    c: Invertir la herencia tampoco funciona, porque un rectángulo no es un cuadrado.
+    d: El problema no son los setters en general, sino que el subtipo rompe lo que el cliente espera de ellos.
+  referencia: https://en.wikipedia.org/wiki/Liskov_substitution_principle
+- id: L03-004
+  tipo: multiple_response
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: ¿Qué cambios en un subtipo incumplen el principio de Liskov?
+  opciones:
+    - {id: a, texto: "Rechazar entradas que el tipo base acepta (precondición más fuerte)"}
+    - {id: b, texto: "Garantizar menos al terminar que el tipo base (postcondición más débil)"}
+    - {id: c, texto: "Lanzar una excepción que los clientes del tipo base no esperan"}
+    - {id: d, texto: "Aceptar más entradas que el tipo base"}
+    - {id: e, texto: "Añadir métodos nuevos que el tipo base no tiene"}
+  correctas: [a, b, c]
+  explicacion: Un subtipo puede ser más permisivo en lo que acepta y más estricto en lo que garantiza, pero no al revés, y no puede sorprender con errores nuevos.
+  distractores:
+    d: Debilitar la precondición es correcto; el código cliente sigue funcionando.
+    e: Añadir métodos no afecta a los clientes que usan el tipo base.
+  referencia: https://en.wikipedia.org/wiki/Liskov_substitution_principle
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: En el código cliente aparece if (figura instanceof Cuadrado) { ... } para tratar ese caso aparte. ¿Qué suele indicar?
+  opciones:
+    - {id: a, texto: "Que el código es más eficiente"}
+    - {id: b, texto: "Que se aplica el principio abierto/cerrado"}
+    - {id: c, texto: "Que el subtipo no es sustituible y el cliente tiene que conocer los tipos concretos"}
+    - {id: d, texto: "Que Java no admite polimorfismo"}
+  correctas: [c]
+  explicacion: Si el cliente necesita preguntar por el tipo concreto, es porque el subtipo no se comporta como el tipo base. Además, cada subtipo nuevo obligará a modificar el cliente.
+  distractores:
+    a: Las comprobaciones de tipo no aportan eficiencia; añaden casos especiales.
+    b: Es lo contrario, porque cada subtipo nuevo obliga a modificar el cliente.
+    d: Java admite polimorfismo; precisamente aquí no se está aprovechando.
+  referencia: https://en.wikipedia.org/wiki/Liskov_substitution_principle
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: List.of(1, 2).add(3) lanza UnsupportedOperationException. ¿Por qué no se considera una violación formal del principio?
+  opciones:
+    - {id: a, texto: "Porque la documentación de List declara add como operación opcional que puede no estar soportada"}
+    - {id: b, texto: "Porque las listas inmutables no son subtipos de List"}
+    - {id: c, texto: "Porque UnsupportedOperationException no es una excepción"}
+    - {id: d, texto: "Porque el principio solo se aplica a clases, no a interfaces"}
+  correctas: [a]
+  explicacion: El contrato del tipo base ya advierte de que add puede no estar soportado, así que el cliente no tiene garantizado poder añadir. El diseño sí tiene un coste, porque el cliente no lo sabe sin mirar el origen de la lista.
+  distractores:
+    b: List.of devuelve un objeto que implementa List.
+    c: Es una excepción no comprobada (RuntimeException).
+    d: El principio se aplica a cualquier relación de subtipo, incluidas las interfaces.
+  referencia: https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué diseños evitan el problema del cuadrado y el rectángulo?
+  opciones:
+    - {id: a, texto: "Que ambos implementen una interfaz Figura con area(), sin heredar uno del otro"}
+    - {id: b, texto: "Hacer las figuras inmutables, sin setters, de modo que un cuadrado sí sea un rectángulo válido"}
+    - {id: c, texto: "Añadir instanceof Cuadrado en cada cliente"}
+    - {id: d, texto: "Hacer que Cuadrado.setAlto lance una excepción"}
+    - {id: e, texto: "Mantener la herencia y documentar que no se use así"}
+  correctas: [a, b]
+  explicacion: Sin herencia mutable, o sin mutabilidad, desaparece la expectativa que el cuadrado no puede cumplir.
+  distractores:
+    c: Traslada el problema a cada cliente y rompe el principio abierto/cerrado.
+    d: Lanzar una excepción nueva es otra forma de incumplir el principio.
+    e: Documentarlo no hace que el subtipo sea sustituible.
+  referencia: https://en.wikipedia.org/wiki/Liskov_substitution_principle
+- id: L03-008
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada hecho con el año en que ocurrió.
+  prompts:
+    - {id: "1", texto: "Liskov presenta la idea en la conferencia Data abstraction and hierarchy"}
+    - {id: "2", texto: "Liskov y Wing publican la formulación formal del subtipado"}
+    - {id: "3", texto: "Martin reúne los cinco principios en Design Principles and Design Patterns"}
+  opciones:
+    - {id: a, texto: "1987"}
+    - {id: b, texto: "1994"}
+    - {id: c, texto: "2000"}
+    - {id: d, texto: "2012"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Liskov presentó la idea en 1987, la formalizó con Wing en 1994, y Martin la reunió con los otros cuatro principios en 2000.
+  distractores:
+    d: 2012 es el año del artículo de Martin sobre Clean Architecture, no de ninguno de estos hechos.
+  referencia: https://en.wikipedia.org/wiki/Liskov_substitution_principle
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Qué dice el principio de segregación de interfaces?
+  opciones:
+    - {id: a, texto: "Que las interfaces deben estar en un paquete separado de las clases"}
+    - {id: b, texto: "Que ningún cliente debe verse obligado a depender de métodos que no usa"}
+    - {id: c, texto: "Que una clase solo puede implementar una interfaz"}
+    - {id: d, texto: "Que las interfaces no pueden tener más de tres métodos"}
+  correctas: [b]
+  explicacion: El principio pide interfaces ajustadas a lo que usa cada cliente, en lugar de una interfaz grande y general.
+  distractores:
+    a: La ubicación de las interfaces no es el objeto del principio.
+    c: Una clase puede implementar varias interfaces pequeñas; es justo lo que facilita el principio.
+    d: No hay un límite numérico; el criterio es el uso de los clientes.
+  referencia: https://en.wikipedia.org/wiki/Interface_segregation_principle
+- id: L04-002
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué problemas tiene la interfaz Maquina de la lección, con imprimir, escanear y enviarFax?
+  opciones:
+    - {id: a, texto: "Obliga a la impresora básica a implementar métodos que no puede cumplir"}
+    - {id: b, texto: "Un cambio en enviarFax afecta a clientes que solo imprimen"}
+    - {id: c, texto: "Lleva a lanzar UnsupportedOperationException, que rompe también la sustitución de Liskov"}
+    - {id: d, texto: "Impide que una clase implemente varias interfaces"}
+    - {id: e, texto: "Hace el programa más lento"}
+  correctas: [a, b, c]
+  explicacion: La interfaz grande fuerza implementaciones imposibles, propaga cambios a quien no los necesita y deja a los clientes sin poder fiarse de sus métodos.
+  distractores:
+    d: Java permite implementar varias interfaces; el problema es que esta mezcla capacidades.
+    e: El rendimiento no es la consecuencia; lo es el acoplamiento.
+  referencia: https://en.wikipedia.org/wiki/Interface_segregation_principle
+- id: L04-003
+  tipo: completar
+  dificultad: baja
+  objetivo: "4.2"
+  enunciado: Completa la declaración para que la multifunción ofrezca las dos capacidades por separado.
+  codigo:
+    lenguaje: java
+    fuente: |
+      interface Impresora { void imprimir(String doc); }
+      interface Escaner { String escanear(); }
+
+      class Multifuncion implements Impresora, [[1]] {
+          public void imprimir(String d) { System.out.println("Imprimiendo " + d); }
+          public String escanear() { return "escaneado"; }
+      }
+  huecos:
+    - {id: "1", respuestas: [Escaner]}
+  explicacion: Una clase Java puede implementar varias interfaces separadas por comas. Así cada cliente depende solo de la capacidad que usa.
+  referencia: https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html
+- id: L04-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Una función genera un informe y solo llama a impresora.imprimir(...). ¿Qué tipo debería recibir?
+  opciones:
+    - {id: a, texto: "Impresora"}
+    - {id: b, texto: "Multifuncion"}
+    - {id: c, texto: "Object, el tipo más general de Java"}
+    - {id: d, texto: "Una interfaz con imprimir, escanear y enviarFax"}
+  correctas: [a]
+  explicacion: La función solo necesita imprimir, así que debe depender de la interfaz mínima. Así sirve cualquier máquina que imprima.
+  distractores:
+    b: Ata la función a una clase concreta y excluye a las impresoras básicas.
+    c: Pierde la comprobación de tipos y obliga a hacer conversiones.
+    d: La hace depender de métodos que no usa, justo lo que el principio evita.
+  referencia: https://en.wikipedia.org/wiki/Interface_segregation_principle
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Un repositorio de pedidos tiene una sola responsabilidad (persistir pedidos), pero lo usan un servicio de informes, que solo lee, y otro de altas, que solo escribe. ¿Qué aconseja la segregación de interfaces?
+  opciones:
+    - {id: a, texto: "Dividir la clase en dos repositorios con bases de datos distintas"}
+    - {id: b, texto: "Nada, porque la clase ya cumple responsabilidad única"}
+    - {id: c, texto: "Crear una interfaz por método del repositorio"}
+    - {id: d, texto: "Ofrecer dos interfaces, una de lectura y otra de escritura, implementadas por la misma clase"}
+  correctas: [d]
+  explicacion: La segregación mira a los clientes. La misma clase puede ofrecer una interfaz de lectura y otra de escritura, y cada servicio depende solo de la suya.
+  distractores:
+    a: No hace falta dividir la implementación; basta con separar lo que ve cada cliente.
+    b: Responsabilidad única mira la clase; segregación de interfaces, a sus clientes, y aquí cada cliente usa una parte.
+    c: Una interfaz por método es excesiva; se agrupa por uso.
+  referencia: https://en.wikipedia.org/wiki/Interface_segregation_principle
+- id: L04-006
+  tipo: matching
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Empareja cada pregunta con el principio que la responde.
+  prompts:
+    - {id: "1", texto: "¿Cuántos actores piden cambios en esta clase?"}
+    - {id: "2", texto: "¿Depende este cliente de métodos que no usa?"}
+    - {id: "3", texto: "¿Puedo usar este subtipo donde se espera el tipo base?"}
+  opciones:
+    - {id: a, texto: "Responsabilidad única"}
+    - {id: b, texto: "Segregación de interfaces"}
+    - {id: c, texto: "Sustitución de Liskov"}
+    - {id: d, texto: "Abierto/cerrado"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Responsabilidad única mira los motivos de cambio de una clase, segregación de interfaces lo que usa cada cliente, y Liskov si un subtipo es sustituible.
+  distractores:
+    d: Abierto/cerrado responde a cómo añadir comportamiento sin modificar lo existente.
+  referencia: https://en.wikipedia.org/wiki/SOLID
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: En Python, una función solo necesita llamar a fuente.leer(). ¿Cómo aplicarías el principio?
+  opciones:
+    - {id: a, texto: "Recibir un objeto de la clase concreta FicheroCsv"}
+    - {id: b, texto: "Recibir un objeto sin tipo y comprobar sus métodos con hasattr"}
+    - {id: c, texto: "Definir un Protocol Legible con el método leer() y tipar el parámetro con él"}
+    - {id: d, texto: "Hacer que las fuentes hereden de una clase base con veinte métodos"}
+  correctas: [c]
+  explicacion: Un protocolo con solo leer() expresa exactamente lo que la función necesita; cualquier clase con ese método lo cumple sin heredar.
+  distractores:
+    a: Ata la función a una clase concreta.
+    b: Funciona, pero pierde la comprobación estática y documenta peor el contrato.
+    d: Una clase base enorme es lo contrario de segregar interfaces.
+  referencia: https://docs.python.org/3/library/typing.html#typing.Protocol
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.2"
+  enunciado: ¿Cuál es la señal más clara de que una interfaz debería dividirse?
+  opciones:
+    - {id: a, texto: "Que tiene un nombre largo"}
+    - {id: b, texto: "Que alguna implementación deja métodos vacíos o lanza «no soportado»"}
+    - {id: c, texto: "Que está documentada"}
+    - {id: d, texto: "Que la usan varios clientes"}
+  correctas: [b]
+  explicacion: Si una implementación no puede cumplir parte de la interfaz, esa parte es otra capacidad y debe ir en otra interfaz.
+  distractores:
+    a: El nombre no indica nada sobre el tamaño ni el uso.
+    c: Documentar una interfaz es bueno y no es una señal de problema.
+    d: Que la usen varios clientes es normal; el problema es que cada uno use partes distintas.
+  referencia: https://en.wikipedia.org/wiki/Interface_segregation_principle
+- id: L05-001
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "5.1"
+  enunciado: ¿Qué afirma el principio de inversión de dependencias?
+  opciones:
+    - {id: a, texto: "Los módulos de alto nivel no deben depender de los de bajo nivel"}
+    - {id: b, texto: "Ambos deben depender de abstracciones"}
+    - {id: c, texto: "Los detalles deben depender de las abstracciones, y no al revés"}
+    - {id: d, texto: "Hay que usar un framework de inyección de dependencias"}
+    - {id: e, texto: "Las clases no deben tener dependencias"}
+  correctas: [a, b, c]
+  explicacion: El principio tiene dos partes, que alto y bajo nivel dependan de abstracciones, y que las abstracciones no dependan de los detalles.
+  distractores:
+    d: Un contenedor es una herramienta opcional; el principio se cumple también conectando a mano.
+    e: Las dependencias son inevitables; el principio dice hacia dónde deben apuntar.
+  referencia: https://en.wikipedia.org/wiki/Dependency_inversion_principle
+- id: L05-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué imprime el programa de la lección?
+  codigo:
+    lenguaje: python
+    fuente: |
+      class NotificadorConsola:
+          def enviar(self, destino: str, texto: str) -> None:
+              print(f"[{destino}] {texto}")
+
+
+      class ServicioPedidos:
+          def __init__(self, notificador) -> None:
+              self._notificador = notificador
+
+          def confirmar(self, cliente: str) -> None:
+              self._notificador.enviar(cliente, "Pedido confirmado")
+
+
+      ServicioPedidos(NotificadorConsola()).confirmar("ana@example.com")
+  opciones:
+    - {id: a, texto: "Pedido confirmado"}
+    - {id: b, texto: "ana@example.com"}
+    - {id: c, texto: "[ana@example.com] Pedido confirmado"}
+    - {id: d, texto: "Nada, porque falta heredar de Notificador"}
+  correctas: [c]
+  explicacion: El servicio delega en el notificador recibido, que imprime el destino entre corchetes seguido del texto. No hace falta heredar de nada, porque Python usa tipado estructural (duck typing).
+  distractores:
+    a: Falta el destino, que el notificador añade entre corchetes.
+    b: Falta el texto del mensaje.
+    d: En Python basta con que el objeto tenga el método enviar; los protocolos no exigen herencia.
+  referencia: https://docs.python.org/3/library/typing.html#typing.Protocol
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: El servicio de pedidos crea dentro un SmtpMailer con new SmtpMailer("smtp.empresa.com"). ¿Qué problema principal tiene?
+  opciones:
+    - {id: a, texto: "Que el SMTP es un protocolo obsoleto"}
+    - {id: b, texto: "Que la política de negocio depende de un detalle concreto, así que no se puede probar ni cambiar el canal sin modificarla"}
+    - {id: c, texto: "Que el nombre del servidor debería estar en mayúsculas"}
+    - {id: d, texto: "Que usar new es incorrecto en Java"}
+  correctas: [b]
+  explicacion: El alto nivel depende directamente del bajo nivel. Para probar hace falta un servidor de correo, y cambiar a SMS obliga a tocar las reglas del pedido.
+  distractores:
+    a: SMTP es el protocolo estándar de envío de correo; el problema es la dependencia.
+    c: El formato del nombre no tiene relación con el diseño.
+    d: new es correcto; el problema es crear un detalle concreto dentro de la política.
+  referencia: https://en.wikipedia.org/wiki/Dependency_inversion_principle
+- id: L05-004
+  tipo: matching
+  dificultad: media
+  objetivo: "5.3"
+  enunciado: Empareja cada término con lo que es.
+  prompts:
+    - {id: "1", texto: "Inversión de dependencias"}
+    - {id: "2", texto: "Inyección de dependencias"}
+    - {id: "3", texto: "Contenedor de inyección (Spring, Guice)"}
+  opciones:
+    - {id: a, texto: "Un principio sobre hacia dónde apuntan las dependencias"}
+    - {id: b, texto: "Una técnica, pasar los colaboradores desde fuera"}
+    - {id: c, texto: "Una herramienta que crea y conecta los objetos"}
+    - {id: d, texto: "Un patrón de base de datos"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: La inversión es el principio, la inyección es una técnica para aplicarlo y el contenedor es una herramienta que automatiza la inyección.
+  distractores:
+    d: Ninguno de los tres es un patrón de base de datos.
+  referencia: https://en.wikipedia.org/wiki/Dependency_injection
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.3"
+  enunciado: Un servicio recibe por constructor un SmtpMailer (clase concreta). ¿Qué se puede afirmar?
+  opciones:
+    - {id: a, texto: "Que usa inyección de dependencias, pero no invierte la dependencia, porque sigue dependiendo del detalle"}
+    - {id: b, texto: "Que cumple la inversión de dependencias porque usa el constructor"}
+    - {id: c, texto: "Que no usa inyección porque no hay un framework"}
+    - {id: d, texto: "Que incumple el principio de Liskov"}
+  correctas: [a]
+  explicacion: Inyectar es pasar el colaborador desde fuera, y aquí se hace. Pero el tipo es una clase concreta de bajo nivel, así que la dependencia no está invertida.
+  distractores:
+    b: El constructor es la técnica; la inversión depende del tipo del que se depende.
+    c: Se puede inyectar sin framework, a mano.
+    d: No hay ninguna relación de subtipo en juego.
+  referencia: https://en.wikipedia.org/wiki/Dependency_inversion_principle
+- id: L05-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.1"
+  enunciado: Un equipo crea la interfaz Notificador copiando los métodos de la biblioteca de correo (setSmtpHost, setTls, sendMimeMessage). ¿Qué parte del principio incumple?
+  opciones:
+    - {id: a, texto: "Ninguna: hay una interfaz, así que la dependencia está invertida"}
+    - {id: b, texto: "La segunda: la abstracción depende de los detalles de una tecnología concreta"}
+    - {id: c, texto: "La de responsabilidad única"}
+    - {id: d, texto: "La de Liskov, porque el correo no es sustituible"}
+  correctas: [b]
+  explicacion: La abstracción debe pertenecer al negocio y usar su vocabulario. Una interfaz calcada de la biblioteca de correo sigue atada a ese detalle.
+  distractores:
+    a: Tener una interfaz no basta si su forma la dicta el detalle.
+    c: El problema está en de qué depende la abstracción, no en las responsabilidades de una clase.
+    d: No se trata de un problema de subtipos.
+  referencia: https://en.wikipedia.org/wiki/Dependency_inversion_principle
+- id: L05-007
+  tipo: completar
+  dificultad: baja
+  objetivo: "5.2"
+  enunciado: Completa el servicio para que reciba su notificador desde fuera.
+  codigo:
+    lenguaje: python
+    fuente: |
+      class ServicioPedidos:
+          def [[1]](self, notificador: Notificador) -> None:
+              self._notificador = [[2]]
+  huecos:
+    - {id: "1", respuestas: [__init__]}
+    - {id: "2", respuestas: [notificador]}
+  explicacion: El constructor (__init__) recibe la abstracción y la guarda. Quien crea el servicio decide qué implementación pasarle.
+  referencia: https://docs.python.org/3/library/typing.html#typing.Protocol
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Qué gana una prueba de ServicioPedidos gracias a la inversión de dependencias?
+  opciones:
+    - {id: a, texto: "Puede ejecutarse sin servidor de correo, pasando un notificador falso que registre los mensajes"}
+    - {id: b, texto: "Puede ejecutarse más rápido gracias al compilador"}
+    - {id: c, texto: "Puede omitir las aserciones"}
+    - {id: d, texto: "Puede conectarse al servidor SMTP real con más seguridad"}
+  correctas: [a]
+  explicacion: Como el servicio depende de una abstracción, la prueba le pasa una implementación falsa y comprueba qué se habría enviado, sin infraestructura.
+  distractores:
+    b: La velocidad viene de no usar infraestructura, no del compilador.
+    c: Las aserciones siguen siendo necesarias.
+    d: El objetivo es justo no depender del servidor real en la prueba.
+  referencia: https://en.wikipedia.org/wiki/Dependency_inversion_principle
+- id: L06-001
+  tipo: matching
+  dificultad: media
+  objetivo: "6.2"
+  enunciado: Empareja cada síntoma con el principio que más ayuda a resolverlo.
+  prompts:
+    - {id: "1", texto: "El mismo switch sobre el tipo de cliente aparece en cinco sitios"}
+    - {id: "2", texto: "No se pueden probar las reglas sin una base de datos"}
+    - {id: "3", texto: "Una implementación deja tres métodos vacíos"}
+    - {id: "4", texto: "Una clase cambia por peticiones de finanzas y de marketing"}
+  opciones:
+    - {id: a, texto: "Abierto/cerrado"}
+    - {id: b, texto: "Inversión de dependencias"}
+    - {id: c, texto: "Segregación de interfaces"}
+    - {id: d, texto: "Responsabilidad única"}
+    - {id: e, texto: "Sustitución de Liskov"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Cada síntoma apunta a un principio. Los switch repetidos piden un punto de extensión, las pruebas imposibles piden invertir dependencias, los métodos vacíos piden interfaces más pequeñas y los cambios de varias áreas piden separar responsabilidades.
+  distractores:
+    e: Liskov ayudaría con instanceof en los clientes o subtipos que no se comportan como la base, que no aparece en la lista.
+  referencia: https://martinfowler.com/bliki/CodeSmell.html
+- id: L06-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "6.1"
+  enunciado: ¿Qué significa YAGNI?
+  opciones:
+    - {id: a, texto: "Que no se debe añadir funcionalidad ni flexibilidad hasta que haga falta de verdad"}
+    - {id: b, texto: "Que no hace falta escribir pruebas"}
+    - {id: c, texto: "Que el diseño no importa"}
+    - {id: d, texto: "Que hay que usar el lenguaje más moderno"}
+  correctas: [a]
+  explicacion: You Aren't Gonna Need It aconseja no construir por adelantado lo que quizá no se necesite. Exige mantener el código fácil de cambiar para añadirlo cuando haga falta.
+  distractores:
+    b: YAGNI viene de la programación extrema, que da mucha importancia a las pruebas.
+    c: Fowler subraya que YAGNI requiere un diseño fácil de cambiar.
+    d: No trata de lenguajes.
+  referencia: https://martinfowler.com/bliki/Yagni.html
+- id: L06-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "6.1"
+  enunciado: ¿Qué son señales de haber aplicado SOLID en exceso?
+  opciones:
+    - {id: a, texto: "Una interfaz por clase, cada una con una sola implementación que no va a cambiar"}
+    - {id: b, texto: "Puntos de extensión que nadie ha usado en años"}
+    - {id: c, texto: "Un cambio pequeño obliga a tocar diez ficheros diminutos"}
+    - {id: d, texto: "Una interfaz con dos implementaciones en uso"}
+    - {id: e, texto: "Una clase de cálculo probada sin base de datos"}
+  correctas: [a, b, c]
+  explicacion: Las abstracciones sin variación, las extensiones sin uso y la fragmentación excesiva son coste sin beneficio.
+  distractores:
+    d: Dos implementaciones reales justifican la interfaz.
+    e: Poder probar sin base de datos es un beneficio real del diseño.
+  referencia: https://martinfowler.com/bliki/Yagni.html
+- id: L06-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "6.3"
+  enunciado: En un lenguaje con funciones de primera clase, ¿cómo se puede aplicar abierto/cerrado a los descuentos sin crear una jerarquía de clases?
+  opciones:
+    - {id: a, texto: "No se puede; el principio exige herencia"}
+    - {id: b, texto: "Con un switch más grande"}
+    - {id: c, texto: "Pasando a total una función que aplique el descuento"}
+    - {id: d, texto: "Con variables globales"}
+  correctas: [c]
+  explicacion: Una función es una abstracción de un solo método. total se queda cerrado y cada descuento nuevo es una función nueva.
+  distractores:
+    a: El principio trata de añadir comportamiento sin modificar; las funciones lo permiten igual que las interfaces.
+    b: Un switch más grande es justo lo que el principio evita.
+    d: Las variables globales aumentan el acoplamiento.
+  referencia: https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html
+- id: L06-005
+  tipo: completar
+  dificultad: media
+  objetivo: "6.3"
+  enunciado: Completa la versión con funciones del punto de extensión de descuentos.
+  codigo:
+    lenguaje: python
+    fuente: |
+      from decimal import Decimal
+      from typing import Callable
+
+      Descuento = [[1]][[Decimal], Decimal]
+
+      def total(lineas: list[Decimal], descuento: Descuento) -> Decimal:
+          return descuento([[2]](lineas))
+
+      print(total([Decimal("40"), Decimal("60")], lambda i: i * Decimal("0.9")))
+  huecos:
+    - {id: "1", respuestas: [Callable]}
+    - {id: "2", respuestas: [sum]}
+  explicacion: Callable[[Decimal], Decimal] describe una función que recibe y devuelve un Decimal. total suma las líneas con sum y aplica la función recibida; imprime 90.0.
+  referencia: https://docs.python.org/3/library/typing.html#typing.Protocol
+- id: L06-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "6.1"
+  enunciado: Un prototipo de dos semanas para validar una idea con clientes tiene una sola fuente de datos y un único formato de salida. ¿Qué enfoque es más sensato?
+  opciones:
+    - {id: a, texto: "Aplicar los cinco principios con interfaces para cada componente desde el inicio"}
+    - {id: b, texto: "Prohibir las interfaces para ir más rápido aunque luego se mantenga años"}
+    - {id: c, texto: "Escribirlo de forma directa y fácil de cambiar, e introducir abstracciones si el prototipo se convierte en producto"}
+    - {id: d, texto: "Esperar a tener el diseño completo antes de escribir código"}
+  correctas: [c]
+  explicacion: Sin variaciones ni horizonte largo, las abstracciones no se amortizan. Si el prototipo sobrevive, los síntomas dirán qué principios aplicar.
+  distractores:
+    a: Es sobreingeniería para un código de vida corta y sin variaciones.
+    b: Si se va a mantener años, el diseño sí importa; el error es el contrario.
+    d: Un prototipo sirve justamente para aprender antes de diseñar en detalle.
+  referencia: https://martinfowler.com/bliki/Yagni.html
+- id: L06-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "6.3"
+  enunciado: ¿Qué principio SOLID es la base de la arquitectura hexagonal?
+  opciones:
+    - {id: a, texto: "Inversión de dependencias"}
+    - {id: b, texto: "Sustitución de Liskov"}
+    - {id: c, texto: "Segregación de interfaces"}
+    - {id: d, texto: "Abierto/cerrado"}
+  correctas: [a]
+  explicacion: En hexagonal, la aplicación define los puertos (abstracciones) y la infraestructura los implementa. Es la inversión de dependencias aplicada a escala de arquitectura.
+  distractores:
+    b: Liskov ayuda a que los adaptadores sean sustituibles, pero no define la arquitectura.
+    c: Los puertos pequeños aplican la segregación, pero lo esencial es la dirección de las dependencias.
+    d: Añadir adaptadores sin tocar la aplicación es una consecuencia, no la base.
+  referencia: https://en.wikipedia.org/wiki/Dependency_inversion_principle
+- id: L06-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "6.3"
+  enunciado: Según Martin en Solid Relevance (2020), ¿por qué SOLID sigue siendo útil?
+  opciones:
+    - {id: a, texto: "Porque solo se aplica a Java"}
+    - {id: b, texto: "Porque trata de cómo gestionar las dependencias, algo que no depende del lenguaje ni de la moda"}
+    - {id: c, texto: "Porque los frameworks modernos lo implementan automáticamente"}
+    - {id: d, texto: "Porque obliga a usar programación orientada a objetos"}
+  correctas: [b]
+  explicacion: Martin defiende que los principios tratan de cómo organizar el código para gestionar las dependencias, y eso sigue siendo necesario con cualquier lenguaje.
+  distractores:
+    a: Los principios se aplican en muchos lenguajes, también en Python o en lenguajes funcionales.
+    c: Los frameworks ayudan con la inyección, pero no deciden el diseño.
+    d: Las ideas se trasladan también a funciones y módulos.
+  referencia: https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html

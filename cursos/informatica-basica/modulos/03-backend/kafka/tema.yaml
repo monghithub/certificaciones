@@ -1,0 +1,13 @@
+slug: mensajeria-y-kafka
+titulo: "Mensajería: colas y Kafka"
+area: datos
+nivel: intermedio
+idioma: es-ES
+resumen: Comunicación asíncrona con mensajes, con colas y publicación-suscripción, y Kafka en detalle (temas, particiones, claves, offsets, grupos de consumidores y garantías de entrega), comprobado con un Kafka 4.1 real.
+etiquetas: [kafka, mensajeria, colas, eventos, asincronia]
+fuentes:
+  - kafka.apache.org
+  - enterpriseintegrationpatterns.com
+  - rabbitmq.com
+ejercicios:
+  minimo_por_leccion: 8

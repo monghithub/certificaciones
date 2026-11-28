@@ -1,0 +1,555 @@
+- id: L01-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: Clasifica cada mensaje como evento o comando.
+  prompts:
+    - {id: "1", texto: "PedidoConfirmado"}
+    - {id: "2", texto: "ReservarStock"}
+    - {id: "3", texto: "PagoRechazado"}
+    - {id: "4", texto: "CobrarPedido"}
+  opciones:
+    - {id: a, texto: "Evento"}
+    - {id: b, texto: "Comando"}
+    - {id: c, texto: "Consulta"}
+  correctas: [["1", a], ["2", b], ["3", a], ["4", b]]
+  explicacion: Los eventos describen hechos pasados; los comandos piden a alguien que haga algo.
+  distractores:
+    c: Ninguno pide datos; son hechos o peticiones de acción.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: El servicio de pedidos publica un «evento» llamado EnviarCorreoDeConfirmacion. ¿Qué problema tiene?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Que el nombre es demasiado largo"}
+    - {id: c, texto: "Que debería ir por HTTP"}
+    - {id: d, texto: "Que es un comando disfrazado; pedidos decide qué debe hacer otro, en lugar de publicar el hecho PedidoConfirmado"}
+  correctas: [d]
+  explicacion: Publicar el hecho deja que cada interesado decida qué hacer. Ordenar acciones a otros desde un evento vuelve a acoplar a los servicios.
+  distractores:
+    a: El nombre revela que el emisor conoce y dirige al receptor.
+    b: La longitud no es el problema.
+    c: El medio de transporte no cambia el acoplamiento.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Empareja cada patrón con su idea principal.
+  prompts:
+    - {id: "1", texto: "Notificación de eventos"}
+    - {id: "2", texto: "Transferencia de estado en el evento"}
+    - {id: "3", texto: "Event sourcing"}
+    - {id: "4", texto: "CQRS"}
+  opciones:
+    - {id: a, texto: "Avisar de un cambio sin esperar respuesta"}
+    - {id: b, texto: "El evento lleva los datos para que el receptor mantenga su copia"}
+    - {id: c, texto: "Guardar cada cambio como evento y reconstruir el estado con ellos"}
+    - {id: d, texto: "Modelos distintos para escribir y para leer"}
+    - {id: e, texto: "Llamar a otro servicio y esperar su respuesta"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son los cuatro patrones que Fowler distinguió bajo el nombre común de dirigido por eventos.
+  distractores:
+    e: Es una llamada síncrona, no un patrón de eventos.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Envíos necesita la dirección del cliente, y el servicio de clientes no siempre está disponible. ¿Qué patrón encaja?
+  opciones:
+    - {id: a, texto: "Notificación con solo el id, para que envíos llame a clientes"}
+    - {id: b, texto: "Transferencia de estado: el evento lleva la dirección y envíos guarda su copia"}
+    - {id: c, texto: "CQRS en el servicio de clientes"}
+    - {id: d, texto: "Que envíos lea la base de datos de clientes"}
+  correctas: [b]
+  explicacion: Con los datos en el evento, envíos trabaja aunque clientes esté caído, a cambio de duplicar la dirección.
+  distractores:
+    a: Envíos dependería de que clientes respondiera.
+    c: No resuelve la dependencia entre servicios.
+    d: Acoplaría a envíos con el esquema de otro servicio.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué dice Fowler sobre la relación entre CQRS y los eventos?
+  opciones:
+    - {id: a, texto: "Que CQRS no requiere eventos, aunque se suele combinar con los otros patrones"}
+    - {id: b, texto: "Que CQRS exige event sourcing"}
+    - {id: c, texto: "Que CQRS es lo mismo que la notificación de eventos"}
+    - {id: d, texto: "Que CQRS está obsoleto"}
+  correctas: [a]
+  explicacion: CQRS separa modelos de escritura y lectura; puede aplicarse sin eventos, pero a menudo se combina con ellos.
+  distractores:
+    b: Se pueden usar por separado.
+    c: Son patrones distintos.
+    d: No lo considera obsoleto, sino arriesgado en la mayoría de los sistemas.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L01-006
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: ¿Qué consecuencias tiene la transferencia de estado en el evento?
+  opciones:
+    - {id: a, texto: "El receptor no necesita llamar al emisor para obtener los datos"}
+    - {id: b, texto: "Los datos quedan duplicados en varios servicios"}
+    - {id: c, texto: "Las copias se ponen al día con un pequeño retraso"}
+    - {id: d, texto: "El emisor tiene que conocer a cada receptor"}
+    - {id: e, texto: "Desaparece la necesidad de un broker"}
+  correctas: [a, b, c]
+  explicacion: Se gana independencia del emisor a cambio de duplicar datos y aceptar la consistencia eventual.
+  distractores:
+    d: El emisor sigue sin conocer a los receptores.
+    e: Los eventos siguen necesitando un medio de transporte.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Cómo se nombran los eventos?
+  opciones:
+    - {id: a, texto: "En imperativo, como ReservarStock"}
+    - {id: b, texto: "Con el nombre del servicio que los recibe"}
+    - {id: c, texto: "En pasado, como PedidoConfirmado"}
+    - {id: d, texto: "Con un número de versión"}
+  correctas: [c]
+  explicacion: Un evento describe un hecho que ya ocurrió, así que se nombra en pasado.
+  distractores:
+    a: Es la forma de nombrar los comandos.
+    b: El emisor no conoce a los receptores.
+    d: La versión puede ir en los metadatos, pero no es el nombre.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.2"
+  enunciado: Con notificación de eventos, ¿qué riesgo destaca Fowler cuando hay muchos eventos encadenados?
+  opciones:
+    - {id: a, texto: "Que los eventos ocupan mucho espacio"}
+    - {id: b, texto: "Que el broker se satura"}
+    - {id: c, texto: "Que se pierden datos"}
+    - {id: d, texto: "Que el flujo completo del proceso se vuelve difícil de seguir, porque no está escrito en ningún sitio"}
+  correctas: [d]
+  explicacion: El desacoplamiento hace que la lógica quede repartida entre emisores y receptores; para entender el proceso hay que observarlo en ejecución.
+  distractores:
+    a: Las notificaciones suelen ser pequeñas.
+    b: No es el riesgo principal del patrón.
+    c: La pérdida depende de las garantías del broker, no del patrón.
+  referencia: https://martinfowler.com/articles/201701-event-driven.html
+- id: L02-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Un servicio guarda el pedido en la base de datos y después publica PedidoCreado en Kafka. Kafka está caído en ese momento. ¿Qué pasa?
+  opciones:
+    - {id: a, texto: "La base de datos deshace el pedido"}
+    - {id: b, texto: "Kafka guarda el evento hasta que vuelva"}
+    - {id: c, texto: "El pedido queda guardado, pero ningún otro sistema se entera"}
+    - {id: d, texto: "Se crean dos pedidos"}
+  correctas: [c]
+  explicacion: Es el problema de la doble escritura; no hay una transacción que cubra la base de datos y el broker a la vez.
+  distractores:
+    a: La transacción del pedido ya se confirmó.
+    b: Si Kafka está caído, no recibe nada.
+    d: No hay motivo para duplicar el pedido.
+  referencia: https://microservices.io/patterns/data/transactional-outbox.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: ¿En qué consiste el patrón outbox?
+  opciones:
+    - {id: a, texto: "En guardar el evento en una tabla de la base de datos en la misma transacción que el cambio, y publicarlo después con otro proceso"}
+    - {id: b, texto: "En publicar primero el evento y después guardar el cambio"}
+    - {id: c, texto: "En usar una transacción distribuida entre la base de datos y el broker"}
+    - {id: d, texto: "En no publicar eventos"}
+  correctas: [a]
+  explicacion: El cambio y su evento se confirman juntos en la base de datos; la publicación al broker se hace después, sin riesgo de perder el evento.
+  distractores:
+    b: Tiene el problema contrario, anunciar algo que quizá no se guarde.
+    c: Es lo que el patrón evita, porque muchos brokers no lo soportan.
+    d: El objetivo es publicarlos de forma fiable.
+  referencia: https://microservices.io/patterns/data/transactional-outbox.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: En la prueba, se intentó crear un pedido con total negativo, que viola la restricción CHECK. ¿Qué quedó en la tabla outbox?
+  opciones:
+    - {id: a, texto: "Un evento PedidoCreado del pedido fallido"}
+    - {id: b, texto: "Un evento PedidoRechazado"}
+    - {id: c, texto: "El evento, marcado como enviado"}
+    - {id: d, texto: "Nada; la transacción se deshizo entera, con el pedido y su evento"}
+  correctas: [d]
+  explicacion: El pedido y la fila de la outbox están en la misma transacción. La restricción la aborta y no queda ninguno de los dos.
+  distractores:
+    a: Es justo lo que el patrón evita.
+    b: Nadie escribió un evento de rechazo.
+    c: Nunca llegó a guardarse.
+  referencia: https://microservices.io/patterns/data/transactional-outbox.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: El reenviador publica el evento y se cae antes de marcar la fila como enviada. ¿Qué ocurre después y qué lo hace inofensivo?
+  opciones:
+    - {id: a, texto: "El evento se pierde; hay que reenviarlo a mano"}
+    - {id: b, texto: "El evento se publica otra vez; un consumidor idempotente evita el efecto duplicado"}
+    - {id: c, texto: "Kafka detecta el duplicado y lo descarta"}
+    - {id: d, texto: "La base de datos deshace el pedido"}
+  correctas: [b]
+  explicacion: El outbox garantiza al menos una vez. En la prueba, el consumidor recibió 2 mensajes y, con ON CONFLICT DO NOTHING, creó 1 factura.
+  distractores:
+    a: La fila sigue sin marcar, así que se reenvía.
+    c: Son dos envíos distintos del reenviador; el productor idempotente no evita esto.
+    d: El pedido ya está confirmado.
+  referencia: https://microservices.io/patterns/data/transactional-outbox.html
+- id: L02-005
+  tipo: completar
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: Completa la consulta del reenviador para que varias instancias no publiquen las mismas filas.
+  codigo:
+    lenguaje: sql
+    fuente: |
+      SELECT id, agregado, tipo, carga FROM outbox
+      WHERE NOT enviado ORDER BY id
+      FOR UPDATE [[1]] [[2]];
+  huecos:
+    - {id: "1", respuestas: [SKIP], mayusculas: false}
+    - {id: "2", respuestas: [LOCKED], mayusculas: false}
+  explicacion: FOR UPDATE SKIP LOCKED bloquea las filas que toma cada instancia y hace que las demás se las salten.
+  referencia: https://microservices.io/patterns/data/transactional-outbox.html
+- id: L02-006
+  tipo: matching
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Empareja cada característica con la forma de reenviar la outbox.
+  prompts:
+    - {id: "1", texto: "Solo necesita SQL y un proceso que consulta cada pocos segundos"}
+    - {id: "2", texto: "Lee el registro de transacciones de la base de datos"}
+    - {id: "3", texto: "Tiene la latencia del intervalo de consulta"}
+  opciones:
+    - {id: a, texto: "Consulta periódica"}
+    - {id: b, texto: "Captura de cambios (CDC), por ejemplo con Debezium"}
+    - {id: c, texto: "Transacción distribuida"}
+  correctas: [["1", a], ["2", b], ["3", a]]
+  explicacion: La consulta periódica es simple pero tiene latencia y carga; la captura de cambios lee el registro de la base de datos con poca latencia.
+  distractores:
+    c: No es una forma de reenviar la outbox, sino lo que el patrón evita.
+  referencia: https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html
+- id: L02-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: ¿Qué hace idempotente al consumidor de facturas de la prueba?
+  codigo:
+    lenguaje: sql
+    fuente: |
+      INSERT INTO facturas VALUES (%s, %s) ON CONFLICT (pedido) DO NOTHING
+  opciones:
+    - {id: a, texto: "Que usa una transacción"}
+    - {id: b, texto: "Que confirma el offset antes de procesar"}
+    - {id: c, texto: "Que lee los mensajes en orden"}
+    - {id: d, texto: "Que la clave primaria por pedido hace que un segundo mensaje del mismo pedido no cree otra factura"}
+  correctas: [d]
+  explicacion: La restricción de unicidad convierte el mensaje repetido en una operación sin efecto.
+  distractores:
+    a: Una transacción por sí sola no evita procesar dos veces.
+    b: Cambiaría la garantía a como máximo una vez.
+    c: El orden no evita los duplicados.
+  referencia: https://microservices.io/patterns/data/transactional-outbox.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.1"
+  enunciado: ¿Por qué no se resuelve la doble escritura con una transacción distribuida (two-phase commit) entre la base de datos y el broker?
+  opciones:
+    - {id: a, texto: "Porque es ilegal"}
+    - {id: b, texto: "Porque muchos brokers y bases de datos no la soportan, y acopla el servicio a los dos sistemas"}
+    - {id: c, texto: "Porque es demasiado rápida"}
+    - {id: d, texto: "Porque Kafka no tiene transacciones"}
+  correctas: [b]
+  explicacion: microservices.io lo descarta como opción por falta de soporte y por el acoplamiento que introduce.
+  distractores:
+    a: No hay ninguna restricción legal.
+    c: Lo habitual es que sea lenta, no rápida.
+    d: Kafka tiene transacciones propias, pero no se coordinan con una base de datos externa.
+  referencia: https://microservices.io/patterns/data/transactional-outbox.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Por qué un pedido que reserva stock, cobra y programa el envío en tres servicios distintos no se hace con una transacción ACID?
+  opciones:
+    - {id: a, texto: "Porque las transacciones ACID están obsoletas"}
+    - {id: b, texto: "Porque cada servicio tiene su base de datos y no hay una transacción que abarque las tres, y bloquearlas sería lento y frágil"}
+    - {id: c, texto: "Porque los pedidos no necesitan coherencia"}
+    - {id: d, texto: "Porque Kafka no lo permite"}
+  correctas: [b]
+  explicacion: Las transacciones ACID viven dentro de una base de datos. Entre servicios se usa una saga de transacciones locales.
+  distractores:
+    a: Siguen siendo la herramienta dentro de cada servicio.
+    c: Necesitan coherencia; la saga la consigue de otra forma.
+    d: No es una limitación de Kafka.
+  referencia: https://microservices.io/patterns/data/saga.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.2"
+  enunciado: ¿Quién propuso las sagas y cuándo?
+  opciones:
+    - {id: a, texto: "Martin Fowler, en 2017"}
+    - {id: b, texto: "Chris Richardson, en 2018"}
+    - {id: c, texto: "Hector Garcia-Molina y Kenneth Salem, en 1987"}
+    - {id: d, texto: "Edgar F. Codd, en 1970"}
+  correctas: [c]
+  explicacion: El artículo Sagas, publicado por la ACM en 1987, las propuso para transacciones de larga duración.
+  distractores:
+    a: Fowler escribió sobre los patrones de eventos en 2017.
+    b: Richardson las ha difundido en microservices.io, pero no las propuso.
+    d: Codd propuso el modelo relacional.
+  referencia: https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: En la ejecución de la lección, el pedido P2 de 80 € falla al cobrar con un saldo de 40 €. ¿Qué compensaciones se ejecutan?
+  opciones:
+    - {id: a, texto: "Solo liberar el stock, porque es el único paso que se había completado"}
+    - {id: b, texto: "Liberar el stock y devolver el cobro"}
+    - {id: c, texto: "Ninguna"}
+    - {id: d, texto: "Cancelar el envío"}
+  correctas: [a]
+  explicacion: El cobro falló, así que no hay nada que devolver; solo se compensa la reserva, que sí se hizo.
+  distractores:
+    b: El cobro no llegó a hacerse.
+    c: La reserva quedaría bloqueada.
+    d: El envío no llegó a programarse.
+  referencia: https://microservices.io/patterns/data/saga.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿En qué se diferencia una compensación de un ROLLBACK?
+  opciones:
+    - {id: a, texto: "En nada"}
+    - {id: b, texto: "La compensación es más rápida"}
+    - {id: c, texto: "La compensación solo funciona en Kafka"}
+    - {id: d, texto: "La compensación es una operación de negocio nueva que deshace el efecto de un paso ya confirmado y visible"}
+  correctas: [d]
+  explicacion: El paso ya se confirmó y otros pudieron verlo; por eso se deshace con una operación explícita, como una devolución.
+  distractores:
+    a: Un ROLLBACK deshace algo que nunca se confirmó.
+    b: La velocidad no es la diferencia.
+    c: Es independiente del broker.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction
+- id: L03-005
+  tipo: matching
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Empareja cada característica con la forma de coordinar la saga.
+  prompts:
+    - {id: "1", texto: "Un coordinador indica a cada servicio qué paso ejecutar"}
+    - {id: "2", texto: "Cada servicio reacciona a los eventos de los demás"}
+    - {id: "3", texto: "El flujo está escrito en un solo sitio"}
+    - {id: "4", texto: "Se vuelve difícil de seguir cuando crecen los pasos"}
+  opciones:
+    - {id: a, texto: "Orquestación"}
+    - {id: b, texto: "Coreografía"}
+    - {id: c, texto: "Transacción distribuida"}
+  correctas: [["1", a], ["2", b], ["3", a], ["4", b]]
+  explicacion: La orquestación centraliza el flujo; la coreografía lo reparte entre eventos.
+  distractores:
+    c: No es una forma de coordinar sagas, sino lo que evitan.
+  referencia: https://microservices.io/patterns/data/saga.html
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.2"
+  enunciado: Una saga envía un correo de confirmación al cliente. ¿Dónde conviene situar ese paso?
+  opciones:
+    - {id: a, texto: "Al principio, para avisar cuanto antes"}
+    - {id: b, texto: "En medio, con su compensación"}
+    - {id: c, texto: "Al final, cuando ya no puede fallar ningún paso, porque un correo no se puede compensar"}
+    - {id: d, texto: "En otra saga"}
+  correctas: [c]
+  explicacion: Lo que no se puede deshacer va al final. Así no hay que compensarlo si falla un paso posterior.
+  distractores:
+    a: Habría que «desenviarlo» si fallara un paso después.
+    b: Un correo enviado no tiene compensación real.
+    d: Separarlo no resuelve el problema de cuándo enviarlo.
+  referencia: https://learn.microsoft.com/en-us/azure/architecture/patterns/saga
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Qué hay que tener en cuenta al diseñar las compensaciones de una saga?
+  opciones:
+    - {id: a, texto: "Definir la compensación de cada paso antes de escribir la saga"}
+    - {id: b, texto: "Que sean idempotentes y se puedan reintentar"}
+    - {id: c, texto: "Que otros pueden ver estados intermedios, porque falta el aislamiento de ACID"}
+    - {id: d, texto: "Que se ejecuten en el mismo orden que los pasos"}
+    - {id: e, texto: "Que no hagan falta si el broker es fiable"}
+  correctas: [a, b, c]
+  explicacion: Cada paso debe poder deshacerse de forma repetible, y el diseño debe contemplar los estados intermedios visibles.
+  distractores:
+    d: Se ejecutan en orden inverso.
+    e: Los fallos de negocio (un pago rechazado) ocurren aunque el broker sea fiable.
+  referencia: https://microservices.io/patterns/data/saga.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Un proceso de alta de cliente tiene doce pasos en siete servicios, con reglas que cambian a menudo. ¿Qué coordinación recomendarías?
+  opciones:
+    - {id: a, texto: "Orquestación, para tener el flujo en un solo sitio y poder entenderlo y cambiarlo"}
+    - {id: b, texto: "Coreografía, porque desacopla más"}
+    - {id: c, texto: "Una transacción ACID entre los siete servicios"}
+    - {id: d, texto: "Ninguna; que cada servicio decida"}
+  correctas: [a]
+  explicacion: Con muchos pasos y reglas cambiantes, tener el flujo escrito en un orquestador compensa su acoplamiento.
+  distractores:
+    b: Con doce pasos repartidos entre eventos, el proceso sería muy difícil de seguir y cambiar.
+    c: No hay una transacción que abarque siete bases de datos.
+    d: Sin coordinación no hay garantías de terminar o compensar.
+  referencia: https://microservices.io/patterns/data/saga.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: ¿Qué saldo da reconstruir la cuenta con los eventos CuentaAbierta, Ingreso de 100, Retirada de 30 e Ingreso de 50?
+  opciones:
+    - {id: a, texto: "180"}
+    - {id: b, texto: "120"}
+    - {id: c, texto: "70"}
+    - {id: d, texto: "50"}
+  correctas: [b]
+  explicacion: 0 + 100 − 30 + 50 = 120. La ejecución del ejemplo de la lección devolvió saldo 120 y 3 movimientos.
+  distractores:
+    a: Sumaría la retirada en lugar de restarla.
+    c: Es el saldo tras los tres primeros eventos.
+    d: Es solo el último ingreso.
+  referencia: https://martinfowler.com/eaaDev/EventSourcing.html
+- id: L04-002
+  tipo: completar
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Completa la reconstrucción del estado aplicando los eventos uno tras otro.
+  codigo:
+    lenguaje: python
+    fuente: |
+      from functools import [[1]]
+
+      estado_actual = reduce([[2]], eventos, None)
+      estado_hace_un_mes = reduce(aplicar, eventos_hasta_hace_un_mes, None)
+  huecos:
+    - {id: "1", respuestas: [reduce]}
+    - {id: "2", respuestas: [aplicar]}
+  explicacion: reduce aplica la función a cada evento partiendo del estado inicial. Con un subconjunto de eventos se obtiene el estado de cualquier momento pasado.
+  referencia: https://martinfowler.com/eaaDev/EventSourcing.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: En event sourcing, ¿cuál es la fuente de verdad?
+  opciones:
+    - {id: a, texto: "La tabla con el estado actual"}
+    - {id: b, texto: "La caché"}
+    - {id: c, texto: "El almacén de eventos; el estado se deriva de él"}
+    - {id: d, texto: "Las proyecciones de lectura"}
+  correctas: [c]
+  explicacion: Fowler describe el almacén de eventos como la fuente principal de verdad; el estado es un cálculo a partir de él.
+  distractores:
+    a: El estado se calcula; si se guarda, es una copia derivada.
+    b: Una caché es una copia efímera.
+    d: Las proyecciones se construyen a partir de los eventos.
+  referencia: https://martinfowler.com/eaaDev/EventSourcing.html
+- id: L04-004
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: ¿Qué costes tiene el event sourcing?
+  opciones:
+    - {id: a, texto: "Consultar el estado actual exige reconstruirlo o mantener proyecciones"}
+    - {id: b, texto: "Cambiar el formato de los eventos exige versionarlos, porque los antiguos se conservan"}
+    - {id: c, texto: "Con muchos eventos por entidad hacen falta instantáneas"}
+    - {id: d, texto: "Se pierde el historial de cambios"}
+    - {id: e, texto: "No se pueden publicar eventos"}
+  correctas: [a, b, c]
+  explicacion: El historial completo tiene un precio en consultas, en evolución del formato y en rendimiento.
+  distractores:
+    d: Es justo al revés; conserva todo el historial.
+    e: Encaja de forma natural con la publicación de eventos.
+  referencia: https://martinfowler.com/eaaDev/EventSourcing.html
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: ¿Qué es CQRS?
+  opciones:
+    - {id: a, texto: "Un formato de eventos"}
+    - {id: b, texto: "Un broker de mensajería"}
+    - {id: c, texto: "Un tipo de base de datos"}
+    - {id: d, texto: "Usar un modelo para escribir y otro distinto para leer"}
+  correctas: [d]
+  explicacion: Command Query Responsibility Segregation separa el modelo que valida y aplica cambios del que sirve las consultas.
+  distractores:
+    a: Los formatos de eventos son otra cosa, como CloudEvents.
+    b: No es una herramienta, sino un patrón.
+    c: Se puede aplicar con cualquier base de datos.
+  referencia: https://martinfowler.com/bliki/CQRS.html
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: Con CQRS y proyecciones asíncronas, un usuario guarda un pedido y, al volver al listado, aún no aparece. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Que el pedido se ha perdido"}
+    - {id: b, texto: "Que la proyección de lectura va un poco por detrás de la escritura, y la interfaz debe estar diseñada para ello"}
+    - {id: c, texto: "Que hay un interbloqueo"}
+    - {id: d, texto: "Que el listado está mal programado"}
+  correctas: [b]
+  explicacion: Las proyecciones se actualizan consumiendo los cambios, con un pequeño retraso. Es consistencia eventual, no una pérdida.
+  distractores:
+    a: El pedido está guardado en el lado de escritura.
+    c: No hay bloqueos implicados.
+    d: Es una propiedad del diseño, no necesariamente un error.
+  referencia: https://martinfowler.com/bliki/CQRS.html
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué advierte Fowler sobre CQRS?
+  opciones:
+    - {id: a, texto: "Que es obligatorio con microservicios"}
+    - {id: b, texto: "Que no funciona con bases de datos relacionales"}
+    - {id: c, texto: "Que en la mayoría de los sistemas añade complejidad arriesgada, y debe usarse solo en partes concretas, no en todo el sistema"}
+    - {id: d, texto: "Que sustituye al event sourcing"}
+  correctas: [c]
+  explicacion: Fowler indica que para la mayoría de los sistemas CQRS añade complejidad arriesgada y que, si se usa, sea en partes concretas.
+  distractores:
+    a: No lo considera obligatorio en ningún tipo de arquitectura.
+    b: Funciona con cualquier tipo de base de datos.
+    d: Son patrones distintos que pueden combinarse.
+  referencia: https://martinfowler.com/bliki/CQRS.html
+- id: L04-008
+  tipo: matching
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Indica si conviene aplicar event sourcing o CQRS en cada caso.
+  prompts:
+    - {id: "1", texto: "Un CRUD de fichas de proveedores"}
+    - {id: "2", texto: "Un libro contable que debe conservar cada movimiento y auditarse"}
+    - {id: "3", texto: "Un catálogo con 1000 lecturas por cada escritura y búsquedas muy distintas del modelo de escritura"}
+  opciones:
+    - {id: a, texto: "No conviene; basta un modelo único"}
+    - {id: b, texto: "Puede encajar event sourcing"}
+    - {id: c, texto: "Puede encajar CQRS en esa parte"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Los patrones se justifican por necesidades concretas, como la auditoría completa o las lecturas muy distintas y masivas; en un CRUD solo añaden complejidad.
+  referencia: https://martinfowler.com/bliki/CQRS.html

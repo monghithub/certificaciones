@@ -1,0 +1,17 @@
+slug: arquitectura-hexagonal
+titulo: Arquitectura hexagonal (puertos y adaptadores)
+area: arquitectura
+nivel: intermedio
+idioma: es-ES
+resumen: Cómo aislar la lógica de negocio de la interfaz, la base de datos y los demás sistemas con puertos y adaptadores, y cómo aplicarlo en un servicio Java con Spring Boot.
+requisitos: [principios-solid]
+etiquetas: [hexagonal, puertos-y-adaptadores, java, spring, diseno]
+fuentes:
+  - alistair.cockburn.us
+  - martinfowler.com
+  - blog.cleancoder.com
+  - jeffreypalermo.com
+  - docs.spring.io
+  - junit.org
+ejercicios:
+  minimo_por_leccion: 8

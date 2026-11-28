@@ -1,0 +1,14 @@
+slug: keycloak
+titulo: Keycloak
+area: seguridad
+nivel: intermedio
+idioma: es-ES
+resumen: Configurar Keycloak como proveedor de identidad (realms, clientes, roles, grupos y mapeadores), proteger una API Spring Boot con sus tokens y operarlo en producción, con todo probado en Keycloak 26.4.
+requisitos: [oauth2-y-oidc]
+etiquetas: [keycloak, iam, sso, spring-security, oidc]
+fuentes:
+  - keycloak.org
+  - docs.spring.io
+  - rfc-editor.org
+ejercicios:
+  minimo_por_leccion: 8

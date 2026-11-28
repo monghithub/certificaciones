@@ -1,0 +1,16 @@
+slug: domain-driven-design
+titulo: Domain-Driven Design táctico y estratégico
+area: arquitectura
+nivel: avanzado
+idioma: es-ES
+resumen: Diseñar el software alrededor del dominio del negocio. Lenguaje ubicuo y subdominios, contextos delimitados y mapas de contexto, agregados con sus invariantes, eventos de dominio y repositorios, e integración entre contextos con capas anticorrupción. El código de ejemplo, en Java 25, se ha ejecutado para comprobar cada regla.
+requisitos: [arquitectura-hexagonal]
+etiquetas: [ddd, arquitectura, agregados, contextos-delimitados, java]
+fuentes:
+  - domainlanguage.com
+  - martinfowler.com
+  - dddcommunity.org
+  - github.com
+  - learn.microsoft.com
+ejercicios:
+  minimo_por_leccion: 8

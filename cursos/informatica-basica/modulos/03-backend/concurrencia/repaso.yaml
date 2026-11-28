@@ -1,0 +1,555 @@
+- id: L01-001
+  tipo: matching
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: Empareja cada garantía ACID con su significado.
+  prompts:
+    - {id: "1", texto: "Atomicidad"}
+    - {id: "2", texto: "Consistencia"}
+    - {id: "3", texto: "Aislamiento"}
+    - {id: "4", texto: "Durabilidad"}
+  opciones:
+    - {id: a, texto: "Todo o nada"}
+    - {id: b, texto: "Los datos cumplen las reglas definidas al terminar"}
+    - {id: c, texto: "Las transacciones concurrentes no ven estados intermedios de las demás"}
+    - {id: d, texto: "Lo confirmado sobrevive a una caída"}
+    - {id: e, texto: "Las consultas son rápidas"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Son las cuatro garantías que da una transacción en una base de datos relacional.
+  distractores:
+    e: El rendimiento no forma parte de ACID.
+  referencia: https://en.wikipedia.org/wiki/ACID
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Ana tiene 100 € y Luis 50 €, con CHECK (saldo >= 0). En una transacción se abonan 200 € a Luis y luego se intentan cargar 200 € a Ana. ¿Qué saldos quedan?
+  opciones:
+    - {id: a, texto: "Ana 100 y Luis 250"}
+    - {id: b, texto: "Ana -100 y Luis 250"}
+    - {id: c, texto: "Ana 100 y Luis 50"}
+    - {id: d, texto: "Ana 0 y Luis 150"}
+  correctas: [c]
+  explicacion: El cargo viola la restricción y la transacción entera se deshace, incluido el abono ya ejecutado. Es la atomicidad, comprobada en PostgreSQL 17.
+  distractores:
+    a: Sería el resultado sin transacción, con el abono aplicado y el cargo fallido.
+    b: La restricción impide el saldo negativo.
+    d: La base de datos no ajusta el importe por su cuenta.
+  referencia: https://www.postgresql.org/docs/current/tutorial-transactions.html
+- id: L01-003
+  tipo: completar
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: Completa la transferencia para que se aplique como una unidad.
+  codigo:
+    lenguaje: sql
+    fuente: |
+      [[1]];
+      UPDATE cuentas SET saldo = saldo + 20 WHERE id = 2;
+      UPDATE cuentas SET saldo = saldo - 20 WHERE id = 1;
+      [[2]];
+  huecos:
+    - {id: "1", respuestas: [BEGIN, START TRANSACTION, BEGIN TRANSACTION], mayusculas: false}
+    - {id: "2", respuestas: [COMMIT, END], mayusculas: false}
+  explicacion: BEGIN abre la transacción y COMMIT la confirma; si algo falla antes, ROLLBACK la deshace entera.
+  referencia: https://www.postgresql.org/docs/current/tutorial-transactions.html
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿En qué se apoya PostgreSQL para garantizar la durabilidad?
+  opciones:
+    - {id: a, texto: "En los índices"}
+    - {id: b, texto: "En el registro de escritura anticipada (WAL), que se guarda en disco antes de confirmar"}
+    - {id: c, texto: "En la caché de memoria"}
+    - {id: d, texto: "En las restricciones CHECK"}
+  correctas: [b]
+  explicacion: Los cambios se anotan en el WAL antes de dar la transacción por confirmada; tras una caída, se reaplican desde él.
+  distractores:
+    a: Los índices aceleran consultas.
+    c: Lo que solo está en memoria se pierde en una caída.
+    d: Las restricciones protegen la consistencia.
+  referencia: https://www.postgresql.org/docs/current/wal-intro.html
+- id: L01-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.2"
+  enunciado: La regla «un pedido no puede superar el crédito del cliente» solo está en el código de la aplicación. ¿Qué garantiza la C de ACID sobre ella?
+  opciones:
+    - {id: a, texto: "Que se cumple, porque la transacción es consistente"}
+    - {id: b, texto: "Que se cumple en el nivel SERIALIZABLE sin más"}
+    - {id: c, texto: "Que se comprueba al hacer COMMIT"}
+    - {id: d, texto: "Nada; la base de datos solo protege las reglas que conoce, como restricciones"}
+  correctas: [d]
+  explicacion: La consistencia de ACID se refiere a las reglas declaradas en la base de datos. Las demás dependen de la aplicación y del nivel de aislamiento.
+  distractores:
+    a: La base de datos no conoce la regla.
+    b: SERIALIZABLE evita anomalías de concurrencia, pero la regla la sigue aplicando la aplicación.
+    c: COMMIT solo comprueba las restricciones declaradas.
+  referencia: https://en.wikipedia.org/wiki/ACID
+- id: L01-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "1.1"
+  enunciado: Ejecutas dos UPDATE seguidos en psql sin BEGIN. ¿Cuántas transacciones hay?
+  opciones:
+    - {id: a, texto: "Ninguna"}
+    - {id: b, texto: "Dos, una por orden, en modo autocommit"}
+    - {id: c, texto: "Una que agrupa las dos órdenes"}
+    - {id: d, texto: "Depende del tamaño de la tabla"}
+  correctas: [b]
+  explicacion: Sin BEGIN, cada orden es su propia transacción. Si la segunda falla, la primera ya está confirmada.
+  distractores:
+    a: Toda orden se ejecuta dentro de una transacción.
+    c: Agruparlas requiere BEGIN.
+    d: El tamaño no influye.
+  referencia: https://www.postgresql.org/docs/current/tutorial-transactions.html
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.1"
+  enunciado: Un método abre una transacción, actualiza el pedido, llama a una pasarela de pago que tarda 20 segundos y después confirma. ¿Qué problema hay?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Que el pago se hace dos veces"}
+    - {id: c, texto: "Que la base de datos no admite transacciones tan largas"}
+    - {id: d, texto: "Que mantiene bloqueadas las filas modificadas 20 segundos y frena a las transacciones que las necesitan"}
+  correctas: [d]
+  explicacion: Los bloqueos duran hasta el final de la transacción. Las llamadas externas deben ir fuera de ella.
+  distractores:
+    a: Las esperas dentro de la transacción afectan a los demás.
+    b: La duplicación no es una consecuencia directa.
+    c: Las admite, pero a costa de bloquear a otros.
+  referencia: https://www.postgresql.org/docs/current/explicit-locking.html
+- id: L01-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: ¿Qué afirmaciones sobre las transacciones son correctas?
+  opciones:
+    - {id: a, texto: "Si no se confirman, sus cambios no los ve nadie más"}
+    - {id: b, texto: "Una violación de una restricción aborta la transacción"}
+    - {id: c, texto: "ROLLBACK deshace los cambios de la transacción en curso"}
+    - {id: d, texto: "COMMIT puede deshacerse después con ROLLBACK"}
+    - {id: e, texto: "Las transacciones hacen las consultas más rápidas"}
+  correctas: [a, b, c]
+  explicacion: Los cambios no confirmados son invisibles para otras transacciones, las violaciones abortan y ROLLBACK deshace lo pendiente.
+  distractores:
+    d: Una vez confirmada, la transacción es definitiva.
+    e: Su objetivo es la corrección, no la velocidad.
+  referencia: https://www.postgresql.org/docs/current/tutorial-transactions.html
+- id: L02-001
+  tipo: matching
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Empareja cada situación con su anomalía.
+  prompts:
+    - {id: "1", texto: "Leo un saldo dos veces en la misma transacción y obtengo valores distintos"}
+    - {id: "2", texto: "Repito un SELECT con WHERE y aparece una fila nueva"}
+    - {id: "3", texto: "Dos procesos leen el stock, restan en la aplicación y escriben; una resta desaparece"}
+    - {id: "4", texto: "Dos médicos se quitan de la guardia a la vez y no queda ninguno"}
+  opciones:
+    - {id: a, texto: "Lectura no repetible"}
+    - {id: b, texto: "Lectura fantasma"}
+    - {id: c, texto: "Actualización perdida"}
+    - {id: d, texto: "Write skew"}
+    - {id: e, texto: "Lectura sucia"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: Cada anomalía describe una forma distinta en que la concurrencia rompe lo que cada transacción daba por hecho.
+  distractores:
+    e: La lectura sucia sería leer datos no confirmados, y PostgreSQL no la permite.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "2.3"
+  enunciado: ¿Cuál es el nivel de aislamiento predeterminado de PostgreSQL?
+  opciones:
+    - {id: a, texto: "READ UNCOMMITTED"}
+    - {id: b, texto: "READ COMMITTED"}
+    - {id: c, texto: "REPEATABLE READ"}
+    - {id: d, texto: "SERIALIZABLE"}
+  correctas: [b]
+  explicacion: SHOW default_transaction_isolation devolvió read committed en la prueba.
+  distractores:
+    a: Se puede pedir, pero se comporta como READ COMMITTED.
+    c: Hay que pedirlo explícitamente.
+    d: Hay que pedirlo explícitamente.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L02-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.2"
+  enunciado: La transacción A lee el saldo de Luis (50). B lo cambia a 999 y confirma. A vuelve a leer en REPEATABLE READ. ¿Qué ve?
+  opciones:
+    - {id: a, texto: "999"}
+    - {id: b, texto: "Un error de serialización"}
+    - {id: c, texto: "50, porque toda la transacción ve la instantánea tomada al empezar"}
+    - {id: d, texto: "NULL"}
+  correctas: [c]
+  explicacion: En REPEATABLE READ las lecturas usan la misma instantánea. En READ COMMITTED, en cambio, la segunda lectura habría devuelto 999.
+  distractores:
+    a: Es lo que vería en READ COMMITTED.
+    b: Leer no provoca errores de serialización; escribir sobre una fila cambiada sí.
+    d: La fila existe y tiene valor.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: En REPEATABLE READ, B intenta actualizar una fila que A modificó y confirmó después de que B empezara. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "B sobrescribe el cambio de A"}
+    - {id: b, texto: "B espera indefinidamente"}
+    - {id: c, texto: "B recibe «could not serialize access due to concurrent update» y debe reintentar"}
+    - {id: d, texto: "PostgreSQL fusiona los dos cambios"}
+  correctas: [c]
+  explicacion: Para no perder el cambio de A, PostgreSQL aborta B. La aplicación debe repetir la transacción desde el principio.
+  distractores:
+    a: Eso sería una actualización perdida, que este nivel evita.
+    b: Espera solo mientras A no termina; luego falla.
+    d: La base de datos no fusiona valores.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L02-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.2"
+  enunciado: En el ejemplo de los médicos de guardia, ¿por qué REPEATABLE READ no evita que se queden sin nadie?
+  opciones:
+    - {id: a, texto: "Porque cada transacción escribe una fila distinta, así que no hay conflicto de escritura que detectar"}
+    - {id: b, texto: "Porque REPEATABLE READ permite lecturas sucias"}
+    - {id: c, texto: "Porque falta un índice"}
+    - {id: d, texto: "Porque es un error de PostgreSQL"}
+  correctas: [a]
+  explicacion: El write skew no implica escribir la misma fila. Solo SERIALIZABLE detecta que el resultado no equivale a ninguna ejecución en serie.
+  distractores:
+    b: PostgreSQL no permite lecturas sucias en ningún nivel.
+    c: Los índices no cambian la semántica del aislamiento.
+    d: Es el comportamiento documentado del nivel.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Pides READ UNCOMMITTED en PostgreSQL. ¿Qué obtienes?
+  opciones:
+    - {id: a, texto: "Lecturas sucias"}
+    - {id: b, texto: "Un error"}
+    - {id: c, texto: "El comportamiento de SERIALIZABLE"}
+    - {id: d, texto: "El comportamiento de READ COMMITTED"}
+  correctas: [d]
+  explicacion: La documentación indica que solo hay tres niveles internos y que READ UNCOMMITTED se comporta como READ COMMITTED por su arquitectura MVCC.
+  distractores:
+    a: PostgreSQL no permite lecturas sucias.
+    b: El nivel se acepta.
+    c: Es el nivel más estricto, no el más permisivo.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L02-007
+  tipo: matching
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: Elige un nivel de aislamiento para cada caso.
+  prompts:
+    - {id: "1", texto: "Alta de un pedido con un INSERT y un UPDATE relativo del stock"}
+    - {id: "2", texto: "Un informe que hace varias consultas y debe ver los datos de un mismo instante"}
+    - {id: "3", texto: "La regla «al menos un médico de guardia», que depende de varias filas"}
+  opciones:
+    - {id: a, texto: "READ COMMITTED"}
+    - {id: b, texto: "REPEATABLE READ"}
+    - {id: c, texto: "SERIALIZABLE con reintentos"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El predeterminado basta con escrituras seguras; un informe necesita una instantánea estable; una regla sobre varias filas necesita SERIALIZABLE.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Según la documentación, ¿qué da PostgreSQL en REPEATABLE READ por encima de lo que exige el estándar SQL?
+  opciones:
+    - {id: a, texto: "Evita también las lecturas fantasma"}
+    - {id: b, texto: "Evita el write skew"}
+    - {id: c, texto: "Permite lecturas sucias"}
+    - {id: d, texto: "Nada"}
+  correctas: [a]
+  explicacion: El estándar permite fantasmas en REPEATABLE READ, pero la implementación de PostgreSQL no los permite.
+  distractores:
+    b: El write skew sí puede darse en este nivel.
+    c: PostgreSQL no permite lecturas sucias.
+    d: La documentación indica expresamente que no permite fantasmas.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L03-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: En PostgreSQL, una transacción está actualizando una fila sin confirmar. Otra hace un SELECT normal de esa fila. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "El SELECT espera a que termine la actualización"}
+    - {id: b, texto: "El SELECT falla"}
+    - {id: c, texto: "El SELECT ve el valor nuevo sin confirmar"}
+    - {id: d, texto: "El SELECT devuelve la última versión confirmada sin esperar, gracias a MVCC"}
+  correctas: [d]
+  explicacion: Con MVCC, las lecturas usan versiones confirmadas y no se bloquean por las escrituras en curso.
+  distractores:
+    a: Las lecturas normales no esperan a las escrituras.
+    b: No hay ningún error.
+    c: Sería una lectura sucia, que PostgreSQL no permite.
+  referencia: https://www.postgresql.org/docs/current/mvcc-intro.html
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: A ejecuta UPDATE cuentas SET saldo = saldo - 30 WHERE id = 1 sin confirmar; B ejecuta UPDATE cuentas SET saldo = saldo - 20 WHERE id = 1. El saldo era 100. ¿Qué pasa en READ COMMITTED?
+  opciones:
+    - {id: a, texto: "B espera; cuando A confirma, B relee la fila y el saldo final es 50"}
+    - {id: b, texto: "B falla con un error de serialización"}
+    - {id: c, texto: "Las dos se aplican sobre 100 y el saldo final es 80"}
+    - {id: d, texto: "B se aplica primero"}
+  correctas: [a]
+  explicacion: Las escrituras sobre la misma fila se serializan. En READ COMMITTED, la orden que esperó se reevalúa sobre la fila actualizada, y la resta relativa no se pierde.
+  distractores:
+    b: Ese error aparece en REPEATABLE READ o SERIALIZABLE.
+    c: Sería una actualización perdida, que un UPDATE relativo evita.
+    d: B espera porque A llegó primero.
+  referencia: https://www.postgresql.org/docs/current/explicit-locking.html
+- id: L03-003
+  tipo: completar
+  dificultad: baja
+  objetivo: "3.3"
+  enunciado: Completa la lectura para bloquear la fila hasta el final de la transacción.
+  codigo:
+    lenguaje: sql
+    fuente: |
+      BEGIN;
+      SELECT saldo FROM cuentas WHERE id = 1 [[1]] [[2]];
+  huecos:
+    - {id: "1", respuestas: [FOR], mayusculas: false}
+    - {id: "2", respuestas: [UPDATE], mayusculas: false}
+  explicacion: FOR UPDATE bloquea las filas leídas; otras transacciones que quieran modificarlas o bloquearlas esperan.
+  referencia: https://www.postgresql.org/docs/current/sql-select.html
+- id: L03-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: A y B hacen SELECT saldo … FOR UPDATE sobre la misma cuenta (saldo 100). A resta 30, escribe y confirma. ¿Qué saldo lee B?
+  opciones:
+    - {id: a, texto: "100"}
+    - {id: b, texto: "70, porque espera al bloqueo de A y después lee el valor confirmado"}
+    - {id: c, texto: "50"}
+    - {id: d, texto: "Ninguno; B falla"}
+  correctas: [b]
+  explicacion: El FOR UPDATE de B espera al de A y, al liberarse, devuelve la versión actualizada. En la prueba, B leyó 70 y el saldo final fue 50.
+  distractores:
+    a: Sería sin bloqueo, y daría lugar a una actualización perdida.
+    c: Es el saldo final tras la resta de B.
+    d: En READ COMMITTED, B espera y continúa.
+  referencia: https://www.postgresql.org/docs/current/explicit-locking.html
+- id: L03-005
+  tipo: matching
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Empareja cada cláusula con su efecto.
+  prompts:
+    - {id: "1", texto: "FOR UPDATE"}
+    - {id: "2", texto: "FOR UPDATE NOWAIT"}
+    - {id: "3", texto: "FOR UPDATE SKIP LOCKED"}
+  opciones:
+    - {id: a, texto: "Bloquea las filas y espera si otra transacción las tiene"}
+    - {id: b, texto: "Falla en lugar de esperar si la fila está bloqueada"}
+    - {id: c, texto: "Salta las filas bloqueadas; útil para repartir trabajos de una cola"}
+    - {id: d, texto: "Lee sin bloquear"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Las tres bloquean las filas que devuelven, pero reaccionan distinto ante las que ya están bloqueadas.
+  distractores:
+    d: Es un SELECT normal, sin cláusula de bloqueo.
+  referencia: https://www.postgresql.org/docs/current/sql-select.html
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: A bloquea la cuenta 1 y pide la 2; B bloquea la 2 y pide la 1. ¿Qué hace PostgreSQL?
+  opciones:
+    - {id: a, texto: "Esperan las dos indefinidamente"}
+    - {id: b, texto: "Confirma las dos"}
+    - {id: c, texto: "Detecta el interbloqueo tras deadlock_timeout y aborta una de las dos"}
+    - {id: d, texto: "Reinicia el servidor"}
+  correctas: [c]
+  explicacion: Tras esperar deadlock_timeout (1 segundo por defecto), PostgreSQL comprueba si hay un ciclo y aborta una transacción con DeadlockDetected. En la prueba, A fue abortada y B confirmó.
+  distractores:
+    a: La detección evita la espera infinita.
+    b: Una de las dos no puede continuar.
+    d: El servidor sigue funcionando.
+  referencia: https://www.postgresql.org/docs/current/runtime-config-locks.html
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: ¿Cómo se reducen los interbloqueos en transferencias entre cuentas?
+  opciones:
+    - {id: a, texto: "Bloquear las cuentas siempre en el mismo orden, por ejemplo por id ascendente"}
+    - {id: b, texto: "Mantener las transacciones cortas"}
+    - {id: c, texto: "Reintentar la transacción abortada por DeadlockDetected"}
+    - {id: d, texto: "Desactivar la detección de interbloqueos"}
+    - {id: e, texto: "Usar transacciones más largas"}
+  correctas: [a, b, c]
+  explicacion: Un orden fijo evita los ciclos, las transacciones cortas reducen la ventana de conflicto y el reintento resuelve los que aún ocurran.
+  distractores:
+    d: Las transacciones se quedarían esperando indefinidamente.
+    e: Aumentan la ventana en la que se cruzan los bloqueos.
+  referencia: https://www.postgresql.org/docs/current/explicit-locking.html
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: ¿Qué limpia el proceso VACUUM?
+  opciones:
+    - {id: a, texto: "Las versiones antiguas de las filas que ya ninguna transacción necesita"}
+    - {id: b, texto: "Los índices que no se usan"}
+    - {id: c, texto: "Las transacciones abiertas"}
+    - {id: d, texto: "Los usuarios inactivos"}
+  correctas: [a]
+  explicacion: Con MVCC, cada actualización deja versiones antiguas. VACUUM (normalmente autovacuum) recupera ese espacio cuando ya no son visibles para nadie.
+  distractores:
+    b: VACUUM no borra índices.
+    c: No cierra transacciones.
+    d: No gestiona usuarios.
+  referencia: https://www.postgresql.org/docs/current/mvcc-intro.html
+- id: L04-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Dos procesos ejecutan a la vez este código sobre un saldo de 100, uno restando 30 y otro 20, en READ COMMITTED. ¿Qué saldo puede quedar?
+  codigo:
+    lenguaje: python
+    fuente: |
+      saldo = db.execute("SELECT saldo FROM cuentas WHERE id = 1").fetchone()[0]
+      db.execute("UPDATE cuentas SET saldo = %s WHERE id = 1", (saldo - x,))
+      db.commit()
+  opciones:
+    - {id: a, texto: "50, la suma correcta de las dos restas"}
+    - {id: b, texto: "80 o 70, porque una escritura puede borrar la otra"}
+    - {id: c, texto: "Un error de serialización"}
+    - {id: d, texto: "150"}
+  correctas: [b]
+  explicacion: Los dos leen 100 y escriben 100 − x; la última escritura gana. En la prueba quedó 80. Es la actualización perdida.
+  distractores:
+    a: Solo sería así si una transacción leyera después de que la otra confirmara.
+    c: READ COMMITTED no da errores de serialización.
+    d: Ninguna operación suma.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L04-002
+  tipo: completar
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: Reescribe la resta para que dos procesos concurrentes no pierdan ninguna.
+  codigo:
+    lenguaje: sql
+    fuente: |
+      UPDATE cuentas SET saldo = [[1]] - 30 WHERE id = 1;
+  huecos:
+    - {id: "1", respuestas: [saldo]}
+  explicacion: Con la resta relativa, cada UPDATE trabaja sobre el valor actual de la fila; el segundo espera y se aplica sobre el resultado del primero.
+  referencia: https://www.postgresql.org/docs/current/explicit-locking.html
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Con bloqueo optimista, dos procesos leen la versión 0 y ejecutan UPDATE … WHERE id = 1 AND version = 0. ¿Qué devuelve cada UPDATE?
+  opciones:
+    - {id: a, texto: "1 fila los dos"}
+    - {id: b, texto: "0 filas los dos"}
+    - {id: c, texto: "Un error de serialización en el segundo"}
+    - {id: d, texto: "1 fila el primero y 0 el segundo, que debe releer y decidir"}
+  correctas: [d]
+  explicacion: El primero sube la versión a 1, así que la condición del segundo ya no se cumple y no actualiza nada. Así se detecta el conflicto, como en la prueba.
+  distractores:
+    a: La versión cambió tras el primero.
+    b: El primero sí encuentra la versión 0.
+    c: No hay error; simplemente no se actualiza ninguna fila.
+  referencia: https://en.wikipedia.org/wiki/Optimistic_concurrency_control
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Elige la técnica para cada caso.
+  prompts:
+    - {id: "1", texto: "Restar unidades de stock con una regla de no bajar de cero"}
+    - {id: "2", texto: "Un usuario edita una ficha durante varios minutos antes de guardar"}
+    - {id: "3", texto: "Varios procesos compiten a menudo por la misma fila y deciden con lógica compleja"}
+  opciones:
+    - {id: a, texto: "UPDATE relativo con restricción CHECK"}
+    - {id: b, texto: "Bloqueo optimista con columna de versión"}
+    - {id: c, texto: "SELECT … FOR UPDATE"}
+    - {id: d, texto: "Leer, calcular y escribir sin más"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Lo expresable en SQL va en SQL; las esperas de usuario piden bloqueo optimista; los conflictos frecuentes con lógica de aplicación, bloqueo pesimista.
+  distractores:
+    d: Pierde actualizaciones en cuanto hay concurrencia.
+  referencia: https://www.postgresql.org/docs/current/explicit-locking.html
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.2"
+  enunciado: ¿Por qué no se usa SELECT … FOR UPDATE mientras un usuario edita un formulario durante minutos?
+  opciones:
+    - {id: a, texto: "Porque FOR UPDATE no funciona con formularios"}
+    - {id: b, texto: "Porque habría que mantener una transacción abierta y la fila bloqueada todo ese tiempo, frenando a los demás"}
+    - {id: c, texto: "Porque es más lento que un SELECT normal"}
+    - {id: d, texto: "Porque solo funciona en SERIALIZABLE"}
+  correctas: [b]
+  explicacion: El bloqueo pesimista solo dura lo que dura la transacción. Para esperas de usuario se usa el bloqueo optimista, que no bloquea nada.
+  distractores:
+    a: El problema no es técnico del formulario, sino de la duración del bloqueo.
+    c: El coste importante es el bloqueo, no la consulta.
+    d: Funciona en todos los niveles.
+  referencia: https://en.wikipedia.org/wiki/Optimistic_concurrency_control
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Una transacción SERIALIZABLE falla con SerializationFailure. ¿Qué debe hacer la aplicación?
+  opciones:
+    - {id: a, texto: "Mostrar un error técnico al usuario y no hacer nada más"}
+    - {id: b, texto: "Bajar a READ COMMITTED para que no vuelva a pasar"}
+    - {id: c, texto: "Repetir solo la última orden"}
+    - {id: d, texto: "Repetir la transacción entera desde el principio, releyendo los datos"}
+  correctas: [d]
+  explicacion: El error indica que confirmar habría violado el aislamiento. Repetir la transacción completa, con datos nuevos, es la respuesta prevista.
+  distractores:
+    a: Es una situación esperada que se resuelve reintentando.
+    b: Reaparecerían las anomalías que se querían evitar.
+    c: La transacción fallida ya está abortada entera.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.4"
+  enunciado: Una transacción cobra al cliente en la pasarela de pago y después falla con DeadlockDetected. ¿Por qué no basta con reintentarla sin más?
+  opciones:
+    - {id: a, texto: "Porque el cobro ya se hizo y la base de datos no puede deshacerlo; reintentar cobraría dos veces"}
+    - {id: b, texto: "Porque los interbloqueos no se pueden reintentar"}
+    - {id: c, texto: "Porque la pasarela no acepta reintentos"}
+    - {id: d, texto: "Porque hay que reiniciar la base de datos"}
+  correctas: [a]
+  explicacion: Solo es seguro reintentar si la transacción no tuvo efectos externos. El cobro debe ir después de confirmar, de forma idempotente, o con un patrón outbox.
+  distractores:
+    b: Se reintentan con normalidad si no hay efectos externos.
+    c: Depende de la pasarela; el problema es el cobro duplicado.
+    d: No hace falta reiniciar nada.
+  referencia: https://www.postgresql.org/docs/current/transaction-iso.html
+- id: L04-008
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: ¿Qué técnicas ayudan a combinar una transacción con efectos externos?
+  opciones:
+    - {id: a, texto: "Confirmar primero en la base de datos y hacer después el efecto externo"}
+    - {id: b, texto: "Que el efecto externo sea idempotente, por ejemplo con una clave de idempotencia"}
+    - {id: c, texto: "Guardar el mensaje en una tabla outbox en la misma transacción y enviarlo después"}
+    - {id: d, texto: "Hacer el efecto externo dentro de la transacción para poder deshacerlo"}
+    - {id: e, texto: "Ignorar los fallos del efecto externo"}
+  correctas: [a, b, c]
+  explicacion: La base de datos no puede deshacer lo externo. Se ordena el trabajo, se hace repetible sin daño y se usa una tabla outbox para no perder mensajes.
+  distractores:
+    d: ROLLBACK no deshace un correo ni un cobro.
+    e: Dejaría datos y sistemas externos incoherentes.
+  referencia: https://en.wikipedia.org/wiki/Optimistic_concurrency_control

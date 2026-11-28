@@ -1,0 +1,19 @@
+slug: microservicios
+titulo: 'Microservicios: límites, integración y datos'
+area: arquitectura
+nivel: avanzado
+idioma: es-ES
+resumen: Cuándo compensan los microservicios y cómo diseñarlos para que no se conviertan en un monolito distribuido. Límites por capacidades de negocio, comunicación resiliente (timeouts, reintentos, interruptores e idempotencia), datos por servicio y consistencia, y operación con pasarelas, contratos y versionado. Los fallos y sus soluciones se han medido con dos servicios Python reales.
+requisitos: [domain-driven-design, arquitectura-dirigida-por-eventos]
+etiquetas: [microservicios, arquitectura, resiliencia, idempotencia, circuit-breaker]
+fuentes:
+  - martinfowler.com
+  - microservices.io
+  - learn.microsoft.com
+  - aws.amazon.com
+  - datatracker.ietf.org
+  - docs.pact.io
+  - grpc.io
+  - kubernetes.io
+ejercicios:
+  minimo_por_leccion: 8

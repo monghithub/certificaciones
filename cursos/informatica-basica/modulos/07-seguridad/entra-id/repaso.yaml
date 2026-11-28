@@ -1,0 +1,689 @@
+- id: L01-001
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué relación hay entre Azure Active Directory y Microsoft Entra ID?
+  opciones:
+    - {id: a, texto: "Son productos distintos que hay que integrar entre sí"}
+    - {id: b, texto: "Entra ID es el nuevo nombre de Azure AD; las URL de inicio de sesión, las API y MSAL siguen igual"}
+    - {id: c, texto: "Entra ID sustituye a Azure AD y obliga a migrar las aplicaciones"}
+    - {id: d, texto: "Entra ID es la versión local de Active Directory"}
+  correctas: [b]
+  explicacion: Microsoft renombró Azure AD a Microsoft Entra ID en 2023 sin interrupciones del servicio. Las URL, las API, los cmdlets y MSAL se mantienen.
+  distractores:
+    a: Es el mismo servicio con otro nombre.
+    c: No hay que migrar nada; Microsoft lo indica expresamente.
+    d: El Active Directory local de Windows Server es otro producto; el cambio de nombre buscaba precisamente evitar esa confusión.
+  referencia: https://learn.microsoft.com/en-us/entra/fundamentals/new-name
+- id: L01-002
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.2"
+  enunciado: ¿Qué es un tenant de Entra ID?
+  opciones:
+    - {id: a, texto: "Una máquina virtual de Azure"}
+    - {id: b, texto: "Un usuario con permisos de administrador"}
+    - {id: c, texto: "La instancia de Entra ID de una organización, con sus usuarios, grupos y aplicaciones, identificada por un GUID"}
+    - {id: d, texto: "Una suscripción de pago"}
+  correctas: [c]
+  explicacion: El tenant es el directorio de una organización. Su identificador aparece en el claim tid de los tokens.
+  distractores:
+    a: Un tenant no es un recurso de cómputo.
+    b: Un administrador es un usuario dentro del tenant.
+    d: Las suscripciones de Azure se asocian a un tenant, pero no son lo mismo.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/single-and-multi-tenant-apps
+- id: L01-003
+  tipo: matching
+  dificultad: media
+  objetivo: "1.2"
+  enunciado: Elige el tipo de aplicación adecuado para cada caso.
+  prompts:
+    - {id: "1", texto: "La intranet de tu empresa, solo para empleados"}
+    - {id: "2", texto: "Un producto SaaS que venden otras empresas a sus empleados"}
+    - {id: "3", texto: "Una aplicación para clientes que entran con su cuenta personal de Outlook"}
+  opciones:
+    - {id: a, texto: "Un solo tenant"}
+    - {id: b, texto: "Multitenant, solo cuentas de trabajo o escuela"}
+    - {id: c, texto: "Multitenant con cuentas personales de Microsoft"}
+    - {id: d, texto: "Ninguna; no se puede con Entra ID"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: El tipo depende de quién debe poder iniciar sesión, solo tu organización, cualquier organización o también cuentas personales.
+  distractores:
+    d: Los tres casos son posibles con Entra ID.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/single-and-multi-tenant-apps
+- id: L01-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.2"
+  enunciado: Una API multitenant guarda los datos de cada organización cliente. ¿Qué comprobación indica la documentación como primer paso para no mezclar datos?
+  opciones:
+    - {id: a, texto: "Que el token tenga menos de una hora"}
+    - {id: b, texto: "Que el usuario tenga correo verificado"}
+    - {id: c, texto: "Que la petición venga de un navegador"}
+    - {id: d, texto: "Que el tid del token coincide con el tenant al que pertenecen los datos"}
+  correctas: [d]
+  explicacion: La documentación indica comprobar siempre que el tid coincide con el tenant de los datos y no permitir nunca acceder a datos de un tenant desde otro.
+  distractores:
+    a: La caducidad se valida, pero no evita mezclar tenants.
+    b: No tiene relación con el tenant de los datos.
+    c: El origen de la petición no identifica al tenant.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/claims-validation
+- id: L01-005
+  tipo: completar
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Completa la URL del documento de descubrimiento de OpenID Connect de un tenant.
+  codigo:
+    lenguaje: text
+    fuente: |
+      https://login.microsoftonline.com/{tenant-id}/[[1]]/.well-known/[[2]]
+  huecos:
+    - {id: "1", respuestas: [v2.0]}
+    - {id: "2", respuestas: [openid-configuration]}
+  explicacion: El endpoint v2.0 publica su configuración en la ruta estándar de OpenID Connect Discovery.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc
+- id: L01-006
+  tipo: matching
+  dificultad: media
+  objetivo: "1.3"
+  enunciado: Empareja cada alias de tenant con las cuentas que admite.
+  prompts:
+    - {id: "1", texto: "common"}
+    - {id: "2", texto: "organizations"}
+    - {id: "3", texto: "consumers"}
+  opciones:
+    - {id: a, texto: "Cuentas de trabajo o escuela y cuentas personales"}
+    - {id: b, texto: "Solo cuentas de trabajo o escuela"}
+    - {id: c, texto: "Solo cuentas personales de Microsoft"}
+    - {id: d, texto: "Solo cuentas de invitado"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: Los alias sustituyen al GUID del tenant en la URL cuando la aplicación admite varias organizaciones o cuentas personales.
+  distractores:
+    d: No existe un alias específico para invitados.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc
+- id: L01-007
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "1.3"
+  enunciado: El documento de descubrimiento de common devuelve el issuer https://login.microsoftonline.com/{tenantid}/v2.0. ¿Qué implica para una API multitenant?
+  opciones:
+    - {id: a, texto: "Que debe aceptar el texto {tenantid} literalmente"}
+    - {id: b, texto: "Que los tokens no llevan emisor"}
+    - {id: c, texto: "Que no puede fijar un único emisor; debe validar que el emisor tiene esa forma y que el tid está entre los tenants aceptados"}
+    - {id: d, texto: "Que debe usar el endpoint v1.0"}
+  correctas: [c]
+  explicacion: Es una plantilla; cada token lleva el GUID del tenant del usuario. La API debe sustituirlo y decidir qué tenants acepta.
+  distractores:
+    a: Ningún token real lleva el texto literal de la plantilla.
+    b: Todos los tokens llevan iss.
+    d: El endpoint v1.0 no resuelve el problema y es el antiguo.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference
+- id: L01-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "1.1"
+  enunciado: ¿Qué protocolos estándar usa Entra ID para que las aplicaciones inicien sesión y obtengan tokens?
+  opciones:
+    - {id: a, texto: "OAuth 2.0 y OpenID Connect"}
+    - {id: b, texto: "Un protocolo propietario sin especificación pública"}
+    - {id: c, texto: "FTP"}
+    - {id: d, texto: "Solo NTLM"}
+  correctas: [a]
+  explicacion: La plataforma de identidad de Microsoft implementa OAuth 2.0 y OpenID Connect, así que se aplica lo visto en el tema de OAuth.
+  distractores:
+    b: Los protocolos son estándares públicos.
+    c: FTP es un protocolo de transferencia de ficheros.
+    d: NTLM es un protocolo antiguo de redes Windows, no el de las aplicaciones modernas.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/v2-overview
+- id: L02-001
+  tipo: matching
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Empareja cada afirmación con el objeto al que se refiere.
+  prompts:
+    - {id: "1", texto: "Definición global con el client ID y las URI de redirección"}
+    - {id: "2", texto: "Instancia local en cada tenant donde se usa la aplicación"}
+    - {id: "3", texto: "Recoge los consentimientos y las asignaciones de usuarios en ese tenant"}
+  opciones:
+    - {id: a, texto: "Objeto de aplicación"}
+    - {id: b, texto: "Entidad de servicio"}
+    - {id: c, texto: "Tenant"}
+  correctas: [["1", a], ["2", b], ["3", b]]
+  explicacion: El objeto de aplicación define la aplicación una vez; la entidad de servicio la representa en cada tenant y registra lo que puede hacer allí.
+  distractores:
+    c: El tenant es el directorio que contiene ambos objetos, no uno de ellos.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals
+- id: L02-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.1"
+  enunciado: Tu aplicación multitenant la usan 30 empresas clientes. ¿Cuántos objetos de aplicación y cuántas entidades de servicio existen?
+  opciones:
+    - {id: a, texto: "30 objetos de aplicación y una entidad de servicio"}
+    - {id: b, texto: "Un objeto de aplicación y una entidad de servicio"}
+    - {id: c, texto: "Un objeto de aplicación en tu tenant y una entidad de servicio en cada tenant donde se usa, incluido el tuyo"}
+    - {id: d, texto: "Ninguno; las aplicaciones multitenant no se registran"}
+  correctas: [c]
+  explicacion: El objeto de aplicación es global y vive en el tenant de origen. En cada tenant que usa la aplicación se crea una entidad de servicio que la referencia.
+  distractores:
+    a: Es al revés.
+    b: Cada tenant necesita su propia entidad de servicio.
+    d: Toda aplicación que usa Entra ID se registra.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals
+- id: L02-003
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: ¿Qué recomienda Microsoft sobre las URI de redirección?
+  opciones:
+    - {id: a, texto: "No usar comodines como https://*.contoso.com"}
+    - {id: b, texto: "Mantener la lista corta y quitar las que no se usan"}
+    - {id: c, texto: "Conservar la propiedad de los dominios de todas las URI"}
+    - {id: d, texto: "Usar http en producción para simplificar"}
+    - {id: e, texto: "Compartir el mismo registro entre desarrollo y producción"}
+  correctas: [a, b, c]
+  explicacion: Las URI deben ser exactas, pocas y de dominios bajo tu control. Microsoft también aconseja registros separados para desarrollo y producción.
+  distractores:
+    d: La documentación desaconseja los esquemas inseguros como http.
+    e: Se recomiendan registros separados para no dejar URI de desarrollo en producción.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration
+- id: L02-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "2.4"
+  enunciado: Una URI de redirección registrada apunta a un subdominio de una campaña antigua cuyo dominio dejó de renovarse. ¿Qué riesgo hay?
+  opciones:
+    - {id: a, texto: "Ninguno, porque la URI ya no se usa"}
+    - {id: b, texto: "Que alguien registre el dominio y reciba códigos de autorización de tus usuarios"}
+    - {id: c, texto: "Que Entra ID borre la aplicación"}
+    - {id: d, texto: "Que los usuarios no puedan cambiar la contraseña"}
+  correctas: [b]
+  explicacion: Microsoft advierte de que perder la propiedad de un dominio de una URI de redirección puede comprometer la aplicación. Hay que quitar las URI que no se usan.
+  distractores:
+    a: Mientras esté registrada, se puede usar en una petición.
+    c: Entra ID no borra aplicaciones por eso.
+    d: No tiene relación con las contraseñas.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration
+- id: L02-005
+  tipo: matching
+  dificultad: baja
+  objetivo: "2.2"
+  enunciado: Elige la plataforma del registro para cada aplicación.
+  prompts:
+    - {id: "1", texto: "Una aplicación React que se ejecuta en el navegador"}
+    - {id: "2", texto: "Una aplicación web con backend en Java que guarda un secreto"}
+    - {id: "3", texto: "Una aplicación de escritorio en .NET"}
+  opciones:
+    - {id: a, texto: "SPA"}
+    - {id: b, texto: "Web"}
+    - {id: c, texto: "Móvil y escritorio"}
+    - {id: d, texto: "API"}
+  correctas: [["1", a], ["2", b], ["3", c]]
+  explicacion: La plataforma determina cómo se aplica el flujo, por ejemplo PKCE sin secreto en las SPA o un cliente confidencial en las web con backend.
+  distractores:
+    d: Exponer una API no es una plataforma de cliente; se configura aparte.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app
+- id: L02-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: ¿Qué valor tiene el claim aud de un token de acceso v2.0 emitido para tu API?
+  opciones:
+    - {id: a, texto: "El client ID del cliente que pidió el token"}
+    - {id: b, texto: "El tenant ID"}
+    - {id: c, texto: "El correo del usuario"}
+    - {id: d, texto: "El client ID de la API"}
+  correctas: [d]
+  explicacion: La documentación indica que, en los tokens v2.0, aud es siempre el client ID de la API. La API debe validarlo y rechazar el token si no coincide.
+  distractores:
+    a: El cliente aparece en azp.
+    b: El tenant aparece en tid.
+    c: El correo no es una audiencia.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference
+- id: L02-007
+  tipo: completar
+  dificultad: media
+  objetivo: "2.3"
+  enunciado: Completa el scope con el que un cliente pide permiso delegado para leer pedidos en la API expuesta.
+  codigo:
+    lenguaje: text
+    fuente: |
+      [[1]]://3f2a7c1e-0000-0000-0000-000000000000/[[2]]
+  huecos:
+    - {id: "1", respuestas: [api]}
+    - {id: "2", respuestas: [Pedidos.Read]}
+  explicacion: El scope combina el URI de identificador de la aplicación, por defecto api://{client-id}, con el nombre del permiso que expone la API.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app
+- id: L02-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "2.4"
+  enunciado: El registro de una SPA tiene marcada la opción de emitir tokens de acceso para el flujo implícito. ¿Qué recomienda Microsoft?
+  opciones:
+    - {id: a, texto: "Mantenerla, porque las SPA lo necesitan"}
+    - {id: b, texto: "Activar también la de ID tokens"}
+    - {id: c, texto: "Desactivarla y usar el flujo de código con PKCE"}
+    - {id: d, texto: "Convertir la SPA en aplicación de escritorio"}
+  correctas: [c]
+  explicacion: Microsoft indica que los escenarios que usaban el flujo implícito pueden usar el flujo de código y reducir el riesgo; coincide con el RFC 9700.
+  distractores:
+    a: Las SPA modernas usan el flujo de código con PKCE.
+    b: Ampliaría el uso de un flujo desaconsejado.
+    d: Cambiar de plataforma no tiene sentido para una SPA.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration
+- id: L03-001
+  tipo: matching
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Empareja cada característica con el tipo de acceso.
+  prompts:
+    - {id: "1", texto: "La aplicación actúa en nombre de un usuario que ha iniciado sesión"}
+    - {id: "2", texto: "La aplicación actúa por sí misma, sin usuario"}
+    - {id: "3", texto: "Los permisos llegan en el claim scp"}
+    - {id: "4", texto: "Los permisos llegan en el claim roles"}
+  opciones:
+    - {id: a, texto: "Acceso delegado"}
+    - {id: b, texto: "Acceso solo de aplicación"}
+    - {id: c, texto: "Acceso anónimo"}
+  correctas: [["1", a], ["2", b], ["3", a], ["4", b]]
+  explicacion: El acceso delegado usa permisos delegados (scp); el de aplicación usa permisos de aplicación, que llegan en roles.
+  distractores:
+    c: Entra ID no emite tokens de acceso anónimos para API protegidas.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/permissions-consent-overview
+- id: L03-002
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.1"
+  enunciado: Una aplicación tiene el permiso delegado Files.Read.All y la usa Ana. ¿A qué ficheros puede acceder?
+  opciones:
+    - {id: a, texto: "A los ficheros de la organización, sean de quien sean"}
+    - {id: b, texto: "Solo a los que Ana podría leer personalmente"}
+    - {id: c, texto: "A ninguno, porque falta un permiso de aplicación"}
+    - {id: d, texto: "Solo a los que creó la aplicación"}
+  correctas: [b]
+  explicacion: Con permisos delegados, la aplicación actúa en nombre del usuario y no puede superar lo que él podría hacer. La documentación usa este mismo ejemplo.
+  distractores:
+    a: Eso sería con el permiso de aplicación, sin usuario.
+    c: El permiso delegado basta para acceder en nombre de Ana.
+    d: El límite lo marcan los permisos de Ana, no quién creó los ficheros.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/permissions-consent-overview
+- id: L03-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.2"
+  enunciado: ¿Quién puede conceder consentimiento a un permiso de aplicación?
+  opciones:
+    - {id: a, texto: "El usuario que inicia sesión"}
+    - {id: b, texto: "El desarrollador de la aplicación, al registrarla"}
+    - {id: c, texto: "Solo un administrador"}
+    - {id: d, texto: "Nadie; se concede automáticamente"}
+  correctas: [c]
+  explicacion: La documentación indica que los permisos de aplicación y muchos permisos delegados de alto privilegio solo los puede conceder un administrador.
+  distractores:
+    a: En el acceso solo de aplicación no hay usuario a quien preguntar.
+    b: Registrar la aplicación no concede permisos en los tenants.
+    d: Requieren una decisión explícita de un administrador.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/permissions-consent-overview
+- id: L03-004
+  tipo: completar
+  dificultad: media
+  objetivo: "3.3"
+  enunciado: Completa la petición de credenciales de cliente para obtener un token de Microsoft Graph con los permisos de aplicación concedidos.
+  codigo:
+    lenguaje: text
+    fuente: |
+      POST https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
+
+      grant_type=[[1]]
+      &client_id=…
+      &scope=https://graph.microsoft.com/[[2]]
+      &client_assertion=…
+  huecos:
+    - {id: "1", respuestas: [client_credentials]}
+    - {id: "2", respuestas: [.default]}
+  explicacion: En el flujo de credenciales de cliente se pide el scope /.default del recurso, que equivale a todos los permisos de aplicación ya concedidos para él.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
+- id: L03-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "3.3"
+  enunciado: Un servicio pide en una sola petición de credenciales de cliente los scopes https://graph.microsoft.com/.default y api://mi-api/.default. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Recibe un token válido para los dos recursos"}
+    - {id: b, texto: "Recibe dos tokens"}
+    - {id: c, texto: "Recibe un token solo para el primero"}
+    - {id: d, texto: "Error, porque los scopes de una petición deben ser de un único recurso"}
+  correctas: [d]
+  explicacion: La documentación indica que todos los scopes deben ser del mismo recurso y que mezclar recursos produce un error. Cada recurso necesita su propio token.
+  distractores:
+    a: Un token tiene una sola audiencia.
+    b: El endpoint devuelve un token por petición.
+    c: La petición falla en lugar de ignorar el segundo.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
+- id: L03-006
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: Quieres que los gestores de pedidos puedan modificar pedidos y los demás solo leerlos en tu API. ¿Qué usarías en Entra ID?
+  opciones:
+    - {id: a, texto: "Roles de aplicación definidos en la API y asignados a grupos, leídos del claim roles"}
+    - {id: b, texto: "Un tenant para cada tipo de usuario"}
+    - {id: c, texto: "El claim scp del cliente"}
+    - {id: d, texto: "El nombre del usuario"}
+  correctas: [a]
+  explicacion: Los roles de aplicación describen qué puede hacer cada usuario en la API. Asignarlos a grupos simplifica la gestión.
+  distractores:
+    b: Los tenants separan organizaciones, no perfiles de usuario.
+    c: scp expresa qué puede hacer la aplicación cliente en nombre del usuario, no el perfil del usuario.
+    d: Decidir por nombres de usuario es frágil e inmanejable.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-app-roles-in-apps
+- id: L03-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "3.4"
+  enunciado: ¿A quién se puede asignar un rol de aplicación?
+  opciones:
+    - {id: a, texto: "A usuarios"}
+    - {id: b, texto: "A grupos de usuarios"}
+    - {id: c, texto: "A la entidad de servicio de otra aplicación"}
+    - {id: d, texto: "A una dirección IP"}
+    - {id: e, texto: "A un dominio DNS"}
+  correctas: [a, b, c]
+  explicacion: Los roles de aplicación se asignan a usuarios, grupos o entidades de servicio. En este último caso funcionan como permisos de aplicación.
+  distractores:
+    d: Las direcciones IP no son identidades de Entra ID.
+    e: Los dominios tampoco son identidades.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-app-roles-in-apps
+- id: L03-008
+  tipo: multiple_choice
+  dificultad: baja
+  objetivo: "3.2"
+  enunciado: ¿Qué permite la preautorización de clientes en una API?
+  opciones:
+    - {id: a, texto: "Que las aplicaciones llamen a la API sin token"}
+    - {id: b, texto: "Que ciertos clientes de confianza obtengan los scopes indicados sin que sus usuarios vean la pantalla de consentimiento"}
+    - {id: c, texto: "Que la API conceda permisos de aplicación sin administrador"}
+    - {id: d, texto: "Que la API cambie de tenant"}
+  correctas: [b]
+  explicacion: El propietario de la API preautoriza a clientes concretos para un conjunto de permisos, y los usuarios no ven el aviso de consentimiento para ellos.
+  distractores:
+    a: Las llamadas siguen necesitando un token válido.
+    c: Los permisos de aplicación siguen requiriendo un administrador.
+    d: No tiene relación con el tenant de la API.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/permissions-consent-overview
+- id: L04-001
+  tipo: ordering
+  dificultad: media
+  objetivo: "4.1"
+  enunciado: Ordena las credenciales de una aplicación de la más recomendada a la menos, según las buenas prácticas de Microsoft.
+  opciones:
+    - {id: a, texto: "Identidad administrada"}
+    - {id: b, texto: "Federación de identidades de carga de trabajo"}
+    - {id: c, texto: "Certificado guardado en un almacén seguro"}
+    - {id: d, texto: "Secreto de cliente"}
+  correctas: [a, b, c, d]
+  explicacion: Microsoft recomienda la identidad administrada siempre que sea posible, después un proveedor externo seguro (federación), luego certificados, y desaconseja los secretos.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration
+- id: L04-002
+  tipo: multiple_response
+  dificultad: baja
+  objetivo: "4.1"
+  enunciado: ¿Por qué desaconseja Microsoft los secretos de cliente?
+  opciones:
+    - {id: a, texto: "Porque se gestionan mal y se filtran con facilidad"}
+    - {id: b, texto: "Porque caducan y pueden provocar caídas si no se renuevan"}
+    - {id: c, texto: "Porque hay alternativas sin credenciales que guardar"}
+    - {id: d, texto: "Porque los tokens obtenidos con secreto no son JWT"}
+    - {id: e, texto: "Porque los secretos no funcionan en Linux"}
+  correctas: [a, b, c]
+  explicacion: Los secretos acaban en repositorios y registros, caducan y existen opciones mejores, como las identidades administradas o la federación.
+  distractores:
+    d: El formato del token no depende de la credencial del cliente.
+    e: Funcionan en cualquier sistema; el problema es de seguridad y gestión.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration
+- id: L04-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Una aplicación en Azure App Service necesita leer de una API protegida por Entra ID. ¿Qué credencial usarías?
+  opciones:
+    - {id: a, texto: "Un secreto de cliente en las variables de entorno"}
+    - {id: b, texto: "Un certificado subido con la aplicación"}
+    - {id: c, texto: "Una identidad administrada del recurso"}
+    - {id: d, texto: "El usuario y la contraseña de un administrador"}
+  correctas: [c]
+  explicacion: En Azure, la identidad administrada da una identidad al recurso sin ninguna credencial que guardar ni rotar.
+  distractores:
+    a: Es la opción que Microsoft desaconseja.
+    b: Es mejor que un secreto, pero en Azure hay una opción sin credenciales.
+    d: Nunca se usan credenciales de personas para aplicaciones.
+  referencia: https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview
+- id: L04-004
+  tipo: matching
+  dificultad: media
+  objetivo: "4.2"
+  enunciado: Empareja cada característica con el tipo de identidad administrada.
+  prompts:
+    - {id: "1", texto: "Se borra automáticamente al borrar el recurso"}
+    - {id: "2", texto: "Es un recurso independiente que se asigna a varios recursos"}
+    - {id: "3", texto: "Solo puede usarla el recurso en el que se activa"}
+  opciones:
+    - {id: a, texto: "Asignada por el sistema"}
+    - {id: b, texto: "Asignada por el usuario"}
+    - {id: c, texto: "Certificado"}
+  correctas: [["1", a], ["2", b], ["3", a]]
+  explicacion: La asignada por el sistema va ligada a un recurso; la asignada por el usuario se gestiona aparte y se comparte.
+  distractores:
+    c: Un certificado es otro tipo de credencial, no una identidad administrada.
+  referencia: https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview
+- id: L04-005
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.3"
+  enunciado: Un flujo de GitHub Actions despliega en un recurso protegido por Entra ID. ¿Cómo evitar guardar un secreto en GitHub?
+  opciones:
+    - {id: a, texto: "Configurar la federación de identidades de carga de trabajo para confiar en los tokens OIDC de GitHub Actions"}
+    - {id: b, texto: "Guardar el secreto cifrado en el repositorio"}
+    - {id: c, texto: "Usar una identidad administrada asignada por el sistema en el ejecutor de GitHub"}
+    - {id: d, texto: "Usar la contraseña de un desarrollador"}
+  correctas: [a]
+  explicacion: GitHub Actions emite un token OIDC por ejecución; Entra ID confía en él con las condiciones configuradas y entrega un token propio, sin secretos.
+  distractores:
+    b: Sigue siendo un secreto que se puede filtrar y caduca.
+    c: Las identidades administradas asignadas por el sistema son de recursos de Azure, no de ejecutores externos.
+    d: Nunca se usan credenciales personales en automatizaciones.
+  referencia: https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation
+- id: L04-006
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.3"
+  enunciado: En la federación de identidades de carga de trabajo, ¿qué presenta la carga de trabajo a Entra ID para obtener un token?
+  opciones:
+    - {id: a, texto: "Un secreto de cliente generado por Entra ID"}
+    - {id: b, texto: "El token emitido por su propia plataforma, en el que Entra ID está configurado para confiar"}
+    - {id: c, texto: "La contraseña del administrador del tenant"}
+    - {id: d, texto: "Nada; Entra ID emite tokens sin comprobar el origen"}
+  correctas: [b]
+  explicacion: Se establece una relación de confianza con el proveedor externo, y Entra ID cambia su token por uno propio.
+  distractores:
+    a: La idea es precisamente no tener secretos.
+    c: Nunca se usan credenciales de personas.
+    d: Solo acepta tokens de proveedores y condiciones configurados.
+  referencia: https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation
+- id: L04-007
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "4.4"
+  enunciado: Un servicio que se ejecuta en un servidor propio, sin federación posible, necesita credenciales. ¿Qué recomienda Microsoft?
+  opciones:
+    - {id: a, texto: "Un secreto de cliente en el fichero de configuración"}
+    - {id: b, texto: "Un certificado de una autoridad de confianza, guardado en un almacén seguro"}
+    - {id: c, texto: "Desactivar la autenticación del cliente"}
+    - {id: d, texto: "Compartir las credenciales con otra aplicación"}
+  correctas: [b]
+  explicacion: Si no hay identidad administrada ni federación, el certificado es la siguiente opción; la clave privada no viaja, solo firma una aserción.
+  distractores:
+    a: Es lo que la guía desaconseja.
+    c: Un cliente confidencial debe autenticarse.
+    d: Cada aplicación debe tener su propia identidad.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration
+- id: L04-008
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "4.4"
+  enunciado: ¿Por qué un certificado es más seguro que un secreto de cliente?
+  opciones:
+    - {id: a, texto: "Porque es más largo"}
+    - {id: b, texto: "Porque no caduca"}
+    - {id: c, texto: "Porque la clave privada no se envía; la aplicación firma una aserción con ella y Entra ID la verifica con la clave pública"}
+    - {id: d, texto: "Porque se puede publicar en el repositorio"}
+  correctas: [c]
+  explicacion: Con un secreto, el valor viaja en cada petición; con un certificado, solo viaja una firma que no permite reconstruir la clave privada.
+  distractores:
+    a: La longitud no es la diferencia esencial.
+    b: Los certificados también caducan.
+    d: La clave privada nunca debe estar en un repositorio.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
+- id: L05-001
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Dos aplicaciones de tu empresa (dos client ID distintos) deben reconocer al mismo usuario. ¿Qué claim usas como identificador?
+  opciones:
+    - {id: a, texto: "sub"}
+    - {id: b, texto: "oid, junto con tid"}
+    - {id: c, texto: "name"}
+    - {id: d, texto: "preferred_username"}
+  correctas: [b]
+  explicacion: oid es inmutable y el mismo para todas las aplicaciones del tenant. sub es por pareja, distinto en cada aplicación.
+  distractores:
+    a: Cada aplicación recibe un sub distinto para el mismo usuario.
+    c: El nombre puede cambiar y repetirse.
+    d: Es un dato para mostrar que puede cambiar.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference
+- id: L05-002
+  tipo: matching
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Empareja cada claim con su descripción.
+  prompts:
+    - {id: "1", texto: "oid"}
+    - {id: "2", texto: "sub"}
+    - {id: "3", texto: "tid"}
+    - {id: "4", texto: "azp"}
+  opciones:
+    - {id: a, texto: "Identificador inmutable del usuario, igual en todas las aplicaciones del tenant"}
+    - {id: b, texto: "Identificador del usuario distinto para cada aplicación"}
+    - {id: c, texto: "Tenant del usuario"}
+    - {id: d, texto: "Client ID de la aplicación que pidió el token"}
+    - {id: e, texto: "Correo del usuario"}
+  correctas: [["1", a], ["2", b], ["3", c], ["4", d]]
+  explicacion: oid y sub identifican al usuario con alcances distintos; tid identifica al tenant y azp al cliente.
+  distractores:
+    e: El correo, si viene, va en otros claims y no es un identificador estable.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference
+- id: L05-003
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: ¿Quién debe validar un token de acceso emitido para tu API?
+  opciones:
+    - {id: a, texto: "La aplicación cliente que lo pidió"}
+    - {id: b, texto: "El navegador"}
+    - {id: c, texto: "La API, que solo debe aceptarlo si su aud es ella misma"}
+    - {id: d, texto: "Nadie; Entra ID ya lo ha validado"}
+  correctas: [c]
+  explicacion: La documentación indica que los tokens de acceso los valida solo la API para la que se emitieron; el cliente no debe hacerlo.
+  distractores:
+    a: El cliente no debe validar los tokens de acceso; no son para él.
+    b: El navegador no valida tokens.
+    d: La API debe comprobar firma, emisor, audiencia y caducidad.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens
+- id: L05-004
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.2"
+  enunciado: Una aplicación intenta validar el token de acceso que obtuvo para Microsoft Graph y falla la verificación de la firma. ¿Qué ocurre?
+  opciones:
+    - {id: a, texto: "Que el token está manipulado"}
+    - {id: b, texto: "Que falta descargar las claves"}
+    - {id: c, texto: "Que el reloj va mal"}
+    - {id: d, texto: "Que los tokens de Graph tienen un formato propio y no se validan con estas reglas; además, el cliente no debe validarlos"}
+  correctas: [d]
+  explicacion: La documentación indica que los tokens de Microsoft Graph no se pueden validar según estas reglas por su formato propietario. El token es para Graph, no para el cliente.
+  distractores:
+    a: No es un indicio de manipulación; es su formato.
+    b: Con las claves correctas tampoco se podría validar.
+    c: El reloj no afecta a la verificación de la firma.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens
+- id: L05-005
+  tipo: multiple_choice
+  dificultad: alta
+  objetivo: "5.3"
+  enunciado: Tu API usa issuer-uri https://login.microsoftonline.com/{tenant}/v2.0 y rechaza todos los tokens por emisor no válido. Su manifiesto tiene requestedAccessTokenVersion en null. ¿Qué pasa?
+  opciones:
+    - {id: a, texto: "Que Entra ID emite tokens v1.0 para la API, con otro emisor; hay que poner requestedAccessTokenVersion a 2"}
+    - {id: b, texto: "Que el cliente debe pedir tokens v2.0 con un parámetro"}
+    - {id: c, texto: "Que la API debe cambiarse a multitenant"}
+    - {id: d, texto: "Que los tokens han caducado"}
+  correctas: [a]
+  explicacion: La versión del token de acceso la decide la API con requestedAccessTokenVersion. Con null o 1 recibe tokens v1.0, cuyo emisor no termina en /v2.0.
+  distractores:
+    b: La versión no la elige el cliente.
+    c: El número de tenants no cambia la versión del token.
+    d: El error es de emisor, no de caducidad.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens
+- id: L05-006
+  tipo: completar
+  dificultad: media
+  objetivo: "5.2"
+  enunciado: Completa la configuración de una API Spring Boot que acepta tokens v2.0 de un tenant.
+  codigo:
+    lenguaje: yaml
+    fuente: |
+      spring:
+        security:
+          oauth2:
+            resourceserver:
+              jwt:
+                issuer-uri: https://login.microsoftonline.com/{tenant-id}/[[1]]
+                [[2]]: 3f2a7c1e-0000-0000-0000-000000000000
+  huecos:
+    - {id: "1", respuestas: [v2.0]}
+    - {id: "2", respuestas: [audiences]}
+  explicacion: El emisor de los tokens v2.0 termina en /v2.0, y la audiencia es el client ID de la API.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference
+- id: L05-007
+  tipo: multiple_response
+  dificultad: media
+  objetivo: "5.4"
+  enunciado: ¿Qué ventajas tiene usar MSAL en lugar de implementar los flujos a mano?
+  opciones:
+    - {id: a, texto: "Gestiona los flujos de OAuth y OIDC, incluidos PKCE, state y nonce"}
+    - {id: b, texto: "Guarda los tokens en caché y los renueva"}
+    - {id: c, texto: "Está disponible para .NET, Java, Python, JavaScript, Android e iOS"}
+    - {id: d, texto: "Hace innecesario validar los tokens en la API"}
+    - {id: e, texto: "Elimina la necesidad de registrar la aplicación"}
+  correctas: [a, b, c]
+  explicacion: MSAL encapsula los flujos y la gestión de tokens en el cliente, en muchas plataformas.
+  distractores:
+    d: La API sigue validando los tokens que recibe.
+    e: Toda aplicación debe estar registrada.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/msal-overview
+- id: L05-008
+  tipo: multiple_choice
+  dificultad: media
+  objetivo: "5.1"
+  enunciado: Una API decide si un usuario es administrador comprobando si su preferred_username termina en @admin.contoso.com. ¿Qué problema tiene?
+  opciones:
+    - {id: a, texto: "Ninguno"}
+    - {id: b, texto: "Que el claim no existe"}
+    - {id: c, texto: "Que la comprobación es lenta"}
+    - {id: d, texto: "Que es un dato para mostrar que puede cambiar; los permisos deben salir de roles de aplicación"}
+  correctas: [d]
+  explicacion: La documentación indica que estos claims son mutables y para mostrar. La autorización debe basarse en roles, scp u oid.
+  distractores:
+    a: Un valor que puede cambiar no es una base segura para dar permisos.
+    b: Existe, pero no sirve para autorizar.
+    c: El problema no es el rendimiento.
+  referencia: https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference
