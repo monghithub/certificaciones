@@ -19,6 +19,9 @@ examen:
   tipos: [multiple_choice, matching, true_false]
   distribucion: {multiple_choice: 60, matching: 20, true_false: 20}
 
+# Simulacro (referencia a carpeta o indicador de existencia)
+simulacro: null
+
 # Banco de preguntas
 banco:
   minimo_por_modulo: 30
