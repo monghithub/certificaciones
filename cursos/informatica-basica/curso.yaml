@@ -13,12 +13,12 @@ dominios:
   - {id: 5, nombre: "Seguridad", peso: 20}
 
 # Simulacro y examen
-simulacro: simulacro-informatica-basica
+simulacro: "06-simulacro"
 examen:
   preguntas: 50
   minutos: 90
-  tipos: [multiple_choice, matching]
-  distribucion: {multiple_choice: 70, matching: 30}
+  tipos: [multiple_choice, matching, ordering]
+  distribucion: {multiple_choice: 60, matching: 30, ordering: 10}
 
 # Banco de preguntas
 banco:
@@ -26,7 +26,7 @@ banco:
   minimo_simulacro: 50
   minimo_por_objetivo: 2
   minimo_por_tarea: 10
-  distribucion: {multiple_choice: 70, matching: 30}
+  distribucion: {multiple_choice: 60, matching: 30, ordering: 10}
 
 # Configuración de repaso
 repaso:
