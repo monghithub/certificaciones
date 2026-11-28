@@ -129,10 +129,11 @@ function toggleSidebar() {
         </button>
 
         <!-- Dropdown usuario -->
+        {% if user %}
         <div class="dropdown dropdown-end">
           <button tabindex="0" class="btn btn-ghost btn-circle avatar btn-sm">
             <div class="w-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs">
-              {{ user.nombre[0:1].upper() }}
+              {{ user.nombre[0:1].upper() if user.nombre else '?' }}
             </div>
           </button>
           <ul tabindex="0" class="dropdown-content z-50 menu p-2 shadow bg-base-100 rounded-box w-52 border border-base-300">
@@ -146,6 +147,7 @@ function toggleSidebar() {
             <li><a href="/logout" hx-boost="false" hx-post hx-headers='{"X-CSRF-Token": "{{ csrf }}"}' class="text-error">🚪 Salir</a></li>
           </ul>
         </div>
+        {% endif %}
       </div>
     </header>
 
